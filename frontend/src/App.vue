@@ -27,7 +27,7 @@
       ></v-text-field>
     </div>
 
-    <v-main :class="currentRouteName === 'Login' ? 'ml-0' : 'ml-16'">
+    <v-main :class="currentRouteName === 'Login' ? 'ml-0' : 'ml-16 mt-12'">
       <router-view />
     </v-main>
   </v-app>
@@ -58,8 +58,8 @@ export default {
 <style scoped>
 .search-bar-wrapper {
   position: absolute;
-  top: 32px;
-  right: 32px;
+  top: 24px;
+  right: 24px;
   z-index: 2;
   display: flex;
 }
