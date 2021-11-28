@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <SideBar v-if="isAuthenticated" />
+    <SideBar v-if="isAuthenticated" :currentRouteName="currentRouteName" />
 
     <div class="search-bar-wrapper">
       <!-- Language switch is planned only for development -->
@@ -9,13 +9,15 @@
         :items="langs"
         item-text="name"
         item-value="abbr"
-        label="Change lang"
         outlined
         dense
+        background-color="grey"
         class="lang-select"
-        style="margin-right: 1rem;"
+        :style="currentRouteName === 'Login' ? '' : 'margin-right: 1rem;'"
+        dark
       ></v-select>
       <v-text-field
+        v-if="currentRouteName !== 'Login'"
         :label="$t('general.search-box')"
         prepend-inner-icon="mdi-magnify"
         outlined
@@ -25,7 +27,7 @@
       ></v-text-field>
     </div>
 
-    <v-main class="ml-16">
+    <v-main :class="currentRouteName === 'Login' ? 'ml-0' : 'ml-16'">
       <router-view />
     </v-main>
   </v-app>
@@ -44,7 +46,10 @@ export default {
   computed: {
     ...mapGetters({
       isAuthenticated: "auth/getIsAuthenticated",
-    })
+    }),
+    currentRouteName() {
+      return this.$route.name;
+    }
   },
 };
 </script>
@@ -55,11 +60,11 @@ export default {
   position: absolute;
   top: 32px;
   right: 32px;
-  z-index: 1;
+  z-index: 2;
   display: flex;
 }
 
 .lang-select {
-  max-width: 11rem;
+  max-width: 10.5rem;
 }
 </style>

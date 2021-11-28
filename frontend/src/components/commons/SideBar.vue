@@ -91,10 +91,8 @@ export default {
             isAuthenticated: "auth/getIsAuthenticated",
             credentials: "auth/getCredentials"
         }),
-        currentRouteName() {
-            return this.$route.name;
-        }
     },
+    props: { currentRouteName: String },
     methods: {
         ...mapActions({
             deleteSession: 'auth/deleteSession'
