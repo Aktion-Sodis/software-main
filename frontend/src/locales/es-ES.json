@@ -11,5 +11,8 @@
         "sign-in-with-google": "Iniciar sesión con Google",
         "dont-have-an-account": "¿No tienes una cuenta?",
         "register-here": "Regístrese aquí"
+    },
+    "general": {
+        "search-box": "Buscar cualquier cosa"
     }
 }

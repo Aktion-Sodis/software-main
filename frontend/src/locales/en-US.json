@@ -11,5 +11,8 @@
     "sign-in-with-google": "Sign in with Google",
     "dont-have-an-account": "Don't have an account?",
     "register-here": "Register here"
+  },
+  "general": {
+    "search-box": "Search anything"
   }
 }

@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer permanent expand-on-hover class="primary-dark" width="17rem">
+    <v-navigation-drawer permanent expand-on-hover class="primary-dark" width="17rem" absolute>
         <!-- expand-on-hover -->
         <div class="side-bar-inner-wrapper">
             <v-list>
@@ -7,6 +7,7 @@
                     <v-list-item-avatar>
                         <v-img src="../../static/aktionSodisSmall.png"></v-img>
                     </v-list-item-avatar>
+                    <v-list-item-title class="white--text text-body-1">{{ societyName }}</v-list-item-title>
                 </v-list-item>
             </v-list>
 
@@ -62,8 +63,10 @@
                     </v-list-item-avatar>
                     <div class="next-to-avatar">
                         <v-list-item-content>
-                            <v-list-item-title class="text-h6 white--text">Lorem ipsum</v-list-item-title>
-                            <v-list-item-subtitle class="white--text">sandra_a88@gmail.com</v-list-item-subtitle>
+                            <v-list-item-title
+                                class="text-h6 white--text"
+                            >{{ credentials.firstname }} {{ credentials.lastname }}</v-list-item-title>
+                            <v-list-item-subtitle class="white--text">{{ credentials.email }}</v-list-item-subtitle>
                         </v-list-item-content>
                         <v-btn @click="logout" class="mx-2" fab elevation="0" small color="primary">
                             <v-icon color="white">mdi-exit-to-app</v-icon>
@@ -78,12 +81,15 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
+const societyName = process.env.VUE_APP_SOCIETY_NAME
+
 export default {
     name: "SideBar",
-    data: () => ({}),
+    data: () => ({ societyName }),
     computed: {
         ...mapGetters({
             isAuthenticated: "auth/getIsAuthenticated",
+            credentials: "auth/getCredentials"
         }),
         currentRouteName() {
             return this.$route.name;
