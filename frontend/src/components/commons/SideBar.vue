@@ -81,7 +81,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-const societyName = process.env.VUE_APP_SOCIETY_NAME
+const societyName = process.env.VUE_APP_SOCIETY_VERBOSE_NAME
 
 export default {
     name: "SideBar",
