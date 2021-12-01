@@ -82,6 +82,38 @@ const entitiesModule = {
     getTreeRoot: (state) => {
       return state.treeRoot;
     },
+    getParentInTreeRoot: (state, getters) => (upperEntityId) => {
+      return upperEntityId === null
+        ? getters.getTreeRoot
+        : getters.getAllDescendantsOfTreeRoot
+            .concat(getters.getTreeRoot)
+            .filter((e) => e.entityId === upperEntityId)[0] || null;
+    },
+    getVerticalOrderByEntityId: (state, getters) => (entityId, hid) => {
+      return getters
+        .getAllEntitiesOfHierarchyByHid(hid)
+        .sort((a, b) => a.entityId - b.entityId)
+        .findIndex((e) => e.entityId === entityId);
+    },
+    getMaxVerticalOrderOfTreeRootDescendantsInAHierarchy:
+      (state, getters) => (hid) => {
+        const hierarchyContainsDescendent = getters
+          .getAllEntitiesOfHierarchyByHid(hid)
+          .some((e) => getters.getEntityIsDescendantOfTreeRoot(e.entityId));
+
+        return hierarchyContainsDescendent
+          ? hid <= getters.getTreeRoot.hierarchyId
+            ? 0
+            : getters.getAllEntitiesOfHierarchyByHid(hid).length -
+              getters
+                .getAllEntitiesOfHierarchyByHid(hid)
+                .sort((a, b) => b.entityId - a.entityId) // asc
+                .findIndex((e) =>
+                  getters.getEntityIsDescendantOfTreeRoot(e.entityId)
+                ) -
+              1
+          : -1;
+      },
   },
   mutations: {
     setTreeRoot: (state, payload) => {
