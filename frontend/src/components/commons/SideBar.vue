@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer permanent expand-on-hover class="primary-dark" width="17rem" absolute>
         <!-- expand-on-hover -->
-        <div class="side-bar-inner-wrapper">
+        <div class="side-bar-inner-wrapper overflow-hidden">
             <v-list>
                 <v-list-item class="px-2">
                     <v-list-item-avatar>
