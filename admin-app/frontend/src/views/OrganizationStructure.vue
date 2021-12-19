@@ -9,11 +9,6 @@
         :class="hierarchy.upperHierarchy === null || 'dotted-left-border'"
       >
         <h4 style="width: 100%">Level {{ index }}</h4>
-        <h5>
-          {{ getMinVerticalOrderOfTreeRootDescendantsInAHierarchy(index) }}
-          <br />
-          {{ getMaxVerticalOrderOfTreeRootDescendantsInAHierarchy(index) }}
-        </h5>
         <div class="d-flex flex-column" style="width: 100%">
           <div
             v-for="entity in allEntitiesOfHierarchy(hierarchy.hierarchyId)"
@@ -83,6 +78,14 @@
           </div>
           <AddEntityButton />
         </div>
+      </div>
+      <div
+        class="column dotted-left-border d-flex flex-column align-center justify-center"
+      >
+        <v-btn rounded x-large color="primary">
+          <v-icon class="mr-2"> mdi-plus </v-icon>
+          {{ $t("organizationStructure.addNewLevel") }}
+        </v-btn>
       </div>
     </div>
   </div>

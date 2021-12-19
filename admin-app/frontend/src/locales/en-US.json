@@ -16,6 +16,7 @@
     "search-box": "Search anything"
   },
   "organizationStructure": {
-    "addNewEntity": "Add entity to level"
+    "addNewEntity": "Add entity to level",
+    "addNewLevel": "Add new level"
   }
 }
