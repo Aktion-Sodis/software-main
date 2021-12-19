@@ -46,13 +46,19 @@
             ></div>
             <v-hover v-slot="{ hover }">
               <v-sheet
-                class="mx-auto transition-swing grey lighten-5 rounded-xl pa-4 text-center d-flex flex-column justify-center align-center"
+                class="mx-auto transition-swing grey lighten-5 rounded-lg pa-4 d-flex flex-column justify-center align-center"
                 :class="hover ? 'lighten-2' : ''"
                 elevation="4"
-                style="width: 100%; height: 128px; cursor: pointer"
+                style="
+                  width: 100%;
+                  height: 128px;
+                  cursor: pointer;
+                  position: relative !important;
+                "
                 @click="clickOnEntity(entity)"
               >
-                <p>{{ entity.name }}</p>
+                {{ entity.name }}
+                <br />
                 vertical order
                 {{
                   verticalOrderByEntityId(
@@ -69,9 +75,13 @@
                     entity.hierarchyId
                   )
                 }}
+                <v-btn fab icon class="entity-icon">
+                  <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
+                </v-btn>
               </v-sheet>
             </v-hover>
           </div>
+          <AddEntityButton />
         </div>
       </div>
     </div>
@@ -80,9 +90,11 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import AddEntityButton from "../components/organizationStructure/AddEntityButton.vue";
 
 export default {
   name: "OrganizationStructure",
+  components: { AddEntityButton },
   data: () => ({}),
   mounted() {},
   computed: {
@@ -146,5 +158,11 @@ export default {
   background-color: orange;
   width: 3px;
   transform: translate(calc(-16rem + 16px), 64px);
+}
+
+.entity-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 </style>

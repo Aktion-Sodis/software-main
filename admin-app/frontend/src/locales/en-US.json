@@ -14,5 +14,8 @@
   },
   "general": {
     "search-box": "Search anything"
+  },
+  "organizationStructure": {
+    "addNewEntity": "Add entity to level"
   }
 }

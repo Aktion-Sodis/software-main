@@ -1,18 +1,21 @@
 {
-    "login": {
-        "title": "¡Bienvenido de nuevo!",
-        "subtitle": "Inicie sesión con sus datos o regístrese.",
-        "username": "Nombre de usuario",
-        "password": "Contraseña",
-        "required": "Necessario.",
-        "remember-me": "Recuérdame",
-        "forgot-password": "Contraseña Olvidada",
-        "sign-in": "iniciar sesión",
-        "sign-in-with-google": "Iniciar sesión con Google",
-        "dont-have-an-account": "¿No tienes una cuenta?",
-        "register-here": "Regístrese aquí"
-    },
-    "general": {
-        "search-box": "Buscar cualquier cosa"
-    }
+  "login": {
+    "title": "¡Bienvenido de nuevo!",
+    "subtitle": "Inicie sesión con sus datos o regístrese.",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "required": "Necessario.",
+    "remember-me": "Recuérdame",
+    "forgot-password": "Contraseña Olvidada",
+    "sign-in": "iniciar sesión",
+    "sign-in-with-google": "Iniciar sesión con Google",
+    "dont-have-an-account": "¿No tienes una cuenta?",
+    "register-here": "Regístrese aquí"
+  },
+  "general": {
+    "search-box": "Buscar cualquier cosa"
+  },
+  "organizationStructure": {
+    "addNewEntity": "Add entity to level"
+  }
 }
