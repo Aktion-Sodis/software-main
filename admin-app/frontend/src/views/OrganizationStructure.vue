@@ -10,12 +10,9 @@
       >
         <h4 style="width: 100%">Level {{ index }}</h4>
         <h5>
-          max ver. order of descendants:
-          {{
-            getMaxVerticalOrderOfTreeRootDescendantsInAHierarchy(
-              hierarchy.hierarchyId
-            )
-          }}
+          {{ getMinVerticalOrderOfTreeRootDescendantsInAHierarchy(index) }}
+          <br />
+          {{ getMaxVerticalOrderOfTreeRootDescendantsInAHierarchy(index) }}
         </h5>
         <div class="d-flex flex-column" style="width: 100%">
           <div
@@ -25,27 +22,16 @@
           >
             <div>
               <div
-                v-if="entityIsDescendantOfTreeRoot(entity.entityId)"
+                v-if="entityIsInTree(entity.entityId) && index !== 0"
                 class="entity-connection-left-line"
               ></div>
               <div
                 v-if="
-                  verticalOrderByEntityId(
+                  getEntityShouldHaveVerticalLine(
                     entity.entityId,
-                    hierarchy.hierarchyId
-                  ) <
-                    getMaxVerticalOrderOfTreeRootDescendantsInAHierarchy(
-                      hierarchy.hierarchyId
-                    ) ||
-                  (entityIsDescendantOfTreeRoot(entity.entityId) &&
-                    verticalOrderByEntityId(
-                      entity.entityId,
-                      hierarchy.hierarchyId
-                    ) <
-                      verticalOrderByEntityId(
-                        parentInTreeRoot(entity.upperEntityId).entityId,
-                        parentInTreeRoot(entity.upperEntityId).hierarchyId
-                      ))
+                    entity.upperEntityId,
+                    index
+                  )
                 "
                 class="entity-connection-vertical-line"
               ></div>
@@ -53,26 +39,14 @@
             <div
               v-if="
                 hasChildren(entity.entityId) &&
-                (entityIsDescendantOfTreeRoot(entity.entityId) ||
+                (entityIsInTree(entity.entityId) ||
                   entity.entityId === treeRoot.entityId)
               "
               class="entity-connection-right-line"
             ></div>
             <v-hover v-slot="{ hover }">
               <v-sheet
-                class="
-                  mx-auto
-                  transition-swing
-                  grey
-                  lighten-5
-                  rounded-xl
-                  pa-4
-                  text-center
-                  d-flex
-                  flex-column
-                  justify-center
-                  align-center
-                "
+                class="mx-auto transition-swing grey lighten-5 rounded-xl pa-4 text-center d-flex flex-column justify-center align-center"
                 :class="hover ? 'lighten-2' : ''"
                 elevation="4"
                 style="width: 100%; height: 128px; cursor: pointer"
@@ -86,7 +60,15 @@
                     hierarchy.hierarchyId
                   )
                 }}
-                {{ entityIsDescendantOfTreeRoot(entity.entityId) }}
+                <br />
+                parent is above entity:
+                {{
+                  parentIsAboveEntity(
+                    entity.entityId,
+                    entity.upperEntityId,
+                    entity.hierarchyId
+                  )
+                }}
               </v-sheet>
             </v-hover>
           </div>
@@ -110,13 +92,18 @@ export default {
       hierarchialStructure: "entities/getHierarchialStructure",
       hasSiblingsUnderIt: "entities/getEntityHasSiblingUnderIt",
       allDescendantsOfTreeRoot: "entities/getAllDescendantsOfTreeRoot",
-      entityIsDescendantOfTreeRoot: "entities/getEntityIsDescendantOfTreeRoot",
+      entityIsInTree: "entities/getEntityIsInTree",
       hasChildren: "entities/getHasChildren",
       treeRoot: "entities/getTreeRoot",
       verticalOrderByEntityId: "entities/getVerticalOrderByEntityId",
       getMaxVerticalOrderOfTreeRootDescendantsInAHierarchy:
         "entities/getMaxVerticalOrderOfTreeRootDescendantsInAHierarchy",
       parentInTreeRoot: "entities/getParentInTreeRoot",
+      parentIsAboveEntity: "entities/getParentIsAboveEntity",
+      getMinVerticalOrderOfTreeRootDescendantsInAHierarchy:
+        "entities/getMinVerticalOrderOfTreeRootDescendantsInAHierarchy",
+      getEntityShouldHaveVerticalLine:
+        "entities/getEntityShouldHaveVerticalLine",
     }),
   },
   methods: {
