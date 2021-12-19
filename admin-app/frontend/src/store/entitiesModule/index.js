@@ -34,17 +34,18 @@ const entitiesModule = {
     },
   }),
   getters: {
-    getAllEntitiesOfHierarchyByHid: (state) => (hid) => {
-      return state.hierarchialData
+    getHierarchialData: (state) => state.hierarchialData,
+    getHierarchialStructure: (state) => state.hierarchialStructure,
+    getTreeRoot: (state) => state.treeRoot,
+    getAllEntitiesOfHierarchyByHid: (state) => (hid) =>
+      state.hierarchialData
         .filter((e) => e.hierarchyId === hid)
-        .sort((a, b) => a.entityId - b.entityId); // sort by entityId ascending
-    },
+        .sort((a, b) => a.entityId - b.entityId), // sort by entityId ascending
     getEntityHasSiblingUnderIt: (state, getters) => (entityId, hid) => {
       const allDescendantsOfTreeRoot = getters.getAllDescendantsOfTreeRoot;
       const allDescendantsOfTreeRootAtHid = allDescendantsOfTreeRoot.filter(
         (e) => e.hierarchyId === hid
       );
-      console.log(allDescendantsOfTreeRootAtHid);
       return (
         entityId !==
         Math.max(
@@ -54,8 +55,6 @@ const entitiesModule = {
         )
       );
     },
-    getHierarchialData: (state) => state.hierarchialData,
-    getHierarchialStructure: (state) => state.hierarchialStructure,
     getAllDescendantsOfTreeRoot: (state) =>
       recursiveMarker(
         state.treeRoot,
@@ -64,28 +63,26 @@ const entitiesModule = {
           marked: false,
         }))
       ),
-    getEntityIsDescendantOfTreeRoot: (state, getters) => (entityId) =>
-      getters.getAllDescendantsOfTreeRoot.some((e) => e.entityId === entityId),
-    getHasChildren: (state, getters) => (entityId) =>
-      getters.getHierarchialData.some((e) => e.upperEntityId === entityId),
 
-    getTreeRoot: (state) => state.treeRoot,
-    getParentInTreeRoot: (state, getters) => (upperEntityId) =>
-      upperEntityId === null
-        ? getters.getTreeRoot
-        : getters.getAllDescendantsOfTreeRoot
-            .concat(getters.getTreeRoot)
-            .filter((e) => e.entityId === upperEntityId)[0] || null,
     getVerticalOrderByEntityId: (state, getters) => (entityId, hid) =>
       getters
         .getAllEntitiesOfHierarchyByHid(hid)
         .sort((a, b) => a.entityId - b.entityId)
         .findIndex((e) => e.entityId === entityId),
+    getParentIsAboveEntity:
+      (state, getters) => (entityId, upperEntityId, hid) =>
+        !!(
+          getters.getVerticalOrderByEntityId(upperEntityId, hid - 1) <
+            getters.getVerticalOrderByEntityId(entityId, hid) &&
+          upperEntityId !== null &&
+          hid !== 0
+        ),
+
     getMaxVerticalOrderOfTreeRootDescendantsInAHierarchy:
       (state, getters) => (hid) => {
         const hierarchyContainsDescendent = getters
           .getAllEntitiesOfHierarchyByHid(hid)
-          .some((e) => getters.getEntityIsDescendantOfTreeRoot(e.entityId));
+          .some((e) => getters.getEntityIsInTree(e.entityId));
 
         return hierarchyContainsDescendent
           ? hid <= getters.getTreeRoot.hierarchyId
@@ -93,13 +90,90 @@ const entitiesModule = {
             : getters.getAllEntitiesOfHierarchyByHid(hid).length -
               getters
                 .getAllEntitiesOfHierarchyByHid(hid)
-                .sort((a, b) => b.entityId - a.entityId) // asc
-                .findIndex((e) =>
-                  getters.getEntityIsDescendantOfTreeRoot(e.entityId)
-                ) -
+                .sort((a, b) => b.entityId - a.entityId) // desc
+                .findIndex((e) => getters.getEntityIsInTree(e.entityId)) -
               1
           : -1;
       },
+    getMinVerticalOrderOfTreeRootDescendantsInAHierarchy:
+      (state, getters) => (hid) => {
+        const hierarchyContainsDescendent = getters
+          .getAllEntitiesOfHierarchyByHid(hid)
+          .some((e) => getters.getEntityIsInTree(e.entityId));
+
+        return hierarchyContainsDescendent
+          ? hid <= getters.getTreeRoot.hierarchyId
+            ? 0
+            : getters
+                .getAllEntitiesOfHierarchyByHid(hid)
+                .sort((a, b) => a.entityId - b.entityId) // asc
+                .findIndex((e) => getters.getEntityIsInTree(e.entityId))
+          : -1;
+      },
+
+    getEntityShouldHaveVerticalLine:
+      (state, getters) => (entityId, upperEntityId, hid) => {
+        const minVerticalOrderOfTreeRootDescendantsInAHierarchy =
+          getters.getMinVerticalOrderOfTreeRootDescendantsInAHierarchy(hid);
+        const maxVerticalOrderOfTreeRootDescendantsInAHierarchy =
+          getters.getMaxVerticalOrderOfTreeRootDescendantsInAHierarchy(hid);
+        const verticalOrderOfParent = getters.getVerticalOrderByEntityId(
+          upperEntityId,
+          hid - 1
+        );
+        const verticalOrderOfSelf = getters.getVerticalOrderByEntityId(
+          entityId,
+          hid
+        );
+        if (
+          verticalOrderOfParent <
+          minVerticalOrderOfTreeRootDescendantsInAHierarchy
+        ) {
+          return (
+            verticalOrderOfSelf <= verticalOrderOfParent &&
+            verticalOrderOfSelf <
+              maxVerticalOrderOfTreeRootDescendantsInAHierarchy
+          );
+        }
+        if (
+          verticalOrderOfParent >=
+            minVerticalOrderOfTreeRootDescendantsInAHierarchy &&
+          verticalOrderOfParent <=
+            maxVerticalOrderOfTreeRootDescendantsInAHierarchy
+        )
+          return (
+            verticalOrderOfSelf >=
+              minVerticalOrderOfTreeRootDescendantsInAHierarchy &&
+            verticalOrderOfSelf <
+              maxVerticalOrderOfTreeRootDescendantsInAHierarchy
+          );
+        if (
+          verticalOrderOfParent >
+          maxVerticalOrderOfTreeRootDescendantsInAHierarchy
+        ) {
+          return (
+            verticalOrderOfSelf <=
+              minVerticalOrderOfTreeRootDescendantsInAHierarchy &&
+            verticalOrderOfSelf < verticalOrderOfParent
+          );
+        }
+      },
+
+    getUpmostElementInTreeByHid: (state, getters) => (hid) =>
+      getters.getAllEntitiesOfHierarchyByHid(hid),
+
+    getEntityIsInTree: (state, getters) => (entityId) =>
+      getters.getAllDescendantsOfTreeRoot.some(
+        (e) => e.entityId === entityId
+      ) || entityId === getters.getTreeRoot.entityId,
+    getHasChildren: (state, getters) => (entityId) =>
+      getters.getHierarchialData.some((e) => e.upperEntityId === entityId),
+    getParentInTreeRoot: (state, getters) => (upperEntityId) =>
+      upperEntityId === null
+        ? getters.getTreeRoot
+        : getters.getAllDescendantsOfTreeRoot
+            .concat(getters.getTreeRoot)
+            .find((e) => e.entityId === upperEntityId) || null,
   },
   mutations: {
     setTreeRoot: (state, payload) => {
