@@ -10,7 +10,7 @@
         key="hovered"
         class="overflow-hidden"
       >
-        <v-icon dark class="mx-auto"> mdi-plus </v-icon>
+        <v-icon class="mr-2"> mdi-plus </v-icon>
         <span class="overflow-hidden">
           {{ $t("organizationStructure.addNewEntity") }}
         </span>
@@ -22,7 +22,7 @@
         @mouseover="setIsHovered(true)"
         key="notHovered"
       >
-        <v-icon dark class="mx-auto"> mdi-plus </v-icon>
+        <v-icon class="mx-auto"> mdi-plus </v-icon>
       </v-btn>
     </transition>
   </div>
