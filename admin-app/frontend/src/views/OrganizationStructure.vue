@@ -82,10 +82,69 @@
       <div
         class="column dotted-left-border d-flex flex-column align-center justify-center"
       >
-        <v-btn rounded x-large color="primary">
-          <v-icon class="mr-2"> mdi-plus </v-icon>
-          {{ $t("organizationStructure.addNewLevel") }}
-        </v-btn>
+        <v-dialog
+          v-model="newLevelDialogIsDisplayed"
+          width="75%"
+          class="dialog"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              rounded
+              x-large
+              color="primary"
+              @click="showNewLevelDialog(true)"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon class="mr-2"> mdi-plus </v-icon>
+              {{ $t("organizationStructure.addNewLevel") }}
+            </v-btn>
+          </template>
+
+          <v-form ref="form" @submit.prevent="submitNewLevel" lazy-validation>
+            <v-card class="px-4 pt-4">
+              <v-card-title> Create new level </v-card-title>
+              <v-card-subtitle>
+                This is the description of this beautiful dialog.
+              </v-card-subtitle>
+
+              <v-text-field
+                v-model="levelName"
+                :rules="[rules.required]"
+                :label="$t('organizationStructure.newLevelDialog.levelName')"
+                required
+                outlined
+              ></v-text-field>
+              <v-text-field
+                v-model="levelDescription"
+                :rules="[rules.required]"
+                :label="
+                  $t('organizationStructure.newLevelDialog.levelDescription')
+                "
+                required
+                outlined
+              ></v-text-field>
+
+              <v-divider vertical></v-divider>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" text @click="showNewLevelDialog(false)">
+                  Cancel
+                </v-btn>
+                <v-btn
+                  type="submit"
+                  color="primary"
+                  text
+                  @click="showNewLevelDialog(false)"
+                  :disabled="!levelFormIsInvalid"
+                >
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-form>
+        </v-dialog>
       </div>
     </div>
   </div>
@@ -98,7 +157,16 @@ import AddEntityButton from "../components/organizationStructure/AddEntityButton
 export default {
   name: "OrganizationStructure",
   components: { AddEntityButton },
-  data: () => ({}),
+  data() {
+    return {
+      newLevelDialogIsDisplayed: true,
+      rules: {
+        required: (value) => !!value || this.requiredi18n,
+      },
+      levelName: "",
+      levelDescription: "",
+    };
+  },
   mounted() {},
   computed: {
     ...mapGetters({
@@ -120,11 +188,20 @@ export default {
       getEntityShouldHaveVerticalLine:
         "entities/getEntityShouldHaveVerticalLine",
     }),
+    requiredi18n: function () {
+      return this.$t("login.required");
+    },
+    levelFormIsInvalid: function () {
+      return !!(this.levelName && this.levelDescription);
+    },
   },
   methods: {
     ...mapActions({
-      clickOnEntity: "entities/clickOnEntity", // map `this.add()` to `this.$store.dispatch('increment')`
+      clickOnEntity: "entities/clickOnEntity",
     }),
+    showNewLevelDialog: function (payload) {
+      this.newLevelDialogIsDisplayed = payload;
+    },
   },
 };
 </script>
@@ -167,5 +244,9 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.dialog {
+  width: 75%;
 }
 </style>

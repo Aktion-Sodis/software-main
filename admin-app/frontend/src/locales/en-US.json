@@ -17,6 +17,10 @@
   },
   "organizationStructure": {
     "addNewEntity": "Add entity to level",
-    "addNewLevel": "Add new level"
+    "addNewLevel": "Add new level",
+    "newLevelDialog": {
+      "levelName": "Level Name",
+      "levelDescription": "Level Description"
+    }
   }
 }
