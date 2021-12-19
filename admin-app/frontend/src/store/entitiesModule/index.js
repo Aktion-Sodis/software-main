@@ -3,10 +3,30 @@ import recursiveMarker from "./utils";
 const entitiesModule = {
   namespaced: true,
   state: () => ({
+    technologies: [
+      { technologyId: 0, name: "Kitchen" },
+      { technologyId: 1, name: "Toilet" },
+      { technologyId: 2, name: "Plantation" },
+    ],
     hierarchialStructure: [
-      { name: "Gemeinde", hierarchyId: 0, upperHierarchy: null },
-      { name: "Dorf", hierarchyId: 1, upperHierarchy: 0 },
-      { name: "Family", hierarchyId: 2, upperHierarchy: 1 },
+      {
+        name: "Gemeinde",
+        hierarchyId: 0,
+        upperHierarchy: null,
+        allowedTechnologies: [],
+      },
+      {
+        name: "Dorf",
+        hierarchyId: 1,
+        upperHierarchy: 0,
+        allowedTechnologies: [2],
+      },
+      {
+        name: "Family",
+        hierarchyId: 2,
+        upperHierarchy: 1,
+        allowedTechnologies: [0, 1, 2],
+      },
     ],
     hierarchialData: [
       { entityId: 0, hierarchyId: 0, upperEntityId: null, name: "Aachen" },
@@ -34,8 +54,10 @@ const entitiesModule = {
     },
   }),
   getters: {
+    getTechnologies: (state) => state.technologies,
     getHierarchialData: (state) => state.hierarchialData,
-    getHierarchialStructure: (state) => state.hierarchialStructure,
+    getHierarchialStructure: (state) =>
+      state.hierarchialStructure.sort((a, b) => a.hierarchyId - b.hierarchyId),
     getTreeRoot: (state) => state.treeRoot,
     getAllEntitiesOfHierarchyByHid: (state) => (hid) =>
       state.hierarchialData
@@ -179,10 +201,33 @@ const entitiesModule = {
     setTreeRoot: (state, payload) => {
       state.treeRoot = payload;
     },
+    addLevel: (state, payload) => {
+      state.hierarchialStructure = state.hierarchialStructure.concat(payload);
+    },
+    injectNewLevel: (state, newLevelId, upperLevelIdOfNewLevel) => {
+      state.hierarchialStructure = state.hierarchialStructure.map((e) =>
+        e.upperHierarchy === upperLevelIdOfNewLevel
+          ? { ...e, upperHierarchy: newLevelId }
+          : e
+      );
+    },
   },
   actions: {
     clickOnEntity: ({ commit }, payload) => {
       commit("setTreeRoot", payload);
+    },
+    saveNewLevel: (
+      { commit },
+      { levelName, levelDescription, upperHierarchy, technologies }
+    ) => {
+      commit("injectNewLevel", upperHierarchy + 0.1, upperHierarchy);
+      commit("addLevel", {
+        name: levelName,
+        description: levelDescription,
+        hierarchyId: upperHierarchy + 0.1,
+        upperHierarchy,
+        allowedTechnologies: technologies,
+      });
     },
   },
 };

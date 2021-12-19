@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Organization Structure</h1>
+    <h1 class="ml-8">Organization Structure</h1>
     <div class="my-8 d-flex" style="overflow-x: scroll">
       <div
         v-for="(hierarchy, index) in hierarchialStructure"
@@ -8,7 +8,7 @@
         class="column d-flex flex-column align-center px-8"
         :class="hierarchy.upperHierarchy === null || 'dotted-left-border'"
       >
-        <h4 style="width: 100%">Level {{ index }}</h4>
+        <h4 style="width: 100%">{{ hierarchy.name }}</h4>
         <div class="d-flex flex-column" style="width: 100%">
           <div
             v-for="entity in allEntitiesOfHierarchy(hierarchy.hierarchyId)"
@@ -84,8 +84,9 @@
       >
         <v-dialog
           v-model="newLevelDialogIsDisplayed"
-          width="75%"
+          max-width="800px"
           class="dialog"
+          persistent
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -101,49 +102,101 @@
             </v-btn>
           </template>
 
-          <v-form ref="form" @submit.prevent="submitNewLevel" lazy-validation>
-            <v-card class="px-4 pt-4">
-              <v-card-title> Create new level </v-card-title>
+          <v-card class="px-4 pt-4">
+            <v-form ref="form" @submit.prevent="submitNewLevel" lazy-validation>
+              <v-card-title> <h2>Create new level</h2> </v-card-title>
               <v-card-subtitle>
                 This is the description of this beautiful dialog.
               </v-card-subtitle>
 
-              <v-text-field
-                v-model="levelName"
-                :rules="[rules.required]"
-                :label="$t('organizationStructure.newLevelDialog.levelName')"
-                required
-                outlined
-              ></v-text-field>
-              <v-text-field
-                v-model="levelDescription"
-                :rules="[rules.required]"
-                :label="
-                  $t('organizationStructure.newLevelDialog.levelDescription')
-                "
-                required
-                outlined
-              ></v-text-field>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <v-card-title> Level information </v-card-title>
+                      <v-text-field
+                        v-model="levelName"
+                        :rules="[rules.required]"
+                        :label="
+                          $t('organizationStructure.newLevelDialog.levelName')
+                        "
+                        required
+                        outlined
+                        dense
+                      ></v-text-field>
+                      <v-textarea
+                        v-model="levelDescription"
+                        :counter="
+                          levelDescription.length > levelDescriptionMaxChar - 20
+                        "
+                        :rules="[rules.maxChar]"
+                        :label="
+                          $t(
+                            'organizationStructure.newLevelDialog.levelDescription'
+                          )
+                        "
+                        required
+                        outlined
+                        dense
+                      ></v-textarea>
 
-              <v-divider vertical></v-divider>
+                      <v-select
+                        v-model="levelIsSubordinateTo"
+                        :items="hierarchialStructure"
+                        :label="
+                          $t(
+                            'organizationStructure.newLevelDialog.levelIsSubordinateTo'
+                          )
+                        "
+                        dense
+                        outlined
+                        persistent-hint
+                        item-value="hierarchyId"
+                        item-text="name"
+                      ></v-select>
+                    </v-col>
+
+                    <v-col cols="12" sm="6">
+                      <v-card-title> Technologies </v-card-title>
+                      <v-card-text>
+                        <v-select
+                          v-model="levelAllowedTechnologies"
+                          :items="technologies"
+                          :label="
+                            $t(
+                              'organizationStructure.newLevelDialog.manageAllowedTechnologies'
+                            )
+                          "
+                          multiple
+                          dense
+                          outlined
+                          persistent-hint
+                          item-value="technologyId"
+                          item-text="name"
+                        ></v-select>
+                      </v-card-text>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" text @click="showNewLevelDialog(false)">
-                  Cancel
+                  {{ $t("general.cancel") }}
                 </v-btn>
                 <v-btn
                   type="submit"
                   color="primary"
                   text
-                  @click="showNewLevelDialog(false)"
+                  @click.prevent="submitNewLevel()"
                   :disabled="!levelFormIsInvalid"
                 >
-                  Save
+                  {{ $t("general.save") }}
                 </v-btn>
               </v-card-actions>
-            </v-card>
-          </v-form>
+            </v-form>
+          </v-card>
         </v-dialog>
       </div>
     </div>
@@ -154,17 +207,27 @@
 import { mapGetters, mapActions } from "vuex";
 import AddEntityButton from "../components/organizationStructure/AddEntityButton.vue";
 
+const levelDescriptionMaxChar = parseInt(
+  process.env.VUE_APP_LEVEL_DESCRIPTION_MAX_CHAR,
+  10
+);
+
 export default {
   name: "OrganizationStructure",
   components: { AddEntityButton },
   data() {
     return {
+      levelDescriptionMaxChar,
       newLevelDialogIsDisplayed: true,
       rules: {
         required: (value) => !!value || this.requiredi18n,
+        maxChar: (value) =>
+          value.length <= levelDescriptionMaxChar || this.maxCharExceededi18n,
       },
       levelName: "",
       levelDescription: "",
+      levelAllowedTechnologies: [],
+      levelIsSubordinateTo: 0,
     };
   },
   mounted() {},
@@ -187,9 +250,15 @@ export default {
         "entities/getMinVerticalOrderOfTreeRootDescendantsInAHierarchy",
       getEntityShouldHaveVerticalLine:
         "entities/getEntityShouldHaveVerticalLine",
+      technologies: "entities/getTechnologies",
     }),
     requiredi18n: function () {
       return this.$t("login.required");
+    },
+    maxCharExceededi18n: function () {
+      return this.$t("login.maxCharExceeded", {
+        maxChar: levelDescriptionMaxChar,
+      });
     },
     levelFormIsInvalid: function () {
       return !!(this.levelName && this.levelDescription);
@@ -198,9 +267,19 @@ export default {
   methods: {
     ...mapActions({
       clickOnEntity: "entities/clickOnEntity",
+      saveNewLevel: "entities/saveNewLevel",
     }),
     showNewLevelDialog: function (payload) {
       this.newLevelDialogIsDisplayed = payload;
+    },
+    submitNewLevel: function () {
+      this.showNewLevelDialog(false);
+      this.saveNewLevel({
+        levelName: this.levelName,
+        levelDescription: this.levelDescription,
+        technologies: this.levelAllowedTechnologies,
+        upperHierarchy: this.levelIsSubordinateTo,
+      });
     },
   },
 };

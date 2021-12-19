@@ -5,6 +5,7 @@
     "username": "Nombre de usuario",
     "password": "Contraseña",
     "required": "Necessario.",
+    "maxCharExceeded": "Maximum {maxChar} characters.",
     "remember-me": "Recuérdame",
     "forgot-password": "Contraseña Olvidada",
     "sign-in": "iniciar sesión",
@@ -13,14 +14,18 @@
     "register-here": "Regístrese aquí"
   },
   "general": {
-    "search-box": "Buscar cualquier cosa"
+    "search-box": "Buscar cualquier cosa",
+    "cancel": "Cancel",
+    "save": "Save"
   },
   "organizationStructure": {
     "addNewEntity": "Add entity to level",
     "addNewLevel": "Add new level",
     "newLevelDialog": {
       "levelName": "Level Name",
-      "levelDescription": "Level Description"
+      "levelDescription": "Level Description",
+      "manageAllowedTechnologies": "Manage allowed technologies",
+      "levelIsSubordinateTo": "Level is subordinate to..."
     }
   }
 }
