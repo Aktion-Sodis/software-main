@@ -23,10 +23,7 @@ export enum ShapesEnum {
   "Triangle",
 }
 
-// just so we now that this ID is ID, not some random string
-export interface ID {
-  id: string;
-}
+export type UUID = string | null;
 
 export interface Marking {
   x1: number;
