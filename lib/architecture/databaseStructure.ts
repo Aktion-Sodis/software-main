@@ -5,17 +5,19 @@ import {
   QuestionTypesEnum,
   Marking,
   UUID,
+  shortText,
+  longText,
 } from "./utils";
 
 interface Config {
   ID: UUID /* primary key */;
-  name: string;
-  verboseName: string;
-  bannerPath: string;
-  iconPath: string;
-  locales: string[];
+  name: shortText;
+  verboseName: shortText;
+  bannerPath: shortText;
+  iconPath: shortText;
+  locales: shortText[];
   colors: {
-    primary: string;
+    primary: shortText;
     secondary: number;
     white: number;
     black: number;
@@ -23,21 +25,21 @@ interface Config {
     lightGray: number;
   };
   databaseDerivableTemplates: {
-    userImgPath: string;
-    levelImgPath: string;
-    levelMasterDataImgPath: string;
-    entityAppliedMasterDataImgPath: string;
-    technologyImgPath: string;
-    technologyDocMdPath: string;
-    appliedTechnologyImgPath: string;
-    surveyImgPath: string;
-    questionImgPath: string;
-    questionOptionImgPath: string;
-    entityImgPath: string;
-    executedSurveyAnswerAudioPath: string;
-    executedSurveyAnswerImgPath: string;
-    taskImgPath: string;
-    taskAudioPath: string;
+    userImgPath: shortText;
+    levelImgPath: shortText;
+    levelMasterDataImgPath: shortText;
+    entityAppliedMasterDataImgPath: shortText;
+    technologyImgPath: shortText;
+    technologyDocMdPath: shortText;
+    appliedTechnologyImgPath: shortText;
+    surveyImgPath: shortText;
+    questionImgPath: shortText;
+    questionOptionImgPath: shortText;
+    entityImgPath: shortText;
+    executedSurveyAnswerAudioPath: shortText;
+    executedSurveyAnswerImgPath: shortText;
+    taskImgPath: shortText;
+    taskAudioPath: shortText;
   };
   creationDate: number;
   lastEditDate: number;
@@ -45,11 +47,11 @@ interface Config {
 
 interface User {
   ID: UUID /* primary key */;
-  firstName: string;
-  lastName: string;
+  firstName: shortText;
+  lastName: shortText;
   permissions: {
-    read: UUID[];
-    createSubentities: UUID[];
+    read: UUID[] /* foreign key */;
+    createSubentities: UUID[] /* foreign key */;
   };
   creationDate: number;
   lastEditDate: number;
@@ -57,21 +59,21 @@ interface User {
 
 interface Level {
   ID: UUID /* primary key */;
-  name: string;
+  name: shortText;
   upperLevelID: UUID /* foreign key */;
-  customData: [{ ID: UUID /* primary key */; name: string }];
+  customData: [{ ID: UUID /* primary key */; name: shortText }];
   creationDate: number;
   lastEditDate: number;
 }
 
 interface Technology {
   ID: UUID /* primary key */;
-  description: string;
+  description: longText;
   docs: [
     {
       ID: UUID /* primary key */;
-      name: string;
-      description: string;
+      name: shortText;
+      description: longText;
       tags: DocTagsEnum;
     }
   ];
@@ -83,14 +85,14 @@ interface Technology {
 interface Entity {
   ID: UUID /* primary key */;
   parentEntityID: UUID /* foreign key */;
-  name: string;
+  name: shortText;
   geolocation: Geoloc;
   levelID: UUID /* foreign key */;
   appliedCustomData: [
     {
       ID: UUID /* foreign key */;
       customDataID: UUID /* foreign key */;
-      name: string;
+      name: shortText;
       value: number;
     }
   ];
@@ -109,15 +111,15 @@ interface Entity {
 
 interface Question {
   ID: UUID /* primary key */;
-  text: string;
+  text: longText;
   type: QuestionTypesEnum;
-  questionOptions: [{ ID: UUID; /* primary key */ text: string }];
-  followingQuestion: string;
+  questionOptions: [{ ID: UUID; /* primary key */ text: longText }];
+  followingQuestion: UUID /* foreign key */;
 }
 
 interface Survey {
   ID: UUID /* primary key */;
-  description: string;
+  description: longText;
   type: SurveyTypesEnum;
   questionIDs: UUID[];
   creationDate: number;
@@ -135,7 +137,7 @@ interface executedSurvey {
       ID: UUID /* primary key */;
       questionID: UUID /* foreign key */;
       answerTime: number;
-      text: string;
+      text: longText;
       markings: Marking[];
     }
   ];
@@ -145,8 +147,8 @@ interface executedSurvey {
 
 interface Task {
   ID: UUID /* primary key */;
-  title: string;
-  text: string;
+  title: shortText;
+  text: longText;
   dueDate: number;
   finishedDate: number | null /* if null, not finished */;
   geolocation: Geoloc;

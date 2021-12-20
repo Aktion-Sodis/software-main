@@ -25,6 +25,9 @@ export enum ShapesEnum {
 
 export type UUID = string | null;
 
+export type shortText = string;
+export type longText = string;
+
 export interface Marking {
   x1: number;
   y1: number;
