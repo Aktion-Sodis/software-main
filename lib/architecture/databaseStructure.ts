@@ -119,6 +119,8 @@ interface Question {
   type: QuestionTypesEnum;
   questionOptions: [{ ID: UUID; /* primary key */ text: longText }];
   followingQuestion: UUID /* foreign key */;
+  creationDate: number;
+  lastEditDate: number;
 }
 
 interface Survey {
