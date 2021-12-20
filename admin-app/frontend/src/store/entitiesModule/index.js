@@ -55,6 +55,8 @@ const entitiesModule = {
   }),
   getters: {
     getTechnologies: (state) => state.technologies,
+    getTechnologyById: (state, getters) => (technologyId) =>
+      getters.getTechnologies.find((e) => e.technologyId === technologyId),
     getHierarchialData: (state) => state.hierarchialData,
     getHierarchialStructure: (state) =>
       state.hierarchialStructure.sort((a, b) => a.hierarchyId - b.hierarchyId),

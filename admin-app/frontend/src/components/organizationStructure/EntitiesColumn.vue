@@ -1,17 +1,24 @@
 <template>
-  <div class="d-flex flex-column" style="width: 100%">
+  <div
+    class="d-flex flex-column"
+    style="width: 100%"
+    v-if="allEntitiesOfHierarchy(hierarchyId).length > 0"
+  >
     <Entity
+      v-for="entity in allEntitiesOfHierarchy(hierarchyId)"
+      :key="entity.entityId"
       :entityId="entity.entityId"
       :upperEntityId="entity.upperEntityId"
       :entityName="entity.name"
       :index="index"
-      v-for="entity in allEntitiesOfHierarchy(hierarchyId)"
-      :key="entity.entityId"
       class="d-flex flex-column align-center my-8"
       style="position: relative"
     />
 
     <AddEntityButton />
+  </div>
+  <div class="mt-8" v-else>
+    <p>No entities for this level.</p>
   </div>
 </template>
 
