@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div style="overflow-x: scroll; width: 100%">
     <h1 class="ml-8">Organization Structure</h1>
-    <div class="my-8 d-flex" style="overflow-x: scroll">
+    <div class="my-8 d-flex">
       <div
         v-for="(hierarchy, index) in hierarchialStructure"
         :key="hierarchy.hierarchyId"
@@ -14,6 +14,7 @@
             v-for="entity in allEntitiesOfHierarchy(hierarchy.hierarchyId)"
             :key="entity.entityId"
             class="d-flex flex-column align-center my-8"
+            style="position: relative"
           >
             <div>
               <div
@@ -287,7 +288,7 @@ export default {
 
 <style scoped>
 .column {
-  width: 32rem;
+  min-width: 32rem;
 }
 
 .dotted-left-border {
@@ -299,24 +300,26 @@ export default {
   height: 3px;
   background-color: orange;
   width: 16px;
-  transform: translate(calc(-16rem + 16px), 64px);
+  left: -16px;
+  top: 64px;
 }
 
 .entity-connection-right-line {
   position: relative;
   height: 3px;
   background-color: orange;
-  width: 50px;
-  left: calc(16rem - 8px);
+  width: 52px;
+  left: calc(16rem - 6px);
   top: 64px;
 }
 
 .entity-connection-vertical-line {
   position: absolute;
-  height: 196px;
+  height: 195px;
   background-color: orange;
   width: 3px;
-  transform: translate(calc(-16rem + 16px), 64px);
+  left: -16px;
+  top: 64px;
 }
 
 .entity-icon {
