@@ -7,6 +7,7 @@ import {
   UUID,
   shortText,
   longText,
+  TechnologyContentTypeEnum,
 } from "./utils";
 
 interface Config {
@@ -71,9 +72,10 @@ interface Level {
 interface Technology {
   ID: UUID /* primary key */;
   description: longText;
-  docs: [
+  contents: [
     {
       ID: UUID /* primary key */;
+      type: TechnologyContentTypeEnum;
       name: shortText;
       description: longText;
       tags: DocTagsEnum;

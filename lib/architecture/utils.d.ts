@@ -23,6 +23,13 @@ export enum ShapesEnum {
   "Triangle",
 }
 
+export enum TechnologyContentTypeEnum {
+  "MarkdownDocument",
+  "Image",
+  "Video",
+  "Misc",
+}
+
 export type UUID = string | null;
 
 export type shortText = string;
