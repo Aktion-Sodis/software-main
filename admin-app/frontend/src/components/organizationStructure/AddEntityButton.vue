@@ -44,7 +44,7 @@ export default {
 .horizontal-grow-enter-active,
 .horizontal-grow-leave-active {
   transition-property: max-width;
-  transition-duration: 0.5s;
+  transition-duration: 0.3s;
   transition-timing-function: ease;
 }
 .horizontal-grow-enter,
