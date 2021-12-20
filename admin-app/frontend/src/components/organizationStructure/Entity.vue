@@ -18,7 +18,7 @@
     <v-hover v-slot="{ hover }">
       <v-sheet
         class="entity-sheet mx-auto grey lighten-5 rounded-lg pa-4 d-flex flex-column justify-center align-center"
-        :class="hover ? 'lighten-2' : ''"
+        :class="hover ? 'lighten-4' : ''"
         elevation="4"
         @click="clickOnEntity(entity)"
       >
