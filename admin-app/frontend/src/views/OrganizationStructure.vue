@@ -6,14 +6,15 @@
         v-for="(hierarchy, index) in hierarchialStructure"
         :key="hierarchy.hierarchyId"
         class="column-wrapper d-flex flex-column align-center px-8"
-        :class="hierarchy.upperHierarchy === null || 'dotted-left-border'"
+        :style="
+          hierarchy.upperHierarchy === null ||
+          'border-left: 4px rgb(0, 0, 0, 0.2) dotted;'
+        "
       >
         <h4 style="width: 100%">{{ hierarchy.name }}</h4>
         <EntitiesColumn :hierarchyId="hierarchy.hierarchyId" :index="index" />
       </div>
-      <div
-        class="column-wrapper dotted-left-border d-flex flex-column align-center justify-center"
-      >
+      <div class="column-wrapper d-flex align-center justify-center">
         <NewLevelModal />
       </div>
     </div>
@@ -48,9 +49,5 @@ export default {
 <style scoped>
 .column-wrapper {
   min-width: 32rem;
-}
-
-.dotted-left-border {
-  border-left: 4px rgb(0, 0, 0, 0.2) dotted;
 }
 </style>
