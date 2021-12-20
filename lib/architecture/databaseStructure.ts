@@ -49,6 +49,7 @@ interface User {
   ID: UUID /* primary key */;
   firstName: shortText;
   lastName: shortText;
+  bio: longText;
   permissions: {
     read: UUID[] /* foreign key */;
     createSubentities: UUID[] /* foreign key */;
@@ -60,6 +61,7 @@ interface User {
 interface Level {
   ID: UUID /* primary key */;
   name: shortText;
+  description: longText;
   upperLevelID: UUID /* foreign key */;
   customData: [{ ID: UUID /* primary key */; name: shortText }];
   creationDate: number;
