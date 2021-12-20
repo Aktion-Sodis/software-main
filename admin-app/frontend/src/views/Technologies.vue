@@ -1,12 +1,11 @@
 <template>
-    <div>
-        <h1 class="text-h1">Technologies</h1>
-    </div>
+  <div>
+    <h1 class="ml-8">Technologies</h1>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'Technologies',
-}
-
+  name: "Technologies",
+};
 </script>
