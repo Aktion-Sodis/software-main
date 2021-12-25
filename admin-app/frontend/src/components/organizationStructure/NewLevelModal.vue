@@ -2,7 +2,7 @@
   <v-dialog
     v-model="newLevelDialogIsDisplayed"
     max-width="800px"
-    :persistent="!!(levelName || levelDescription)"
+    :persistent="persistModal"
   >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
@@ -152,6 +152,9 @@ export default {
     },
     levelFormIsInvalid: function () {
       return !!this.levelName;
+    },
+    persistModal: function () {
+      return Boolean(this.levelName || this.levelDescription);
     },
   },
   methods: {
