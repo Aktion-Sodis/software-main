@@ -61,6 +61,8 @@ const entitiesModule = {
     getHierarchialStructure: (state) =>
       state.hierarchialStructure.sort((a, b) => a.hierarchyId - b.hierarchyId),
     getTreeRoot: (state) => state.treeRoot,
+    getEntityById: (state, getters) => (entityId) =>
+      getters.getHierarchialData.find((e) => e.entityId === entityId),
     getAllEntitiesOfHierarchyByHid: (state) => (hid) =>
       state.hierarchialData
         .filter((e) => e.hierarchyId === hid)
@@ -79,10 +81,10 @@ const entitiesModule = {
         )
       );
     },
-    getAllDescendantsOfTreeRoot: (state) =>
+    getAllDescendantsOfTreeRoot: (state, getters) =>
       recursiveMarker(
-        state.treeRoot,
-        state.hierarchialData.map((e) => ({
+        getters.getTreeRoot,
+        getters.getHierarchialData.map((e) => ({
           ...e,
           marked: false,
         }))
@@ -215,8 +217,8 @@ const entitiesModule = {
     },
   },
   actions: {
-    clickOnEntity: ({ commit }, payload) => {
-      commit("setTreeRoot", payload);
+    clickOnEntity: ({ commit, getters }, payload) => {
+      commit("setTreeRoot", getters.getEntityById(payload));
     },
     saveNewLevel: (
       { commit },
