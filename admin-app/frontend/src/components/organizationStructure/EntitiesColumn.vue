@@ -1,7 +1,7 @@
 <template>
   <div
     class="d-flex flex-column"
-    style="width: 100%"
+    style="width: 100%; position: relative"
     v-if="allEntitiesOfHierarchy(hierarchyId).length > 0"
   >
     <Entity
@@ -12,12 +12,22 @@
       :entityName="entity.name"
       :index="index"
       class="d-flex flex-column align-center my-8"
-      style="position: relative"
+      style="position: relative; height: 128px"
     />
 
     <AddEntityButton />
+    <div
+      class="vertical-line"
+      v-for="line in calculatedLinesByHierarchyId(hierarchyId)"
+      :key="line.entityId"
+      :style="`background-color: ${lineColors[line.indentation]}; height: ${
+        192 * (line.y1 - line.y0)
+      }px; top: ${96 + line.y0 * 192}px; left: -${
+        28 - line.indentation * 6
+      }px;`"
+    ></div>
   </div>
-  <div class="d-flex flex-column mt-8 align-center" style="width: 100%" v-else>
+  <div v-else class="d-flex flex-column mt-8 align-center" style="width: 100%">
     <p>No entities for this level.</p>
     <AddEntityButton class="mt-4" />
   </div>
@@ -39,6 +49,8 @@ export default {
   computed: {
     ...mapGetters({
       allEntitiesOfHierarchy: "entities/getAllEntitiesOfHierarchyByHid",
+      lineColors: "getLineColors",
+      calculatedLinesByHierarchyId: "entities/getCalculatedLinesByHierarchyId",
     }),
   },
   methods: {
@@ -48,3 +60,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.vertical-line {
+  position: absolute;
+  width: 3px;
+}
+</style>

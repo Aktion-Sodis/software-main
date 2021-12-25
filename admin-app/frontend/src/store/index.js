@@ -14,7 +14,12 @@ const vuexLocal = new VuexPersistence({
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    lineColors: ["green", "orange", "blue", "red", "yellow", "purple"],
+  },
+  getters: {
+    getLineColors: (state) => state.lineColors,
+  },
   mutations: {},
   actions: {},
   modules: {

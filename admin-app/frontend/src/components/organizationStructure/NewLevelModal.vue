@@ -125,7 +125,7 @@ export default {
   data() {
     return {
       levelDescriptionMaxChar,
-      newLevelDialogIsDisplayed: true,
+      newLevelDialogIsDisplayed: false,
       rules: {
         required: (value) => !!value || this.requiredi18n,
         maxChar: (value) =>
