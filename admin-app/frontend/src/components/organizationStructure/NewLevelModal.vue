@@ -1,5 +1,9 @@
 <template>
-  <v-dialog v-model="newLevelDialogIsDisplayed" max-width="800px" persistent>
+  <v-dialog
+    v-model="newLevelDialogIsDisplayed"
+    max-width="800px"
+    :persistent="!!(levelName || levelDescription)"
+  >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         rounded
