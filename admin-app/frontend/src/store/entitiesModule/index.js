@@ -44,6 +44,8 @@ const entitiesModule = {
       },
       { entityId: 3, hierarchyId: 2, upperEntityId: 2, name: "Eine 4er WG" },
     ],
+    entityIdCurrentlyBeingEdited: null,
+    entityModalIsDisplayed: false,
   }),
   getters: {
     /* GENERIC GETTERS */
@@ -149,6 +151,12 @@ const entitiesModule = {
       getters.getCalculatedLines.find((l) => l.entityId === entityId) || {
         indentation: 0,
       },
+
+    getEntityModalIsEdit: (state) =>
+      state.entityIdCurrentlyBeingEdited !== null,
+    getEntityCurrentlyBeingEdited: (state, getters) =>
+      getters.getEntityById(state.entityIdCurrentlyBeingEdited) || null,
+    getEntityModalIsDisplayed: (state) => state.entityModalIsDisplayed,
   },
   mutations: {
     addLevel: (state, payload) => {
@@ -161,9 +169,22 @@ const entitiesModule = {
           : e
       );
     },
+    setEntityIdCurrentlyBeingEdited: (state, entityId) => {
+      state.entityIdCurrentlyBeingEdited = entityId;
+    },
+    setEntityModalIsDisplayed: (state, payload) => {
+      state.entityModalIsDisplayed = payload;
+    },
   },
   actions: {
-    // clickOnEntity: ({ commit, getters }, payload) => {},
+    clickOnEditEntity: ({ commit, dispatch }, payload) => {
+      commit("setEntityIdCurrentlyBeingEdited", payload);
+      dispatch("showEntityModal");
+    },
+    clickOnAddNewEntity: ({ commit, dispatch }) => {
+      commit("setEntityIdCurrentlyBeingEdited", null);
+      dispatch("showEntityModal");
+    },
     saveNewLevel: (
       { commit },
       { levelName, levelDescription, upperHierarchy, technologies }
@@ -176,6 +197,13 @@ const entitiesModule = {
         upperHierarchy,
         allowedTechnologies: technologies,
       });
+    },
+    showEntityModal: ({ commit }) => {
+      commit("setEntityModalIsDisplayed", true);
+    },
+    closeEntityModal: ({ commit }) => {
+      commit("setEntityIdCurrentlyBeingEdited", null);
+      commit("setEntityModalIsDisplayed", false);
     },
   },
 };

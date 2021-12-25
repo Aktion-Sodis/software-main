@@ -27,7 +27,12 @@
         elevation="4"
       >
         {{ entityName }} <br />
-        <v-btn fab icon class="entity-icon">
+        <v-btn
+          fab
+          icon
+          class="entity-icon"
+          @click="clickOnEditEntity(entityId)"
+        >
           <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
         </v-btn>
       </v-sheet>
@@ -65,7 +70,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      clickOnEntity: "entities/clickOnEntity",
+      clickOnEditEntity: "entities/clickOnEditEntity",
     }),
   },
 };

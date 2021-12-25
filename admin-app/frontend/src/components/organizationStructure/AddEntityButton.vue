@@ -9,6 +9,7 @@
         @mouseleave="setIsHovered(false)"
         key="hovered"
         class="overflow-hidden"
+        @click="clickOnAddNewEntity"
       >
         <v-icon class="mr-2"> mdi-plus </v-icon>
         <span class="overflow-hidden">
@@ -21,6 +22,7 @@
         color="primary"
         @mouseover="setIsHovered(true)"
         key="notHovered"
+        @click="clickOnAddNewEntity"
       >
         <v-icon class="mx-auto"> mdi-plus </v-icon>
       </v-btn>
@@ -29,6 +31,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "AddEntityButton",
   data: () => ({ isHovered: false }),
@@ -36,6 +40,9 @@ export default {
     setIsHovered: function (payload) {
       this.isHovered = payload;
     },
+    ...mapActions({
+      clickOnAddNewEntity: "entities/clickOnAddNewEntity",
+    }),
   },
 };
 </script>

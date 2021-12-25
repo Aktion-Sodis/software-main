@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model="newLevelDialogIsDisplayed"
+    v-model="newLevelModalIsDisplayed"
     max-width="800px"
     :persistent="persistModal"
   >
@@ -9,7 +9,7 @@
         rounded
         x-large
         color="primary"
-        @click="showNewLevelDialog(true)"
+        @click="showNewLevelModal(true)"
         v-bind="attrs"
         v-on="on"
       >
@@ -20,9 +20,19 @@
 
     <v-card class="px-4 pt-4">
       <v-form ref="form" @submit.prevent="submitNewLevel" lazy-validation>
-        <v-card-title> <h2>Create new level</h2> </v-card-title>
-        <v-card-subtitle>
-          This is the description of this beautiful dialog.
+        <v-card-title>
+          <h2 v-if="levelModalIsEdit">
+            {{ $t("organizationStructure.levelModal.title.edit") }}
+          </h2>
+          <h2 v-else>
+            {{ $t("organizationStructure.levelModal.title.create") }}
+          </h2>
+        </v-card-title>
+        <v-card-subtitle v-if="levelModalIsEdit">
+          {{ $t("organizationStructure.levelModal.description.edit") }}
+        </v-card-subtitle>
+        <v-card-subtitle v-else>
+          {{ $t("organizationStructure.levelModal.description.create") }}
         </v-card-subtitle>
 
         <v-card-text>
@@ -33,7 +43,7 @@
                 <v-text-field
                   v-model="levelName"
                   :rules="[rules.required]"
-                  :label="$t('organizationStructure.newLevelDialog.levelName')"
+                  :label="$t('organizationStructure.newLevelModal.levelName')"
                   required
                   outlined
                   dense
@@ -45,7 +55,7 @@
                   "
                   :rules="[rules.maxChar]"
                   :label="
-                    $t('organizationStructure.newLevelDialog.levelDescription')
+                    $t('organizationStructure.newLevelModal.levelDescription')
                   "
                   required
                   outlined
@@ -57,7 +67,7 @@
                   :items="hierarchialStructure"
                   :label="
                     $t(
-                      'organizationStructure.newLevelDialog.levelIsSubordinateTo'
+                      'organizationStructure.newLevelModal.levelIsSubordinateTo'
                     )
                   "
                   dense
@@ -76,7 +86,7 @@
                     :items="technologies"
                     :label="
                       $t(
-                        'organizationStructure.newLevelDialog.manageAllowedTechnologies'
+                        'organizationStructure.newLevelModal.manageAllowedTechnologies'
                       )
                     "
                     multiple
@@ -94,7 +104,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="showNewLevelDialog(false)">
+          <v-btn color="primary" text @click="showNewLevelModal(false)">
             {{ $t("general.cancel") }}
           </v-btn>
           <v-btn
@@ -115,9 +125,9 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-const levelDescriptionMaxChar = parseInt(
-  process.env.VUE_APP_LEVEL_DESCRIPTION_MAX_CHAR,
-  10
+const levelDescriptionMaxChar = Math.max(
+  parseInt(process.env.VUE_APP_LEVEL_DESCRIPTION_MAX_CHAR, 10),
+  0
 );
 
 export default {
@@ -125,7 +135,7 @@ export default {
   data() {
     return {
       levelDescriptionMaxChar,
-      newLevelDialogIsDisplayed: false,
+      newLevelModalIsDisplayed: false,
       rules: {
         required: (value) => !!value || this.requiredi18n,
         maxChar: (value) =>
@@ -161,11 +171,11 @@ export default {
     ...mapActions({
       saveNewLevel: "entities/saveNewLevel",
     }),
-    showNewLevelDialog: function (payload) {
-      this.newLevelDialogIsDisplayed = payload;
+    showNewLevelModal: function (payload) {
+      this.newLevelModalIsDisplayed = payload;
     },
     submitNewLevel: function () {
-      this.showNewLevelDialog(false);
+      this.showNewLevelModal(false);
       this.saveNewLevel({
         levelName: this.levelName,
         levelDescription: this.levelDescription,

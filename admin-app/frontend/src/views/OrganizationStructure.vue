@@ -38,6 +38,7 @@
         class="column-wrapper dotted-left-border d-flex align-center justify-center"
       >
         <NewLevelModal />
+        <EntityModal />
       </div>
     </div>
   </div>
@@ -47,11 +48,12 @@
 import { mapGetters, mapActions } from "vuex";
 
 import NewLevelModal from "../components/organizationStructure/NewLevelModal.vue";
+import EntityModal from "../components/organizationStructure/EntityModal.vue";
 import EntitiesColumn from "../components/organizationStructure/EntitiesColumn.vue";
 
 export default {
   name: "OrganizationStructure",
-  components: { NewLevelModal, EntitiesColumn },
+  components: { NewLevelModal, EntityModal, EntitiesColumn },
   computed: {
     ...mapGetters({
       hierarchialStructure: "entities/getHierarchialStructure",

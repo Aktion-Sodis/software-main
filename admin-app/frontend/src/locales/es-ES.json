@@ -21,7 +21,7 @@
   "organizationStructure": {
     "addNewEntity": "Add entity to level",
     "addNewLevel": "Add new level",
-    "newLevelDialog": {
+    "newLevelModal": {
       "levelName": "Level Name",
       "levelDescription": "Level Description",
       "manageAllowedTechnologies": "Manage allowed technologies",
