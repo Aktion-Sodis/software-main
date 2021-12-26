@@ -53,12 +53,14 @@
 
                 <v-select
                   v-model="upperEntity"
-                  :items="hierarchialStructure"
+                  :items="
+                    allEntitiesOfHierarchy(hierarchyIdOfEntityBeingCreated - 1)
+                  "
                   :label="$t('organizationStructure.entityModal.upperEntity')"
                   dense
                   outlined
                   persistent-hint
-                  item-value="hierarchyId"
+                  item-value="entityId"
                   item-text="name"
                   ref="upper-entity"
                 ></v-select>
@@ -116,11 +118,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      hierarchialStructure: "entities/getHierarchialStructure",
+      allEntitiesOfHierarchy: "entities/getAllEntitiesOfHierarchyByHid",
       technologies: "entities/getTechnologies",
       entityModalIsEdit: "entities/getEntityModalIsEdit",
       entityCurrentlyBeingEdited: "entities/getEntityCurrentlyBeingEdited",
       entityModalIsDisplayed: "entities/getEntityModalIsDisplayed",
+      hierarchyIdOfEntityBeingCreated:
+        "entities/getHierarchyIdOfEntityBeingCreated",
     }),
     requiredi18n() {
       return this.$t("login.required");
@@ -139,7 +143,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      saveNewEntity: "entities/saveNewEntity",
+      saveEntity: "entities/saveEntity",
       closeEntityModal: "entities/closeEntityModal",
     }),
     prefillForm() {
@@ -150,11 +154,16 @@ export default {
     },
     submitEntity() {
       this.closeEntityModal();
-      this.saveNewEntity({
+      this.saveEntity({
+        entityId: this.entityCurrentlyBeingEdited
+          ? this.entityCurrentlyBeingEdited.entityId
+          : null,
         entityName: this.entityName,
         entityDescription: this.entityDescription,
-        technologies: this.entityAllowedTechnologies,
-        upperHierarchy: this.upperEntity,
+        entityHierarchyId: this.entityCurrentlyBeingEdited
+          ? this.entityCurrentlyBeingEdited.hierarchyId
+          : this.hierarchyIdOfEntityBeingCreated,
+        entityUpperEntityId: this.upperEntity,
       });
     },
   },

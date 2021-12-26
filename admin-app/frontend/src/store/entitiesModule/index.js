@@ -75,6 +75,7 @@ const entitiesModule = {
     ],
     entityIdCurrentlyBeingEdited: null,
     entityModalIsDisplayed: false,
+    hierarchyIdOfEntityBeingCreated: null,
   }),
   getters: {
     /* GENERIC GETTERS */
@@ -186,6 +187,8 @@ const entitiesModule = {
     getEntityCurrentlyBeingEdited: (state, getters) =>
       getters.getEntityById(state.entityIdCurrentlyBeingEdited) || null,
     getEntityModalIsDisplayed: (state) => state.entityModalIsDisplayed,
+    getHierarchyIdOfEntityBeingCreated: (state) =>
+      state.hierarchyIdOfEntityBeingCreated,
   },
   mutations: {
     addLevel: (state, payload) => {
@@ -198,11 +201,48 @@ const entitiesModule = {
           : e
       );
     },
+    injectNewEntity: (
+      state,
+      { entityName, entityDescription, entityHierarchyId, entityUpperEntityId }
+    ) => {
+      state.hierarchialData = state.hierarchialData.concat({
+        entityId: Math.random() * 100,
+        hierarchyId: entityHierarchyId,
+        upperEntityId: entityUpperEntityId,
+        description: entityDescription,
+        name: entityName,
+      });
+    },
+    replaceEntity: (
+      state,
+      {
+        entityId,
+        entityName,
+        entityDescription,
+        entityHierarchyId,
+        entityUpperEntityId,
+      }
+    ) => {
+      state.hierarchialData = state.hierarchialData.map((e) =>
+        e.entityId === entityId
+          ? {
+              entityId,
+              hierarchyId: entityHierarchyId,
+              upperEntityId: entityUpperEntityId,
+              description: entityDescription,
+              name: entityName,
+            }
+          : e
+      );
+    },
     setEntityIdCurrentlyBeingEdited: (state, entityId) => {
       state.entityIdCurrentlyBeingEdited = entityId;
     },
     setEntityModalIsDisplayed: (state, payload) => {
       state.entityModalIsDisplayed = payload;
+    },
+    setHierarchyIdOfEntityBeingCreated: (state, payload) => {
+      state.hierarchyIdOfEntityBeingCreated = payload;
     },
   },
   actions: {
@@ -210,8 +250,10 @@ const entitiesModule = {
       commit("setEntityIdCurrentlyBeingEdited", payload);
       dispatch("showEntityModal");
     },
-    clickOnAddNewEntity: ({ commit, dispatch }) => {
+    clickOnAddNewEntity: ({ commit, dispatch }, payload) => {
+      console.log(payload);
       commit("setEntityIdCurrentlyBeingEdited", null);
+      commit("setHierarchyIdOfEntityBeingCreated", payload);
       dispatch("showEntityModal");
     },
     saveNewLevel: (
@@ -226,6 +268,32 @@ const entitiesModule = {
         upperHierarchy,
         allowedTechnologies: technologies,
       });
+    },
+    saveEntity: (
+      { commit },
+      {
+        entityId,
+        entityName,
+        entityDescription,
+        entityHierarchyId,
+        entityUpperEntityId,
+      }
+    ) => {
+      if (entityId === null)
+        commit("injectNewEntity", {
+          entityName,
+          entityDescription,
+          entityHierarchyId,
+          entityUpperEntityId,
+        });
+      else
+        commit("replaceEntity", {
+          entityId,
+          entityName,
+          entityDescription,
+          entityHierarchyId,
+          entityUpperEntityId,
+        });
     },
     showEntityModal: ({ commit }) => {
       commit("setEntityModalIsDisplayed", true);
