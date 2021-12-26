@@ -194,11 +194,9 @@ const entitiesModule = {
     addLevel: (state, payload) => {
       state.levelStructure = state.levelStructure.concat(payload);
     },
-    injectNewLevel: (state, newLevelId, upperLevelIdOfNewLevel) => {
+    injectNewLevel: (state, levelId, upperLevelId) => {
       state.levelStructure = state.levelStructure.map((e) =>
-        e.upperLevel === upperLevelIdOfNewLevel
-          ? { ...e, upperLevel: newLevelId }
-          : e
+        e.upperLevel === upperLevelId ? { ...e, upperLevel: levelId } : e
       );
     },
     injectNewEntity: (

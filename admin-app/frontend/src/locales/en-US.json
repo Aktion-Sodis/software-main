@@ -38,6 +38,7 @@
         "edit": "This is the description of this beautiful edit dialog.",
         "create": "This is the description of this beautiful create dialog."
       },
+      "upperEntity": "Choose parent entity",
       "entityName": "Entity Name",
       "entityDescription": "Entity Description",
       "entityIsSubordinateTo": "Entity is subordinate to..."

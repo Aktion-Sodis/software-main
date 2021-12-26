@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model="newLevelModalIsDisplayed"
+    v-model="levelModalIsDisplayed"
     max-width="800px"
     :persistent="persistModal"
   >
@@ -9,7 +9,7 @@
         rounded
         x-large
         color="primary"
-        @click="showNewLevelModal(true)"
+        @click="showlevelModal(true)"
         v-bind="attrs"
         v-on="on"
       >
@@ -19,7 +19,7 @@
     </template>
 
     <v-card class="px-4 pt-4">
-      <v-form ref="form" @submit.prevent="submitNewLevel" lazy-validation>
+      <v-form ref="form" @submit.prevent="submitlevel" lazy-validation>
         <v-card-title>
           <h2 v-if="levelModalIsEdit">
             {{ $t("organizationStructure.levelModal.title.edit") }}
@@ -43,7 +43,7 @@
                 <v-text-field
                   v-model="levelName"
                   :rules="[rules.required]"
-                  :label="$t('organizationStructure.newLevelModal.levelName')"
+                  :label="$t('organizationStructure.levelModal.levelName')"
                   required
                   outlined
                   dense
@@ -55,7 +55,7 @@
                   "
                   :rules="[rules.maxChar]"
                   :label="
-                    $t('organizationStructure.newLevelModal.levelDescription')
+                    $t('organizationStructure.levelModal.levelDescription')
                   "
                   required
                   outlined
@@ -66,9 +66,7 @@
                   v-model="levelIsSubordinateTo"
                   :items="levelStructure"
                   :label="
-                    $t(
-                      'organizationStructure.newLevelModal.levelIsSubordinateTo'
-                    )
+                    $t('organizationStructure.levelModal.levelIsSubordinateTo')
                   "
                   dense
                   outlined
@@ -86,7 +84,7 @@
                     :items="technologies"
                     :label="
                       $t(
-                        'organizationStructure.newLevelModal.manageAllowedTechnologies'
+                        'organizationStructure.levelModal.manageAllowedTechnologies'
                       )
                     "
                     multiple
@@ -104,14 +102,14 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="showNewLevelModal(false)">
+          <v-btn color="primary" text @click="showlevelModal(false)">
             {{ $t("general.cancel") }}
           </v-btn>
           <v-btn
             type="submit"
             color="primary"
             text
-            @click.prevent="submitNewLevel()"
+            @click.prevent="submitlevel()"
             :disabled="!levelFormIsInvalid"
           >
             {{ $t("general.save") }}
@@ -131,11 +129,11 @@ const levelDescriptionMaxChar = Math.max(
 );
 
 export default {
-  name: "NewLevelModal",
+  name: "levelModal",
   data() {
     return {
       levelDescriptionMaxChar,
-      newLevelModalIsDisplayed: false,
+      levelModalIsDisplayed: false,
       rules: {
         required: (value) => !!value || this.requiredi18n,
         maxChar: (value) =>
@@ -170,14 +168,14 @@ export default {
   },
   methods: {
     ...mapActions({
-      saveNewLevel: "entities/saveNewLevel",
+      savelevel: "entities/savelevel",
     }),
-    showNewLevelModal: function (payload) {
-      this.newLevelModalIsDisplayed = payload;
+    showlevelModal: function (payload) {
+      this.levelModalIsDisplayed = payload;
     },
-    submitNewLevel: function () {
-      this.showNewLevelModal(false);
-      this.saveNewLevel({
+    submitlevel: function () {
+      this.showlevelModal(false);
+      this.savelevel({
         levelName: this.levelName,
         levelDescription: this.levelDescription,
         technologies: this.levelAllowedTechnologies,
