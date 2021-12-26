@@ -223,6 +223,7 @@ const entitiesModule = {
         entityUpperEntityId,
       }
     ) => {
+      console.log("hey");
       state.hierarchialData = state.hierarchialData.map((e) =>
         e.entityId === entityId
           ? {
@@ -279,6 +280,7 @@ const entitiesModule = {
         entityUpperEntityId,
       }
     ) => {
+      console.log({ entityId });
       if (entityId === null)
         commit("injectNewEntity", {
           entityName,

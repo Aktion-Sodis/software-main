@@ -153,7 +153,6 @@ export default {
         this.entityCurrentlyBeingEdited.description || "";
     },
     submitEntity() {
-      this.closeEntityModal();
       this.saveEntity({
         entityId: this.entityCurrentlyBeingEdited
           ? this.entityCurrentlyBeingEdited.entityId
@@ -165,6 +164,12 @@ export default {
           : this.hierarchyIdOfEntityBeingCreated,
         entityUpperEntityId: this.upperEntity,
       });
+
+      this.closeEntityModal();
+
+      this.entityName = "";
+      this.entityDescription = "";
+      this.upperEntity = null;
     },
   },
 };
