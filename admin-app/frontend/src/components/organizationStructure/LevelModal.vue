@@ -64,7 +64,7 @@
 
                 <v-select
                   v-model="levelIsSubordinateTo"
-                  :items="levelStructure"
+                  :items="levels"
                   :label="
                     $t('organizationStructure.levelModal.levelIsSubordinateTo')
                   "
@@ -146,7 +146,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      levelStructure: "entities/getLevelStructure",
+      levels: "entities/getlevels",
       technologies: "entities/getTechnologies",
       levelModalIsEdit: "os/getLevelModalIsEdit",
       levelModalIsDisplayed: "os/getLevelModalIsDisplayed",

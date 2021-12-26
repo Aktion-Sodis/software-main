@@ -3,7 +3,7 @@
     <h1 class="ml-8">Organization Structure</h1>
     <div class="my-8 d-flex">
       <div
-        v-for="(level, index) in levelStructure"
+        v-for="(level, index) in levels"
         :key="level.levelId"
         class="column-wrapper d-flex flex-column align-center px-8"
         :class="level.upperLevelId === null || 'dotted-left-border'"
@@ -56,7 +56,7 @@ export default {
   components: { LevelModal, EntityModal, EntitiesColumn },
   computed: {
     ...mapGetters({
-      levelStructure: "entities/getLevelStructure",
+      levels: "entities/getlevels",
       getTechnologyById: "entities/getTechnologyById",
     }),
   },

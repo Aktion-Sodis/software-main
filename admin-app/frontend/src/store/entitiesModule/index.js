@@ -6,7 +6,7 @@ const entitiesModule = {
       { technologyId: 1, description: "Some description", name: "Toilet" },
       { technologyId: 2, description: "Some description", name: "Plantation" },
     ],
-    levelStructure: [
+    levels: [
       {
         description: "Some description",
         name: "Gemeinde",
@@ -86,8 +86,7 @@ const entitiesModule = {
     getTechnologyById: (state, getters) => (technologyId) =>
       getters.getTechnologies.find((e) => e.technologyId === technologyId),
     getLevelData: (state) => state.levelData,
-    getLevelStructure: (state) =>
-      state.levelStructure.sort((a, b) => a.levelId - b.levelId),
+    getlevels: (state) => state.levels.sort((a, b) => a.levelId - b.levelId),
     getEntityById: (state, getters) => (entityId) =>
       getters.getLevelData.find((e) => e.entityId === entityId),
     getAllEntitiesOfLevelByHid: (state) => (hid) =>
@@ -147,7 +146,7 @@ const entitiesModule = {
     /* returns "lines" with the schema {levelId, entityId, indentation, y0, y1} */
     getCalculatedLines: (state, getters) => {
       let lines = [];
-      getters.getLevelStructure.forEach((h) => {
+      getters.getlevels.forEach((h) => {
         const allParentsInLevel = getters
           .getAllEntitiesOfLevelByHid(h.levelId)
           .filter((e) => getters.getHasDescendants(e.entityId));
@@ -183,10 +182,10 @@ const entitiesModule = {
   },
   mutations: {
     addLevel: (state, payload) => {
-      state.levelStructure = state.levelStructure.concat(payload);
+      state.levels = state.levels.concat(payload);
     },
     injectNewLevel: (state, { levelId, upperLevelId }) => {
-      state.levelStructure = state.levelStructure.map((e) =>
+      state.levels = state.levels.map((e) =>
         e.upperLevelId === upperLevelId ? { ...e, upperLevelId: levelId } : e
       );
     },
