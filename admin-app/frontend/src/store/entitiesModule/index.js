@@ -29,7 +29,7 @@ const entitiesModule = {
         allowedTechnologies: [0, 1, 2],
       },
     ],
-    levelData: [
+    entities: [
       {
         entityId: 0,
         levelId: 0,
@@ -85,12 +85,12 @@ const entitiesModule = {
     getTechnologies: (state) => state.technologies,
     getTechnologyById: (state, getters) => (technologyId) =>
       getters.getTechnologies.find((e) => e.technologyId === technologyId),
-    getLevelData: (state) => state.levelData,
+    getEntities: (state) => state.entities,
     getlevels: (state) => state.levels.sort((a, b) => a.levelId - b.levelId),
     getEntityById: (state, getters) => (entityId) =>
-      getters.getLevelData.find((e) => e.entityId === entityId),
+      getters.getEntities.find((e) => e.entityId === entityId),
     getAllEntitiesOfLevelByHid: (state) => (hid) =>
-      state.levelData
+      state.entities
         .filter((e) => e.levelId === hid)
         .sort((a, b) => a.entityId - b.entityId), // sort by entityId ascending
 
@@ -138,9 +138,9 @@ const entitiesModule = {
       },
 
     getHasDescendants: (state, getters) => (entityId) =>
-      getters.getLevelData.some((e) => e.upperEntityId === entityId),
+      getters.getEntities.some((e) => e.upperEntityId === entityId),
     getEntityHasParent: (state, getters) => (upperEntityId) => {
-      return getters.getLevelData.some((e) => e.entityId === upperEntityId);
+      return getters.getEntities.some((e) => e.entityId === upperEntityId);
     },
 
     /* returns "lines" with the schema {levelId, entityId, indentation, y0, y1} */
@@ -193,7 +193,7 @@ const entitiesModule = {
       state,
       { entityName, entityDescription, entityLevelId, entityUpperEntityId }
     ) => {
-      state.levelData = state.levelData.concat({
+      state.entities = state.entities.concat({
         entityId: Math.random() * 100,
         levelId: entityLevelId,
         upperEntityId: entityUpperEntityId,
@@ -212,7 +212,7 @@ const entitiesModule = {
       }
     ) => {
       console.log("hey");
-      state.levelData = state.levelData.map((e) =>
+      state.entities = state.entities.map((e) =>
         e.entityId === entityId
           ? {
               entityId,
