@@ -219,9 +219,37 @@ const entitiesModule = {
     addLevel: (state, payload) => {
       state.levels = state.levels.concat(payload);
     },
-    injectNewLevel: (state, { levelId, upperLevelId }) => {
-      state.levels = state.levels.map((e) =>
-        e.upperLevelId === upperLevelId ? { ...e, upperLevelId: levelId } : e
+    injectNewLevel: (
+      state,
+      { name, description, upperLevelId, allowedTechnologies }
+    ) => {
+      const levelId = uuidv4();
+      state.levels = state.levels.map((l) =>
+        l.upperLevelId === upperLevelId ? { ...l, upperLevelId: levelId } : l
+      );
+      state.levels = state.levels.concat({
+        levelId,
+        name,
+        description,
+        upperLevelId,
+        allowedTechnologies,
+      });
+    },
+    replaceLevel: (
+      state,
+      { levelId, name, description, upperLevelId, allowedTechnologies }
+    ) => {
+      state.levels = state.levels.map((l) =>
+        l.levelId === levelId
+          ? {
+              ...l,
+              levelId,
+              name,
+              description,
+              upperLevelId,
+              allowedTechnologies,
+            }
+          : l
       );
     },
     injectNewEntity: (

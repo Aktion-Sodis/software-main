@@ -81,7 +81,7 @@
                 <v-card-text>
                   <v-select
                     v-model="levelAllowedTechnologies"
-                    :items="technologies"
+                    :items="allowedTechnologies"
                     :label="
                       $t(
                         'organizationStructure.levelModal.manageAllowedTechnologies'
@@ -147,22 +147,23 @@ export default {
   computed: {
     ...mapGetters({
       levels: "entities/getSortedLevels",
-      technologies: "entities/getTechnologies",
+      allowedTechnologies: "entities/getTechnologies",
       levelModalIsEdit: "os/getLevelModalIsEdit",
       levelModalIsDisplayed: "os/getLevelModalIsDisplayed",
+      levelCurrentlyBeingEdited: "os/getLevelCurrentlyBeingEdited",
     }),
-    requiredi18n: function () {
+    requiredi18n() {
       return this.$t("login.required");
     },
-    maxCharExceededi18n: function () {
+    maxCharExceededi18n() {
       return this.$t("login.maxCharExceeded", {
         maxChar: levelDescriptionMaxChar,
       });
     },
-    levelFormIsInvalid: function () {
+    levelFormIsInvalid() {
       return !!this.levelName;
     },
-    persistModal: function () {
+    persistModal() {
       return Boolean(this.levelName || this.levelDescription);
     },
   },
@@ -172,11 +173,14 @@ export default {
       showLevelModal: "os/showLevelModal",
       closeLevelModal: "os/closeLevelModal",
     }),
-    submitLevel: function () {
+    submitLevel() {
       this.saveLevel({
-        levelName: this.levelName,
-        levelDescription: this.levelDescription,
-        technologies: this.levelAllowedTechnologies,
+        levelId: this.levelCurrentlyBeingEdited
+          ? this.levelCurrentlyBeingEdited.levelId
+          : null,
+        name: this.levelName,
+        description: this.levelDescription,
+        allowedTechnologies: this.levelAllowedTechnologies || [],
         upperLevelId: this.levelIsSubordinateTo,
       });
 

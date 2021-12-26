@@ -118,14 +118,18 @@ export default {
     ...mapGetters({
       allEntitiesOfLevel: "entities/getAllEntitiesOfLevelByHid",
       upperLevelById: "entities/getUpperLevelById",
-      technologies: "entities/getTechnologies",
+      allowedTechnologies: "entities/getTechnologies",
       entityModalIsEdit: "os/getEntityModalIsEdit",
       entityCurrentlyBeingEdited: "os/getEntityCurrentlyBeingEdited",
       entityModalIsDisplayed: "os/getEntityModalIsDisplayed",
       levelIdOfEntityBeingCreated: "os/getLevelIdOfEntityBeingCreated",
     }),
     allEntitiesOfUpperLevel() {
-      const upperLevel = this.upperLevelById(this.levelIdOfEntityBeingCreated);
+      const upperLevel = this.upperLevelById(
+        this.entityModalIsEdit
+          ? this.entityCurrentlyBeingEdited.levelId
+          : this.levelIdOfEntityBeingCreated
+      );
       return upperLevel ? this.allEntitiesOfLevel(upperLevel.levelId) : [];
     },
     requiredi18n() {

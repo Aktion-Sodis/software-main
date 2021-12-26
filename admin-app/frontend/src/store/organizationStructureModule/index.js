@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
-
 const organizationStructureModule = {
   namespaced: true,
   state: () => ({
@@ -57,26 +55,31 @@ const organizationStructureModule = {
     },
     saveLevel: (
       { commit },
-      { levelName, levelDescription, upperLevelId, technologies }
+      { levelId, name, description, upperLevelId, allowedTechnologies }
     ) => {
-      commit(
-        "entities/injectNewLevel",
-        { levelId: upperLevelId - 0.1, upperLevelId },
-        {
-          root: true,
-        }
-      );
-      commit(
-        "entities/addLevel",
-        {
-          name: levelName,
-          description: levelDescription,
-          levelId: uuidv4(),
-          upperLevelId,
-          allowedTechnologies: technologies,
-        },
-        { root: true }
-      );
+      if (levelId === null)
+        commit(
+          "entities/injectNewLevel",
+          {
+            name,
+            description,
+            upperLevelId,
+            allowedTechnologies,
+          },
+          { root: true }
+        );
+      else
+        commit(
+          "entities/replaceLevel",
+          {
+            levelId,
+            name,
+            description,
+            upperLevelId,
+            allowedTechnologies,
+          },
+          { root: true }
+        );
     },
     saveEntity: (
       { commit },
