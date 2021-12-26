@@ -118,16 +118,20 @@ const entitiesModule = {
 
     getEntityById: (state, getters) => (entityId) =>
       getters.getEntities.find((e) => e.entityId === entityId),
-    getLevelById: (state, getters) => (levelId) =>
-      getters.getLevels.find((e) => e.levelId === levelId),
+    getLevelById: (state, getters) => (levelId) => {
+      if (getters.getLevels)
+        return getters.getLevels.find((l) => l.levelId === levelId);
+    },
     getAllEntitiesOfLevelByHid: (state) => (levelId) =>
       state.entities
         .filter((e) => e.levelId === levelId)
         .sort((a, b) => a.entityId - b.entityId), // sort by entityId for consistency
-
     getUpperLevelById: (state, getters) => (levelId) => {
-      const upperLevelId = getters.getLevelById(levelId).upperLevelId;
-      return getters.getLevels.find((l) => l.entityId === upperLevelId);
+      const currentLevel = getters.getLevels.find((l) => l.levelId === levelId);
+      const upperLevel = getters.getLevels.find(
+        (l) => l.levelId === currentLevel.upperLevelId
+      );
+      return upperLevel || null;
     },
 
     /* VERTICAL CALCULATIONS */

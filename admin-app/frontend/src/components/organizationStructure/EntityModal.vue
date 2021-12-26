@@ -53,11 +53,7 @@
 
                 <v-select
                   v-model="upperEntity"
-                  :items="
-                    allEntitiesOfLevel(
-                      upperLevelById(levelIdOfEntityBeingCreated).levelId
-                    )
-                  "
+                  :items="allEntitiesOfUpperLevel"
                   :label="$t('organizationStructure.entityModal.upperEntity')"
                   dense
                   outlined
@@ -128,6 +124,10 @@ export default {
       entityModalIsDisplayed: "os/getEntityModalIsDisplayed",
       levelIdOfEntityBeingCreated: "os/getLevelIdOfEntityBeingCreated",
     }),
+    allEntitiesOfUpperLevel() {
+      const upperLevel = this.upperLevelById(this.levelIdOfEntityBeingCreated);
+      return upperLevel ? this.allEntitiesOfLevel(upperLevel.levelId) : [];
+    },
     requiredi18n() {
       return this.$t("login.required");
     },
