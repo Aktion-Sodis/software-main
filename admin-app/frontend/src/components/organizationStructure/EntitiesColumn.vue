@@ -15,7 +15,7 @@
       style="position: relative; height: 128px"
     />
 
-    <AddEntityButton />
+    <AddEntityButton :hierarchyId="hierarchyId" />
     <div
       class="vertical-line"
       v-for="line in calculatedLinesByHierarchyId(hierarchyId)"
@@ -29,7 +29,7 @@
   </div>
   <div v-else class="d-flex flex-column mt-8 align-center" style="width: 100%">
     <p>No entities for this level.</p>
-    <AddEntityButton class="mt-4" />
+    <AddEntityButton class="mt-4" :hierarchyId="hierarchyId" />
   </div>
 </template>
 
