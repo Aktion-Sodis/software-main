@@ -9,7 +9,7 @@
         rounded
         x-large
         color="primary"
-        @click="showlevelModal(true)"
+        @click="showLevelModal"
         v-bind="attrs"
         v-on="on"
       >
@@ -19,7 +19,7 @@
     </template>
 
     <v-card class="px-4 pt-4">
-      <v-form ref="form" @submit.prevent="submitlevel" lazy-validation>
+      <v-form ref="form" @submit.prevent="submitLevel" lazy-validation>
         <v-card-title>
           <h2 v-if="levelModalIsEdit">
             {{ $t("organizationStructure.levelModal.title.edit") }}
@@ -102,14 +102,14 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="showlevelModal(false)">
+          <v-btn color="primary" text @click="closeLevelModal">
             {{ $t("general.cancel") }}
           </v-btn>
           <v-btn
             type="submit"
             color="primary"
             text
-            @click.prevent="submitlevel()"
+            @click.prevent="submitLevel()"
             :disabled="!levelFormIsInvalid"
           >
             {{ $t("general.save") }}
@@ -133,7 +133,6 @@ export default {
   data() {
     return {
       levelDescriptionMaxChar,
-      levelModalIsDisplayed: false,
       rules: {
         required: (value) => !!value || this.requiredi18n,
         maxChar: (value) =>
@@ -149,7 +148,8 @@ export default {
     ...mapGetters({
       levelStructure: "entities/getLevelStructure",
       technologies: "entities/getTechnologies",
-      levelModalIsEdit: "entities/getLevelModalIsEdit",
+      levelModalIsEdit: "os/getLevelModalIsEdit",
+      levelModalIsDisplayed: "os/getLevelModalIsDisplayed",
     }),
     requiredi18n: function () {
       return this.$t("login.required");
@@ -168,19 +168,24 @@ export default {
   },
   methods: {
     ...mapActions({
-      savelevel: "entities/savelevel",
+      saveLevel: "os/saveLevel",
+      showLevelModal: "os/showLevelModal",
+      closeLevelModal: "os/closeLevelModal",
     }),
-    showlevelModal: function (payload) {
-      this.levelModalIsDisplayed = payload;
-    },
-    submitlevel: function () {
-      this.showlevelModal(false);
-      this.savelevel({
+    submitLevel: function () {
+      this.saveLevel({
         levelName: this.levelName,
         levelDescription: this.levelDescription,
         technologies: this.levelAllowedTechnologies,
-        upperLevel: this.levelIsSubordinateTo,
+        upperLevelId: this.levelIsSubordinateTo,
       });
+
+      this.closeLevelModal();
+
+      this.levelName = "";
+      this.levelDescription = "";
+      this.levelAllowedTechnologies = [];
+      this.levelIsSubordinateTo = 0;
     },
   },
 };

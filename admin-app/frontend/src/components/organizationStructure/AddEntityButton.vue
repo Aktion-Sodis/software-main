@@ -47,7 +47,7 @@ export default {
       this.isHovered = payload;
     },
     ...mapActions({
-      clickOnAddNewEntity: "entities/clickOnAddNewEntity",
+      clickOnAddNewEntity: "os/clickOnAddNewEntity",
     }),
   },
 };

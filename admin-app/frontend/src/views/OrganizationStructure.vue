@@ -6,7 +6,7 @@
         v-for="(level, index) in levelStructure"
         :key="level.levelId"
         class="column-wrapper d-flex flex-column align-center px-8"
-        :class="level.upperLevel === null || 'dotted-left-border'"
+        :class="level.upperLevelId === null || 'dotted-left-border'"
       >
         <h4 style="width: 100%">{{ level.name }}</h4>
         <div style="width: 100%">

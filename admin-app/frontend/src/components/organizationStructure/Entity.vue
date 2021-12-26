@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      clickOnEditEntity: "entities/clickOnEditEntity",
+      clickOnEditEntity: "os/clickOnEditEntity",
     }),
   },
 };

@@ -11,21 +11,21 @@ const entitiesModule = {
         description: "Some description",
         name: "Gemeinde",
         levelId: 0,
-        upperLevel: null,
+        upperLevelId: null,
         allowedTechnologies: [],
       },
       {
         description: "Some description",
         name: "Dorf",
         levelId: 1,
-        upperLevel: 0,
+        upperLevelId: 0,
         allowedTechnologies: [2],
       },
       {
         description: "Some description",
         name: "Family",
         levelId: 2,
-        upperLevel: 1,
+        upperLevelId: 1,
         allowedTechnologies: [0, 1, 2],
       },
     ],
@@ -180,23 +180,14 @@ const entitiesModule = {
       getters.getCalculatedLines.find((l) => l.entityId === entityId) || {
         indentation: 0,
       },
-
-    getEntityModalIsEdit: (state) =>
-      state.entityIdCurrentlyBeingEdited !== null,
-    getLevelModalIsEdit: (state) => state.levelIdCurrentlyBeingEdited !== null,
-    getEntityCurrentlyBeingEdited: (state, getters) =>
-      getters.getEntityById(state.entityIdCurrentlyBeingEdited) || null,
-    getEntityModalIsDisplayed: (state) => state.entityModalIsDisplayed,
-    getLevelIdOfEntityBeingCreated: (state) =>
-      state.levelIdOfEntityBeingCreated,
   },
   mutations: {
     addLevel: (state, payload) => {
       state.levelStructure = state.levelStructure.concat(payload);
     },
-    injectNewLevel: (state, levelId, upperLevelId) => {
+    injectNewLevel: (state, { levelId, upperLevelId }) => {
       state.levelStructure = state.levelStructure.map((e) =>
-        e.upperLevel === upperLevelId ? { ...e, upperLevel: levelId } : e
+        e.upperLevelId === upperLevelId ? { ...e, upperLevelId: levelId } : e
       );
     },
     injectNewEntity: (
@@ -233,74 +224,6 @@ const entitiesModule = {
             }
           : e
       );
-    },
-    setEntityIdCurrentlyBeingEdited: (state, entityId) => {
-      state.entityIdCurrentlyBeingEdited = entityId;
-    },
-    setEntityModalIsDisplayed: (state, payload) => {
-      state.entityModalIsDisplayed = payload;
-    },
-    setLevelIdOfEntityBeingCreated: (state, payload) => {
-      state.levelIdOfEntityBeingCreated = payload;
-    },
-  },
-  actions: {
-    clickOnEditEntity: ({ commit, dispatch }, payload) => {
-      commit("setEntityIdCurrentlyBeingEdited", payload);
-      dispatch("showEntityModal");
-    },
-    clickOnAddNewEntity: ({ commit, dispatch }, payload) => {
-      console.log(payload);
-      commit("setEntityIdCurrentlyBeingEdited", null);
-      commit("setLevelIdOfEntityBeingCreated", payload);
-      dispatch("showEntityModal");
-    },
-    saveNewLevel: (
-      { commit },
-      { levelName, levelDescription, upperLevel, technologies }
-    ) => {
-      commit("injectNewLevel", upperLevel + 0.1, upperLevel);
-      commit("addLevel", {
-        name: levelName,
-        description: levelDescription,
-        levelId: upperLevel + 0.1,
-        upperLevel,
-        allowedTechnologies: technologies,
-      });
-    },
-    saveEntity: (
-      { commit },
-      {
-        entityId,
-        entityName,
-        entityDescription,
-        entityLevelId,
-        entityUpperEntityId,
-      }
-    ) => {
-      console.log({ entityId });
-      if (entityId === null)
-        commit("injectNewEntity", {
-          entityName,
-          entityDescription,
-          entityLevelId,
-          entityUpperEntityId,
-        });
-      else
-        commit("replaceEntity", {
-          entityId,
-          entityName,
-          entityDescription,
-          entityLevelId,
-          entityUpperEntityId,
-        });
-    },
-    showEntityModal: ({ commit }) => {
-      commit("setEntityModalIsDisplayed", true);
-    },
-    closeEntityModal: ({ commit }) => {
-      commit("setEntityIdCurrentlyBeingEdited", null);
-      commit("setEntityModalIsDisplayed", false);
     },
   },
 };

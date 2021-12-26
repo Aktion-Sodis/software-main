@@ -118,10 +118,10 @@ export default {
     ...mapGetters({
       allEntitiesOfLevel: "entities/getAllEntitiesOfLevelByHid",
       technologies: "entities/getTechnologies",
-      entityModalIsEdit: "entities/getEntityModalIsEdit",
-      entityCurrentlyBeingEdited: "entities/getEntityCurrentlyBeingEdited",
-      entityModalIsDisplayed: "entities/getEntityModalIsDisplayed",
-      levelIdOfEntityBeingCreated: "entities/getLevelIdOfEntityBeingCreated",
+      entityModalIsEdit: "os/getEntityModalIsEdit",
+      entityCurrentlyBeingEdited: "os/getEntityCurrentlyBeingEdited",
+      entityModalIsDisplayed: "os/getEntityModalIsDisplayed",
+      levelIdOfEntityBeingCreated: "os/getLevelIdOfEntityBeingCreated",
     }),
     requiredi18n() {
       return this.$t("login.required");
@@ -140,8 +140,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      saveEntity: "entities/saveEntity",
-      closeEntityModal: "entities/closeEntityModal",
+      saveEntity: "os/saveEntity",
+      closeEntityModal: "os/closeEntityModal",
     }),
     prefillForm() {
       this.$refs["entity-name"].value =
