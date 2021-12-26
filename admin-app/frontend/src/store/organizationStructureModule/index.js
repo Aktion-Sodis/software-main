@@ -49,7 +49,6 @@ const organizationStructureModule = {
       dispatch("showEntityModal");
     },
     clickOnAddNewEntity: ({ commit, dispatch }, payload) => {
-      console.log(payload);
       commit("setEntityIdCurrentlyBeingEdited", null);
       commit("setLevelIdOfEntityBeingCreated", payload);
       dispatch("showEntityModal");
