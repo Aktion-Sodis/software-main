@@ -146,7 +146,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      levels: "entities/getlevels",
+      levels: "entities/getSortedLevels",
       technologies: "entities/getTechnologies",
       levelModalIsEdit: "os/getLevelModalIsEdit",
       levelModalIsDisplayed: "os/getLevelModalIsDisplayed",

@@ -86,9 +86,22 @@ const entitiesModule = {
     getTechnologyById: (state, getters) => (technologyId) =>
       getters.getTechnologies.find((e) => e.technologyId === technologyId),
     getEntities: (state) => state.entities,
-    getlevels: (state) => state.levels.sort((a, b) => a.levelId - b.levelId),
+    getLevels: (state) => state.levels, // never use this getter. Use only the sorted getter, namely "getSortedLevels".
+    getSortedLevels: (state, getters) =>
+      state.levels.sort((a, b) => getters.hierarchySort(a, b)),
+
+    // used in the getter "getSortedLevels". Don't use directly outside of Vuex environment.
+    hierarchySort: (state, getters) => (a, b) => {
+      if (a.upperLevelId === null) return -1;
+      if (b.upperLevelId === null) return 1;
+      if (a.levelId === b.upperLevelId) return -1;
+      return getters.hierarchySort(a, getters.getLevelById(b.upperLevelId));
+    },
+
     getEntityById: (state, getters) => (entityId) =>
       getters.getEntities.find((e) => e.entityId === entityId),
+    getLevelById: (state, getters) => (levelId) =>
+      getters.getLevels.find((e) => e.levelId === levelId),
     getAllEntitiesOfLevelByHid: (state) => (hid) =>
       state.entities
         .filter((e) => e.levelId === hid)
@@ -146,7 +159,7 @@ const entitiesModule = {
     /* returns "lines" with the schema {levelId, entityId, indentation, y0, y1} */
     getCalculatedLines: (state, getters) => {
       let lines = [];
-      getters.getlevels.forEach((h) => {
+      getters.getSortedLevels.forEach((h) => {
         const allParentsInLevel = getters
           .getAllEntitiesOfLevelByHid(h.levelId)
           .filter((e) => getters.getHasDescendants(e.entityId));

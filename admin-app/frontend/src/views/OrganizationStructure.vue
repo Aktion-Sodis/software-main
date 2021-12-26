@@ -56,7 +56,7 @@ export default {
   components: { LevelModal, EntityModal, EntitiesColumn },
   computed: {
     ...mapGetters({
-      levels: "entities/getlevels",
+      levels: "entities/getSortedLevels",
       getTechnologyById: "entities/getTechnologyById",
     }),
   },
