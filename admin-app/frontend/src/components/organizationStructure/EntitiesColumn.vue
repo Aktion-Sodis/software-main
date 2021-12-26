@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import { validate as uuidValidate } from "uuid";
+
 import { mapGetters, mapActions } from "vuex";
 
 import AddEntityButton from "./AddEntityButton.vue";
@@ -43,7 +45,10 @@ export default {
   name: "EntitiesColumn",
   components: { AddEntityButton, Entity },
   props: {
-    levelId: { type: Number, required: true },
+    levelId: {
+      required: true,
+      validator: (e) => uuidValidate(e) || e === null,
+    },
     index: { type: Number, required: true },
   },
   computed: {

@@ -53,7 +53,11 @@
 
                 <v-select
                   v-model="upperEntity"
-                  :items="allEntitiesOfLevel(levelIdOfEntityBeingCreated - 1)"
+                  :items="
+                    allEntitiesOfLevel(
+                      upperLevelById(levelIdOfEntityBeingCreated).levelId
+                    )
+                  "
                   :label="$t('organizationStructure.entityModal.upperEntity')"
                   dense
                   outlined
@@ -117,6 +121,7 @@ export default {
   computed: {
     ...mapGetters({
       allEntitiesOfLevel: "entities/getAllEntitiesOfLevelByHid",
+      upperLevelById: "entities/getUpperLevelById",
       technologies: "entities/getTechnologies",
       entityModalIsEdit: "os/getEntityModalIsEdit",
       entityCurrentlyBeingEdited: "os/getEntityCurrentlyBeingEdited",

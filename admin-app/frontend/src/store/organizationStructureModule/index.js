@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 const organizationStructureModule = {
   namespaced: true,
   state: () => ({
@@ -69,7 +71,7 @@ const organizationStructureModule = {
         {
           name: levelName,
           description: levelDescription,
-          levelId: upperLevelId + 0.1,
+          levelId: uuidv4(),
           upperLevelId,
           allowedTechnologies: technologies,
         },

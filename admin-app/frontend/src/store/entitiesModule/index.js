@@ -1,74 +1,92 @@
+import { v4 as uuidv4 } from "uuid";
+
 const entitiesModule = {
   namespaced: true,
   state: () => ({
     technologies: [
-      { technologyId: 0, description: "Some description", name: "Kitchen" },
-      { technologyId: 1, description: "Some description", name: "Toilet" },
-      { technologyId: 2, description: "Some description", name: "Plantation" },
+      {
+        technologyId: "bd5f6df6-a64c-4d60-9df2-8f29bb7944d5",
+        description: "Some description",
+        name: "Kitchen",
+      },
+      {
+        technologyId: "59fe15e7-59ad-46bf-a196-cbab81885d5b",
+        description: "Some description",
+        name: "Toilet",
+      },
+      {
+        technologyId: "c220fb83-a0e4-4463-a28a-f21b260e609a",
+        description: "Some description",
+        name: "Plantation",
+      },
     ],
     levels: [
       {
         description: "Some description",
         name: "Gemeinde",
-        levelId: 0,
+        levelId: "5a93459f-f23d-44e6-a112-c41e90473a2d",
         upperLevelId: null,
         allowedTechnologies: [],
       },
       {
         description: "Some description",
         name: "Dorf",
-        levelId: 1,
-        upperLevelId: 0,
-        allowedTechnologies: [2],
+        levelId: "e7a03934-90b9-405b-807b-3f748b15ae69",
+        upperLevelId: "5a93459f-f23d-44e6-a112-c41e90473a2d",
+        allowedTechnologies: ["bd5f6df6-a64c-4d60-9df2-8f29bb7944d5"],
       },
       {
         description: "Some description",
         name: "Family",
-        levelId: 2,
-        upperLevelId: 1,
-        allowedTechnologies: [0, 1, 2],
+        levelId: "d1faef12-cf15-4b5e-9637-b4ffbd156954",
+        upperLevelId: "e7a03934-90b9-405b-807b-3f748b15ae69",
+        allowedTechnologies: [
+          "bd5f6df6-a64c-4d60-9df2-8f29bb7944d5",
+          "59fe15e7-59ad-46bf-a196-cbab81885d5b",
+          "c220fb83-a0e4-4463-a28a-f21b260e609a",
+        ],
       },
     ],
     entities: [
       {
-        entityId: 0,
-        levelId: 0,
+        entityId: "f77a7d3f-fb7f-434e-8be3-32b74269083c",
+        levelId: "5a93459f-f23d-44e6-a112-c41e90473a2d",
         upperEntityId: null,
         description: "Some description",
         name: "Aachen",
       },
       {
-        entityId: 4,
-        levelId: 0,
+        entityId: "afd8874d-ac52-4508-8351-f35f8f7e28a0",
+        levelId: "5a93459f-f23d-44e6-a112-c41e90473a2d",
         upperEntityId: null,
         description: "Some description",
         name: "Sinop",
       },
       {
-        entityId: 2,
-        levelId: 1,
-        upperEntityId: 0,
+        entityId: "0b38df2a-84f5-4066-9c0c-f447b93e8278",
+        levelId: "e7a03934-90b9-405b-807b-3f748b15ae69",
+        upperEntityId: "f77a7d3f-fb7f-434e-8be3-32b74269083c",
         description: "Some description",
         name: "Nizzaallee",
       },
       {
-        entityId: 1,
-        levelId: 1,
-        upperEntityId: 0,
+        entityId: "3d29c7aa-f422-41bc-99ae-35480a1f415e",
+        levelId: "e7a03934-90b9-405b-807b-3f748b15ae69",
+        upperEntityId: "f77a7d3f-fb7f-434e-8be3-32b74269083c",
         description: "Some description",
         name: "Mies van der Rohe Straße",
       },
       {
-        entityId: 5,
-        levelId: 1,
-        upperEntityId: 4,
+        entityId: "327ac9b8-ab56-47e0-a1c5-bd4c978645a0",
+        levelId: "e7a03934-90b9-405b-807b-3f748b15ae69",
+        upperEntityId: "afd8874d-ac52-4508-8351-f35f8f7e28a0",
         description: "Some description",
         name: "Atatürk Mahallesi",
       },
       {
-        entityId: 3,
-        levelId: 2,
-        upperEntityId: 2,
+        entityId: "b046cde7-4f18-4fc9-9b13-eb49c98f226c",
+        levelId: "d1faef12-cf15-4b5e-9637-b4ffbd156954",
+        upperEntityId: "0b38df2a-84f5-4066-9c0c-f447b93e8278",
         description: "Some description",
         name: "Eine 4er WG",
       },
@@ -86,9 +104,9 @@ const entitiesModule = {
     getTechnologyById: (state, getters) => (technologyId) =>
       getters.getTechnologies.find((e) => e.technologyId === technologyId),
     getEntities: (state) => state.entities,
-    getLevels: (state) => state.levels, // never use this getter. Use only the sorted getter, namely "getSortedLevels".
+    getLevels: (state) => state.levels, // not sorted. Use with care.
     getSortedLevels: (state, getters) =>
-      state.levels.sort((a, b) => getters.hierarchySort(a, b)),
+      getters.getLevels.sort((a, b) => getters.hierarchySort(a, b)),
 
     // used in the getter "getSortedLevels". Don't use directly outside of Vuex environment.
     hierarchySort: (state, getters) => (a, b) => {
@@ -102,53 +120,48 @@ const entitiesModule = {
       getters.getEntities.find((e) => e.entityId === entityId),
     getLevelById: (state, getters) => (levelId) =>
       getters.getLevels.find((e) => e.levelId === levelId),
-    getAllEntitiesOfLevelByHid: (state) => (hid) =>
+    getAllEntitiesOfLevelByHid: (state) => (levelId) =>
       state.entities
-        .filter((e) => e.levelId === hid)
-        .sort((a, b) => a.entityId - b.entityId), // sort by entityId ascending
+        .filter((e) => e.levelId === levelId)
+        .sort((a, b) => a.entityId - b.entityId), // sort by entityId for consistency
+
+    getUpperLevelById: (state, getters) => (levelId) => {
+      const upperLevelId = getters.getLevelById(levelId).upperLevelId;
+      return getters.getLevels.find((l) => l.entityId === upperLevelId);
+    },
 
     /* VERTICAL CALCULATIONS */
-    getVerticalOrderByEntityId: (state, getters) => (entityId, hid) =>
+    getVerticalOrderByEntityId: (state, getters) => (entityId, levelId) =>
       getters
-        .getAllEntitiesOfLevelByHid(hid)
-        .sort((a, b) => a.entityId - b.entityId)
+        .getAllEntitiesOfLevelByHid(levelId)
         .findIndex((e) => e.entityId === entityId),
-    getParentIsAboveEntity:
-      (state, getters) => (entityId, upperEntityId, hid) =>
-        !!(
-          getters.getVerticalOrderByEntityId(upperEntityId, hid - 1) <
-            getters.getVerticalOrderByEntityId(entityId, hid) &&
-          upperEntityId !== null &&
-          hid !== 0
-        ),
-    getMaxVerticalOrderOfChildren:
-      (state, getters) => (entityId, levelIndex) => {
-        const lowerLevelContainsChildren = getters
-          .getAllEntitiesOfLevelByHid(levelIndex + 1)
-          .some((e) => e.upperEntityId === entityId);
 
-        return lowerLevelContainsChildren
-          ? getters.getAllEntitiesOfLevelByHid(levelIndex + 1).length -
-              getters
-                .getAllEntitiesOfLevelByHid(levelIndex + 1)
-                .sort((a, b) => b.entityId - a.entityId) // desc
-                .findIndex((e) => e.upperEntityId === entityId) -
-              1
-          : -1;
-      },
-    getMinVerticalOrderOfChildren:
-      (state, getters) => (entityId, levelIndex) => {
-        const lowerLevelContainsChildren = getters
-          .getAllEntitiesOfLevelByHid(levelIndex + 1)
-          .some((e) => e.upperEntityId === entityId);
-
-        return lowerLevelContainsChildren
-          ? getters
-              .getAllEntitiesOfLevelByHid(levelIndex + 1)
-              .sort((a, b) => a.entityId - b.entityId) // asc
-              .findIndex((e) => e.upperEntityId === entityId)
-          : -1;
-      },
+    getMaxVerticalOrderOfChildren: (state, getters) => (entityId, levelId) => {
+      const allEntitiesInLowerLevel = getters.getAllEntitiesOfLevelByHid(
+        getters.getLevels.find((l) => l.upperLevelId === levelId).levelId
+      );
+      const lowerLevelContainsChildren = allEntitiesInLowerLevel.some(
+        (e) => e.upperEntityId === entityId
+      );
+      return lowerLevelContainsChildren
+        ? allEntitiesInLowerLevel.length -
+            allEntitiesInLowerLevel
+              .reverse()
+              .findIndex((e) => e.upperEntityId === entityId) -
+            1
+        : -1;
+    },
+    getMinVerticalOrderOfChildren: (state, getters) => (entityId, levelId) => {
+      const allEntitiesInLowerLevel = getters.getAllEntitiesOfLevelByHid(
+        getters.getLevels.find((l) => l.upperLevelId === levelId).levelId
+      );
+      const lowerLevelContainsChildren = allEntitiesInLowerLevel.some(
+        (e) => e.upperEntityId === entityId
+      );
+      return lowerLevelContainsChildren
+        ? allEntitiesInLowerLevel.findIndex((e) => e.upperEntityId === entityId)
+        : -1;
+    },
 
     getHasDescendants: (state, getters) => (entityId) =>
       getters.getEntities.some((e) => e.upperEntityId === entityId),
@@ -168,7 +181,7 @@ const entitiesModule = {
             p.entityId,
             p.levelId
           );
-          lines.push({
+          const newLine = {
             levelId: h.levelId,
             entityId: p.entityId,
             indentation: index,
@@ -180,14 +193,19 @@ const entitiesModule = {
               getters.getMaxVerticalOrderOfChildren(p.entityId, h.levelId),
               parentVerticalOrder
             ),
-          });
+          };
+          lines.push(newLine);
         });
       });
       return lines;
     },
 
     getCalculatedLinesByLevelId: (state, getters) => (levelId) =>
-      getters.getCalculatedLines.filter((l) => l.levelId + 1 === levelId),
+      getters.getCalculatedLines.filter(
+        (li) =>
+          getters.getLevels.find((le) => le.upperLevelId === li.levelId)
+            .levelId === levelId
+      ),
     getLineByEntityId: (state, getters) => (entityId) =>
       getters.getCalculatedLines.find((l) => l.entityId === entityId) || {
         indentation: 0,
@@ -207,7 +225,7 @@ const entitiesModule = {
       { entityName, entityDescription, entityLevelId, entityUpperEntityId }
     ) => {
       state.entities = state.entities.concat({
-        entityId: Math.random() * 100,
+        entityId: uuidv4(),
         levelId: entityLevelId,
         upperEntityId: entityUpperEntityId,
         description: entityDescription,
@@ -224,7 +242,6 @@ const entitiesModule = {
         entityUpperEntityId,
       }
     ) => {
-      console.log("hey");
       state.entities = state.entities.map((e) =>
         e.entityId === entityId
           ? {

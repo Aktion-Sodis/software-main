@@ -41,15 +41,20 @@
 </template>
 
 <script>
+import { validate as uuidValidate } from "uuid";
+
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   entityName: "Entity",
   props: {
-    entityId: { type: Number, required: true },
+    entityId: {
+      required: true,
+      validator: (e) => uuidValidate(e) || e === null,
+    },
     upperEntityId: {
       required: true,
-      validator: (e) => typeof e === "number" || e === null,
+      validator: (e) => uuidValidate(e) || e === null,
     },
     entityName: { type: String, required: true },
     index: { type: Number, required: true },

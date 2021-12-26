@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import { validate as uuidValidate } from "uuid";
+
 import { mapActions } from "vuex";
 
 export default {
@@ -38,8 +40,8 @@ export default {
   data: () => ({ isHovered: false }),
   props: {
     levelId: {
-      type: Number,
       required: true,
+      validator: (e) => uuidValidate(e) || e === null,
     },
   },
   methods: {
