@@ -53,9 +53,7 @@
 
                 <v-select
                   v-model="upperEntity"
-                  :items="
-                    allEntitiesOfHierarchy(hierarchyIdOfEntityBeingCreated - 1)
-                  "
+                  :items="allEntitiesOfLevel(levelIdOfEntityBeingCreated - 1)"
                   :label="$t('organizationStructure.entityModal.upperEntity')"
                   dense
                   outlined
@@ -118,13 +116,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      allEntitiesOfHierarchy: "entities/getAllEntitiesOfHierarchyByHid",
+      allEntitiesOfLevel: "entities/getAllEntitiesOfLevelByHid",
       technologies: "entities/getTechnologies",
       entityModalIsEdit: "entities/getEntityModalIsEdit",
       entityCurrentlyBeingEdited: "entities/getEntityCurrentlyBeingEdited",
       entityModalIsDisplayed: "entities/getEntityModalIsDisplayed",
-      hierarchyIdOfEntityBeingCreated:
-        "entities/getHierarchyIdOfEntityBeingCreated",
+      levelIdOfEntityBeingCreated: "entities/getLevelIdOfEntityBeingCreated",
     }),
     requiredi18n() {
       return this.$t("login.required");
@@ -159,9 +156,9 @@ export default {
           : null,
         entityName: this.entityName,
         entityDescription: this.entityDescription,
-        entityHierarchyId: this.entityCurrentlyBeingEdited
-          ? this.entityCurrentlyBeingEdited.hierarchyId
-          : this.hierarchyIdOfEntityBeingCreated,
+        entityLevelId: this.entityCurrentlyBeingEdited
+          ? this.entityCurrentlyBeingEdited.levelId
+          : this.levelIdOfEntityBeingCreated,
         entityUpperEntityId: this.upperEntity,
       });
 

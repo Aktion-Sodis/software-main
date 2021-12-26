@@ -6,68 +6,68 @@ const entitiesModule = {
       { technologyId: 1, description: "Some description", name: "Toilet" },
       { technologyId: 2, description: "Some description", name: "Plantation" },
     ],
-    hierarchialStructure: [
+    levelStructure: [
       {
         description: "Some description",
         name: "Gemeinde",
-        hierarchyId: 0,
-        upperHierarchy: null,
+        levelId: 0,
+        upperLevel: null,
         allowedTechnologies: [],
       },
       {
         description: "Some description",
         name: "Dorf",
-        hierarchyId: 1,
-        upperHierarchy: 0,
+        levelId: 1,
+        upperLevel: 0,
         allowedTechnologies: [2],
       },
       {
         description: "Some description",
         name: "Family",
-        hierarchyId: 2,
-        upperHierarchy: 1,
+        levelId: 2,
+        upperLevel: 1,
         allowedTechnologies: [0, 1, 2],
       },
     ],
-    hierarchialData: [
+    levelData: [
       {
         entityId: 0,
-        hierarchyId: 0,
+        levelId: 0,
         upperEntityId: null,
         description: "Some description",
         name: "Aachen",
       },
       {
         entityId: 4,
-        hierarchyId: 0,
+        levelId: 0,
         upperEntityId: null,
         description: "Some description",
         name: "Sinop",
       },
       {
         entityId: 2,
-        hierarchyId: 1,
+        levelId: 1,
         upperEntityId: 0,
         description: "Some description",
         name: "Nizzaallee",
       },
       {
         entityId: 1,
-        hierarchyId: 1,
+        levelId: 1,
         upperEntityId: 0,
         description: "Some description",
         name: "Mies van der Rohe Straße",
       },
       {
         entityId: 5,
-        hierarchyId: 1,
+        levelId: 1,
         upperEntityId: 4,
         description: "Some description",
         name: "Atatürk Mahallesi",
       },
       {
         entityId: 3,
-        hierarchyId: 2,
+        levelId: 2,
         upperEntityId: 2,
         description: "Some description",
         name: "Eine 4er WG",
@@ -75,27 +75,30 @@ const entitiesModule = {
     ],
     entityIdCurrentlyBeingEdited: null,
     entityModalIsDisplayed: false,
-    hierarchyIdOfEntityBeingCreated: null,
+    levelIdOfEntityBeingCreated: null,
+
+    levelIdCurrentlyBeingEdited: null,
+    levelModalIsDisplayed: false,
   }),
   getters: {
     /* GENERIC GETTERS */
     getTechnologies: (state) => state.technologies,
     getTechnologyById: (state, getters) => (technologyId) =>
       getters.getTechnologies.find((e) => e.technologyId === technologyId),
-    getHierarchialData: (state) => state.hierarchialData,
-    getHierarchialStructure: (state) =>
-      state.hierarchialStructure.sort((a, b) => a.hierarchyId - b.hierarchyId),
+    getLevelData: (state) => state.levelData,
+    getLevelStructure: (state) =>
+      state.levelStructure.sort((a, b) => a.levelId - b.levelId),
     getEntityById: (state, getters) => (entityId) =>
-      getters.getHierarchialData.find((e) => e.entityId === entityId),
-    getAllEntitiesOfHierarchyByHid: (state) => (hid) =>
-      state.hierarchialData
-        .filter((e) => e.hierarchyId === hid)
+      getters.getLevelData.find((e) => e.entityId === entityId),
+    getAllEntitiesOfLevelByHid: (state) => (hid) =>
+      state.levelData
+        .filter((e) => e.levelId === hid)
         .sort((a, b) => a.entityId - b.entityId), // sort by entityId ascending
 
     /* VERTICAL CALCULATIONS */
     getVerticalOrderByEntityId: (state, getters) => (entityId, hid) =>
       getters
-        .getAllEntitiesOfHierarchyByHid(hid)
+        .getAllEntitiesOfLevelByHid(hid)
         .sort((a, b) => a.entityId - b.entityId)
         .findIndex((e) => e.entityId === entityId),
     getParentIsAboveEntity:
@@ -107,64 +110,62 @@ const entitiesModule = {
           hid !== 0
         ),
     getMaxVerticalOrderOfChildren:
-      (state, getters) => (entityId, hierarchyIndex) => {
-        const lowerHierarchyContainsChildren = getters
-          .getAllEntitiesOfHierarchyByHid(hierarchyIndex + 1)
+      (state, getters) => (entityId, levelIndex) => {
+        const lowerLevelContainsChildren = getters
+          .getAllEntitiesOfLevelByHid(levelIndex + 1)
           .some((e) => e.upperEntityId === entityId);
 
-        return lowerHierarchyContainsChildren
-          ? getters.getAllEntitiesOfHierarchyByHid(hierarchyIndex + 1).length -
+        return lowerLevelContainsChildren
+          ? getters.getAllEntitiesOfLevelByHid(levelIndex + 1).length -
               getters
-                .getAllEntitiesOfHierarchyByHid(hierarchyIndex + 1)
+                .getAllEntitiesOfLevelByHid(levelIndex + 1)
                 .sort((a, b) => b.entityId - a.entityId) // desc
                 .findIndex((e) => e.upperEntityId === entityId) -
               1
           : -1;
       },
     getMinVerticalOrderOfChildren:
-      (state, getters) => (entityId, hierarchyIndex) => {
-        const lowerHierarchyContainsChildren = getters
-          .getAllEntitiesOfHierarchyByHid(hierarchyIndex + 1)
+      (state, getters) => (entityId, levelIndex) => {
+        const lowerLevelContainsChildren = getters
+          .getAllEntitiesOfLevelByHid(levelIndex + 1)
           .some((e) => e.upperEntityId === entityId);
 
-        return lowerHierarchyContainsChildren
+        return lowerLevelContainsChildren
           ? getters
-              .getAllEntitiesOfHierarchyByHid(hierarchyIndex + 1)
+              .getAllEntitiesOfLevelByHid(levelIndex + 1)
               .sort((a, b) => a.entityId - b.entityId) // asc
               .findIndex((e) => e.upperEntityId === entityId)
           : -1;
       },
 
     getHasDescendants: (state, getters) => (entityId) =>
-      getters.getHierarchialData.some((e) => e.upperEntityId === entityId),
+      getters.getLevelData.some((e) => e.upperEntityId === entityId),
     getEntityHasParent: (state, getters) => (upperEntityId) => {
-      return getters.getHierarchialData.some(
-        (e) => e.entityId === upperEntityId
-      );
+      return getters.getLevelData.some((e) => e.entityId === upperEntityId);
     },
 
-    /* returns "lines" with the schema {hierarchyId, entityId, indentation, y0, y1} */
+    /* returns "lines" with the schema {levelId, entityId, indentation, y0, y1} */
     getCalculatedLines: (state, getters) => {
       let lines = [];
-      getters.getHierarchialStructure.forEach((h) => {
-        const allParentsInHierarchy = getters
-          .getAllEntitiesOfHierarchyByHid(h.hierarchyId)
+      getters.getLevelStructure.forEach((h) => {
+        const allParentsInLevel = getters
+          .getAllEntitiesOfLevelByHid(h.levelId)
           .filter((e) => getters.getHasDescendants(e.entityId));
-        allParentsInHierarchy.forEach((p, index) => {
+        allParentsInLevel.forEach((p, index) => {
           const parentVerticalOrder = getters.getVerticalOrderByEntityId(
             p.entityId,
-            p.hierarchyId
+            p.levelId
           );
           lines.push({
-            hierarchyId: h.hierarchyId,
+            levelId: h.levelId,
             entityId: p.entityId,
             indentation: index,
             y0: Math.min(
-              getters.getMinVerticalOrderOfChildren(p.entityId, h.hierarchyId),
+              getters.getMinVerticalOrderOfChildren(p.entityId, h.levelId),
               parentVerticalOrder
             ),
             y1: Math.max(
-              getters.getMaxVerticalOrderOfChildren(p.entityId, h.hierarchyId),
+              getters.getMaxVerticalOrderOfChildren(p.entityId, h.levelId),
               parentVerticalOrder
             ),
           });
@@ -173,10 +174,8 @@ const entitiesModule = {
       return lines;
     },
 
-    getCalculatedLinesByHierarchyId: (state, getters) => (hierarchyId) =>
-      getters.getCalculatedLines.filter(
-        (l) => l.hierarchyId + 1 === hierarchyId
-      ),
+    getCalculatedLinesByLevelId: (state, getters) => (levelId) =>
+      getters.getCalculatedLines.filter((l) => l.levelId + 1 === levelId),
     getLineByEntityId: (state, getters) => (entityId) =>
       getters.getCalculatedLines.find((l) => l.entityId === entityId) || {
         indentation: 0,
@@ -184,30 +183,31 @@ const entitiesModule = {
 
     getEntityModalIsEdit: (state) =>
       state.entityIdCurrentlyBeingEdited !== null,
+    getLevelModalIsEdit: (state) => state.levelIdCurrentlyBeingEdited !== null,
     getEntityCurrentlyBeingEdited: (state, getters) =>
       getters.getEntityById(state.entityIdCurrentlyBeingEdited) || null,
     getEntityModalIsDisplayed: (state) => state.entityModalIsDisplayed,
-    getHierarchyIdOfEntityBeingCreated: (state) =>
-      state.hierarchyIdOfEntityBeingCreated,
+    getLevelIdOfEntityBeingCreated: (state) =>
+      state.levelIdOfEntityBeingCreated,
   },
   mutations: {
     addLevel: (state, payload) => {
-      state.hierarchialStructure = state.hierarchialStructure.concat(payload);
+      state.levelStructure = state.levelStructure.concat(payload);
     },
     injectNewLevel: (state, newLevelId, upperLevelIdOfNewLevel) => {
-      state.hierarchialStructure = state.hierarchialStructure.map((e) =>
-        e.upperHierarchy === upperLevelIdOfNewLevel
-          ? { ...e, upperHierarchy: newLevelId }
+      state.levelStructure = state.levelStructure.map((e) =>
+        e.upperLevel === upperLevelIdOfNewLevel
+          ? { ...e, upperLevel: newLevelId }
           : e
       );
     },
     injectNewEntity: (
       state,
-      { entityName, entityDescription, entityHierarchyId, entityUpperEntityId }
+      { entityName, entityDescription, entityLevelId, entityUpperEntityId }
     ) => {
-      state.hierarchialData = state.hierarchialData.concat({
+      state.levelData = state.levelData.concat({
         entityId: Math.random() * 100,
-        hierarchyId: entityHierarchyId,
+        levelId: entityLevelId,
         upperEntityId: entityUpperEntityId,
         description: entityDescription,
         name: entityName,
@@ -219,16 +219,16 @@ const entitiesModule = {
         entityId,
         entityName,
         entityDescription,
-        entityHierarchyId,
+        entityLevelId,
         entityUpperEntityId,
       }
     ) => {
       console.log("hey");
-      state.hierarchialData = state.hierarchialData.map((e) =>
+      state.levelData = state.levelData.map((e) =>
         e.entityId === entityId
           ? {
               entityId,
-              hierarchyId: entityHierarchyId,
+              levelId: entityLevelId,
               upperEntityId: entityUpperEntityId,
               description: entityDescription,
               name: entityName,
@@ -242,8 +242,8 @@ const entitiesModule = {
     setEntityModalIsDisplayed: (state, payload) => {
       state.entityModalIsDisplayed = payload;
     },
-    setHierarchyIdOfEntityBeingCreated: (state, payload) => {
-      state.hierarchyIdOfEntityBeingCreated = payload;
+    setLevelIdOfEntityBeingCreated: (state, payload) => {
+      state.levelIdOfEntityBeingCreated = payload;
     },
   },
   actions: {
@@ -254,19 +254,19 @@ const entitiesModule = {
     clickOnAddNewEntity: ({ commit, dispatch }, payload) => {
       console.log(payload);
       commit("setEntityIdCurrentlyBeingEdited", null);
-      commit("setHierarchyIdOfEntityBeingCreated", payload);
+      commit("setLevelIdOfEntityBeingCreated", payload);
       dispatch("showEntityModal");
     },
     saveNewLevel: (
       { commit },
-      { levelName, levelDescription, upperHierarchy, technologies }
+      { levelName, levelDescription, upperLevel, technologies }
     ) => {
-      commit("injectNewLevel", upperHierarchy + 0.1, upperHierarchy);
+      commit("injectNewLevel", upperLevel + 0.1, upperLevel);
       commit("addLevel", {
         name: levelName,
         description: levelDescription,
-        hierarchyId: upperHierarchy + 0.1,
-        upperHierarchy,
+        levelId: upperLevel + 0.1,
+        upperLevel,
         allowedTechnologies: technologies,
       });
     },
@@ -276,7 +276,7 @@ const entitiesModule = {
         entityId,
         entityName,
         entityDescription,
-        entityHierarchyId,
+        entityLevelId,
         entityUpperEntityId,
       }
     ) => {
@@ -285,7 +285,7 @@ const entitiesModule = {
         commit("injectNewEntity", {
           entityName,
           entityDescription,
-          entityHierarchyId,
+          entityLevelId,
           entityUpperEntityId,
         });
       else
@@ -293,7 +293,7 @@ const entitiesModule = {
           entityId,
           entityName,
           entityDescription,
-          entityHierarchyId,
+          entityLevelId,
           entityUpperEntityId,
         });
     },

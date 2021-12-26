@@ -64,7 +64,7 @@
 
                 <v-select
                   v-model="levelIsSubordinateTo"
-                  :items="hierarchialStructure"
+                  :items="levelStructure"
                   :label="
                     $t(
                       'organizationStructure.newLevelModal.levelIsSubordinateTo'
@@ -73,7 +73,7 @@
                   dense
                   outlined
                   persistent-hint
-                  item-value="hierarchyId"
+                  item-value="levelId"
                   item-text="name"
                 ></v-select>
               </v-col>
@@ -149,8 +149,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      hierarchialStructure: "entities/getHierarchialStructure",
+      levelStructure: "entities/getLevelStructure",
       technologies: "entities/getTechnologies",
+      levelModalIsEdit: "entities/getLevelModalIsEdit",
     }),
     requiredi18n: function () {
       return this.$t("login.required");
@@ -180,7 +181,7 @@ export default {
         levelName: this.levelName,
         levelDescription: this.levelDescription,
         technologies: this.levelAllowedTechnologies,
-        upperHierarchy: this.levelIsSubordinateTo,
+        upperLevel: this.levelIsSubordinateTo,
       });
     },
   },

@@ -2,10 +2,10 @@
   <div
     class="d-flex flex-column"
     style="width: 100%; position: relative"
-    v-if="allEntitiesOfHierarchy(hierarchyId).length > 0"
+    v-if="allEntitiesOfLevel(levelId).length > 0"
   >
     <Entity
-      v-for="entity in allEntitiesOfHierarchy(hierarchyId)"
+      v-for="entity in allEntitiesOfLevel(levelId)"
       :key="entity.entityId"
       :entityId="entity.entityId"
       :upperEntityId="entity.upperEntityId"
@@ -15,10 +15,10 @@
       style="position: relative; height: 128px"
     />
 
-    <AddEntityButton :hierarchyId="hierarchyId" />
+    <AddEntityButton :levelId="levelId" />
     <div
       class="vertical-line"
-      v-for="line in calculatedLinesByHierarchyId(hierarchyId)"
+      v-for="line in calculatedLinesByLevelId(levelId)"
       :key="line.entityId"
       :style="`background-color: ${lineColors[line.indentation]}; height: ${
         192 * (line.y1 - line.y0)
@@ -29,7 +29,7 @@
   </div>
   <div v-else class="d-flex flex-column mt-8 align-center" style="width: 100%">
     <p>No entities for this level.</p>
-    <AddEntityButton class="mt-4" :hierarchyId="hierarchyId" />
+    <AddEntityButton class="mt-4" :levelId="levelId" />
   </div>
 </template>
 
@@ -43,14 +43,14 @@ export default {
   name: "EntitiesColumn",
   components: { AddEntityButton, Entity },
   props: {
-    hierarchyId: { type: Number, required: true },
+    levelId: { type: Number, required: true },
     index: { type: Number, required: true },
   },
   computed: {
     ...mapGetters({
-      allEntitiesOfHierarchy: "entities/getAllEntitiesOfHierarchyByHid",
+      allEntitiesOfLevel: "entities/getAllEntitiesOfLevelByHid",
       lineColors: "getLineColors",
-      calculatedLinesByHierarchyId: "entities/getCalculatedLinesByHierarchyId",
+      calculatedLinesByLevelId: "entities/getCalculatedLinesByLevelId",
     }),
   },
   methods: {

@@ -3,21 +3,21 @@
     <h1 class="ml-8">Organization Structure</h1>
     <div class="my-8 d-flex">
       <div
-        v-for="(hierarchy, index) in hierarchialStructure"
-        :key="hierarchy.hierarchyId"
+        v-for="(level, index) in levelStructure"
+        :key="level.levelId"
         class="column-wrapper d-flex flex-column align-center px-8"
-        :class="hierarchy.upperHierarchy === null || 'dotted-left-border'"
+        :class="level.upperLevel === null || 'dotted-left-border'"
       >
-        <h4 style="width: 100%">{{ hierarchy.name }}</h4>
+        <h4 style="width: 100%">{{ level.name }}</h4>
         <div style="width: 100%">
           <div
             class="d-flex justify-space-around"
             style="width: 100%"
-            v-if="hierarchy.allowedTechnologies.length > 0"
+            v-if="level.allowedTechnologies.length > 0"
           >
             <v-tooltip
               top
-              v-for="technologyId in hierarchy.allowedTechnologies"
+              v-for="technologyId in level.allowedTechnologies"
               :key="technologyId"
             >
               <template v-slot:activator="{ on, attrs }">
@@ -32,7 +32,7 @@
             <p>No technologies for this level.</p>
           </div>
         </div>
-        <EntitiesColumn :hierarchyId="hierarchy.hierarchyId" :index="index" />
+        <EntitiesColumn :levelId="level.levelId" :index="index" />
       </div>
       <div
         class="column-wrapper dotted-left-border d-flex align-center justify-center"
@@ -56,7 +56,7 @@ export default {
   components: { NewLevelModal, EntityModal, EntitiesColumn },
   computed: {
     ...mapGetters({
-      hierarchialStructure: "entities/getHierarchialStructure",
+      levelStructure: "entities/getLevelStructure",
       getTechnologyById: "entities/getTechnologyById",
     }),
   },
