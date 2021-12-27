@@ -15,8 +15,7 @@
 
 **[OUR MISSION](https://github.com/Aktion-Sodis/software-main#our-mission) • 
 [THE SUBPROJECTS](https://github.com/Aktion-Sodis/software-main#our-mission) • 
-[CONTRIBUTE](https://github.com/Aktion-Sodis/software-main#our-mission) • 
-[LICENSE](https://github.com/Aktion-Sodis/software-main#our-mission)**
+[CONTRIBUTE](https://github.com/Aktion-Sodis/software-main#our-mission)**
 
 </div>
 
