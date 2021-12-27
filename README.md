@@ -3,7 +3,7 @@
 # The Software Project Aktion Sodis e.V.
 > For helping communities in a **sustainable way**.
 
-💻💻💻↔️🌐The monolithic repository of three front-end projects instantiated with a powerful and secure back-end as the communication mediator between them.
+💻📈📱&nbsp;&nbsp;↔️&nbsp;&nbsp;🌐 The monolithic repository of three front-end projects instantiated with a powerful and secure back-end as the communication mediator between them.
 
 🌎 Fully generic approach for satisfying the needs of many different types of organizations on their mission to help communities reach a more human life quality in many different areas on the world.
 
@@ -25,21 +25,37 @@
 
 ### 💻 The Admin App
 
+<div align="right">
+  
 ![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D) ![Vuetify](https://img.shields.io/badge/Vuetify-1867C0?style=for-the-badge&logo=vuetify&logoColor=AEDDFF) ![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
+
+</div>
 
 ![image](https://user-images.githubusercontent.com/4698720/147454315-1a985342-36aa-4661-aada-43fede5deb97.png)
 
-### 💻 The Analytics App
+### 📈 The Analytics App
+
+<div align="right">
 
 ![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
+  
+</div>
 
-### 💻 The App
+### 📱 The App
+  
+<div align="right">
 
 ![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white) ![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
+  
+</div>
 
 ### 🌐 The Back-End
 
+<div align="right">
+
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![AmazonDynamoDB](https://img.shields.io/badge/Amazon%20DynamoDB-4053D6?style=for-the-badge&logo=Amazon%20DynamoDB&logoColor=white)
+  
+</div>
 
 ## 🙌 Contribute
 
