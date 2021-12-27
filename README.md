@@ -12,7 +12,7 @@
 <div align="center">
   
 **[OUR MISSION](https://github.com/Aktion-Sodis/software-main#our-mission) • 
-[THE SUBPROJECTS](https://github.com/Aktion-Sodis/software-main#the-submissions) • 
+[THE SUBPROJECTS](https://github.com/Aktion-Sodis/software-main#the-subprojects) • 
 [CONTRIBUTE](https://github.com/Aktion-Sodis/software-main#contribute)**
 
 </div>
