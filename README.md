@@ -3,19 +3,17 @@
 # The Software Project Aktion Sodis e.V.
 > For helping communities in a **sustainable way**.
 
-💻💻💻↔️🖥️The monolithic repository of three front-end projects instantiated with a powerful and secure back-end as the communication mediator between them.
+💻💻💻↔️🌐The monolithic repository of three front-end projects instantiated with a powerful and secure back-end as the communication mediator between them.
 
 🌎 Fully generic approach for satisfying the needs of many different types of organizations on their mission to help communities reach a more human life quality in many different areas on the world.
 
 ---
 
-<br />
-
 <div align="center">
-
+  
 **[OUR MISSION](https://github.com/Aktion-Sodis/software-main#our-mission) • 
-[THE SUBPROJECTS](https://github.com/Aktion-Sodis/software-main#our-mission) • 
-[CONTRIBUTE](https://github.com/Aktion-Sodis/software-main#our-mission)**
+[THE SUBPROJECTS](https://github.com/Aktion-Sodis/software-main#the-submissions) • 
+[CONTRIBUTE](https://github.com/Aktion-Sodis/software-main#contribute)**
 
 </div>
 
@@ -26,10 +24,23 @@
 ## The Subprojects
 
 ### 💻 The Admin App
-![Vue.js 2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+
+![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D) ![Vuetify](https://img.shields.io/badge/Vuetify-1867C0?style=for-the-badge&logo=vuetify&logoColor=AEDDFF) ![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
 
 ![image](https://user-images.githubusercontent.com/4698720/147454315-1a985342-36aa-4661-aada-43fede5deb97.png)
 
+### 💻 The Analytics App
+
+![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
+
+### 💻 The App
+
+![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white) ![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
+
+### 🌐 The Back-End
+
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![AmazonDynamoDB](https://img.shields.io/badge/Amazon%20DynamoDB-4053D6?style=for-the-badge&logo=Amazon%20DynamoDB&logoColor=white)
+
 ## 🙌 Contribute
 
-See our ["job" posts](https://cloud.collective-incubator.de/teams/aktion-sodis) for our volunteer collaboration! We will be to have you around and thus skyrocketing our coolness coefficient to the moon 😎
+See our ["job" posts](https://cloud.collective-incubator.de/teams/aktion-sodis) for our volunteer collaboration! We will love it to have you around and to skyrocket our coolness coefficient to the moon 😎🚀
