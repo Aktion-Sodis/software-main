@@ -5,7 +5,7 @@
 
 💻📈📱&nbsp;&nbsp;↔️&nbsp;&nbsp;🌐 The monolithic repository of three front-end projects instantiated with a powerful and secure back-end as the communication mediator between them.
 
-🌎 Fully generic approach for satisfying the needs of many different types of organizations on their mission to help communities reach a more human life quality in many different areas on the world.
+🌎 Fully generic approach for satisfying the needs of many different types of organizations on their mission to help communities reach a more human life quality in many different areas in the world.
 
 ---
 
