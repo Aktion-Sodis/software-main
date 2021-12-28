@@ -5,10 +5,15 @@
       <div
         v-for="(level, index) in levels"
         :key="level.levelId"
-        class="column-wrapper d-flex flex-column align-center px-16"
+        class="column-wrapper d-flex flex-column px-16"
         :class="level.upperLevelId === null || 'dotted-left-border'"
       >
-        <h3 style="width: 100%">{{ level.name }}</h3>
+        <v-btn plain rounded class="text-none black--text">
+          <span class="text-h5">
+            {{ level.name }}
+          </span>
+          <v-icon dense class="edit-level-icon"> mdi-pencil-outline </v-icon>
+        </v-btn>
         <div style="width: 100%">
           <div
             class="d-flex justify-space-around"
@@ -75,5 +80,9 @@ export default {
 
 .dotted-left-border {
   border-left: 4px rgb(0, 0, 0, 0.2) dotted;
+}
+
+.edit-level-icon {
+  transform: translate(4px, -8px);
 }
 </style>

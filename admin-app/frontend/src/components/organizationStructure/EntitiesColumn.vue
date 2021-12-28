@@ -11,7 +11,7 @@
       :upperEntityId="entity.upperEntityId"
       :entityName="entity.name"
       :index="index"
-      class="d-flex flex-column align-center my-8"
+      class="d-flex flex-column align-center my-4"
       style="position: relative; height: 128px"
     />
 
@@ -21,8 +21,8 @@
       v-for="line in calculatedLinesByLevelId(levelId)"
       :key="line.entityId"
       :style="`background-color: ${lineColors[line.indentation]}; height: ${
-        192 * (line.y1 - line.y0)
-      }px; top: ${96 + line.y0 * 192 + line.indentation * 6}px; left: -${
+        160 * (line.y1 - line.y0)
+      }px; top: ${80 + line.y0 * 160 + line.indentation * 6}px; left: -${
         60 - line.indentation * 12
       }px;`"
     ></div>
