@@ -109,3 +109,12 @@ export default {
   transform: translate(4px, -8px);
 }
 </style>
+    <div></div>
+</template>
+
+<script>
+export default {
+    name: 'OrganizationStructure',
+}
+
+</script>

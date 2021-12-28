@@ -8,6 +8,8 @@ import entitiesModule from "./entitiesModule";
 import organizationStructureModule from "./organizationStructureModule";
 
 // persist
+import authModule from "./authModule";
+
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
 });
@@ -21,6 +23,7 @@ export default new Vuex.Store({
   getters: {
     getLineColors: (state) => state.lineColors,
   },
+  state: {},
   mutations: {},
   actions: {},
   modules: {

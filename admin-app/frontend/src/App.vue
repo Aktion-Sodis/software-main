@@ -28,6 +28,9 @@
     </div>
 
     <v-main :class="currentRouteName === 'Login' ? 'ml-0' : 'ml-16 mt-12'">
+    <SideBar v-if="isAuthenticated" />
+
+    <v-main>
       <router-view />
     </v-main>
   </v-app>
@@ -68,3 +71,11 @@ export default {
   max-width: 10.5rem;
 }
 </style>
+  data: () => ({}),
+  computed: {
+    ...mapGetters({
+      isAuthenticated: "auth/getIsAuthenticated",
+    })
+  },
+};
+</script>

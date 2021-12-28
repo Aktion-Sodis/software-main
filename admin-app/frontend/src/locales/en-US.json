@@ -6,6 +6,7 @@
     "password": "Password",
     "required": "Required.",
     "maxCharExceeded": "Maximum {maxChar} characters.",
+
     "remember-me": "Remember me",
     "forgot-password": "Forgot Password",
     "sign-in": "Sign in",
@@ -43,5 +44,7 @@
       "entityDescription": "Entity Description",
       "entityIsSubordinateTo": "Entity is subordinate to..."
     }
+  }
+}
   }
 }

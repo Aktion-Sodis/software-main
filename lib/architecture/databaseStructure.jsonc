@@ -1,0 +1,228 @@
+{
+  //Collection config/Document config
+  "config": {
+    "schemeVersion": 0.9,
+    "ID": "config", //fixe ID!
+    "name": "sodis",
+    "verboseName": "Aktion Sodis e.V.", //Name; String
+    "bannerPath": "configFiles/banner.png",
+    "iconPath": "configFiles/icon.png",
+    "locales": ["es-ES", "en-US", "tr-TR"], // lower the index, higher the priority
+    "colors": {
+      "primary": "0x00ff00", // Integer hex,
+      "secondary": "0x00ff00", // Integer hex,
+      "white": "0x00ff00", // Integer hex,
+      "black": "0x00ff00", // Integer hex,
+      "gray": "0x00ff00", // Integer hex,
+      "lightGray": "0x00ff00" // Integer hex,
+      // ...
+    },
+    "databaseOntologies": {
+      // for building project instances
+      // these derivable strings will be parsed in real time and $substrings will be replaced instead of saving them in the database
+      "userImgPath": "userpics/$userID.png",
+      "levelImgPath": "levelFiles/$levelID/pic.png",
+      "levelMasterDataImgPath": "levelFiles/$levelName/$masterDataID.png",
+      "entityAppliedMasterDataImgPath": "levelFiles/$levelID/$masterDataID.png",
+      "technologyImgPath": "technologies/$technologyID/icon.png",
+      "technologyDocMdPath": "technologies/$technologyID/docs/$docID.md",
+      "appliedTechnologyImgPath": "entityFiles/$entityID/$appliedTechnologyID/dfsldf.png",
+      "surveyImgPath": "technologies/$technologyID/surveys/$surveyID/icon.png",
+      "questionImgPath": "technologies/$ID/surveys/$surveyID/$questionID.png",
+      "questionOptionImgPath": "technologies/$technologyID/surveys/$surveyID/$questionOptionID.png",
+      "entityImgPath": "entityFiles/$entityID/pic.png",
+      "executedSurveyAnswerAudioPath": "technologies/$technologyID/surveys/$surveyID/$answerID.mp3",
+      "executedSurveyAnswerImgPath": "technologies/$technologyID/surveys/$surveyID/$answerID.png",
+      "taskImgPath": "tasks/$taskID.png",
+      "taskAudioPath": "tasks/$taskID.mp3"
+    },
+    "creationDate": "12345435435", // Date in milliseconds
+    "lastEdit": "12345435435" // Date in milliseconds
+  },
+
+  //Collection users; many documents as below
+  "user": {
+    "schemeVersion": 0.9,
+    "ID": "43598d35-26fe-45ee-b498-ba597b2e0092", //primary key; uuidv4
+    "firstName": "Max", //Name; String
+    "lastName": "Mustermann",
+    "permissions": {
+      "read": [
+        "74ed79f9-c7ac-4565-8b7d-9adc7e558880",
+        "d9c743a4-75fd-443f-9c59-e49fa122e241"
+      ], //jeweils berechtigung und zugehörige höchste ebenen entity foreign key
+      "createSubentities": ["48904258-6f34-4daa-92b0-f7a91faf799a"]
+      //...
+    },
+    "creationDate": "12345435435", // Date in milliseconds
+    "lastEdit": "12345435435" // Date in milliseconds
+  },
+
+  //collection levels; few but multiple documents as below
+  "level": {
+    "schemeVersion": 0.9,
+    "ID": "74ed79f9-c7ac-4565-8b7d-9adc7e558880", // primary key uuidv4
+    "name": "Familie",
+    "upperLevelID": null, //foreign key der übergordneten ebene
+    // TODO: allowed technologies festhalten
+    "masterData": [
+      {
+        "ID": "d9c743a4-75fd-443f-9c59-e49fa122e241",
+        "name": "Kinder"
+      }
+    ],
+    "creationDate": "12345435435", // Date in milliseconds
+    "lastEdit": "12345435435" // Date in milliseconds
+  },
+
+  //collection technologies; many documents as below
+  "technology": {
+    "schemeVersion": 0.9,
+    "ID": "48904258-6f34-4daa-92b0-f7a91faf799a", //primary key; uuidv4
+    "description": "Kochstelle blabla", // Longtext Beschreibung, String
+    "docs": [
+      //Anleitungen/später bildungsinhalte in eigene Collection
+      {
+        "schemeVersion": 0.9,
+        "ID": "48904258-6f34-4daa-92b0-f7a91faf879b", //primary key; uuidv4
+        "name": "Bauanleitung", //Name; string
+        "description": "Anleitung zum erstellen einer ...", //Beschreibung; string
+        "tags": ["Bauanleitung", "Tutorial", "Kochstelle"] //Liste mit Tags; strings
+      }
+      //...
+    ],
+    "creationDate": "12345435435", // Date in milliseconds
+    "lastEdit": "12345435435", // Date in milliseconds
+    "surveys": [
+      { "surveyID": "d9c743a4-75fd-443f-9c59-e49fa122e241" } //Fragebögen
+      //...
+    ]
+  },
+
+  //collection entities; many documents as below
+  "entity": {
+    "schemeVersion": 0.9,
+    "ID": "d9c743a4-75fd-443f-9c59-e49fa122e241", //primary key; uuidv4,
+    "ParentID": "d9c743a4-75fd-443f-9c59-e49fa122e241", //foreign key
+    "name": "ABC", //String
+    "longitude": 1.234389,
+    "latitude": 2343.344,
+    "LevelID": "d9c743a4-75fd-443f-9c59-e49fa122e241", //foreign key
+    "levelName": "Familie",
+    "levelTechnologiesAllowed": true, //bool
+    "appliedMasterData": [
+      //ausprägungen der masterDatas
+      {
+        "MasterDataID": "asdf45", //foreign key
+        "name": "Kinder",
+        "value": 2
+      }
+      //...
+    ],
+    "appliedTechnologies": [
+      //applied Technologies
+      {
+        "schemeVersion": 0.9,
+        "ID": "d9c743a4-75fd-443f-9c59-e49fa122e241", //primary key; uuidv4
+        "creationDate": 12404950653455940435565, //millisecondsSinceEpoch?
+        "userID": "abcdefg244d", //foreign key of the initiator user
+        "longitude": 32.345,
+        "latitude": 43.345,
+        "technology": "d9c743a4-75fd-443f-9c59-e49fa122e241", //foreign key
+        "executedSurveys": [
+          //foreign keys ausgeführter executedSurveys
+        ]
+      }
+    ]
+  },
+
+  //Fragebögen
+  "survey": {
+    "schemeVersion": 0.9,
+    "ID": "48904258-6f34-4daa-92b0-f7a00faf879b", //primary key; uuidv4
+    "description": "Abfrage von XYZ", // Description; String
+    "type": "Initial", // Different types for standardized flows --> e.g. initial at the beginning
+    "questions": [
+      //Fragen des Fragebogens
+      {
+        "ID": "sdafklafs734", //primary key; uuidv4
+        "text": "Wie alt sind sie?", //fragestellung text
+        "audio": "technologies/$ID/surveys/$ID/$ID_audio.mp3", //audio, optional, s3 reference
+        "type": "MultipleChoice", //typ, enum
+        "questionOptions": [
+          //Antwortoptionen wenn multiple/single choice
+          {
+            "ID": "dskafdskfjlfd", //primary key, uuidv4
+            "text": "Nicht so gut", //antwort text
+            "questionType": "MultipleChoice", // enum
+
+            //folgefrage wenn sc
+            "followingQuestion": {
+              //selbe struktur wie question --> kann beliebig genestet werden
+            }
+          }
+          //...
+        ]
+      }
+    ]
+  },
+
+  //collection executedSurveys; many documents as below
+  "executedSurvey": {
+    "schemeVersion": 0.9,
+    "ID": "d9c743a4-75fd-443f-9c59-e49fa122e241", //primary key; uuidv4
+    "surveyID": "d9c743a4-75fd-443f-9c59-e49fa122e241", //foreign key der zugehörigen survey
+    "userID": "d9c743a4-75fd-443f-9c59-e49fa122e241", //foreign key des durchführenden Nutzers
+    "executionDate": 12345435435, // date, milliseconds since epoch
+    "executionGeoLocation": {
+      "latitude": 45.454,
+      "longitude": 3454.45
+    },
+    "answers": [
+      //antworten
+      {
+        "schemeVersion": 0.9,
+        "questionID": "d9c743a4-75fd-443f-9c59-e49fa122e241", //foreign key der zugehörigen Frage
+        "answerTime": 12332453434, //zeitstempel der fragenbeantwortung
+        "text": "Msafdjladsfkljadsflkadjsfladsf", //Freifeldantwort
+        "markings": [
+          {
+            "x1": 0.7,
+            "y1": 0.65,
+            "x2": 1.2,
+            "y2": 0.3,
+            "shape": "Rectangle" // enum
+          }
+          //...
+        ],
+        "questionAnswers": [
+          //liste mit antworten single choice/multiple choice; foreign keys
+          // TODO: ich brauche hier Erklärung
+          "dsafadslf345",
+          "dsaf34"
+        ]
+      }
+    ]
+  },
+
+  //collection tasks, many documents as below
+
+  "task": {
+    "schemeVersion": 0.9,
+    "ID": "dsafsafkewrt345", //primary key; uuidv4
+    "title": "Problem!",
+    "text": "Das Problem liegt an xyz. Zur Behebung plane ich das",
+    "creationDate": 2134925235433,
+    "dueDate": 324565436324564,
+    "finished": true,
+    "finishingDate": 32445645356,
+    "geoLocation": {
+      "latitude": 3423.34,
+      "longitude": 23453.4
+    },
+    "userID": "sdafdsafjlkadsfret", //foreign key executor
+    "entityID": "dsalft5453", //foreign key
+    "appliedTechnologyID": "alksdfjslöag", //foreign key
+    "executedSurveyID": "ewrsdafadsf" //foreign key
+  }
+}

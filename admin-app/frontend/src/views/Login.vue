@@ -221,6 +221,7 @@ export default {
 .push-to-end {
   display: flex;
   justify-content: end;
+  justify-content: flex-end;
 }
 
 .background-img {
