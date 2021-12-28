@@ -4,7 +4,7 @@
     expand-on-hover
     class="primary-dark"
     width="17rem"
-    absolute
+    fixed
   >
     <!-- expand-on-hover -->
     <div class="side-bar-inner-wrapper overflow-hidden">
