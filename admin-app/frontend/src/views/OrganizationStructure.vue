@@ -1,7 +1,7 @@
 <template>
   <div style="overflow-x: scroll; width: 100%">
-    <h1 class="ml-8" style="position: fixed">Organization Structure</h1>
-    <div class="mb-8 mt-16 d-flex">
+    <h1 class="ml-8">Organization Structure</h1>
+    <div class="my-8 d-flex">
       <div
         v-for="(level, index) in levels"
         :key="level.levelId"
