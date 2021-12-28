@@ -8,7 +8,7 @@
         class="column-wrapper d-flex flex-column align-center px-16"
         :class="level.upperLevelId === null || 'dotted-left-border'"
       >
-        <h4 style="width: 100%">{{ level.name }}</h4>
+        <h3 style="width: 100%">{{ level.name }}</h3>
         <div style="width: 100%">
           <div
             class="d-flex justify-space-around"
@@ -29,7 +29,7 @@
             </v-tooltip>
           </div>
           <div v-else style="height: 48px; overflow: hidden">
-            <p>No technologies for this level.</p>
+            <p class="caption">No technologies for this level.</p>
           </div>
         </div>
         <EntitiesColumn :levelId="level.levelId" :index="index" />
@@ -70,7 +70,7 @@ export default {
 
 <style scoped>
 .column-wrapper {
-  min-width: 32rem;
+  min-width: 24rem;
 }
 
 .dotted-left-border {

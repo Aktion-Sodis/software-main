@@ -16,8 +16,8 @@
       class="entity-connection-right-line"
       :style="`width: ${
         72 + rightLineOfEntity.indentation * 12
-      }px; left: calc(16rem - 26px + ${
-        rightLineOfEntity.indentation * 4
+      }px; left: calc(12rem - 26px + ${
+        rightLineOfEntity.indentation * 6
       }px); background-color: ${
         lineColors[rightLineOfEntity.indentation]
       }; top: ${64 + rightLineOfEntity.indentation * 6}px; z-index: ${
