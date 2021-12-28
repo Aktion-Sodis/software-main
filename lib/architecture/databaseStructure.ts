@@ -4,18 +4,21 @@ import {
   SurveyTypesEnum,
   QuestionTypesEnum,
   Marking,
-  ID,
+  UUID,
+  shortText,
+  longText,
+  TechnologyContentTypeEnum,
 } from "./utils";
 
 interface Config {
-  ID: ID /* primary key */;
-  name: string;
-  verboseName: string;
-  bannerPath: string;
-  iconPath: string;
-  locales: string[];
+  ID: UUID /* primary key */;
+  name: shortText;
+  verboseName: shortText;
+  bannerPath: shortText;
+  iconPath: shortText;
+  locales: shortText[];
   colors: {
-    primary: string;
+    primary: shortText;
     secondary: number;
     white: number;
     black: number;
@@ -23,84 +26,87 @@ interface Config {
     lightGray: number;
   };
   databaseDerivableTemplates: {
-    userImgPath: string;
-    levelImgPath: string;
-    levelMasterDataImgPath: string;
-    entityAppliedMasterDataImgPath: string;
-    technologyImgPath: string;
-    technologyDocMdPath: string;
-    appliedTechnologyImgPath: string;
-    surveyImgPath: string;
-    questionImgPath: string;
-    questionOptionImgPath: string;
-    entityImgPath: string;
-    executedSurveyAnswerAudioPath: string;
-    executedSurveyAnswerImgPath: string;
-    taskImgPath: string;
-    taskAudioPath: string;
+    userImgPath: shortText;
+    levelImgPath: shortText;
+    levelMasterDataImgPath: shortText;
+    entityAppliedMasterDataImgPath: shortText;
+    technologyImgPath: shortText;
+    technologyDocMdPath: shortText;
+    appliedTechnologyImgPath: shortText;
+    surveyImgPath: shortText;
+    questionImgPath: shortText;
+    questionOptionImgPath: shortText;
+    entityImgPath: shortText;
+    executedSurveyAnswerAudioPath: shortText;
+    executedSurveyAnswerImgPath: shortText;
+    taskImgPath: shortText;
+    taskAudioPath: shortText;
   };
   creationDate: number;
   lastEditDate: number;
 }
 
 interface User {
-  ID: ID /* primary key */;
-  firstName: string;
-  lastName: string;
+  ID: UUID /* primary key */;
+  firstName: shortText;
+  lastName: shortText;
+  bio: longText;
   permissions: {
-    read: ID[];
-    createSubentities: ID[];
+    read: UUID[] /* foreign key */;
+    createSubentities: UUID[] /* foreign key */;
   };
   creationDate: number;
   lastEditDate: number;
 }
 
 interface Level {
-  ID: ID /* primary key */;
-  name: string;
-  upperLevelID: ID /* foreign key */;
-  customData: [{ ID: ID /* primary key */; name: string }];
+  ID: UUID /* primary key */;
+  name: shortText;
+  description: longText;
+  upperLevelID: UUID /* foreign key */;
+  customData: [{ ID: UUID /* primary key */; name: shortText }];
   creationDate: number;
   lastEditDate: number;
 }
 
 interface Technology {
-  ID: ID /* primary key */;
-  description: string;
-  docs: [
+  ID: UUID /* primary key */;
+  description: longText;
+  contents: [
     {
-      ID: ID /* primary key */;
-      name: string;
-      description: string;
+      ID: UUID /* primary key */;
+      type: TechnologyContentTypeEnum;
+      name: shortText;
+      description: longText;
       tags: DocTagsEnum;
     }
   ];
-  surveys: [{ surveyID: ID /* foreign key */ }];
+  surveys: [{ surveyID: UUID /* foreign key */ }];
   creationDate: number;
   lastEditDate: number;
 }
 
 interface Entity {
-  ID: ID /* primary key */;
-  parentEntityID: ID /* foreign key */;
-  name: string;
+  ID: UUID /* primary key */;
+  parentEntityID: UUID /* foreign key */;
+  name: shortText;
   geolocation: Geoloc;
-  levelID: ID /* foreign key */;
+  levelID: UUID /* foreign key */;
   appliedCustomData: [
     {
-      ID: ID /* foreign key */;
-      customDataID: ID /* foreign key */;
-      name: string;
+      ID: UUID /* foreign key */;
+      customDataID: UUID /* foreign key */;
+      name: shortText;
       value: number;
     }
   ];
   appliedTecnologies: [
     {
-      ID: ID /* primary key */;
-      applierUserID: ID /* foreign key */;
-      technologyID: ID /* foreign key */;
+      ID: UUID /* primary key */;
+      applierUserID: UUID /* foreign key */;
+      technologyID: UUID /* foreign key */;
       geolocation: Geoloc;
-      executedSurveys: ID[];
+      executedSurveys: UUID[];
     }
   ];
   creationDate: number;
@@ -108,34 +114,36 @@ interface Entity {
 }
 
 interface Question {
-  ID: ID /* primary key */;
-  text: string;
+  ID: UUID /* primary key */;
+  text: longText;
   type: QuestionTypesEnum;
-  questionOptions: [{ ID: ID; /* primary key */ text: string }];
-  followingQuestion: string;
+  questionOptions: [{ ID: UUID; /* primary key */ text: longText }];
+  followingQuestion: UUID /* foreign key */;
+  creationDate: number;
+  lastEditDate: number;
 }
 
 interface Survey {
-  ID: ID /* primary key */;
-  description: string;
+  ID: UUID /* primary key */;
+  description: longText;
   type: SurveyTypesEnum;
-  questionIDs: ID[];
+  questionIDs: UUID[];
   creationDate: number;
   lastEditDate: number;
 }
 
 interface executedSurvey {
-  ID: ID /* primary key */;
-  surveyID: ID /* foreign key */;
-  executorUserID: ID /* foreign key */;
+  ID: UUID /* primary key */;
+  surveyID: UUID /* foreign key */;
+  executorUserID: UUID /* foreign key */;
   executionDate: number;
   geolocation: Geoloc;
   answers: [
     {
-      ID: ID /* primary key */;
-      questionID: ID /* foreign key */;
+      ID: UUID /* primary key */;
+      questionID: UUID /* foreign key */;
       answerTime: number;
-      text: string;
+      text: longText;
       markings: Marking[];
     }
   ];
@@ -144,16 +152,16 @@ interface executedSurvey {
 }
 
 interface Task {
-  ID: ID /* primary key */;
-  title: string;
-  text: string;
+  ID: UUID /* primary key */;
+  title: shortText;
+  text: longText;
   dueDate: number;
   finishedDate: number | null /* if null, not finished */;
   geolocation: Geoloc;
-  executorUserID: ID /* foreign key */;
-  entityID: ID /* foreign key */;
-  appliedTechnologyID: ID /* foreign key */;
-  executedSurveyID: ID /* foreign key */;
+  executorUserID: UUID /* foreign key */;
+  entityID: UUID /* foreign key */;
+  appliedTechnologyID: UUID /* foreign key */;
+  executedSurveyID: UUID /* foreign key */;
   creationDate: number;
   lastEditDate: number;
 }

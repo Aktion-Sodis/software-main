@@ -23,10 +23,17 @@ export enum ShapesEnum {
   "Triangle",
 }
 
-// just so we now that this ID is ID, not some random string
-export interface ID {
-  id: string;
+export enum TechnologyContentTypeEnum {
+  "MarkdownDocument",
+  "Image",
+  "Video",
+  "Misc",
 }
+
+export type UUID = string | null;
+
+export type shortText = string;
+export type longText = string;
 
 export interface Marking {
   x1: number;
