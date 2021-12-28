@@ -160,6 +160,14 @@ export default {
       showLevelModal: "os/showLevelModal",
       closeLevelModal: "os/closeLevelModal",
     }),
+    closeThenDeleteComponentData() {
+      this.closeLevelModal();
+
+      this.levelName = "";
+      this.levelDescription = "";
+      this.levelAllowedTechnologies = [];
+      this.levelIsSubordinateTo = null;
+    },
     submitLevel() {
       this.saveLevel({
         levelId: this.levelCurrentlyBeingEdited
@@ -171,12 +179,7 @@ export default {
         upperLevelId: this.levelIsSubordinateTo,
       });
 
-      this.closeLevelModal();
-
-      this.levelName = "";
-      this.levelDescription = "";
-      this.levelAllowedTechnologies = [];
-      this.levelIsSubordinateTo = 0;
+      this.closeThenDeleteComponentData();
     },
   },
 };

@@ -35,7 +35,7 @@
           fab
           icon
           class="entity-icon"
-          @click="clickOnEditEntity(entityId)"
+          @click="callVuexActionThenFillEntityModalForm"
         >
           <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
         </v-btn>
@@ -52,6 +52,10 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   entityName: "Entity",
   props: {
+    levelId: {
+      required: true,
+      validator: (e) => uuidValidate(e) || e === null,
+    },
     entityId: {
       required: true,
       validator: (e) => uuidValidate(e) || e === null,
@@ -61,6 +65,7 @@ export default {
       validator: (e) => uuidValidate(e) || e === null,
     },
     entityName: { type: String, required: true },
+    entityDescription: { type: String, required: true },
     index: { type: Number, required: true },
   },
   computed: {
@@ -81,6 +86,17 @@ export default {
     ...mapActions({
       clickOnEditEntity: "os/clickOnEditEntity",
     }),
+    callVuexActionThenFillEntityModalForm() {
+      this.clickOnEditEntity(this.entityId);
+
+      /* TODO: This is bad, bad practice. */
+      const entityModal = this.$parent.$parent.$children.find(
+        (c) => c.$options.name === "EntityModal"
+      );
+      entityModal.entityName = this.entityName || "";
+      entityModal.entityDescription = this.entityDescription || "";
+      entityModal.upperEntity = this.upperEntityId || "";
+    },
   },
 };
 </script>

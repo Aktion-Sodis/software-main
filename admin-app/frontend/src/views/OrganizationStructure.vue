@@ -12,7 +12,7 @@
           plain
           rounded
           class="text-none black--text"
-          @click="clickOnEditLevel(level.levelId)"
+          @click="callVuexActionThenFillEntityModalForm(level)"
         >
           <span class="text-h5">
             {{ level.name }}
@@ -80,6 +80,18 @@ export default {
       clickOnAddNewLevel: "os/clickOnAddNewLevel",
       clickOnEditLevel: "os/clickOnEditLevel",
     }),
+    callVuexActionThenFillEntityModalForm(level) {
+      this.clickOnEditLevel(level.levelId);
+
+      /* TODO: This is bad, bad practice. */
+      const levelModal = this.$children.find(
+        (c) => c.$options.name === "LevelModal"
+      );
+      levelModal.levelName = level.name || "";
+      levelModal.levelDescription = level.description || "";
+      levelModal.levelAllowedTechnologies = level.allowedTechnologies || [];
+      levelModal.levelIsSubordinateTo = level.upperLevelId || null;
+    },
   },
 };
 </script>

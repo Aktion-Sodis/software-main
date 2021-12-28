@@ -1,9 +1,5 @@
 <template>
-  <v-dialog
-    v-model="entityModalIsDisplayed"
-    max-width="800px"
-    :persistent="persistModal"
-  >
+  <v-dialog v-model="entityModalIsDisplayed" max-width="800px" persistent>
     <v-card class="px-4 pt-4">
       <v-form ref="form" @submit.prevent="submitEntity" lazy-validation>
         <v-card-title>
@@ -28,6 +24,7 @@
               <v-col cols="12" sm="6">
                 <v-card-title> Entity information </v-card-title>
                 <v-text-field
+                  :autofocus="entityModalIsEdit"
                   v-model="entityName"
                   :rules="[rules.required]"
                   :label="$t('organizationStructure.entityModal.entityName')"
@@ -73,7 +70,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="closeEntityModal">
+          <v-btn color="primary" text @click="closeThenDeleteComponentData">
             {{ $t("general.cancel") }}
           </v-btn>
           <v-btn
@@ -143,20 +140,18 @@ export default {
     entityFormIsInvalid() {
       return !!this.entityName;
     },
-    persistModal() {
-      return Boolean(this.entityName || this.entityDescription);
-    },
   },
   methods: {
     ...mapActions({
       saveEntity: "os/saveEntity",
       closeEntityModal: "os/closeEntityModal",
     }),
-    prefillForm() {
-      this.$refs["entity-name"].value =
-        this.entityCurrentlyBeingEdited.name || "";
-      this.$refs["entity-description"].value =
-        this.entityCurrentlyBeingEdited.description || "";
+    closeThenDeleteComponentData() {
+      this.closeEntityModal();
+
+      this.entityName = "";
+      this.entityDescription = "";
+      this.upperEntity = null;
     },
     submitEntity() {
       this.saveEntity({
@@ -171,11 +166,7 @@ export default {
         entityUpperEntityId: this.upperEntity,
       });
 
-      this.closeEntityModal();
-
-      this.entityName = "";
-      this.entityDescription = "";
-      this.upperEntity = null;
+      this.closeThenDeleteComponentData();
     },
   },
 };
