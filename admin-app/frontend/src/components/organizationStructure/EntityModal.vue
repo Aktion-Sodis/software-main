@@ -53,7 +53,7 @@
 
                 <v-select
                   v-model="upperEntity"
-                  :items="allEntitiesOfUpperLevel"
+                  :items="allEntitiesOfUpperLevel || []"
                   :label="$t('organizationStructure.entityModal.upperEntity')"
                   dense
                   outlined
