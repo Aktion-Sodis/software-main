@@ -15,7 +15,7 @@
       style="position: relative; height: 128px"
     />
 
-    <AddEntityButton :levelId="levelId" />
+    <AddEntityButton class="mt-4" :levelId="levelId" />
     <div
       class="vertical-line"
       v-for="line in calculatedLinesByLevelId(levelId)"
