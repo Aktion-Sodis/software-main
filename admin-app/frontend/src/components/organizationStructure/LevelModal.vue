@@ -1,28 +1,25 @@
 <template>
   <v-dialog
-    v-model="newLevelDialogIsDisplayed"
+    v-model="levelModalIsDisplayed"
     max-width="800px"
     :persistent="persistModal"
   >
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn
-        rounded
-        x-large
-        color="primary"
-        @click="showNewLevelDialog(true)"
-        v-bind="attrs"
-        v-on="on"
-      >
-        <v-icon class="mr-2"> mdi-plus </v-icon>
-        {{ $t("organizationStructure.addNewLevel") }}
-      </v-btn>
-    </template>
-
     <v-card class="px-4 pt-4">
-      <v-form ref="form" @submit.prevent="submitNewLevel" lazy-validation>
-        <v-card-title> <h2>Create new level</h2> </v-card-title>
-        <v-card-subtitle>
-          This is the description of this beautiful dialog.
+      <v-form ref="form" @submit.prevent="submitLevel" lazy-validation>
+        <v-card-title>
+          <h2 v-if="levelModalIsEdit">
+            {{ $t("organizationStructure.levelModal.title.edit") }}
+            <i>{{ levelCurrentlyBeingEdited.name }}</i>
+          </h2>
+          <h2 v-else>
+            {{ $t("organizationStructure.levelModal.title.create") }}
+          </h2>
+        </v-card-title>
+        <v-card-subtitle v-if="levelModalIsEdit">
+          {{ $t("organizationStructure.levelModal.description.edit") }}
+        </v-card-subtitle>
+        <v-card-subtitle v-else>
+          {{ $t("organizationStructure.levelModal.description.create") }}
         </v-card-subtitle>
 
         <v-card-text>
@@ -33,7 +30,7 @@
                 <v-text-field
                   v-model="levelName"
                   :rules="[rules.required]"
-                  :label="$t('organizationStructure.newLevelDialog.levelName')"
+                  :label="$t('organizationStructure.levelModal.levelName')"
                   required
                   outlined
                   dense
@@ -45,7 +42,7 @@
                   "
                   :rules="[rules.maxChar]"
                   :label="
-                    $t('organizationStructure.newLevelDialog.levelDescription')
+                    $t('organizationStructure.levelModal.levelDescription')
                   "
                   required
                   outlined
@@ -54,16 +51,14 @@
 
                 <v-select
                   v-model="levelIsSubordinateTo"
-                  :items="hierarchialStructure"
+                  :items="levels"
                   :label="
-                    $t(
-                      'organizationStructure.newLevelDialog.levelIsSubordinateTo'
-                    )
+                    $t('organizationStructure.levelModal.levelIsSubordinateTo')
                   "
                   dense
                   outlined
                   persistent-hint
-                  item-value="hierarchyId"
+                  item-value="levelId"
                   item-text="name"
                 ></v-select>
               </v-col>
@@ -73,10 +68,10 @@
                 <v-card-text>
                   <v-select
                     v-model="levelAllowedTechnologies"
-                    :items="technologies"
+                    :items="allowedTechnologies"
                     :label="
                       $t(
-                        'organizationStructure.newLevelDialog.manageAllowedTechnologies'
+                        'organizationStructure.levelModal.manageAllowedTechnologies'
                       )
                     "
                     multiple
@@ -94,14 +89,14 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="showNewLevelDialog(false)">
+          <v-btn color="primary" text @click="closeLevelModal">
             {{ $t("general.cancel") }}
           </v-btn>
           <v-btn
             type="submit"
             color="primary"
             text
-            @click.prevent="submitNewLevel()"
+            @click.prevent="submitLevel()"
             :disabled="!levelFormIsInvalid"
           >
             {{ $t("general.save") }}
@@ -115,17 +110,16 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-const levelDescriptionMaxChar = parseInt(
-  process.env.VUE_APP_LEVEL_DESCRIPTION_MAX_CHAR,
-  10
+const levelDescriptionMaxChar = Math.max(
+  parseInt(process.env.VUE_APP_LEVEL_DESCRIPTION_MAX_CHAR, 10),
+  0
 );
 
 export default {
-  name: "NewLevelModal",
+  name: "LevelModal",
   data() {
     return {
       levelDescriptionMaxChar,
-      newLevelDialogIsDisplayed: true,
       rules: {
         required: (value) => !!value || this.requiredi18n,
         maxChar: (value) =>
@@ -134,44 +128,58 @@ export default {
       levelName: "",
       levelDescription: "",
       levelAllowedTechnologies: [],
-      levelIsSubordinateTo: 0,
+      levelIsSubordinateTo: null,
     };
   },
   computed: {
     ...mapGetters({
-      hierarchialStructure: "entities/getHierarchialStructure",
-      technologies: "entities/getTechnologies",
+      levels: "entities/getSortedLevels",
+      allowedTechnologies: "entities/getTechnologies",
+      levelModalIsEdit: "os/getLevelModalIsEdit",
+      levelModalIsDisplayed: "os/getLevelModalIsDisplayed",
+      levelCurrentlyBeingEdited: "os/getLevelCurrentlyBeingEdited",
     }),
-    requiredi18n: function () {
+    requiredi18n() {
       return this.$t("login.required");
     },
-    maxCharExceededi18n: function () {
+    maxCharExceededi18n() {
       return this.$t("login.maxCharExceeded", {
         maxChar: levelDescriptionMaxChar,
       });
     },
-    levelFormIsInvalid: function () {
+    levelFormIsInvalid() {
       return !!this.levelName;
     },
-    persistModal: function () {
+    persistModal() {
       return Boolean(this.levelName || this.levelDescription);
     },
   },
   methods: {
     ...mapActions({
-      saveNewLevel: "entities/saveNewLevel",
+      saveLevel: "os/saveLevel",
+      showLevelModal: "os/showLevelModal",
+      closeLevelModal: "os/closeLevelModal",
     }),
-    showNewLevelDialog: function (payload) {
-      this.newLevelDialogIsDisplayed = payload;
+    closeThenDeleteComponentData() {
+      this.closeLevelModal();
+
+      this.levelName = "";
+      this.levelDescription = "";
+      this.levelAllowedTechnologies = [];
+      this.levelIsSubordinateTo = null;
     },
-    submitNewLevel: function () {
-      this.showNewLevelDialog(false);
-      this.saveNewLevel({
-        levelName: this.levelName,
-        levelDescription: this.levelDescription,
-        technologies: this.levelAllowedTechnologies,
-        upperHierarchy: this.levelIsSubordinateTo,
+    submitLevel() {
+      this.saveLevel({
+        levelId: this.levelCurrentlyBeingEdited
+          ? this.levelCurrentlyBeingEdited.levelId
+          : null,
+        name: this.levelName,
+        description: this.levelDescription,
+        allowedTechnologies: this.levelAllowedTechnologies || [],
+        upperLevelId: this.levelIsSubordinateTo,
       });
+
+      this.closeThenDeleteComponentData();
     },
   },
 };

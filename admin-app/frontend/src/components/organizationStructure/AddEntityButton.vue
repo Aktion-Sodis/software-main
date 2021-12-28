@@ -9,6 +9,7 @@
         @mouseleave="setIsHovered(false)"
         key="hovered"
         class="overflow-hidden"
+        @click="clickOnAddNewEntity(levelId)"
       >
         <v-icon class="mr-2"> mdi-plus </v-icon>
         <span class="overflow-hidden">
@@ -21,6 +22,7 @@
         color="primary"
         @mouseover="setIsHovered(true)"
         key="notHovered"
+        @click="clickOnAddNewEntity(levelId)"
       >
         <v-icon class="mx-auto"> mdi-plus </v-icon>
       </v-btn>
@@ -29,13 +31,26 @@
 </template>
 
 <script>
+import { validate as uuidValidate } from "uuid";
+
+import { mapActions } from "vuex";
+
 export default {
   name: "AddEntityButton",
   data: () => ({ isHovered: false }),
+  props: {
+    levelId: {
+      required: true,
+      validator: (e) => uuidValidate(e) || e === null,
+    },
+  },
   methods: {
     setIsHovered: function (payload) {
       this.isHovered = payload;
     },
+    ...mapActions({
+      clickOnAddNewEntity: "os/clickOnAddNewEntity",
+    }),
   },
 };
 </script>

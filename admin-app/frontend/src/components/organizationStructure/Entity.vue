@@ -1,29 +1,42 @@
 <template>
   <div>
     <div
-      v-if="entityIsInTree(entityId) && index !== 0"
+      v-if="entityHasParent(upperEntityId) && index !== 0"
       class="entity-connection-left-line"
+      :style="`width: ${60 - leftLineOfEntity.indentation * 12}px; left: ${
+        -60 + leftLineOfEntity.indentation * 12
+      }px; background-color: ${
+        lineColors[leftLineOfEntity.indentation]
+      }; top: ${64 + leftLineOfEntity.indentation * 6}px; z-index: ${
+        leftLineOfEntity.indentation
+      }`"
     ></div>
     <div
-      v-if="getEntityShouldHaveVerticalLine(entityId, upperEntityId, index)"
-      class="entity-connection-vertical-line"
-    ></div>
-    <div
-      v-if="
-        hasChildren(entityId) &&
-        (entityIsInTree(entityId) || entityId === treeRoot.entityId)
-      "
+      v-if="hasDescendants(entityId)"
       class="entity-connection-right-line"
+      :style="`width: ${
+        72 + rightLineOfEntity.indentation * 12
+      }px; left: calc(12rem - 26px + ${
+        rightLineOfEntity.indentation * 6
+      }px); background-color: ${
+        lineColors[rightLineOfEntity.indentation]
+      }; top: ${64 + rightLineOfEntity.indentation * 6}px; z-index: ${
+        rightLineOfEntity.indentation
+      }`"
     ></div>
     <v-hover v-slot="{ hover }">
       <v-sheet
         class="entity-sheet mx-auto grey lighten-5 rounded-lg pa-4 d-flex flex-column justify-center align-center"
         :class="hover ? 'lighten-4' : ''"
         elevation="4"
-        @click="clickOnEntity(entityId)"
       >
-        {{ entityName }}
-        <v-btn fab icon class="entity-icon">
+        {{ entityName }} <br />
+        <v-btn
+          fab
+          icon
+          class="entity-icon"
+          @click="callVuexActionThenFillEntityModalForm"
+        >
           <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
         </v-btn>
       </v-sheet>
@@ -32,32 +45,58 @@
 </template>
 
 <script>
+import { validate as uuidValidate } from "uuid";
+
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   entityName: "Entity",
   props: {
-    entityId: { type: Number, required: true },
+    levelId: {
+      required: true,
+      validator: (e) => uuidValidate(e) || e === null,
+    },
+    entityId: {
+      required: true,
+      validator: (e) => uuidValidate(e) || e === null,
+    },
     upperEntityId: {
       required: true,
-      validator: (e) => typeof e === "number" || e === null,
+      validator: (e) => uuidValidate(e) || e === null,
     },
     entityName: { type: String, required: true },
+    entityDescription: { type: String, required: true },
     index: { type: Number, required: true },
   },
   computed: {
     ...mapGetters({
-      entityIsInTree: "entities/getEntityIsInTree",
-      getEntityShouldHaveVerticalLine:
-        "entities/getEntityShouldHaveVerticalLine",
-      hasChildren: "entities/getHasChildren",
-      treeRoot: "entities/getTreeRoot",
+      entityHasParent: "entities/getEntityHasParent",
+      hasDescendants: "entities/getHasDescendants",
+      lineColors: "getLineColors",
+      lineOfEntity: "entities/getLineByEntityId",
     }),
+    leftLineOfEntity() {
+      return this.lineOfEntity(this.upperEntityId);
+    },
+    rightLineOfEntity() {
+      return this.lineOfEntity(this.entityId);
+    },
   },
   methods: {
     ...mapActions({
-      clickOnEntity: "entities/clickOnEntity",
+      clickOnEditEntity: "os/clickOnEditEntity",
     }),
+    callVuexActionThenFillEntityModalForm() {
+      this.clickOnEditEntity(this.entityId);
+
+      /* TODO: This is bad, bad practice. */
+      const entityModal = this.$parent.$parent.$children.find(
+        (c) => c.$options.name === "EntityModal"
+      );
+      entityModal.entityName = this.entityName || "";
+      entityModal.entityDescription = this.entityDescription || "";
+      entityModal.upperEntity = this.upperEntityId || "";
+    },
   },
 };
 </script>
@@ -66,28 +105,11 @@ export default {
 .entity-connection-left-line {
   position: absolute;
   height: 3px;
-  background-color: orange;
-  width: 16px;
-  left: -16px;
-  top: 64px;
 }
 
 .entity-connection-right-line {
   position: relative;
   height: 3px;
-  background-color: orange;
-  width: 52px;
-  left: calc(16rem - 6px);
-  top: 64px;
-}
-
-.entity-connection-vertical-line {
-  position: absolute;
-  height: 195px;
-  background-color: orange;
-  width: 3px;
-  left: -16px;
-  top: 64px;
 }
 
 .entity-icon {
@@ -98,7 +120,7 @@ export default {
 
 .entity-sheet {
   width: 100%;
-  height: 128px;
+  height: 100%;
   cursor: pointer;
   position: relative !important;
 }

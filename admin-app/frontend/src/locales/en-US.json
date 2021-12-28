@@ -19,13 +19,29 @@
     "save": "Save"
   },
   "organizationStructure": {
-    "addNewEntity": "Add entity to level",
+    "addNewEntity": "Add entity",
     "addNewLevel": "Add new level",
-    "newLevelDialog": {
+    "levelModal": {
+      "title": { "edit": "Edit level ", "create": "Create new level" },
+      "description": {
+        "edit": "This is the description of this beautiful edit dialog.",
+        "create": "This is the description of this beautiful create dialog."
+      },
       "levelName": "Level Name",
       "levelDescription": "Level Description",
       "manageAllowedTechnologies": "Manage allowed technologies",
       "levelIsSubordinateTo": "Level is subordinate to..."
+    },
+    "entityModal": {
+      "title": { "edit": "Edit entity ", "create": "Create new entity" },
+      "description": {
+        "edit": "This is the description of this beautiful edit dialog.",
+        "create": "This is the description of this beautiful create dialog."
+      },
+      "upperEntity": "Choose parent entity",
+      "entityName": "Entity Name",
+      "entityDescription": "Entity Description",
+      "entityIsSubordinateTo": "Entity is subordinate to..."
     }
   }
 }

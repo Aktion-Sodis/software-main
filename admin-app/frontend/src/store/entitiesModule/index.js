@@ -1,237 +1,291 @@
-import recursiveMarker from "./utils";
+import { v4 as uuidv4 } from "uuid";
 
 const entitiesModule = {
   namespaced: true,
   state: () => ({
     technologies: [
-      { technologyId: 0, name: "Kitchen" },
-      { technologyId: 1, name: "Toilet" },
-      { technologyId: 2, name: "Plantation" },
-    ],
-    hierarchialStructure: [
       {
+        technologyId: "bd5f6df6-a64c-4d60-9df2-8f29bb7944d5",
+        description: "Some description",
+        name: "Kitchen",
+      },
+      {
+        technologyId: "59fe15e7-59ad-46bf-a196-cbab81885d5b",
+        description: "Some description",
+        name: "Toilet",
+      },
+      {
+        technologyId: "c220fb83-a0e4-4463-a28a-f21b260e609a",
+        description: "Some description",
+        name: "Plantation",
+      },
+    ],
+    levels: [
+      {
+        description: "Some description",
         name: "Gemeinde",
-        hierarchyId: 0,
-        upperHierarchy: null,
+        levelId: "5a93459f-f23d-44e6-a112-c41e90473a2d",
+        upperLevelId: null,
         allowedTechnologies: [],
       },
       {
+        description: "Some description",
         name: "Dorf",
-        hierarchyId: 1,
-        upperHierarchy: 0,
-        allowedTechnologies: [2],
+        levelId: "e7a03934-90b9-405b-807b-3f748b15ae69",
+        upperLevelId: "5a93459f-f23d-44e6-a112-c41e90473a2d",
+        allowedTechnologies: ["bd5f6df6-a64c-4d60-9df2-8f29bb7944d5"],
       },
       {
+        description: "Some description",
         name: "Family",
-        hierarchyId: 2,
-        upperHierarchy: 1,
-        allowedTechnologies: [0, 1, 2],
+        levelId: "d1faef12-cf15-4b5e-9637-b4ffbd156954",
+        upperLevelId: "e7a03934-90b9-405b-807b-3f748b15ae69",
+        allowedTechnologies: [
+          "bd5f6df6-a64c-4d60-9df2-8f29bb7944d5",
+          "59fe15e7-59ad-46bf-a196-cbab81885d5b",
+          "c220fb83-a0e4-4463-a28a-f21b260e609a",
+        ],
       },
     ],
-    hierarchialData: [
-      { entityId: 0, hierarchyId: 0, upperEntityId: null, name: "Aachen" },
-      { entityId: 4, hierarchyId: 0, upperEntityId: null, name: "Sinop" },
-      { entityId: 2, hierarchyId: 1, upperEntityId: 0, name: "Nizzaallee" },
+    entities: [
       {
-        entityId: 1,
-        hierarchyId: 1,
-        upperEntityId: 0,
+        entityId: "f77a7d3f-fb7f-434e-8be3-32b74269083c",
+        levelId: "5a93459f-f23d-44e6-a112-c41e90473a2d",
+        upperEntityId: null,
+        description: "Some description",
+        name: "Aachen",
+      },
+      {
+        entityId: "afd8874d-ac52-4508-8351-f35f8f7e28a0",
+        levelId: "5a93459f-f23d-44e6-a112-c41e90473a2d",
+        upperEntityId: null,
+        description: "Some description",
+        name: "Sinop",
+      },
+      {
+        entityId: "0b38df2a-84f5-4066-9c0c-f447b93e8278",
+        levelId: "e7a03934-90b9-405b-807b-3f748b15ae69",
+        upperEntityId: "f77a7d3f-fb7f-434e-8be3-32b74269083c",
+        description: "Some description",
+        name: "Nizzaallee",
+      },
+      {
+        entityId: "3d29c7aa-f422-41bc-99ae-35480a1f415e",
+        levelId: "e7a03934-90b9-405b-807b-3f748b15ae69",
+        upperEntityId: "f77a7d3f-fb7f-434e-8be3-32b74269083c",
+        description: "Some description",
         name: "Mies van der Rohe Straße",
       },
       {
-        entityId: 5,
-        hierarchyId: 1,
-        upperEntityId: 4,
+        entityId: "327ac9b8-ab56-47e0-a1c5-bd4c978645a0",
+        levelId: "e7a03934-90b9-405b-807b-3f748b15ae69",
+        upperEntityId: "afd8874d-ac52-4508-8351-f35f8f7e28a0",
+        description: "Some description",
         name: "Atatürk Mahallesi",
       },
-      { entityId: 3, hierarchyId: 2, upperEntityId: 2, name: "Eine 4er WG" },
+      {
+        entityId: "b046cde7-4f18-4fc9-9b13-eb49c98f226c",
+        levelId: "d1faef12-cf15-4b5e-9637-b4ffbd156954",
+        upperEntityId: "0b38df2a-84f5-4066-9c0c-f447b93e8278",
+        description: "Some description",
+        name: "Eine 4er WG",
+      },
     ],
-    treeRoot: {
-      entityId: 0,
-      hierarchyId: 0,
-      upperEntityId: null,
-      name: "Aachen",
-    },
+    entityIdCurrentlyBeingEdited: null,
+    entityModalIsDisplayed: false,
+    levelIdOfEntityBeingCreated: null,
+
+    levelIdCurrentlyBeingEdited: null,
+    levelModalIsDisplayed: false,
   }),
   getters: {
+    /* GENERIC GETTERS */
     getTechnologies: (state) => state.technologies,
     getTechnologyById: (state, getters) => (technologyId) =>
       getters.getTechnologies.find((e) => e.technologyId === technologyId),
-    getHierarchialData: (state) => state.hierarchialData,
-    getHierarchialStructure: (state) =>
-      state.hierarchialStructure.sort((a, b) => a.hierarchyId - b.hierarchyId),
-    getTreeRoot: (state) => state.treeRoot,
-    getEntityById: (state, getters) => (entityId) =>
-      getters.getHierarchialData.find((e) => e.entityId === entityId),
-    getAllEntitiesOfHierarchyByHid: (state) => (hid) =>
-      state.hierarchialData
-        .filter((e) => e.hierarchyId === hid)
-        .sort((a, b) => a.entityId - b.entityId), // sort by entityId ascending
-    getEntityHasSiblingUnderIt: (state, getters) => (entityId, hid) => {
-      const allDescendantsOfTreeRoot = getters.getAllDescendantsOfTreeRoot;
-      const allDescendantsOfTreeRootAtHid = allDescendantsOfTreeRoot.filter(
-        (e) => e.hierarchyId === hid
-      );
-      return (
-        entityId !==
-        Math.max(
-          ...allDescendantsOfTreeRootAtHid
-            .map((e) => e.entityId)
-            .sort((a, b) => a - b) // sort by entityId ascending
-        )
-      );
+    getEntities: (state) => state.entities,
+    getLevels: (state) => state.levels, // not sorted. Use with care.
+    getSortedLevels: (state, getters) =>
+      getters.getLevels.sort((a, b) => getters.hierarchySort(a, b)),
+
+    // used in the getter "getSortedLevels". Don't use directly outside of Vuex environment.
+    hierarchySort: (state, getters) => (a, b) => {
+      if (a.upperLevelId === null) return -1;
+      if (b.upperLevelId === null) return 1;
+      if (a.levelId === b.upperLevelId) return -1;
+      return getters.hierarchySort(a, getters.getLevelById(b.upperLevelId));
     },
-    getAllDescendantsOfTreeRoot: (state, getters) =>
-      recursiveMarker(
-        getters.getTreeRoot,
-        getters.getHierarchialData.map((e) => ({
-          ...e,
-          marked: false,
-        }))
-      ),
 
-    getVerticalOrderByEntityId: (state, getters) => (entityId, hid) =>
+    getEntityById: (state, getters) => (entityId) =>
+      getters.getEntities.find((e) => e.entityId === entityId),
+    getLevelById: (state, getters) => (levelId) => {
+      if (getters.getLevels)
+        return getters.getLevels.find((l) => l.levelId === levelId);
+    },
+    getAllEntitiesOfLevelByHid: (state) => (levelId) =>
+      state.entities
+        .filter((e) => e.levelId === levelId)
+        .sort((a, b) => a.entityId - b.entityId), // sort by entityId for consistency
+    getUpperLevelById: (state, getters) => (levelId) => {
+      const currentLevel = getters.getLevels.find((l) => l.levelId === levelId);
+      if (!currentLevel) return null;
+      const upperLevel = getters.getLevels.find(
+        (l) => l.levelId === currentLevel.upperLevelId
+      );
+      return upperLevel || null;
+    },
+
+    /* VERTICAL CALCULATIONS */
+    getVerticalOrderByEntityId: (state, getters) => (entityId, levelId) =>
       getters
-        .getAllEntitiesOfHierarchyByHid(hid)
-        .sort((a, b) => a.entityId - b.entityId)
+        .getAllEntitiesOfLevelByHid(levelId)
         .findIndex((e) => e.entityId === entityId),
-    getParentIsAboveEntity:
-      (state, getters) => (entityId, upperEntityId, hid) =>
-        !!(
-          getters.getVerticalOrderByEntityId(upperEntityId, hid - 1) <
-            getters.getVerticalOrderByEntityId(entityId, hid) &&
-          upperEntityId !== null &&
-          hid !== 0
-        ),
 
-    getMaxVerticalOrderOfTreeRootDescendantsInAHierarchy:
-      (state, getters) => (hid) => {
-        const hierarchyContainsDescendent = getters
-          .getAllEntitiesOfHierarchyByHid(hid)
-          .some((e) => getters.getEntityIsInTree(e.entityId));
+    getMaxVerticalOrderOfChildren: (state, getters) => (entityId, levelId) => {
+      const allEntitiesInLowerLevel = getters.getAllEntitiesOfLevelByHid(
+        getters.getLevels.find((l) => l.upperLevelId === levelId).levelId
+      );
+      const lowerLevelContainsChildren = allEntitiesInLowerLevel.some(
+        (e) => e.upperEntityId === entityId
+      );
+      return lowerLevelContainsChildren
+        ? allEntitiesInLowerLevel.length -
+            allEntitiesInLowerLevel
+              .reverse()
+              .findIndex((e) => e.upperEntityId === entityId) -
+            1
+        : -1;
+    },
+    getMinVerticalOrderOfChildren: (state, getters) => (entityId, levelId) => {
+      const allEntitiesInLowerLevel = getters.getAllEntitiesOfLevelByHid(
+        getters.getLevels.find((l) => l.upperLevelId === levelId).levelId
+      );
+      const lowerLevelContainsChildren = allEntitiesInLowerLevel.some(
+        (e) => e.upperEntityId === entityId
+      );
+      return lowerLevelContainsChildren
+        ? allEntitiesInLowerLevel.findIndex((e) => e.upperEntityId === entityId)
+        : -1;
+    },
 
-        return hierarchyContainsDescendent
-          ? hid <= getters.getTreeRoot.hierarchyId
-            ? 0
-            : getters.getAllEntitiesOfHierarchyByHid(hid).length -
-              getters
-                .getAllEntitiesOfHierarchyByHid(hid)
-                .sort((a, b) => b.entityId - a.entityId) // desc
-                .findIndex((e) => getters.getEntityIsInTree(e.entityId)) -
-              1
-          : -1;
-      },
-    getMinVerticalOrderOfTreeRootDescendantsInAHierarchy:
-      (state, getters) => (hid) => {
-        const hierarchyContainsDescendent = getters
-          .getAllEntitiesOfHierarchyByHid(hid)
-          .some((e) => getters.getEntityIsInTree(e.entityId));
+    getHasDescendants: (state, getters) => (entityId) =>
+      getters.getEntities.some((e) => e.upperEntityId === entityId),
+    getEntityHasParent: (state, getters) => (upperEntityId) => {
+      return getters.getEntities.some((e) => e.entityId === upperEntityId);
+    },
 
-        return hierarchyContainsDescendent
-          ? hid <= getters.getTreeRoot.hierarchyId
-            ? 0
-            : getters
-                .getAllEntitiesOfHierarchyByHid(hid)
-                .sort((a, b) => a.entityId - b.entityId) // asc
-                .findIndex((e) => getters.getEntityIsInTree(e.entityId))
-          : -1;
-      },
-
-    getEntityShouldHaveVerticalLine:
-      (state, getters) => (entityId, upperEntityId, hid) => {
-        const minVerticalOrderOfTreeRootDescendantsInAHierarchy =
-          getters.getMinVerticalOrderOfTreeRootDescendantsInAHierarchy(hid);
-        const maxVerticalOrderOfTreeRootDescendantsInAHierarchy =
-          getters.getMaxVerticalOrderOfTreeRootDescendantsInAHierarchy(hid);
-        const verticalOrderOfParent = getters.getVerticalOrderByEntityId(
-          upperEntityId,
-          hid - 1
-        );
-        const verticalOrderOfSelf = getters.getVerticalOrderByEntityId(
-          entityId,
-          hid
-        );
-        if (
-          verticalOrderOfParent <
-          minVerticalOrderOfTreeRootDescendantsInAHierarchy
-        ) {
-          return (
-            verticalOrderOfSelf <= verticalOrderOfParent &&
-            verticalOrderOfSelf <
-              maxVerticalOrderOfTreeRootDescendantsInAHierarchy
+    /* returns "lines" with the schema {levelId, entityId, indentation, y0, y1} */
+    getCalculatedLines: (state, getters) => {
+      let lines = [];
+      getters.getSortedLevels.forEach((h) => {
+        const allParentsInLevel = getters
+          .getAllEntitiesOfLevelByHid(h.levelId)
+          .filter((e) => getters.getHasDescendants(e.entityId));
+        allParentsInLevel.forEach((p, index) => {
+          const parentVerticalOrder = getters.getVerticalOrderByEntityId(
+            p.entityId,
+            p.levelId
           );
-        }
-        if (
-          verticalOrderOfParent >=
-            minVerticalOrderOfTreeRootDescendantsInAHierarchy &&
-          verticalOrderOfParent <=
-            maxVerticalOrderOfTreeRootDescendantsInAHierarchy
-        )
-          return (
-            verticalOrderOfSelf >=
-              minVerticalOrderOfTreeRootDescendantsInAHierarchy &&
-            verticalOrderOfSelf <
-              maxVerticalOrderOfTreeRootDescendantsInAHierarchy
-          );
-        if (
-          verticalOrderOfParent >
-          maxVerticalOrderOfTreeRootDescendantsInAHierarchy
-        ) {
-          return (
-            verticalOrderOfSelf <=
-              minVerticalOrderOfTreeRootDescendantsInAHierarchy &&
-            verticalOrderOfSelf < verticalOrderOfParent
-          );
-        }
+          const newLine = {
+            levelId: h.levelId,
+            entityId: p.entityId,
+            indentation: index,
+            y0: Math.min(
+              getters.getMinVerticalOrderOfChildren(p.entityId, h.levelId),
+              parentVerticalOrder
+            ),
+            y1: Math.max(
+              getters.getMaxVerticalOrderOfChildren(p.entityId, h.levelId),
+              parentVerticalOrder
+            ),
+          };
+          lines.push(newLine);
+        });
+      });
+      return lines;
+    },
+
+    getCalculatedLinesByLevelId: (state, getters) => (levelId) =>
+      getters.getCalculatedLines.filter(
+        (li) =>
+          getters.getLevels.find((le) => le.upperLevelId === li.levelId)
+            .levelId === levelId
+      ),
+    getLineByEntityId: (state, getters) => (entityId) =>
+      getters.getCalculatedLines.find((l) => l.entityId === entityId) || {
+        indentation: 0,
       },
-
-    getUpmostElementInTreeByHid: (state, getters) => (hid) =>
-      getters.getAllEntitiesOfHierarchyByHid(hid),
-
-    getEntityIsInTree: (state, getters) => (entityId) =>
-      getters.getAllDescendantsOfTreeRoot.some(
-        (e) => e.entityId === entityId
-      ) || entityId === getters.getTreeRoot.entityId,
-    getHasChildren: (state, getters) => (entityId) =>
-      getters.getHierarchialData.some((e) => e.upperEntityId === entityId),
-    getParentInTreeRoot: (state, getters) => (upperEntityId) =>
-      upperEntityId === null
-        ? getters.getTreeRoot
-        : getters.getAllDescendantsOfTreeRoot
-            .concat(getters.getTreeRoot)
-            .find((e) => e.entityId === upperEntityId) || null,
   },
   mutations: {
-    setTreeRoot: (state, payload) => {
-      state.treeRoot = payload;
-    },
     addLevel: (state, payload) => {
-      state.hierarchialStructure = state.hierarchialStructure.concat(payload);
+      state.levels = state.levels.concat(payload);
     },
-    injectNewLevel: (state, newLevelId, upperLevelIdOfNewLevel) => {
-      state.hierarchialStructure = state.hierarchialStructure.map((e) =>
-        e.upperHierarchy === upperLevelIdOfNewLevel
-          ? { ...e, upperHierarchy: newLevelId }
-          : e
+    injectNewLevel: (
+      state,
+      { name, description, upperLevelId, allowedTechnologies }
+    ) => {
+      const levelId = uuidv4();
+      state.levels = state.levels.map((l) =>
+        l.upperLevelId === upperLevelId ? { ...l, upperLevelId: levelId } : l
+      );
+      state.levels = state.levels.concat({
+        levelId,
+        name,
+        description,
+        upperLevelId,
+        allowedTechnologies,
+      });
+    },
+    replaceLevel: (
+      state,
+      { levelId, name, description, upperLevelId, allowedTechnologies }
+    ) => {
+      state.levels = state.levels.map((l) =>
+        l.levelId === levelId
+          ? {
+              ...l,
+              levelId,
+              name,
+              description,
+              upperLevelId,
+              allowedTechnologies,
+            }
+          : l
       );
     },
-  },
-  actions: {
-    clickOnEntity: ({ commit, getters }, payload) => {
-      commit("setTreeRoot", getters.getEntityById(payload));
-    },
-    saveNewLevel: (
-      { commit },
-      { levelName, levelDescription, upperHierarchy, technologies }
+    injectNewEntity: (
+      state,
+      { entityName, entityDescription, entityLevelId, entityUpperEntityId }
     ) => {
-      commit("injectNewLevel", upperHierarchy + 0.1, upperHierarchy);
-      commit("addLevel", {
-        name: levelName,
-        description: levelDescription,
-        hierarchyId: upperHierarchy + 0.1,
-        upperHierarchy,
-        allowedTechnologies: technologies,
+      state.entities = state.entities.concat({
+        entityId: uuidv4(),
+        levelId: entityLevelId,
+        upperEntityId: entityUpperEntityId,
+        description: entityDescription,
+        name: entityName,
       });
+    },
+    replaceEntity: (
+      state,
+      {
+        entityId,
+        entityName,
+        entityDescription,
+        entityLevelId,
+        entityUpperEntityId,
+      }
+    ) => {
+      state.entities = state.entities.map((e) =>
+        e.entityId === entityId
+          ? {
+              entityId,
+              levelId: entityLevelId,
+              upperEntityId: entityUpperEntityId,
+              description: entityDescription,
+              name: entityName,
+            }
+          : e
+      );
     },
   },
 };
