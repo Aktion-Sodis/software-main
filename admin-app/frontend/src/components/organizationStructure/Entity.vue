@@ -3,22 +3,26 @@
     <div
       v-if="entityHasParent(upperEntityId) && index !== 0"
       class="entity-connection-left-line"
-      :style="`width: ${28 - leftLineOfEntity.indentation * 6}px; left: ${
-        -28 + leftLineOfEntity.indentation * 6
+      :style="`width: ${60 - leftLineOfEntity.indentation * 12}px; left: ${
+        -60 + leftLineOfEntity.indentation * 12
       }px; background-color: ${
         lineColors[leftLineOfEntity.indentation]
-      }; z-index: ${leftLineOfEntity.indentation}`"
+      }; top: ${64 + leftLineOfEntity.indentation * 6}px; z-index: ${
+        leftLineOfEntity.indentation
+      }`"
     ></div>
     <div
       v-if="hasDescendants(entityId)"
       class="entity-connection-right-line"
       :style="`width: ${
-        40 + rightLineOfEntity.indentation * 6
-      }px; left: calc(16rem - 10px + ${
-        rightLineOfEntity.indentation * 2
+        72 + rightLineOfEntity.indentation * 12
+      }px; left: calc(16rem - 26px + ${
+        rightLineOfEntity.indentation * 4
       }px); background-color: ${
         lineColors[rightLineOfEntity.indentation]
-      }; z-index: ${rightLineOfEntity.indentation}`"
+      }; top: ${64 + rightLineOfEntity.indentation * 6}px; z-index: ${
+        rightLineOfEntity.indentation
+      }`"
     ></div>
     <v-hover v-slot="{ hover }">
       <v-sheet
@@ -85,13 +89,11 @@ export default {
 .entity-connection-left-line {
   position: absolute;
   height: 3px;
-  top: 64px;
 }
 
 .entity-connection-right-line {
   position: relative;
   height: 3px;
-  top: 64px;
 }
 
 .entity-icon {
