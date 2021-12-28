@@ -19,7 +19,7 @@
     "save": "Save"
   },
   "organizationStructure": {
-    "addNewEntity": "Add entity to level",
+    "addNewEntity": "Add entity",
     "addNewLevel": "Add new level",
     "levelModal": {
       "levelName": "Level Name",
