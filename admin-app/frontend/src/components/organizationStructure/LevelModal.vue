@@ -4,25 +4,12 @@
     max-width="800px"
     :persistent="persistModal"
   >
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn
-        rounded
-        x-large
-        color="primary"
-        @click="showLevelModal"
-        v-bind="attrs"
-        v-on="on"
-      >
-        <v-icon class="mr-2"> mdi-plus </v-icon>
-        {{ $t("organizationStructure.addNewLevel") }}
-      </v-btn>
-    </template>
-
     <v-card class="px-4 pt-4">
       <v-form ref="form" @submit.prevent="submitLevel" lazy-validation>
         <v-card-title>
           <h2 v-if="levelModalIsEdit">
             {{ $t("organizationStructure.levelModal.title.edit") }}
+            <i>{{ levelCurrentlyBeingEdited.name }}</i>
           </h2>
           <h2 v-else>
             {{ $t("organizationStructure.levelModal.title.create") }}

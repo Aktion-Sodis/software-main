@@ -1,14 +1,19 @@
 <template>
   <div style="overflow-x: scroll; width: 100%">
-    <h1 class="ml-8">Organization Structure</h1>
-    <div class="my-8 d-flex">
+    <h1 class="ml-8" style="position: fixed">Organization Structure</h1>
+    <div class="mb-8 mt-16 d-flex">
       <div
         v-for="(level, index) in levels"
         :key="level.levelId"
         class="column-wrapper d-flex flex-column px-16"
         :class="level.upperLevelId === null || 'dotted-left-border'"
       >
-        <v-btn plain rounded class="text-none black--text">
+        <v-btn
+          plain
+          rounded
+          class="text-none black--text"
+          @click="clickOnEditLevel(level.levelId)"
+        >
           <span class="text-h5">
             {{ level.name }}
           </span>
@@ -27,7 +32,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-avatar v-bind="attrs" v-on="on">
-                  <v-icon color="white">mdi-cog-outline</v-icon>
+                  <v-icon color="white"> mdi-hammer-wrench </v-icon>
                 </v-avatar>
               </template>
               <span>{{ getTechnologyById(technologyId).name }}</span>
@@ -44,6 +49,10 @@
       >
         <LevelModal />
         <EntityModal />
+        <v-btn rounded x-large color="primary" @click="clickOnAddNewLevel">
+          <v-icon class="mr-2"> mdi-plus </v-icon>
+          {{ $t("organizationStructure.addNewLevel") }}
+        </v-btn>
       </div>
     </div>
   </div>
@@ -68,6 +77,8 @@ export default {
   methods: {
     ...mapActions({
       clickOnEntity: "entities/clickOnEntity",
+      clickOnAddNewLevel: "os/clickOnAddNewLevel",
+      clickOnEditLevel: "os/clickOnEditLevel",
     }),
   },
 };

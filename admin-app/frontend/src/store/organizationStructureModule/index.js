@@ -28,31 +28,51 @@ const organizationStructureModule = {
     getLevelModalIsDisplayed: (state) => state.levelModalIsDisplayed,
   },
   mutations: {
+    /* ENTITY */
     setEntityIdCurrentlyBeingEdited: (state, entityId) => {
       state.entityIdCurrentlyBeingEdited = entityId;
     },
     setEntityModalIsDisplayed: (state, payload) => {
       state.entityModalIsDisplayed = payload;
     },
+    setLevelIdOfEntityBeingCreated: (state, payload) => {
+      state.levelIdOfEntityBeingCreated = payload;
+    },
+
+    /* LEVEL */
     setLevelIdCurrentlyBeingEdited: (state, levelId) => {
       state.levelIdCurrentlyBeingEdited = levelId;
     },
     setLevelModalIsDisplayed: (state, payload) => {
       state.levelModalIsDisplayed = payload;
     },
-    setLevelIdOfEntityBeingCreated: (state, payload) => {
-      state.levelIdOfEntityBeingCreated = payload;
-    },
   },
   actions: {
+    resetAll: ({ commit }) => {
+      commit("setEntityIdCurrentlyBeingEdited", null);
+      commit("setEntityModalIsDisplayed", false);
+      commit("setLevelIdOfEntityBeingCreated", null);
+      commit("setLevelIdCurrentlyBeingEdited", null);
+      commit("setLevelModalIsDisplayed", false);
+    },
     clickOnEditEntity: ({ commit, dispatch }, payload) => {
+      dispatch("resetAll");
       commit("setEntityIdCurrentlyBeingEdited", payload);
       dispatch("showEntityModal");
     },
     clickOnAddNewEntity: ({ commit, dispatch }, payload) => {
-      commit("setEntityIdCurrentlyBeingEdited", null);
+      dispatch("resetAll");
       commit("setLevelIdOfEntityBeingCreated", payload);
       dispatch("showEntityModal");
+    },
+    clickOnAddNewLevel: ({ dispatch }) => {
+      dispatch("resetAll");
+      dispatch("showLevelModal");
+    },
+    clickOnEditLevel: ({ commit, dispatch }, payload) => {
+      dispatch("resetAll");
+      commit("setLevelIdCurrentlyBeingEdited", payload);
+      dispatch("showLevelModal");
     },
     saveLevel: (
       { commit },
