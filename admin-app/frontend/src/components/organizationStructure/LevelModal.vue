@@ -128,7 +128,7 @@ export default {
       levelName: "",
       levelDescription: "",
       levelAllowedTechnologies: [],
-      levelIsSubordinateTo: 0,
+      levelIsSubordinateTo: null,
     };
   },
   computed: {
