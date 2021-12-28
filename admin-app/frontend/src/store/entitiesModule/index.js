@@ -128,6 +128,7 @@ const entitiesModule = {
         .sort((a, b) => a.entityId - b.entityId), // sort by entityId for consistency
     getUpperLevelById: (state, getters) => (levelId) => {
       const currentLevel = getters.getLevels.find((l) => l.levelId === levelId);
+      if (!currentLevel) return null;
       const upperLevel = getters.getLevels.find(
         (l) => l.levelId === currentLevel.upperLevelId
       );
