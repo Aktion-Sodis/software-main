@@ -9,7 +9,7 @@ const organizationStructureModule = {
     levelModalIsDisplayed: false,
   }),
   getters: {
-    /* GENERIC GETTERS */
+    /* ENTITY */
     getEntityModalIsEdit: (state) =>
       state.entityIdCurrentlyBeingEdited !== null,
     getEntityCurrentlyBeingEdited: (state, getters, rootState, rootGetters) =>
@@ -20,6 +20,7 @@ const organizationStructureModule = {
     getLevelIdOfEntityBeingCreated: (state) =>
       state.levelIdOfEntityBeingCreated,
 
+    /* LEVEL */
     getLevelModalIsEdit: (state) => state.levelIdCurrentlyBeingEdited !== null,
     getLevelCurrentlyBeingEdited: (state, getters, rootState, rootGetters) =>
       rootGetters["entities/getLevelById"](state.levelIdCurrentlyBeingEdited) ||
