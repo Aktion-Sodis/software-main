@@ -116,7 +116,7 @@ const levelDescriptionMaxChar = Math.max(
 );
 
 export default {
-  name: "levelModal",
+  name: "LevelModal",
   data() {
     return {
       levelDescriptionMaxChar,
