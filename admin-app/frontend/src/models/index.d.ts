@@ -156,7 +156,7 @@ export declare class User {
   readonly lastName: string;
   readonly bio?: string;
   readonly permissions: Permission[];
-  readonly schemeVersion: number;
+  readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<User, UserMetaData>);
@@ -168,7 +168,7 @@ export declare class Config {
   readonly name: string;
   readonly colorTheme?: ColorTheme;
   readonly storagePaths: StoragePaths;
-  readonly schemeVersion: number;
+  readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<Config, ConfigMetaData>);
@@ -178,12 +178,12 @@ export declare class Config {
 export declare class Level {
   readonly id: string;
   readonly name: string;
-  readonly description: string;
+  readonly description?: string;
   readonly parentLevel?: Level;
   readonly interventionsAreAllowed: boolean;
   readonly allowedInterventions?: Intervention[];
   readonly customData: CustomData[];
-  readonly schemeVersion: number;
+  readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   readonly levelParentLevelId?: string;
@@ -194,12 +194,12 @@ export declare class Level {
 export declare class Intervention {
   readonly id: string;
   readonly name: string;
-  readonly description: string;
+  readonly description?: string;
   readonly interventionType: InterventionType | keyof typeof InterventionType;
   readonly contents: Content[];
   readonly surveys: Survey[];
   readonly tags: string[];
-  readonly schemeVersion: number;
+  readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   readonly levelAllowedInterventionsId?: string;
@@ -210,10 +210,10 @@ export declare class Intervention {
 export declare class Content {
   readonly id: string;
   readonly name: string;
-  readonly description: string;
+  readonly description?: string;
   readonly intervention?: Intervention;
   readonly tags: string[];
-  readonly schemeVersion: number;
+  readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   readonly interventionContentsId?: string;
@@ -224,10 +224,10 @@ export declare class Content {
 export declare class Survey {
   readonly id: string;
   readonly name: string;
-  readonly description: string;
+  readonly description?: string;
   readonly intervention?: Intervention;
   readonly questions: Question[];
-  readonly schemeVersion: number;
+  readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   readonly interventionSurveysId?: string;
@@ -238,14 +238,14 @@ export declare class Survey {
 export declare class Entity {
   readonly id: string;
   readonly name: string;
-  readonly description: string;
+  readonly description?: string;
   readonly parentEntity?: Entity;
   readonly childEntities?: Entity[];
   readonly level: Level;
   readonly location?: Location;
   readonly customData: (AppliedCustomData | null)[];
   readonly appliedInterventions: AppliedIntervention[];
-  readonly schemeVersion: number;
+  readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   readonly entityChildEntitiesId?: string;
@@ -260,7 +260,7 @@ export declare class AppliedIntervention {
   readonly intervention: Intervention;
   readonly location?: Location;
   readonly executedSurveys: ExecutedSurvey[];
-  readonly schemeVersion: number;
+  readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   readonly entityAppliedInterventionsId?: string;
@@ -278,7 +278,7 @@ export declare class ExecutedSurvey {
   readonly date: string;
   readonly location?: Location;
   readonly answers: QuestionAnswer[];
-  readonly schemeVersion: number;
+  readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   readonly appliedInterventionExecutedSurveysId?: string;
@@ -299,7 +299,7 @@ export declare class Task {
   readonly entity?: Entity;
   readonly appliedIntervention?: AppliedIntervention;
   readonly executedSurvey?: ExecutedSurvey;
-  readonly schemeVersion: number;
+  readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   readonly taskUserId: string;
