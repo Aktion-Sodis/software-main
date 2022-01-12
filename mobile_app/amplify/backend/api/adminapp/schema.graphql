@@ -1,0 +1,219 @@
+#  This "input" configures a global authorization rule to enable public access to
+#  all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY {
+  globalAuthRule: AuthRule = { allow: public }
+} #  FOR TESTING ONLY!
+# user collection
+
+type User @model {
+  firstName: String!
+  lastName: String!
+  bio: String
+  permissions: [Permission!]!
+  schemeVersion: Int @default(value: "0")
+}
+
+type Permission {
+  permissionType: PermissionType!
+  allowedEntities: [ID!]!
+}
+
+enum PermissionType {
+  READ
+  CHANGEMASTERDATA
+  CREATEINTERVENTIONS
+  EXECUTESURVEYS
+  CREATESUBENTITIES
+  ADMIN
+}
+
+# config collection
+
+type Config @model {
+  name: String!
+  colorTheme: ColorTheme
+  storagePaths: StoragePaths!
+  schemeVersion: Int @default(value: "0")
+}
+
+type ColorTheme {
+  highlight: String # chosen by user # todo: default
+  secundaryHighlight: String # chosen by user # todo: default
+  backgroundOneLight: String # auto generate via api
+  backgroundTwoLight: String # auto generate via api
+  backgroundOneDark: String # auto generate via api
+  backgroundTwoDark: String # auto generate via api
+}
+
+type StoragePaths {
+  ownerPic: String
+  ownerIcon: String
+  # todo: check whether this approach makes sense
+}
+
+# level collection
+
+type Level @model {
+  name: String!
+  description: String @default(value: "")
+  parentLevel: Level @hasOne
+  interventionsAreAllowed: Boolean!
+  allowedInterventions: [Intervention!] @hasMany
+  customData: [CustomData!]!
+  schemeVersion: Int @default(value: "0")
+}
+
+type CustomData {
+  id: ID! # todo: check how to generate it
+  name: String!
+  type: Type!
+}
+
+enum Type {
+  INT
+  STRING
+}
+
+# intervention collection
+
+type Intervention @model {
+  name: String!
+  description: String @default(value: "")
+  interventionType: InterventionType!
+  contents: [Content!]! @hasMany
+  surveys: [Survey!]! @hasMany
+  tags: [String!]!
+  schemeVersion: Int @default(value: "0")
+}
+
+enum InterventionType {
+  TECHNOLOGY
+  EDUCATION
+}
+
+# content collection
+type Content @model {
+  name: String!
+  description: String @default(value: "")
+  intervention: Intervention @belongsTo
+  tags: [String!]!
+  schemeVersion: Int @default(value: "0")
+}
+
+# survey collection
+type Survey @model {
+  name: String!
+  description: String @default(value: "")
+  intervention: Intervention @belongsTo
+  questions: [Question!]!
+  schemeVersion: Int @default(value: "0")
+}
+
+enum SurveyType {
+  INITIAL
+  DEFAULT
+}
+
+enum QuestionType {
+  TEXT
+  SINGLECHOICE
+  MULTIPLECHOICE
+  PICTURE
+  PICTUREWITHTAGS
+  AUDIO
+}
+
+type Question {
+  id: ID! # todo: dependent ID
+  text: String!
+  type: QuestionType!
+  questionOptions: [QuestionOption!]
+}
+
+type QuestionOption {
+  id: ID!
+  text: String!
+  followUpQuestion: Question
+}
+
+# entityCollection
+
+# todo: check whether binding the children makes sense
+type Entity @model {
+  name: String!
+  description: String @default(value: "")
+  parentEntity: Entity @belongsTo
+  childEntities: [Entity!] @hasMany # TODO: check whether causes inconsistency
+  level: Level! @hasOne
+  location: Location
+  customData: [AppliedCustomData]!
+  appliedInterventions: [AppliedIntervention!]! @hasMany
+  schemeVersion: Int @default(value: "0")
+}
+
+type Location {
+  latitude: Float
+  longitude: Float
+}
+
+type AppliedCustomData {
+  customDataID: ID! # todo: we might possibly annotate the connection
+  type: Type!
+  name: String!
+  intValue: Int
+  stringValue: String
+}
+
+# appliedInterventionCollection
+
+# todo: possibly add bidirectional reference entity
+type AppliedIntervention @model {
+  whoDidIt: User! @hasOne
+  intervention: Intervention! @hasOne
+  location: Location
+  executedSurveys: [ExecutedSurvey!]! @hasMany
+  schemeVersion: Int @default(value: "0")
+}
+
+# executedSurveyCollection
+
+type ExecutedSurvey @model {
+  appliedIntervention: AppliedIntervention! @belongsTo
+  survey: Survey! @hasOne
+  whoExecutedIt: User! @hasOne
+  date: AWSDateTime!
+  location: Location
+  answers: [QuestionAnswer!]!
+  schemeVersion: Int @default(value: "0")
+}
+
+type QuestionAnswer {
+  id: ID! # todo: dependent ID
+  questionID: ID! # todo: dependent ID
+  date: AWSDateTime!
+  type: QuestionType!
+  text: String
+  questionOptions: [QuestionOption!]
+  markings: [Marking!]
+  # todo: possibly also pic/audio path
+}
+
+type Marking {
+  x: Float!
+  y: Float!
+  description: String!
+}
+
+type Task @model {
+  title: String!
+  text: String
+  dueDate: AWSDateTime
+  finishedDate: AWSDateTime
+  location: Location
+  user: User! @hasOne
+  entity: Entity @hasOne
+  appliedIntervention: AppliedIntervention @hasOne
+  executedSurvey: ExecutedSurvey @hasOne
+  schemeVersion: Int @default(value: "0")
+  # todo: what to do with audio
+}

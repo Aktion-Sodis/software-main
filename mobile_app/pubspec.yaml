@@ -30,8 +30,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  amplify_flutter: ^0.2.6
-  amplify_datastore: ^0.2.6
+  amplify_flutter: ^0.3.0-rc.2
+  amplify_datastore: ^0.3.0-rc.3
 
   cupertino_icons: ^1.0.2
 

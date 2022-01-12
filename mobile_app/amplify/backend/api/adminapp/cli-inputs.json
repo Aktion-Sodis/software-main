@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "adminapp",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/aktionsodis/Documents/Entwicklung/SodisGit/software-main/admin-app/frontend/amplify/backend/api/adminapp/schema.graphql",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authadminapp"
+    },
+    "conflictResolution": {
+      "defaultResolutionStrategy": {
+        "type": "OPTIMISTIC_CONCURRENCY"
+      }
+    },
+    "additionalAuthTypes": [
+      {
+        "mode": "API_KEY",
+        "expirationTime": 30,
+        "apiKeyExpirationDate": "2022-02-06T18:20:29.977Z",
+        "keyDescription": "admin-key"
+      }
+    ]
+  }
+}
