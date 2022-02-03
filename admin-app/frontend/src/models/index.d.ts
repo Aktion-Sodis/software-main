@@ -41,7 +41,7 @@ export declare class Permission {
 
 export declare class ColorTheme {
   readonly highlight?: string;
-  readonly secundaryHighlight?: string;
+  readonly secondaryHighlight?: string;
   readonly backgroundOneLight?: string;
   readonly backgroundTwoLight?: string;
   readonly backgroundOneDark?: string;
@@ -108,7 +108,7 @@ export declare class Marking {
   readonly y: number;
   readonly rx: number;
   readonly ry: number;
-  readonly description: string;
+  readonly text: string;
   constructor(init: ModelInit<Marking>);
 }
 

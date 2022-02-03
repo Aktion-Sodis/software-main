@@ -1175,8 +1175,8 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "secundaryHighlight": {
-                    "name": "secundaryHighlight",
+                "secondaryHighlight": {
+                    "name": "secondaryHighlight",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -1479,8 +1479,8 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "description": {
-                    "name": "description",
+                "text": {
+                    "name": "text",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
@@ -1489,5 +1489,5 @@ export const schema = {
             }
         }
     },
-    "version": "2169cd6098fbe7c38821be998d7eef17"
+    "version": "1c3c9873d0810d7fa85c409ab590431c"
 };

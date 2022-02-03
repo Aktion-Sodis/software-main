@@ -27,7 +27,7 @@ import 'package:flutter/foundation.dart';
 @immutable
 class ColorTheme {
   final String? _highlight;
-  final String? _secundaryHighlight;
+  final String? _secondaryHighlight;
   final String? _backgroundOneLight;
   final String? _backgroundTwoLight;
   final String? _backgroundOneDark;
@@ -37,8 +37,8 @@ class ColorTheme {
     return _highlight;
   }
   
-  String? get secundaryHighlight {
-    return _secundaryHighlight;
+  String? get secondaryHighlight {
+    return _secondaryHighlight;
   }
   
   String? get backgroundOneLight {
@@ -57,12 +57,12 @@ class ColorTheme {
     return _backgroundTwoDark;
   }
   
-  const ColorTheme._internal({highlight, secundaryHighlight, backgroundOneLight, backgroundTwoLight, backgroundOneDark, backgroundTwoDark}): _highlight = highlight, _secundaryHighlight = secundaryHighlight, _backgroundOneLight = backgroundOneLight, _backgroundTwoLight = backgroundTwoLight, _backgroundOneDark = backgroundOneDark, _backgroundTwoDark = backgroundTwoDark;
+  const ColorTheme._internal({highlight, secondaryHighlight, backgroundOneLight, backgroundTwoLight, backgroundOneDark, backgroundTwoDark}): _highlight = highlight, _secondaryHighlight = secondaryHighlight, _backgroundOneLight = backgroundOneLight, _backgroundTwoLight = backgroundTwoLight, _backgroundOneDark = backgroundOneDark, _backgroundTwoDark = backgroundTwoDark;
   
-  factory ColorTheme({String? highlight, String? secundaryHighlight, String? backgroundOneLight, String? backgroundTwoLight, String? backgroundOneDark, String? backgroundTwoDark}) {
+  factory ColorTheme({String? highlight, String? secondaryHighlight, String? backgroundOneLight, String? backgroundTwoLight, String? backgroundOneDark, String? backgroundTwoDark}) {
     return ColorTheme._internal(
       highlight: highlight,
-      secundaryHighlight: secundaryHighlight,
+      secondaryHighlight: secondaryHighlight,
       backgroundOneLight: backgroundOneLight,
       backgroundTwoLight: backgroundTwoLight,
       backgroundOneDark: backgroundOneDark,
@@ -78,7 +78,7 @@ class ColorTheme {
     if (identical(other, this)) return true;
     return other is ColorTheme &&
       _highlight == other._highlight &&
-      _secundaryHighlight == other._secundaryHighlight &&
+      _secondaryHighlight == other._secondaryHighlight &&
       _backgroundOneLight == other._backgroundOneLight &&
       _backgroundTwoLight == other._backgroundTwoLight &&
       _backgroundOneDark == other._backgroundOneDark &&
@@ -94,7 +94,7 @@ class ColorTheme {
     
     buffer.write("ColorTheme {");
     buffer.write("highlight=" + "$_highlight" + ", ");
-    buffer.write("secundaryHighlight=" + "$_secundaryHighlight" + ", ");
+    buffer.write("secondaryHighlight=" + "$_secondaryHighlight" + ", ");
     buffer.write("backgroundOneLight=" + "$_backgroundOneLight" + ", ");
     buffer.write("backgroundTwoLight=" + "$_backgroundTwoLight" + ", ");
     buffer.write("backgroundOneDark=" + "$_backgroundOneDark" + ", ");
@@ -104,10 +104,10 @@ class ColorTheme {
     return buffer.toString();
   }
   
-  ColorTheme copyWith({String? highlight, String? secundaryHighlight, String? backgroundOneLight, String? backgroundTwoLight, String? backgroundOneDark, String? backgroundTwoDark}) {
+  ColorTheme copyWith({String? highlight, String? secondaryHighlight, String? backgroundOneLight, String? backgroundTwoLight, String? backgroundOneDark, String? backgroundTwoDark}) {
     return ColorTheme._internal(
       highlight: highlight ?? this.highlight,
-      secundaryHighlight: secundaryHighlight ?? this.secundaryHighlight,
+      secondaryHighlight: secondaryHighlight ?? this.secondaryHighlight,
       backgroundOneLight: backgroundOneLight ?? this.backgroundOneLight,
       backgroundTwoLight: backgroundTwoLight ?? this.backgroundTwoLight,
       backgroundOneDark: backgroundOneDark ?? this.backgroundOneDark,
@@ -116,14 +116,14 @@ class ColorTheme {
   
   ColorTheme.fromJson(Map<String, dynamic> json)  
     : _highlight = json['highlight'],
-      _secundaryHighlight = json['secundaryHighlight'],
+      _secondaryHighlight = json['secondaryHighlight'],
       _backgroundOneLight = json['backgroundOneLight'],
       _backgroundTwoLight = json['backgroundTwoLight'],
       _backgroundOneDark = json['backgroundOneDark'],
       _backgroundTwoDark = json['backgroundTwoDark'];
   
   Map<String, dynamic> toJson() => {
-    'highlight': _highlight, 'secundaryHighlight': _secundaryHighlight, 'backgroundOneLight': _backgroundOneLight, 'backgroundTwoLight': _backgroundTwoLight, 'backgroundOneDark': _backgroundOneDark, 'backgroundTwoDark': _backgroundTwoDark
+    'highlight': _highlight, 'secondaryHighlight': _secondaryHighlight, 'backgroundOneLight': _backgroundOneLight, 'backgroundTwoLight': _backgroundTwoLight, 'backgroundOneDark': _backgroundOneDark, 'backgroundTwoDark': _backgroundTwoDark
   };
 
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -137,7 +137,7 @@ class ColorTheme {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'secundaryHighlight',
+      fieldName: 'secondaryHighlight',
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));

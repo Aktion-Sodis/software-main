@@ -79,7 +79,7 @@ export const createConfig = /* GraphQL */ `
       name
       colorTheme {
         highlight
-        secundaryHighlight
+        secondaryHighlight
         backgroundOneLight
         backgroundTwoLight
         backgroundOneDark
@@ -108,7 +108,7 @@ export const updateConfig = /* GraphQL */ `
       name
       colorTheme {
         highlight
-        secundaryHighlight
+        secondaryHighlight
         backgroundOneLight
         backgroundTwoLight
         backgroundOneDark
@@ -137,7 +137,7 @@ export const deleteConfig = /* GraphQL */ `
       name
       colorTheme {
         highlight
-        secundaryHighlight
+        secondaryHighlight
         backgroundOneLight
         backgroundTwoLight
         backgroundOneDark
@@ -1255,7 +1255,7 @@ export const createExecutedSurvey = /* GraphQL */ `
           y
           rx
           ry
-          description
+          text
         }
       }
       schemeVersion
@@ -1391,7 +1391,7 @@ export const updateExecutedSurvey = /* GraphQL */ `
           y
           rx
           ry
-          description
+          text
         }
       }
       schemeVersion
@@ -1527,7 +1527,7 @@ export const deleteExecutedSurvey = /* GraphQL */ `
           y
           rx
           ry
-          description
+          text
         }
       }
       schemeVersion

@@ -38,7 +38,7 @@ type Config @model {
 
 type ColorTheme {
   highlight: String # chosen by user # todo: default
-  secundaryHighlight: String # chosen by user # todo: default
+  secondaryHighlight: String # chosen by user # todo: default
   backgroundOneLight: String # auto generate via api
   backgroundTwoLight: String # auto generate via api
   backgroundOneDark: String # auto generate via api
@@ -203,7 +203,7 @@ type Marking {
   y: Float!
   rx: Float!
   ry: Float!
-  description: String!
+  text: String!
 }
 
 type Task @model {

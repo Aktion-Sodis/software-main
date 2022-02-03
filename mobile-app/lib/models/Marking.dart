@@ -30,7 +30,7 @@ class Marking {
   final double? _y;
   final double? _rx;
   final double? _ry;
-  final String? _description;
+  final String? _text;
 
   double get x {
     try {
@@ -84,9 +84,9 @@ class Marking {
     }
   }
   
-  String get description {
+  String get text {
     try {
-      return _description!;
+      return _text!;
     } catch(e) {
       throw new DataStoreException(
       DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -97,15 +97,15 @@ class Marking {
     }
   }
   
-  const Marking._internal({required x, required y, required rx, required ry, required description}): _x = x, _y = y, _rx = rx, _ry = ry, _description = description;
+  const Marking._internal({required x, required y, required rx, required ry, required text}): _x = x, _y = y, _rx = rx, _ry = ry, _text = text;
   
-  factory Marking({required double x, required double y, required double rx, required double ry, required String description}) {
+  factory Marking({required double x, required double y, required double rx, required double ry, required String text}) {
     return Marking._internal(
       x: x,
       y: y,
       rx: rx,
       ry: ry,
-      description: description);
+      text: text);
   }
   
   bool equals(Object other) {
@@ -120,7 +120,7 @@ class Marking {
       _y == other._y &&
       _rx == other._rx &&
       _ry == other._ry &&
-      _description == other._description;
+      _text == other._text;
   }
   
   @override
@@ -135,19 +135,19 @@ class Marking {
     buffer.write("y=" + (_y != null ? _y!.toString() : "null") + ", ");
     buffer.write("rx=" + (_rx != null ? _rx!.toString() : "null") + ", ");
     buffer.write("ry=" + (_ry != null ? _ry!.toString() : "null") + ", ");
-    buffer.write("description=" + "$_description");
+    buffer.write("text=" + "$_text");
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Marking copyWith({double? x, double? y, double? rx, double? ry, String? description}) {
+  Marking copyWith({double? x, double? y, double? rx, double? ry, String? text}) {
     return Marking._internal(
       x: x ?? this.x,
       y: y ?? this.y,
       rx: rx ?? this.rx,
       ry: ry ?? this.ry,
-      description: description ?? this.description);
+      text: text ?? this.text);
   }
   
   Marking.fromJson(Map<String, dynamic> json)  
@@ -155,10 +155,10 @@ class Marking {
       _y = (json['y'] as num?)?.toDouble(),
       _rx = (json['rx'] as num?)?.toDouble(),
       _ry = (json['ry'] as num?)?.toDouble(),
-      _description = json['description'];
+      _text = json['text'];
   
   Map<String, dynamic> toJson() => {
-    'x': _x, 'y': _y, 'rx': _rx, 'ry': _ry, 'description': _description
+    'x': _x, 'y': _y, 'rx': _rx, 'ry': _ry, 'text': _text
   };
 
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -190,7 +190,7 @@ class Marking {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'description',
+      fieldName: 'text',
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));

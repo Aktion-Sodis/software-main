@@ -89,7 +89,7 @@ export const getConfig = /* GraphQL */ `
       name
       colorTheme {
         highlight
-        secundaryHighlight
+        secondaryHighlight
         backgroundOneLight
         backgroundTwoLight
         backgroundOneDark
@@ -120,7 +120,7 @@ export const listConfigs = /* GraphQL */ `
         name
         colorTheme {
           highlight
-          secundaryHighlight
+          secondaryHighlight
           backgroundOneLight
           backgroundTwoLight
           backgroundOneDark
@@ -160,7 +160,7 @@ export const syncConfigs = /* GraphQL */ `
         name
         colorTheme {
           highlight
-          secundaryHighlight
+          secondaryHighlight
           backgroundOneLight
           backgroundTwoLight
           backgroundOneDark
@@ -1150,7 +1150,7 @@ export const getExecutedSurvey = /* GraphQL */ `
           y
           rx
           ry
-          description
+          text
         }
       }
       schemeVersion
