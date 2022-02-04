@@ -5,7 +5,7 @@
 import 'dart:core';
 
 ///enum of available paths to avoid errors due to wrong string spelling
-enum DataStorePathes {
+enum DataStorePaths {
   userPicPath,
   levelPicPath,
   levelCustomDataPicPath,
@@ -24,68 +24,68 @@ enum DataStorePathes {
 }
 
 ///Map of ontoligies including the replacable parameters
-final Map<DataStorePathes, dynamic> databaseOntologies = {
-  DataStorePathes.userPicPath: {
+final Map<DataStorePaths, dynamic> databaseOntologies = {
+  DataStorePaths.userPicPath: {
     "path": "userFiles/userID/pic.png",
     "toBeReplaced": ["userID"]
   },
-  DataStorePathes.levelPicPath: {
+  DataStorePaths.levelPicPath: {
     "path": "levelFiles/levelID/pic.png",
     "toBeReplaced": ["levelID"],
   },
-  DataStorePathes.levelCustomDataPicPath: {
+  DataStorePaths.levelCustomDataPicPath: {
     "path": "levelFiles/levelID/customDataFiles/customDataID/pic.png",
     "toBeReplaced": ["levelID", "customDataID"],
   },
-  DataStorePathes.interventionPicPath: {
+  DataStorePaths.interventionPicPath: {
     "path": "interventionFiles/interventionID/pic.png",
     "toBeReplaced": ["interventionID"],
   },
-  DataStorePathes.docPdfPath: {
+  DataStorePaths.docPdfPath: {
     "path": "documentFiles/documentID/pdf.pdf",
     "toBeReplaced": ["documentID"],
   },
-  DataStorePathes.docPicPath: {
+  DataStorePaths.docPicPath: {
     "path": "documentFiles/documentID/pic.png",
     "toBeReplaced": ["documentID"],
   },
-  DataStorePathes.interventionSurveyPicPath: {
+  DataStorePaths.interventionSurveyPicPath: {
     "path": "interventionFiles/interventionID/surveyFiles/surveyID/pic.png",
     "toBeReplaced": ["interventionID", "surveyID"],
   },
-  DataStorePathes.questionPicPath: {
+  DataStorePaths.questionPicPath: {
     "path":
         "interventionFiles/interventionID/surveyFiles/surveyID/questionFiles/questionID/pic.png",
     "toBeReplaced": ["interventionID", "surveyID", "questionID"],
   },
-  DataStorePathes.questionOptionPicPath: {
+  DataStorePaths.questionOptionPicPath: {
     "path":
         "interventionFiles/interventionID/surveyFiles/surveyID/questionFiles/questionID/optionFiles/optionID/pic.png",
     "toBeReplaced": ["interventionID", "surveyID", "questionID", "optionID"],
   },
-  DataStorePathes.questionPicAnswerPath: {
+  DataStorePaths.questionPicAnswerPath: {
     "path":
         "appliedInterventionFiles/appliedInterventionID/executedSurveyFiles/executedSurveyID/questionFiles/questionID/pic.png",
     "toBeReplaced": ["appliedInterventionID", "executedSurveyID", "questionID"],
   },
-  DataStorePathes.questionAudioAnswerPath: {
+  DataStorePaths.questionAudioAnswerPath: {
     "path":
         "appliedInterventionFiles/appliedInterventionID/executedSurveyFiles/executedSurveyID/questionFiles/questionID/audio.mp3",
     "toBeReplaced": ["appliedInterventionID", "executedSurveyID", "questionID"],
   },
-  DataStorePathes.appliedInterventionPicPath: {
+  DataStorePaths.appliedInterventionPicPath: {
     "path": "appliedInterventionFiles/appliedInterventionID/pic.png",
     "toBeReplaced": ["appliedInterventionID"],
   },
-  DataStorePathes.entityPicPath: {
+  DataStorePaths.entityPicPath: {
     "path": "entityFiles/entityID/pic.png",
     "toBeReplaced": ["entityID"],
   },
-  DataStorePathes.taskPicPath: {
+  DataStorePaths.taskPicPath: {
     "path": "taskFiles/taskID/pic.png",
     "toBeReplaced": ["taskID"]
   },
-  DataStorePathes.taskAudioPath: {
+  DataStorePaths.taskAudioPath: {
     "path": "taskFiles/taskID/audio.mp3",
     "toBeReplaced": ["taskID"],
   },
@@ -93,7 +93,7 @@ final Map<DataStorePathes, dynamic> databaseOntologies = {
 
 ///method passed the path name and the required paramters
 ///throws an error if parameters not fitting the paths are passed
-String dataStorePath(DataStorePathes path, List<String> parameters) {
+String dataStorePath(DataStorePaths path, List<String> parameters) {
   String rawPath = databaseOntologies[path]["path"];
   List<String> replacementParameters = databaseOntologies[path]["toBeReplaced"];
 
