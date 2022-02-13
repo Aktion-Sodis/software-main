@@ -19,10 +19,10 @@ dependencies:
 
 
   #amplify packages
-  amplify_flutter: ^0.3.2
-  amplify_datastore: ^0.3.2
-  amplify_api: ^0.3.2
-  amplify_auth_cognito: ^0.3.2
+  amplify_flutter: ^0.4.0-rc.1
+  amplify_datastore: ^0.4.0-rc.1
+  amplify_api: ^0.4.0-rc.1
+  amplify_auth_cognito: ^0.4.0-rc.1
 
   cupertino_icons: ^1.0.2
   flutter_bloc: ^8.0.1

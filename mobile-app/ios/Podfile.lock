@@ -47,13 +47,8 @@ PODS:
     - AWSCore (~> 2.27.0)
     - AWSPluginsCore (= 1.19.0)
     - SQLite.swift (= 0.12.2)
-<<<<<<< HEAD
   - AppSyncRealTimeClient (1.7.0):
     - Starscream (~> 4.0.4)
-=======
-  - AppSyncRealTimeClient (1.6.0):
-    - Starscream (~> 3.1.1)
->>>>>>> a60e634915298e06a000cc9c2bd8f285697c3140
   - AWSAuthCore (2.27.1):
     - AWSCore (= 2.27.1)
   - AWSCognitoIdentityProvider (2.27.1):
@@ -75,13 +70,8 @@ PODS:
   - SQLite.swift (0.12.2):
     - SQLite.swift/standard (= 0.12.2)
   - SQLite.swift/standard (0.12.2)
-<<<<<<< HEAD
   - Starscream (4.0.4)
   - SwiftFormat/CLI (0.49.4)
-=======
-  - Starscream (3.1.1)
-  - SwiftFormat/CLI (0.49.3)
->>>>>>> a60e634915298e06a000cc9c2bd8f285697c3140
   - SwiftLint (0.46.2)
 
 DEPENDENCIES:
@@ -131,11 +121,7 @@ SPEC CHECKSUMS:
   amplify_datastore: a08d00ffda5eabaad23b28d2d85b1a58e951d014
   amplify_flutter: 565399b1213f406463a5d99443ea5973a78f494c
   AmplifyPlugins: 3f43645652234700ee62aba927a67ff4eebacf46
-<<<<<<< HEAD
   AppSyncRealTimeClient: 3a9c0d6685974e7f5d9ce1c157ef9873b87706b1
-=======
-  AppSyncRealTimeClient: 8b5ec94085b8ee9bb6fb9d9d76a157beb538ec6f
->>>>>>> a60e634915298e06a000cc9c2bd8f285697c3140
   AWSAuthCore: 9528c60ccdac6df6024fb0af1ed6a43782fd2d3d
   AWSCognitoIdentityProvider: 4de7f96340be72c1dca35c0ba835c6b9b69a28c0
   AWSCognitoIdentityProviderASF: 727f7c1c80d667a2da79e408c8c8745eac981d58
@@ -145,13 +131,8 @@ SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
   SQLite.swift: d2b4642190917051ce6bd1d49aab565fe794eea3
-<<<<<<< HEAD
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   SwiftFormat: 8acc16efcecb563206cbe90b4cb047cfdf9aafdb
-=======
-  Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
-  SwiftFormat: a3b79e8b5f8ecdec7a716b998aee230d08512894
->>>>>>> a60e634915298e06a000cc9c2bd8f285697c3140
   SwiftLint: 6bc52a21f0fd44cab9aa2dc8e534fb9f5e3ec507
 
 PODFILE CHECKSUM: cc1f88378b4bfcf93a6ce00d2c587857c6008d3b
