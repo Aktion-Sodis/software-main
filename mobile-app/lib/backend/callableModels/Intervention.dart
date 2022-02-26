@@ -1,6 +1,8 @@
 import 'package:mobile_app/backend/callableModels/Content.dart';
 import 'package:mobile_app/backend/callableModels/Survey.dart';
 
+import 'package:mobile_app/models/ModelProvider.dart' as amp;
+
 class Intervention {
   String id;
   String? name;
@@ -24,6 +26,36 @@ class Intervention {
       this.schemeVersion,
       this.createdAt,
       this.updatedAt});
+
+  amp.Intervention toAmplifyModel() {
+    return (
+      amp.Intervention(contents: )
+      );
+  }
 }
 
 enum InterventionType { TECHNOLOGY, EDUCATION }
+
+amp.InterventionType amplifyInterventionTypeFromInterventionType(
+    InterventionType interventionType) {
+  switch (interventionType) {
+    case InterventionType.TECHNOLOGY:
+      return amp.InterventionType.TECHNOLOGY;
+      break;
+    case InterventionType.EDUCATION:
+      return amp.InterventionType.EDUCATION;
+      break;
+  }
+}
+
+InterventionType interventionTypeFromAmplifyInterventionType(
+    amp.InterventionType interventionType) {
+  switch (interventionType) {
+    case amp.InterventionType.TECHNOLOGY:
+      return InterventionType.TECHNOLOGY;
+      break;
+    case amp.InterventionType.EDUCATION:
+      return InterventionType.EDUCATION;
+      break;
+  }
+}
