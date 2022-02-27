@@ -4,33 +4,56 @@ import 'package:mobile_app/backend/callableModels/Survey.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class Intervention {
-  String id;
-  String? name;
+  String? id;
+  late String name;
   String? description;
-  InterventionType? interventionType;
-  List<Content>? contents;
-  List<Survey>? surveys;
-  List<String>? tags;
+  late InterventionType interventionType;
+  late List<amp.InterventionContentRelation> interventionContentRelations;
+  late List<Survey> surveys;
+  late List<String> tags;
   int? schemeVersion;
   DateTime? createdAt;
   DateTime? updatedAt;
 
   Intervention(
-      {required this.id,
-      this.name,
+      {this.id,
+      required this.name,
       this.description,
-      this.interventionType,
-      this.contents,
-      this.surveys,
-      this.tags,
+      required this.interventionType,
+      required this.interventionContentRelations,
+      required this.surveys,
+      required this.tags,
       this.schemeVersion,
       this.createdAt,
       this.updatedAt});
 
+  Intervention.fromAmplifyModel(amp.Intervention intervention) {
+    id = intervention.id;
+    name = intervention.name;
+    description = intervention.description;
+    interventionType = interventionTypeFromAmplifyInterventionType(
+        intervention.interventionType);
+    interventionContentRelations = intervention.contents;
+    surveys = List.generate(intervention.surveys.length,
+        (index) => Survey.fromAmplifyModel(intervention.surveys[index]));
+    tags = intervention.tags;
+    schemeVersion = intervention.schemeVersion;
+    createdAt = intervention.createdAt?.getDateTimeInUtc();
+    updatedAt = intervention.updatedAt?.getDateTimeInUtc();
+  }
+
   amp.Intervention toAmplifyModel() {
-    return (
-      amp.Intervention(contents: )
-      );
+    return (amp.Intervention(
+        id: id,
+        name: name,
+        description: description,
+        interventionType:
+            amplifyInterventionTypeFromInterventionType(interventionType),
+        contents: interventionContentRelations,
+        tags: tags,
+        surveys: List.generate(
+            surveys.length, (index) => surveys[index].toAmplifyModel()),
+        schemeVersion: schemeVersion));
   }
 }
 
