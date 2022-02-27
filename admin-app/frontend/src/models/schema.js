@@ -301,10 +301,16 @@ export const schema = {
                 "tags": {
                     "name": "tags",
                     "isArray": true,
-                    "type": "String",
+                    "type": {
+                        "model": "Tag"
+                    },
                     "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": false
+                    "isArrayNullable": false,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "interventionTagsId"
+                    }
                 },
                 "schemeVersion": {
                     "name": "schemeVersion",
@@ -387,10 +393,16 @@ export const schema = {
                 "tags": {
                     "name": "tags",
                     "isArray": true,
-                    "type": "String",
+                    "type": {
+                        "model": "Tag"
+                    },
                     "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": false
+                    "isArrayNullable": false,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "contentTagsId"
+                    }
                 },
                 "schemeVersion": {
                     "name": "schemeVersion",
@@ -418,6 +430,77 @@ export const schema = {
             },
             "syncable": true,
             "pluralName": "Contents",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                }
+            ]
+        },
+        "Tag": {
+            "name": "Tag",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "text": {
+                    "name": "text",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "schemeVersion": {
+                    "name": "schemeVersion",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "interventionTagsId": {
+                    "name": "interventionTagsId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "contentTagsId": {
+                    "name": "contentTagsId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "surveyTagsId": {
+                    "name": "surveyTagsId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "Tags",
             "attributes": [
                 {
                     "type": "model",
@@ -475,10 +558,25 @@ export const schema = {
                 "tags": {
                     "name": "tags",
                     "isArray": true,
-                    "type": "String",
+                    "type": {
+                        "model": "Tag"
+                    },
                     "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": false
+                    "isArrayNullable": false,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "surveyTagsId"
+                    }
+                },
+                "surveyType": {
+                    "name": "surveyType",
+                    "isArray": false,
+                    "type": {
+                        "enum": "SurveyType"
+                    },
+                    "isRequired": true,
+                    "attributes": []
                 },
                 "schemeVersion": {
                     "name": "schemeVersion",
@@ -1127,18 +1225,18 @@ export const schema = {
                 "AUDIO"
             ]
         },
-        "Type": {
-            "name": "Type",
-            "values": [
-                "INT",
-                "STRING"
-            ]
-        },
         "SurveyType": {
             "name": "SurveyType",
             "values": [
                 "INITIAL",
                 "DEFAULT"
+            ]
+        },
+        "Type": {
+            "name": "Type",
+            "values": [
+                "INT",
+                "STRING"
             ]
         }
     },
@@ -1494,5 +1592,5 @@ export const schema = {
             }
         }
     },
-    "version": "b47ec14c06ef690adc833bae4a5d4aa1"
+    "version": "4ef5d1ad132c7dd2c2fe2db547ddd828"
 };

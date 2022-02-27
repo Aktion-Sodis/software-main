@@ -34,7 +34,8 @@ class Survey extends Model {
   final String? _description;
   final Intervention? _intervention;
   final List<Question>? _questions;
-  final List<String>? _tags;
+  final List<Tag>? _tags;
+  final SurveyType? _surveyType;
   final int? _schemeVersion;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
@@ -81,9 +82,22 @@ class Survey extends Model {
     }
   }
   
-  List<String> get tags {
+  List<Tag> get tags {
     try {
       return _tags!;
+    } catch(e) {
+      throw new DataStoreException(
+      DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      recoverySuggestion:
+        DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+      underlyingException: e.toString()
+    );
+    }
+  }
+  
+  SurveyType get surveyType {
+    try {
+      return _surveyType!;
     } catch(e) {
       throw new DataStoreException(
       DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -106,16 +120,17 @@ class Survey extends Model {
     return _updatedAt;
   }
   
-  const Survey._internal({required this.id, required name, description, intervention, required questions, required tags, schemeVersion, createdAt, updatedAt}): _name = name, _description = description, _intervention = intervention, _questions = questions, _tags = tags, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Survey._internal({required this.id, required name, description, intervention, required questions, required tags, required surveyType, schemeVersion, createdAt, updatedAt}): _name = name, _description = description, _intervention = intervention, _questions = questions, _tags = tags, _surveyType = surveyType, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Survey({String? id, required String name, String? description, Intervention? intervention, required List<Question> questions, required List<String> tags, int? schemeVersion}) {
+  factory Survey({String? id, required String name, String? description, Intervention? intervention, required List<Question> questions, required List<Tag> tags, required SurveyType surveyType, int? schemeVersion}) {
     return Survey._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
       description: description,
       intervention: intervention,
       questions: questions != null ? List<Question>.unmodifiable(questions) : questions,
-      tags: tags != null ? List<String>.unmodifiable(tags) : tags,
+      tags: tags != null ? List<Tag>.unmodifiable(tags) : tags,
+      surveyType: surveyType,
       schemeVersion: schemeVersion);
   }
   
@@ -133,6 +148,7 @@ class Survey extends Model {
       _intervention == other._intervention &&
       DeepCollectionEquality().equals(_questions, other._questions) &&
       DeepCollectionEquality().equals(_tags, other._tags) &&
+      _surveyType == other._surveyType &&
       _schemeVersion == other._schemeVersion;
   }
   
@@ -149,7 +165,7 @@ class Survey extends Model {
     buffer.write("description=" + "$_description" + ", ");
     buffer.write("intervention=" + (_intervention != null ? _intervention!.toString() : "null") + ", ");
     buffer.write("questions=" + (_questions != null ? _questions!.toString() : "null") + ", ");
-    buffer.write("tags=" + (_tags != null ? _tags!.toString() : "null") + ", ");
+    buffer.write("surveyType=" + (_surveyType != null ? enumToString(_surveyType)! : "null") + ", ");
     buffer.write("schemeVersion=" + (_schemeVersion != null ? _schemeVersion!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
@@ -158,7 +174,7 @@ class Survey extends Model {
     return buffer.toString();
   }
   
-  Survey copyWith({String? id, String? name, String? description, Intervention? intervention, List<Question>? questions, List<String>? tags, int? schemeVersion}) {
+  Survey copyWith({String? id, String? name, String? description, Intervention? intervention, List<Question>? questions, List<Tag>? tags, SurveyType? surveyType, int? schemeVersion}) {
     return Survey._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -166,6 +182,7 @@ class Survey extends Model {
       intervention: intervention ?? this.intervention,
       questions: questions ?? this.questions,
       tags: tags ?? this.tags,
+      surveyType: surveyType ?? this.surveyType,
       schemeVersion: schemeVersion ?? this.schemeVersion);
   }
   
@@ -182,13 +199,19 @@ class Survey extends Model {
           .map((e) => Question.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
-      _tags = json['tags']?.cast<String>(),
+      _tags = json['tags'] is List
+        ? (json['tags'] as List)
+          .where((e) => e?['serializedData'] != null)
+          .map((e) => Tag.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
+      _surveyType = enumFromString<SurveyType>(json['surveyType'], SurveyType.values),
       _schemeVersion = (json['schemeVersion'] as num?)?.toInt(),
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'description': _description, 'intervention': _intervention?.toJson(), 'questions': _questions?.map((Question? e) => e?.toJson()).toList(), 'tags': _tags, 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'name': _name, 'description': _description, 'intervention': _intervention?.toJson(), 'questions': _questions?.map((Question? e) => e?.toJson()).toList(), 'tags': _tags?.map((Tag? e) => e?.toJson()).toList(), 'surveyType': enumToString(_surveyType), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "survey.id");
@@ -198,7 +221,10 @@ class Survey extends Model {
     fieldName: "intervention",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Intervention).toString()));
   static final QueryField QUESTIONS = QueryField(fieldName: "questions");
-  static final QueryField TAGS = QueryField(fieldName: "tags");
+  static final QueryField TAGS = QueryField(
+    fieldName: "tags",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Tag).toString()));
+  static final QueryField SURVEYTYPE = QueryField(fieldName: "surveyType");
   static final QueryField SCHEMEVERSION = QueryField(fieldName: "schemeVersion");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Survey";
@@ -232,11 +258,17 @@ class Survey extends Model {
       ofType: ModelFieldType(ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Question')
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
       key: Survey.TAGS,
       isRequired: true,
-      isArray: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.collection, ofModelName: describeEnum(ModelFieldTypeEnum.string))
+      ofModelName: (Tag).toString(),
+      associatedKey: Tag.SURVEYTAGSID
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Survey.SURVEYTYPE,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.enumeration)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
