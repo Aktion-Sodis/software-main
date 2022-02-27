@@ -9,11 +9,11 @@
         @mouseleave="setIsHovered(false)"
         key="hovered"
         class="overflow-hidden"
-        @click="clickOnAddNewEntity(levelId)"
+        @click="clickHandler"
       >
         <v-icon class="mr-2"> mdi-plus </v-icon>
         <span class="overflow-hidden">
-          {{ $t("organizationStructure.addNewEntity") }}
+          {{ $t('organizationStructure.addNewEntity') }}
         </span>
       </v-btn>
       <v-btn
@@ -22,7 +22,7 @@
         color="primary"
         @mouseover="setIsHovered(true)"
         key="notHovered"
-        @click="clickOnAddNewEntity(levelId)"
+        @click="clickHandler"
       >
         <v-icon class="mx-auto"> mdi-plus </v-icon>
       </v-btn>
@@ -31,12 +31,12 @@
 </template>
 
 <script>
-import { validate as uuidValidate } from "uuid";
+import { validate as uuidValidate } from 'uuid';
 
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from 'vuex';
 
 export default {
-  name: "AddEntityButton",
+  name: 'AddEntityButton',
   data: () => ({ isHovered: false }),
   props: {
     levelId: {
@@ -45,12 +45,19 @@ export default {
     },
   },
   methods: {
-    setIsHovered: function (payload) {
+    setIsHovered(payload) {
       this.isHovered = payload;
     },
     ...mapActions({
-      clickOnAddNewEntity: "os/clickOnAddNewEntity",
+      newEntityHandler: 'dataModal/createData',
     }),
+    ...mapMutations({
+      setCreatingEntityInLevelId: 'setCreatingEntityInLevelId',
+    }),
+    clickHandler() {
+      this.setCreatingEntityInLevelId({ id: this.levelId });
+      this.newEntityHandler({ dataType: 'ENTITY' });
+    },
   },
 };
 </script>

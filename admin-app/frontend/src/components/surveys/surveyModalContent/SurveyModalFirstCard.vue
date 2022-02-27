@@ -1,27 +1,23 @@
 <template>
-  <v-card class="px-4 pt-4">
+  <v-card class="px-0 pt-0 px-md-4 pt-md-4">
     <v-form lazy-validation>
       <v-card-title>
         <h2 v-if="edit">
-          {{ $t("interventionView.surveyModal.firstCard.title.edit") }}
+          {{ $t('interventions.surveyModal.firstCard.title.edit') }}
           <i>{{ surveyInFocus.name }}</i>
         </h2>
         <h2 v-else-if="create">
-          {{ $t("interventionView.surveyModal.firstCard.title.create") }}
+          {{ $t('interventions.surveyModal.firstCard.title.create') }}
         </h2>
         <h2 v-else-if="read">{{ surveyInFocus.name }}</h2>
         <v-spacer></v-spacer>
-        <v-btn
-          x-large
-          text
-          class="text-none"
-          @click="nextStepHandler"
-          :disabled="!canAdvance"
-        >
+        <v-btn x-large text class="text-none" @click="nextStepHandler" :disabled="!canAdvance">
           {{
-            read
-              ? $t("interventionView.surveyModal.firstCard.questions")
-              : $t(`interventionView.surveyModal.firstCard.next-step`)
+            $vuetify.breakpoint.name === 'xs'
+              ? ''
+              : read
+              ? $t('interventions.surveyModal.firstCard.questions')
+              : $t(`interventions.surveyModal.firstCard.next-step`)
           }}
           <v-icon large> mdi-chevron-right </v-icon>
         </v-btn>
@@ -30,7 +26,7 @@
       <v-card-text>
         <v-container>
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col cols="12" sm="6" class="pb-0 px-0 px-md-3">
               <h2 v-if="read">
                 {{ surveyName }}
               </h2>
@@ -38,7 +34,7 @@
                 v-else
                 autofocus
                 v-model="surveyName"
-                :label="$t('interventionView.surveyModal.firstCard.form.name')"
+                :label="$t('interventions.surveyModal.firstCard.form.name')"
                 outlined
                 dense
               ></v-text-field>
@@ -49,23 +45,16 @@
               <v-textarea
                 v-else
                 v-model="surveyDescription"
-                :counter="
-                  surveyDescription.length > surveyDescriptionMaxChar - 20
-                "
+                :counter="surveyDescription.length > surveyDescriptionMaxChar - 20"
                 :rules="[rules.maxChar]"
-                :label="
-                  $t('interventionView.surveyModal.firstCard.form.description')
-                "
+                :label="$t('interventions.surveyModal.firstCard.form.description')"
                 outlined
                 dense
                 class="mt-4"
               ></v-textarea>
             </v-col>
-            <v-col cols="12" md="6">
-              <v-img
-                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                max-height="200px"
-              >
+            <v-col cols="12" sm="6" class="pt-0 px-0 px-md-3">
+              <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" max-height="200px">
                 <div v-if="!read" class="iv-edit-icon">
                   <v-btn fab color="primary" @click="selectImg">
                     <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
@@ -81,7 +70,7 @@
 
               <div v-if="read">
                 <h2>
-                  {{ $t("interventionView.surveyModal.firstCard.form.tags") }}
+                  {{ $t('interventions.surveyModal.firstCard.form.tags') }}
                 </h2>
                 <v-chip v-for="tag in tagsInFocus" :key="tag.tagId">
                   {{ tag }}
@@ -96,7 +85,7 @@
                 deletable-chips
                 chips
                 dense
-                :label="$t('interventionView.surveyModal.firstCard.form.tags')"
+                :label="$t('interventions.surveyModal.firstCard.form.tags')"
                 multiple
                 outlined
                 class="mt-8"
@@ -108,7 +97,7 @@
 
       <v-card-actions>
         <v-btn color="warning" text @click="exitHandler">
-          {{ read ? "Close" : $t("general.cancel") }}
+          {{ read ? 'Close' : $t('general.cancel') }}
         </v-btn>
       </v-card-actions>
     </v-form>
@@ -116,26 +105,24 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
-import { modalModesDict } from "../../../store/constants";
+import { mapGetters, mapActions, mapMutations } from 'vuex';
+import { modalModesDict } from '../../../store/constants';
 
 const surveyDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_SURVEY_DESCRIPTION_MAX_CHAR, 10),
-  0
+  0,
 );
 
 export default {
-  name: "SurveyModalFirstCard",
+  name: 'SurveyModalFirstCard',
   data() {
     return {
       surveyDescriptionMaxChar,
       rules: {
-        maxChar: (value) =>
-          value.length <= surveyDescriptionMaxChar || this.maxCharExceededi18n,
+        maxChar: (value) => value.length <= surveyDescriptionMaxChar || this.maxCharExceededi18n,
       },
-      modalModesDict,
-      surveyName: "",
-      surveyDescription: "",
+      surveyName: '',
+      surveyDescription: '',
       surveyTags: [],
     };
   },
@@ -144,44 +131,51 @@ export default {
   },
   computed: {
     ...mapGetters({
-      surveyModalMode: "surveysUI/getSurveyModalMode",
-      surveyInFocus: "surveysUI/surveyInFocus",
-      surveyDraft: "surveysUI/getSurveyDraft",
-      allSurveyTags: "surveysData/getSurveyTags",
-      tagsInFocus: "surveysUI/tagsInFocus",
+      surveyModalMode: 'dataModal/getMode',
+      dataIdInFocus: 'dataModal/getDataIdInFocus',
+      surveyDraft: 'dataModal/getDataDraft',
+      SURVEYById: 'SURVEY_Data/SURVEYById',
+      allSurveyTags: 'SURVEY_Data/getSurveyTags',
+      tagById: 'SURVEY_Data/tagById',
     }),
+    surveyInFocus() {
+      return this.SURVEYById({ id: this.dataIdInFocus });
+    },
+    tagsInFocus() {
+      return this.surveyInFocus.tagIds.map((t) => this.tagById(t));
+    },
     edit() {
-      return this.surveyModalMode === this.modalModesDict.edit;
+      return this.surveyModalMode === modalModesDict.edit;
     },
     create() {
-      return this.surveyModalMode === this.modalModesDict.create;
+      return this.surveyModalMode === modalModesDict.create;
     },
     read() {
-      return this.surveyModalMode === this.modalModesDict.read;
+      return this.surveyModalMode === modalModesDict.read;
     },
     canAdvance() {
-      return this.read || this.surveyName !== "";
+      return this.read || this.surveyName !== '';
     },
     maxCharExceededi18n() {
-      return this.$t("login.maxCharExceeded", {
+      return this.$t('general.form.maxCharExceeded', {
         maxChar: surveyDescriptionMaxChar,
       });
     },
   },
   methods: {
     ...mapActions({
-      abortNewSurveyHandler: "surveysUI/abortNewSurveyHandler",
-      abortReadSurveyHandler: "surveysUI/abortReadSurveyHandler",
-      abortEditSurveyHandler: "surveysUI/abortEditSurveyHandler",
+      abortNewSurveyHandler: 'dataModal/abortCreateData',
+      abortReadSurveyHandler: 'dataModal/abortReadData',
+      abortEditSurveyHandler: 'dataModal/abortEditData',
     }),
     ...mapMutations({
-      setSurveyDraft: "surveysUI/setSurveyDraft",
-      incrementCompletionIndex: "surveysUI/incrementSurveyModalCompletionIndex",
+      setSurveyDraft: 'dataModal/setSURVEYDraft',
+      incrementCompletionIndex: 'incrementSurveyModalCompletionIndex',
     }),
     selectImg() {
-      const imgInput = this.$refs["img-upload"];
+      const imgInput = this.$refs['img-upload'];
       imgInput.click();
-      console.log("TODO: do something with", imgInput);
+      // console.log('TODO: do something with', imgInput);
     },
     nextStepHandler() {
       this.setSurveyDraft({
@@ -192,8 +186,8 @@ export default {
       this.incrementCompletionIndex();
     },
     prefillComponentDataFromSurveyDraft() {
-      this.surveyName = this.surveyDraft?.name ?? "";
-      this.surveyDescription = this.surveyDraft?.description ?? "";
+      this.surveyName = this.surveyDraft?.name ?? '';
+      this.surveyDescription = this.surveyDraft?.description ?? '';
       this.surveyTags = this.surveyDraft?.tags ?? [];
     },
     exitHandler() {
@@ -202,11 +196,11 @@ export default {
         return;
       }
       if (this.edit) {
-        this.abortEditSurveyHandler();
+        this.abortEditSurveyHandler({ dataId: this.dataIdInFocus, dataType: 'SURVEY' });
         return;
       }
       if (this.create) {
-        this.abortNewSurveyHandler();
+        this.abortNewSurveyHandler({ dataType: 'SURVEY' });
       }
     },
   },

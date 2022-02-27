@@ -2,12 +2,12 @@
   <div
     class="d-flex flex-column"
     style="width: 100%; position: relative"
-    v-if="allEntitiesOfLevel(levelId).length > 0"
+    v-if="allEntitiesOfLevel({ levelId }).length > 0"
   >
     <Entity
-      v-for="entity in allEntitiesOfLevel(levelId)"
-      :key="entity.entityId"
-      :entityId="entity.entityId"
+      v-for="entity in allEntitiesOfLevel({ levelId })"
+      :key="entity.id"
+      :id="entity.id"
       :upperEntityId="entity.upperEntityId"
       :levelId="levelId"
       :entityName="entity.name"
@@ -20,7 +20,7 @@
     <AddEntityButton class="mt-4" :levelId="levelId" />
     <div
       class="vertical-line"
-      v-for="line in calculatedLinesByLevelId(levelId)"
+      v-for="line in calculatedLinesByLevelId({ levelId })"
       :key="line.entityId"
       :style="`background-color: ${lineColors[line.indentation]}; height: ${
         160 * (line.y1 - line.y0)
@@ -36,15 +36,15 @@
 </template>
 
 <script>
-import { validate as uuidValidate } from "uuid";
+import { validate as uuidValidate } from 'uuid';
 
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from 'vuex';
 
-import AddEntityButton from "./AddEntityButton.vue";
-import Entity from "./Entity.vue";
+import AddEntityButton from './AddEntityButton.vue';
+import Entity from './Entity.vue';
 
 export default {
-  name: "EntitiesColumn",
+  name: 'EntitiesColumn',
   components: { AddEntityButton, Entity },
   props: {
     levelId: {
@@ -55,14 +55,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      allEntitiesOfLevel: "entities/getAllEntitiesOfLevelByHid",
-      lineColors: "getLineColors",
-      calculatedLinesByLevelId: "entities/getCalculatedLinesByLevelId",
-    }),
-  },
-  methods: {
-    ...mapActions({
-      clickOnEntity: "entities/clickOnEntity",
+      allEntitiesOfLevel: 'ENTITY_Data/allEntitiesByLevelId',
+      lineColors: 'getLineColors',
+      calculatedLinesByLevelId: 'ENTITY_Data/calculatedLinesByLevelId',
     }),
   },
 };

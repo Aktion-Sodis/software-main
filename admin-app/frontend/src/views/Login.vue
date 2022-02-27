@@ -1,12 +1,12 @@
 <template>
   <v-container fluid class="outer-wrapper grey lighten-5">
     <v-row class="inner-wrapper" no-gutters>
-      <v-col class="login-wrapper" cols="12" md="6">
+      <v-col class="login-wrapper mt-16 mt-md-0" cols="12" md="6">
         <v-container fluid>
           <v-row no-gutters class="login-row">
             <v-col cols="11" sm="10" md="8">
-              <h1>{{ $t("login.title") }}</h1>
-              <p class="mb-8 mt-4">{{ $t("login.subtitle") }}</p>
+              <h1>{{ $t('login.title') }}</h1>
+              <p class="mb-8 mt-4">{{ $t('login.subtitle') }}</p>
               <v-form ref="form" @submit.prevent="submit" lazy-validation>
                 <v-text-field
                   v-model="username"
@@ -29,18 +29,16 @@
                   <v-checkbox
                     class="my-0"
                     v-model="rememberMe"
-                    :label="$t('login.remember-me')"
+                    :label="$t('login.rememberMe')"
+                    @click="showToBeImplementedFeedback"
                   ></v-checkbox>
-                  <p class="mt-1 py-0">{{ $t("login.forgot-password") }}</p>
+                  <div class="mt-1" @click="showToBeImplementedFeedback" style="cursor: pointer">
+                    <p class="py-0">{{ $t('login.forgotPassword') }}</p>
+                  </div>
                 </div>
-                <v-btn
-                  type="submit"
-                  block
-                  large
-                  color="primary"
-                  class="text-none"
-                  >{{ $t("login.sign-in") }}</v-btn
-                >
+                <v-btn type="submit" block large color="primary" class="text-none">{{
+                  $t('login.signIn')
+                }}</v-btn>
                 <v-btn
                   type="submit"
                   block
@@ -48,6 +46,7 @@
                   large
                   color="grey"
                   class="mt-2 text-none"
+                  @click.prevent="showToBeImplementedFeedback"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -56,6 +55,7 @@
                     xmlns="http://www.w3.org/2000/svg"
                     class="mr-2"
                   >
+                    <!-- eslint-disable max-len -->
                     <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
                       <path
                         fill="#4285F4"
@@ -74,23 +74,26 @@
                         d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"
                       />
                     </g>
+                    <!-- eslint-enable max-len -->
                   </svg>
-                  {{ $t("login.sign-in-with-google") }}
+                  {{ $t('login.signInWithGoogle') }}
                 </v-btn>
                 <div class="push-to-end mt-4">
                   <p>
-                    {{ $t("login.dont-have-an-account") }}
+                    {{ $t('login.dontHaveAnAccount') }}
                     <a
                       href="#"
                       class="font-weight-bold font-italic text-decoration-none"
-                      >{{ $t("login.register-here") }}</a
+                      @click="showToBeImplementedFeedback"
                     >
+                      {{ $t('login.registerHere') }}
+                    </a>
                   </p>
                 </div>
               </v-form>
             </v-col>
           </v-row>
-          <v-row no-gutters class="d-md-none mt-16">
+          <v-row no-gutters class="d-md-none mt-4 mt-md-16">
             <v-col cols="6" sm="4" offset="3" offset-sm="4">
               <div class="rounded-xl pa-4 lg-rounded-pill society-icon-wrapper">
                 <img
@@ -103,13 +106,11 @@
           </v-row>
         </v-container>
       </v-col>
-      <v-col class="images-wrapper" cols="12" md="6">
+      <v-col class="images-wrapper d-none d-md-block" cols="12" md="6">
         <v-container style="height: 100%" fluid>
           <v-row style="height: 100%" no-gutters>
             <v-col cols="6" offset="3" class="login-row">
-              <div
-                class="rounded-xl pa-4 lg-rounded-pill d-none d-md-block society-icon-wrapper"
-              >
+              <div class="rounded-xl pa-4 lg-rounded-pill d-none d-md-block society-icon-wrapper">
                 <img
                   src="../static/aktionSodisBig.png"
                   style="width: 100%"
@@ -125,14 +126,14 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     return {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       showPassword: false,
       rules: {
         required: (value) => !!value || this.requiredi18n,
@@ -142,21 +143,27 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isAuthenticated: "auth/getIsAuthenticated",
+      isAuthenticated: 'auth/getIsAuthenticated',
     }),
-    requiredi18n: function () {
-      return this.$t("login.required");
+    requiredi18n() {
+      return this.$t('general.form.required');
     },
   },
   methods: {
+    ...mapActions({
+      showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
+    }),
     submit() {
       const valid = this.$refs.form.validate();
       if (valid) {
-        const signInSuccess = this.$store.dispatch("auth/signIn", {
-          username: this.username,
+        const signInSuccess = this.$store.dispatch('auth/signIn', {
+          credentials: {
+            username: this.username,
+            rememberMe: this.rememberMe,
+          },
         });
         if (signInSuccess) {
-          this.$router.push({ name: "Home" });
+          this.$router.push({ name: 'Home' });
         }
       }
     },
@@ -175,7 +182,6 @@ export default {
 }
 
 .login-wrapper {
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -191,26 +197,12 @@ export default {
   z-index: 1;
 }
 .images-wrapper {
-  background-image: url("../static/colleagues.jpeg");
+  background-image: url('../static/colleagues.jpeg');
   background-size: cover;
   background-position: center;
   padding: 0;
   height: 100vh;
   overflow: hidden;
-}
-
-@media only screen and (max-width: 960px) {
-  .images-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 0;
-  }
-
-  .login-wrapper {
-    background-color: rgba(255, 255, 255, 0.85);
-    height: 100vh;
-  }
 }
 
 .row-space-between {
@@ -220,7 +212,7 @@ export default {
 
 .push-to-end {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .background-img {

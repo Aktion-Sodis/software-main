@@ -23,14 +23,14 @@ export enum QuestionType {
   AUDIO = "AUDIO"
 }
 
-export enum Type {
-  INT = "INT",
-  STRING = "STRING"
-}
-
 export enum SurveyType {
   INITIAL = "INITIAL",
   DEFAULT = "DEFAULT"
+}
+
+export enum Type {
+  INT = "INT",
+  STRING = "STRING"
 }
 
 export declare class Permission {
@@ -133,6 +133,10 @@ type ContentMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type TagMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type SurveyMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
@@ -204,7 +208,7 @@ export declare class Intervention {
   readonly interventionType: InterventionType | keyof typeof InterventionType;
   readonly contents: InterventionContentRelation[];
   readonly surveys: Survey[];
-  readonly tags: string[];
+  readonly tags: Tag[];
   readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
@@ -218,12 +222,25 @@ export declare class Content {
   readonly name: string;
   readonly description?: string;
   readonly interventions: InterventionContentRelation[];
-  readonly tags: string[];
+  readonly tags: Tag[];
   readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<Content, ContentMetaData>);
   static copyOf(source: Content, mutator: (draft: MutableModel<Content, ContentMetaData>) => MutableModel<Content, ContentMetaData> | void): Content;
+}
+
+export declare class Tag {
+  readonly id: string;
+  readonly text: string;
+  readonly schemeVersion?: number;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+  readonly interventionTagsId?: string;
+  readonly contentTagsId?: string;
+  readonly surveyTagsId?: string;
+  constructor(init: ModelInit<Tag, TagMetaData>);
+  static copyOf(source: Tag, mutator: (draft: MutableModel<Tag, TagMetaData>) => MutableModel<Tag, TagMetaData> | void): Tag;
 }
 
 export declare class Survey {
@@ -232,7 +249,8 @@ export declare class Survey {
   readonly description?: string;
   readonly intervention?: Intervention;
   readonly questions: Question[];
-  readonly tags: string[];
+  readonly tags: Tag[];
+  readonly surveyType: SurveyType | keyof typeof SurveyType;
   readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;

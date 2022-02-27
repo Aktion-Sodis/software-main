@@ -1,15 +1,15 @@
 export class EmptyQuestion {
   constructor() {
-    this.questionText = "";
-    this.questionType = "text";
-    this.answers = [{ answerText: "" }];
+    this.questionText = '';
+    this.questionType = 'text';
+    this.answers = [{ answerText: '' }];
     this.isEmptyQuestion = true;
   }
 }
 
 export class EmptyAnswer {
   constructor() {
-    this.answerText = "";
+    this.answerText = '';
     this.isEmptyAnswer = true;
   }
 }

@@ -1,6 +1,6 @@
-import Vue from "vue";
-import Vuetify from "vuetify/lib/framework";
-import colors from "vuetify/lib/util/colors";
+import Vue from 'vue';
+import Vuetify from 'vuetify/lib/framework';
+import colors from 'vuetify/lib/util/colors';
 
 Vue.use(Vuetify);
 
@@ -20,9 +20,9 @@ export default new Vuetify({
   theme: {
     themes: {
       light: {
-        primary: "#723D46",
-        "primary-dark": "#472D30",
-        secondary: "#E26D5C",
+        primary: '#723D46',
+        'primary-dark': '#472D30',
+        secondary: '#E26D5C',
         accent: colors.indigo.base,
         warning: colors.red.darken4,
       },

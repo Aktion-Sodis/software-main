@@ -25,17 +25,17 @@ const QuestionType = {
   "AUDIO": "AUDIO"
 };
 
-const Type = {
-  "INT": "INT",
-  "STRING": "STRING"
-};
-
 const SurveyType = {
   "INITIAL": "INITIAL",
   "DEFAULT": "DEFAULT"
 };
 
-const { User, Config, Level, Intervention, Content, Survey, Entity, AppliedIntervention, ExecutedSurvey, Task, InterventionContentRelation, Permission, ColorTheme, StoragePaths, Question, QuestionOption, CustomData, Location, AppliedCustomData, QuestionAnswer, Marking } = initSchema(schema);
+const Type = {
+  "INT": "INT",
+  "STRING": "STRING"
+};
+
+const { User, Config, Level, Intervention, Content, Tag, Survey, Entity, AppliedIntervention, ExecutedSurvey, Task, InterventionContentRelation, Permission, ColorTheme, StoragePaths, Question, QuestionOption, CustomData, Location, AppliedCustomData, QuestionAnswer, Marking } = initSchema(schema);
 
 export {
   User,
@@ -43,6 +43,7 @@ export {
   Level,
   Intervention,
   Content,
+  Tag,
   Survey,
   Entity,
   AppliedIntervention,
@@ -52,8 +53,8 @@ export {
   PermissionType,
   InterventionType,
   QuestionType,
-  Type,
   SurveyType,
+  Type,
   Permission,
   ColorTheme,
   StoragePaths,

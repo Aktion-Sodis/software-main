@@ -5,14 +5,8 @@
         {{ surveyName }}
       </h2>
       <v-spacer></v-spacer>
-      <v-btn
-        x-large
-        text
-        class="text-none"
-        @click="publishSurveyHandler"
-        :disabled="false"
-      >
-        {{ $t("interventionView.surveyModal.finalizeCard.publish-survey") }}
+      <v-btn x-large text class="text-none" @click="handlePublishSurvey" :disabled="false">
+        {{ $t('interventions.surveyModal.finalizeCard.publishSurvey') }}
         <v-icon large class="ml-2"> mdi-bullhorn-outline </v-icon>
       </v-btn>
     </v-card-title>
@@ -24,19 +18,23 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 
 export default {
-  name: "Finalize",
+  name: 'Finalize',
   watch: {},
   data() {
     return {};
   },
   computed: {
     ...mapGetters({
-      surveyName: "surveysUI/surveyNameInFocus",
-      surveyModalMode: "surveysUI/getSurveyModalMode",
+      dataIdInFocus: 'dataModal/getDataIdInFocus',
+      SURVEYById: 'SURVEY_Data/SURVEYById',
+      surveyModalMode: 'dataModal/getMode',
     }),
+    surveyName() {
+      return this.SURVEYById({ id: this.dataIdInFocus })?.name ?? '';
+    },
     edit() {
       return this.surveyModalMode === this.modalModesDict.edit;
     },
@@ -49,12 +47,17 @@ export default {
   },
   methods: {
     ...mapActions({
-      publishSurveyHandler: "surveysUI/publishSurveyHandler",
+      publishSurveyHandler: 'publishSurveyHandler',
+      showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
     }),
     ...mapMutations({
-      incrementCompletionIndex: "surveysUI/incrementSurveyModalCompletionIndex",
-      decrementCompletionIndex: "surveysUI/decrementSurveyModalCompletionIndex",
+      incrementCompletionIndex: 'incrementSurveyModalCompletionIndex',
+      decrementCompletionIndex: 'decrementSurveyModalCompletionIndex',
     }),
+    handlePublishSurvey() {
+      this.showToBeImplementedFeedback();
+      this.publishSurveyHandler();
+    },
   },
 };
 </script>

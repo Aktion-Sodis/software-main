@@ -1,118 +1,163 @@
 {
-  "login": {
-    "title": "Welcome back!",
-    "subtitle": "Please sign in with your credentials or register.",
-    "username": "Username",
-    "password": "Password",
-    "required": "Required.",
-    "maxCharExceeded": "Maximum {maxChar} characters.",
-    "remember-me": "Remember me",
-    "forgot-password": "Forgot Password",
-    "sign-in": "Sign in",
-    "sign-in-with-google": "Sign in with Google",
-    "dont-have-an-account": "Don't have an account?",
-    "register-here": "Register here"
+  "development": {
+    "notYetImplemented": "Esta función aún no se ha implementado. ¡Por favor, ignora si estás en búsqueda de errores! 🐞🔍"
   },
   "general": {
-    "search-box": "Search anything",
-    "cancel": "Cancel",
-    "save": "Save",
-    "delete": "Delete"
-  },
-  "organizationStructure": {
-    "addNewEntity": "Add entity",
-    "addNewLevel": "Add new level",
-    "levelModal": {
-      "title": { "edit": "Edit level ", "create": "Create new level" },
-      "description": {
-        "edit": "This is the description of this beautiful edit dialog.",
-        "create": "This is the description of this beautiful create dialog."
-      },
-      "levelName": "Level Name",
-      "levelDescription": "Level Description",
-      "manageAllowedInterventions": "Manage allowed interventions",
-      "levelIsSubordinateTo": "Level is subordinate to..."
+    "searchBox": "Búsqueda",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "form": {
+      "maxCharExceeded": "Máximo {maxChar} caracteres.",
+      "required": "Necesario.",
+      "unsavedChanges": "Hay cambios sin guardar. ¿Estás seguro de que quieres salir?"
     },
-    "entityModal": {
-      "title": { "edit": "Edit entity ", "create": "Create new entity" },
-      "description": {
-        "edit": "This is the description of this beautiful edit dialog.",
-        "create": "This is the description of this beautiful create dialog."
-      },
-      "upperEntity": "Choose parent entity",
-      "entityName": "Entity Name",
-      "entityDescription": "Entity Description",
-      "entityIsSubordinateTo": "Entity is subordinate to..."
+    "routes": {
+      "home": "Inicio",
+      "baseData": "Datos básicos",
+      "organizationStructure": "Estructura organizativa",
+      "interventions": "Intervenciones",
+      "login": "Iniciar sesión",
+      "register": "Registrar"
     }
   },
-  "interventionView": {
+  "login": {
+    "title": "¡Bienvenido de nuevo!",
+    "subtitle": "Por favor, inicie sesión con sus credenciales o regístrese.",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "rememberMe": "Recuérdalo",
+    "forgotPassword": "Contraseña olvidada",
+    "signIn": "Iniciar sesión",
+    "signInWithGoogle": "Iniciar sesión con Google",
+    "dontHaveAnAccount": "Todavía no tengo cuenta",
+    "registerHere": "Registar"
+  },
+  "home": {
+    "title": "Inicio"
+  },
+  "baseData": {
+    "title": "Datos básicos",
+    "documents": "Documentos",
+    "images": "Imágenes",
+    "videos": "Vídeos",
+    "surveys": "Encuestas",
+    "tags": "Etiquetas"
+  },
+  "organizationStructure": {
+    "title": "Estructura organizativa",
+    "addNewEntity": "Añadir entidad",
+    "addNewLevel": "Añadir un nuevo nivel",
+    "hasNoInterventions": "No existen intervenciones para este nivel.",
+    "levelModal": {
+      "modalTitle": {
+        "edit": "Editar nivel ",
+        "create": "Crear nuevo nivel",
+        "read": "Observando nivel"
+      },
+      "modalDescription": {
+        "edit": "Esta es la descripción de este diálogo de edición.",
+        "create": "Esta es la descripción de este diálogo de creación."
+      },
+      "interventions": "Intervenciones",
+      "name": "Nombre del nivel",
+      "description": "Descripción del nivel",
+      "manageAllowedInterventions": "Gestionar las intervenciones permitidas",
+      "upperLevel": "El nivel está subordinado a"
+    },
+    "entityModal": {
+      "modalTitle": {
+        "edit": "Editar entidad ",
+        "create": "Crear nueva entidad",
+        "read": "Observando entidad"
+      },
+      "modalDescription": {
+        "edit": "Esta es la descripción de este diálogo de edición.",
+        "create": "Esta es la descripción de este diálogo de creación."
+      },
+      "name": "Nombre de la entidad",
+      "description": "Descripción de la entidad",
+      "otherInfo": "Información adicional",
+      "upperEntity": "Entidad superior",
+      "upperEntityLabel": "Elija la entidad madre"
+    }
+  },
+  "interventions": {
+    "title": "Intervenciones",
+    "newIntervention": "Nueva intervención",
+    "newSurvey": "Nueva encuesta",
     "interventionModal": {
-      "title": {
-        "edit": "Edit intervention ",
-        "create": "Create new intervention"
+      "modalTitle": {
+        "read": "Observando intervención",
+        "edit": "Editar intervención ",
+        "create": "Crear nueva intervención"
       },
-      "description": {
-        "edit": "This is the description of this beautiful edit dialog.",
-        "create": "This is the description of this beautiful create dialog."
+      "modalDescription": {
+        "edit": "Esta es la descripción de este diálogo de edición.",
+        "create": "Esta es la descripción de este diálogo de creación."
       },
-      "interventionName": "Intervention Name",
-      "interventionDescription": "Intervention Description"
+      "name": "Nombre de la intervención",
+      "description": "Descripción de la intervención",
+      "noDocuments": "No se han subido documentos.",
+      "noImages": "No se han subido imágenes.",
+      "noVideos": "No se han subido vídeos.",
+      "noSurveys": "No se han subido encuestas."
     },
     "surveyModal": {
       "firstCard": {
         "title": {
-          "edit": "Editing survey ",
-          "create": "New survey"
+          "edit": "Editar encuesta ",
+          "create": "Nueva encuesta"
         },
         "form": {
-          "name": "Survey name",
-          "description": "Survey description",
-          "tags": "Survey tags"
+          "name": "Nombre de la encuesta",
+          "description": "Descripción de la encuesta",
+          "tags": "Etiquetas para la encuesta"
         },
-        "next-step": "Next step",
-        "questions": "Questions"
+        "next-step": "Siguiente",
+        "questions": "Preguntas"
       },
       "questionCard": {
         "form": {
           "question": {
-            "title": "Question",
-            "textLabel": "Question text",
-            "imageTitle": "Question image",
-            "addImage": "Add image",
-            "audioTitle": "Question audio",
-            "addAudio": "Add audio"
+            "title": "Pregunta",
+            "textLabel": "Texto pregunta",
+            "imageTitle": "Imágen de la pregunta",
+            "addImage": "Añadir imàgen",
+            "audioTitle": "Audio sobre la pregunta",
+            "addAudio": "Añadir audio"
           },
           "answer": {
-            "title": "Answer",
-            "typeLabel": "Question type",
-            "answer": "Answer",
-            "textLabel": "Answer text",
-            "addImage": "Add image to answer",
-            "addAnswer": "Add answer",
+            "title": "Pregunta",
+            "typeLabel": "Tipo de pregunta",
+            "answer": "Respuesta",
+            "textLabel": "Texto respuesta",
+            "addImage": "Añadir imágen a la respuresta",
+            "addAnswer": "Añadir respuesta",
             "questionTypes": {
-              "text": "Text",
-              "singleChoice": "Single choice",
-              "multipleChoice": "Multiple choice",
-              "picture": "Picture",
-              "pictureWithTags": "Picture with tags",
+              "text": "Texto",
+              "singleChoice": "Elección única",
+              "multipleChoice": "Elección múltiple",
+              "picture": "Imágen",
+              "pictureWithTags": "Imágen con etiquetas",
               "audio": "Audio"
             }
           }
         },
-        "discard-question": "Discard question",
-        "prior-question": "Prior question",
-        "next-question": "Next question",
-        "finalize-survey": "Finalize survey",
-        "back-to-details": "Details",
-        "save-draft": "Save draft"
+        "discardQuestion": "Descartar pregunta",
+        "priorQuestion": "Pregunta anterior",
+        "nextQuestion": "Siguiente pregunta",
+        "finalizeSurvey": "Finalizar encuesta",
+        "backToDetails": "Detalles",
+        "saveDraft": "Guardar borrador"
       },
       "finalizeCard": {
-        "publish-survey": "Publish survey"
+        "publishSurvey": "Publicar encuesta"
       },
       "stepper": {
-        "details": "Survey details",
-        "questions": "Questions",
-        "finalize": "Finalize"
+        "details": "Detalles de encuesta",
+        "questions": "Preguntas",
+        "finalize": "Finalizar"
       }
     }
   }

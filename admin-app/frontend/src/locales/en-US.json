@@ -1,62 +1,107 @@
 {
+  "development": {
+    "notYetImplemented": "This feature is yet to be implemented. Please ignore if you are on bug hunting! 🐞🔍"
+  },
+  "general": {
+    "searchBox": "Search anything",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "form": {
+      "maxCharExceeded": "Maximum {maxChar} characters.",
+      "required": "Required.",
+      "unsavedChanges": "There are unsaved changes. Are you sure you want to leave?"
+    },
+    "routes": {
+      "home": "Home",
+      "baseData": "Base data",
+      "organizationStructure": "Organization structure",
+      "interventions": "Interventions",
+      "login": "Login",
+      "register": "Register"
+    }
+  },
   "login": {
     "title": "Welcome back!",
     "subtitle": "Please sign in with your credentials or register.",
     "username": "Username",
     "password": "Password",
-    "required": "Required.",
-    "maxCharExceeded": "Maximum {maxChar} characters.",
-    "remember-me": "Remember me",
-    "forgot-password": "Forgot Password",
-    "sign-in": "Sign in",
-    "sign-in-with-google": "Sign in with Google",
-    "dont-have-an-account": "Don't have an account?",
-    "register-here": "Register here"
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot Password",
+    "signIn": "Sign in",
+    "signInWithGoogle": "Sign in with Google",
+    "dontHaveAnAccount": "Don't have an account?",
+    "registerHere": "Register here"
   },
-  "general": {
-    "search-box": "Search anything",
-    "cancel": "Cancel",
-    "save": "Save",
-    "delete": "Delete"
+  "home": {
+    "title": "Home"
+  },
+  "baseData": {
+    "title": "Base Data",
+    "documents": "Documents",
+    "images": "Images",
+    "videos": "Videos",
+    "surveys": "Surveys",
+    "tags": "Tags"
   },
   "organizationStructure": {
-    "addNewEntity": "Add entity",
+    "title": "Organization Structure",
+    "addNewEntity": "Add new entity",
     "addNewLevel": "Add new level",
+    "hasNoInterventions": "There are no interventions for this level.",
     "levelModal": {
-      "title": { "edit": "Edit level ", "create": "Create new level" },
-      "description": {
+      "modalTitle": {
+        "edit": "Edit level ",
+        "create": "Create new level",
+        "read": "Viewing level"
+      },
+      "modalDescription": {
         "edit": "This is the description of this beautiful edit dialog.",
         "create": "This is the description of this beautiful create dialog."
       },
-      "levelName": "Level Name",
-      "levelDescription": "Level Description",
+      "interventions": "Interventions",
+      "name": "Level Name",
+      "description": "Level Description",
       "manageAllowedInterventions": "Manage allowed interventions",
-      "levelIsSubordinateTo": "Level is subordinate to..."
+      "upperLevel": "Level is subordinate to"
     },
     "entityModal": {
-      "title": { "edit": "Edit entity ", "create": "Create new entity" },
-      "description": {
+      "modalTitle": {
+        "edit": "Edit entity ",
+        "create": "Create new entity",
+        "read": "Viewing entity"
+      },
+      "modalDescription": {
         "edit": "This is the description of this beautiful edit dialog.",
         "create": "This is the description of this beautiful create dialog."
       },
-      "upperEntity": "Choose parent entity",
-      "entityName": "Entity Name",
-      "entityDescription": "Entity Description",
-      "entityIsSubordinateTo": "Entity is subordinate to..."
+      "name": "Entity Name",
+      "description": "Entity Description",
+      "otherInfo": "Here be some other things",
+      "upperEntity": "Upper entity",
+      "upperEntityLabel": "Choose parent entity"
     }
   },
-  "interventionView": {
+  "interventions": {
+    "title": "Interventions",
+    "newIntervention": "New intervention",
+    "newSurvey": "New survey",
     "interventionModal": {
-      "title": {
+      "modalTitle": {
+        "read": "Viewing intervention",
         "edit": "Edit intervention ",
         "create": "Create new intervention"
       },
-      "description": {
+      "modalDescription": {
         "edit": "This is the description of this beautiful edit dialog.",
         "create": "This is the description of this beautiful create dialog."
       },
-      "interventionName": "Intervention Name",
-      "interventionDescription": "Intervention Description"
+      "name": "Intervention Name",
+      "description": "Intervention Description",
+      "noDocuments": "No documents uploaded.",
+      "noImages": "No images uploaded.",
+      "noVideos": "No videos uploaded.",
+      "noSurveys": "No surveys uploaded."
     },
     "surveyModal": {
       "firstCard": {
@@ -99,15 +144,15 @@
             }
           }
         },
-        "discard-question": "Discard question",
-        "prior-question": "Prior question",
-        "next-question": "Next question",
-        "finalize-survey": "Finalize survey",
-        "back-to-details": "Details",
-        "save-draft": "Save draft"
+        "discardQuestion": "Discard question",
+        "priorQuestion": "Prior question",
+        "nextQuestion": "Next question",
+        "finalizeSurvey": "Finalize survey",
+        "backToDetails": "Details",
+        "saveDraft": "Save draft"
       },
       "finalizeCard": {
-        "publish-survey": "Publish survey"
+        "publishSurvey": "Publish survey"
       },
       "stepper": {
         "details": "Survey details",

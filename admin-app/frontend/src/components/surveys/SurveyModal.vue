@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    @keydown.esc="exitHandler"
+    @keydown.esc="escHandler"
     v-model="isSurveyModalDisplayed"
     max-width="1200px"
     persistent
@@ -17,16 +17,17 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
+import { modalModesDict, dataTypesDict } from '../../store/constants';
 
-import SurveyModalStepper from "./surveyModalContent/SurveyModalStepper.vue";
-import QuestionTabs from "./surveyModalContent/QuestionTabs.vue";
-import SurveyModalFirstCard from "./surveyModalContent/SurveyModalFirstCard.vue";
-import SurveyModalQuestion from "./surveyModalContent/SurveyModalQuestion.vue";
-import SurveyModalFinalize from "./surveyModalContent/SurveyModalFinalize.vue";
+import SurveyModalStepper from './surveyModalContent/SurveyModalStepper.vue';
+import QuestionTabs from './surveyModalContent/QuestionTabs.vue';
+import SurveyModalFirstCard from './surveyModalContent/SurveyModalFirstCard.vue';
+import SurveyModalQuestion from './surveyModalContent/SurveyModalQuestion.vue';
+import SurveyModalFinalize from './surveyModalContent/SurveyModalFinalize.vue';
 
 export default {
-  name: "SurveyModal",
+  name: 'SurveyModal',
   components: {
     SurveyModalFirstCard,
     SurveyModalQuestion,
@@ -36,9 +37,36 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isSurveyModalDisplayed: "surveysUI/getIsSurveyModalDisplayed",
-      completionIndex: "surveysUI/getSurveyModalCompletionIndex",
+      surveyModalMode: 'dataModal/getMode',
+      isDataModalDisplayed: 'dataModal/getIsDisplayed',
+      dataType: 'dataModal/getDataType',
+      dataIdInFocus: 'dataModal/getDataIdInFocus',
+      completionIndex: 'getSurveyModalCompletionIndex',
     }),
+    isSurveyModalDisplayed() {
+      return this.isDataModalDisplayed && this.dataType === dataTypesDict.survey;
+    },
+    edit() {
+      return this.surveyModalMode === modalModesDict.edit;
+    },
+    create() {
+      return this.surveyModalMode === modalModesDict.create;
+    },
+    read() {
+      return this.surveyModalMode === modalModesDict.read;
+    },
+  },
+  methods: {
+    ...mapActions({
+      abortReadSurveyHandler: 'dataModal/abortReadData',
+      abortNewSurveyHandler: 'dataModal/abortCreateData',
+      abortEditSurveyHandler: 'dataModal/abortEditData',
+    }),
+    escHandler() {
+      if (this.read) this.abortReadSurveyHandler();
+      else if (this.edit) this.abortEditSurveyHandler({ dataId: this.dataIdInFocus, dataType: 'SURVEY' });
+      else if (this.create) this.abortNewSurveyHandler({ dataType: 'SURVEY' });
+    },
   },
 };
 </script>
