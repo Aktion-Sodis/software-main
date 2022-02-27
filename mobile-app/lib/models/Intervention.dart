@@ -35,7 +35,7 @@ class Intervention extends Model {
   final InterventionType? _interventionType;
   final List<InterventionContentRelation>? _contents;
   final List<Survey>? _surveys;
-  final List<String>? _tags;
+  final List<Tag>? _tags;
   final int? _schemeVersion;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
@@ -105,7 +105,7 @@ class Intervention extends Model {
     }
   }
   
-  List<String> get tags {
+  List<Tag> get tags {
     try {
       return _tags!;
     } catch(e) {
@@ -136,7 +136,7 @@ class Intervention extends Model {
   
   const Intervention._internal({required this.id, required name, description, required interventionType, required contents, required surveys, required tags, schemeVersion, createdAt, updatedAt, levelAllowedInterventionsId}): _name = name, _description = description, _interventionType = interventionType, _contents = contents, _surveys = surveys, _tags = tags, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _levelAllowedInterventionsId = levelAllowedInterventionsId;
   
-  factory Intervention({String? id, required String name, String? description, required InterventionType interventionType, required List<InterventionContentRelation> contents, required List<Survey> surveys, required List<String> tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
+  factory Intervention({String? id, required String name, String? description, required InterventionType interventionType, required List<InterventionContentRelation> contents, required List<Survey> surveys, required List<Tag> tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
     return Intervention._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -144,7 +144,7 @@ class Intervention extends Model {
       interventionType: interventionType,
       contents: contents != null ? List<InterventionContentRelation>.unmodifiable(contents) : contents,
       surveys: surveys != null ? List<Survey>.unmodifiable(surveys) : surveys,
-      tags: tags != null ? List<String>.unmodifiable(tags) : tags,
+      tags: tags != null ? List<Tag>.unmodifiable(tags) : tags,
       schemeVersion: schemeVersion,
       levelAllowedInterventionsId: levelAllowedInterventionsId);
   }
@@ -180,7 +180,6 @@ class Intervention extends Model {
     buffer.write("name=" + "$_name" + ", ");
     buffer.write("description=" + "$_description" + ", ");
     buffer.write("interventionType=" + (_interventionType != null ? enumToString(_interventionType)! : "null") + ", ");
-    buffer.write("tags=" + (_tags != null ? _tags!.toString() : "null") + ", ");
     buffer.write("schemeVersion=" + (_schemeVersion != null ? _schemeVersion!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null") + ", ");
@@ -190,7 +189,7 @@ class Intervention extends Model {
     return buffer.toString();
   }
   
-  Intervention copyWith({String? id, String? name, String? description, InterventionType? interventionType, List<InterventionContentRelation>? contents, List<Survey>? surveys, List<String>? tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
+  Intervention copyWith({String? id, String? name, String? description, InterventionType? interventionType, List<InterventionContentRelation>? contents, List<Survey>? surveys, List<Tag>? tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
     return Intervention._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -220,14 +219,19 @@ class Intervention extends Model {
           .map((e) => Survey.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
-      _tags = json['tags']?.cast<String>(),
+      _tags = json['tags'] is List
+        ? (json['tags'] as List)
+          .where((e) => e?['serializedData'] != null)
+          .map((e) => Tag.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
       _schemeVersion = (json['schemeVersion'] as num?)?.toInt(),
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null,
       _levelAllowedInterventionsId = json['levelAllowedInterventionsId'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'description': _description, 'interventionType': enumToString(_interventionType), 'contents': _contents?.map((InterventionContentRelation? e) => e?.toJson()).toList(), 'surveys': _surveys?.map((Survey? e) => e?.toJson()).toList(), 'tags': _tags, 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'levelAllowedInterventionsId': _levelAllowedInterventionsId
+    'id': id, 'name': _name, 'description': _description, 'interventionType': enumToString(_interventionType), 'contents': _contents?.map((InterventionContentRelation? e) => e?.toJson()).toList(), 'surveys': _surveys?.map((Survey? e) => e?.toJson()).toList(), 'tags': _tags?.map((Tag? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'levelAllowedInterventionsId': _levelAllowedInterventionsId
   };
 
   static final QueryField ID = QueryField(fieldName: "intervention.id");
@@ -240,7 +244,9 @@ class Intervention extends Model {
   static final QueryField SURVEYS = QueryField(
     fieldName: "surveys",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Survey).toString()));
-  static final QueryField TAGS = QueryField(fieldName: "tags");
+  static final QueryField TAGS = QueryField(
+    fieldName: "tags",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Tag).toString()));
   static final QueryField SCHEMEVERSION = QueryField(fieldName: "schemeVersion");
   static final QueryField LEVELALLOWEDINTERVENTIONSID = QueryField(fieldName: "levelAllowedInterventionsId");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -281,11 +287,11 @@ class Intervention extends Model {
       associatedKey: Survey.INTERVENTION
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
       key: Intervention.TAGS,
       isRequired: true,
-      isArray: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.collection, ofModelName: describeEnum(ModelFieldTypeEnum.string))
+      ofModelName: (Tag).toString(),
+      associatedKey: Tag.INTERVENTIONTAGSID
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

@@ -151,7 +151,6 @@ export const onCreateLevel = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -191,7 +190,6 @@ export const onUpdateLevel = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -231,7 +229,6 @@ export const onDeleteLevel = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -283,7 +280,7 @@ export const onCreateIntervention = /* GraphQL */ `
         items {
           name
           description
-          tags
+          surveyType
           schemeVersion
           id
           createdAt
@@ -296,7 +293,23 @@ export const onCreateIntervention = /* GraphQL */ `
         nextToken
         startedAt
       }
-      tags
+      tags {
+        items {
+          text
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionTagsId
+          contentTagsId
+          surveyTagsId
+        }
+        nextToken
+        startedAt
+      }
       schemeVersion
       id
       createdAt
@@ -332,7 +345,7 @@ export const onUpdateIntervention = /* GraphQL */ `
         items {
           name
           description
-          tags
+          surveyType
           schemeVersion
           id
           createdAt
@@ -345,7 +358,23 @@ export const onUpdateIntervention = /* GraphQL */ `
         nextToken
         startedAt
       }
-      tags
+      tags {
+        items {
+          text
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionTagsId
+          contentTagsId
+          surveyTagsId
+        }
+        nextToken
+        startedAt
+      }
       schemeVersion
       id
       createdAt
@@ -381,7 +410,7 @@ export const onDeleteIntervention = /* GraphQL */ `
         items {
           name
           description
-          tags
+          surveyType
           schemeVersion
           id
           createdAt
@@ -394,7 +423,23 @@ export const onDeleteIntervention = /* GraphQL */ `
         nextToken
         startedAt
       }
-      tags
+      tags {
+        items {
+          text
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionTagsId
+          contentTagsId
+          surveyTagsId
+        }
+        nextToken
+        startedAt
+      }
       schemeVersion
       id
       createdAt
@@ -425,7 +470,23 @@ export const onCreateContent = /* GraphQL */ `
         nextToken
         startedAt
       }
-      tags
+      tags {
+        items {
+          text
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionTagsId
+          contentTagsId
+          surveyTagsId
+        }
+        nextToken
+        startedAt
+      }
       schemeVersion
       id
       createdAt
@@ -455,7 +516,23 @@ export const onUpdateContent = /* GraphQL */ `
         nextToken
         startedAt
       }
-      tags
+      tags {
+        items {
+          text
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionTagsId
+          contentTagsId
+          surveyTagsId
+        }
+        nextToken
+        startedAt
+      }
       schemeVersion
       id
       createdAt
@@ -485,7 +562,23 @@ export const onDeleteContent = /* GraphQL */ `
         nextToken
         startedAt
       }
-      tags
+      tags {
+        items {
+          text
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionTagsId
+          contentTagsId
+          surveyTagsId
+        }
+        nextToken
+        startedAt
+      }
       schemeVersion
       id
       createdAt
@@ -513,7 +606,10 @@ export const onCreateSurvey = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -534,7 +630,24 @@ export const onCreateSurvey = /* GraphQL */ `
         }
         isFollowUpQuestion
       }
-      tags
+      tags {
+        items {
+          text
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionTagsId
+          contentTagsId
+          surveyTagsId
+        }
+        nextToken
+        startedAt
+      }
+      surveyType
       schemeVersion
       id
       createdAt
@@ -563,7 +676,10 @@ export const onUpdateSurvey = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -584,7 +700,24 @@ export const onUpdateSurvey = /* GraphQL */ `
         }
         isFollowUpQuestion
       }
-      tags
+      tags {
+        items {
+          text
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionTagsId
+          contentTagsId
+          surveyTagsId
+        }
+        nextToken
+        startedAt
+      }
+      surveyType
       schemeVersion
       id
       createdAt
@@ -613,7 +746,10 @@ export const onDeleteSurvey = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -634,7 +770,24 @@ export const onDeleteSurvey = /* GraphQL */ `
         }
         isFollowUpQuestion
       }
-      tags
+      tags {
+        items {
+          text
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionTagsId
+          contentTagsId
+          surveyTagsId
+        }
+        nextToken
+        startedAt
+      }
+      surveyType
       schemeVersion
       id
       createdAt
@@ -875,7 +1028,10 @@ export const onCreateAppliedIntervention = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -950,7 +1106,10 @@ export const onUpdateAppliedIntervention = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -1025,7 +1184,10 @@ export const onDeleteAppliedIntervention = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -1089,7 +1251,6 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1125,7 +1286,6 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1141,7 +1301,11 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
           type
           isFollowUpQuestion
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
+        surveyType
         schemeVersion
         id
         createdAt
@@ -1224,7 +1388,6 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1260,7 +1423,6 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1276,7 +1438,11 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
           type
           isFollowUpQuestion
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
+        surveyType
         schemeVersion
         id
         createdAt
@@ -1359,7 +1525,6 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1395,7 +1560,6 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1411,7 +1575,11 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
           type
           isFollowUpQuestion
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
+        surveyType
         schemeVersion
         id
         createdAt
@@ -1559,7 +1727,6 @@ export const onCreateTask = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1604,7 +1771,7 @@ export const onCreateTask = /* GraphQL */ `
         survey {
           name
           description
-          tags
+          surveyType
           schemeVersion
           id
           createdAt
@@ -1748,7 +1915,6 @@ export const onUpdateTask = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1793,7 +1959,7 @@ export const onUpdateTask = /* GraphQL */ `
         survey {
           name
           description
-          tags
+          surveyType
           schemeVersion
           id
           createdAt
@@ -1937,7 +2103,6 @@ export const onDeleteTask = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1982,7 +2147,7 @@ export const onDeleteTask = /* GraphQL */ `
         survey {
           name
           description
-          tags
+          surveyType
           schemeVersion
           id
           createdAt
@@ -2041,6 +2206,57 @@ export const onDeleteTask = /* GraphQL */ `
     }
   }
 `;
+export const onCreateTag = /* GraphQL */ `
+  subscription OnCreateTag {
+    onCreateTag {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      interventionTagsId
+      contentTagsId
+      surveyTagsId
+    }
+  }
+`;
+export const onUpdateTag = /* GraphQL */ `
+  subscription OnUpdateTag {
+    onUpdateTag {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      interventionTagsId
+      contentTagsId
+      surveyTagsId
+    }
+  }
+`;
+export const onDeleteTag = /* GraphQL */ `
+  subscription OnDeleteTag {
+    onDeleteTag {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      interventionTagsId
+      contentTagsId
+      surveyTagsId
+    }
+  }
+`;
 export const onCreateInterventionContentRelation = /* GraphQL */ `
   subscription OnCreateInterventionContentRelation {
     onCreateInterventionContentRelation {
@@ -2059,7 +2275,10 @@ export const onCreateInterventionContentRelation = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -2076,7 +2295,10 @@ export const onCreateInterventionContentRelation = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -2111,7 +2333,10 @@ export const onUpdateInterventionContentRelation = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -2128,7 +2353,10 @@ export const onUpdateInterventionContentRelation = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -2163,7 +2391,10 @@ export const onDeleteInterventionContentRelation = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -2180,7 +2411,10 @@ export const onDeleteInterventionContentRelation = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt

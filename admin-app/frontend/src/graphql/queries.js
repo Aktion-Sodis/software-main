@@ -195,7 +195,6 @@ export const getLevel = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -321,7 +320,7 @@ export const getIntervention = /* GraphQL */ `
         items {
           name
           description
-          tags
+          surveyType
           schemeVersion
           id
           createdAt
@@ -334,7 +333,23 @@ export const getIntervention = /* GraphQL */ `
         nextToken
         startedAt
       }
-      tags
+      tags {
+        items {
+          text
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionTagsId
+          contentTagsId
+          surveyTagsId
+        }
+        nextToken
+        startedAt
+      }
       schemeVersion
       id
       createdAt
@@ -365,7 +380,10 @@ export const listInterventions = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -405,7 +423,10 @@ export const syncInterventions = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -439,7 +460,23 @@ export const getContent = /* GraphQL */ `
         nextToken
         startedAt
       }
-      tags
+      tags {
+        items {
+          text
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionTagsId
+          contentTagsId
+          surveyTagsId
+        }
+        nextToken
+        startedAt
+      }
       schemeVersion
       id
       createdAt
@@ -464,7 +501,10 @@ export const listContents = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -498,7 +538,10 @@ export const syncContents = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -529,7 +572,10 @@ export const getSurvey = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -550,7 +596,24 @@ export const getSurvey = /* GraphQL */ `
         }
         isFollowUpQuestion
       }
-      tags
+      tags {
+        items {
+          text
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionTagsId
+          contentTagsId
+          surveyTagsId
+        }
+        nextToken
+        startedAt
+      }
+      surveyType
       schemeVersion
       id
       createdAt
@@ -576,7 +639,6 @@ export const listSurveys = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -592,7 +654,11 @@ export const listSurveys = /* GraphQL */ `
           type
           isFollowUpQuestion
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
+        surveyType
         schemeVersion
         id
         createdAt
@@ -627,7 +693,6 @@ export const syncSurveys = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -643,7 +708,11 @@ export const syncSurveys = /* GraphQL */ `
           type
           isFollowUpQuestion
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
+        surveyType
         schemeVersion
         id
         createdAt
@@ -867,7 +936,10 @@ export const getAppliedIntervention = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -939,7 +1011,6 @@ export const listAppliedInterventions = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1003,7 +1074,6 @@ export const syncAppliedInterventions = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1057,7 +1127,6 @@ export const getExecutedSurvey = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1093,7 +1162,6 @@ export const getExecutedSurvey = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1109,7 +1177,11 @@ export const getExecutedSurvey = /* GraphQL */ `
           type
           isFollowUpQuestion
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
+        surveyType
         schemeVersion
         id
         createdAt
@@ -1195,7 +1267,7 @@ export const listExecutedSurveys = /* GraphQL */ `
         survey {
           name
           description
-          tags
+          surveyType
           schemeVersion
           id
           createdAt
@@ -1274,7 +1346,7 @@ export const syncExecutedSurveys = /* GraphQL */ `
         survey {
           name
           description
-          tags
+          surveyType
           schemeVersion
           id
           createdAt
@@ -1409,7 +1481,6 @@ export const getTask = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1454,7 +1525,7 @@ export const getTask = /* GraphQL */ `
         survey {
           name
           description
-          tags
+          surveyType
           schemeVersion
           id
           createdAt
@@ -1685,6 +1756,79 @@ export const syncTasks = /* GraphQL */ `
     }
   }
 `;
+export const getTag = /* GraphQL */ `
+  query GetTag($id: ID!) {
+    getTag(id: $id) {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      interventionTagsId
+      contentTagsId
+      surveyTagsId
+    }
+  }
+`;
+export const listTags = /* GraphQL */ `
+  query ListTags(
+    $filter: ModelTagFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        text
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        interventionTagsId
+        contentTagsId
+        surveyTagsId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncTags = /* GraphQL */ `
+  query SyncTags(
+    $filter: ModelTagFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncTags(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        text
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        interventionTagsId
+        contentTagsId
+        surveyTagsId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const getInterventionContentRelation = /* GraphQL */ `
   query GetInterventionContentRelation($id: ID!) {
     getInterventionContentRelation(id: $id) {
@@ -1703,7 +1847,10 @@ export const getInterventionContentRelation = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -1720,7 +1867,10 @@ export const getInterventionContentRelation = /* GraphQL */ `
           nextToken
           startedAt
         }
-        tags
+        tags {
+          nextToken
+          startedAt
+        }
         schemeVersion
         id
         createdAt
@@ -1756,7 +1906,6 @@ export const listInterventionContentRelations = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1769,7 +1918,6 @@ export const listInterventionContentRelations = /* GraphQL */ `
         content {
           name
           description
-          tags
           schemeVersion
           id
           createdAt
@@ -1810,7 +1958,6 @@ export const syncInterventionContentRelations = /* GraphQL */ `
           name
           description
           interventionType
-          tags
           schemeVersion
           id
           createdAt
@@ -1823,7 +1970,6 @@ export const syncInterventionContentRelations = /* GraphQL */ `
         content {
           name
           description
-          tags
           schemeVersion
           id
           createdAt
