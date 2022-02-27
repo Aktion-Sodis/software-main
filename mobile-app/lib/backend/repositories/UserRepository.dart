@@ -5,8 +5,4 @@ class UserRepository {
   static Future<User?> userByID(String ID) async {
     //todo: implement
   }
-
-  static Future<List<User>> allUsers() async {
-    //todo: implement
-  }
 }

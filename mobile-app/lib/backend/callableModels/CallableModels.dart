@@ -18,3 +18,4 @@ export 'package:mobile_app/backend/callableModels/StoragePaths.dart';
 export 'package:mobile_app/backend/callableModels/Survey.dart';
 export 'package:mobile_app/backend/callableModels/Task.dart';
 export 'package:mobile_app/backend/callableModels/User.dart';
+export 'package:mobile_app/backend/callableModels/Tag.dart';

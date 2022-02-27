@@ -1,5 +1,6 @@
 import 'package:mobile_app/backend/callableModels/Intervention.dart';
 import 'package:mobile_app/backend/callableModels/Question.dart';
+import 'package:mobile_app/backend/callableModels/Tag.dart';
 
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
@@ -9,11 +10,11 @@ class Survey {
   String? description;
   Intervention? intervention;
   late List<Question> questions;
-  late List<String> tags;
+  late List<Tag> tags;
   int? schemeVersion;
   DateTime? createdAt;
   DateTime? updatedAt;
-  SurveyType? surveyType;
+  late SurveyType surveyType;
 
   Survey(
       {this.id,
@@ -25,7 +26,7 @@ class Survey {
       this.schemeVersion,
       this.createdAt,
       this.updatedAt,
-      this.surveyType});
+      required this.surveyType});
 
   Survey.fromAmplifyModel(amp.Survey survey) {
     id = survey.id;
@@ -36,11 +37,13 @@ class Survey {
         : null;
     questions = List.generate(survey.questions.length,
         (index) => Question.fromAmplifyModel(survey.questions[index]));
-    tags = survey.tags;
+    tags = List.generate(survey.tags.length,
+        (index) => Tag.fromAmplifyModel(survey.tags[index]));
     schemeVersion = survey.schemeVersion;
     createdAt = survey.createdAt?.getDateTimeInUtc();
     updatedAt = survey.updatedAt?.getDateTimeInUtc();
-    surveyType = SurveyType.DEFAULT; //todo: change with theme change
+    surveyType = surveyTypeFromAmplifySurveyType(
+        survey.surveyType); //todo: change with theme change
   }
 
   amp.Survey toAmplifyModel() {
@@ -49,9 +52,10 @@ class Survey {
       name: name,
       description: description,
       intervention: intervention?.toAmplifyModel(),
+      surveyType: surveyTypeToAmplifySurveyType(surveyType),
       questions: List.generate(
           questions.length, (index) => questions[index].toAmplifyModel()),
-      tags: tags,
+      tags: List.generate(tags.length, (index) => tags[index].toAmplifyModel()),
       schemeVersion: schemeVersion,
       //todo: missing survey type
     );
