@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_app/backend/Blocs/auth/auth_repository.dart';
+import 'package:mobile_app/backend/Blocs/session/session_cubit.dart';
+import 'package:mobile_app/backend/repositories/UserRepository.dart';
+import 'package:mobile_app/frontend/dependentsizes.dart';
 
 import 'package:mobile_app/services/amplify.dart';
-import 'package:mobile_app/services/auth/auth_repository.dart';
-import 'package:mobile_app/services/session/session_cubit.dart';
-import 'package:mobile_app/structure/data_repository.dart';
 import 'package:mobile_app/app_navigator.dart';
 
 void main() {
@@ -30,7 +31,21 @@ class MyAppState extends State<MyApp> {
 
     ///todo: dummy data, replace with db-version
     setState(() {
-      themeData = ThemeData();
+      themeData = ThemeData(
+          primaryColor: Colors.blue,
+          inputDecorationTheme: InputDecorationTheme(
+              labelStyle: TextStyle(color: Colors.blue, fontSize: 12),
+              hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue),
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red),
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              prefixIconColor: Colors.grey));
     });
   }
 
@@ -46,18 +61,17 @@ class MyAppState extends State<MyApp> {
         title: 'Flutter Demo',
         theme: themeData ?? ThemeData.light(),
         home: MultiRepositoryProvider(
-                providers: [
-                  RepositoryProvider(create: (context) => AuthRepository()),
-                  RepositoryProvider(create: (context) => DataRepository())
-                ],
-                child: BlocProvider(
-                  create: (context) => SessionCubit(
-                    authRepo: context.read<AuthRepository>(),
-                    dataRepo: context.read<DataRepository>(),
-                  ),
-                  child: const AppNavigator(),
-                ),
-              )
-            );
+          providers: [
+            RepositoryProvider(create: (context) => AuthRepository()),
+            RepositoryProvider(create: (context) => UserRepository())
+          ],
+          child: BlocProvider(
+            create: (context) => SessionCubit(
+              authRepo: context.read<AuthRepository>(),
+              userRepo: context.read<UserRepository>(),
+            ),
+            child: const AppNavigator(),
+          ),
+        ));
   }
 }

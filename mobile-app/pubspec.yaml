@@ -24,6 +24,8 @@ dependencies:
   amplify_api: ^0.4.0-rc.1
   amplify_auth_cognito: ^0.4.0-rc.1
 
+
+  font_awesome_flutter: ^9.2.0
   cupertino_icons: ^1.0.2
   flutter_bloc: ^8.0.1
 
@@ -35,3 +37,4 @@ dev_dependencies:
 flutter:
   assets:
       - assets/test/
+      - assets/fixAssets/
