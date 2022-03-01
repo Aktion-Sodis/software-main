@@ -82,7 +82,7 @@ type Intervention @model {
   interventionType: InterventionType!
   contents: [Content!]! @manyToMany(relationName: "InterventionContentRelation")
   surveys: [Survey!]! @hasMany
-  tags: [Tag!]! @hasMany
+  tags: [InterventionTag!]! @hasMany
   schemeVersion: Int @default(value: "0")
 }
 
@@ -97,7 +97,7 @@ type Content @model {
   description: String @default(value: "")
   interventions: [Intervention!]!
     @manyToMany(relationName: "InterventionContentRelation")
-  tags: [Tag!]! @hasMany
+  tags: [ContentTag!]! @hasMany
   schemeVersion: Int @default(value: "0")
 }
 
@@ -107,7 +107,7 @@ type Survey @model {
   description: String @default(value: "")
   intervention: Intervention @belongsTo
   questions: [Question!]!
-  tags: [Tag!]! @hasMany
+  tags: [SurveyTag!]! @hasMany
   surveyType: SurveyType!
   schemeVersion: Int @default(value: "0")
 }
@@ -223,7 +223,17 @@ type Task @model {
   # todo: what to do with audio
 }
 
-type Tag @model {
+type ContentTag @model {
+  text: String!
+  schemeVersion: Int @default(value: "0")
+}
+
+type InterventionTag @model {
+  text: String!
+  schemeVersion: Int @default(value: "0")
+}
+
+type SurveyTag @model {
   text: String!
   schemeVersion: Int @default(value: "0")
 }

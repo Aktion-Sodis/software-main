@@ -133,11 +133,19 @@ type ContentMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
-type TagMetaData = {
+type ContentTagMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
 type SurveyMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+type SurveyTagMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+type InterventionTagMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
@@ -208,7 +216,7 @@ export declare class Intervention {
   readonly interventionType: InterventionType | keyof typeof InterventionType;
   readonly contents: InterventionContentRelation[];
   readonly surveys: Survey[];
-  readonly tags: Tag[];
+  readonly tags: InterventionTag[];
   readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
@@ -222,7 +230,7 @@ export declare class Content {
   readonly name: string;
   readonly description?: string;
   readonly interventions: InterventionContentRelation[];
-  readonly tags: Tag[];
+  readonly tags: ContentTag[];
   readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
@@ -230,17 +238,15 @@ export declare class Content {
   static copyOf(source: Content, mutator: (draft: MutableModel<Content, ContentMetaData>) => MutableModel<Content, ContentMetaData> | void): Content;
 }
 
-export declare class Tag {
+export declare class ContentTag {
   readonly id: string;
   readonly text: string;
   readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
-  readonly interventionTagsId?: string;
   readonly contentTagsId?: string;
-  readonly surveyTagsId?: string;
-  constructor(init: ModelInit<Tag, TagMetaData>);
-  static copyOf(source: Tag, mutator: (draft: MutableModel<Tag, TagMetaData>) => MutableModel<Tag, TagMetaData> | void): Tag;
+  constructor(init: ModelInit<ContentTag, ContentTagMetaData>);
+  static copyOf(source: ContentTag, mutator: (draft: MutableModel<ContentTag, ContentTagMetaData>) => MutableModel<ContentTag, ContentTagMetaData> | void): ContentTag;
 }
 
 export declare class Survey {
@@ -249,13 +255,35 @@ export declare class Survey {
   readonly description?: string;
   readonly intervention?: Intervention;
   readonly questions: Question[];
-  readonly tags: Tag[];
+  readonly tags: SurveyTag[];
   readonly surveyType: SurveyType | keyof typeof SurveyType;
   readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<Survey, SurveyMetaData>);
   static copyOf(source: Survey, mutator: (draft: MutableModel<Survey, SurveyMetaData>) => MutableModel<Survey, SurveyMetaData> | void): Survey;
+}
+
+export declare class SurveyTag {
+  readonly id: string;
+  readonly text: string;
+  readonly schemeVersion?: number;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+  readonly surveyTagsId?: string;
+  constructor(init: ModelInit<SurveyTag, SurveyTagMetaData>);
+  static copyOf(source: SurveyTag, mutator: (draft: MutableModel<SurveyTag, SurveyTagMetaData>) => MutableModel<SurveyTag, SurveyTagMetaData> | void): SurveyTag;
+}
+
+export declare class InterventionTag {
+  readonly id: string;
+  readonly text: string;
+  readonly schemeVersion?: number;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+  readonly interventionTagsId?: string;
+  constructor(init: ModelInit<InterventionTag, InterventionTagMetaData>);
+  static copyOf(source: InterventionTag, mutator: (draft: MutableModel<InterventionTag, InterventionTagMetaData>) => MutableModel<InterventionTag, InterventionTagMetaData> | void): InterventionTag;
 }
 
 export declare class Entity {
