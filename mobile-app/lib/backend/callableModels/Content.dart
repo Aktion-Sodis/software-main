@@ -1,5 +1,5 @@
 import 'package:mobile_app/backend/callableModels/Intervention.dart';
-import 'package:mobile_app/backend/callableModels/Tag.dart';
+import 'package:mobile_app/backend/callableModels/ContentTag.dart';
 
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
@@ -9,7 +9,7 @@ class Content {
   String? description;
   late List<amp.InterventionContentRelation>
       interventions; //many to many -> maybe change
-  late List<Tag> tags;
+  late List<ContentTag> tags;
   int? schemeVersion;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -30,7 +30,7 @@ class Content {
     description = content.description;
     interventions = content.interventions;
     tags = List.generate(content.tags.length,
-        (index) => Tag.fromAmplifyModel(content.tags[index]));
+        (index) => ContentTag.fromAmplifyModel(content.tags[index]));
     schemeVersion = content.schemeVersion;
     createdAt = content.createdAt?.getDateTimeInUtc();
     updatedAt = content.updatedAt?.getDateTimeInUtc();

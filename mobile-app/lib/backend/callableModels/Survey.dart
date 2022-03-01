@@ -1,6 +1,6 @@
 import 'package:mobile_app/backend/callableModels/Intervention.dart';
 import 'package:mobile_app/backend/callableModels/Question.dart';
-import 'package:mobile_app/backend/callableModels/Tag.dart';
+import 'package:mobile_app/backend/callableModels/SurveyTag.dart';
 
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
@@ -10,7 +10,7 @@ class Survey {
   String? description;
   Intervention? intervention;
   late List<Question> questions;
-  late List<Tag> tags;
+  late List<SurveyTag> tags;
   int? schemeVersion;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -38,7 +38,7 @@ class Survey {
     questions = List.generate(survey.questions.length,
         (index) => Question.fromAmplifyModel(survey.questions[index]));
     tags = List.generate(survey.tags.length,
-        (index) => Tag.fromAmplifyModel(survey.tags[index]));
+        (index) => SurveyTag.fromAmplifyModel(survey.tags[index]));
     schemeVersion = survey.schemeVersion;
     createdAt = survey.createdAt?.getDateTimeInUtc();
     updatedAt = survey.updatedAt?.getDateTimeInUtc();
