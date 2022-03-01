@@ -344,8 +344,6 @@ export const getIntervention = /* GraphQL */ `
           _deleted
           _lastChangedAt
           interventionTagsId
-          contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -470,9 +468,7 @@ export const getContent = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
           contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -606,8 +602,6 @@ export const getSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
-          contentTagsId
           surveyTagsId
         }
         nextToken
@@ -1756,9 +1750,76 @@ export const syncTasks = /* GraphQL */ `
     }
   }
 `;
-export const getTag = /* GraphQL */ `
-  query GetTag($id: ID!) {
-    getTag(id: $id) {
+export const getContentTag = /* GraphQL */ `
+  query GetContentTag($id: ID!) {
+    getContentTag(id: $id) {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      contentTagsId
+    }
+  }
+`;
+export const listContentTags = /* GraphQL */ `
+  query ListContentTags(
+    $filter: ModelContentTagFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listContentTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        text
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        contentTagsId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncContentTags = /* GraphQL */ `
+  query SyncContentTags(
+    $filter: ModelContentTagFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncContentTags(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        text
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        contentTagsId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getInterventionTag = /* GraphQL */ `
+  query GetInterventionTag($id: ID!) {
+    getInterventionTag(id: $id) {
       text
       schemeVersion
       id
@@ -1768,18 +1829,20 @@ export const getTag = /* GraphQL */ `
       _deleted
       _lastChangedAt
       interventionTagsId
-      contentTagsId
-      surveyTagsId
     }
   }
 `;
-export const listTags = /* GraphQL */ `
-  query ListTags(
-    $filter: ModelTagFilterInput
+export const listInterventionTags = /* GraphQL */ `
+  query ListInterventionTags(
+    $filter: ModelInterventionTagFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listInterventionTags(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
       items {
         text
         schemeVersion
@@ -1790,22 +1853,20 @@ export const listTags = /* GraphQL */ `
         _deleted
         _lastChangedAt
         interventionTagsId
-        contentTagsId
-        surveyTagsId
       }
       nextToken
       startedAt
     }
   }
 `;
-export const syncTags = /* GraphQL */ `
-  query SyncTags(
-    $filter: ModelTagFilterInput
+export const syncInterventionTags = /* GraphQL */ `
+  query SyncInterventionTags(
+    $filter: ModelInterventionTagFilterInput
     $limit: Int
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncTags(
+    syncInterventionTags(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -1821,7 +1882,72 @@ export const syncTags = /* GraphQL */ `
         _deleted
         _lastChangedAt
         interventionTagsId
-        contentTagsId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getSurveyTag = /* GraphQL */ `
+  query GetSurveyTag($id: ID!) {
+    getSurveyTag(id: $id) {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      surveyTagsId
+    }
+  }
+`;
+export const listSurveyTags = /* GraphQL */ `
+  query ListSurveyTags(
+    $filter: ModelSurveyTagFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSurveyTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        text
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        surveyTagsId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncSurveyTags = /* GraphQL */ `
+  query SyncSurveyTags(
+    $filter: ModelSurveyTagFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncSurveyTags(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        text
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         surveyTagsId
       }
       nextToken

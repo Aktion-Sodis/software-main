@@ -35,7 +35,7 @@ const Type = {
   "STRING": "STRING"
 };
 
-const { User, Config, Level, Intervention, Content, Tag, Survey, Entity, AppliedIntervention, ExecutedSurvey, Task, InterventionContentRelation, Permission, ColorTheme, StoragePaths, Question, QuestionOption, CustomData, Location, AppliedCustomData, QuestionAnswer, Marking } = initSchema(schema);
+const { User, Config, Level, Intervention, Content, ContentTag, Survey, SurveyTag, InterventionTag, Entity, AppliedIntervention, ExecutedSurvey, Task, InterventionContentRelation, Permission, ColorTheme, StoragePaths, Question, QuestionOption, CustomData, Location, AppliedCustomData, QuestionAnswer, Marking } = initSchema(schema);
 
 export {
   User,
@@ -43,8 +43,10 @@ export {
   Level,
   Intervention,
   Content,
-  Tag,
+  ContentTag,
   Survey,
+  SurveyTag,
+  InterventionTag,
   Entity,
   AppliedIntervention,
   ExecutedSurvey,

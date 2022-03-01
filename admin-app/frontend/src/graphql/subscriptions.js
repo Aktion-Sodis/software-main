@@ -304,8 +304,6 @@ export const onCreateIntervention = /* GraphQL */ `
           _deleted
           _lastChangedAt
           interventionTagsId
-          contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -369,8 +367,6 @@ export const onUpdateIntervention = /* GraphQL */ `
           _deleted
           _lastChangedAt
           interventionTagsId
-          contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -434,8 +430,6 @@ export const onDeleteIntervention = /* GraphQL */ `
           _deleted
           _lastChangedAt
           interventionTagsId
-          contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -480,9 +474,7 @@ export const onCreateContent = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
           contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -526,9 +518,7 @@ export const onUpdateContent = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
           contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -572,9 +562,7 @@ export const onDeleteContent = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
           contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -640,8 +628,6 @@ export const onCreateSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
-          contentTagsId
           surveyTagsId
         }
         nextToken
@@ -710,8 +696,6 @@ export const onUpdateSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
-          contentTagsId
           surveyTagsId
         }
         nextToken
@@ -780,8 +764,6 @@ export const onDeleteSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
-          contentTagsId
           surveyTagsId
         }
         nextToken
@@ -2206,9 +2188,54 @@ export const onDeleteTask = /* GraphQL */ `
     }
   }
 `;
-export const onCreateTag = /* GraphQL */ `
-  subscription OnCreateTag {
-    onCreateTag {
+export const onCreateContentTag = /* GraphQL */ `
+  subscription OnCreateContentTag {
+    onCreateContentTag {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      contentTagsId
+    }
+  }
+`;
+export const onUpdateContentTag = /* GraphQL */ `
+  subscription OnUpdateContentTag {
+    onUpdateContentTag {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      contentTagsId
+    }
+  }
+`;
+export const onDeleteContentTag = /* GraphQL */ `
+  subscription OnDeleteContentTag {
+    onDeleteContentTag {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      contentTagsId
+    }
+  }
+`;
+export const onCreateInterventionTag = /* GraphQL */ `
+  subscription OnCreateInterventionTag {
+    onCreateInterventionTag {
       text
       schemeVersion
       id
@@ -2218,14 +2245,57 @@ export const onCreateTag = /* GraphQL */ `
       _deleted
       _lastChangedAt
       interventionTagsId
-      contentTagsId
+    }
+  }
+`;
+export const onUpdateInterventionTag = /* GraphQL */ `
+  subscription OnUpdateInterventionTag {
+    onUpdateInterventionTag {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      interventionTagsId
+    }
+  }
+`;
+export const onDeleteInterventionTag = /* GraphQL */ `
+  subscription OnDeleteInterventionTag {
+    onDeleteInterventionTag {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      interventionTagsId
+    }
+  }
+`;
+export const onCreateSurveyTag = /* GraphQL */ `
+  subscription OnCreateSurveyTag {
+    onCreateSurveyTag {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       surveyTagsId
     }
   }
 `;
-export const onUpdateTag = /* GraphQL */ `
-  subscription OnUpdateTag {
-    onUpdateTag {
+export const onUpdateSurveyTag = /* GraphQL */ `
+  subscription OnUpdateSurveyTag {
+    onUpdateSurveyTag {
       text
       schemeVersion
       id
@@ -2234,15 +2304,13 @@ export const onUpdateTag = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
-      interventionTagsId
-      contentTagsId
       surveyTagsId
     }
   }
 `;
-export const onDeleteTag = /* GraphQL */ `
-  subscription OnDeleteTag {
-    onDeleteTag {
+export const onDeleteSurveyTag = /* GraphQL */ `
+  subscription OnDeleteSurveyTag {
+    onDeleteSurveyTag {
       text
       schemeVersion
       id
@@ -2251,8 +2319,6 @@ export const onDeleteTag = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
-      interventionTagsId
-      contentTagsId
       surveyTagsId
     }
   }
