@@ -334,8 +334,6 @@ export const createIntervention = /* GraphQL */ `
           _deleted
           _lastChangedAt
           interventionTagsId
-          contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -402,8 +400,6 @@ export const updateIntervention = /* GraphQL */ `
           _deleted
           _lastChangedAt
           interventionTagsId
-          contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -470,8 +466,6 @@ export const deleteIntervention = /* GraphQL */ `
           _deleted
           _lastChangedAt
           interventionTagsId
-          contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -519,9 +513,7 @@ export const createContent = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
           contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -568,9 +560,7 @@ export const updateContent = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
           contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -617,9 +607,7 @@ export const deleteContent = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
           contentTagsId
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -688,8 +676,6 @@ export const createSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
-          contentTagsId
           surveyTagsId
         }
         nextToken
@@ -761,8 +747,6 @@ export const updateSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
-          contentTagsId
           surveyTagsId
         }
         nextToken
@@ -834,8 +818,6 @@ export const deleteSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
-          contentTagsId
           surveyTagsId
         }
         nextToken
@@ -2296,12 +2278,66 @@ export const deleteTask = /* GraphQL */ `
     }
   }
 `;
-export const createTag = /* GraphQL */ `
-  mutation CreateTag(
-    $input: CreateTagInput!
-    $condition: ModelTagConditionInput
+export const createContentTag = /* GraphQL */ `
+  mutation CreateContentTag(
+    $input: CreateContentTagInput!
+    $condition: ModelContentTagConditionInput
   ) {
-    createTag(input: $input, condition: $condition) {
+    createContentTag(input: $input, condition: $condition) {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      contentTagsId
+    }
+  }
+`;
+export const updateContentTag = /* GraphQL */ `
+  mutation UpdateContentTag(
+    $input: UpdateContentTagInput!
+    $condition: ModelContentTagConditionInput
+  ) {
+    updateContentTag(input: $input, condition: $condition) {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      contentTagsId
+    }
+  }
+`;
+export const deleteContentTag = /* GraphQL */ `
+  mutation DeleteContentTag(
+    $input: DeleteContentTagInput!
+    $condition: ModelContentTagConditionInput
+  ) {
+    deleteContentTag(input: $input, condition: $condition) {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      contentTagsId
+    }
+  }
+`;
+export const createInterventionTag = /* GraphQL */ `
+  mutation CreateInterventionTag(
+    $input: CreateInterventionTagInput!
+    $condition: ModelInterventionTagConditionInput
+  ) {
+    createInterventionTag(input: $input, condition: $condition) {
       text
       schemeVersion
       id
@@ -2311,17 +2347,69 @@ export const createTag = /* GraphQL */ `
       _deleted
       _lastChangedAt
       interventionTagsId
-      contentTagsId
+    }
+  }
+`;
+export const updateInterventionTag = /* GraphQL */ `
+  mutation UpdateInterventionTag(
+    $input: UpdateInterventionTagInput!
+    $condition: ModelInterventionTagConditionInput
+  ) {
+    updateInterventionTag(input: $input, condition: $condition) {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      interventionTagsId
+    }
+  }
+`;
+export const deleteInterventionTag = /* GraphQL */ `
+  mutation DeleteInterventionTag(
+    $input: DeleteInterventionTagInput!
+    $condition: ModelInterventionTagConditionInput
+  ) {
+    deleteInterventionTag(input: $input, condition: $condition) {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      interventionTagsId
+    }
+  }
+`;
+export const createSurveyTag = /* GraphQL */ `
+  mutation CreateSurveyTag(
+    $input: CreateSurveyTagInput!
+    $condition: ModelSurveyTagConditionInput
+  ) {
+    createSurveyTag(input: $input, condition: $condition) {
+      text
+      schemeVersion
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       surveyTagsId
     }
   }
 `;
-export const updateTag = /* GraphQL */ `
-  mutation UpdateTag(
-    $input: UpdateTagInput!
-    $condition: ModelTagConditionInput
+export const updateSurveyTag = /* GraphQL */ `
+  mutation UpdateSurveyTag(
+    $input: UpdateSurveyTagInput!
+    $condition: ModelSurveyTagConditionInput
   ) {
-    updateTag(input: $input, condition: $condition) {
+    updateSurveyTag(input: $input, condition: $condition) {
       text
       schemeVersion
       id
@@ -2330,18 +2418,16 @@ export const updateTag = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
-      interventionTagsId
-      contentTagsId
       surveyTagsId
     }
   }
 `;
-export const deleteTag = /* GraphQL */ `
-  mutation DeleteTag(
-    $input: DeleteTagInput!
-    $condition: ModelTagConditionInput
+export const deleteSurveyTag = /* GraphQL */ `
+  mutation DeleteSurveyTag(
+    $input: DeleteSurveyTagInput!
+    $condition: ModelSurveyTagConditionInput
   ) {
-    deleteTag(input: $input, condition: $condition) {
+    deleteSurveyTag(input: $input, condition: $condition) {
       text
       schemeVersion
       id
@@ -2350,8 +2436,6 @@ export const deleteTag = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
-      interventionTagsId
-      contentTagsId
       surveyTagsId
     }
   }

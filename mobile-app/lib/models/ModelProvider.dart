@@ -23,13 +23,15 @@ import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_inte
 import 'AppliedIntervention.dart';
 import 'Config.dart';
 import 'Content.dart';
+import 'ContentTag.dart';
 import 'Entity.dart';
 import 'ExecutedSurvey.dart';
 import 'Intervention.dart';
 import 'InterventionContentRelation.dart';
+import 'InterventionTag.dart';
 import 'Level.dart';
 import 'Survey.dart';
-import 'Tag.dart';
+import 'SurveyTag.dart';
 import 'Task.dart';
 import 'User.dart';
 import 'AppliedCustomData.dart';
@@ -48,11 +50,13 @@ export 'AppliedIntervention.dart';
 export 'ColorTheme.dart';
 export 'Config.dart';
 export 'Content.dart';
+export 'ContentTag.dart';
 export 'CustomData.dart';
 export 'Entity.dart';
 export 'ExecutedSurvey.dart';
 export 'Intervention.dart';
 export 'InterventionContentRelation.dart';
+export 'InterventionTag.dart';
 export 'InterventionType.dart';
 export 'Level.dart';
 export 'Location.dart';
@@ -65,17 +69,17 @@ export 'QuestionOption.dart';
 export 'QuestionType.dart';
 export 'StoragePaths.dart';
 export 'Survey.dart';
+export 'SurveyTag.dart';
 export 'SurveyType.dart';
-export 'Tag.dart';
 export 'Task.dart';
 export 'Type.dart';
 export 'User.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "4ef5d1ad132c7dd2c2fe2db547ddd828";
+  String version = "05254d9262d567df4fce42ac9c7f4131";
   @override
-  List<ModelSchema> modelSchemas = [AppliedIntervention.schema, Config.schema, Content.schema, Entity.schema, ExecutedSurvey.schema, Intervention.schema, InterventionContentRelation.schema, Level.schema, Survey.schema, Tag.schema, Task.schema, User.schema];
+  List<ModelSchema> modelSchemas = [AppliedIntervention.schema, Config.schema, Content.schema, ContentTag.schema, Entity.schema, ExecutedSurvey.schema, Intervention.schema, InterventionContentRelation.schema, InterventionTag.schema, Level.schema, Survey.schema, SurveyTag.schema, Task.schema, User.schema];
   static final ModelProvider _instance = ModelProvider();
   @override
   List<ModelSchema> customTypeSchemas = [AppliedCustomData.schema, ColorTheme.schema, CustomData.schema, Location.schema, Marking.schema, Permission.schema, Question.schema, QuestionAnswer.schema, QuestionOption.schema, StoragePaths.schema];
@@ -90,6 +94,8 @@ class ModelProvider implements ModelProviderInterface {
         return Config.classType;
       case "Content":
         return Content.classType;
+      case "ContentTag":
+        return ContentTag.classType;
       case "Entity":
         return Entity.classType;
       case "ExecutedSurvey":
@@ -98,12 +104,14 @@ class ModelProvider implements ModelProviderInterface {
         return Intervention.classType;
       case "InterventionContentRelation":
         return InterventionContentRelation.classType;
+      case "InterventionTag":
+        return InterventionTag.classType;
       case "Level":
         return Level.classType;
       case "Survey":
         return Survey.classType;
-      case "Tag":
-        return Tag.classType;
+      case "SurveyTag":
+        return SurveyTag.classType;
       case "Task":
         return Task.classType;
       case "User":

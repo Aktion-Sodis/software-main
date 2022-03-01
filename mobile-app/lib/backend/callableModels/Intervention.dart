@@ -1,6 +1,6 @@
 import 'package:mobile_app/backend/callableModels/Content.dart';
 import 'package:mobile_app/backend/callableModels/Survey.dart';
-import 'package:mobile_app/backend/callableModels/Tag.dart';
+import 'package:mobile_app/backend/callableModels/InterventionTag.dart';
 
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
@@ -11,7 +11,7 @@ class Intervention {
   late InterventionType interventionType;
   late List<amp.InterventionContentRelation> interventionContentRelations;
   late List<Survey> surveys;
-  late List<Tag> tags;
+  late List<InterventionTag> tags;
   int? schemeVersion;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -38,7 +38,7 @@ class Intervention {
     surveys = List.generate(intervention.surveys.length,
         (index) => Survey.fromAmplifyModel(intervention.surveys[index]));
     tags = List.generate(intervention.tags.length,
-        (index) => Tag.fromAmplifyModel(intervention.tags[index]));
+        (index) => InterventionTag.fromAmplifyModel(intervention.tags[index]));
     schemeVersion = intervention.schemeVersion;
     createdAt = intervention.createdAt?.getDateTimeInUtc();
     updatedAt = intervention.updatedAt?.getDateTimeInUtc();

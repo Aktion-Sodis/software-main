@@ -1,20 +1,20 @@
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
-class Tag {
+class ContentTag {
   String? id;
   late String text;
   int? schemeVersion;
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  Tag(
+  ContentTag(
       {this.id,
       required this.text,
       this.schemeVersion,
       this.createdAt,
       this.updatedAt});
 
-  Tag.fromAmplifyModel(amp.Tag tag) {
+  ContentTag.fromAmplifyModel(amp.ContentTag tag) {
     id = tag.id;
     text = tag.text;
     schemeVersion = tag.schemeVersion;
@@ -22,7 +22,7 @@ class Tag {
     updatedAt = tag.updatedAt?.getDateTimeInUtc();
   }
 
-  amp.Tag toAmplifyModel() {
-    return amp.Tag(text: text, id: id, schemeVersion: schemeVersion);
+  amp.ContentTag toAmplifyModel() {
+    return amp.ContentTag(text: text, id: id, schemeVersion: schemeVersion);
   }
 }
