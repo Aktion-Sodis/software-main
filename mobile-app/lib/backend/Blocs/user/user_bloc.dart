@@ -1,47 +1,45 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/backend/Blocs/auth/auth_cubit.dart';
 import 'package:mobile_app/backend/Blocs/auth/auth_repository.dart';
+import 'package:mobile_app/backend/Blocs/user/user_events.dart';
+import 'package:mobile_app/backend/Blocs/user/user_state.dart';
+import 'package:mobile_app/backend/callableModels/CallableModels.dart';
+import 'package:mobile_app/backend/repositories/UserRepository.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   final AuthRepository authRepo;
   final AuthCubit authCubit;
+  final UserRepository userRepository;
 
-  LoginBloc({required this.authRepo, required this.authCubit})
-      : super(LoginState()) {
-    on<LoginEvent>(_mapEventToState);
+  UserBloc(
+      {required this.authRepo,
+      required this.authCubit,
+      required this.userRepository})
+      : super(UserState()) {
+    on<UserEvent>(_mapEventToState);
   }
 
-  void _mapEventToState(LoginEvent event, Emitter<LoginState> emit) async {
-    // Username updated
-    if (event is LoginEmailOrPhoneNumberChanged) {
-      emit(state.copyWith(emailOrPhoneNumber: event.emailOrPhoneNumber));
-
-      // Password updated
-    } else if (event is LoginPasswordChanged) {
-      emit(state.copyWith(password: event.password));
-
+  void _mapEventToState(UserEvent event, Emitter<UserState> emit) async {
+    if (event is CreateUserEvent) {
+      //Create user if it does not exist with current auth ID
+      User toCreate = event.user;
+      toCreate.id = authCubit.credentials.userId!;
+      emit(state.copyWith(user: toCreate));
+      userRepository.createUser(event.user);
+    } else if (event is UpdateUserEvent) {
+      ///updaet user and save to db
+      emit(state.copyWith(user: event.user));
+      userRepository.updateUser(event.user);
       // Form submitted
-    } else if (event is LoginSubmitted) {
-      emit(state.copyWith(formStatus: FormSubmitting()));
-
-      try {
-        final userId = await authRepo.login(
-          username: state.emailOrPhoneNumber,
-          password: state.password,
-        );
-        emit(state.copyWith(formStatus: SubmissionSuccess()));
-
-        authCubit.launchSession(AuthCredentials(
-          userName: state.emailOrPhoneNumber,
-          password: state.password,
-          userId: userId,
-        ));
-      } catch (e) {
-        //todo: hier error management einbauen
-        emit(state.copyWith(
-            formStatus: SubmissionFailed(e as Exception, e.toString())));
-      }
+    } else if (event is InitializeUserEvent) {
+      ///initialize user without saving to db anything
+      emit(state.copyWith(user: event.user, userPic: event.userPic));
+    } else if (event is UpdatePicUserEvent) {
+      emit(state.copyWith(userPic: event.userPic));
+      userRepository.updateUserPic(
+          event.userPic, authCubit.credentials.userId!);
+    } else if (event is LogOutUserEvent) {
+      emit(UserState());
     }
   }
 }
