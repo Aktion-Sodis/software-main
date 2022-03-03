@@ -1,15 +1,24 @@
-import 'package:mobile_app/backend/callableModels/CallableModels.dart';
-
 abstract class SessionState {}
 
-class UnknownSessionState extends SessionState {}
+abstract class UnauthenticatedSessionState extends SessionState {}
 
-class Unauthenticated extends SessionState {}
+class UnknownSessionState extends UnauthenticatedSessionState {}
 
-class AuthenticatedAndUserCreated extends SessionState {
-  final User user;
-
-  AuthenticatedAndUserCreated({required this.user});
+class RequiresAuthentificationSessionState extends UnauthenticatedSessionState {
 }
 
-class AuthenticatedAndNoUserCreated extends SessionState {}
+class AuthenticatedSessionState extends SessionState {
+  String userID;
+
+  AuthenticatedSessionState({required this.userID});
+}
+
+class FullyAuthenticatedSessionState extends AuthenticatedSessionState {
+  FullyAuthenticatedSessionState({required String userID})
+      : super(userID: userID);
+}
+
+class RequiresPasswordChangeSessionState extends AuthenticatedSessionState {
+  RequiresPasswordChangeSessionState({required String userID})
+      : super(userID: userID);
+}

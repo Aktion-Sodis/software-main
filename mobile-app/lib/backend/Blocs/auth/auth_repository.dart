@@ -42,6 +42,7 @@ class AuthRepository {
     required String username,
     required String password,
   }) async {
+    print("login with $username + $password");
     try {
       final result = await Amplify.Auth.signIn(
         username: username.trim(),
@@ -49,8 +50,9 @@ class AuthRepository {
       );
 
       return result.isSignedIn ? (await _getUserIdFromAttributes()) : null;
-    } on AuthException catch (e) {
-      debugPrint(e.message);
+    } catch (e) {
+      print("error in authentication");
+      print(e.toString());
     }
   }
 

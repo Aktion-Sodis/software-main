@@ -8,12 +8,12 @@ import 'package:mobile_app/backend/repositories/UserRepository.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   final AuthRepository authRepo;
-  final AuthCubit authCubit;
   final UserRepository userRepository;
+  final String userID;
 
   UserBloc(
       {required this.authRepo,
-      required this.authCubit,
+      required this.userID,
       required this.userRepository})
       : super(UserState()) {
     on<UserEvent>(_mapEventToState);
@@ -23,7 +23,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (event is CreateUserEvent) {
       //Create user if it does not exist with current auth ID
       User toCreate = event.user;
-      toCreate.id = authCubit.credentials.userId!;
+      toCreate.id = userID;
       emit(state.copyWith(user: toCreate));
       userRepository.createUser(event.user);
     } else if (event is UpdateUserEvent) {
@@ -36,8 +36,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(state.copyWith(user: event.user, userPic: event.userPic));
     } else if (event is UpdatePicUserEvent) {
       emit(state.copyWith(userPic: event.userPic));
-      userRepository.updateUserPic(
-          event.userPic, authCubit.credentials.userId!);
+      userRepository.updateUserPic(event.userPic, userID);
     } else if (event is LogOutUserEvent) {
       emit(UserState());
     }

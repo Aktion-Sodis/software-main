@@ -1,3 +1,6 @@
+///hier die String jeweils in englisch hinterlegen und in allen anderen  angelegten Sprachen zumindest anlegen
+///bei neuen strings am ende übersetzung anfordern
+
 String currentLanguage = "en";
 
 Map<String, dynamic> stringMap = {

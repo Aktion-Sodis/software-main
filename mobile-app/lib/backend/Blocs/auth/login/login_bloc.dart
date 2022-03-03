@@ -41,6 +41,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           userId: userId,
         ));
       } catch (e) {
+        print("error in authentication");
+        print(e.toString());
+
         //todo: hier error management einbauen
         emit(state.copyWith(
             formStatus: SubmissionFailed(e as Exception, e.toString())));

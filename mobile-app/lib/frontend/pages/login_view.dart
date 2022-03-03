@@ -190,39 +190,37 @@ class LoginView extends StatelessWidget {
               Container(
                   margin: EdgeInsets.only(bottom: defaultPadding(context)),
                   child: Text(strings.or, style: TextStyle(fontSize: 18))),
-              state.formStatus is FormSubmitting
-                  ? const CircularProgressIndicator(color: Colors.blue)
-                  : ElevatedButton(
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all(EdgeInsets.zero),
-                        textStyle: MaterialStateProperty.all(
-                            TextStyle(fontSize: 18, color: Colors.black)),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8))),
-                        minimumSize: MaterialStateProperty.all(
-                            Size(width(context) * .8, width(context) * .1)),
-                        maximumSize: MaterialStateProperty.all(
-                            Size(width(context) * .8, width(context) * .12)),
-                        backgroundColor: MaterialStateProperty.all(
-                            Colors.white), //todo: change
-                      ),
-                      onPressed: () {
-                        context.read<LoginBloc>().add(GoogleLogin());
-                      },
-                      child: Container(
-                          padding: EdgeInsets.all(2),
-                          child: Row(children: [
-                            Container(
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.asset(
-                                        "assets/fixAssets/google_light.png"))),
-                            Expanded(
-                                child: Center(
-                                    child: Text(strings.google_sign_in,
-                                        style: TextStyle(color: Colors.black))))
-                          ])),
-                    )
+              ElevatedButton(
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all(EdgeInsets.zero),
+                  textStyle: MaterialStateProperty.all(
+                      TextStyle(fontSize: 18, color: Colors.black)),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8))),
+                  minimumSize: MaterialStateProperty.all(
+                      Size(width(context) * .8, width(context) * .1)),
+                  maximumSize: MaterialStateProperty.all(
+                      Size(width(context) * .8, width(context) * .12)),
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.white), //todo: change
+                ),
+                onPressed: () {
+                  context.read<LoginBloc>().add(GoogleLogin());
+                },
+                child: Container(
+                    padding: EdgeInsets.all(2),
+                    child: Row(children: [
+                      Container(
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.asset(
+                                  "assets/fixAssets/google_light.png"))),
+                      Expanded(
+                          child: Center(
+                              child: Text(strings.google_sign_in,
+                                  style: TextStyle(color: Colors.black))))
+                    ])),
+              )
             ],
           ));
     });

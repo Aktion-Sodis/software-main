@@ -19,49 +19,32 @@ class SessionCubit extends Cubit<SessionState> {
   }
 
   void attemptAutoLogin() async {
-    try {
-      final userId = await authRepo.attemptAutoLogin();
-      if (userId == null) {
-        throw Exception('User not logged in');
-      }
-
-      User? user = await userRepo.getUserById(userId);
-
-      /// Will require user to enter first and lastname if not created so far (unlikely when attempting auto login)
-      if (user != null) {
-        emit(AuthenticatedAndUserCreated(user: user));
-      } else {
-        emit(AuthenticatedAndNoUserCreated());
-      }
-    } on Exception {
-      emit(Unauthenticated());
+    final userId = await authRepo.attemptAutoLogin();
+    if (userId != null) {
+      emit(FullyAuthenticatedSessionState(userID: userId));
+      //todo: differ when password is necessary
+    } else {
+      emit(RequiresAuthentificationSessionState());
     }
   }
 
-  void showAuth() => emit(Unauthenticated());
+  void showAuth() => emit(RequiresAuthentificationSessionState());
 
   void showSession(AuthCredentials credentials) async {
     try {
-      if (credentials.userId == null) {
-        emit(Unauthenticated());
-      }
-
-      User? user = await userRepo.getUserById(credentials.userId!);
-
-      //todo: check here wether password has to be updated
-      /// Will require user to enter first and lastname if not created so far
-      if (user != null) {
-        emit(AuthenticatedAndUserCreated(user: user));
+      if (credentials.userId != null) {
+        //todo: check whether user requires
+        emit(FullyAuthenticatedSessionState(userID: credentials.userId!));
       } else {
-        emit(AuthenticatedAndNoUserCreated());
+        emit(RequiresAuthentificationSessionState());
       }
     } catch (e) {
-      emit(Unauthenticated());
+      emit(RequiresAuthentificationSessionState());
     }
   }
 
   void signOut() {
     authRepo.signOut();
-    emit(Unauthenticated());
+    emit(RequiresAuthentificationSessionState());
   }
 }
