@@ -7,19 +7,20 @@ import mysql from 'mysql';
 
 import createBaseLevels from "./src/migrators/createBaseLevels.js"
 import migrateVillages from "./src/migrators/migrateVillages.js"
-import { deleteFamilyLevels, deleteVillageLevels, filterUndeleted } from "./src/deleteUtils.js";
+import { deleteFamilyLevels, deleteVillageLevels, filterUndeleted } from "./src/utils/deleteUtils.js";
 import createMigrationUser from "./src/migrators/createMigrationUser.js";
 import migrateFamilies from "./src/migrators/migrateFamilies.js";
 import migrateAppliedInterventions from "./src/migrators/migrateAppliedInterventions.js";
 import migrateQuestionOptions from "./src/migrators/migrateQuestionOptions.js";
-// import migrateSurveys from "./src/migrators/migrateSurveys.js";
+import migrateSurveys from "./src/migrators/migrateSurveys.js";
 import migrateProjects from "./src/migrators/migrateProjects.js";
+import migrateExecutedSurveys from "./src/migrators/migrateExecutedSurveys.js";
 
 Amplify.default.configure(awsconfig);
 
 dotenv.config();
 
-console.log(`Initializing migration of data from ${process.env.MARIADB_HOST} ${process.env.MARIADB_DBNAME} to AWS amplify storage.`)
+console.log(`Initializing migration of data from ${process.env.MARIADB_HOST} ${process.env.MARIADB_DBNAME} to AWS amplify storage.`);
 
 // Initializes connection to (local) MYSQL database from app version 1.
 const sqlPool = mysql.createPool({
@@ -52,40 +53,34 @@ const {villageLevel, familyLevel} = response;
 const allowedEntities = [villageLevel.id, familyLevel.id];
 
 
-console.log("Creating a single default user, assigned to all migrated data from version 1...")
+console.log("Creating a single default user, assigned to all migrated data from version 1...");
 const defaultUser = createMigrationUser(allowedEntities);
 
 
-console.log("Creating interventions...")
+console.log("Creating interventions...");
 migrateProjects(sqlPool);
 
 //  TODO: check graphql-API --> no mutation createQuestionOption() available.
-console.log("Migrating question options...")
+console.log("Migrating question options...");
 migrateQuestionOptions(sqlPool);
 
-// console.log("Migrating question options...")
-// migrateQuestions(sqlPool);
+console.log("Migrating surveys...");
+migrateSurveys(sqlPool);
 
-// // TODO: implement
-// console.log("Migrating answers...")
-// migrateAnswers(sqlPool);
+console.log("Migrating executed surveys and answers...");
+migrateExecutedSurveys(sqlPool, defaultUser);
 
-// // TODO: implement
-// console.log("Migrating surveys...")
-// migrateSurveys(sqlPool);
-
-
-console.log("Migrating villages...")
+console.log("Migrating villages...");
 migrateVillages(sqlPool, villageLevel);
 
 
-console.log("Migrating families...")
+console.log("Migrating families...");
 migrateFamilies(sqlPool, familyLevel);
 
 
-console.log("Migrating applied interventions...") 
+console.log("Migrating applied interventions...") ;
 // Applied interventions are not directly documented in old database schema.
 // Application of intervention is infered based on executed surveys.
 migrateAppliedInterventions(sqlPool, defaultUser);
 
-console.log("Successfully finished migration.")
+console.log("Successfully finished migration.");

@@ -1,3 +1,5 @@
+import { inferQuestionType } from './inferQuestionType.js';
+
 export async function getQuestionsBySurveyId(sqlPool, surveyId) {
     var questions = [];
     const getQuestionsQuery = `
@@ -18,11 +20,11 @@ export async function getQuestionsBySurveyId(sqlPool, surveyId) {
             const newQuestion = {
                 id: oldQuestion.id,
                 text: oldQuestion.question_name,
+                type: inferQuestionType(oldQuestion),
             };
             questions.push(newQuestion);
         });
     }
     );
     return questions;
-}
-;
+};

@@ -1,6 +1,6 @@
 import * as mutations from '../graphql/mutations.js';
-import { InterventionType } from '../models/index.js';
-import { getQuestionsBySurveyId } from './getQuestionsBySurveyId';
+import { InterventionType, SurveyType } from '../models/index.js';
+import { getQuestionsBySurveyId } from './getQuestionsBySurveyId.js';
 
 const listSurveys = `
     SELECT
@@ -15,22 +15,23 @@ const listSurveys = `
   
     
 const migrateSurveys = async (sqlPool) => {
-    await sqlPool.query(listSurveys, function (err, result, fields) {
+    const oldSurvies = await sqlPool.query(listSurveys, function (err, result, fields) {
         if (err) throw err;
-        Object.values(result).forEach(function(oldSurvey) {
-            const newSurvey = surveyTransformer(oldSurvey);
-            try {
-                const newSurveyEntry = await API.graphql({
-                    query: mutations.createSurvey, // missing in graph-QL api?
-                    variables: {input: newSurvey}
-                })
-                console.log("Created question option" + JSON.stringify(newSurveyEntry));
-                
-            } catch (error) {
-                console.log("Error writing question option" + JSON.stringify(newSurvey) + error);
-            }
-        });
+        return Object.values(result);
     });
+    for (let oldSurvey of oldSurvies){
+        const newSurvey = surveyTransformer(oldSurvey);
+        try {
+            const newSurveyEntry = await API.graphql({
+                query: mutations.createSurvey,
+                variables: {input: newSurvey}
+            })
+            console.log("Created question option" + JSON.stringify(newSurveyEntry));
+            
+        } catch (error) {
+            console.log("Error writing question option" + JSON.stringify(newSurvey) + error);
+        }
+    }
 }
 
 const surveyTransformer = (oldSurvey) => {
@@ -39,11 +40,12 @@ const surveyTransformer = (oldSurvey) => {
         id: oldSurvey.survey_id,
         intervention: {
             name:oldSurvey.intervention_name,
+            description: "",
             id: oldSurvey.intervention_id,
             interventionType: InterventionType.TECHNOLOGY,
         },
         questions: getQuestionsBySurveyId(oldSurvey.survey_id),
-        // questionOptions: getQuestionOptionsBySurveyId(oldSurvey.survey_id),
+        surveyType: SurveyType.DEFAULT,
     }
     return newSurvey;
 }

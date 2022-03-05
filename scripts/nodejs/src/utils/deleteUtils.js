@@ -1,6 +1,6 @@
 import { API, graphqlOperation } from "aws-amplify";
-import * as mutations from './graphql/mutations.js';
-import * as queries from './graphql/queries.js';
+import * as mutations from '../graphql/mutations.js';
+import * as queries from '../graphql/queries.js';
 
 export async function deleteVillageLevels() {
     const villageLevelQuery = await API.graphql({ query: queries.listLevels, variables: { filter: { name: { eq: "village" } } } });

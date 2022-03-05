@@ -9,7 +9,9 @@ const listProjectsQuery = `
 const migrateProjects = async (sqlPool) => {
     const projects = await sqlPool.query(listProjectsQuery, function (err, result, fields) {
         if (err) throw err;
-        return Object.values(result);
+        console.log(result)
+        console.log(fields)
+        return result;
     });
 
     for (let project of projects){

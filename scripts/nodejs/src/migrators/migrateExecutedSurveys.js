@@ -36,42 +36,44 @@ async function getAnswersForSurveyId(sqlPool, surveyId){
         FROM answers
         WHERE completed_survey_id = ${surveyId}
     `
-    await sqlPool.query(getAnswerQuery, function (err, result, fields) {
+    const oldAnswers = await sqlPool.query(getAnswerQuery, function (err, result, fields) {
             if (err) throw err;
-            Object.values(result).forEach(function(oldAnswer) {
-                const newAnswer = {
-                    id: oldAnswer.answer_id,
-                    questionID: oldAnswer.question_id,
-                    type: oldAnswer.answer_text != null ? QuestionType.TEXT : QuestionType.MULTIPLECHOICE,
-                    text: oldAnswer.answer_text
-                }
-                answers.push(newAnswer);
-            });
+            return Object.values(result);
+    });
+
+    for (let oldAnswer of oldAnswers){
+        const newAnswer = {
+            id: oldAnswer.answer_id,
+            questionID: oldAnswer.question_id,
+            type: oldAnswer.answer_text != null ? QuestionType.TEXT : QuestionType.MULTIPLECHOICE,
+            text: oldAnswer.answer_text
         }
-    )
+        answers.push(newAnswer);
+    }
     return answers;
 };
 
         
 const migrateExecutedSurveys = async (sqlPool, defaultUser) => {
-    await sqlPool.query(listExecutedSurveys, function (err, result, fields) {
+    const executedSurveys = await sqlPool.query(listExecutedSurveys, function (err, result, fields) {
         if (err) throw err;
-        Object.values(result).forEach(function(executedSurveyData) {
-            const answers = getAnswersForSurveyId(sqlPool, executedSurveyData.executed_survey_id)
-            const newExecutedSurvey = executedSurveysTransformer(executedSurveyData, defaultUser, answers)    
-            try {
-                const newExecutedSurveyEntry = await API.graphql({
-                    query: mutations.createExecutedSurvey,
-                    variables: {input: newExecutedSurvey}
-                })
-                console.log("Created executed survey" + JSON.stringify(newExecutedSurveyEntry));
-                
-            } catch (error) {
-                console.log("Error writing survey" + JSON.stringify(newExecutedSurvey) + error);
-            }
-        });
+        return Object.values(result);
     });
-    
+        
+    for (let executedSurvey in executedSurveys){
+        const answers = getAnswersForSurveyId(sqlPool, executedSurvey.executed_survey_id)
+        const newExecutedSurvey = executedSurveysTransformer(executedSurvey, defaultUser, answers)    
+        try {
+            const newExecutedSurveyEntry = await API.graphql({
+                query: mutations.createExecutedSurvey,
+                variables: {input: newExecutedSurvey}
+            })
+            console.log("Created executed survey" + JSON.stringify(newExecutedSurveyEntry));
+            
+        } catch (error) {
+            console.log("Error writing survey" + JSON.stringify(newExecutedSurvey) + error);
+        }
+    }    
 }
 
 const executedSurveysTransformer = (executedSurveyData, defaultUser, answers) => {
