@@ -1,0 +1,246 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-monitoring-dev-182045-authRole",
+      "UnauthRoleArn": "arn:aws:iam::404541487485:role/amplify-monitoring-dev-182045-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::404541487485:role/amplify-monitoring-dev-182045-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-monitoring-dev-182045-deployment",
+      "UnauthRoleName": "amplify-monitoring-dev-182045-unauthRole",
+      "StackName": "amplify-monitoring-dev-182045",
+      "StackId": "arn:aws:cloudformation:eu-central-1:404541487485:stack/amplify-monitoring-dev-182045/79901770-844c-11ec-b1b4-02a8f7b30bee",
+      "AmplifyAppId": "ddi8cmvwmf668"
+    }
+  },
+  "api": {
+    "monitoring": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            }
+          },
+          "additionalAuthenticationProviders": []
+        },
+        "GraphQLAPIIdOutput": "kujdc6nk4nabrdj2d3chn4kf2q",
+        "GraphQLAPIEndpointOutput": "https://s7pvubsl6ffpbfjmz6xn2yx46a.appsync-api.eu-central-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-m4hdqi3h5baa5hwrwpdqgnl5j4"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-monitoring-dev-182045-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apimonitoring"
+      },
+      "lastPushTimeStamp": "2022-03-01T10:05:09.932Z",
+      "lastPushDirHash": "9uciI/o7tz5bST9uNzmIV7ZwSHw="
+    },
+    "AdminQueries": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "sodisusers",
+          "attributes": [
+            "UserPoolId"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "AdminQueries3df1db39",
+          "attributes": [
+            "Arn",
+            "Name"
+          ]
+        }
+      ],
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-monitoring-dev-182045-deployment/amplify-cfn-templates/api/AdminQueries-cloudformation-template.json",
+        "logicalId": "apiAdminQueries"
+      },
+      "lastPushTimeStamp": "2022-03-01T10:05:01.615Z",
+      "output": {
+        "ApiName": "AdminQueries",
+        "RootUrl": "https://o5yxww9rn3.execute-api.eu-central-1.amazonaws.com/dev",
+        "ApiId": "o5yxww9rn3"
+      },
+      "lastPushDirHash": "YTZy5VTmQs4o6aOJ+1IxOhTKing="
+    }
+  },
+  "auth": {
+    "userPoolGroups": {
+      "service": "Cognito-UserPool-Groups",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "sodisusers",
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ]
+        }
+      ],
+      "userPoolGroups": {
+        "service": "Cognito-UserPool-Groups",
+        "providerPlugin": "awscloudformation",
+        "dependsOn": [
+          {
+            "category": "auth",
+            "resourceName": "sodisusers",
+            "attributes": [
+              "UserPoolId",
+              "AppClientIDWeb",
+              "AppClientID",
+              "IdentityPoolId"
+            ]
+          }
+        ]
+      },
+      "lastPushTimeStamp": "2022-03-01T10:05:01.617Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-monitoring-dev-182045-deployment/amplify-cfn-templates/auth/userPoolGroups-cloudformation-template.json",
+        "logicalId": "authuserPoolGroups"
+      },
+      "output": {
+        "appusersGroupRole": "arn:aws:iam::404541487485:role/eu-central-1_xXF4NoKsm-appusersGroupRole",
+        "statisticusersGroupRole": "arn:aws:iam::404541487485:role/eu-central-1_xXF4NoKsm-statisticusersGroupRole",
+        "adminGroupRole": "arn:aws:iam::404541487485:role/eu-central-1_xXF4NoKsm-adminGroupRole"
+      },
+      "lastPushDirHash": "l46HRqLZCbUhpuGmE8rRPK2TnYI="
+    },
+    "sodisusers": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL",
+          "PHONE_NUMBER"
+        ],
+        "signupAttributes": [],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": "6",
+          "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_UPPERCASE",
+            "REQUIRES_NUMBERS"
+          ]
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "PHONE_NUMBER"
+        ]
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-monitoring-dev-182045-deployment/amplify-cfn-templates/auth/sodisusers-cloudformation-template.json",
+        "logicalId": "authsodisusers"
+      },
+      "lastPushTimeStamp": "2022-03-01T10:05:01.618Z",
+      "output": {
+        "CreatedSNSRole": "arn:aws:iam::404541487485:role/snsa74a3cce182045-dev",
+        "UserPoolId": "eu-central-1_xXF4NoKsm",
+        "AppClientIDWeb": "57qq7a9q433s8bsp7b1gc83o7a",
+        "AppClientID": "7jt688an8t62hq2k5c75hbm44t",
+        "IdentityPoolId": "eu-central-1:df4c579c-5cd5-4d01-858a-92e9c83742b7",
+        "UserPoolArn": "arn:aws:cognito-idp:eu-central-1:404541487485:userpool/eu-central-1_xXF4NoKsm",
+        "IdentityPoolName": "sodisusers__dev",
+        "UserPoolName": "sodisusers"
+      },
+      "lastPushDirHash": "0RHSc+6g8jd7xSpJw2JIC3wtYOE="
+    }
+  },
+  "function": {
+    "AdminQueries3df1db39": {
+      "service": "Lambda",
+      "providerPlugin": "awscloudformation",
+      "build": true,
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "sodisusers",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ],
+      "lastBuildTimeStamp": "2022-02-02T17:30:10.245Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2022-02-02T17:30:13.435Z",
+      "distZipFilename": "AdminQueries3df1db39-6762337046583568706b-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-monitoring-dev-182045-deployment",
+        "s3Key": "amplify-builds/AdminQueries3df1db39-6762337046583568706b-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-monitoring-dev-182045-deployment/amplify-cfn-templates/function/AdminQueries3df1db39-cloudformation-template.json",
+        "logicalId": "functionAdminQueries3df1db39"
+      },
+      "lastPushTimeStamp": "2022-03-01T10:05:01.619Z",
+      "output": {
+        "Region": "eu-central-1",
+        "Arn": "arn:aws:lambda:eu-central-1:404541487485:function:AdminQueries3df1db39-dev",
+        "Name": "AdminQueries3df1db39-dev",
+        "LambdaExecutionRole": "AdminQueries3df1db39LambdaRole-dev"
+      },
+      "lastPushDirHash": "qVhXJnHkUCFWT1m5EOInZ5rP5CI="
+    }
+  },
+  "storage": {
+    "s3e48a1903": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "sodisusers",
+          "attributes": [
+            "UserPoolId"
+          ]
+        },
+        {
+          "category": "auth",
+          "resourceName": "userPoolGroups",
+          "attributes": [
+            "adminGroupRole"
+          ]
+        },
+        {
+          "category": "auth",
+          "resourceName": "userPoolGroups",
+          "attributes": [
+            "appusersGroupRole"
+          ]
+        },
+        {
+          "category": "auth",
+          "resourceName": "userPoolGroups",
+          "attributes": [
+            "statisticusersGroupRole"
+          ]
+        }
+      ],
+      "lastPushTimeStamp": "2022-03-01T10:05:01.620Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-monitoring-dev-182045-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "logicalId": "storages3e48a1903"
+      },
+      "output": {
+        "BucketName": "monitoring458d35c4cce0449db22ae25ed77dd515182045-dev",
+        "Region": "eu-central-1"
+      },
+      "lastPushDirHash": "mlUb2umh3TPObMM9ut4rwXtWEkE="
+    }
+  }
+}
