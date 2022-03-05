@@ -7,7 +7,7 @@ import mysql from 'mysql';
 
 import createBaseLevels from "./src/migrators/createBaseLevels.js"
 import migrateVillages from "./src/migrators/migrateVillages.js"
-import { deleteFamilyLevels, deleteVillageLevels } from "./src/deleteUtils.js";
+import { deleteFamilyLevels, deleteVillageLevels, filterUndeleted } from "./src/deleteUtils.js";
 import createMigrationUser from "./src/migrators/createMigrationUser.js";
 import migrateFamilies from "./src/migrators/migrateFamilies.js";
 import migrateAppliedInterventions from "./src/migrators/migrateAppliedInterventions.js";
@@ -39,13 +39,15 @@ await deleteVillageLevels();
 
 
 console.log("Creating new base levels for villageEntity and familyEntity and retrieve ids...")
-const levels = await createBaseLevels();
+let response = await createBaseLevels();
+const {villageLevel, familyLevel} = response;
 
-const villageLevel = await API.graphql({ query: queries.listLevels, variables: { filter: { name: { eq: "village" } } } }).data.listLevels.items.at(-1);
-console.log("Village level id is:" + JSON.stringify(villageLevel));
+// response = await API.graphql({ query: queries.listLevels, variables: { filter: { name: { eq: "village" } } } });
+// const villageLevel = filterUndeleted(response.data.listLevels.items).at(-1);
+// console.log("Village level id is:" + JSON.stringify(villageLevel));
 
-const familyLevel = await API.graphql({ query: queries.listLevels, variables: {filter: {name: {eq: "family"}}}}).data.listLevels.items.at(-1);
-console.log("Family level id is:" + JSON.stringify(familyLevel));
+// const familyLevel = await API.graphql({ query: queries.listLevels, variables: {filter: {name: {eq: "family"}}}}).data.listLevels.items.at(-1);
+// console.log("Family level id is:" + JSON.stringify(familyLevel));
 
 const allowedEntities = [villageLevel.id, familyLevel.id];
 
@@ -61,7 +63,6 @@ migrateProjects(sqlPool);
 console.log("Migrating question options...")
 migrateQuestionOptions(sqlPool);
 
-// //  TODO: check SQL dump --> "SELECT * FROM questions" returns no data.
 // console.log("Migrating question options...")
 // migrateQuestions(sqlPool);
 

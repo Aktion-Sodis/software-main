@@ -6,7 +6,7 @@ import uuid from 'uuid';
 
 const createBaseLevels = async () => {
     // First, create entity levels manually for village and family.
-    const villageLevel = await API.graphql({
+    let response = await API.graphql({
         query: mutations.createLevel, 
         variables: {input: {
             name: "village",
@@ -18,15 +18,17 @@ const createBaseLevels = async () => {
             }],
         }},
     })
+    const villageLevel = response.data.createLevel;
+
     console.log("Created villageLevel entry:");
     console.log(villageLevel);
 
-    const familyLevel = await API.graphql({
+    response = await API.graphql({
         query: mutations.createLevel, 
         variables: {input: {
             name: "family",
             interventionsAreAllowed: true,
-            parentLevelID: villageLevel.data.createLevel.id,
+            parentLevelID: villageLevel.id,
             customData: [{
                 name: "numChildren",
                 type: schema.Type.INT,
@@ -34,8 +36,10 @@ const createBaseLevels = async () => {
             }],
         }},
     })
+    const familyLevel = response.data.createLevel;
     console.log("Created familyLevel entry:");
     console.log(familyLevel);
+    return {villageLevel, familyLevel}
 }
 
 export default createBaseLevels;
