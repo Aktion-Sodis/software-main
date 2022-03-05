@@ -153,28 +153,34 @@ class LoginView extends StatelessWidget {
 
   Widget _loginButton() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-      return Container(
-          margin: EdgeInsets.only(top: defaultPadding(context)),
-          child: state.formStatus is FormSubmitting
-              ? const CircularProgressIndicator(color: Colors.green)
-              : ElevatedButton(
-                  style: ButtonStyle(
-                    textStyle:
-                        MaterialStateProperty.all(TextStyle(fontSize: 18)),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8))),
-                    minimumSize: MaterialStateProperty.all(
-                        Size(width(context) * .8, width(context) * .12)),
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.green), //todo: change
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      context.read<LoginBloc>().add(LoginSubmitted());
-                    }
-                  },
-                  child: Text(strings.login),
-                ));
+      return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                margin: EdgeInsets.only(top: defaultPadding(context)),
+                child: state.formStatus is FormSubmitting
+                    ? const CircularProgressIndicator(color: Colors.green)
+                    : ElevatedButton(
+                        style: ButtonStyle(
+                          textStyle: MaterialStateProperty.all(
+                              TextStyle(fontSize: 18)),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8))),
+                          minimumSize: MaterialStateProperty.all(
+                              Size(width(context) * .8, width(context) * .12)),
+                          backgroundColor: MaterialStateProperty.all(
+                              Colors.green), //todo: change
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<LoginBloc>().add(LoginSubmitted());
+                          }
+                        },
+                        child: Text(strings.login),
+                      ))
+          ]);
     });
   }
 

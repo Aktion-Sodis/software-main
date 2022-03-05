@@ -12,6 +12,8 @@ import 'package:mobile_app/frontend/pages/login_view.dart';
 import 'package:mobile_app/frontend/pages/update_password_view.dart';
 import 'package:mobile_app/frontend/session_view.dart';
 
+import 'backend/Blocs/auth/auth_repository.dart';
+
 class AppNavigator extends StatelessWidget {
   const AppNavigator({Key? key}) : super(key: key);
 
@@ -49,11 +51,27 @@ class AppNavigator extends StatelessWidget {
                       pages: [
                         if (state.user == null)
                           //todo: user initialization page
-                          MaterialPage(child: Container()),
+                          MaterialPage(
+                              child: Scaffold(
+                                  body: Container(
+                                      child: Center(
+                                          child: IconButton(
+                                              icon: Icon(Icons.time_to_leave),
+                                              onPressed: () => context
+                                                  .read<SessionCubit>()
+                                                  .signOut()))))),
                         if (state.user != null)
 
                           ///hier beginnt der beef/App-Inhalt
-                          MaterialPage(child: Container())
+                          MaterialPage(
+                              child: Scaffold(
+                                  body: Container(
+                                      child: Center(
+                                          child: IconButton(
+                                              icon: Icon(Icons.time_to_leave),
+                                              onPressed: () => context
+                                                  .read<SessionCubit>()
+                                                  .signOut())))))
                       ],
                       onPopPage: (route, result) => route.didPop(result),
                     );
