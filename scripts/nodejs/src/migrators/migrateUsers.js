@@ -25,14 +25,13 @@ const migrateUsers = async (sqlPool, permissions) => {
             }
         });
     });
-    
 }
 
 const userTransformer = (userOld, permissions) => {
     const userNew = {
-        firstName = userOld.first_name,
-        lastName = userOld.last_name,
-        permissions = permissions,
+        firstName : userOld.first_name,
+        lastName : userOld.last_name,
+        permissions : permissions,
     }
     return userNew;
 }

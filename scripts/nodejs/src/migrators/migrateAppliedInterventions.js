@@ -20,23 +20,24 @@ const listAppliedInterventionsQuery = `
     `;
         
 const migrateAppliedInterventions = async (sqlPool, defaultUser) => {
-    await sqlPool.query(listAppliedInterventionsQuery, function (err, result, fields) {
+    const executedSurveyDatas = await sqlPool.query(listAppliedInterventionsQuery, function (err, result, fields) {
         if (err) throw err;
-        Object.values(result).forEach(function(executedSurveyData) {
-            const newAppliedIntervention = appliedInterventionTransformer(executedSurveyData, defaultUser)    
-            try {
-                const newAppliedInterventionEntry = await API.graphql({
-                    query: mutations.createAppliedIntervention,
-                    variables: {input: newAppliedIntervention}
-                })
-                console.log("Created family entity" + JSON.stringify(newAppliedInterventionEntry));
-                
-            } catch (error) {
-                console.log("Error writing family" + JSON.stringify(newAppliedIntervention) + error);
-            }
-        });
+        return Object.values(result);
     });
-    
+
+    for (let executedSurveyData of executedSurveyDatas){
+        const newAppliedIntervention = appliedInterventionTransformer(executedSurveyData, defaultUser)    
+        try {
+            const newAppliedInterventionEntry = await API.graphql({
+                query: mutations.createAppliedIntervention,
+                variables: {input: newAppliedIntervention}
+            })
+            console.log("Created family entity" + JSON.stringify(newAppliedInterventionEntry));
+            
+        } catch (error) {
+            console.log("Error writing family" + JSON.stringify(newAppliedIntervention) + error);
+        }
+    }
 }
 
 const appliedInterventionTransformer = (executedSurveyData, defaultUser) => {

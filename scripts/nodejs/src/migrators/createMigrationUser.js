@@ -1,5 +1,5 @@
 import { PermissionType } from '../models/index.js';
-import * as mutations from './graphql/mutations.js';
+import * as mutations from '../graphql/mutations.js';
 
 const defaultUser = {
     firstName : "defaultUser",

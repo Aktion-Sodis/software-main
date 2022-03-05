@@ -11,26 +11,27 @@ const listQuestionOptions = `
 
         
 const migrateQuestionOptions = async (sqlPool) => {
-    await sqlPool.query(listQuestionOptions, function (err, result, fields) {
+    const oldQuestionOptions = await sqlPool.query(listQuestionOptions, function (err, result, fields) {
         if (err) throw err;
-        Object.values(result).forEach(function(oldQuestionOption) {
-            const newQuestionOption = {
-                id: oldQuestionOption.id,
-                text: oldQuestionOption.text
-            }
-            try {
-                const newQuestionOptionEntry = await API.graphql({
-                    query: mutations.createQuestionOption, // missing in graph-QL api?
-                    variables: {input: newExecutedSurvey}
-                })
-                console.log("Created question option" + JSON.stringify(newQuestionOptionEntry));
-                
-            } catch (error) {
-                console.log("Error writing question option" + JSON.stringify(newQuestionOption) + error);
-            }
-        });
+        return Object.values(result);
     });
-    
+
+    for (let oldQuestionOption of oldQuestionOptions){
+        const newQuestionOption = {
+            id: oldQuestionOption.id,
+            text: oldQuestionOption.text
+        }
+        try {
+            const newQuestionOptionEntry = await API.graphql({
+                query: mutations.createQuestionOption, // missing in graph-QL api?
+                variables: {input: newExecutedSurvey}
+            })
+            console.log("Created question option" + JSON.stringify(newQuestionOptionEntry));
+            
+        } catch (error) {
+            console.log("Error writing question option" + JSON.stringify(newQuestionOption) + error);
+        }
+    }   
 }
 
 export default migrateQuestionOptions;
