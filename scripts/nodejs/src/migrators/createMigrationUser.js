@@ -2,9 +2,9 @@ import { PermissionType } from '../models/index.js';
 import * as mutations from './graphql/mutations.js';
 
 const defaultUser = {
-    firstName = "defaultUser",
-    lastName = "MigrationV1",
-    bio = "auto-generated user linked to V1-data",
+    firstName : "defaultUser",
+    lastName : "MigrationV1",
+    bio : "auto-generated user linked to V1-data",
     
 }
 

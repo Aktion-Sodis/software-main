@@ -1,0 +1,12 @@
+{
+  "name": "migrate-database",
+  "version": "1.0.0",
+  "description": "migrate sodis sql database to aws amplify",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "type":"module"
+}
