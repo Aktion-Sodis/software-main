@@ -9,6 +9,7 @@ import 'package:mobile_app/backend/Blocs/user/user_state.dart';
 import 'package:mobile_app/backend/repositories/UserRepository.dart';
 import 'package:mobile_app/frontend/pages/loading_view.dart';
 import 'package:mobile_app/frontend/pages/login_view.dart';
+import 'package:mobile_app/frontend/pages/update_password_view.dart';
 import 'package:mobile_app/frontend/session_view.dart';
 
 class AppNavigator extends StatelessWidget {
@@ -54,9 +55,16 @@ class AppNavigator extends StatelessWidget {
                           ///hier beginnt der beef/App-Inhalt
                           MaterialPage(child: Container())
                       ],
+                      onPopPage: (route, result) => route.didPop(result),
                     );
                   })),
-            )
+            ),
+          if (state is RequiresPasswordChangeSessionState)
+            MaterialPage(
+                child: UpdatePasswordView(
+              authCredentials: state.authCredentials,
+              sessionCubit: context.read<SessionCubit>(),
+            ))
         ],
         onPopPage: (route, result) => route.didPop(result),
       );

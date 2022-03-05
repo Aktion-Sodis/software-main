@@ -1,3 +1,5 @@
+import 'package:mobile_app/backend/Blocs/auth/auth_credentials.dart';
+
 abstract class SessionState {}
 
 abstract class UnauthenticatedSessionState extends SessionState {}
@@ -18,7 +20,7 @@ class FullyAuthenticatedSessionState extends AuthenticatedSessionState {
       : super(userID: userID);
 }
 
-class RequiresPasswordChangeSessionState extends AuthenticatedSessionState {
-  RequiresPasswordChangeSessionState({required String userID})
-      : super(userID: userID);
+class RequiresPasswordChangeSessionState extends SessionState {
+  AuthCredentials authCredentials;
+  RequiresPasswordChangeSessionState({required this.authCredentials});
 }

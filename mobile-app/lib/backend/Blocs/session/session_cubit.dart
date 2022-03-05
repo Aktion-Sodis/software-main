@@ -32,13 +32,20 @@ class SessionCubit extends Cubit<SessionState> {
 
   void showSession(AuthCredentials credentials) async {
     try {
-      if (credentials.userId != null) {
-        //todo: check whether user requires
-        emit(FullyAuthenticatedSessionState(userID: credentials.userId!));
-      } else {
+      print("showSession called: ${credentials.userId}");
+      if (credentials.userId == null) {
+        print("popping requires authentification");
         emit(RequiresAuthentificationSessionState());
+      } else if (credentials.userId == "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD") {
+        print("popping requires password state");
+        emit(RequiresPasswordChangeSessionState(authCredentials: credentials));
+      } else {
+        print("popping fully quthenticated state");
+        emit(FullyAuthenticatedSessionState(userID: credentials.userId!));
       }
     } catch (e) {
+      print("error in showing Session");
+      print(e.toString());
       emit(RequiresAuthentificationSessionState());
     }
   }

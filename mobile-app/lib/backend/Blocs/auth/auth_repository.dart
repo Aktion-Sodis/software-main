@@ -14,58 +14,98 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 
+import 'auth_credentials.dart';
+
 class AuthRepository {
   Future<String?> _getUserIdFromAttributes() async {
-    try {
-      final attributes = await Amplify.Auth.fetchUserAttributes();
-      final userId = attributes
-          .firstWhere((element) => element.userAttributeKey.toString() == 'sub')
-          .value;
-      return userId;
-    } on AuthException catch (e) {
-      debugPrint(e.message);
-    }
+    print("getting attributes");
+
+    final attributes = await Amplify.Auth.fetchUserAttributes();
+    final userId = attributes
+        .firstWhere((element) => element.userAttributeKey.toString() == 'sub')
+        .value;
+    print("userID from attributes: $userId");
+    return userId;
   }
 
   Future<String?> attemptAutoLogin() async {
-    try {
-      final session = await Amplify.Auth.fetchAuthSession();
+    print("trying auto login");
 
-      return session.isSignedIn ? (await _getUserIdFromAttributes()) : null;
-    } on AuthException catch (e) {
-      debugPrint(e.message);
-    }
+    final session = await Amplify.Auth.fetchAuthSession();
+    print("autoLogin logged in?: ${session.isSignedIn}");
+
+    return session.isSignedIn ? (await _getUserIdFromAttributes()) : null;
   }
 
   // todo: Verify how to implement "always remember device" on login.
   Future<String?> login({
-    required String username,
+    String? email,
+    String? phoneNumber,
     required String password,
   }) async {
-    print("login with $username + $password");
-    try {
-      final result = await Amplify.Auth.signIn(
-        username: username.trim(),
-        password: password.trim(),
-      );
+    Amplify.Auth.streamController.stream.listen((event) {
+      print("login event: ${event.toString()}");
+    });
+    print("login called in repo");
 
-      return result.isSignedIn ? (await _getUserIdFromAttributes()) : null;
-    } catch (e) {
-      print("error in authentication");
-      print(e.toString());
+    print("login is getting attempted with $email + $phoneNumber + $password");
+    Map<String, String> signInOptions = email != null
+        ? {
+            "email": email,
+          }
+        : phoneNumber != null
+            ? {
+                "phone_number": phoneNumber,
+              }
+            : {};
+    print("sign in options");
+    print(signInOptions.toString());
+
+    final result = await Amplify.Auth.signIn(
+        username: email ?? phoneNumber ?? "",
+        password: password,
+        options: CognitoSignInOptions(clientMetadata: signInOptions));
+
+    print("is Signed in: ${result.isSignedIn}");
+    print("next Step: ${result.nextStep?.signInStep}");
+    if (result.nextStep?.signInStep == "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD") {
+      return ("CONFIRM_SIGN_IN_WITH_NEW_PASSWORD");
+    }
+
+    return result.isSignedIn ? (await _getUserIdFromAttributes()) : null;
+  }
+
+  Future<AuthCredentials?> updatePasswordInitially(
+      AuthCredentials oldCredentials, String newPassword) async {
+    print("updateing password");
+    SignInResult signInResult =
+        await Amplify.Auth.confirmSignIn(confirmationValue: newPassword);
+    print("updated password: ${signInResult.isSignedIn}");
+    if (signInResult.isSignedIn) {
+      String? id = await _getUserIdFromAttributes();
+      print("id: $id");
+      if (id != null) {
+        AuthCredentials creds = AuthCredentials(
+            userName: oldCredentials.userName,
+            password: newPassword,
+            userId: id,
+            email: oldCredentials.email,
+            phoneNumber: oldCredentials.phoneNumber);
+        return creds;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
     }
   }
 
   Future<String?> _loginWithWebUI(
     AuthProvider authProvider,
   ) async {
-    try {
-      SignInResult result =
-          await Amplify.Auth.signInWithWebUI(provider: authProvider);
-      return result.isSignedIn ? (await _getUserIdFromAttributes()) : null;
-    } on AuthException catch (e) {
-      debugPrint(e.message);
-    }
+    SignInResult result =
+        await Amplify.Auth.signInWithWebUI(provider: authProvider);
+    return result.isSignedIn ? (await _getUserIdFromAttributes()) : null;
   }
 
   Future<String?> loginWithGoogle() => _loginWithWebUI(AuthProvider.google);
@@ -116,13 +156,8 @@ class AuthRepository {
 
   // todo: Verify how to implement "forgetting device" on sign out.
   Future<bool> signOut() async {
-    try {
-      await Amplify.Auth.signOut(
-          options: const SignOutOptions(globalSignOut: true));
-      return true;
-    } catch (e) {
-      debugPrint("Error on sign out:\n" + e.toString());
-      return false;
-    }
+    await Amplify.Auth.signOut(
+        options: const SignOutOptions(globalSignOut: true));
+    return true;
   }
 }

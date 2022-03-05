@@ -29,17 +29,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(state.copyWith(formStatus: FormSubmitting()));
 
       try {
+        print("form is getting submitted");
+        print("authRepo not null: ${authRepo != null}");
         final userId = await authRepo.login(
-          username: state.emailOrPhoneNumber,
+          email: state.isPhoneNumber ? null : state.emailOrPhoneNumber,
+          phoneNumber: state.isPhoneNumber ? state.emailOrPhoneNumber : null,
           password: state.password,
         );
         emit(state.copyWith(formStatus: SubmissionSuccess()));
+        print("now launching session");
+
+        if (userId == "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD") {
+          //todo: ask for password update
+        }
 
         authCubit.launchSession(AuthCredentials(
           userName: state.emailOrPhoneNumber,
+          email: state.isPhoneNumber ? null : state.emailOrPhoneNumber,
+          phoneNumber: state.isPhoneNumber ? state.emailOrPhoneNumber : null,
           password: state.password,
           userId: userId,
         ));
+        print("session launched");
       } catch (e) {
         print("error in authentication");
         print(e.toString());
