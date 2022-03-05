@@ -24,7 +24,7 @@ const migrateQuestionOptions = async (sqlPool) => {
         try {
             const newQuestionOptionEntry = await API.graphql({
                 query: mutations.createQuestionOption, // missing in graph-QL api?
-                variables: {input: newExecutedSurvey}
+                variables: {input: newQuestionOption}
             })
             console.log("Created question option" + JSON.stringify(newQuestionOptionEntry));
             

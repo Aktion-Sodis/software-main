@@ -1,5 +1,6 @@
 import * as mutations from '../graphql/mutations.js';
 import { InterventionType } from '../models/index.js';
+import { getQuestionsBySurveyId } from './getQuestionsBySurveyId';
 
 const listSurveys = `
     SELECT
@@ -11,29 +12,8 @@ const listSurveys = `
     LEFT JOIN project
         ON project.id=survey_header.project_id;
     `;
-
+  
     
-async function getQuestionsBySurveyId(sqlPool, surveyId){
-    var questions = [];
-    const getQuestionsQuery = `
-        SELECT 
-            *
-        FROM question
-    `
-    await sqlPool.query(getQuestionsQuery, function (err, result, fields) {
-            if (err) throw err;
-            Object.values(result).forEach(function(oldQuestion) {
-                const newQuestion = {
-                    id: oldQuestion.id,
-                    text: oldQuestion.question_name,
-                }
-                questions.push(newQuestion);
-            });
-        }
-    )
-    return questions;
-};
-        
 const migrateSurveys = async (sqlPool) => {
     await sqlPool.query(listSurveys, function (err, result, fields) {
         if (err) throw err;
@@ -51,7 +31,6 @@ const migrateSurveys = async (sqlPool) => {
             }
         });
     });
-    
 }
 
 const surveyTransformer = (oldSurvey) => {
