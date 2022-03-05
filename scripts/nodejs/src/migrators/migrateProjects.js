@@ -13,7 +13,7 @@ const migrateProjects = async (sqlPool) => {
 
             const newIntervention = {
                 name: project.name,
-                interventionType = InterventionType.TECHNOLOGY,
+                interventionType : InterventionType.TECHNOLOGY,
                 tags: ["migrated"],
                 id: project.id,
             }

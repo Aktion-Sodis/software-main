@@ -12,6 +12,8 @@ import createMigrationUser from "./src/migrators/createMigrationUser.js";
 import migrateFamilies from "./src/migrators/migrateFamilies.js";
 import migrateAppliedInterventions from "./src/migrators/migrateAppliedInterventions.js";
 import migrateQuestionOptions from "./src/migrators/migrateQuestionOptions.js";
+import migrateSurveys from "./src/migrators/migrateSurveys.js";
+import migrateProjects from "./src/migrators/migrateProjects.js";
 
 Amplify.default.configure(awsconfig);
 
@@ -59,19 +61,13 @@ migrateProjects(sqlPool);
 console.log("Migrating question options...")
 migrateQuestionOptions(sqlPool);
 
-//  TODO: check SQL dump --> "SELECT * FROM questions" returns no data.
-console.log("Migrating question options...")
-migrateQuestions(sqlPool);
+// //  TODO: check SQL dump --> "SELECT * FROM questions" returns no data.
+// console.log("Migrating question options...")
+// migrateQuestions(sqlPool);
 
-
-// TODO: implement
-console.log("Migrating answers...")
-migrateAnswers(sqlPool);
-
-
-// TODO: implement
-console.log("Migrating surveys...")
-migrateAnswers(sqlPool);
+// // TODO: implement
+// console.log("Migrating answers...")
+// migrateAnswers(sqlPool);
 
 // TODO: implement
 console.log("Migrating surveys...")
