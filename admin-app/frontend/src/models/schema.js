@@ -301,10 +301,16 @@ export const schema = {
                 "tags": {
                     "name": "tags",
                     "isArray": true,
-                    "type": "String",
+                    "type": {
+                        "model": "InterventionTag"
+                    },
                     "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": false
+                    "isArrayNullable": false,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "interventionTagsId"
+                    }
                 },
                 "schemeVersion": {
                     "name": "schemeVersion",
@@ -387,10 +393,16 @@ export const schema = {
                 "tags": {
                     "name": "tags",
                     "isArray": true,
-                    "type": "String",
+                    "type": {
+                        "model": "ContentTag"
+                    },
                     "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": false
+                    "isArrayNullable": false,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "contentTagsId"
+                    }
                 },
                 "schemeVersion": {
                     "name": "schemeVersion",
@@ -418,6 +430,63 @@ export const schema = {
             },
             "syncable": true,
             "pluralName": "Contents",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                }
+            ]
+        },
+        "ContentTag": {
+            "name": "ContentTag",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "text": {
+                    "name": "text",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "schemeVersion": {
+                    "name": "schemeVersion",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "contentTagsId": {
+                    "name": "contentTagsId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "ContentTags",
             "attributes": [
                 {
                     "type": "model",
@@ -475,10 +544,25 @@ export const schema = {
                 "tags": {
                     "name": "tags",
                     "isArray": true,
-                    "type": "String",
+                    "type": {
+                        "model": "SurveyTag"
+                    },
                     "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": false
+                    "isArrayNullable": false,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "surveyTagsId"
+                    }
+                },
+                "surveyType": {
+                    "name": "surveyType",
+                    "isArray": false,
+                    "type": {
+                        "enum": "SurveyType"
+                    },
+                    "isRequired": true,
+                    "attributes": []
                 },
                 "schemeVersion": {
                     "name": "schemeVersion",
@@ -506,6 +590,120 @@ export const schema = {
             },
             "syncable": true,
             "pluralName": "Surveys",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                }
+            ]
+        },
+        "SurveyTag": {
+            "name": "SurveyTag",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "text": {
+                    "name": "text",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "schemeVersion": {
+                    "name": "schemeVersion",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "surveyTagsId": {
+                    "name": "surveyTagsId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "SurveyTags",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                }
+            ]
+        },
+        "InterventionTag": {
+            "name": "InterventionTag",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "text": {
+                    "name": "text",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "schemeVersion": {
+                    "name": "schemeVersion",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "interventionTagsId": {
+                    "name": "interventionTagsId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "InterventionTags",
             "attributes": [
                 {
                     "type": "model",
@@ -1127,18 +1325,18 @@ export const schema = {
                 "AUDIO"
             ]
         },
-        "Type": {
-            "name": "Type",
-            "values": [
-                "INT",
-                "STRING"
-            ]
-        },
         "SurveyType": {
             "name": "SurveyType",
             "values": [
                 "INITIAL",
                 "DEFAULT"
+            ]
+        },
+        "Type": {
+            "name": "Type",
+            "values": [
+                "INT",
+                "STRING"
             ]
         }
     },
@@ -1494,5 +1692,5 @@ export const schema = {
             }
         }
     },
-    "version": "b47ec14c06ef690adc833bae4a5d4aa1"
+    "version": "05254d9262d567df4fce42ac9c7f4131"
 };
