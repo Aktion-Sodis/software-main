@@ -50,25 +50,25 @@ const {villageLevel, familyLevel} = response;
 // const familyLevel = await API.graphql({ query: queries.listLevels, variables: {filter: {name: {eq: "family"}}}}).data.listLevels.items.at(-1);
 // console.log("Family level id is:" + JSON.stringify(familyLevel));
 
+//das sind ja levels -> dementsprechend nicht sinnvoll 
 const allowedEntities = [villageLevel.id, familyLevel.id];
 
 
 console.log("Creating a single default user, assigned to all migrated data from version 1...");
-const defaultUser = createMigrationUser(allowedEntities);
+const defaultUser = createMigrationUser([]);
 
 
 console.log("Creating interventions...");
 migrateProjects(sqlPool);
 
-//  TODO: check graphql-API --> no mutation createQuestionOption() available.
+//  TODO: das muss mit in die survey migration 
 console.log("Migrating question options...");
 migrateQuestionOptions(sqlPool);
 
 console.log("Migrating surveys...");
 migrateSurveys(sqlPool);
 
-console.log("Migrating executed surveys and answers...");
-migrateExecutedSurveys(sqlPool, defaultUser);
+
 
 console.log("Migrating villages...");
 migrateVillages(sqlPool, villageLevel);
@@ -83,4 +83,7 @@ console.log("Migrating applied interventions...") ;
 // Application of intervention is infered based on executed surveys.
 migrateAppliedInterventions(sqlPool, defaultUser);
 
+//TODO: hier überprüfen -> wurde zuvor zu früh übertragen
+console.log("Migrating executed surveys and answers...");
+migrateExecutedSurveys(sqlPool, defaultUser);
 console.log("Successfully finished migration.");
