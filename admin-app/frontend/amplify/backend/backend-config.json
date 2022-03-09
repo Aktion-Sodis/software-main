@@ -1,20 +1,5 @@
 {
   "api": {
-    "monitoring": {
-      "service": "AppSync",
-      "providerPlugin": "awscloudformation",
-      "output": {
-        "authConfig": {
-          "defaultAuthentication": {
-            "authenticationType": "API_KEY",
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
-            }
-          },
-          "additionalAuthenticationProviders": []
-        }
-      }
-    },
     "AdminQueries": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
@@ -36,6 +21,23 @@
           ]
         }
       ]
+    },
+    "monitoring": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 50,
+              "apiKeyExpirationDate": "2022-04-28T19:05:36.543Z",
+              "description": "monitoring_api_key"
+            }
+          },
+          "additionalAuthenticationProviders": []
+        }
+      }
     }
   },
   "auth": {

@@ -73,10 +73,6 @@ export const onCreateConfig = /* GraphQL */ `
         backgroundOneDark
         backgroundTwoDark
       }
-      storagePaths {
-        ownerPic
-        ownerIcon
-      }
       schemeVersion
       id
       createdAt
@@ -98,10 +94,6 @@ export const onUpdateConfig = /* GraphQL */ `
         backgroundTwoLight
         backgroundOneDark
         backgroundTwoDark
-      }
-      storagePaths {
-        ownerPic
-        ownerIcon
       }
       schemeVersion
       id
@@ -125,10 +117,6 @@ export const onDeleteConfig = /* GraphQL */ `
         backgroundOneDark
         backgroundTwoDark
       }
-      storagePaths {
-        ownerPic
-        ownerIcon
-      }
       schemeVersion
       id
       createdAt
@@ -142,14 +130,18 @@ export const onDeleteConfig = /* GraphQL */ `
 export const onCreateLevel = /* GraphQL */ `
   subscription OnCreateLevel {
     onCreateLevel {
-      name
-      description
+      name {
+        languageKeys
+        languageTexts
+      }
+      description {
+        languageKeys
+        languageTexts
+      }
       parentLevelID
       interventionsAreAllowed
       allowedInterventions {
         items {
-          name
-          description
           interventionType
           schemeVersion
           id
@@ -165,7 +157,10 @@ export const onCreateLevel = /* GraphQL */ `
       }
       customData {
         id
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         type
       }
       schemeVersion
@@ -181,14 +176,18 @@ export const onCreateLevel = /* GraphQL */ `
 export const onUpdateLevel = /* GraphQL */ `
   subscription OnUpdateLevel {
     onUpdateLevel {
-      name
-      description
+      name {
+        languageKeys
+        languageTexts
+      }
+      description {
+        languageKeys
+        languageTexts
+      }
       parentLevelID
       interventionsAreAllowed
       allowedInterventions {
         items {
-          name
-          description
           interventionType
           schemeVersion
           id
@@ -204,7 +203,10 @@ export const onUpdateLevel = /* GraphQL */ `
       }
       customData {
         id
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         type
       }
       schemeVersion
@@ -220,14 +222,18 @@ export const onUpdateLevel = /* GraphQL */ `
 export const onDeleteLevel = /* GraphQL */ `
   subscription OnDeleteLevel {
     onDeleteLevel {
-      name
-      description
+      name {
+        languageKeys
+        languageTexts
+      }
+      description {
+        languageKeys
+        languageTexts
+      }
       parentLevelID
       interventionsAreAllowed
       allowedInterventions {
         items {
-          name
-          description
           interventionType
           schemeVersion
           id
@@ -243,7 +249,10 @@ export const onDeleteLevel = /* GraphQL */ `
       }
       customData {
         id
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         type
       }
       schemeVersion
@@ -259,8 +268,14 @@ export const onDeleteLevel = /* GraphQL */ `
 export const onCreateIntervention = /* GraphQL */ `
   subscription OnCreateIntervention {
     onCreateIntervention {
-      name
-      description
+      name {
+        languageKeys
+        languageTexts
+      }
+      description {
+        languageKeys
+        languageTexts
+      }
       interventionType
       contents {
         items {
@@ -278,8 +293,6 @@ export const onCreateIntervention = /* GraphQL */ `
       }
       surveys {
         items {
-          name
-          description
           surveyType
           schemeVersion
           id
@@ -322,8 +335,14 @@ export const onCreateIntervention = /* GraphQL */ `
 export const onUpdateIntervention = /* GraphQL */ `
   subscription OnUpdateIntervention {
     onUpdateIntervention {
-      name
-      description
+      name {
+        languageKeys
+        languageTexts
+      }
+      description {
+        languageKeys
+        languageTexts
+      }
       interventionType
       contents {
         items {
@@ -341,8 +360,6 @@ export const onUpdateIntervention = /* GraphQL */ `
       }
       surveys {
         items {
-          name
-          description
           surveyType
           schemeVersion
           id
@@ -385,8 +402,14 @@ export const onUpdateIntervention = /* GraphQL */ `
 export const onDeleteIntervention = /* GraphQL */ `
   subscription OnDeleteIntervention {
     onDeleteIntervention {
-      name
-      description
+      name {
+        languageKeys
+        languageTexts
+      }
+      description {
+        languageKeys
+        languageTexts
+      }
       interventionType
       contents {
         items {
@@ -404,8 +427,6 @@ export const onDeleteIntervention = /* GraphQL */ `
       }
       surveys {
         items {
-          name
-          description
           surveyType
           schemeVersion
           id
@@ -448,8 +469,14 @@ export const onDeleteIntervention = /* GraphQL */ `
 export const onCreateContent = /* GraphQL */ `
   subscription OnCreateContent {
     onCreateContent {
-      name
-      description
+      name {
+        languageKeys
+        languageTexts
+      }
+      description {
+        languageKeys
+        languageTexts
+      }
       interventions {
         items {
           id
@@ -492,8 +519,14 @@ export const onCreateContent = /* GraphQL */ `
 export const onUpdateContent = /* GraphQL */ `
   subscription OnUpdateContent {
     onUpdateContent {
-      name
-      description
+      name {
+        languageKeys
+        languageTexts
+      }
+      description {
+        languageKeys
+        languageTexts
+      }
       interventions {
         items {
           id
@@ -536,8 +569,14 @@ export const onUpdateContent = /* GraphQL */ `
 export const onDeleteContent = /* GraphQL */ `
   subscription OnDeleteContent {
     onDeleteContent {
-      name
-      description
+      name {
+        languageKeys
+        languageTexts
+      }
+      description {
+        languageKeys
+        languageTexts
+      }
       interventions {
         items {
           id
@@ -580,11 +619,23 @@ export const onDeleteContent = /* GraphQL */ `
 export const onCreateSurvey = /* GraphQL */ `
   subscription OnCreateSurvey {
     onCreateSurvey {
-      name
-      description
+      name {
+        languageKeys
+        languageTexts
+      }
+      description {
+        languageKeys
+        languageTexts
+      }
       intervention {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         interventionType
         contents {
           nextToken
@@ -609,11 +660,13 @@ export const onCreateSurvey = /* GraphQL */ `
       }
       questions {
         id
-        text
+        text {
+          languageKeys
+          languageTexts
+        }
         type
         questionOptions {
           id
-          text
           followUpQuestionID
         }
         isFollowUpQuestion
@@ -648,11 +701,23 @@ export const onCreateSurvey = /* GraphQL */ `
 export const onUpdateSurvey = /* GraphQL */ `
   subscription OnUpdateSurvey {
     onUpdateSurvey {
-      name
-      description
+      name {
+        languageKeys
+        languageTexts
+      }
+      description {
+        languageKeys
+        languageTexts
+      }
       intervention {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         interventionType
         contents {
           nextToken
@@ -677,11 +742,13 @@ export const onUpdateSurvey = /* GraphQL */ `
       }
       questions {
         id
-        text
+        text {
+          languageKeys
+          languageTexts
+        }
         type
         questionOptions {
           id
-          text
           followUpQuestionID
         }
         isFollowUpQuestion
@@ -716,11 +783,23 @@ export const onUpdateSurvey = /* GraphQL */ `
 export const onDeleteSurvey = /* GraphQL */ `
   subscription OnDeleteSurvey {
     onDeleteSurvey {
-      name
-      description
+      name {
+        languageKeys
+        languageTexts
+      }
+      description {
+        languageKeys
+        languageTexts
+      }
       intervention {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         interventionType
         contents {
           nextToken
@@ -745,11 +824,13 @@ export const onDeleteSurvey = /* GraphQL */ `
       }
       questions {
         id
-        text
+        text {
+          languageKeys
+          languageTexts
+        }
         type
         questionOptions {
           id
-          text
           followUpQuestionID
         }
         isFollowUpQuestion
@@ -785,11 +866,20 @@ export const onCreateEntity = /* GraphQL */ `
   subscription OnCreateEntity {
     onCreateEntity {
       name
-      description
+      description {
+        languageKeys
+        languageTexts
+      }
       parentEntityID
       level {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         parentLevelID
         interventionsAreAllowed
         allowedInterventions {
@@ -798,7 +888,6 @@ export const onCreateEntity = /* GraphQL */ `
         }
         customData {
           id
-          name
           type
         }
         schemeVersion
@@ -851,11 +940,20 @@ export const onUpdateEntity = /* GraphQL */ `
   subscription OnUpdateEntity {
     onUpdateEntity {
       name
-      description
+      description {
+        languageKeys
+        languageTexts
+      }
       parentEntityID
       level {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         parentLevelID
         interventionsAreAllowed
         allowedInterventions {
@@ -864,7 +962,6 @@ export const onUpdateEntity = /* GraphQL */ `
         }
         customData {
           id
-          name
           type
         }
         schemeVersion
@@ -917,11 +1014,20 @@ export const onDeleteEntity = /* GraphQL */ `
   subscription OnDeleteEntity {
     onDeleteEntity {
       name
-      description
+      description {
+        languageKeys
+        languageTexts
+      }
       parentEntityID
       level {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         parentLevelID
         interventionsAreAllowed
         allowedInterventions {
@@ -930,7 +1036,6 @@ export const onDeleteEntity = /* GraphQL */ `
         }
         customData {
           id
-          name
           type
         }
         schemeVersion
@@ -999,8 +1104,14 @@ export const onCreateAppliedIntervention = /* GraphQL */ `
         _lastChangedAt
       }
       intervention {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         interventionType
         contents {
           nextToken
@@ -1077,8 +1188,14 @@ export const onUpdateAppliedIntervention = /* GraphQL */ `
         _lastChangedAt
       }
       intervention {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         interventionType
         contents {
           nextToken
@@ -1155,8 +1272,14 @@ export const onDeleteAppliedIntervention = /* GraphQL */ `
         _lastChangedAt
       }
       intervention {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         interventionType
         contents {
           nextToken
@@ -1230,8 +1353,6 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
           _lastChangedAt
         }
         intervention {
-          name
-          description
           interventionType
           schemeVersion
           id
@@ -1262,11 +1383,15 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
         appliedInterventionInterventionId
       }
       survey {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         intervention {
-          name
-          description
           interventionType
           schemeVersion
           id
@@ -1279,7 +1404,6 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
         }
         questions {
           id
-          text
           type
           isFollowUpQuestion
         }
@@ -1326,7 +1450,6 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
         text
         questionOptions {
           id
-          text
           followUpQuestionID
         }
         markings {
@@ -1367,8 +1490,6 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
           _lastChangedAt
         }
         intervention {
-          name
-          description
           interventionType
           schemeVersion
           id
@@ -1399,11 +1520,15 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
         appliedInterventionInterventionId
       }
       survey {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         intervention {
-          name
-          description
           interventionType
           schemeVersion
           id
@@ -1416,7 +1541,6 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
         }
         questions {
           id
-          text
           type
           isFollowUpQuestion
         }
@@ -1463,7 +1587,6 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
         text
         questionOptions {
           id
-          text
           followUpQuestionID
         }
         markings {
@@ -1504,8 +1627,6 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
           _lastChangedAt
         }
         intervention {
-          name
-          description
           interventionType
           schemeVersion
           id
@@ -1536,11 +1657,15 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
         appliedInterventionInterventionId
       }
       survey {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         intervention {
-          name
-          description
           interventionType
           schemeVersion
           id
@@ -1553,7 +1678,6 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
         }
         questions {
           id
-          text
           type
           isFollowUpQuestion
         }
@@ -1600,7 +1724,6 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
         text
         questionOptions {
           id
-          text
           followUpQuestionID
         }
         markings {
@@ -1653,11 +1776,12 @@ export const onCreateTask = /* GraphQL */ `
       }
       entity {
         name
-        description
+        description {
+          languageKeys
+          languageTexts
+        }
         parentEntityID
         level {
-          name
-          description
           parentLevelID
           interventionsAreAllowed
           schemeVersion
@@ -1706,8 +1830,6 @@ export const onCreateTask = /* GraphQL */ `
           _lastChangedAt
         }
         intervention {
-          name
-          description
           interventionType
           schemeVersion
           id
@@ -1751,8 +1873,6 @@ export const onCreateTask = /* GraphQL */ `
           appliedInterventionInterventionId
         }
         survey {
-          name
-          description
           surveyType
           schemeVersion
           id
@@ -1841,11 +1961,12 @@ export const onUpdateTask = /* GraphQL */ `
       }
       entity {
         name
-        description
+        description {
+          languageKeys
+          languageTexts
+        }
         parentEntityID
         level {
-          name
-          description
           parentLevelID
           interventionsAreAllowed
           schemeVersion
@@ -1894,8 +2015,6 @@ export const onUpdateTask = /* GraphQL */ `
           _lastChangedAt
         }
         intervention {
-          name
-          description
           interventionType
           schemeVersion
           id
@@ -1939,8 +2058,6 @@ export const onUpdateTask = /* GraphQL */ `
           appliedInterventionInterventionId
         }
         survey {
-          name
-          description
           surveyType
           schemeVersion
           id
@@ -2029,11 +2146,12 @@ export const onDeleteTask = /* GraphQL */ `
       }
       entity {
         name
-        description
+        description {
+          languageKeys
+          languageTexts
+        }
         parentEntityID
         level {
-          name
-          description
           parentLevelID
           interventionsAreAllowed
           schemeVersion
@@ -2082,8 +2200,6 @@ export const onDeleteTask = /* GraphQL */ `
           _lastChangedAt
         }
         intervention {
-          name
-          description
           interventionType
           schemeVersion
           id
@@ -2127,8 +2243,6 @@ export const onDeleteTask = /* GraphQL */ `
           appliedInterventionInterventionId
         }
         survey {
-          name
-          description
           surveyType
           schemeVersion
           id
@@ -2323,6 +2437,63 @@ export const onDeleteSurveyTag = /* GraphQL */ `
     }
   }
 `;
+export const onCreateSessionData = /* GraphQL */ `
+  subscription OnCreateSessionData {
+    onCreateSessionData {
+      date
+      userID
+      app
+      version
+      buildNumber
+      remoteConfig
+      platform
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateSessionData = /* GraphQL */ `
+  subscription OnUpdateSessionData {
+    onUpdateSessionData {
+      date
+      userID
+      app
+      version
+      buildNumber
+      remoteConfig
+      platform
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteSessionData = /* GraphQL */ `
+  subscription OnDeleteSessionData {
+    onDeleteSessionData {
+      date
+      userID
+      app
+      version
+      buildNumber
+      remoteConfig
+      platform
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
 export const onCreateInterventionContentRelation = /* GraphQL */ `
   subscription OnCreateInterventionContentRelation {
     onCreateInterventionContentRelation {
@@ -2330,8 +2501,14 @@ export const onCreateInterventionContentRelation = /* GraphQL */ `
       interventionID
       contentID
       intervention {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         interventionType
         contents {
           nextToken
@@ -2355,8 +2532,14 @@ export const onCreateInterventionContentRelation = /* GraphQL */ `
         levelAllowedInterventionsId
       }
       content {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         interventions {
           nextToken
           startedAt
@@ -2388,8 +2571,14 @@ export const onUpdateInterventionContentRelation = /* GraphQL */ `
       interventionID
       contentID
       intervention {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         interventionType
         contents {
           nextToken
@@ -2413,8 +2602,14 @@ export const onUpdateInterventionContentRelation = /* GraphQL */ `
         levelAllowedInterventionsId
       }
       content {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         interventions {
           nextToken
           startedAt
@@ -2446,8 +2641,14 @@ export const onDeleteInterventionContentRelation = /* GraphQL */ `
       interventionID
       contentID
       intervention {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         interventionType
         contents {
           nextToken
@@ -2471,8 +2672,14 @@ export const onDeleteInterventionContentRelation = /* GraphQL */ `
         levelAllowedInterventionsId
       }
       content {
-        name
-        description
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
         interventions {
           nextToken
           startedAt
