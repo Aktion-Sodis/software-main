@@ -1,4 +1,5 @@
 import 'package:mobile_app/backend/callableModels/Content.dart';
+import 'package:mobile_app/backend/callableModels/MultiLanguageText.dart';
 import 'package:mobile_app/backend/callableModels/Survey.dart';
 import 'package:mobile_app/backend/callableModels/InterventionTag.dart';
 
@@ -6,8 +7,8 @@ import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class Intervention {
   String? id;
-  late String name;
-  String? description;
+  late MultiLanguageText name_ml;
+  late MultiLanguageText description_ml;
   late InterventionType interventionType;
   late List<amp.InterventionContentRelation> interventionContentRelations;
   late List<Survey> surveys;
@@ -16,10 +17,18 @@ class Intervention {
   DateTime? createdAt;
   DateTime? updatedAt;
 
+  String get name => name_ml.text;
+
+  set name(String name) => name_ml.text = name;
+
+  String get description => description_ml.text;
+
+  set description(String description) => description_ml.text = description;
+
   Intervention(
       {this.id,
-      required this.name,
-      this.description,
+      required this.name_ml,
+      required this.description_ml,
       required this.interventionType,
       required this.interventionContentRelations,
       required this.surveys,
@@ -30,8 +39,9 @@ class Intervention {
 
   Intervention.fromAmplifyModel(amp.Intervention intervention) {
     id = intervention.id;
-    name = intervention.name;
-    description = intervention.description;
+    name_ml = MultiLanguageText.fromAmplifyModel(intervention.name);
+    description_ml =
+        MultiLanguageText.fromAmplifyModel(intervention.description);
     interventionType = interventionTypeFromAmplifyInterventionType(
         intervention.interventionType);
     interventionContentRelations = intervention.contents;
@@ -47,8 +57,8 @@ class Intervention {
   amp.Intervention toAmplifyModel() {
     return (amp.Intervention(
         id: id,
-        name: name,
-        description: description,
+        name: name_ml.toAmplifyModel(),
+        description: description_ml.toAmplifyModel(),
         interventionType:
             amplifyInterventionTypeFromInterventionType(interventionType),
         contents: interventionContentRelations,

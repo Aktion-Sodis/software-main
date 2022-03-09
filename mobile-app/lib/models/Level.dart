@@ -20,7 +20,7 @@
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
 import 'ModelProvider.dart';
-import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:amplify_core/amplify_core.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
@@ -30,8 +30,8 @@ import 'package:flutter/foundation.dart';
 class Level extends Model {
   static const classType = const _LevelModelType();
   final String id;
-  final String? _name;
-  final String? _description;
+  final MultiLanguageText? _name;
+  final MultiLanguageText? _description;
   final String? _parentLevelID;
   final bool? _interventionsAreAllowed;
   final List<Intervention>? _allowedInterventions;
@@ -48,21 +48,30 @@ class Level extends Model {
     return id;
   }
   
-  String get name {
+  MultiLanguageText get name {
     try {
       return _name!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
   }
   
-  String? get description {
-    return _description;
+  MultiLanguageText get description {
+    try {
+      return _description!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   String? get parentLevelID {
@@ -73,10 +82,10 @@ class Level extends Model {
     try {
       return _interventionsAreAllowed!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -90,10 +99,10 @@ class Level extends Model {
     try {
       return _customData!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -111,9 +120,9 @@ class Level extends Model {
     return _updatedAt;
   }
   
-  const Level._internal({required this.id, required name, description, parentLevelID, required interventionsAreAllowed, allowedInterventions, required customData, schemeVersion, createdAt, updatedAt}): _name = name, _description = description, _parentLevelID = parentLevelID, _interventionsAreAllowed = interventionsAreAllowed, _allowedInterventions = allowedInterventions, _customData = customData, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Level._internal({required this.id, required name, required description, parentLevelID, required interventionsAreAllowed, allowedInterventions, required customData, schemeVersion, createdAt, updatedAt}): _name = name, _description = description, _parentLevelID = parentLevelID, _interventionsAreAllowed = interventionsAreAllowed, _allowedInterventions = allowedInterventions, _customData = customData, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Level({String? id, required String name, String? description, String? parentLevelID, required bool interventionsAreAllowed, List<Intervention>? allowedInterventions, required List<CustomData> customData, int? schemeVersion}) {
+  factory Level({String? id, required MultiLanguageText name, required MultiLanguageText description, String? parentLevelID, required bool interventionsAreAllowed, List<Intervention>? allowedInterventions, required List<CustomData> customData, int? schemeVersion}) {
     return Level._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -152,8 +161,8 @@ class Level extends Model {
     
     buffer.write("Level {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("name=" + "$_name" + ", ");
-    buffer.write("description=" + "$_description" + ", ");
+    buffer.write("name=" + (_name != null ? _name!.toString() : "null") + ", ");
+    buffer.write("description=" + (_description != null ? _description!.toString() : "null") + ", ");
     buffer.write("parentLevelID=" + "$_parentLevelID" + ", ");
     buffer.write("interventionsAreAllowed=" + (_interventionsAreAllowed != null ? _interventionsAreAllowed!.toString() : "null") + ", ");
     buffer.write("customData=" + (_customData != null ? _customData!.toString() : "null") + ", ");
@@ -165,7 +174,7 @@ class Level extends Model {
     return buffer.toString();
   }
   
-  Level copyWith({String? id, String? name, String? description, String? parentLevelID, bool? interventionsAreAllowed, List<Intervention>? allowedInterventions, List<CustomData>? customData, int? schemeVersion}) {
+  Level copyWith({String? id, MultiLanguageText? name, MultiLanguageText? description, String? parentLevelID, bool? interventionsAreAllowed, List<Intervention>? allowedInterventions, List<CustomData>? customData, int? schemeVersion}) {
     return Level._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -179,8 +188,12 @@ class Level extends Model {
   
   Level.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _name = json['name'],
-      _description = json['description'],
+      _name = json['name']?['serializedData'] != null
+        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
+        : null,
+      _description = json['description']?['serializedData'] != null
+        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
+        : null,
       _parentLevelID = json['parentLevelID'],
       _interventionsAreAllowed = json['interventionsAreAllowed'],
       _allowedInterventions = json['allowedInterventions'] is List
@@ -200,7 +213,7 @@ class Level extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'description': _description, 'parentLevelID': _parentLevelID, 'interventionsAreAllowed': _interventionsAreAllowed, 'allowedInterventions': _allowedInterventions?.map((Intervention? e) => e?.toJson()).toList(), 'customData': _customData?.map((CustomData? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'name': _name?.toJson(), 'description': _description?.toJson(), 'parentLevelID': _parentLevelID, 'interventionsAreAllowed': _interventionsAreAllowed, 'allowedInterventions': _allowedInterventions?.map((Intervention? e) => e?.toJson()).toList(), 'customData': _customData?.map((CustomData? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "level.id");
@@ -219,16 +232,16 @@ class Level extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Level.NAME,
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+      fieldName: 'name',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Level.DESCRIPTION,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+      fieldName: 'description',
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

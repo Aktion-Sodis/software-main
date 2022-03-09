@@ -1,12 +1,13 @@
 import 'package:mobile_app/backend/callableModels/CustomData.dart';
 import 'package:mobile_app/backend/callableModels/Intervention.dart';
+import 'package:mobile_app/backend/callableModels/MultiLanguageText.dart';
 
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class Level {
   String? id;
-  late String name;
-  String? description;
+  late MultiLanguageText name_ml;
+  late MultiLanguageText description_ml;
   String? parentLevelID;
   late bool interventionsAreAllowed;
   List<Intervention>? allowedInterventions;
@@ -15,10 +16,18 @@ class Level {
   DateTime? createdAt;
   DateTime? updatedAt;
 
+  String get name => name_ml.text;
+
+  set name(String name) => name_ml.text = name;
+
+  String get description => description_ml.text;
+
+  set description(String description) => description_ml.text = description;
+
   Level(
       {this.id,
-      required this.name,
-      this.description,
+      required this.name_ml,
+      required this.description_ml,
       this.parentLevelID,
       required this.interventionsAreAllowed,
       this.allowedInterventions,
@@ -29,8 +38,8 @@ class Level {
 
   Level.fromAmplifyModel(amp.Level level) {
     id = level.id;
-    name = level.name;
-    description = level.description;
+    name_ml = MultiLanguageText.fromAmplifyModel(level.name);
+    description_ml = MultiLanguageText.fromAmplifyModel(level.description);
     parentLevelID = level.parentLevelID;
     interventionsAreAllowed = level.interventionsAreAllowed;
     allowedInterventions = level.allowedInterventions != null
@@ -49,8 +58,8 @@ class Level {
   amp.Level toAmplifyModel() {
     return amp.Level(
         id: id,
-        name: name,
-        description: description,
+        name: name_ml.toAmplifyModel(),
+        description: description_ml.toAmplifyModel(),
         parentLevelID: parentLevelID,
         interventionsAreAllowed: interventionsAreAllowed,
         allowedInterventions: allowedInterventions != null

@@ -19,7 +19,8 @@
 
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
-import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'ModelProvider.dart';
+import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -27,17 +28,17 @@ import 'package:flutter/foundation.dart';
 @immutable
 class QuestionOption {
   final String id;
-  final String? _text;
+  final MultiLanguageText? _text;
   final String? _followUpQuestionID;
 
-  String get text {
+  MultiLanguageText get text {
     try {
       return _text!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -49,7 +50,7 @@ class QuestionOption {
   
   const QuestionOption._internal({required this.id, required text, followUpQuestionID}): _text = text, _followUpQuestionID = followUpQuestionID;
   
-  factory QuestionOption({String? id, required String text, String? followUpQuestionID}) {
+  factory QuestionOption({String? id, required MultiLanguageText text, String? followUpQuestionID}) {
     return QuestionOption._internal(
       id: id == null ? UUID.getUUID() : id,
       text: text,
@@ -78,14 +79,14 @@ class QuestionOption {
     
     buffer.write("QuestionOption {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("text=" + "$_text" + ", ");
+    buffer.write("text=" + (_text != null ? _text!.toString() : "null") + ", ");
     buffer.write("followUpQuestionID=" + "$_followUpQuestionID");
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  QuestionOption copyWith({String? id, String? text, String? followUpQuestionID}) {
+  QuestionOption copyWith({String? id, MultiLanguageText? text, String? followUpQuestionID}) {
     return QuestionOption._internal(
       id: id ?? this.id,
       text: text ?? this.text,
@@ -94,11 +95,13 @@ class QuestionOption {
   
   QuestionOption.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _text = json['text'],
+      _text = json['text']?['serializedData'] != null
+        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['text']['serializedData']))
+        : null,
       _followUpQuestionID = json['followUpQuestionID'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'text': _text, 'followUpQuestionID': _followUpQuestionID
+    'id': id, 'text': _text?.toJson(), 'followUpQuestionID': _followUpQuestionID
   };
 
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -111,10 +114,10 @@ class QuestionOption {
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'text',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(

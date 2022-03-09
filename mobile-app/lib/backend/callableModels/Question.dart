@@ -1,16 +1,21 @@
+import 'package:mobile_app/backend/callableModels/MultiLanguageText.dart';
 import 'package:mobile_app/backend/callableModels/QuestionOption.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class Question {
   String? id;
-  late String text;
+  late MultiLanguageText text_ml;
   late QuestionType type;
   List<QuestionOption>? questionOptions;
   late bool isFollowUpQuestion;
 
+  String get text => text_ml.text;
+
+  set text(String text) => text_ml.text = text;
+
   Question(
       {this.id,
-      required this.text,
+      required this.text_ml,
       required this.type,
       this.questionOptions,
       required this.isFollowUpQuestion});
@@ -18,7 +23,7 @@ class Question {
   amp.Question toAmplifyModel() {
     return amp.Question(
         id: id,
-        text: text,
+        text: text_ml.toAmplifyModel(),
         type: questionTypeToAmplifyQuestionType(type),
         questionOptions: questionOptions != null
             ? List.generate(questionOptions!.length,
@@ -29,7 +34,7 @@ class Question {
 
   Question.fromAmplifyModel(amp.Question question) {
     id = question.id;
-    text = question.text;
+    text_ml = MultiLanguageText.fromAmplifyModel(question.text);
     type = questionTypeFromAmplifyQuestionType(question.type);
     questionOptions = question.questionOptions != null
         ? List.generate(

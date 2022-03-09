@@ -1,4 +1,5 @@
 import 'package:mobile_app/backend/callableModels/Intervention.dart';
+import 'package:mobile_app/backend/callableModels/MultiLanguageText.dart';
 import 'package:mobile_app/backend/callableModels/Question.dart';
 import 'package:mobile_app/backend/callableModels/SurveyTag.dart';
 
@@ -6,8 +7,8 @@ import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class Survey {
   String? id;
-  late String name;
-  String? description;
+  late MultiLanguageText name_ml;
+  late MultiLanguageText description_ml;
   Intervention? intervention;
   late List<Question> questions;
   late List<SurveyTag> tags;
@@ -16,10 +17,18 @@ class Survey {
   DateTime? updatedAt;
   late SurveyType surveyType;
 
+  String get name => name_ml.text;
+
+  set name(String name) => name_ml.text = name;
+
+  String get description => description_ml.text;
+
+  set description(String description) => description_ml.text = description;
+
   Survey(
       {this.id,
-      required this.name,
-      this.description,
+      required this.name_ml,
+      required this.description_ml,
       this.intervention,
       required this.questions,
       required this.tags,
@@ -30,8 +39,8 @@ class Survey {
 
   Survey.fromAmplifyModel(amp.Survey survey) {
     id = survey.id;
-    name = survey.name;
-    description = survey.description;
+    name_ml = MultiLanguageText.fromAmplifyModel(survey.name);
+    description_ml = MultiLanguageText.fromAmplifyModel(survey.description);
     intervention = survey.intervention != null
         ? Intervention.fromAmplifyModel(survey.intervention!)
         : null;
@@ -49,8 +58,8 @@ class Survey {
   amp.Survey toAmplifyModel() {
     return amp.Survey(
       id: id,
-      name: name,
-      description: description,
+      name: name_ml.toAmplifyModel(),
+      description: description_ml.toAmplifyModel(),
       intervention: intervention?.toAmplifyModel(),
       surveyType: surveyTypeToAmplifySurveyType(surveyType),
       questions: List.generate(

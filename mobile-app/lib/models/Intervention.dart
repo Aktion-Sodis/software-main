@@ -20,7 +20,7 @@
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
 import 'ModelProvider.dart';
-import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:amplify_core/amplify_core.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
@@ -30,8 +30,8 @@ import 'package:flutter/foundation.dart';
 class Intervention extends Model {
   static const classType = const _InterventionModelType();
   final String id;
-  final String? _name;
-  final String? _description;
+  final MultiLanguageText? _name;
+  final MultiLanguageText? _description;
   final InterventionType? _interventionType;
   final List<InterventionContentRelation>? _contents;
   final List<Survey>? _surveys;
@@ -49,31 +49,40 @@ class Intervention extends Model {
     return id;
   }
   
-  String get name {
+  MultiLanguageText get name {
     try {
       return _name!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
   }
   
-  String? get description {
-    return _description;
+  MultiLanguageText get description {
+    try {
+      return _description!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   InterventionType get interventionType {
     try {
       return _interventionType!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -83,10 +92,10 @@ class Intervention extends Model {
     try {
       return _contents!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -96,10 +105,10 @@ class Intervention extends Model {
     try {
       return _surveys!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -109,10 +118,10 @@ class Intervention extends Model {
     try {
       return _tags!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -134,9 +143,9 @@ class Intervention extends Model {
     return _levelAllowedInterventionsId;
   }
   
-  const Intervention._internal({required this.id, required name, description, required interventionType, required contents, required surveys, required tags, schemeVersion, createdAt, updatedAt, levelAllowedInterventionsId}): _name = name, _description = description, _interventionType = interventionType, _contents = contents, _surveys = surveys, _tags = tags, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _levelAllowedInterventionsId = levelAllowedInterventionsId;
+  const Intervention._internal({required this.id, required name, required description, required interventionType, required contents, required surveys, required tags, schemeVersion, createdAt, updatedAt, levelAllowedInterventionsId}): _name = name, _description = description, _interventionType = interventionType, _contents = contents, _surveys = surveys, _tags = tags, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _levelAllowedInterventionsId = levelAllowedInterventionsId;
   
-  factory Intervention({String? id, required String name, String? description, required InterventionType interventionType, required List<InterventionContentRelation> contents, required List<Survey> surveys, required List<InterventionTag> tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
+  factory Intervention({String? id, required MultiLanguageText name, required MultiLanguageText description, required InterventionType interventionType, required List<InterventionContentRelation> contents, required List<Survey> surveys, required List<InterventionTag> tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
     return Intervention._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -177,8 +186,8 @@ class Intervention extends Model {
     
     buffer.write("Intervention {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("name=" + "$_name" + ", ");
-    buffer.write("description=" + "$_description" + ", ");
+    buffer.write("name=" + (_name != null ? _name!.toString() : "null") + ", ");
+    buffer.write("description=" + (_description != null ? _description!.toString() : "null") + ", ");
     buffer.write("interventionType=" + (_interventionType != null ? enumToString(_interventionType)! : "null") + ", ");
     buffer.write("schemeVersion=" + (_schemeVersion != null ? _schemeVersion!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
@@ -189,7 +198,7 @@ class Intervention extends Model {
     return buffer.toString();
   }
   
-  Intervention copyWith({String? id, String? name, String? description, InterventionType? interventionType, List<InterventionContentRelation>? contents, List<Survey>? surveys, List<InterventionTag>? tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
+  Intervention copyWith({String? id, MultiLanguageText? name, MultiLanguageText? description, InterventionType? interventionType, List<InterventionContentRelation>? contents, List<Survey>? surveys, List<InterventionTag>? tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
     return Intervention._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -204,8 +213,12 @@ class Intervention extends Model {
   
   Intervention.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _name = json['name'],
-      _description = json['description'],
+      _name = json['name']?['serializedData'] != null
+        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
+        : null,
+      _description = json['description']?['serializedData'] != null
+        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
+        : null,
       _interventionType = enumFromString<InterventionType>(json['interventionType'], InterventionType.values),
       _contents = json['contents'] is List
         ? (json['contents'] as List)
@@ -231,7 +244,7 @@ class Intervention extends Model {
       _levelAllowedInterventionsId = json['levelAllowedInterventionsId'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'description': _description, 'interventionType': enumToString(_interventionType), 'contents': _contents?.map((InterventionContentRelation? e) => e?.toJson()).toList(), 'surveys': _surveys?.map((Survey? e) => e?.toJson()).toList(), 'tags': _tags?.map((InterventionTag? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'levelAllowedInterventionsId': _levelAllowedInterventionsId
+    'id': id, 'name': _name?.toJson(), 'description': _description?.toJson(), 'interventionType': enumToString(_interventionType), 'contents': _contents?.map((InterventionContentRelation? e) => e?.toJson()).toList(), 'surveys': _surveys?.map((Survey? e) => e?.toJson()).toList(), 'tags': _tags?.map((InterventionTag? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'levelAllowedInterventionsId': _levelAllowedInterventionsId
   };
 
   static final QueryField ID = QueryField(fieldName: "intervention.id");
@@ -255,16 +268,16 @@ class Intervention extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Intervention.NAME,
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+      fieldName: 'name',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Intervention.DESCRIPTION,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+      fieldName: 'description',
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

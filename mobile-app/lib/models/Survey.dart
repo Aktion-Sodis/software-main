@@ -20,7 +20,7 @@
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
 import 'ModelProvider.dart';
-import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:amplify_core/amplify_core.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
@@ -30,8 +30,8 @@ import 'package:flutter/foundation.dart';
 class Survey extends Model {
   static const classType = const _SurveyModelType();
   final String id;
-  final String? _name;
-  final String? _description;
+  final MultiLanguageText? _name;
+  final MultiLanguageText? _description;
   final Intervention? _intervention;
   final List<Question>? _questions;
   final List<SurveyTag>? _tags;
@@ -48,21 +48,30 @@ class Survey extends Model {
     return id;
   }
   
-  String get name {
+  MultiLanguageText get name {
     try {
       return _name!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
   }
   
-  String? get description {
-    return _description;
+  MultiLanguageText get description {
+    try {
+      return _description!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   Intervention? get intervention {
@@ -73,10 +82,10 @@ class Survey extends Model {
     try {
       return _questions!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -86,10 +95,10 @@ class Survey extends Model {
     try {
       return _tags!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -99,10 +108,10 @@ class Survey extends Model {
     try {
       return _surveyType!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -120,9 +129,9 @@ class Survey extends Model {
     return _updatedAt;
   }
   
-  const Survey._internal({required this.id, required name, description, intervention, required questions, required tags, required surveyType, schemeVersion, createdAt, updatedAt}): _name = name, _description = description, _intervention = intervention, _questions = questions, _tags = tags, _surveyType = surveyType, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Survey._internal({required this.id, required name, required description, intervention, required questions, required tags, required surveyType, schemeVersion, createdAt, updatedAt}): _name = name, _description = description, _intervention = intervention, _questions = questions, _tags = tags, _surveyType = surveyType, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Survey({String? id, required String name, String? description, Intervention? intervention, required List<Question> questions, required List<SurveyTag> tags, required SurveyType surveyType, int? schemeVersion}) {
+  factory Survey({String? id, required MultiLanguageText name, required MultiLanguageText description, Intervention? intervention, required List<Question> questions, required List<SurveyTag> tags, required SurveyType surveyType, int? schemeVersion}) {
     return Survey._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -161,8 +170,8 @@ class Survey extends Model {
     
     buffer.write("Survey {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("name=" + "$_name" + ", ");
-    buffer.write("description=" + "$_description" + ", ");
+    buffer.write("name=" + (_name != null ? _name!.toString() : "null") + ", ");
+    buffer.write("description=" + (_description != null ? _description!.toString() : "null") + ", ");
     buffer.write("intervention=" + (_intervention != null ? _intervention!.toString() : "null") + ", ");
     buffer.write("questions=" + (_questions != null ? _questions!.toString() : "null") + ", ");
     buffer.write("surveyType=" + (_surveyType != null ? enumToString(_surveyType)! : "null") + ", ");
@@ -174,7 +183,7 @@ class Survey extends Model {
     return buffer.toString();
   }
   
-  Survey copyWith({String? id, String? name, String? description, Intervention? intervention, List<Question>? questions, List<SurveyTag>? tags, SurveyType? surveyType, int? schemeVersion}) {
+  Survey copyWith({String? id, MultiLanguageText? name, MultiLanguageText? description, Intervention? intervention, List<Question>? questions, List<SurveyTag>? tags, SurveyType? surveyType, int? schemeVersion}) {
     return Survey._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -188,8 +197,12 @@ class Survey extends Model {
   
   Survey.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _name = json['name'],
-      _description = json['description'],
+      _name = json['name']?['serializedData'] != null
+        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
+        : null,
+      _description = json['description']?['serializedData'] != null
+        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
+        : null,
       _intervention = json['intervention']?['serializedData'] != null
         ? Intervention.fromJson(new Map<String, dynamic>.from(json['intervention']['serializedData']))
         : null,
@@ -211,7 +224,7 @@ class Survey extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'description': _description, 'intervention': _intervention?.toJson(), 'questions': _questions?.map((Question? e) => e?.toJson()).toList(), 'tags': _tags?.map((SurveyTag? e) => e?.toJson()).toList(), 'surveyType': enumToString(_surveyType), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'name': _name?.toJson(), 'description': _description?.toJson(), 'intervention': _intervention?.toJson(), 'questions': _questions?.map((Question? e) => e?.toJson()).toList(), 'tags': _tags?.map((SurveyTag? e) => e?.toJson()).toList(), 'surveyType': enumToString(_surveyType), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "survey.id");
@@ -232,16 +245,16 @@ class Survey extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Survey.NAME,
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+      fieldName: 'name',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Survey.DESCRIPTION,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+      fieldName: 'description',
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(

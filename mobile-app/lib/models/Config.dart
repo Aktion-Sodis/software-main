@@ -20,7 +20,7 @@
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
 import 'ModelProvider.dart';
-import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -31,7 +31,6 @@ class Config extends Model {
   final String id;
   final String? _name;
   final ColorTheme? _colorTheme;
-  final StoragePaths? _storagePaths;
   final int? _schemeVersion;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
@@ -48,10 +47,10 @@ class Config extends Model {
     try {
       return _name!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -59,19 +58,6 @@ class Config extends Model {
   
   ColorTheme? get colorTheme {
     return _colorTheme;
-  }
-  
-  StoragePaths get storagePaths {
-    try {
-      return _storagePaths!;
-    } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
   }
   
   int? get schemeVersion {
@@ -86,14 +72,13 @@ class Config extends Model {
     return _updatedAt;
   }
   
-  const Config._internal({required this.id, required name, colorTheme, required storagePaths, schemeVersion, createdAt, updatedAt}): _name = name, _colorTheme = colorTheme, _storagePaths = storagePaths, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Config._internal({required this.id, required name, colorTheme, schemeVersion, createdAt, updatedAt}): _name = name, _colorTheme = colorTheme, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Config({String? id, required String name, ColorTheme? colorTheme, required StoragePaths storagePaths, int? schemeVersion}) {
+  factory Config({String? id, required String name, ColorTheme? colorTheme, int? schemeVersion}) {
     return Config._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
       colorTheme: colorTheme,
-      storagePaths: storagePaths,
       schemeVersion: schemeVersion);
   }
   
@@ -108,7 +93,6 @@ class Config extends Model {
       id == other.id &&
       _name == other._name &&
       _colorTheme == other._colorTheme &&
-      _storagePaths == other._storagePaths &&
       _schemeVersion == other._schemeVersion;
   }
   
@@ -123,7 +107,6 @@ class Config extends Model {
     buffer.write("id=" + "$id" + ", ");
     buffer.write("name=" + "$_name" + ", ");
     buffer.write("colorTheme=" + (_colorTheme != null ? _colorTheme!.toString() : "null") + ", ");
-    buffer.write("storagePaths=" + (_storagePaths != null ? _storagePaths!.toString() : "null") + ", ");
     buffer.write("schemeVersion=" + (_schemeVersion != null ? _schemeVersion!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
@@ -132,12 +115,11 @@ class Config extends Model {
     return buffer.toString();
   }
   
-  Config copyWith({String? id, String? name, ColorTheme? colorTheme, StoragePaths? storagePaths, int? schemeVersion}) {
+  Config copyWith({String? id, String? name, ColorTheme? colorTheme, int? schemeVersion}) {
     return Config._internal(
       id: id ?? this.id,
       name: name ?? this.name,
       colorTheme: colorTheme ?? this.colorTheme,
-      storagePaths: storagePaths ?? this.storagePaths,
       schemeVersion: schemeVersion ?? this.schemeVersion);
   }
   
@@ -147,21 +129,17 @@ class Config extends Model {
       _colorTheme = json['colorTheme']?['serializedData'] != null
         ? ColorTheme.fromJson(new Map<String, dynamic>.from(json['colorTheme']['serializedData']))
         : null,
-      _storagePaths = json['storagePaths']?['serializedData'] != null
-        ? StoragePaths.fromJson(new Map<String, dynamic>.from(json['storagePaths']['serializedData']))
-        : null,
       _schemeVersion = (json['schemeVersion'] as num?)?.toInt(),
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'colorTheme': _colorTheme?.toJson(), 'storagePaths': _storagePaths?.toJson(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'name': _name, 'colorTheme': _colorTheme?.toJson(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "config.id");
   static final QueryField NAME = QueryField(fieldName: "name");
   static final QueryField COLORTHEME = QueryField(fieldName: "colorTheme");
-  static final QueryField STORAGEPATHS = QueryField(fieldName: "storagePaths");
   static final QueryField SCHEMEVERSION = QueryField(fieldName: "schemeVersion");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Config";
@@ -179,12 +157,6 @@ class Config extends Model {
       fieldName: 'colorTheme',
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'ColorTheme')
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
-      fieldName: 'storagePaths',
-      isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'StoragePaths')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

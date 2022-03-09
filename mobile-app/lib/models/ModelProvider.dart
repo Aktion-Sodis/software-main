@@ -19,7 +19,7 @@
 
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
-import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:amplify_core/amplify_core.dart';
 import 'AppliedIntervention.dart';
 import 'Config.dart';
 import 'Content.dart';
@@ -30,6 +30,7 @@ import 'Intervention.dart';
 import 'InterventionContentRelation.dart';
 import 'InterventionTag.dart';
 import 'Level.dart';
+import 'SessionData.dart';
 import 'Survey.dart';
 import 'SurveyTag.dart';
 import 'Task.dart';
@@ -39,11 +40,11 @@ import 'ColorTheme.dart';
 import 'CustomData.dart';
 import 'Location.dart';
 import 'Marking.dart';
+import 'MultiLanguageText.dart';
 import 'Permission.dart';
 import 'Question.dart';
 import 'QuestionAnswer.dart';
 import 'QuestionOption.dart';
-import 'StoragePaths.dart';
 
 export 'AppliedCustomData.dart';
 export 'AppliedIntervention.dart';
@@ -61,13 +62,14 @@ export 'InterventionType.dart';
 export 'Level.dart';
 export 'Location.dart';
 export 'Marking.dart';
+export 'MultiLanguageText.dart';
 export 'Permission.dart';
 export 'PermissionType.dart';
 export 'Question.dart';
 export 'QuestionAnswer.dart';
 export 'QuestionOption.dart';
 export 'QuestionType.dart';
-export 'StoragePaths.dart';
+export 'SessionData.dart';
 export 'Survey.dart';
 export 'SurveyTag.dart';
 export 'SurveyType.dart';
@@ -77,12 +79,12 @@ export 'User.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "05254d9262d567df4fce42ac9c7f4131";
+  String version = "3a5fcfc298f93a28760890bfbd0ffb42";
   @override
-  List<ModelSchema> modelSchemas = [AppliedIntervention.schema, Config.schema, Content.schema, ContentTag.schema, Entity.schema, ExecutedSurvey.schema, Intervention.schema, InterventionContentRelation.schema, InterventionTag.schema, Level.schema, Survey.schema, SurveyTag.schema, Task.schema, User.schema];
+  List<ModelSchema> modelSchemas = [AppliedIntervention.schema, Config.schema, Content.schema, ContentTag.schema, Entity.schema, ExecutedSurvey.schema, Intervention.schema, InterventionContentRelation.schema, InterventionTag.schema, Level.schema, SessionData.schema, Survey.schema, SurveyTag.schema, Task.schema, User.schema];
   static final ModelProvider _instance = ModelProvider();
   @override
-  List<ModelSchema> customTypeSchemas = [AppliedCustomData.schema, ColorTheme.schema, CustomData.schema, Location.schema, Marking.schema, Permission.schema, Question.schema, QuestionAnswer.schema, QuestionOption.schema, StoragePaths.schema];
+  List<ModelSchema> customTypeSchemas = [AppliedCustomData.schema, ColorTheme.schema, CustomData.schema, Location.schema, Marking.schema, MultiLanguageText.schema, Permission.schema, Question.schema, QuestionAnswer.schema, QuestionOption.schema];
 
   static ModelProvider get instance => _instance;
   
@@ -108,6 +110,8 @@ class ModelProvider implements ModelProviderInterface {
         return InterventionTag.classType;
       case "Level":
         return Level.classType;
+      case "SessionData":
+        return SessionData.classType;
       case "Survey":
         return Survey.classType;
       case "SurveyTag":

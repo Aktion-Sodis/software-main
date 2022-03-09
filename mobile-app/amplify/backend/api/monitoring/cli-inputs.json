@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "monitoring",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/aktionsodis/Documents/Entwicklung/SodisGit/software-main/admin-app/frontend/amplify/backend/api/monitoring/schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 50,
+      "apiKeyExpirationDate": "2022-04-28T19:05:36.543Z",
+      "keyDescription": "monitoring_api_key"
+    },
+    "conflictResolution": {
+      "defaultResolutionStrategy": {
+        "type": "OPTIMISTIC_CONCURRENCY"
+      }
+    }
+  }
+}

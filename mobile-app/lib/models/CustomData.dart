@@ -20,7 +20,7 @@
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
 import 'ModelProvider.dart';
-import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -28,17 +28,17 @@ import 'package:flutter/foundation.dart';
 @immutable
 class CustomData {
   final String id;
-  final String? _name;
+  final MultiLanguageText? _name;
   final Type? _type;
 
-  String get name {
+  MultiLanguageText get name {
     try {
       return _name!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -48,10 +48,10 @@ class CustomData {
     try {
       return _type!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -59,7 +59,7 @@ class CustomData {
   
   const CustomData._internal({required this.id, required name, required type}): _name = name, _type = type;
   
-  factory CustomData({String? id, required String name, required Type type}) {
+  factory CustomData({String? id, required MultiLanguageText name, required Type type}) {
     return CustomData._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -88,14 +88,14 @@ class CustomData {
     
     buffer.write("CustomData {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("name=" + "$_name" + ", ");
+    buffer.write("name=" + (_name != null ? _name!.toString() : "null") + ", ");
     buffer.write("type=" + (_type != null ? enumToString(_type)! : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  CustomData copyWith({String? id, String? name, Type? type}) {
+  CustomData copyWith({String? id, MultiLanguageText? name, Type? type}) {
     return CustomData._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -104,11 +104,13 @@ class CustomData {
   
   CustomData.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _name = json['name'],
+      _name = json['name']?['serializedData'] != null
+        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
+        : null,
       _type = enumFromString<Type>(json['type'], Type.values);
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'type': enumToString(_type)
+    'id': id, 'name': _name?.toJson(), 'type': enumToString(_type)
   };
 
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -121,10 +123,10 @@ class CustomData {
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'name',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(

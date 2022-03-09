@@ -20,7 +20,7 @@
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
 import 'ModelProvider.dart';
-import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:amplify_core/amplify_core.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
@@ -29,19 +29,19 @@ import 'package:flutter/foundation.dart';
 @immutable
 class Question {
   final String id;
-  final String? _text;
+  final MultiLanguageText? _text;
   final QuestionType? _type;
   final List<QuestionOption>? _questionOptions;
   final bool? _isFollowUpQuestion;
 
-  String get text {
+  MultiLanguageText get text {
     try {
       return _text!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -51,10 +51,10 @@ class Question {
     try {
       return _type!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -68,10 +68,10 @@ class Question {
     try {
       return _isFollowUpQuestion!;
     } catch(e) {
-      throw new DataStoreException(
-          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -79,7 +79,7 @@ class Question {
   
   const Question._internal({required this.id, required text, required type, questionOptions, required isFollowUpQuestion}): _text = text, _type = type, _questionOptions = questionOptions, _isFollowUpQuestion = isFollowUpQuestion;
   
-  factory Question({String? id, required String text, required QuestionType type, List<QuestionOption>? questionOptions, required bool isFollowUpQuestion}) {
+  factory Question({String? id, required MultiLanguageText text, required QuestionType type, List<QuestionOption>? questionOptions, required bool isFollowUpQuestion}) {
     return Question._internal(
       id: id == null ? UUID.getUUID() : id,
       text: text,
@@ -112,7 +112,7 @@ class Question {
     
     buffer.write("Question {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("text=" + "$_text" + ", ");
+    buffer.write("text=" + (_text != null ? _text!.toString() : "null") + ", ");
     buffer.write("type=" + (_type != null ? enumToString(_type)! : "null") + ", ");
     buffer.write("questionOptions=" + (_questionOptions != null ? _questionOptions!.toString() : "null") + ", ");
     buffer.write("isFollowUpQuestion=" + (_isFollowUpQuestion != null ? _isFollowUpQuestion!.toString() : "null"));
@@ -121,7 +121,7 @@ class Question {
     return buffer.toString();
   }
   
-  Question copyWith({String? id, String? text, QuestionType? type, List<QuestionOption>? questionOptions, bool? isFollowUpQuestion}) {
+  Question copyWith({String? id, MultiLanguageText? text, QuestionType? type, List<QuestionOption>? questionOptions, bool? isFollowUpQuestion}) {
     return Question._internal(
       id: id ?? this.id,
       text: text ?? this.text,
@@ -132,7 +132,9 @@ class Question {
   
   Question.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _text = json['text'],
+      _text = json['text']?['serializedData'] != null
+        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['text']['serializedData']))
+        : null,
       _type = enumFromString<QuestionType>(json['type'], QuestionType.values),
       _questionOptions = json['questionOptions'] is List
         ? (json['questionOptions'] as List)
@@ -143,7 +145,7 @@ class Question {
       _isFollowUpQuestion = json['isFollowUpQuestion'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'text': _text, 'type': enumToString(_type), 'questionOptions': _questionOptions?.map((QuestionOption? e) => e?.toJson()).toList(), 'isFollowUpQuestion': _isFollowUpQuestion
+    'id': id, 'text': _text?.toJson(), 'type': enumToString(_type), 'questionOptions': _questionOptions?.map((QuestionOption? e) => e?.toJson()).toList(), 'isFollowUpQuestion': _isFollowUpQuestion
   };
 
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -156,10 +158,10 @@ class Question {
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'text',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(

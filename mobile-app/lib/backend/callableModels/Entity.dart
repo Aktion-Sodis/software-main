@@ -2,13 +2,14 @@ import 'package:mobile_app/backend/callableModels/AppliedCustomData.dart';
 import 'package:mobile_app/backend/callableModels/AppliedIntervention.dart';
 import 'package:mobile_app/backend/callableModels/Level.dart';
 import 'package:mobile_app/backend/callableModels/Location.dart';
+import 'package:mobile_app/backend/callableModels/MultiLanguageText.dart';
 
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class Entity {
   String? id;
   late String name;
-  String? description;
+  late MultiLanguageText description_ml;
   String? parentEntityID;
   late Level level;
   Location? location;
@@ -18,10 +19,14 @@ class Entity {
   DateTime? createdAt;
   DateTime? updatedAt;
 
+  String get description => description_ml.text;
+
+  set description(String description) => description_ml.text = description;
+
   Entity(
       {this.id,
       required this.name,
-      this.description,
+      required this.description_ml,
       this.parentEntityID,
       required this.level,
       this.location,
@@ -34,7 +39,7 @@ class Entity {
   Entity.fromAmplifyModel(amp.Entity entity) {
     id = entity.id;
     name = entity.name;
-    description = entity.description;
+    description_ml = MultiLanguageText.fromAmplifyModel(entity.description);
     parentEntityID = entity.parentEntityID;
     level = Level.fromAmplifyModel(entity.level);
     location = entity.location == null
@@ -57,7 +62,7 @@ class Entity {
     return (amp.Entity(
         id: id,
         name: name,
-        description: description,
+        description: description_ml.toAmplifyModel(),
         parentEntityID: parentEntityID,
         level: level.toAmplifyModel(),
         location: location?.toAmplifyModel(),
