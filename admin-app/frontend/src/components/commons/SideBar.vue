@@ -11,7 +11,6 @@
           </v-list-item-title>
         </v-list-item>
         <SyncAction />
-        <v-btn @click="createDummyIntervention"> Create dummy level </v-btn>
       </v-list>
 
       <v-list nav dense class="mt-12">
@@ -116,7 +115,6 @@ export default {
     ...mapActions({
       deleteSession: 'auth/deleteSession',
       showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
-      createDummyIntervention: 'SYNC_UI/createDummyIntervention',
     }),
     logout() {
       this.deleteSession();
