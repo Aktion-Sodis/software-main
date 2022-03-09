@@ -25,7 +25,7 @@
         :label="$t('login.rememberMe')"
         :disabled="loading"
       ></v-checkbox>
-      <div class="mt-1" @click="showToBeImplementedFeedback" style="cursor: pointer">
+      <div class="mt-1" @click="forgotPasswordHandler" style="cursor: pointer">
         <p class="py-0">{{ $t('login.forgotPassword') }}</p>
       </div>
     </div>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 import GoogleIcon from './GoogleIcon.vue';
 
 export default {
@@ -87,30 +87,38 @@ export default {
   methods: {
     ...mapActions({
       showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
+      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
       signIn: 'auth/signIn',
+    }),
+    ...mapMutations({
+      setCredentials: 'auth/setCredentials',
     }),
     async submit() {
       const valid = this.$refs.form.validate();
-      if (valid) {
-        this.loading = true;
-        const signInStatus = await this.signIn({
-          email: this.email,
-          password: this.password,
-          rememberMe: this.rememberMe,
-        });
-        if (signInStatus === 'success') {
-          this.$router.push({ name: 'OrganizationStructure' });
-          return;
-        }
-        if (signInStatus === 'failed') {
-          this.loading = false;
-          // TODO: handle error
-          return;
-        }
-        if (signInStatus === 'completeUserInfo') {
-          this.$router.push({ name: 'CompleteUserInfo' });
-        }
+      if (!valid) return;
+
+      this.loading = true;
+      const signInStatus = await this.signIn({
+        email: this.email,
+        password: this.password,
+        rememberMe: this.rememberMe,
+      });
+      if (signInStatus === 'success') {
+        this.$router.push({ name: 'OrganizationStructure' });
+        return;
       }
+      if (signInStatus === 'failed') {
+        this.loading = false;
+        // TODO: handle error
+        return;
+      }
+      if (signInStatus === 'completeUserInfo') {
+        this.$router.push({ name: 'CompleteUserInfo' });
+      }
+    },
+    forgotPasswordHandler() {
+      this.setCredentials({ email: this.email || '' });
+      this.$router.push({ name: 'ForgotPassword' });
     },
   },
 };

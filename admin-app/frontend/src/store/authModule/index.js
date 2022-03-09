@@ -19,6 +19,8 @@ const authModule = {
     rememberSession: true,
     priorRouteActivity: Date.now(),
     lastRouteActivity: Date.now(),
+
+    tempPassword: null,
   }),
   getters: {
     getIsAuthenticated: ({ isAuthenticated }) => isAuthenticated,
@@ -43,6 +45,8 @@ const authModule = {
 
     // <==> is it longer than an hour?
     lastRouteActivityDiffTooLarge: (_, { getLastRouteActivity, getPriorRouteActivity }) => getLastRouteActivity - getPriorRouteActivity > 1000 * 60 * 60,
+
+    getTempPassword: ({ tempPassword }) => tempPassword,
   },
   mutations: {
     setIsAuthenticated(state, { newValue }) {
@@ -70,57 +74,69 @@ const authModule = {
       state.priorRouteActivity = null;
       state.lastRouteActivity = null;
     },
+    setTempPassword(state, { newValue }) {
+      state.tempPassword = newValue;
+    },
   },
   actions: {
     async signIn({ commit, dispatch }, { email, password, rememberMe }) {
       try {
         const x = await Auth.signIn(email, password);
-        const { username, Session } = x;
+        const { username, Session, challengeName } = x;
+
+        // if password is not finalized
+        if (challengeName === 'NEW_PASSWORD_REQUIRED') {
+          commit('setCredentials', {
+            userId: username,
+            email,
+            firstName: null,
+            lastName: null,
+          });
+          commit('setToken', { newToken: Session });
+          commit('setTempPassword', { newValue: password });
+          return 'completeUserInfo';
+        }
 
         const userFoundInDb = (await API.graphql(graphqlOperation(getUser, { id: username }))).data
           .getUser;
 
-        /* eslint-disable no-underscore-dangle */
-        if (userFoundInDb && !userFoundInDb._deleted) {
-          /* eslint-enable no-underscore-dangle */
-          // login
-          commit('setCredentials', {
-            userId: username,
-            email,
-            firstName: userFoundInDb.firstName,
-            lastName: userFoundInDb.lastName,
-          });
-          commit('setToken', { newToken: Session });
-          commit('setIsAuthenticated', { newValue: true });
-          commit('setRememberSession', { newValue: rememberMe });
-          return 'success';
-        }
-
-        // if user doesn't exist yet
+        // if user exists and password is finalized
         commit('setCredentials', {
           userId: username,
           email,
-          firstName: null,
-          lastName: null,
+          firstName: userFoundInDb.firstName,
+          lastName: userFoundInDb.lastName,
         });
         commit('setToken', { newToken: Session });
-        return 'completeUserInfo';
+        commit('setIsAuthenticated', { newValue: true });
+        commit('setRememberSession', { newValue: rememberMe });
+        return 'success';
       } catch (error) {
-        const errorCode = error.code;
+        console.log({ error });
         dispatch(
           'FEEDBACK_UI/showFeedbackForDuration',
           {
             type: 'error',
-            text: i18n.t(`general.errorCodes.${errorCode}`),
+            text: i18n.t(`general.errorCodes.${error.code}`),
           },
           { root: true },
         );
         commit('setToken', { newToken: null });
         commit('setIsAuthenticated', { newValue: false });
+        commit('setCredentials', {
+          userId: null,
+          email,
+          firstName: null,
+          lastName: null,
+        });
         return 'failed';
       }
     },
-    async completeUserInformation({ commit, getters, dispatch }, { firstName, lastName }) {
+
+    async completeUserInformation(
+      { commit, getters, dispatch },
+      { firstName, lastName, newPassword },
+    ) {
       if (!getters.getUserId) {
         dispatch(
           'FEEDBACK_UI/showFeedbackForDuration',
@@ -133,38 +149,17 @@ const authModule = {
         return 'failed';
       }
 
-      // const userFoundInDb = (
-      //   await API.graphql(graphqlOperation(getUser, { id: getters.getUserId }))
-      // ).data.getUser;
-
-      // /* eslint-disable no-underscore-dangle */
-      // if (userFoundInDb && userFoundInDb._deleted) {
-      //   /* eslint-enable no-underscore-dangle */
-      //   try {
-      //     await API.graphql(
-      //       graphqlOperation(updateUser, {
-      //         input: {
-      //           id: getters.getUserId,
-      //           firstName,
-      //           lastName,
-      //           permissions: [],
-      //           _deleted: false,
-      //         },
-      //       }),
-      //     );
-      //     commit('setCredentials', {
-      //       userId: getters.getUserId,
-      //       email: getters.getEmail,
-      //       firstName,
-      //       lastName,
-      //     });
-      //     commit('setIsAuthenticated', { newValue: true });
-      //     return 'success';
-      //   } catch (error) {
-      //     console.log(error);
-      //     return 'failed';
-      //   }
-      // }
+      try {
+        await Auth.completeNewPassword(
+          await Auth.signIn(getters.getEmail, getters.getTempPassword),
+          newPassword,
+        );
+      } catch (error) {
+        console.log(error);
+        commit('setToken', { newToken: null });
+        commit('setIsAuthenticated', { newValue: false });
+        return 'failed';
+      }
 
       try {
         await API.graphql(
@@ -183,18 +178,45 @@ const authModule = {
           firstName,
           lastName,
         });
+        commit('setToken', { newToken: 'Session' });
         commit('setIsAuthenticated', { newValue: true });
+        commit('setTempPassword', { newValue: null });
         return 'success';
       } catch (error) {
-        const errorCode = error.errors[0].errorType;
-        dispatch(
-          'FEEDBACK_UI/showFeedbackForDuration',
-          {
-            type: 'error',
-            text: i18n.t(`general.errorCodes.${errorCode}`),
-          },
-          { root: true },
-        );
+        console.log(error);
+        commit('setToken', { newToken: null });
+        commit('setIsAuthenticated', { newValue: false });
+        return 'failed';
+      }
+    },
+
+    async forgotPassword(_, { email }) {
+      try {
+        await Auth.forgotPassword(email);
+        return 'success';
+      } catch (error) {
+        console.log(error);
+        return 'failed';
+      }
+    },
+
+    async forgotPasswordSubmit({ getters }, { code, newPassword }) {
+      try {
+        await Auth.forgotPasswordSubmit(getters.getEmail, code, newPassword);
+        return 'success';
+      } catch (error) {
+        console.log(error);
+        return 'failed';
+      }
+    },
+
+    async changePassword(_, { oldPassword, newPassword }) {
+      try {
+        const user = await Auth.currentAuthenticatedUser();
+        await Auth.changePassword(user, oldPassword, newPassword);
+        return 'success';
+      } catch (error) {
+        console.log(error);
         return 'failed';
       }
     },

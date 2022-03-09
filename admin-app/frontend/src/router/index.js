@@ -44,6 +44,26 @@ const routes = [
     },
   },
   {
+    path: '/change-password',
+    name: 'ChangePassword',
+    component: Auth,
+    meta: {
+      requiresAuth: false,
+      shouldBeSynced: false,
+      title: i18n.t('general.routes.changePassword'),
+    },
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: Auth,
+    meta: {
+      requiresAuth: false,
+      shouldBeSynced: false,
+      title: i18n.t('general.routes.forgotPassword'),
+    },
+  },
+  {
     path: '/organization-structure',
     name: 'OrganizationStructure',
     component: OrganizationStructure,
