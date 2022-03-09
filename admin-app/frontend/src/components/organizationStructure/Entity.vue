@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="entityHasParent({ upperEntityId }) && index !== 0"
+      v-if="entityHasParent({ parentEntityID }) && index !== 0"
       class="entity-connection-left-line"
       :style="`width: ${60 - leftLineOfEntity.indentation * 12}px; left: ${
         -60 + leftLineOfEntity.indentation * 12
@@ -43,11 +43,11 @@ export default {
       required: true,
       validator: (e) => uuidValidate(e) || e === null,
     },
-    levelId: {
+    entityLevelId: {
       required: true,
       validator: (e) => uuidValidate(e) || e === null,
     },
-    upperEntityId: {
+    parentEntityID: {
       required: true,
       validator: (e) => uuidValidate(e) || e === null,
     },
@@ -63,7 +63,7 @@ export default {
       lineByEntityId: 'ENTITY_Data/lineByEntityId',
     }),
     leftLineOfEntity() {
-      return this.lineByEntityId({ id: this.upperEntityId });
+      return this.lineByEntityId({ id: this.parentEntityID });
     },
     rightLineOfEntity() {
       return this.lineByEntityId({ id: this.id });

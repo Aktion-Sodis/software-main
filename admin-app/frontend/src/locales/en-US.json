@@ -9,6 +9,7 @@
     "delete": "Delete",
     "form": {
       "maxCharExceeded": "Maximum {maxChar} characters.",
+      "minCharNotMet": "Minimum {minChar} characters.",
       "required": "Required.",
       "unsavedChanges": "There are unsaved changes. Are you sure you want to leave?"
     },
@@ -19,10 +20,13 @@
       "interventions": "Interventions",
       "login": "Login",
       "completeUserInfo": "Complete user information",
+      "changePassword": "Change password",
+      "forgotPassword": "Forgot Password",
       "about": "About"
     },
     "errorCodes": {
       "UserNotFoundException": "Sorry, there is no matcing account for the given credentials.",
+      "NotAuthorizedException": "Sorry, there is no matcing account for the given credentials.",
       "ConditionalCheckFailedException": "Sorry, something went wrong."
     },
     "warningCodes": {
@@ -49,9 +53,34 @@
   "completeUserInfo": {
     "title": "One more thing...",
     "subtitle": "Looks like you are new here. Please finish your profile to start using the Admin-App.",
-    "firstName": "Firstname",
-    "lastName": "Lastname",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "password": {
+      "label": "New password",
+      "hint": "Make sure you don't forget this password and note it down."
+    },
     "start": "Start"
+  },
+  "changePassword": {
+    "title": "Update your password",
+    "subtitle": "Enter your old and the new one.",
+    "oldPassword": {
+      "label": "Old password",
+      "hint": "The password that you currently have. If you forgot it, try resetting your password."
+    },
+    "newPassword": {
+      "label": "New password",
+      "hint": "The password that you want to have."
+    }
+  },
+  "forgotPassword": {
+    "title": "Forgot Password",
+    "subtitle": "Enter your email address. If there is an account for it, we will email you a verification code. Please enter the code and set a new password for your account.",
+    "emailedCode": "Code",
+    "newPassword1": "New password",
+    "newPassword2": "New password again",
+    "sendCode": "Send code",
+    "confirm": "Confirm"
   },
   "home": {
     "title": "Home"

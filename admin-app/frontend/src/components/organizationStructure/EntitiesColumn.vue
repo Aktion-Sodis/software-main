@@ -2,14 +2,14 @@
   <div
     class="d-flex flex-column"
     style="width: 100%; position: relative"
-    v-if="allEntitiesOfLevel({ levelId }).length > 0"
+    v-if="allEntitiesOfLevel({ entityLevelId }).length > 0"
   >
     <Entity
-      v-for="entity in allEntitiesOfLevel({ levelId })"
+      v-for="entity in allEntitiesOfLevel({ entityLevelId })"
       :key="entity.id"
       :id="entity.id"
-      :upperEntityId="entity.upperEntityId"
-      :levelId="levelId"
+      :parentEntityID="entity.parentEntityID"
+      :entityLevelId="entityLevelId"
       :entityName="entity.name"
       :entityDescription="entity.description"
       :index="index"
@@ -17,10 +17,10 @@
       style="position: relative; height: 128px"
     />
 
-    <AddEntityButton class="mt-4" :levelId="levelId" />
+    <AddEntityButton class="mt-4" :entityLevelId="entityLevelId" />
     <div
       class="vertical-line"
-      v-for="line in calculatedLinesByLevelId({ levelId })"
+      v-for="line in calculatedLinesByLevelId({ entityLevelId })"
       :key="line.entityId"
       :style="`background-color: ${lineColors[line.indentation]}; height: ${
         160 * (line.y1 - line.y0)
@@ -31,7 +31,7 @@
   </div>
   <div v-else class="d-flex flex-column mt-8 align-center" style="width: 100%">
     <p>No entities for this level.</p>
-    <AddEntityButton class="mt-4" :levelId="levelId" />
+    <AddEntityButton class="mt-4" :entityLevelId="entityLevelId" />
   </div>
 </template>
 
@@ -47,7 +47,7 @@ export default {
   name: 'EntitiesColumn',
   components: { AddEntityButton, Entity },
   props: {
-    levelId: {
+    entityLevelId: {
       required: true,
       validator: (e) => uuidValidate(e) || e === null,
     },

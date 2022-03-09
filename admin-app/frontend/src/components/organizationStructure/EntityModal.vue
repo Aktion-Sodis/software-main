@@ -59,14 +59,14 @@
                 ></v-textarea>
 
                 <div v-if="read && entityInFocus" style="min-height: 5rem">
-                  <h3 v-if="entityInFocus.upperEntityId">
+                  <h3 v-if="entityInFocus.parentEntityID">
                     {{ $t('organizationStructure.entityModal.upperEntity') }}:
-                    {{ ENTITYById({ id: entityInFocus.upperEntityId }).name }}
+                    {{ ENTITYById({ id: entityInFocus.parentEntityID }).name }}
                   </h3>
                 </div>
                 <v-select
                   v-else-if="allEntitiesOfUpperLevel.length > 0"
-                  v-model="upperEntityId"
+                  v-model="parentEntityID"
                   :items="allEntitiesOfUpperLevel"
                   :label="$t('organizationStructure.entityModal.upperEntityLabel')"
                   dense
@@ -76,29 +76,9 @@
                   item-text="name"
                 ></v-select>
               </v-col>
-
               <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
-                <v-card-title class="pt-0 pt-sm-2">
-                  {{ $t('baseData.tags') }}
-                </v-card-title>
-                <div v-if="read && entityInFocus">
-                  <v-chip v-for="tagId in entityInFocus.tagIds" :key="tagId">
-                    {{ tagById({ tagId }).name }}
-                  </v-chip>
-                </div>
-                <v-select
-                  v-else
-                  v-model="tagIds"
-                  :items="allEntityTags"
-                  item-value="tagId"
-                  item-text="name"
-                  deletable-chips
-                  chips
-                  dense
-                  :label="$t('baseData.tags')"
-                  multiple
-                  outlined
-                ></v-select>
+                <v-card-title class="pt-0 pt-sm-2"> More stuff coming soon. </v-card-title>
+                <p>Adding Location, Custom Data and Tags will come in the next major update.</p>
               </v-col>
             </v-row>
           </v-container>
@@ -150,8 +130,7 @@ export default {
       },
       name: '',
       description: '',
-      upperEntityId: null,
-      tagIds: [],
+      parentEntityID: null,
     };
   },
   watch: { entityDraft: 'prefillComponentDataFromEntityDraft' },
@@ -172,8 +151,6 @@ export default {
       hasDescendants: 'ENTITY_Data/hasDescendantsById',
 
       ENTITYById: 'ENTITY_Data/ENTITYById',
-      allEntityTags: 'ENTITY_Data/getEntityTags',
-      tagById: 'ENTITY_Data/tagById',
       getCreatingEntityInLevelId: 'getCreatingEntityInLevelId',
     }),
     entityInFocus() {
@@ -184,9 +161,9 @@ export default {
     },
     allEntitiesOfUpperLevel() {
       const currentLevel = this.LEVELById({
-        id: this.edit ? this.entityInFocus?.levelId : this.getCreatingEntityInLevelId,
+        id: this.edit ? this.entityInFocus?.entityLevelId : this.getCreatingEntityInLevelId,
       });
-      return this.allEntitiesOfLevel({ levelId: currentLevel?.upperLevelId }) ?? [];
+      return this.allEntitiesOfLevel({ entityLevelId: currentLevel?.parentLevelID }) ?? [];
     },
     edit() {
       return this.modalMode === modalModesDict.edit;
@@ -203,19 +180,13 @@ export default {
       });
     },
     isFormInvalid() {
-      return !this.name || this.upperEntityId === null;
+      return !this.name;
     },
     areThereChanges() {
-      const tagIdsInComponent = new Set(this.tagIds);
-      const tagIdsInDraft = new Set(this.entityDraft.tagIds);
       return (
         this.name !== this.entityDraft.name
         || this.description !== this.entityDraft.description
-        || this.upperEntityId !== this.entityDraft.upperEntityId
-        || !(
-          tagIdsInComponent.size === tagIdsInDraft.size
-          && [...tagIdsInComponent].every((value) => tagIdsInDraft.has(value))
-        )
+        || this.parentEntityID !== this.entityDraft.parentEntityID
       );
     },
   },
@@ -260,9 +231,11 @@ export default {
         id: this.dataIdInFocus,
         name: this.name,
         description: this.description,
-        levelId: this.edit ? this.entityInFocus.levelId : this.getCreatingEntityInLevelId,
-        upperEntityId: this.upperEntityId ?? null,
-        tagIds: this.tagIds,
+        entityLevelId: this.edit
+          ? this.entityInFocus.entityLevelId
+          : this.getCreatingEntityInLevelId,
+        parentEntityID: this.parentEntityID ?? null,
+        _version: this.entityDraft._version,
       });
       await this.$nextTick();
       this.saveData({ dataType: dataTypesDict.entity });
@@ -270,8 +243,7 @@ export default {
     prefillComponentDataFromEntityDraft() {
       this.name = this.entityDraft?.name ?? '';
       this.description = this.entityDraft?.description ?? '';
-      this.upperEntityId = this.entityDraft?.upperEntityId ?? null;
-      this.tagIds = this.entityDraft?.tagIds ?? [];
+      this.parentEntityID = this.entityDraft?.parentEntityID ?? null;
       this.contents = this.entityDraft?.contents ?? [];
     },
   },

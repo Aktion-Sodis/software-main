@@ -38,9 +38,7 @@ export default {
   name: 'LevelColumnHeader',
   props: {
     allowedInterventions: {
-      type: Array,
       required: true,
-      validator: (i) => i.every((e) => uuidValidate(e)),
     },
     name: {
       type: String,

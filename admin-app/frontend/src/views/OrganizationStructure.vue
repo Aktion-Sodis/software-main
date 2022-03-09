@@ -6,14 +6,14 @@
         v-for="(level, index) in levels"
         :key="level.id"
         class="column-wrapper px-16"
-        :class="level.upperLevelId === null || 'dotted-left-border'"
+        :class="level.parentLevelID === null || 'dotted-left-border'"
       >
         <LevelColumnHeader
           :id="level.id"
           :allowedInterventions="level.allowedInterventions"
           :name="level.name"
         />
-        <EntitiesColumn :levelId="level.id" :index="index" />
+        <EntitiesColumn :entityLevelId="level.id" :index="index" />
       </div>
       <div class="column-wrapper dotted-left-border d-flex align-center justify-center">
         <LevelModal v-if="showLevelModal" />

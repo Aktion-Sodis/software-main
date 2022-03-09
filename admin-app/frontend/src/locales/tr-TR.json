@@ -9,6 +9,7 @@
     "delete": "Sil",
     "form": {
       "maxCharExceeded": "Maksimum {maxChar} karakter.",
+      "minCharNotMet": "En az {minChar} uzunluğunda olmalı.",
       "required": "Zorunlu alan.",
       "unsavedChanges": "Kaydedilmemiş değişiklikler var. Çıkmak istediğinizden emin misiniz?"
     },
@@ -51,6 +52,10 @@
     "subtitle": "Görünen o ki sen buralarda yenisin. Lütfen Admin-App'i kullanmaya başlamak için profilini tamamla.",
     "firstName": "Ad",
     "lastName": "Soyad",
+    "password": {
+      "label": "Yeni şifre",
+      "hint": "Lütfen bu şifreni unutma ve bir yerde sakladığından emin ol."
+    },
     "start": "Başla"
   },
   "home": {

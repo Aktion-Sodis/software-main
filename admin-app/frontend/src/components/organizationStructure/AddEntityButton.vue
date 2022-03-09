@@ -39,7 +39,7 @@ export default {
   name: 'AddEntityButton',
   data: () => ({ isHovered: false }),
   props: {
-    levelId: {
+    entityLevelId: {
       required: true,
       validator: (e) => uuidValidate(e) || e === null,
     },
@@ -55,7 +55,7 @@ export default {
       setCreatingEntityInLevelId: 'setCreatingEntityInLevelId',
     }),
     clickHandler() {
-      this.setCreatingEntityInLevelId({ id: this.levelId });
+      this.setCreatingEntityInLevelId({ id: this.entityLevelId });
       this.newEntityHandler({ dataType: 'ENTITY' });
     },
   },

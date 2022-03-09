@@ -9,6 +9,7 @@
     "delete": "Eliminar",
     "form": {
       "maxCharExceeded": "Máximo {maxChar} caracteres.",
+      "minCharNotMet": "Al menos {minChar} carácteres.",
       "required": "Necesario.",
       "unsavedChanges": "Hay cambios sin guardar. ¿Estás seguro de que quieres salir?"
     },
@@ -51,6 +52,10 @@
     "subtitle": "Parece que eres nuevo aquí. Finalice su perfil para comenzar a usar la Admin App.",
     "firstName": "Primer nombre",
     "lastName": "Apellido",
+    "password": {
+      "label": "New password",
+      "hint": "Make sure you don't forget this password and note it down."
+    },
     "start": "Comienzo"
   },
   "home": {

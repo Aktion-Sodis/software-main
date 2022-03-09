@@ -59,9 +59,9 @@
                 ></v-textarea>
 
                 <div v-if="read && levelInFocus" style="min-height: 5rem">
-                  <h3 v-if="levelInFocus.upperLevelId">
+                  <h3 v-if="levelInFocus.parentLevelID">
                     {{ $t('organizationStructure.levelModal.upperLevel') }}:
-                    {{ LEVELById({ id: levelInFocus.upperLevelId }).name }}
+                    {{ LEVELById({ id: levelInFocus.parentLevelID }).name }}
                   </h3>
                 </div>
               </v-col>
@@ -75,7 +75,9 @@
                     <v-avatar>
                       <v-icon> mdi-hammer-wrench </v-icon>
                     </v-avatar>
-                    {{ INTERVENTIONById({ id }).name }}
+                    <span v-if="INTERVENTIONById({ id })">
+                      {{ INTERVENTIONById({ id }).name }}
+                    </span>
                   </div>
                 </div>
                 <v-select
@@ -272,7 +274,7 @@ export default {
         id: this.dataIdInFocus,
         name: this.name,
         description: this.description,
-        upperLevelId: this.create ? this.lowestLevelId : this.levelInFocus.upperLevelId,
+        parentLevelID: this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID,
         allowedInterventions: this.allowedInterventions || [],
         tagIds: this.tagIds || [],
       });
