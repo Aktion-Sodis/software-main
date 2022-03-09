@@ -7,7 +7,7 @@ import mysql from 'mysql';
 
 import createBaseLevels from "./src/migrators/createBaseLevels.js"
 import migrateVillages from "./src/migrators/migrateVillages.js"
-import { deleteFamilyLevels, deleteVillageLevels, filterUndeleted } from "./src/utils/deleteUtils.js";
+import { deleteFamilyLevels, deleteUsers, deleteVillageLevels, filterUndeleted } from "./src/utils/deleteUtils.js";
 import createMigrationUser from "./src/migrators/createMigrationUser.js";
 import migrateFamilies from "./src/migrators/migrateFamilies.js";
 import migrateAppliedInterventions from "./src/migrators/migrateAppliedInterventions.js";
@@ -33,15 +33,24 @@ const sqlPool = mysql.createPool({
 
 console.log(`Successfully connected to old database ${sqlPool}.`)
 
-
 console.log("Clean up erroneous writes of villageLevel to remove erroneous entries...")
 await deleteFamilyLevels();
 await deleteVillageLevels();
+await deleteUsers();
+//todo: delete appliedinterventions -> haben keine fixen IDs, also zuvor löschen
+
+//todo: delete interventions -> haben fixe IDs, also wenn dann updaten
+//todo: delete surveys -> haben fixe IDs, also wenn dann updaten
+//todo: delte entities -> haben fixe IDs, also wenn dann updaten
+//todo: delete executedSurveys -> haben fixe IDs, also wenn dann updaten
 
 
-console.log("Creating new base levels for villageEntity and familyEntity and retrieve ids...")
-let response = await createBaseLevels();
-const {villageLevel, familyLevel} = response;
+
+//todo: create config
+//todo: check apriori wether it exists
+
+
+
 
 // response = await API.graphql({ query: queries.listLevels, variables: { filter: { name: { eq: "village" } } } });
 // const villageLevel = filterUndeleted(response.data.listLevels.items).at(-1);
@@ -50,10 +59,6 @@ const {villageLevel, familyLevel} = response;
 // const familyLevel = await API.graphql({ query: queries.listLevels, variables: {filter: {name: {eq: "family"}}}}).data.listLevels.items.at(-1);
 // console.log("Family level id is:" + JSON.stringify(familyLevel));
 
-//das sind ja levels -> dementsprechend nicht sinnvoll 
-const allowedEntities = [villageLevel.id, familyLevel.id];
-
-
 console.log("Creating a single default user, assigned to all migrated data from version 1...");
 const defaultUser = createMigrationUser([]);
 
@@ -61,15 +66,24 @@ const defaultUser = createMigrationUser([]);
 console.log("Creating interventions...");
 migrateProjects(sqlPool);
 
-//  TODO: das muss mit in die survey migration 
-console.log("Migrating question options...");
-migrateQuestionOptions(sqlPool);
 
+//todo: pass supportedInterventions to family Level
+console.log("Creating new base levels for villageEntity and familyEntity and retrieve ids...")
+let response = await createBaseLevels();
+const {villageLevel, familyLevel} = response;
+
+//todo: integrate question and question Options
 console.log("Migrating surveys...");
 migrateSurveys(sqlPool);
 
+//  TODO: das muss mit in die survey migration 
+//console.log("Migrating question options...");
+migrateQuestionOptions(sqlPool);
 
 
+
+
+//todo: check for family wether interventions exist
 console.log("Migrating villages...");
 migrateVillages(sqlPool, villageLevel);
 
