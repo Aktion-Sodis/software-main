@@ -51,7 +51,7 @@ const appliedInterventionTransformer = (executedSurveyData, defaultUser) => {
         location: {
             latitude: executedSurveyData.latitude,
             longitude: executedSurveyData.longitude,
-        }
+        },
         // excecutedSurvey: {
         // ... : executedSurveyData.executed_survey_id
         // }

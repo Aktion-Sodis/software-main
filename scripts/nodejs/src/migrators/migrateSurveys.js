@@ -39,7 +39,7 @@ const surveyTransformer = (oldSurvey) => {
         name: oldSurvey.survey_name,
         id: oldSurvey.survey_id,
         intervention: {
-            name:oldSurvey.intervention_name,
+            name: oldSurvey.intervention_name,
             description: "",
             id: oldSurvey.intervention_id,
             interventionType: InterventionType.TECHNOLOGY,

@@ -1,6 +1,25 @@
 import { API, graphqlOperation } from "aws-amplify";
 import * as mutations from '../graphql/mutations.js';
 import * as queries from '../graphql/queries.js';
+import { User } from "../models/index.js";
+
+export async function deleteUsers() {
+    const userQuery = await API.graphql({
+        query: queries.listUsers
+    });
+    const deleteUsers = filterUndeleted(userQuery.data.listUsers.items);
+    for (let deleteUser of deleteUsers) {
+        await API.graphql(graphqlOperation(mutations.deleteUser, {
+            input: {
+                id: deleteUser.id
+            }
+        }));
+    }
+}
+
+export async function deleteInterventions() {
+
+}
 
 export async function deleteVillageLevels() {
     const villageLevelQuery = await API.graphql({ query: queries.listLevels, variables: { filter: { name: { eq: "village" } } } });
