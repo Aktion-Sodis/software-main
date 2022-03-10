@@ -21,11 +21,12 @@
     <v-hover v-slot="{ hover }">
       <v-sheet
         class="entity-sheet mx-auto grey lighten-5 rounded-lg pa-4 d-flex flex-column justify-center align-center"
-        :class="hover ? 'lighten-4' : ''"
+        :class="[hover ? 'lighten-4' : '', getLoading ?'nonClickable':'']"
         elevation="4"
         @click="clickHandler"
       >
-        {{ entityName }}
+        <v-skeleton-loader v-if="getLoading" class="entitiySkeleton" type="list-item-two-line"></v-skeleton-loader>
+        <div v-else>{{ entityName }}</div>
       </v-sheet>
     </v-hover>
   </div>
@@ -61,6 +62,7 @@ export default {
       hasDescendants: 'ENTITY_Data/hasDescendantsById',
       lineColors: 'getLineColors',
       lineByEntityId: 'ENTITY_Data/lineByEntityId',
+      getLoading: 'LEVEL_Data/getLoading',
     }),
     leftLineOfEntity() {
       return this.lineByEntityId({ id: this.upperEntityId });
@@ -81,6 +83,13 @@ export default {
 </script>
 
 <style scoped>
+.nonClickable {
+  pointer-events: none;
+}
+.entitiySkeleton {
+  width: 100%;
+}
+
 .entity-connection-left-line {
   position: absolute;
   height: 3px;

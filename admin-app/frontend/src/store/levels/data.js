@@ -41,7 +41,6 @@ const levelsData = {
       { tagId: '468084f3-6ec4-42ea-bdb2-40900816b64f', name: 'Tag 1' },
       { tagId: 'e5ebc38b-abed-498d-9052-6c8767cc341e', name: 'Tag 2' },
     ],
-
     loading: false,
   }),
   getters: {
