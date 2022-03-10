@@ -79,7 +79,7 @@ export 'User.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "7ffe6572ebaad261044a1b3c6e0b46a9";
+  String version = "7dc594100f04eacfa826f40bf28e2c10";
   @override
   List<ModelSchema> modelSchemas = [AppliedIntervention.schema, Config.schema, Content.schema, ContentTag.schema, Entity.schema, ExecutedSurvey.schema, Intervention.schema, InterventionContentRelation.schema, InterventionTag.schema, Level.schema, SessionData.schema, Survey.schema, SurveyTag.schema, Task.schema, User.schema];
   static final ModelProvider _instance = ModelProvider();

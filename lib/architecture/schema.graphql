@@ -142,7 +142,7 @@ type QuestionOption {
 
 # todo: check whether binding the children makes sense
 type Entity @model {
-  name: String!
+  name: I18nString!
   description: I18nString!
   parentEntityID: ID
   level: Level! @hasOne
@@ -222,17 +222,17 @@ type Task @model {
 }
 
 type ContentTag @model {
-  text: String!
+  text: I18nString!
   schemeVersion: Int @default(value: "0")
 }
 
 type InterventionTag @model {
-  text: String!
+  text: I18nString!
   schemeVersion: Int @default(value: "0")
 }
 
 type SurveyTag @model {
-  text: String!
+  text: I18nString!
   schemeVersion: Int @default(value: "0")
 }
 

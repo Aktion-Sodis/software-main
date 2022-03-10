@@ -308,7 +308,6 @@ export const onCreateIntervention = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -375,7 +374,6 @@ export const onUpdateIntervention = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -442,7 +440,6 @@ export const onDeleteIntervention = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -493,7 +490,6 @@ export const onCreateContent = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -543,7 +539,6 @@ export const onUpdateContent = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -593,7 +588,6 @@ export const onDeleteContent = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -673,7 +667,6 @@ export const onCreateSurvey = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -755,7 +748,6 @@ export const onUpdateSurvey = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -837,7 +829,6 @@ export const onDeleteSurvey = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -865,7 +856,10 @@ export const onDeleteSurvey = /* GraphQL */ `
 export const onCreateEntity = /* GraphQL */ `
   subscription OnCreateEntity {
     onCreateEntity {
-      name
+      name {
+        languageKeys
+        languageTexts
+      }
       description {
         languageKeys
         languageTexts
@@ -939,7 +933,10 @@ export const onCreateEntity = /* GraphQL */ `
 export const onUpdateEntity = /* GraphQL */ `
   subscription OnUpdateEntity {
     onUpdateEntity {
-      name
+      name {
+        languageKeys
+        languageTexts
+      }
       description {
         languageKeys
         languageTexts
@@ -1013,7 +1010,10 @@ export const onUpdateEntity = /* GraphQL */ `
 export const onDeleteEntity = /* GraphQL */ `
   subscription OnDeleteEntity {
     onDeleteEntity {
-      name
+      name {
+        languageKeys
+        languageTexts
+      }
       description {
         languageKeys
         languageTexts
@@ -1775,7 +1775,10 @@ export const onCreateTask = /* GraphQL */ `
         _lastChangedAt
       }
       entity {
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         description {
           languageKeys
           languageTexts
@@ -1960,7 +1963,10 @@ export const onUpdateTask = /* GraphQL */ `
         _lastChangedAt
       }
       entity {
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         description {
           languageKeys
           languageTexts
@@ -2145,7 +2151,10 @@ export const onDeleteTask = /* GraphQL */ `
         _lastChangedAt
       }
       entity {
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         description {
           languageKeys
           languageTexts
@@ -2305,7 +2314,10 @@ export const onDeleteTask = /* GraphQL */ `
 export const onCreateContentTag = /* GraphQL */ `
   subscription OnCreateContentTag {
     onCreateContentTag {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2320,7 +2332,10 @@ export const onCreateContentTag = /* GraphQL */ `
 export const onUpdateContentTag = /* GraphQL */ `
   subscription OnUpdateContentTag {
     onUpdateContentTag {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2335,7 +2350,10 @@ export const onUpdateContentTag = /* GraphQL */ `
 export const onDeleteContentTag = /* GraphQL */ `
   subscription OnDeleteContentTag {
     onDeleteContentTag {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2350,7 +2368,10 @@ export const onDeleteContentTag = /* GraphQL */ `
 export const onCreateInterventionTag = /* GraphQL */ `
   subscription OnCreateInterventionTag {
     onCreateInterventionTag {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2365,7 +2386,10 @@ export const onCreateInterventionTag = /* GraphQL */ `
 export const onUpdateInterventionTag = /* GraphQL */ `
   subscription OnUpdateInterventionTag {
     onUpdateInterventionTag {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2380,7 +2404,10 @@ export const onUpdateInterventionTag = /* GraphQL */ `
 export const onDeleteInterventionTag = /* GraphQL */ `
   subscription OnDeleteInterventionTag {
     onDeleteInterventionTag {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2395,7 +2422,10 @@ export const onDeleteInterventionTag = /* GraphQL */ `
 export const onCreateSurveyTag = /* GraphQL */ `
   subscription OnCreateSurveyTag {
     onCreateSurveyTag {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2410,7 +2440,10 @@ export const onCreateSurveyTag = /* GraphQL */ `
 export const onUpdateSurveyTag = /* GraphQL */ `
   subscription OnUpdateSurveyTag {
     onUpdateSurveyTag {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2425,7 +2458,10 @@ export const onUpdateSurveyTag = /* GraphQL */ `
 export const onDeleteSurveyTag = /* GraphQL */ `
   subscription OnDeleteSurveyTag {
     onDeleteSurveyTag {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt

@@ -344,7 +344,6 @@ export const getIntervention = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -487,7 +486,6 @@ export const getContent = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -647,7 +645,6 @@ export const getSurvey = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -783,7 +780,10 @@ export const syncSurveys = /* GraphQL */ `
 export const getEntity = /* GraphQL */ `
   query GetEntity($id: ID!) {
     getEntity(id: $id) {
-      name
+      name {
+        languageKeys
+        languageTexts
+      }
       description {
         languageKeys
         languageTexts
@@ -862,7 +862,10 @@ export const listEntities = /* GraphQL */ `
   ) {
     listEntities(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         description {
           languageKeys
           languageTexts
@@ -922,7 +925,10 @@ export const syncEntities = /* GraphQL */ `
       lastSync: $lastSync
     ) {
       items {
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         description {
           languageKeys
           languageTexts
@@ -1485,7 +1491,10 @@ export const getTask = /* GraphQL */ `
         _lastChangedAt
       }
       entity {
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         description {
           languageKeys
           languageTexts
@@ -1671,7 +1680,6 @@ export const listTasks = /* GraphQL */ `
           _lastChangedAt
         }
         entity {
-          name
           parentEntityID
           schemeVersion
           id
@@ -1759,7 +1767,6 @@ export const syncTasks = /* GraphQL */ `
           _lastChangedAt
         }
         entity {
-          name
           parentEntityID
           schemeVersion
           id
@@ -1815,7 +1822,10 @@ export const syncTasks = /* GraphQL */ `
 export const getContentTag = /* GraphQL */ `
   query GetContentTag($id: ID!) {
     getContentTag(id: $id) {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -1835,7 +1845,10 @@ export const listContentTags = /* GraphQL */ `
   ) {
     listContentTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        text
+        text {
+          languageKeys
+          languageTexts
+        }
         schemeVersion
         id
         createdAt
@@ -1864,7 +1877,10 @@ export const syncContentTags = /* GraphQL */ `
       lastSync: $lastSync
     ) {
       items {
-        text
+        text {
+          languageKeys
+          languageTexts
+        }
         schemeVersion
         id
         createdAt
@@ -1882,7 +1898,10 @@ export const syncContentTags = /* GraphQL */ `
 export const getInterventionTag = /* GraphQL */ `
   query GetInterventionTag($id: ID!) {
     getInterventionTag(id: $id) {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -1906,7 +1925,10 @@ export const listInterventionTags = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
-        text
+        text {
+          languageKeys
+          languageTexts
+        }
         schemeVersion
         id
         createdAt
@@ -1935,7 +1957,10 @@ export const syncInterventionTags = /* GraphQL */ `
       lastSync: $lastSync
     ) {
       items {
-        text
+        text {
+          languageKeys
+          languageTexts
+        }
         schemeVersion
         id
         createdAt
@@ -1953,7 +1978,10 @@ export const syncInterventionTags = /* GraphQL */ `
 export const getSurveyTag = /* GraphQL */ `
   query GetSurveyTag($id: ID!) {
     getSurveyTag(id: $id) {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -1973,7 +2001,10 @@ export const listSurveyTags = /* GraphQL */ `
   ) {
     listSurveyTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        text
+        text {
+          languageKeys
+          languageTexts
+        }
         schemeVersion
         id
         createdAt
@@ -2002,7 +2033,10 @@ export const syncSurveyTags = /* GraphQL */ `
       lastSync: $lastSync
     ) {
       items {
-        text
+        text {
+          languageKeys
+          languageTexts
+        }
         schemeVersion
         id
         createdAt

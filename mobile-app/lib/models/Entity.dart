@@ -30,7 +30,7 @@ import 'package:flutter/foundation.dart';
 class Entity extends Model {
   static const classType = const _EntityModelType();
   final String id;
-  final String? _name;
+  final I18nString? _name;
   final I18nString? _description;
   final String? _parentEntityID;
   final Level? _level;
@@ -50,7 +50,7 @@ class Entity extends Model {
     return id;
   }
   
-  String get name {
+  I18nString get name {
     try {
       return _name!;
     } catch(e) {
@@ -150,7 +150,7 @@ class Entity extends Model {
   
   const Entity._internal({required this.id, required name, required description, parentEntityID, required level, location, required customData, required appliedInterventions, schemeVersion, createdAt, updatedAt, required entityLevelId}): _name = name, _description = description, _parentEntityID = parentEntityID, _level = level, _location = location, _customData = customData, _appliedInterventions = appliedInterventions, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _entityLevelId = entityLevelId;
   
-  factory Entity({String? id, required String name, required I18nString description, String? parentEntityID, required Level level, Location? location, required List<AppliedCustomData> customData, required List<AppliedIntervention> appliedInterventions, int? schemeVersion, required String entityLevelId}) {
+  factory Entity({String? id, required I18nString name, required I18nString description, String? parentEntityID, required Level level, Location? location, required List<AppliedCustomData> customData, required List<AppliedIntervention> appliedInterventions, int? schemeVersion, required String entityLevelId}) {
     return Entity._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -193,7 +193,7 @@ class Entity extends Model {
     
     buffer.write("Entity {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("name=" + "$_name" + ", ");
+    buffer.write("name=" + (_name != null ? _name!.toString() : "null") + ", ");
     buffer.write("description=" + (_description != null ? _description!.toString() : "null") + ", ");
     buffer.write("parentEntityID=" + "$_parentEntityID" + ", ");
     buffer.write("location=" + (_location != null ? _location!.toString() : "null") + ", ");
@@ -207,7 +207,7 @@ class Entity extends Model {
     return buffer.toString();
   }
   
-  Entity copyWith({String? id, String? name, I18nString? description, String? parentEntityID, Level? level, Location? location, List<AppliedCustomData>? customData, List<AppliedIntervention>? appliedInterventions, int? schemeVersion, String? entityLevelId}) {
+  Entity copyWith({String? id, I18nString? name, I18nString? description, String? parentEntityID, Level? level, Location? location, List<AppliedCustomData>? customData, List<AppliedIntervention>? appliedInterventions, int? schemeVersion, String? entityLevelId}) {
     return Entity._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -223,7 +223,9 @@ class Entity extends Model {
   
   Entity.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _name = json['name'],
+      _name = json['name']?['serializedData'] != null
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
+        : null,
       _description = json['description']?['serializedData'] != null
         ? I18nString.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
         : null,
@@ -252,7 +254,7 @@ class Entity extends Model {
       _entityLevelId = json['entityLevelId'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'description': _description?.toJson(), 'parentEntityID': _parentEntityID, 'level': _level?.toJson(), 'location': _location?.toJson(), 'customData': _customData?.map((AppliedCustomData? e) => e?.toJson()).toList(), 'appliedInterventions': _appliedInterventions?.map((AppliedIntervention? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'entityLevelId': _entityLevelId
+    'id': id, 'name': _name?.toJson(), 'description': _description?.toJson(), 'parentEntityID': _parentEntityID, 'level': _level?.toJson(), 'location': _location?.toJson(), 'customData': _customData?.map((AppliedCustomData? e) => e?.toJson()).toList(), 'appliedInterventions': _appliedInterventions?.map((AppliedIntervention? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'entityLevelId': _entityLevelId
   };
 
   static final QueryField ID = QueryField(fieldName: "entity.id");
@@ -275,10 +277,10 @@ class Entity extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Entity.NAME,
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+      fieldName: 'name',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(

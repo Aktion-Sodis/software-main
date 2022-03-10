@@ -8,7 +8,7 @@ import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class Entity {
   String? id;
-  late String name;
+  late I18nString name_ml;
   late I18nString description_ml;
   String? parentEntityID;
   late Level level;
@@ -23,9 +23,13 @@ class Entity {
 
   set description(String description) => description_ml.text = description;
 
+  String get name => name_ml.text;
+
+  set name(String name) => name_ml.text = name;
+
   Entity(
       {this.id,
-      required this.name,
+      required this.name_ml,
       required this.description_ml,
       this.parentEntityID,
       required this.level,
@@ -38,7 +42,7 @@ class Entity {
 
   Entity.fromAmplifyModel(amp.Entity entity) {
     id = entity.id;
-    name = entity.name;
+    name_ml = I18nString.fromAmplifyModel(entity.name);
     description_ml = I18nString.fromAmplifyModel(entity.description);
     parentEntityID = entity.parentEntityID;
     level = Level.fromAmplifyModel(entity.level);
@@ -61,7 +65,7 @@ class Entity {
   amp.Entity toAmplifyModel() {
     return (amp.Entity(
         id: id,
-        name: name,
+        name: name_ml.toAmplifyModel(),
         description: description_ml.toAmplifyModel(),
         parentEntityID: parentEntityID,
         level: level.toAmplifyModel(),

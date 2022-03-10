@@ -19,6 +19,7 @@
 
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
+import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/foundation.dart';
 
@@ -28,7 +29,7 @@ import 'package:flutter/foundation.dart';
 class ContentTag extends Model {
   static const classType = const _ContentTagModelType();
   final String id;
-  final String? _text;
+  final I18nString? _text;
   final int? _schemeVersion;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
@@ -42,7 +43,7 @@ class ContentTag extends Model {
     return id;
   }
   
-  String get text {
+  I18nString get text {
     try {
       return _text!;
     } catch(e) {
@@ -73,7 +74,7 @@ class ContentTag extends Model {
   
   const ContentTag._internal({required this.id, required text, schemeVersion, createdAt, updatedAt, contentTagsId}): _text = text, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _contentTagsId = contentTagsId;
   
-  factory ContentTag({String? id, required String text, int? schemeVersion, String? contentTagsId}) {
+  factory ContentTag({String? id, required I18nString text, int? schemeVersion, String? contentTagsId}) {
     return ContentTag._internal(
       id: id == null ? UUID.getUUID() : id,
       text: text,
@@ -104,7 +105,7 @@ class ContentTag extends Model {
     
     buffer.write("ContentTag {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("text=" + "$_text" + ", ");
+    buffer.write("text=" + (_text != null ? _text!.toString() : "null") + ", ");
     buffer.write("schemeVersion=" + (_schemeVersion != null ? _schemeVersion!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null") + ", ");
@@ -114,7 +115,7 @@ class ContentTag extends Model {
     return buffer.toString();
   }
   
-  ContentTag copyWith({String? id, String? text, int? schemeVersion, String? contentTagsId}) {
+  ContentTag copyWith({String? id, I18nString? text, int? schemeVersion, String? contentTagsId}) {
     return ContentTag._internal(
       id: id ?? this.id,
       text: text ?? this.text,
@@ -124,14 +125,16 @@ class ContentTag extends Model {
   
   ContentTag.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _text = json['text'],
+      _text = json['text']?['serializedData'] != null
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['text']['serializedData']))
+        : null,
       _schemeVersion = (json['schemeVersion'] as num?)?.toInt(),
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null,
       _contentTagsId = json['contentTagsId'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'text': _text, 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'contentTagsId': _contentTagsId
+    'id': id, 'text': _text?.toJson(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'contentTagsId': _contentTagsId
   };
 
   static final QueryField ID = QueryField(fieldName: "contentTag.id");
@@ -144,10 +147,10 @@ class ContentTag extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: ContentTag.TEXT,
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+      fieldName: 'text',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

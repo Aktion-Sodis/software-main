@@ -6,8 +6,8 @@
     "gqlSchemaPath": "/Users/aktionsodis/Documents/Entwicklung/SodisGit/software-main/admin-app/frontend/amplify/backend/api/monitoring/schema.graphql",
     "defaultAuthType": {
       "mode": "API_KEY",
-      "expirationTime": 50,
-      "apiKeyExpirationDate": "2022-04-29T07:11:04.247Z",
+      "expirationTime": 60,
+      "apiKeyExpirationDate": "2022-05-09T13:03:16.176Z",
       "keyDescription": "monitoring_api_key"
     },
     "conflictResolution": {

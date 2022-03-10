@@ -338,7 +338,6 @@ export const createIntervention = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -408,7 +407,6 @@ export const updateIntervention = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -478,7 +476,6 @@ export const deleteIntervention = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -532,7 +529,6 @@ export const createContent = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -585,7 +581,6 @@ export const updateContent = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -638,7 +633,6 @@ export const deleteContent = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -721,7 +715,6 @@ export const createSurvey = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -806,7 +799,6 @@ export const updateSurvey = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -891,7 +883,6 @@ export const deleteSurvey = /* GraphQL */ `
       }
       tags {
         items {
-          text
           schemeVersion
           id
           createdAt
@@ -922,7 +913,10 @@ export const createEntity = /* GraphQL */ `
     $condition: ModelEntityConditionInput
   ) {
     createEntity(input: $input, condition: $condition) {
-      name
+      name {
+        languageKeys
+        languageTexts
+      }
       description {
         languageKeys
         languageTexts
@@ -999,7 +993,10 @@ export const updateEntity = /* GraphQL */ `
     $condition: ModelEntityConditionInput
   ) {
     updateEntity(input: $input, condition: $condition) {
-      name
+      name {
+        languageKeys
+        languageTexts
+      }
       description {
         languageKeys
         languageTexts
@@ -1076,7 +1073,10 @@ export const deleteEntity = /* GraphQL */ `
     $condition: ModelEntityConditionInput
   ) {
     deleteEntity(input: $input, condition: $condition) {
-      name
+      name {
+        languageKeys
+        languageTexts
+      }
       description {
         languageKeys
         languageTexts
@@ -1859,7 +1859,10 @@ export const createTask = /* GraphQL */ `
         _lastChangedAt
       }
       entity {
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         description {
           languageKeys
           languageTexts
@@ -2047,7 +2050,10 @@ export const updateTask = /* GraphQL */ `
         _lastChangedAt
       }
       entity {
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         description {
           languageKeys
           languageTexts
@@ -2235,7 +2241,10 @@ export const deleteTask = /* GraphQL */ `
         _lastChangedAt
       }
       entity {
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         description {
           languageKeys
           languageTexts
@@ -2398,7 +2407,10 @@ export const createContentTag = /* GraphQL */ `
     $condition: ModelContentTagConditionInput
   ) {
     createContentTag(input: $input, condition: $condition) {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2416,7 +2428,10 @@ export const updateContentTag = /* GraphQL */ `
     $condition: ModelContentTagConditionInput
   ) {
     updateContentTag(input: $input, condition: $condition) {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2434,7 +2449,10 @@ export const deleteContentTag = /* GraphQL */ `
     $condition: ModelContentTagConditionInput
   ) {
     deleteContentTag(input: $input, condition: $condition) {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2452,7 +2470,10 @@ export const createInterventionTag = /* GraphQL */ `
     $condition: ModelInterventionTagConditionInput
   ) {
     createInterventionTag(input: $input, condition: $condition) {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2470,7 +2491,10 @@ export const updateInterventionTag = /* GraphQL */ `
     $condition: ModelInterventionTagConditionInput
   ) {
     updateInterventionTag(input: $input, condition: $condition) {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2488,7 +2512,10 @@ export const deleteInterventionTag = /* GraphQL */ `
     $condition: ModelInterventionTagConditionInput
   ) {
     deleteInterventionTag(input: $input, condition: $condition) {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2506,7 +2533,10 @@ export const createSurveyTag = /* GraphQL */ `
     $condition: ModelSurveyTagConditionInput
   ) {
     createSurveyTag(input: $input, condition: $condition) {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2524,7 +2554,10 @@ export const updateSurveyTag = /* GraphQL */ `
     $condition: ModelSurveyTagConditionInput
   ) {
     updateSurveyTag(input: $input, condition: $condition) {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
@@ -2542,7 +2575,10 @@ export const deleteSurveyTag = /* GraphQL */ `
     $condition: ModelSurveyTagConditionInput
   ) {
     deleteSurveyTag(input: $input, condition: $condition) {
-      text
+      text {
+        languageKeys
+        languageTexts
+      }
       schemeVersion
       id
       createdAt
