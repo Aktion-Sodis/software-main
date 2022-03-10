@@ -1,8 +1,11 @@
 import { PermissionType } from '../models/index.js';
 import * as mutations from '../graphql/mutations.js';
+import { API, graphqlOperation } from "aws-amplify";
+import * as queries from '../graphql/queries.js';
 
-const defaultUser = {
-    firstName : "defaultUser",
+let defaultUser = {
+    id: "migrateUser",
+    firstName : "migrateUser",
     lastName : "MigrationV1",
     bio : "auto-generated user linked to V1-data",
     
@@ -12,8 +15,8 @@ const defaultUser = {
 const createMigrationUser = async (allowedEntities) => {
     // First, assign permissions to defaultUser.
     defaultUser.permissions = [{
-        allowedEntities: allowedEntities,
-        permissionType: PermissionType.READ,
+        allowedEntities: [],
+        permissionType: PermissionType.ADMIN,
     }];
     
     try {
@@ -21,11 +24,23 @@ const createMigrationUser = async (allowedEntities) => {
             query: mutations.createUser,
             variables: {input: defaultUser}
         })
-        console.log("Created entity" + JSON.stringify(newUserEntry));
+        
         return newUserEntry;
         
     } catch (error) {
-        console.log("Error writing" + JSON.stringify(defaultUser) + error);
+        const userQuery = await API.graphql({
+            query: queries.getUser,
+            variables: {
+                id: defaultUser.id
+            }
+        });
+        defaultUser._version = userQuery.data.getUser._version;
+
+        const newUserEntry = await API.graphql({
+            query: mutations.updateUser,
+            variables: {input: defaultUser}
+        })
+        return newUserEntry;
     }
 }
 

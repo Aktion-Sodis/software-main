@@ -6,7 +6,7 @@ import mysql from 'mysql';
 
 import createBaseLevels from "./src/migrators/createBaseLevels.js"
 import migrateVillages from "./src/migrators/migrateVillages.js"
-import {deleteUsers, deleteAppliedInterventions, deleteLevels} from "./src/utils/deleteUtils.js";
+import {deleteAppliedInterventions, deleteLevels} from "./src/utils/deleteUtils.js";
 import createMigrationUser from "./src/migrators/createMigrationUser.js";
 import migrateFamilies from "./src/migrators/migrateFamilies.js";
 import migrateAppliedInterventions from "./src/migrators/migrateAppliedInterventions.js";
@@ -15,6 +15,7 @@ import migrateSurveys from "./src/migrators/migrateSurveys.js";
 import migrateProjects from "./src/migrators/migrateProjects.js";
 import migrateExecutedSurveys from "./src/migrators/migrateExecutedSurveys.js";
 import createConfig from "./src/migrators/createConfig.js";
+import createMigratorTag from "./src/migrators/createMigratorTag.js";
 
 Amplify.default.configure(awsconfig);
 
@@ -31,11 +32,11 @@ const sqlPool = mysql.createPool({
     connectionLimit: 10,
   });
 
+
 console.log(`Successfully connected to old database ${sqlPool}.`)
 
 console.log("Clean up erroneous writes of villageLevel to remove erroneous entries...")
 await deleteLevels();
-await deleteUsers();
 await deleteAppliedInterventions();
 
 //todo: delete interventions -> haben fixe IDs, also wenn dann updaten
@@ -43,9 +44,14 @@ await deleteAppliedInterventions();
 //todo: delte entities -> haben fixe IDs, also wenn dann updaten
 //todo: delete executedSurveys -> haben fixe IDs, also wenn dann updaten
 
+await createMigratorTag();
 const config = await createConfig();
 
 
+
+console.log("Creating a single default user, assigned to all migrated data from version 1...");
+const defaultUser = createMigrationUser([]);
+//bis hierher passt es
 
 
 // response = await API.graphql({ query: queries.listLevels, variables: { filter: { name: { eq: "village" } } } });
@@ -55,13 +61,12 @@ const config = await createConfig();
 // const familyLevel = await API.graphql({ query: queries.listLevels, variables: {filter: {name: {eq: "family"}}}}).data.listLevels.items.at(-1);
 // console.log("Family level id is:" + JSON.stringify(familyLevel));
 
-console.log("Creating a single default user, assigned to all migrated data from version 1...");
-const defaultUser = createMigrationUser([]);
+
 
 
 console.log("Creating interventions...");
 migrateProjects(sqlPool);
-
+/*
 
 //todo: pass supportedInterventions to family Level
 console.log("Creating new base levels for villageEntity and familyEntity and retrieve ids...")
@@ -97,3 +102,4 @@ migrateAppliedInterventions(sqlPool, defaultUser);
 console.log("Migrating executed surveys and answers...");
 migrateExecutedSurveys(sqlPool, defaultUser);
 console.log("Successfully finished migration.");
+*/

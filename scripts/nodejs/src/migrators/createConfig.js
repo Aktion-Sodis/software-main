@@ -1,8 +1,9 @@
 import * as mutations from '../graphql/mutations.js';
 import { API, graphqlOperation } from "aws-amplify";
+import * as queries from '../graphql/queries.js';
 
 const createConfig = async ()=> {
-    const config = {
+    let config = {
         id: "sodis_config",
         name: "Fundación Sodis/Aktion Sodis e.V.",
         colorTheme: {
@@ -12,7 +13,8 @@ const createConfig = async ()=> {
             backgroundTwoLight: "test",
             backgroundOneDark: "test",
             backgroundTwoDark: "test"
-        }
+        },
+        _version: 1
     }
     try {
        const createdConfig = await API.graphql(
@@ -25,10 +27,18 @@ const createConfig = async ()=> {
         );
         return createdConfig;
     }catch(e) {
+        const currentConfig = await API.graphql({
+            query: queries.getConfig,
+            variables: {
+                id: config.id
+            }
+        });
+        const newVersion = currentConfig.data.getConfig._version;
+        config._version = newVersion;
         const updatedConfig = await API.graphql({
             query: mutations.updateConfig,
             variables: {
-                input: config
+                input: config,
             }
             });
             return updatedConfig;

@@ -3,19 +3,6 @@ import * as mutations from '../graphql/mutations.js';
 import * as queries from '../graphql/queries.js';
 import { User } from "../models/index.js";
 
-export async function deleteUsers() {
-    const userQuery = await API.graphql({
-        query: queries.listUsers
-    });
-    const deleteUsers = userQuery.data.listUsers.items.filter((obj) => !obj._deleted);
-    for (let deleteUser of deleteUsers) {
-        await API.graphql(graphqlOperation(mutations.deleteUser, {
-            input: {
-                id: deleteUser.id
-            }
-        }));
-    }
-}
 
 export async function deleteAppliedInterventions() {
     const appliedInterventionQuery = await API.graphql({query: queries.listAppliedInterventions});
