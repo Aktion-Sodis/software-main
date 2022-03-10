@@ -10,11 +10,13 @@ class StorageRepository {
         local: file,
         key: fileName + '.jpg',
       );
+      
       return result.key;
     } catch (e) {
       rethrow;
     }
   }
+
 
   Future<String> getUrlForFile(String fileKey) async {
     try {
@@ -24,4 +26,18 @@ class StorageRepository {
       rethrow;
     }
   }
+
+  Future<String> removeFile(String key) async {
+    try {
+      // RemoveOptions options =
+      // RemoveOptions(accessLevel: StorageAccessLevel.guest);
+      final result = await Amplify.Storage.remove(key: key, 
+        // options: options
+        );
+      return result.key;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 }
