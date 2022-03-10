@@ -1,4 +1,3 @@
-
 import Amplify, { API } from "aws-amplify";
 import * as queries from './src/graphql/queries.js';
 import dotenv from 'dotenv'
@@ -7,7 +6,7 @@ import mysql from 'mysql';
 
 import createBaseLevels from "./src/migrators/createBaseLevels.js"
 import migrateVillages from "./src/migrators/migrateVillages.js"
-import { deleteFamilyLevels, deleteUsers, deleteVillageLevels, filterUndeleted } from "./src/utils/deleteUtils.js";
+import { deleteAppliedInterventions, deleteFamilyLevels, deleteLevels, deleteUsers, deleteVillageLevels, filterUndeleted } from "./src/utils/deleteUtils.js";
 import createMigrationUser from "./src/migrators/createMigrationUser.js";
 import migrateFamilies from "./src/migrators/migrateFamilies.js";
 import migrateAppliedInterventions from "./src/migrators/migrateAppliedInterventions.js";
@@ -15,6 +14,7 @@ import migrateQuestionOptions from "./src/migrators/migrateQuestionOptions.js";
 import migrateSurveys from "./src/migrators/migrateSurveys.js";
 import migrateProjects from "./src/migrators/migrateProjects.js";
 import migrateExecutedSurveys from "./src/migrators/migrateExecutedSurveys.js";
+import createConfig from "./src/migrators/createConfig.js";
 
 Amplify.default.configure(awsconfig);
 
@@ -34,19 +34,18 @@ const sqlPool = mysql.createPool({
 console.log(`Successfully connected to old database ${sqlPool}.`)
 
 console.log("Clean up erroneous writes of villageLevel to remove erroneous entries...")
-await deleteFamilyLevels();
-await deleteVillageLevels();
+await deleteLevels();
 await deleteUsers();
-//todo: delete appliedinterventions -> haben keine fixen IDs, also zuvor löschen
+await deleteAppliedInterventions();
 
 //todo: delete interventions -> haben fixe IDs, also wenn dann updaten
 //todo: delete surveys -> haben fixe IDs, also wenn dann updaten
 //todo: delte entities -> haben fixe IDs, also wenn dann updaten
 //todo: delete executedSurveys -> haben fixe IDs, also wenn dann updaten
 
+const config = await createConfig();
 
-
-//todo: create config
+//todo: create/update config
 //todo: check apriori wether it exists
 
 
@@ -58,7 +57,7 @@ await deleteUsers();
 
 // const familyLevel = await API.graphql({ query: queries.listLevels, variables: {filter: {name: {eq: "family"}}}}).data.listLevels.items.at(-1);
 // console.log("Family level id is:" + JSON.stringify(familyLevel));
-
+/*
 console.log("Creating a single default user, assigned to all migrated data from version 1...");
 const defaultUser = createMigrationUser([]);
 
@@ -101,3 +100,4 @@ migrateAppliedInterventions(sqlPool, defaultUser);
 console.log("Migrating executed surveys and answers...");
 migrateExecutedSurveys(sqlPool, defaultUser);
 console.log("Successfully finished migration.");
+*/

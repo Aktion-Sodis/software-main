@@ -1,2 +1,3 @@
 src\models
 src/models
+src/aws-export.js

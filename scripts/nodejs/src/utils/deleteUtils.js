@@ -17,42 +17,38 @@ export async function deleteUsers() {
     }
 }
 
-export async function deleteInterventions() {
+export async function deleteAppliedInterventions() {
+    const appliedInterventionQuery = await API.graphql({query: queries.listAppliedInterventions});
+    const deleteAppliedInterventions = appliedInterventionQuery.data.listAppliedInterventions.items.filter((obj) => !obj._deleted);
+    deleteAppliedInterventions.foreach((obj) => {
+        API.graphql(graphqlOperation(mutations.deleteAppliedIntervention, {
+                input: {
+                    id: obj.id
+                }
+            }))
+    })
+    
 
 }
 
-export async function deleteVillageLevels() {
-    const villageLevelQuery = await API.graphql({ query: queries.listLevels, variables: { filter: { name: { eq: "village" } } } });
-    const deleteLevels = filterUndeleted(villageLevelQuery.data.listLevels.items);
-    await deleteAll(deleteLevels);
-}
-
-export async function deleteFamilyLevels() {
-    const familyLevelQuery = await API.graphql({ query: queries.listLevels, variables: { filter: { name: { eq: "family" } } } });   
-    const deleteLevels = filterUndeleted(familyLevelQuery.data.listLevels.items);
-    await deleteAll(deleteLevels);
-}
-
-export function filterUndeleted(queryEntries) {
-    return queryEntries.filter(function (obj) {
-        return obj._deleted === false;
+export async function deleteLevels() {
+    const levelQuery = await API.graphql(
+        {
+            query: queries.listLevels
+        }
+    );
+    const deleteLevelList = levelQuery.data.listLevels.items.filter((obj) => !obj._deleted);
+    deleteLevelList.foreach((obj) => {
+        API.graphql(
+            graphqlOperation(
+                mutations.deleteLevel,
+                {
+                    input: {
+                        id: obj.id
+                    }
+                }
+            )
+        )
     });
 }
 
-async function deleteAll(levels) {
-    for (let level of levels) {
-        try {
-            let deteledObj = await API.graphql(graphqlOperation(mutations.deleteLevel,
-                {
-                    input: {
-                        id: level.id,
-                        _version: level._version,
-                    }
-                }
-            ));
-            console.log(`DELETED ${deteledObj.data.deleteLevel.name} id: ${deteledObj.data.deleteLevel.id} version: ${deteledObj.data.deleteLevel._version}`);
-        } catch (error) {
-            console.log(`FAILED TO DELETE ${level.name} id: ${level.id} version: ${level._version}`);
-        }
-    }
-}

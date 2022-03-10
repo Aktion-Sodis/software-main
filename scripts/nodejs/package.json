@@ -4,12 +4,16 @@
   "description": "migrate sodis sql database to aws amplify",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db_migration": "index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-amplify": "^4.3.15"
+    "aws-amplify": "^4.3.15",
+    "dotenv": "^16.0.0",
+    "esm": "^3.2.25",
+    "mysql": "^2.18.1"
   },
-  "type": "module"
+  "type": "commonjs"
 }
