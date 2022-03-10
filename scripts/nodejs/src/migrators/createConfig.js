@@ -1,4 +1,5 @@
 import * as mutations from '../graphql/mutations.js';
+import { API, graphqlOperation } from "aws-amplify";
 
 const createConfig = async ()=> {
     const config = {
@@ -26,8 +27,8 @@ const createConfig = async ()=> {
     }catch(e) {
         const updatedConfig = await API.graphql({
             query: mutations.updateConfig,
-            input: {
-                variables: config
+            variables: {
+                input: config
             }
             });
             return updatedConfig;
