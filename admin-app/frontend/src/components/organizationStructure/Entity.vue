@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="entityHasParent({ upperEntityId }) && index !== 0"
+      v-if="entityHasParent({ upperEntityId }) && index !== 0  && !getLoading"
       class="entity-connection-left-line"
       :style="`width: ${60 - leftLineOfEntity.indentation * 12}px; left: ${
         -60 + leftLineOfEntity.indentation * 12
@@ -10,7 +10,7 @@
       }px; z-index: ${leftLineOfEntity.indentation}`"
     ></div>
     <div
-      v-if="hasDescendants({ id })"
+      v-if="hasDescendants({ id }) && !getLoading"
       class="entity-connection-right-line"
       :style="`width: ${72 + rightLineOfEntity.indentation * 12}px; left: calc(12rem - 26px + ${
         rightLineOfEntity.indentation * 6
