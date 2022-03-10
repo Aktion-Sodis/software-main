@@ -1,13 +1,13 @@
 import 'package:mobile_app/backend/callableModels/Intervention.dart';
 import 'package:mobile_app/backend/callableModels/ContentTag.dart';
-import 'package:mobile_app/backend/callableModels/MultiLanguageText.dart';
+import 'package:mobile_app/backend/callableModels/I18nString.dart';
 
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class Content {
   String? id;
-  late MultiLanguageText name_ml;
-  late MultiLanguageText description_ml;
+  late I18nString name_ml;
+  late I18nString description_ml;
   late List<amp.InterventionContentRelation>
       interventions; //many to many -> maybe change
   late List<ContentTag> tags;
@@ -35,8 +35,8 @@ class Content {
 
   Content.fromAmplifyModel(amp.Content content) {
     id = content.id;
-    name_ml = MultiLanguageText.fromAmplifyModel(content.name);
-    description_ml = MultiLanguageText.fromAmplifyModel(content.description);
+    name_ml = I18nString.fromAmplifyModel(content.name);
+    description_ml = I18nString.fromAmplifyModel(content.description);
     interventions = content.interventions;
     tags = List.generate(content.tags.length,
         (index) => ContentTag.fromAmplifyModel(content.tags[index]));

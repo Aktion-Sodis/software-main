@@ -28,10 +28,10 @@ import 'package:flutter/foundation.dart';
 @immutable
 class QuestionOption {
   final String id;
-  final MultiLanguageText? _text;
+  final I18nString? _text;
   final String? _followUpQuestionID;
 
-  MultiLanguageText get text {
+  I18nString get text {
     try {
       return _text!;
     } catch(e) {
@@ -50,7 +50,7 @@ class QuestionOption {
   
   const QuestionOption._internal({required this.id, required text, followUpQuestionID}): _text = text, _followUpQuestionID = followUpQuestionID;
   
-  factory QuestionOption({String? id, required MultiLanguageText text, String? followUpQuestionID}) {
+  factory QuestionOption({String? id, required I18nString text, String? followUpQuestionID}) {
     return QuestionOption._internal(
       id: id == null ? UUID.getUUID() : id,
       text: text,
@@ -86,7 +86,7 @@ class QuestionOption {
     return buffer.toString();
   }
   
-  QuestionOption copyWith({String? id, MultiLanguageText? text, String? followUpQuestionID}) {
+  QuestionOption copyWith({String? id, I18nString? text, String? followUpQuestionID}) {
     return QuestionOption._internal(
       id: id ?? this.id,
       text: text ?? this.text,
@@ -96,7 +96,7 @@ class QuestionOption {
   QuestionOption.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _text = json['text']?['serializedData'] != null
-        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['text']['serializedData']))
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['text']['serializedData']))
         : null,
       _followUpQuestionID = json['followUpQuestionID'];
   
@@ -117,7 +117,7 @@ class QuestionOption {
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'text',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(

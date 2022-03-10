@@ -1,10 +1,10 @@
-import 'package:mobile_app/backend/callableModels/MultiLanguageText.dart';
+import 'package:mobile_app/backend/callableModels/I18nString.dart';
 import 'package:mobile_app/backend/callableModels/QuestionOption.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class Question {
   String? id;
-  late MultiLanguageText text_ml;
+  late I18nString text_ml;
   late QuestionType type;
   List<QuestionOption>? questionOptions;
   late bool isFollowUpQuestion;
@@ -34,7 +34,7 @@ class Question {
 
   Question.fromAmplifyModel(amp.Question question) {
     id = question.id;
-    text_ml = MultiLanguageText.fromAmplifyModel(question.text);
+    text_ml = I18nString.fromAmplifyModel(question.text);
     type = questionTypeFromAmplifyQuestionType(question.type);
     questionOptions = question.questionOptions != null
         ? List.generate(

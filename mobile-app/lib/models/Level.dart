@@ -30,8 +30,8 @@ import 'package:flutter/foundation.dart';
 class Level extends Model {
   static const classType = const _LevelModelType();
   final String id;
-  final MultiLanguageText? _name;
-  final MultiLanguageText? _description;
+  final I18nString? _name;
+  final I18nString? _description;
   final String? _parentLevelID;
   final bool? _interventionsAreAllowed;
   final List<Intervention>? _allowedInterventions;
@@ -48,7 +48,7 @@ class Level extends Model {
     return id;
   }
   
-  MultiLanguageText get name {
+  I18nString get name {
     try {
       return _name!;
     } catch(e) {
@@ -61,7 +61,7 @@ class Level extends Model {
     }
   }
   
-  MultiLanguageText get description {
+  I18nString get description {
     try {
       return _description!;
     } catch(e) {
@@ -122,7 +122,7 @@ class Level extends Model {
   
   const Level._internal({required this.id, required name, required description, parentLevelID, required interventionsAreAllowed, allowedInterventions, required customData, schemeVersion, createdAt, updatedAt}): _name = name, _description = description, _parentLevelID = parentLevelID, _interventionsAreAllowed = interventionsAreAllowed, _allowedInterventions = allowedInterventions, _customData = customData, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Level({String? id, required MultiLanguageText name, required MultiLanguageText description, String? parentLevelID, required bool interventionsAreAllowed, List<Intervention>? allowedInterventions, required List<CustomData> customData, int? schemeVersion}) {
+  factory Level({String? id, required I18nString name, required I18nString description, String? parentLevelID, required bool interventionsAreAllowed, List<Intervention>? allowedInterventions, required List<CustomData> customData, int? schemeVersion}) {
     return Level._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -174,7 +174,7 @@ class Level extends Model {
     return buffer.toString();
   }
   
-  Level copyWith({String? id, MultiLanguageText? name, MultiLanguageText? description, String? parentLevelID, bool? interventionsAreAllowed, List<Intervention>? allowedInterventions, List<CustomData>? customData, int? schemeVersion}) {
+  Level copyWith({String? id, I18nString? name, I18nString? description, String? parentLevelID, bool? interventionsAreAllowed, List<Intervention>? allowedInterventions, List<CustomData>? customData, int? schemeVersion}) {
     return Level._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -189,10 +189,10 @@ class Level extends Model {
   Level.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _name = json['name']?['serializedData'] != null
-        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
         : null,
       _description = json['description']?['serializedData'] != null
-        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
         : null,
       _parentLevelID = json['parentLevelID'],
       _interventionsAreAllowed = json['interventionsAreAllowed'],
@@ -235,13 +235,13 @@ class Level extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'name',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'description',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

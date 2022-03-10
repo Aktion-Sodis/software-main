@@ -2785,7 +2785,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MultiLanguageText",
+              "name" : "I18nString",
               "ofType" : null
             }
           },
@@ -2800,7 +2800,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MultiLanguageText",
+              "name" : "I18nString",
               "ofType" : null
             }
           },
@@ -3006,7 +3006,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "MultiLanguageText",
+        "name" : "I18nString",
         "description" : null,
         "fields" : [ {
           "name" : "languageKeys",
@@ -3122,7 +3122,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MultiLanguageText",
+              "name" : "I18nString",
               "ofType" : null
             }
           },
@@ -3137,7 +3137,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MultiLanguageText",
+              "name" : "I18nString",
               "ofType" : null
             }
           },
@@ -3649,7 +3649,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MultiLanguageText",
+              "name" : "I18nString",
               "ofType" : null
             }
           },
@@ -3664,7 +3664,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MultiLanguageText",
+              "name" : "I18nString",
               "ofType" : null
             }
           },
@@ -4406,7 +4406,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MultiLanguageText",
+              "name" : "I18nString",
               "ofType" : null
             }
           },
@@ -4421,7 +4421,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MultiLanguageText",
+              "name" : "I18nString",
               "ofType" : null
             }
           },
@@ -4668,7 +4668,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MultiLanguageText",
+              "name" : "I18nString",
               "ofType" : null
             }
           },
@@ -4795,7 +4795,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MultiLanguageText",
+              "name" : "I18nString",
               "ofType" : null
             }
           },
@@ -5574,7 +5574,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MultiLanguageText",
+              "name" : "I18nString",
               "ofType" : null
             }
           },
@@ -5916,7 +5916,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "MultiLanguageText",
+              "name" : "I18nString",
               "ofType" : null
             }
           },
@@ -10221,7 +10221,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "MultiLanguageTextInput",
+              "name" : "I18nStringInput",
               "ofType" : null
             }
           },
@@ -10234,7 +10234,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "MultiLanguageTextInput",
+              "name" : "I18nStringInput",
               "ofType" : null
             }
           },
@@ -10315,7 +10315,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "MultiLanguageTextInput",
+        "name" : "I18nStringInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -10386,7 +10386,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "MultiLanguageTextInput",
+              "name" : "I18nStringInput",
               "ofType" : null
             }
           },
@@ -10489,7 +10489,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "MultiLanguageTextInput",
+            "name" : "I18nStringInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -10498,7 +10498,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "MultiLanguageTextInput",
+            "name" : "I18nStringInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -10616,7 +10616,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "MultiLanguageTextInput",
+              "name" : "I18nStringInput",
               "ofType" : null
             }
           },
@@ -10629,7 +10629,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "MultiLanguageTextInput",
+              "name" : "I18nStringInput",
               "ofType" : null
             }
           },
@@ -10768,7 +10768,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "MultiLanguageTextInput",
+            "name" : "I18nStringInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -10777,7 +10777,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "MultiLanguageTextInput",
+            "name" : "I18nStringInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -10878,7 +10878,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "MultiLanguageTextInput",
+              "name" : "I18nStringInput",
               "ofType" : null
             }
           },
@@ -10891,7 +10891,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "MultiLanguageTextInput",
+              "name" : "I18nStringInput",
               "ofType" : null
             }
           },
@@ -10990,7 +10990,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "MultiLanguageTextInput",
+            "name" : "I18nStringInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -10999,7 +10999,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "MultiLanguageTextInput",
+            "name" : "I18nStringInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -11082,7 +11082,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "MultiLanguageTextInput",
+              "name" : "I18nStringInput",
               "ofType" : null
             }
           },
@@ -11095,7 +11095,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "MultiLanguageTextInput",
+              "name" : "I18nStringInput",
               "ofType" : null
             }
           },
@@ -11200,7 +11200,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "MultiLanguageTextInput",
+              "name" : "I18nStringInput",
               "ofType" : null
             }
           },
@@ -11274,7 +11274,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "MultiLanguageTextInput",
+              "name" : "I18nStringInput",
               "ofType" : null
             }
           },
@@ -11373,7 +11373,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "MultiLanguageTextInput",
+            "name" : "I18nStringInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -11382,7 +11382,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "MultiLanguageTextInput",
+            "name" : "I18nStringInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -11513,7 +11513,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "MultiLanguageTextInput",
+              "name" : "I18nStringInput",
               "ofType" : null
             }
           },
@@ -11789,7 +11789,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "MultiLanguageTextInput",
+            "name" : "I18nStringInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -14779,82 +14779,6 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "ModelIDKeyConditionInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "eq",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "le",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "lt",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "ge",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "gt",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "between",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "ID",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "beginsWith",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
         "name" : "ModelFloatInput",
         "description" : null,
         "fields" : null,
@@ -14940,6 +14864,82 @@
           "type" : {
             "kind" : "ENUM",
             "name" : "ModelAttributeTypes",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "ModelIDKeyConditionInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "eq",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "ID",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "le",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "ID",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "lt",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "ID",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "ge",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "ID",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "gt",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "ID",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "between",
+          "description" : null,
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "ID",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "beginsWith",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "ID",
             "ofType" : null
           },
           "defaultValue" : null

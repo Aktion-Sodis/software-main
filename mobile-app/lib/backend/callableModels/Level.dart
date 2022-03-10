@@ -1,13 +1,13 @@
 import 'package:mobile_app/backend/callableModels/CustomData.dart';
 import 'package:mobile_app/backend/callableModels/Intervention.dart';
-import 'package:mobile_app/backend/callableModels/MultiLanguageText.dart';
+import 'package:mobile_app/backend/callableModels/I18nString.dart';
 
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class Level {
   String? id;
-  late MultiLanguageText name_ml;
-  late MultiLanguageText description_ml;
+  late I18nString name_ml;
+  late I18nString description_ml;
   String? parentLevelID;
   late bool interventionsAreAllowed;
   List<Intervention>? allowedInterventions;
@@ -38,8 +38,8 @@ class Level {
 
   Level.fromAmplifyModel(amp.Level level) {
     id = level.id;
-    name_ml = MultiLanguageText.fromAmplifyModel(level.name);
-    description_ml = MultiLanguageText.fromAmplifyModel(level.description);
+    name_ml = I18nString.fromAmplifyModel(level.name);
+    description_ml = I18nString.fromAmplifyModel(level.description);
     parentLevelID = level.parentLevelID;
     interventionsAreAllowed = level.interventionsAreAllowed;
     allowedInterventions = level.allowedInterventions != null

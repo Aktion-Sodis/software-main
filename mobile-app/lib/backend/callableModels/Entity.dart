@@ -2,14 +2,14 @@ import 'package:mobile_app/backend/callableModels/AppliedCustomData.dart';
 import 'package:mobile_app/backend/callableModels/AppliedIntervention.dart';
 import 'package:mobile_app/backend/callableModels/Level.dart';
 import 'package:mobile_app/backend/callableModels/Location.dart';
-import 'package:mobile_app/backend/callableModels/MultiLanguageText.dart';
+import 'package:mobile_app/backend/callableModels/I18nString.dart';
 
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class Entity {
   String? id;
   late String name;
-  late MultiLanguageText description_ml;
+  late I18nString description_ml;
   String? parentEntityID;
   late Level level;
   Location? location;
@@ -39,7 +39,7 @@ class Entity {
   Entity.fromAmplifyModel(amp.Entity entity) {
     id = entity.id;
     name = entity.name;
-    description_ml = MultiLanguageText.fromAmplifyModel(entity.description);
+    description_ml = I18nString.fromAmplifyModel(entity.description);
     parentEntityID = entity.parentEntityID;
     level = Level.fromAmplifyModel(entity.level);
     location = entity.location == null

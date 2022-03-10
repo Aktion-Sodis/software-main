@@ -1,7 +1,7 @@
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 import 'package:mobile_app/frontend/strings.dart' as str;
 
-class MultiLanguageText {
+class I18nString {
   late List<String> languageKeys;
   late List<String> languageTexts;
 
@@ -32,18 +32,18 @@ class MultiLanguageText {
     }
   }
 
-  MultiLanguageText({required this.languageKeys, required this.languageTexts});
+  I18nString({required this.languageKeys, required this.languageTexts});
 
-  MultiLanguageText.fromString({String? string}) {
+  I18nString.fromString({String? string}) {
     languageKeys = [str.currentLanguage];
     languageTexts = [string ?? ""];
   }
 
-  MultiLanguageText.fromAmplifyModel(amp.MultiLanguageText multiLanguageText) {
-    languageKeys = multiLanguageText.languageKeys;
-    languageTexts = multiLanguageText.languageTexts;
+  I18nString.fromAmplifyModel(amp.I18nString I18nString) {
+    languageKeys = I18nString.languageKeys;
+    languageTexts = I18nString.languageTexts;
   }
 
-  amp.MultiLanguageText toAmplifyModel() => amp.MultiLanguageText(
-      languageKeys: languageKeys, languageTexts: languageTexts);
+  amp.I18nString toAmplifyModel() =>
+      amp.I18nString(languageKeys: languageKeys, languageTexts: languageTexts);
 }

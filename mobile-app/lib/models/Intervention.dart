@@ -30,8 +30,8 @@ import 'package:flutter/foundation.dart';
 class Intervention extends Model {
   static const classType = const _InterventionModelType();
   final String id;
-  final MultiLanguageText? _name;
-  final MultiLanguageText? _description;
+  final I18nString? _name;
+  final I18nString? _description;
   final InterventionType? _interventionType;
   final List<InterventionContentRelation>? _contents;
   final List<Survey>? _surveys;
@@ -49,7 +49,7 @@ class Intervention extends Model {
     return id;
   }
   
-  MultiLanguageText get name {
+  I18nString get name {
     try {
       return _name!;
     } catch(e) {
@@ -62,7 +62,7 @@ class Intervention extends Model {
     }
   }
   
-  MultiLanguageText get description {
+  I18nString get description {
     try {
       return _description!;
     } catch(e) {
@@ -145,7 +145,7 @@ class Intervention extends Model {
   
   const Intervention._internal({required this.id, required name, required description, required interventionType, required contents, required surveys, required tags, schemeVersion, createdAt, updatedAt, levelAllowedInterventionsId}): _name = name, _description = description, _interventionType = interventionType, _contents = contents, _surveys = surveys, _tags = tags, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _levelAllowedInterventionsId = levelAllowedInterventionsId;
   
-  factory Intervention({String? id, required MultiLanguageText name, required MultiLanguageText description, required InterventionType interventionType, required List<InterventionContentRelation> contents, required List<Survey> surveys, required List<InterventionTag> tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
+  factory Intervention({String? id, required I18nString name, required I18nString description, required InterventionType interventionType, required List<InterventionContentRelation> contents, required List<Survey> surveys, required List<InterventionTag> tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
     return Intervention._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -198,7 +198,7 @@ class Intervention extends Model {
     return buffer.toString();
   }
   
-  Intervention copyWith({String? id, MultiLanguageText? name, MultiLanguageText? description, InterventionType? interventionType, List<InterventionContentRelation>? contents, List<Survey>? surveys, List<InterventionTag>? tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
+  Intervention copyWith({String? id, I18nString? name, I18nString? description, InterventionType? interventionType, List<InterventionContentRelation>? contents, List<Survey>? surveys, List<InterventionTag>? tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
     return Intervention._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -214,10 +214,10 @@ class Intervention extends Model {
   Intervention.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _name = json['name']?['serializedData'] != null
-        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
         : null,
       _description = json['description']?['serializedData'] != null
-        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
         : null,
       _interventionType = enumFromString<InterventionType>(json['interventionType'], InterventionType.values),
       _contents = json['contents'] is List
@@ -271,13 +271,13 @@ class Intervention extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'name',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'description',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

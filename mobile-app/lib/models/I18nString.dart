@@ -24,9 +24,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 
-/** This is an auto generated class representing the MultiLanguageText type in your schema. */
+/** This is an auto generated class representing the I18nString type in your schema. */
 @immutable
-class MultiLanguageText {
+class I18nString {
   final List<String>? _languageKeys;
   final List<String>? _languageTexts;
 
@@ -56,10 +56,10 @@ class MultiLanguageText {
     }
   }
   
-  const MultiLanguageText._internal({required languageKeys, required languageTexts}): _languageKeys = languageKeys, _languageTexts = languageTexts;
+  const I18nString._internal({required languageKeys, required languageTexts}): _languageKeys = languageKeys, _languageTexts = languageTexts;
   
-  factory MultiLanguageText({required List<String> languageKeys, required List<String> languageTexts}) {
-    return MultiLanguageText._internal(
+  factory I18nString({required List<String> languageKeys, required List<String> languageTexts}) {
+    return I18nString._internal(
       languageKeys: languageKeys != null ? List<String>.unmodifiable(languageKeys) : languageKeys,
       languageTexts: languageTexts != null ? List<String>.unmodifiable(languageTexts) : languageTexts);
   }
@@ -71,7 +71,7 @@ class MultiLanguageText {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is MultiLanguageText &&
+    return other is I18nString &&
       DeepCollectionEquality().equals(_languageKeys, other._languageKeys) &&
       DeepCollectionEquality().equals(_languageTexts, other._languageTexts);
   }
@@ -83,7 +83,7 @@ class MultiLanguageText {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("MultiLanguageText {");
+    buffer.write("I18nString {");
     buffer.write("languageKeys=" + (_languageKeys != null ? _languageKeys!.toString() : "null") + ", ");
     buffer.write("languageTexts=" + (_languageTexts != null ? _languageTexts!.toString() : "null"));
     buffer.write("}");
@@ -91,13 +91,13 @@ class MultiLanguageText {
     return buffer.toString();
   }
   
-  MultiLanguageText copyWith({List<String>? languageKeys, List<String>? languageTexts}) {
-    return MultiLanguageText._internal(
+  I18nString copyWith({List<String>? languageKeys, List<String>? languageTexts}) {
+    return I18nString._internal(
       languageKeys: languageKeys ?? this.languageKeys,
       languageTexts: languageTexts ?? this.languageTexts);
   }
   
-  MultiLanguageText.fromJson(Map<String, dynamic> json)  
+  I18nString.fromJson(Map<String, dynamic> json)  
     : _languageKeys = json['languageKeys']?.cast<String>(),
       _languageTexts = json['languageTexts']?.cast<String>();
   
@@ -106,8 +106,8 @@ class MultiLanguageText {
   };
 
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "MultiLanguageText";
-    modelSchemaDefinition.pluralName = "MultiLanguageTexts";
+    modelSchemaDefinition.name = "I18nString";
+    modelSchemaDefinition.pluralName = "I18nStrings";
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
       fieldName: 'languageKeys',

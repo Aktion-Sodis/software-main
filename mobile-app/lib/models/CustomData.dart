@@ -28,10 +28,10 @@ import 'package:flutter/foundation.dart';
 @immutable
 class CustomData {
   final String id;
-  final MultiLanguageText? _name;
+  final I18nString? _name;
   final Type? _type;
 
-  MultiLanguageText get name {
+  I18nString get name {
     try {
       return _name!;
     } catch(e) {
@@ -59,7 +59,7 @@ class CustomData {
   
   const CustomData._internal({required this.id, required name, required type}): _name = name, _type = type;
   
-  factory CustomData({String? id, required MultiLanguageText name, required Type type}) {
+  factory CustomData({String? id, required I18nString name, required Type type}) {
     return CustomData._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -95,7 +95,7 @@ class CustomData {
     return buffer.toString();
   }
   
-  CustomData copyWith({String? id, MultiLanguageText? name, Type? type}) {
+  CustomData copyWith({String? id, I18nString? name, Type? type}) {
     return CustomData._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -105,7 +105,7 @@ class CustomData {
   CustomData.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _name = json['name']?['serializedData'] != null
-        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
         : null,
       _type = enumFromString<Type>(json['type'], Type.values);
   
@@ -126,7 +126,7 @@ class CustomData {
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'name',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(

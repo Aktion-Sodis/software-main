@@ -31,7 +31,7 @@ class Entity extends Model {
   static const classType = const _EntityModelType();
   final String id;
   final String? _name;
-  final MultiLanguageText? _description;
+  final I18nString? _description;
   final String? _parentEntityID;
   final Level? _level;
   final Location? _location;
@@ -63,7 +63,7 @@ class Entity extends Model {
     }
   }
   
-  MultiLanguageText get description {
+  I18nString get description {
     try {
       return _description!;
     } catch(e) {
@@ -150,7 +150,7 @@ class Entity extends Model {
   
   const Entity._internal({required this.id, required name, required description, parentEntityID, required level, location, required customData, required appliedInterventions, schemeVersion, createdAt, updatedAt, required entityLevelId}): _name = name, _description = description, _parentEntityID = parentEntityID, _level = level, _location = location, _customData = customData, _appliedInterventions = appliedInterventions, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _entityLevelId = entityLevelId;
   
-  factory Entity({String? id, required String name, required MultiLanguageText description, String? parentEntityID, required Level level, Location? location, required List<AppliedCustomData> customData, required List<AppliedIntervention> appliedInterventions, int? schemeVersion, required String entityLevelId}) {
+  factory Entity({String? id, required String name, required I18nString description, String? parentEntityID, required Level level, Location? location, required List<AppliedCustomData> customData, required List<AppliedIntervention> appliedInterventions, int? schemeVersion, required String entityLevelId}) {
     return Entity._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -207,7 +207,7 @@ class Entity extends Model {
     return buffer.toString();
   }
   
-  Entity copyWith({String? id, String? name, MultiLanguageText? description, String? parentEntityID, Level? level, Location? location, List<AppliedCustomData>? customData, List<AppliedIntervention>? appliedInterventions, int? schemeVersion, String? entityLevelId}) {
+  Entity copyWith({String? id, String? name, I18nString? description, String? parentEntityID, Level? level, Location? location, List<AppliedCustomData>? customData, List<AppliedIntervention>? appliedInterventions, int? schemeVersion, String? entityLevelId}) {
     return Entity._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -225,7 +225,7 @@ class Entity extends Model {
     : id = json['id'],
       _name = json['name'],
       _description = json['description']?['serializedData'] != null
-        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
         : null,
       _parentEntityID = json['parentEntityID'],
       _level = json['level']?['serializedData'] != null
@@ -284,7 +284,7 @@ class Entity extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'description',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

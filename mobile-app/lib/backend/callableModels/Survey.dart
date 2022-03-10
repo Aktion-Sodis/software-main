@@ -1,5 +1,5 @@
 import 'package:mobile_app/backend/callableModels/Intervention.dart';
-import 'package:mobile_app/backend/callableModels/MultiLanguageText.dart';
+import 'package:mobile_app/backend/callableModels/I18nString.dart';
 import 'package:mobile_app/backend/callableModels/Question.dart';
 import 'package:mobile_app/backend/callableModels/SurveyTag.dart';
 
@@ -7,8 +7,8 @@ import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class Survey {
   String? id;
-  late MultiLanguageText name_ml;
-  late MultiLanguageText description_ml;
+  late I18nString name_ml;
+  late I18nString description_ml;
   Intervention? intervention;
   late List<Question> questions;
   late List<SurveyTag> tags;
@@ -39,8 +39,8 @@ class Survey {
 
   Survey.fromAmplifyModel(amp.Survey survey) {
     id = survey.id;
-    name_ml = MultiLanguageText.fromAmplifyModel(survey.name);
-    description_ml = MultiLanguageText.fromAmplifyModel(survey.description);
+    name_ml = I18nString.fromAmplifyModel(survey.name);
+    description_ml = I18nString.fromAmplifyModel(survey.description);
     intervention = survey.intervention != null
         ? Intervention.fromAmplifyModel(survey.intervention!)
         : null;

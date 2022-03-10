@@ -30,8 +30,8 @@ import 'package:flutter/foundation.dart';
 class Content extends Model {
   static const classType = const _ContentModelType();
   final String id;
-  final MultiLanguageText? _name;
-  final MultiLanguageText? _description;
+  final I18nString? _name;
+  final I18nString? _description;
   final List<InterventionContentRelation>? _interventions;
   final List<ContentTag>? _tags;
   final int? _schemeVersion;
@@ -46,7 +46,7 @@ class Content extends Model {
     return id;
   }
   
-  MultiLanguageText get name {
+  I18nString get name {
     try {
       return _name!;
     } catch(e) {
@@ -59,7 +59,7 @@ class Content extends Model {
     }
   }
   
-  MultiLanguageText get description {
+  I18nString get description {
     try {
       return _description!;
     } catch(e) {
@@ -112,7 +112,7 @@ class Content extends Model {
   
   const Content._internal({required this.id, required name, required description, required interventions, required tags, schemeVersion, createdAt, updatedAt}): _name = name, _description = description, _interventions = interventions, _tags = tags, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Content({String? id, required MultiLanguageText name, required MultiLanguageText description, required List<InterventionContentRelation> interventions, required List<ContentTag> tags, int? schemeVersion}) {
+  factory Content({String? id, required I18nString name, required I18nString description, required List<InterventionContentRelation> interventions, required List<ContentTag> tags, int? schemeVersion}) {
     return Content._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -157,7 +157,7 @@ class Content extends Model {
     return buffer.toString();
   }
   
-  Content copyWith({String? id, MultiLanguageText? name, MultiLanguageText? description, List<InterventionContentRelation>? interventions, List<ContentTag>? tags, int? schemeVersion}) {
+  Content copyWith({String? id, I18nString? name, I18nString? description, List<InterventionContentRelation>? interventions, List<ContentTag>? tags, int? schemeVersion}) {
     return Content._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -170,10 +170,10 @@ class Content extends Model {
   Content.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _name = json['name']?['serializedData'] != null
-        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
         : null,
       _description = json['description']?['serializedData'] != null
-        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
         : null,
       _interventions = json['interventions'] is List
         ? (json['interventions'] as List)
@@ -214,13 +214,13 @@ class Content extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'name',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'description',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(

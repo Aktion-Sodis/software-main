@@ -1,9 +1,9 @@
-import 'package:mobile_app/backend/callableModels/MultiLanguageText.dart';
+import 'package:mobile_app/backend/callableModels/I18nString.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class QuestionOption {
   String? id;
-  late MultiLanguageText text_ml;
+  late I18nString text_ml;
   String? followUpQuestionID;
 
   String get text => text_ml.text;
@@ -21,7 +21,7 @@ class QuestionOption {
 
   QuestionOption.fromAmplifyModel(amp.QuestionOption questionOption) {
     id = questionOption.id;
-    text_ml = MultiLanguageText.fromAmplifyModel(questionOption.text);
+    text_ml = I18nString.fromAmplifyModel(questionOption.text);
     followUpQuestionID = questionOption.followUpQuestionID;
   }
 }

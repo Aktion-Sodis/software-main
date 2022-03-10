@@ -5,7 +5,7 @@ input AMPLIFY {
 } #  FOR TESTING ONLY!
 # user collection
 
-type MultiLanguageText {
+type I18nString {
   languageKeys: [String!]!
   languageTexts: [String!]!
 } 
@@ -52,8 +52,8 @@ type ColorTheme {
 # level collection
 
 type Level @model {
-  name: MultiLanguageText!
-  description: MultiLanguageText!
+  name: I18nString!
+  description: I18nString!
   parentLevelID: ID
   interventionsAreAllowed: Boolean!
   allowedInterventions: [Intervention!] @hasMany
@@ -63,7 +63,7 @@ type Level @model {
 
 type CustomData {
   id: ID! # todo: check how to generate it
-  name: MultiLanguageText!
+  name: I18nString!
   type: Type!
 }
 
@@ -75,8 +75,8 @@ enum Type {
 # intervention collection
 
 type Intervention @model {
-  name: MultiLanguageText!
-  description: MultiLanguageText!
+  name: I18nString!
+  description: I18nString!
   interventionType: InterventionType!
   contents: [Content!]! @manyToMany(relationName: "InterventionContentRelation")
   surveys: [Survey!]! @hasMany
@@ -91,8 +91,8 @@ enum InterventionType {
 
 # content collection
 type Content @model {
-  name: MultiLanguageText!
-  description: MultiLanguageText!
+  name: I18nString!
+  description: I18nString!
   interventions: [Intervention!]!
     @manyToMany(relationName: "InterventionContentRelation")
   tags: [ContentTag!]! @hasMany
@@ -101,8 +101,8 @@ type Content @model {
 
 # survey collection
 type Survey @model {
-  name: MultiLanguageText!
-  description: MultiLanguageText!
+  name: I18nString!
+  description: I18nString!
   intervention: Intervention @belongsTo
   questions: [Question!]!
   tags: [SurveyTag!]! @hasMany
@@ -126,7 +126,7 @@ enum QuestionType {
 
 type Question {
   id: ID! # todo: dependent ID; unique for survey
-  text: MultiLanguageText!
+  text: I18nString!
   type: QuestionType!
   questionOptions: [QuestionOption!]
   isFollowUpQuestion: Boolean!
@@ -134,7 +134,7 @@ type Question {
 
 type QuestionOption {
   id: ID!
-  text: MultiLanguageText!
+  text: I18nString!
   followUpQuestionID: ID
 }
 
@@ -143,7 +143,7 @@ type QuestionOption {
 # todo: check whether binding the children makes sense
 type Entity @model {
   name: String!
-  description: MultiLanguageText!
+  description: I18nString!
   parentEntityID: ID
   level: Level! @hasOne
   location: Location

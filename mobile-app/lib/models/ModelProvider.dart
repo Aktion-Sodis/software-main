@@ -38,9 +38,9 @@ import 'User.dart';
 import 'AppliedCustomData.dart';
 import 'ColorTheme.dart';
 import 'CustomData.dart';
+import 'I18nString.dart';
 import 'Location.dart';
 import 'Marking.dart';
-import 'MultiLanguageText.dart';
 import 'Permission.dart';
 import 'Question.dart';
 import 'QuestionAnswer.dart';
@@ -55,6 +55,7 @@ export 'ContentTag.dart';
 export 'CustomData.dart';
 export 'Entity.dart';
 export 'ExecutedSurvey.dart';
+export 'I18nString.dart';
 export 'Intervention.dart';
 export 'InterventionContentRelation.dart';
 export 'InterventionTag.dart';
@@ -62,7 +63,6 @@ export 'InterventionType.dart';
 export 'Level.dart';
 export 'Location.dart';
 export 'Marking.dart';
-export 'MultiLanguageText.dart';
 export 'Permission.dart';
 export 'PermissionType.dart';
 export 'Question.dart';
@@ -79,12 +79,12 @@ export 'User.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "3a5fcfc298f93a28760890bfbd0ffb42";
+  String version = "7ffe6572ebaad261044a1b3c6e0b46a9";
   @override
   List<ModelSchema> modelSchemas = [AppliedIntervention.schema, Config.schema, Content.schema, ContentTag.schema, Entity.schema, ExecutedSurvey.schema, Intervention.schema, InterventionContentRelation.schema, InterventionTag.schema, Level.schema, SessionData.schema, Survey.schema, SurveyTag.schema, Task.schema, User.schema];
   static final ModelProvider _instance = ModelProvider();
   @override
-  List<ModelSchema> customTypeSchemas = [AppliedCustomData.schema, ColorTheme.schema, CustomData.schema, Location.schema, Marking.schema, MultiLanguageText.schema, Permission.schema, Question.schema, QuestionAnswer.schema, QuestionOption.schema];
+  List<ModelSchema> customTypeSchemas = [AppliedCustomData.schema, ColorTheme.schema, CustomData.schema, I18nString.schema, Location.schema, Marking.schema, Permission.schema, Question.schema, QuestionAnswer.schema, QuestionOption.schema];
 
   static ModelProvider get instance => _instance;
   

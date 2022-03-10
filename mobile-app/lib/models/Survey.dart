@@ -30,8 +30,8 @@ import 'package:flutter/foundation.dart';
 class Survey extends Model {
   static const classType = const _SurveyModelType();
   final String id;
-  final MultiLanguageText? _name;
-  final MultiLanguageText? _description;
+  final I18nString? _name;
+  final I18nString? _description;
   final Intervention? _intervention;
   final List<Question>? _questions;
   final List<SurveyTag>? _tags;
@@ -48,7 +48,7 @@ class Survey extends Model {
     return id;
   }
   
-  MultiLanguageText get name {
+  I18nString get name {
     try {
       return _name!;
     } catch(e) {
@@ -61,7 +61,7 @@ class Survey extends Model {
     }
   }
   
-  MultiLanguageText get description {
+  I18nString get description {
     try {
       return _description!;
     } catch(e) {
@@ -131,7 +131,7 @@ class Survey extends Model {
   
   const Survey._internal({required this.id, required name, required description, intervention, required questions, required tags, required surveyType, schemeVersion, createdAt, updatedAt}): _name = name, _description = description, _intervention = intervention, _questions = questions, _tags = tags, _surveyType = surveyType, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Survey({String? id, required MultiLanguageText name, required MultiLanguageText description, Intervention? intervention, required List<Question> questions, required List<SurveyTag> tags, required SurveyType surveyType, int? schemeVersion}) {
+  factory Survey({String? id, required I18nString name, required I18nString description, Intervention? intervention, required List<Question> questions, required List<SurveyTag> tags, required SurveyType surveyType, int? schemeVersion}) {
     return Survey._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -183,7 +183,7 @@ class Survey extends Model {
     return buffer.toString();
   }
   
-  Survey copyWith({String? id, MultiLanguageText? name, MultiLanguageText? description, Intervention? intervention, List<Question>? questions, List<SurveyTag>? tags, SurveyType? surveyType, int? schemeVersion}) {
+  Survey copyWith({String? id, I18nString? name, I18nString? description, Intervention? intervention, List<Question>? questions, List<SurveyTag>? tags, SurveyType? surveyType, int? schemeVersion}) {
     return Survey._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -198,10 +198,10 @@ class Survey extends Model {
   Survey.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _name = json['name']?['serializedData'] != null
-        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
         : null,
       _description = json['description']?['serializedData'] != null
-        ? MultiLanguageText.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['description']['serializedData']))
         : null,
       _intervention = json['intervention']?['serializedData'] != null
         ? Intervention.fromJson(new Map<String, dynamic>.from(json['intervention']['serializedData']))
@@ -248,13 +248,13 @@ class Survey extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'name',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'description',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'MultiLanguageText')
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(

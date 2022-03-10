@@ -1,10 +1,10 @@
 import 'package:mobile_app/backend/callableModels/AppliedCustomData.dart';
-import 'package:mobile_app/backend/callableModels/MultiLanguageText.dart';
+import 'package:mobile_app/backend/callableModels/I18nString.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class CustomData {
   String? id;
-  late MultiLanguageText name_ml;
+  late I18nString name_ml;
   late CustomDataType type;
 
   String get name => name_ml.text;
@@ -15,7 +15,7 @@ class CustomData {
 
   CustomData.fromAmplifyModel(amp.CustomData customData) {
     id = customData.id;
-    name_ml = MultiLanguageText.fromAmplifyModel(customData.name);
+    name_ml = I18nString.fromAmplifyModel(customData.name);
     type = customDataTypeByAmplifyType(customData.type);
   }
 
