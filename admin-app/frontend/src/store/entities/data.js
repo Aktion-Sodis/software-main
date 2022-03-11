@@ -274,6 +274,45 @@ const entitiesData = {
 
       commit('setLoading', { newValue: false });
     },
+    CreateDummyEntities: async ({ dispatch }) => {
+      const entities = [
+        new Entity({
+          id: '3',
+          name: {
+            languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+            languageTexts: ['Sucre', 'Sucre', 'Sucre'],
+          },
+          description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+          entityLevelId: '1',
+          parentEntityID: '0',
+        }),
+        // new Entity({
+        //   id: '1',
+        //   name: {
+        //     languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+        //     languageTexts: ['La Paz', 'La Paz', 'La Paz'],
+        //   },
+        //   description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+        //   entityLevelId: '1',
+        //   parentEntityID: '0',
+        // }),
+        // new Entity({
+        //   id: '2',
+        //   name: {
+        //     languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+        //     languageTexts: ['El Alto', 'El Alto', 'El Alto'],
+        //   },
+        //   description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+        //   entityLevelId: '2',
+        //   parentEntityID: '1',
+        // }),
+      ];
+
+      // eslint-disable-next-line
+      for (const entity of entities) {
+        dispatch('APIpost', entity);
+      }
+    },
     // sync is handled over LEVEL_Data module
     APIgetAll: async () => (await getAllEntities()).data.listEntities.items,
   },

@@ -51,6 +51,9 @@ amplify/team-provider-info.json
 
 lib/amplifyconfiguration.dart
 
+
+amplify/backend/function
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -71,5 +74,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-
-amplify/backend/function

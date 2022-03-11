@@ -98,6 +98,7 @@
     "addNewEntity": "Add new entity",
     "addNewLevel": "Add new level",
     "hasNoInterventions": "There are no interventions for this level.",
+    "hasNoEntities": "There are no entities for this level.",
     "levelModal": {
       "modalTitle": {
         "edit": "Edit level ",

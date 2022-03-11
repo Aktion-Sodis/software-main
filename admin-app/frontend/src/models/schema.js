@@ -100,15 +100,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "storagePaths": {
-                    "name": "storagePaths",
-                    "isArray": false,
-                    "type": {
-                        "nonModel": "StoragePaths"
-                    },
-                    "isRequired": true,
-                    "attributes": []
-                },
                 "schemeVersion": {
                     "name": "schemeVersion",
                     "isArray": false,
@@ -155,15 +146,19 @@ export const schema = {
                 "name": {
                     "name": "name",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
                 "description": {
                     "name": "description",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
+                    "isRequired": true,
                     "attributes": []
                 },
                 "parentLevelID": {
@@ -250,15 +245,19 @@ export const schema = {
                 "name": {
                     "name": "name",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
                 "description": {
                     "name": "description",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
+                    "isRequired": true,
                     "attributes": []
                 },
                 "interventionType": {
@@ -365,15 +364,19 @@ export const schema = {
                 "name": {
                     "name": "name",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
                 "description": {
                     "name": "description",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
+                    "isRequired": true,
                     "attributes": []
                 },
                 "interventions": {
@@ -450,7 +453,9 @@ export const schema = {
                 "text": {
                     "name": "text",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
@@ -507,15 +512,19 @@ export const schema = {
                 "name": {
                     "name": "name",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
                 "description": {
                     "name": "description",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
+                    "isRequired": true,
                     "attributes": []
                 },
                 "intervention": {
@@ -610,7 +619,9 @@ export const schema = {
                 "text": {
                     "name": "text",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
@@ -667,7 +678,9 @@ export const schema = {
                 "text": {
                     "name": "text",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
@@ -724,15 +737,19 @@ export const schema = {
                 "name": {
                     "name": "name",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
                 "description": {
                     "name": "description",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
+                    "isRequired": true,
                     "attributes": []
                 },
                 "parentEntityID": {
@@ -1232,6 +1249,91 @@ export const schema = {
                 }
             ]
         },
+        "SessionData": {
+            "name": "SessionData",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "date": {
+                    "name": "date",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "userID": {
+                    "name": "userID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "app": {
+                    "name": "app",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "version": {
+                    "name": "version",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "buildNumber": {
+                    "name": "buildNumber",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "remoteConfig": {
+                    "name": "remoteConfig",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "platform": {
+                    "name": "platform",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "SessionData",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                }
+            ]
+        },
         "InterventionContentRelation": {
             "name": "InterventionContentRelation",
             "fields": {
@@ -1341,6 +1443,27 @@ export const schema = {
         }
     },
     "nonModels": {
+        "I18nString": {
+            "name": "I18nString",
+            "fields": {
+                "languageKeys": {
+                    "name": "languageKeys",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": false
+                },
+                "languageTexts": {
+                    "name": "languageTexts",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": false
+                }
+            }
+        },
         "Permission": {
             "name": "Permission",
             "fields": {
@@ -1410,25 +1533,6 @@ export const schema = {
                 }
             }
         },
-        "StoragePaths": {
-            "name": "StoragePaths",
-            "fields": {
-                "ownerPic": {
-                    "name": "ownerPic",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "ownerIcon": {
-                    "name": "ownerIcon",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                }
-            }
-        },
         "Question": {
             "name": "Question",
             "fields": {
@@ -1442,7 +1546,9 @@ export const schema = {
                 "text": {
                     "name": "text",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
@@ -1487,7 +1593,9 @@ export const schema = {
                 "text": {
                     "name": "text",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
@@ -1513,7 +1621,9 @@ export const schema = {
                 "name": {
                     "name": "name",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
@@ -1692,5 +1802,5 @@ export const schema = {
             }
         }
     },
-    "version": "05254d9262d567df4fce42ac9c7f4131"
+    "version": "7dc594100f04eacfa826f40bf28e2c10"
 };

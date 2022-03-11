@@ -6,8 +6,8 @@ import { createEntity, updateEntity, deleteEntity } from '../../graphql/mutation
 export class EmptyEntity {
   constructor() {
     this.id = uuidv4();
-    this.name = '';
-    this.description = '';
+    this.name = { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] };
+    this.description = { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] };
     this.entityLevelId = '';
     this.parentEntityID = null;
     this._version = 1;

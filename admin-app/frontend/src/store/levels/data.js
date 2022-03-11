@@ -1,6 +1,7 @@
 import {
   Level, postNewLevel, putLevel, deleteLevel, getAllLevels,
 } from './utils';
+import { Entity } from '../entities/utils';
 import { dataTypesDict, modalModesDict } from '../constants';
 
 const levelsData = {
@@ -43,7 +44,6 @@ const levelsData = {
       { tagId: '468084f3-6ec4-42ea-bdb2-40900816b64f', name: 'Tag 1' },
       { tagId: 'e5ebc38b-abed-498d-9052-6c8767cc341e', name: 'Tag 2' },
     ],
-
     loading: false,
   }),
   getters: {
@@ -187,10 +187,112 @@ const levelsData = {
     },
     sync: async ({ commit, dispatch }) => {
       commit('setLoading', { newValue: true });
+      commit('setLevels', {
+        newValue: [
+          new Level({
+            id: 'dummyLevel0',
+            name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+            description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+            parentLevelID: null,
+            allowedInterventions: [],
+            levelAllowedInterventionsId: [],
+          }),
+          new Level({
+            id: 'dummyLevel1',
+            name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+            description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+            parentLevelID: 'dummyLevel0',
+            allowedInterventions: [],
+            levelAllowedInterventionsId: [],
+          }),
+          new Level({
+            id: 'dummyLevel2',
+            name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+            description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+            parentLevelID: 'dummyLevel1',
+            allowedInterventions: [],
+            levelAllowedInterventionsId: [],
+          }),
+        ],
+      });
+      commit(
+        'ENTITY_Data/setEntities',
+        {
+          newValue: [
+            new Entity({
+              id: 'dummyEntity0',
+              name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+              description: {
+                languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+                languageTexts: ['', '', ''],
+              },
+              entityLevelId: 'dummyLevel0',
+              parentEntityID: null,
+              _version: 1,
+            }),
+            new Entity({
+              id: 'dummyEntity1',
+              name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+              description: {
+                languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+                languageTexts: ['', '', ''],
+              },
+              entityLevelId: 'dummyLevel0',
+              parentEntityID: null,
+              _version: 1,
+            }),
+            new Entity({
+              id: 'dummyEntity2',
+              name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+              description: {
+                languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+                languageTexts: ['', '', ''],
+              },
+              entityLevelId: 'dummyLevel1',
+              parentEntityID: 'dummyEntity0',
+              _version: 1,
+            }),
+            new Entity({
+              id: 'dummyEntity3',
+              name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+              description: {
+                languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+                languageTexts: ['', '', ''],
+              },
+              entityLevelId: 'dummyLevel2',
+              parentEntityID: 'dummyEntity2',
+              _version: 1,
+            }),
+            new Entity({
+              id: 'dummyEntity4',
+              name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+              description: {
+                languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+                languageTexts: ['', '', ''],
+              },
+              entityLevelId: 'dummyLevel2',
+              parentEntityID: 'dummyEntity3',
+              _version: 1,
+            }),
+            new Entity({
+              id: 'dummyEntity5',
+              name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+              description: {
+                languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+                languageTexts: ['', '', ''],
+              },
+              entityLevelId: 'dummyLevel2',
+              parentEntityID: 'dummyEntity3',
+              _version: 1,
+            }),
+          ],
+        },
+        { root: true },
+      );
       const apiLevels = await dispatch('APIgetAll');
       const apiEntities = await dispatch('ENTITY_Data/APIgetAll', null, { root: true });
       commit('setLevels', {
-        newValue: apiLevels,
+        newValue: apiLevels.filter((l) => !l._deleted),
       });
       commit(
         'ENTITY_Data/setEntities',
@@ -198,6 +300,48 @@ const levelsData = {
         { root: true },
       );
       commit('setLoading', { newValue: false });
+    },
+    CreateDummyLevels: async ({ dispatch }) => {
+      const levels = [
+        new Level({
+          id: '0',
+          name: {
+            languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+            languageTexts: ['Country', 'País', 'Ülke'],
+          },
+          description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+          parentLevelID: null,
+          customData: [],
+          levelAllowedInterventionsId: [],
+        }),
+        new Level({
+          id: '1',
+          name: {
+            languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+            languageTexts: ['City', 'Ciudad', 'Şehir'],
+          },
+          description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+          parentLevelID: '0',
+          customData: [],
+          levelAllowedInterventionsId: [],
+        }),
+        new Level({
+          id: '2',
+          name: {
+            languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+            languageTexts: ['District', 'Distritto', 'Bölge'],
+          },
+          description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+          parentLevelID: '1',
+          customData: [],
+          levelAllowedInterventionsId: [],
+        }),
+      ];
+
+      // eslint-disable-next-line
+      for (const level of levels) {
+        dispatch('APIpost', level);
+      }
     },
     APIgetAll: async () => (await getAllLevels()).data.listLevels.items,
   },

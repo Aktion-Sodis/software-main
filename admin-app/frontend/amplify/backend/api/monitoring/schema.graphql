@@ -5,6 +5,11 @@ input AMPLIFY {
 } #  FOR TESTING ONLY!
 # user collection
 
+type I18nString {
+  languageKeys: [String!]!
+  languageTexts: [String!]!
+} 
+
 type User @model {
   firstName: String!
   lastName: String!
@@ -32,7 +37,6 @@ enum PermissionType {
 type Config @model {
   name: String!
   colorTheme: ColorTheme
-  storagePaths: StoragePaths!
   schemeVersion: Int @default(value: "0")
 }
 
@@ -45,17 +49,11 @@ type ColorTheme {
   backgroundTwoDark: String # auto generate via api
 }
 
-type StoragePaths {
-  ownerPic: String
-  ownerIcon: String
-  # todo: check whether this approach makes sense
-}
-
 # level collection
 
 type Level @model {
-  name: String!
-  description: String @default(value: "")
+  name: I18nString!
+  description: I18nString!
   parentLevelID: ID
   interventionsAreAllowed: Boolean!
   allowedInterventions: [Intervention!] @hasMany
@@ -65,7 +63,7 @@ type Level @model {
 
 type CustomData {
   id: ID! # todo: check how to generate it
-  name: String!
+  name: I18nString!
   type: Type!
 }
 
@@ -77,8 +75,8 @@ enum Type {
 # intervention collection
 
 type Intervention @model {
-  name: String!
-  description: String @default(value: "")
+  name: I18nString!
+  description: I18nString!
   interventionType: InterventionType!
   contents: [Content!]! @manyToMany(relationName: "InterventionContentRelation")
   surveys: [Survey!]! @hasMany
@@ -93,8 +91,8 @@ enum InterventionType {
 
 # content collection
 type Content @model {
-  name: String!
-  description: String @default(value: "")
+  name: I18nString!
+  description: I18nString!
   interventions: [Intervention!]!
     @manyToMany(relationName: "InterventionContentRelation")
   tags: [ContentTag!]! @hasMany
@@ -103,8 +101,8 @@ type Content @model {
 
 # survey collection
 type Survey @model {
-  name: String!
-  description: String @default(value: "")
+  name: I18nString!
+  description: I18nString!
   intervention: Intervention @belongsTo
   questions: [Question!]!
   tags: [SurveyTag!]! @hasMany
@@ -128,7 +126,7 @@ enum QuestionType {
 
 type Question {
   id: ID! # todo: dependent ID; unique for survey
-  text: String!
+  text: I18nString!
   type: QuestionType!
   questionOptions: [QuestionOption!]
   isFollowUpQuestion: Boolean!
@@ -136,7 +134,7 @@ type Question {
 
 type QuestionOption {
   id: ID!
-  text: String!
+  text: I18nString!
   followUpQuestionID: ID
 }
 
@@ -144,8 +142,8 @@ type QuestionOption {
 
 # todo: check whether binding the children makes sense
 type Entity @model {
-  name: String!
-  description: String @default(value: "")
+  name: I18nString!
+  description: I18nString!
   parentEntityID: ID
   level: Level! @hasOne
   location: Location
@@ -224,16 +222,26 @@ type Task @model {
 }
 
 type ContentTag @model {
-  text: String!
+  text: I18nString!
   schemeVersion: Int @default(value: "0")
 }
 
 type InterventionTag @model {
-  text: String!
+  text: I18nString!
   schemeVersion: Int @default(value: "0")
 }
 
 type SurveyTag @model {
-  text: String!
+  text: I18nString!
   schemeVersion: Int @default(value: "0")
+}
+
+type SessionData @model {
+  date: AWSDateTime!
+  userID: String
+  app: String
+  version: String
+  buildNumber: String
+  remoteConfig: String
+  platform: String
 }

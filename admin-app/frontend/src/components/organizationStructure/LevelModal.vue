@@ -5,7 +5,7 @@
         <v-card-title>
           <h2 v-if="edit && levelInFocus">
             {{ $t('organizationStructure.levelModal.modalTitle.edit') }}
-            <i>{{ levelInFocus.name }}</i>
+            <i>{{ levelInFocus.name.languageTexts[0] }}</i>
           </h2>
           <h2 v-else-if="create">
             {{ $t('organizationStructure.levelModal.modalTitle.create') }}
@@ -26,7 +26,7 @@
             <v-row>
               <v-col cols="12" sm="6" class="pb-0 px-0 px-sm-3">
                 <h2 v-if="read && levelInFocus">
-                  {{ levelInFocus.name }}
+                  {{ levelInFocus.name.languageTexts[0] }}
                 </h2>
                 <v-text-field
                   v-else
@@ -44,7 +44,7 @@
                   style="min-height: 10rem"
                 >
                   <h3>
-                    {{ levelInFocus.description }}
+                    {{ levelInFocus.description.languageTexts[0] }}
                   </h3>
                 </div>
                 <v-textarea
@@ -61,7 +61,7 @@
                 <div v-if="read && levelInFocus" style="min-height: 5rem">
                   <h3 v-if="levelInFocus.parentLevelID">
                     {{ $t('organizationStructure.levelModal.upperLevel') }}:
-                    {{ LEVELById({ id: levelInFocus.parentLevelID }).name }}
+                    {{ LEVELById({ id: levelInFocus.parentLevelID }).name.languageTexts[0] }}
                   </h3>
                 </div>
               </v-col>

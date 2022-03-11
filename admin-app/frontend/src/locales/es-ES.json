@@ -74,6 +74,7 @@
     "addNewEntity": "Añadir entidad",
     "addNewLevel": "Añadir un nuevo nivel",
     "hasNoInterventions": "No existen intervenciones para este nivel.",
+    "hasNoEntities": "No hay entidades para este nivel.",
     "levelModal": {
       "modalTitle": {
         "edit": "Editar nivel ",

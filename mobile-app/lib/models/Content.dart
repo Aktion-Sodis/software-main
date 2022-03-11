@@ -33,7 +33,7 @@ class Content extends Model {
   final String? _name;
   final String? _description;
   final List<InterventionContentRelation>? _interventions;
-  final List<String>? _tags;
+  final List<ContentTag>? _tags;
   final int? _schemeVersion;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
@@ -51,11 +51,11 @@ class Content extends Model {
       return _name!;
     } catch(e) {
       throw new DataStoreException(
-      DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-      recoverySuggestion:
-        DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-      underlyingException: e.toString()
-    );
+          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
     }
   }
   
@@ -68,24 +68,24 @@ class Content extends Model {
       return _interventions!;
     } catch(e) {
       throw new DataStoreException(
-      DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-      recoverySuggestion:
-        DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-      underlyingException: e.toString()
-    );
+          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
     }
   }
   
-  List<String> get tags {
+  List<ContentTag> get tags {
     try {
       return _tags!;
     } catch(e) {
       throw new DataStoreException(
-      DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-      recoverySuggestion:
-        DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-      underlyingException: e.toString()
-    );
+          DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
     }
   }
   
@@ -103,13 +103,13 @@ class Content extends Model {
   
   const Content._internal({required this.id, required name, description, required interventions, required tags, schemeVersion, createdAt, updatedAt}): _name = name, _description = description, _interventions = interventions, _tags = tags, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Content({String? id, required String name, String? description, required List<InterventionContentRelation> interventions, required List<String> tags, int? schemeVersion}) {
+  factory Content({String? id, required String name, String? description, required List<InterventionContentRelation> interventions, required List<ContentTag> tags, int? schemeVersion}) {
     return Content._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
       description: description,
       interventions: interventions != null ? List<InterventionContentRelation>.unmodifiable(interventions) : interventions,
-      tags: tags != null ? List<String>.unmodifiable(tags) : tags,
+      tags: tags != null ? List<ContentTag>.unmodifiable(tags) : tags,
       schemeVersion: schemeVersion);
   }
   
@@ -140,7 +140,6 @@ class Content extends Model {
     buffer.write("id=" + "$id" + ", ");
     buffer.write("name=" + "$_name" + ", ");
     buffer.write("description=" + "$_description" + ", ");
-    buffer.write("tags=" + (_tags != null ? _tags!.toString() : "null") + ", ");
     buffer.write("schemeVersion=" + (_schemeVersion != null ? _schemeVersion!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
@@ -149,7 +148,7 @@ class Content extends Model {
     return buffer.toString();
   }
   
-  Content copyWith({String? id, String? name, String? description, List<InterventionContentRelation>? interventions, List<String>? tags, int? schemeVersion}) {
+  Content copyWith({String? id, String? name, String? description, List<InterventionContentRelation>? interventions, List<ContentTag>? tags, int? schemeVersion}) {
     return Content._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -169,13 +168,18 @@ class Content extends Model {
           .map((e) => InterventionContentRelation.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
-      _tags = json['tags']?.cast<String>(),
+      _tags = json['tags'] is List
+        ? (json['tags'] as List)
+          .where((e) => e?['serializedData'] != null)
+          .map((e) => ContentTag.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
       _schemeVersion = (json['schemeVersion'] as num?)?.toInt(),
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'description': _description, 'interventions': _interventions?.map((InterventionContentRelation? e) => e?.toJson()).toList(), 'tags': _tags, 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'name': _name, 'description': _description, 'interventions': _interventions?.map((InterventionContentRelation? e) => e?.toJson()).toList(), 'tags': _tags?.map((ContentTag? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "content.id");
@@ -184,7 +188,9 @@ class Content extends Model {
   static final QueryField INTERVENTIONS = QueryField(
     fieldName: "interventions",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (InterventionContentRelation).toString()));
-  static final QueryField TAGS = QueryField(fieldName: "tags");
+  static final QueryField TAGS = QueryField(
+    fieldName: "tags",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (ContentTag).toString()));
   static final QueryField SCHEMEVERSION = QueryField(fieldName: "schemeVersion");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Content";
@@ -211,11 +217,11 @@ class Content extends Model {
       associatedKey: InterventionContentRelation.CONTENT
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
       key: Content.TAGS,
       isRequired: true,
-      isArray: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.collection, ofModelName: describeEnum(ModelFieldTypeEnum.string))
+      ofModelName: (ContentTag).toString(),
+      associatedKey: ContentTag.CONTENTTAGSID
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

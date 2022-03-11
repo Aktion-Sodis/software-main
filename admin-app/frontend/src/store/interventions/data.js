@@ -149,7 +149,12 @@ const interventionsData = {
     },
   },
   actions: {
-    // APIpost: async (, { intervention }) => postNewIntervention(intervention), // commit('addIntervention', postResponse);
+    // APIpost: async ({ commit, dispatch }, { intervention }) => {
+    //   commit('setLoading', { newValue: true });
+    //   postNewIntervention(intervention);
+
+    //   commit('setLoading', { newValue: false });
+    // },
 
     APIput: async ({ commit, dispatch }, interventionDraft) => {
       commit('setLoading', { newValue: true });
@@ -193,10 +198,17 @@ const interventionsData = {
 
       const { apiInterventions, apiInterventionTags } = await dispatch('APIgetAll');
 
+      console.log({ apiInterventions });
+
       commit('setInterventions', { newValue: apiInterventions });
       commit('setInterventionTags', { newValue: apiInterventionTags });
       commit('setLoading', { newValue: false });
     },
+    // CreateDummyInterventions: async ({ commit, dispatch }) => {
+    //   commit('setLoading', { newValue: true });
+
+    //   commit('setLoading', { newValue: false });
+    // },
     APIgetAll: async () => ({
       apiInterventions: (await getAllInterventions()).data.listInterventions.items,
       apiInterventionTags: (await getAllInterventionTags()).data.listInterventionTags.items,

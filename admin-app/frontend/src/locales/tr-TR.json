@@ -74,6 +74,7 @@
     "addNewEntity": "Yeni oluşum ekle",
     "addNewLevel": "Yeni seviye ekle",
     "hasNoInterventions": "Bu seviyede henüz hiç müdahale yok.",
+    "hasNoEntities": "Bu seviyede henüz hiç oluşum yok.",
     "levelModal": {
       "modalTitle": {
         "edit": "Seviyeyi düzenle: ",

@@ -66,12 +66,14 @@ export default {
       isInterventionModalDisplayed: 'dataModal/getIsDisplayed',
       isSurveyModalDisplayed: 'dataModal/getIsDisplayed',
     }),
+    currentLocale() {
+      return this.$i18n.locale;
+    },
   },
   watch: {
     isInterventionModalDisplayed: 'destroyInterventionModalAfterDelay',
     isSurveyModalDisplayed: 'destroySurveyModalAfterDelay',
   },
-
   methods: {
     // If closed, wait for 500, if still closed, destroy component instance
     async destroyInterventionModalAfterDelay(newValue) {

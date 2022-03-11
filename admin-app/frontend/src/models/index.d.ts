@@ -33,6 +33,12 @@ export enum Type {
   STRING = "STRING"
 }
 
+export declare class I18nString {
+  readonly languageKeys: string[];
+  readonly languageTexts: string[];
+  constructor(init: ModelInit<I18nString>);
+}
+
 export declare class Permission {
   readonly permissionType: PermissionType | keyof typeof PermissionType;
   readonly allowedEntities: string[];
@@ -49,15 +55,9 @@ export declare class ColorTheme {
   constructor(init: ModelInit<ColorTheme>);
 }
 
-export declare class StoragePaths {
-  readonly ownerPic?: string;
-  readonly ownerIcon?: string;
-  constructor(init: ModelInit<StoragePaths>);
-}
-
 export declare class Question {
   readonly id: string;
-  readonly text: string;
+  readonly text: I18nString;
   readonly type: QuestionType | keyof typeof QuestionType;
   readonly questionOptions?: QuestionOption[];
   readonly isFollowUpQuestion: boolean;
@@ -66,14 +66,14 @@ export declare class Question {
 
 export declare class QuestionOption {
   readonly id: string;
-  readonly text: string;
+  readonly text: I18nString;
   readonly followUpQuestionID?: string;
   constructor(init: ModelInit<QuestionOption>);
 }
 
 export declare class CustomData {
   readonly id: string;
-  readonly name: string;
+  readonly name: I18nString;
   readonly type: Type | keyof typeof Type;
   constructor(init: ModelInit<CustomData>);
 }
@@ -165,6 +165,10 @@ type TaskMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type SessionDataMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type InterventionContentRelationMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
@@ -186,7 +190,6 @@ export declare class Config {
   readonly id: string;
   readonly name: string;
   readonly colorTheme?: ColorTheme;
-  readonly storagePaths: StoragePaths;
   readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
@@ -196,8 +199,8 @@ export declare class Config {
 
 export declare class Level {
   readonly id: string;
-  readonly name: string;
-  readonly description?: string;
+  readonly name: I18nString;
+  readonly description: I18nString;
   readonly parentLevelID?: string;
   readonly interventionsAreAllowed: boolean;
   readonly allowedInterventions?: Intervention[];
@@ -211,8 +214,8 @@ export declare class Level {
 
 export declare class Intervention {
   readonly id: string;
-  readonly name: string;
-  readonly description?: string;
+  readonly name: I18nString;
+  readonly description: I18nString;
   readonly interventionType: InterventionType | keyof typeof InterventionType;
   readonly contents: InterventionContentRelation[];
   readonly surveys: Survey[];
@@ -227,8 +230,8 @@ export declare class Intervention {
 
 export declare class Content {
   readonly id: string;
-  readonly name: string;
-  readonly description?: string;
+  readonly name: I18nString;
+  readonly description: I18nString;
   readonly interventions: InterventionContentRelation[];
   readonly tags: ContentTag[];
   readonly schemeVersion?: number;
@@ -240,7 +243,7 @@ export declare class Content {
 
 export declare class ContentTag {
   readonly id: string;
-  readonly text: string;
+  readonly text: I18nString;
   readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
@@ -251,8 +254,8 @@ export declare class ContentTag {
 
 export declare class Survey {
   readonly id: string;
-  readonly name: string;
-  readonly description?: string;
+  readonly name: I18nString;
+  readonly description: I18nString;
   readonly intervention?: Intervention;
   readonly questions: Question[];
   readonly tags: SurveyTag[];
@@ -266,7 +269,7 @@ export declare class Survey {
 
 export declare class SurveyTag {
   readonly id: string;
-  readonly text: string;
+  readonly text: I18nString;
   readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
@@ -277,7 +280,7 @@ export declare class SurveyTag {
 
 export declare class InterventionTag {
   readonly id: string;
-  readonly text: string;
+  readonly text: I18nString;
   readonly schemeVersion?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
@@ -288,8 +291,8 @@ export declare class InterventionTag {
 
 export declare class Entity {
   readonly id: string;
-  readonly name: string;
-  readonly description?: string;
+  readonly name: I18nString;
+  readonly description: I18nString;
   readonly parentEntityID?: string;
   readonly level: Level;
   readonly location?: Location;
@@ -356,6 +359,21 @@ export declare class Task {
   readonly taskExecutedSurveyId?: string;
   constructor(init: ModelInit<Task, TaskMetaData>);
   static copyOf(source: Task, mutator: (draft: MutableModel<Task, TaskMetaData>) => MutableModel<Task, TaskMetaData> | void): Task;
+}
+
+export declare class SessionData {
+  readonly id: string;
+  readonly date: string;
+  readonly userID?: string;
+  readonly app?: string;
+  readonly version?: string;
+  readonly buildNumber?: string;
+  readonly remoteConfig?: string;
+  readonly platform?: string;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+  constructor(init: ModelInit<SessionData, SessionDataMetaData>);
+  static copyOf(source: SessionData, mutator: (draft: MutableModel<SessionData, SessionDataMetaData>) => MutableModel<SessionData, SessionDataMetaData> | void): SessionData;
 }
 
 export declare class InterventionContentRelation {

@@ -25,6 +25,7 @@ class AmplifyIntegration {
     await Amplify.addPlugins(
         [_amplifyDataStore, _amplifyAPI, _amplifyAuthCognito]);
     await Amplify.configure(amplifyconfig);
+    print("amplify successfully initialized");
     return true;
   }
 }

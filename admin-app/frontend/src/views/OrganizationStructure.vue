@@ -18,9 +18,17 @@
       <div class="column-wrapper dotted-left-border d-flex align-center justify-center">
         <LevelModal v-if="showLevelModal" />
         <EntityModal v-if="showEntityModal" />
-        <v-btn rounded x-large color="primary" @click="clickOnAddNewLevel">
-          <v-icon class="mr-2"> mdi-plus </v-icon>
-          {{ $t('organizationStructure.addNewLevel') }}
+        <v-btn :disabled="getLoading" rounded x-large color="primary" @click="clickOnAddNewLevel">
+          <v-icon class="mr-2">mdi-plus</v-icon>
+          <v-skeleton-loader
+            v-if="getLoading"
+            width="196"
+            class="mt-2"
+            type="text"
+          ></v-skeleton-loader>
+          <span v-else>
+            {{ $t('organizationStructure.addNewLevel') }}
+          </span>
         </v-btn>
       </div>
     </div>
@@ -52,6 +60,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      getLoading: 'LEVEL_Data/getLoading',
       levels: 'LEVEL_Data/sortedLevels',
       isLevelModalDisplayed: 'dataModal/getIsDisplayed',
       entityModalIsDisplayed: 'dataModal/getIsDisplayed',

@@ -5,26 +5,26 @@
         v-if="isHovered"
         color="primary"
         rounded
+        :disabled="getLoading"
         x-large
         @mouseleave="setIsHovered(false)"
         key="hovered"
         class="overflow-hidden"
         @click="clickHandler"
       >
-        <v-icon class="mr-2"> mdi-plus </v-icon>
-        <span class="overflow-hidden">
-          {{ $t('organizationStructure.addNewEntity') }}
-        </span>
+        <v-icon class="mr-2">mdi-plus</v-icon>
+        <span class="overflow-hidden">{{ $t('organizationStructure.addNewEntity') }}</span>
       </v-btn>
       <v-btn
         v-else
         fab
         color="primary"
         @mouseover="setIsHovered(true)"
+        :disabled="getLoading"
         key="notHovered"
         @click="clickHandler"
       >
-        <v-icon class="mx-auto"> mdi-plus </v-icon>
+        <v-icon class="mx-auto">mdi-plus</v-icon>
       </v-btn>
     </transition>
   </div>
@@ -33,7 +33,7 @@
 <script>
 import { validate as uuidValidate } from 'uuid';
 
-import { mapActions, mapMutations } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 
 export default {
   name: 'AddEntityButton',
@@ -43,6 +43,11 @@ export default {
       required: true,
       validator: (e) => uuidValidate(e) || e === null,
     },
+  },
+  computed: {
+    ...mapGetters({
+      getLoading: 'LEVEL_Data/getLoading',
+    }),
   },
   methods: {
     setIsHovered(payload) {
