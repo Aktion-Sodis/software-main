@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import awsconfig from './src/aws-exports.js';
 import mysql from 'mysql';
 
+import createTestSurvey from "./src/migrators/createTestSurvey.js";
 import createBaseLevels from "./src/migrators/createBaseLevels.js"
 import migrateVillages from "./src/migrators/migrateVillages.js"
 import {deleteAppliedInterventions, deleteLevels} from "./src/utils/deleteUtils.js";
@@ -19,6 +20,8 @@ import createMigratorTag from "./src/migrators/createMigratorTag.js";
 
 Amplify.default.configure(awsconfig);
 
+await createTestSurvey();
+/*
 dotenv.config();
 
 console.log(`Initializing migration of data from ${process.env.MARIADB_HOST} ${process.env.MARIADB_DBNAME} to AWS amplify storage.`);
