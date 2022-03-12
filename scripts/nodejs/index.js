@@ -19,8 +19,9 @@ import createConfig from "./src/migrators/createConfig.js";
 import createMigratorTag from "./src/migrators/createMigratorTag.js";
 
 Amplify.default.configure(awsconfig);
-
 await createTestSurvey();
+await createMigratorTag();
+
 /*
 dotenv.config();
 

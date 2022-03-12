@@ -2,6 +2,7 @@ import * as mutations from '../graphql/mutations.js';
 import { InterventionType,  SurveyType, QuestionType } from '../models/index.js';
 import { API, graphqlOperation } from "aws-amplify";
 import mlString from '../utils/stringFormatter.js';
+import * as queries from '../graphql/queries.js';
 
 export default async function createTestSurvey() {
     const testSurvey = {
@@ -60,15 +61,16 @@ export default async function createTestSurvey() {
                 isFollowUpQuestion: false
             }
         ],
-        interventionSurveysId: "2"
+        interventionSurveysId: "2",
     }
-
-    await API.graphql(
+    try {
+       await API.graphql(
         {
             query: mutations.createSurvey,
             variables: {
                 input: testSurvey
             }
         }
-    )
+    ) 
+    } catch(e) {}    
 }
