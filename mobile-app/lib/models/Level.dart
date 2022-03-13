@@ -34,7 +34,7 @@ class Level extends Model {
   final I18nString? _description;
   final String? _parentLevelID;
   final bool? _interventionsAreAllowed;
-  final List<Intervention>? _allowedInterventions;
+  final List<LevelInterventionRelation>? _allowedInterventions;
   final List<CustomData>? _customData;
   final int? _schemeVersion;
   final TemporalDateTime? _createdAt;
@@ -91,7 +91,7 @@ class Level extends Model {
     }
   }
   
-  List<Intervention>? get allowedInterventions {
+  List<LevelInterventionRelation>? get allowedInterventions {
     return _allowedInterventions;
   }
   
@@ -122,14 +122,14 @@ class Level extends Model {
   
   const Level._internal({required this.id, required name, required description, parentLevelID, required interventionsAreAllowed, allowedInterventions, required customData, schemeVersion, createdAt, updatedAt}): _name = name, _description = description, _parentLevelID = parentLevelID, _interventionsAreAllowed = interventionsAreAllowed, _allowedInterventions = allowedInterventions, _customData = customData, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Level({String? id, required I18nString name, required I18nString description, String? parentLevelID, required bool interventionsAreAllowed, List<Intervention>? allowedInterventions, required List<CustomData> customData, int? schemeVersion}) {
+  factory Level({String? id, required I18nString name, required I18nString description, String? parentLevelID, required bool interventionsAreAllowed, List<LevelInterventionRelation>? allowedInterventions, required List<CustomData> customData, int? schemeVersion}) {
     return Level._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
       description: description,
       parentLevelID: parentLevelID,
       interventionsAreAllowed: interventionsAreAllowed,
-      allowedInterventions: allowedInterventions != null ? List<Intervention>.unmodifiable(allowedInterventions) : allowedInterventions,
+      allowedInterventions: allowedInterventions != null ? List<LevelInterventionRelation>.unmodifiable(allowedInterventions) : allowedInterventions,
       customData: customData != null ? List<CustomData>.unmodifiable(customData) : customData,
       schemeVersion: schemeVersion);
   }
@@ -174,7 +174,7 @@ class Level extends Model {
     return buffer.toString();
   }
   
-  Level copyWith({String? id, I18nString? name, I18nString? description, String? parentLevelID, bool? interventionsAreAllowed, List<Intervention>? allowedInterventions, List<CustomData>? customData, int? schemeVersion}) {
+  Level copyWith({String? id, I18nString? name, I18nString? description, String? parentLevelID, bool? interventionsAreAllowed, List<LevelInterventionRelation>? allowedInterventions, List<CustomData>? customData, int? schemeVersion}) {
     return Level._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -199,7 +199,7 @@ class Level extends Model {
       _allowedInterventions = json['allowedInterventions'] is List
         ? (json['allowedInterventions'] as List)
           .where((e) => e?['serializedData'] != null)
-          .map((e) => Intervention.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .map((e) => LevelInterventionRelation.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
       _customData = json['customData'] is List
@@ -213,7 +213,7 @@ class Level extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name?.toJson(), 'description': _description?.toJson(), 'parentLevelID': _parentLevelID, 'interventionsAreAllowed': _interventionsAreAllowed, 'allowedInterventions': _allowedInterventions?.map((Intervention? e) => e?.toJson()).toList(), 'customData': _customData?.map((CustomData? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'name': _name?.toJson(), 'description': _description?.toJson(), 'parentLevelID': _parentLevelID, 'interventionsAreAllowed': _interventionsAreAllowed, 'allowedInterventions': _allowedInterventions?.map((LevelInterventionRelation? e) => e?.toJson()).toList(), 'customData': _customData?.map((CustomData? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "level.id");
@@ -223,7 +223,7 @@ class Level extends Model {
   static final QueryField INTERVENTIONSAREALLOWED = QueryField(fieldName: "interventionsAreAllowed");
   static final QueryField ALLOWEDINTERVENTIONS = QueryField(
     fieldName: "allowedInterventions",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Intervention).toString()));
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (LevelInterventionRelation).toString()));
   static final QueryField CUSTOMDATA = QueryField(fieldName: "customData");
   static final QueryField SCHEMEVERSION = QueryField(fieldName: "schemeVersion");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -259,8 +259,8 @@ class Level extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
       key: Level.ALLOWEDINTERVENTIONS,
       isRequired: true,
-      ofModelName: (Intervention).toString(),
-      associatedKey: Intervention.LEVELALLOWEDINTERVENTIONSID
+      ofModelName: (LevelInterventionRelation).toString(),
+      associatedKey: LevelInterventionRelation.LEVEL
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(

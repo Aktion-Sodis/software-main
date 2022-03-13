@@ -23,15 +23,19 @@ import 'package:amplify_core/amplify_core.dart';
 import 'AppliedIntervention.dart';
 import 'Config.dart';
 import 'Content.dart';
+import 'ContentContentTagRelation.dart';
 import 'ContentTag.dart';
 import 'Entity.dart';
 import 'ExecutedSurvey.dart';
 import 'Intervention.dart';
 import 'InterventionContentRelation.dart';
+import 'InterventionInterventionTagRelation.dart';
 import 'InterventionTag.dart';
 import 'Level.dart';
+import 'LevelInterventionRelation.dart';
 import 'SessionData.dart';
 import 'Survey.dart';
+import 'SurveySurveyTagRelation.dart';
 import 'SurveyTag.dart';
 import 'Task.dart';
 import 'User.dart';
@@ -51,6 +55,7 @@ export 'AppliedIntervention.dart';
 export 'ColorTheme.dart';
 export 'Config.dart';
 export 'Content.dart';
+export 'ContentContentTagRelation.dart';
 export 'ContentTag.dart';
 export 'CustomData.dart';
 export 'Entity.dart';
@@ -58,9 +63,11 @@ export 'ExecutedSurvey.dart';
 export 'I18nString.dart';
 export 'Intervention.dart';
 export 'InterventionContentRelation.dart';
+export 'InterventionInterventionTagRelation.dart';
 export 'InterventionTag.dart';
 export 'InterventionType.dart';
 export 'Level.dart';
+export 'LevelInterventionRelation.dart';
 export 'Location.dart';
 export 'Marking.dart';
 export 'Permission.dart';
@@ -71,6 +78,7 @@ export 'QuestionOption.dart';
 export 'QuestionType.dart';
 export 'SessionData.dart';
 export 'Survey.dart';
+export 'SurveySurveyTagRelation.dart';
 export 'SurveyTag.dart';
 export 'SurveyType.dart';
 export 'Task.dart';
@@ -79,9 +87,9 @@ export 'User.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "7dc594100f04eacfa826f40bf28e2c10";
+  String version = "7d9cdd256f2ab5e5a95666032cdb4fc4";
   @override
-  List<ModelSchema> modelSchemas = [AppliedIntervention.schema, Config.schema, Content.schema, ContentTag.schema, Entity.schema, ExecutedSurvey.schema, Intervention.schema, InterventionContentRelation.schema, InterventionTag.schema, Level.schema, SessionData.schema, Survey.schema, SurveyTag.schema, Task.schema, User.schema];
+  List<ModelSchema> modelSchemas = [AppliedIntervention.schema, Config.schema, Content.schema, ContentContentTagRelation.schema, ContentTag.schema, Entity.schema, ExecutedSurvey.schema, Intervention.schema, InterventionContentRelation.schema, InterventionInterventionTagRelation.schema, InterventionTag.schema, Level.schema, LevelInterventionRelation.schema, SessionData.schema, Survey.schema, SurveySurveyTagRelation.schema, SurveyTag.schema, Task.schema, User.schema];
   static final ModelProvider _instance = ModelProvider();
   @override
   List<ModelSchema> customTypeSchemas = [AppliedCustomData.schema, ColorTheme.schema, CustomData.schema, I18nString.schema, Location.schema, Marking.schema, Permission.schema, Question.schema, QuestionAnswer.schema, QuestionOption.schema];
@@ -96,6 +104,8 @@ class ModelProvider implements ModelProviderInterface {
         return Config.classType;
       case "Content":
         return Content.classType;
+      case "ContentContentTagRelation":
+        return ContentContentTagRelation.classType;
       case "ContentTag":
         return ContentTag.classType;
       case "Entity":
@@ -106,14 +116,20 @@ class ModelProvider implements ModelProviderInterface {
         return Intervention.classType;
       case "InterventionContentRelation":
         return InterventionContentRelation.classType;
+      case "InterventionInterventionTagRelation":
+        return InterventionInterventionTagRelation.classType;
       case "InterventionTag":
         return InterventionTag.classType;
       case "Level":
         return Level.classType;
+      case "LevelInterventionRelation":
+        return LevelInterventionRelation.classType;
       case "SessionData":
         return SessionData.classType;
       case "Survey":
         return Survey.classType;
+      case "SurveySurveyTagRelation":
+        return SurveySurveyTagRelation.classType;
       case "SurveyTag":
         return SurveyTag.classType;
       case "Task":
