@@ -15,6 +15,25 @@ const migrateProjects = async (sqlPool) => {
 
     console.log(projects);
 
+    const interventionTagQuery = await API.graphql(
+        {
+            query: queries.listInterventionInterventionTagRelations
+        }
+    );
+    for (const interventionTag in interventionTagQuery.data.listInterventionInterventionTagRelations.list) {
+        await API.graphql(
+            {
+                query: mutations.deleteInterventionInterventionTagRelation,
+                variables: {
+                    input: {
+                        id: interventionTag.id,
+                        _version: interventionTag._version
+                    }
+                }
+            }
+        )
+    }
+
     for (let project of projects){
         //todo: update tags
         let newIntervention = {
@@ -34,22 +53,39 @@ const migrateProjects = async (sqlPool) => {
                 query: mutations.createIntervention,
                 variables: {input: newIntervention}
             });
+            const newInterventionTagConnection = await API.graphql({
+                query: mutations.createInterventionInterventionTagRelation,
+                variables: {
+                    input: {
+                        interventionID: newIntervention.id,
+                        interventionTagID: "migration_tag"
+                    }
+                }
+            })
             
         } catch (error) {
-            console.log(error);
+            
             const oldInterventionEntry = await API.graphql({
                 query: queries.getIntervention,
                 variables: {
                     id: newIntervention.id
                 }
             });
-            console.log("old Intervention");
-            console.log(oldInterventionEntry.tags);
+            
             newIntervention._version = oldInterventionEntry.data.getIntervention._version
             await API.graphql({
                 query: mutations.updateIntervention,
                 variables: {
                     input: newIntervention
+                }
+            });
+            const newInterventionTagConnection = await API.graphql({
+                query: mutations.createInterventionInterventionTagRelation,
+                variables: {
+                    input: {
+                        interventionID: newIntervention.id,
+                        interventionTagID: "migration_tag"
+                    }
                 }
             });
         }

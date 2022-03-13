@@ -14,7 +14,6 @@ const createConfig = async ()=> {
             backgroundOneDark: "test",
             backgroundTwoDark: "test"
         },
-        _version: 1
     }
     try {
        const createdConfig = await API.graphql(

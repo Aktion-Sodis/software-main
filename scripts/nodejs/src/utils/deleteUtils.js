@@ -36,7 +36,8 @@ export async function deleteLevels() {
                 mutations.deleteLevel,
                 {
                     input: {
-                        id: obj.id
+                        id: obj.id,
+                        _version: obj._version
                     }
                 }
             )

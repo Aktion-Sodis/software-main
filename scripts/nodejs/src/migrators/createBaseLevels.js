@@ -2,17 +2,19 @@ import Amplify, { API, graphqlOperation } from "aws-amplify";
 import * as mutations from '../graphql/mutations.js';
 import * as schema from '../models/index.js';
 import uuid from 'uuid';
+import mlString from '../utils/stringFormatter.js';
 
 
 const createBaseLevels = async () => {
-    // First, create entity levels manually for village and family.
-    let response = await API.graphql({
-        query: mutations.createLevel, 
+    try {
+        let response = await API.graphql({
+        query: mutations.createLevel,
         variables: {input: {
-            name: "village",
-            interventionsAreAllowed: true,
+            name: mlString("Pueblo"),
+            description: mlString("Pequenos pueblos en Micani"),
+            interventionsAreAllowed: false,
             customData: [{
-                name: "numHouseholds",
+                name: mlString("Residentes"),
                 type: schema.Type.INT,
                 id: uuid.v4(),
             }],
@@ -26,11 +28,12 @@ const createBaseLevels = async () => {
     response = await API.graphql({
         query: mutations.createLevel, 
         variables: {input: {
-            name: "family",
+            name: mlString("Familia"),
+            description: mlString("Una familia en un pueblo"),
             interventionsAreAllowed: true,
             parentLevelID: villageLevel.id,
             customData: [{
-                name: "numChildren",
+                name: mlString("Niños"),
                 type: schema.Type.INT,
                 id: uuid.v4(),
             }],
@@ -40,6 +43,13 @@ const createBaseLevels = async () => {
     console.log("Created familyLevel entry:");
     console.log(familyLevel);
     return {villageLevel, familyLevel}
+    }
+    catch(e) {
+        console.log("error in level creation");
+        console.log(e);
+    }
+    // First, create entity levels manually for village and family.
+    
 }
 
 export default createBaseLevels;

@@ -7,6 +7,7 @@ import * as queries from '../graphql/queries.js';
 export default async function createTestSurvey() {
     const testSurvey = {
         id: "test_survey",
+        interventionSurveysId: "6",
         name: mlString("TestSurvey"),
         description: mlString("This is a test survey"),
         surveyType: SurveyType.DEFAULT,
@@ -61,16 +62,37 @@ export default async function createTestSurvey() {
                 isFollowUpQuestion: false
             }
         ],
-        interventionSurveysId: "2",
     }
     try {
        await API.graphql(
-        {
+            {
             query: mutations.createSurvey,
             variables: {
                 input: testSurvey
             }
-        }
-    ) 
-    } catch(e) {}    
+            }
+        );
+        
+     
+    } catch(e) {
+        console.log("error in surveycreation");
+        console.log(e);
+    }
+
+    try {
+await API.graphql({
+            query: mutations.createSurveySurveyTagRelation,
+            variables: {
+                input: {
+                    surveyID: "test_survey",
+                    surveyTagID: "migration_tag"
+                }
+            }
+        });
+    }catch(e) {
+        console.log("error in creating surveytagconnection");
+        console.log(e);
+    }
+
+     
 }

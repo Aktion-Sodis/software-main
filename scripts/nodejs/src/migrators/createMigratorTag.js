@@ -11,13 +11,10 @@ export default async function createOrUpdateTags () {
     }
 
     try {
-        let surveyTag = universalTag
-        surveyTag.surveyTagsId = "test_survey"
-
         await API.graphql({
             query: mutations.createSurveyTag,
             variables: {
-                input: surveyTag
+                input: universalTag
             }
         });
         await API.graphql({
@@ -34,7 +31,6 @@ export default async function createOrUpdateTags () {
         });
     }
     catch(e) {
-        console.log("error in tag creation");
-        console.log(e);
+        
     }
 }

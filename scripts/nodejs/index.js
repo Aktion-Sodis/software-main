@@ -17,12 +17,15 @@ import migrateProjects from "./src/migrators/migrateProjects.js";
 import migrateExecutedSurveys from "./src/migrators/migrateExecutedSurveys.js";
 import createConfig from "./src/migrators/createConfig.js";
 import createMigratorTag from "./src/migrators/createMigratorTag.js";
+import createLevelToInterventionConnections from './src/migrators/createLevelToInterventionConnections.js';
 
 Amplify.default.configure(awsconfig);
-await createTestSurvey();
-await createMigratorTag();
 
-/*
+
+//await createTestSurvey();
+
+
+
 dotenv.config();
 
 console.log(`Initializing migration of data from ${process.env.MARIADB_HOST} ${process.env.MARIADB_DBNAME} to AWS amplify storage.`);
@@ -36,12 +39,14 @@ const sqlPool = mysql.createPool({
     connectionLimit: 10,
   });
 
+await migrateSurveys(sqlPool);
+/*
 
 console.log(`Successfully connected to old database ${sqlPool}.`)
 
 console.log("Clean up erroneous writes of villageLevel to remove erroneous entries...")
-await deleteLevels();
-await deleteAppliedInterventions();
+await deleteLevels(); //todo: ggf nicht deleten, sondern prüfen ob vorhanden
+await deleteAppliedInterventions(); //todo: ggf. nicht deleten, sondern prüfen ob vorhanden
 
 //todo: delete interventions -> haben fixe IDs, also wenn dann updaten
 //todo: delete surveys -> haben fixe IDs, also wenn dann updaten
@@ -70,22 +75,32 @@ const defaultUser = createMigrationUser([]);
 
 console.log("Creating interventions...");
 migrateProjects(sqlPool);
-/*
+
+//bis hierher läuft es
+
+//todo: integrate question and question Options
+
 
 //todo: pass supportedInterventions to family Level
 console.log("Creating new base levels for villageEntity and familyEntity and retrieve ids...")
 let response = await createBaseLevels();
 const {villageLevel, familyLevel} = response;
 
-//todo: integrate question and question Options
-console.log("Migrating surveys...");
-migrateSurveys(sqlPool);
+console.log("levels created");
+
+//todo: create level to project connections
+await createLevelToInterventionConnections(familyLevel);
+
+console.log("InterventionLevel connections drawn");
+
+//läuft bis hier her
 
 //  TODO: das muss mit in die survey migration 
 //console.log("Migrating question options...");
 migrateQuestionOptions(sqlPool);
 
-
+console.log("Migrating surveys...");
+migrateSurveys(sqlPool);
 
 
 //todo: check for family wether interventions exist
