@@ -3,6 +3,7 @@
     "notYetImplemented": "This feature is yet to be implemented. Please ignore if you are on bug hunting! 🐞🔍"
   },
   "general": {
+    "edit": "Edit",
     "searchBox": "Search anything",
     "cancel": "Cancel",
     "save": "Save",
@@ -61,6 +62,9 @@
     },
     "start": "Start"
   },
+  "home": {
+    "title": "Home"
+  },
   "changePassword": {
     "title": "Update your password",
     "subtitle": "Enter your old and the new one.",
@@ -81,9 +85,6 @@
     "newPassword2": "New password again",
     "sendCode": "Send code",
     "confirm": "Confirm"
-  },
-  "home": {
-    "title": "Home"
   },
   "baseData": {
     "title": "Base Data",
@@ -116,6 +117,8 @@
       "upperLevel": "Level is subordinate to"
     },
     "entityModal": {
+      "moreStuffTitle": "More stuff coming soon...",
+      "moreStuffDescription": "Adding Location, Custom Data and Tags will come in the next major update.",
       "modalTitle": {
         "edit": "Edit entity ",
         "create": "Create new entity",

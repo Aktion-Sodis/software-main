@@ -128,7 +128,7 @@
           <v-btn x-large color="secondary" text @click="closeHandler">
             {{ read ? 'Close' : $t('general.cancel') }}
           </v-btn>
-          <v-btn x-large v-if="read" color="primary" text @click="editHandler"> Edit </v-btn>
+          <v-btn x-large v-if="read" color="primary" text @click="editHandler"> {{ $t('general.edit') }} </v-btn>
           <v-btn
             x-large
             v-if="!read"

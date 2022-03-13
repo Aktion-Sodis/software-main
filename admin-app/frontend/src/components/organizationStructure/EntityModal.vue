@@ -77,8 +77,10 @@
                 ></v-select>
               </v-col>
               <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
-                <v-card-title class="pt-0 pt-sm-2"> More stuff coming soon. </v-card-title>
-                <p>Adding Location, Custom Data and Tags will come in the next major update.</p>
+               <v-card-title
+                  class="pt-0 pt-sm-2"
+                >{{ $t('organizationStructure.entityModal.moreStuffTitle') }}</v-card-title>
+                <p>{{ $t('organizationStructure.entityModal.moreStuffDescription') }}</p>
               </v-col>
             </v-row>
           </v-container>
@@ -93,7 +95,7 @@
           <v-btn x-large color="secondary" text @click="closeHandler">
             {{ read ? 'Close' : $t('general.cancel') }}
           </v-btn>
-          <v-btn x-large v-if="read" color="primary" text @click="editHandler"> Edit </v-btn>
+          <v-btn x-large v-if="read" color="primary" text @click="editHandler"> {{ $t('general.edit') }} </v-btn>
           <v-btn
             x-large
             v-if="!read"

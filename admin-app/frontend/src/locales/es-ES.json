@@ -3,6 +3,7 @@
     "notYetImplemented": "Esta función aún no se ha implementado. ¡Por favor, ignora si estás en búsqueda de errores! 🐞🔍"
   },
   "general": {
+    "edit": "Editar",
     "searchBox": "Búsqueda",
     "cancel": "Cancelar",
     "save": "Guardar",
@@ -20,10 +21,13 @@
       "interventions": "Intervenciones",
       "login": "Iniciar sesión",
       "completeUserInfo": "Complete la información del usuario",
+      "changePassword": "Cambiar mi contraseña",
+      "forgotPassword": "Olvidé mi contraseña",
       "about": "Acerca de"
     },
     "errorCodes": {
       "UserNotFoundException": "Perdón, no hay ninguna cuenta que coincida con las credenciales proporcionadas.",
+      "NotAuthorizedException": "Perdón, no hay ninguna cuenta que coincida con las credenciales proporcionadas.",
       "ConditionalCheckFailedException": "Perdón, algo salió mal."
     },
     "warningCodes": {
@@ -53,13 +57,34 @@
     "firstName": "Primer nombre",
     "lastName": "Apellido",
     "password": {
-      "label": "New password",
-      "hint": "Make sure you don't forget this password and note it down."
+      "label": "Nueva contraseña",
+      "hint": "Asegúrese de no olvidar esta contraseña y anótela."
     },
     "start": "Comienzo"
   },
   "home": {
     "title": "Inicio"
+  },
+  "changePassword": {
+    "title": "Actualiza tu contraseña",
+    "subtitle": "Ingrese sus contraseñas anterior y nueva",
+    "oldPassword": {
+      "label": "Contraseña anterior",
+      "hint": "La contraseña que tiene actualmente. Si la olvidaste, intenta restablecer tu contraseña."
+    },
+    "newPassword": {
+      "label": "Nueva contraseña",
+      "hint": "La contraseña que desea tener."
+    }
+  },
+  "forgotPassword": {
+    "title": "Has olvidado tu contraseña",
+    "subtitle": "Introduzca su dirección de correo electrónico. Si hay una cuenta para ello, le enviaremos un correo electrónico con un código de verificación. Ingrese el código y establezca una nueva contraseña para su cuenta.",
+    "emailedCode": "Código",
+    "newPassword1": "Nueva contraseña",
+    "newPassword2": "Nueva contraseña de nuevo",
+    "sendCode": "Enviar código",
+    "confirm": "Confirmar"
   },
   "baseData": {
     "title": "Datos básicos",
@@ -92,6 +117,8 @@
       "upperLevel": "El nivel está subordinado a"
     },
     "entityModal": {
+      "moreStuffTitle": "Próximamente más cosas...",
+      "moreStuffDescription": "Agregar ubicación, datos personalizados y etiquetas vendrá en la próxima actualización importante.",
       "modalTitle": {
         "edit": "Editar entidad ",
         "create": "Crear nueva entidad",

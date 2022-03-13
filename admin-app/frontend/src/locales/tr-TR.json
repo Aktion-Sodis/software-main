@@ -3,6 +3,7 @@
     "notYetImplemented": "Bu fonksiyonalite henüz tamamlanmadı. Eğer bug arayışındaysan lütfen görmezden gel! 🐞🔍"
   },
   "general": {
+    "edit": "Düzenle",
     "searchBox": "Her yerde ara",
     "cancel": "İptal",
     "save": "Kaydet",
@@ -20,10 +21,13 @@
       "interventions": "Müdahaleler",
       "login": "Giriş",
       "completeUserInfo": "Kullanıcı bilgilerini tamamla",
+      "changePassword": "Şifre Değiştir",
+      "forgotPassword": "Şifremi Unuttum",
       "about": "Hakkımızda"
     },
     "errorCodes": {
       "UserNotFoundException": "Üzgünüz, girilen bilgilerle eşleşen bir kullanıcı bulunamadı.",
+      "NotAuthorizedException": "Üzgünüz, girilen bilgilerle eşleşen bir kullanıcı bulunamadı.",
       "ConditionalCheckFailedException": "Üzgünüz, bir şeyler yanlış gitti."
     },
     "warningCodes": {
@@ -61,6 +65,27 @@
   "home": {
     "title": "Ana Sayfa"
   },
+  "changePassword": {
+    "title": "Şifreni güncelle",
+    "subtitle": "Eski ve yeni şifrelerini gir",
+    "oldPassword": {
+      "label": "Eski Şifre",
+      "hint": "Şu anda sahip olduğunuz şifre. Unuttuysanız, şifrenizi sıfırlamayı deneyin."
+    },
+    "newPassword": {
+      "label": "Yeni Şifre",
+      "hint": "Yeni şifre oluşturun"
+    }
+  },
+  "forgotPassword": {
+    "title": "Şifremi Unuttum",
+    "subtitle": "E-posta adresinizi giriniz. Size bir doğrulama kodu göndereceğiz. Lütfen kodu girin ve hesabınız için yeni bir şifre belirleyin.",
+    "emailedCode": "Kod",
+    "newPassword1": "Yeni Şifre",
+    "newPassword2": "Yeni Şifre Tekrar",
+    "sendCode": "Kod Gönder",
+    "confirm": "Onay"
+  },
   "baseData": {
     "title": "Temel Veriler",
     "documents": "Dokümanlar",
@@ -92,6 +117,8 @@
       "upperLevel": "Seviyenin üst seviyesi"
     },
     "entityModal": {
+      "moreStuffTitle": "Daha fazlası yakında...",
+      "moreStuffDescription": "Konum, Özel Veriler ve Etiketlerin eklenmesi bir sonraki büyük güncellemede gelecek.",
       "modalTitle": {
         "edit": "Oluşumu düzenle: ",
         "create": "Yeni oluşum yarat",
