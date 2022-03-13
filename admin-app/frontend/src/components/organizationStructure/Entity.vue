@@ -48,18 +48,18 @@ export default {
   props: {
     id: {
       required: true,
-      validator: (e) => uuidValidate(e) || e === null,
+      validator: (v) => uuidValidate(v) || v === null || v.slice(0, 11) === 'dummyEntity',
     },
     entityLevelId: {
       required: true,
-      validator: (e) => uuidValidate(e) || e === null,
+      validator: (v) => uuidValidate(v) || v === null || v.slice(0, 10) === 'dummyLevel',
     },
     parentEntityID: {
       required: true,
-      validator: (e) => uuidValidate(e) || e === null,
+      validator: (v) => uuidValidate(v) || v === null || v.slice(0, 11) === 'dummyEntity',
     },
-    entityName: { type: String, required: true },
-    entityDescription: { type: String, required: true },
+    entityName: { type: Object, required: true },
+    entityDescription: { type: Object, required: true },
     index: { type: Number, required: true },
   },
   computed: {

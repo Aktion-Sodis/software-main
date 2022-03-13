@@ -48,13 +48,13 @@ export default {
       required: true,
     },
     name: {
-      type: String,
+      type: Object,
       required: true,
     },
     id: {
       type: String,
       required: true,
-      validator: (i) => uuidValidate(i),
+      validator: (v) => uuidValidate(v) || v.slice(0, 10) === 'dummyLevel',
     },
   },
   computed: {

@@ -41,7 +41,7 @@ export default {
   props: {
     entityLevelId: {
       required: true,
-      validator: (e) => uuidValidate(e) || e === null,
+      validator: (v) => uuidValidate(v) || v === null || v.slice(0, 10) === 'dummyLevel',
     },
   },
   computed: {
