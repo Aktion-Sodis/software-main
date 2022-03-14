@@ -1,15 +1,9 @@
 import Vue from 'vue';
 import { dataTypesDict, modalModesDict } from '../constants';
-import {
-  EmptyEntity,
-  Entity,
-  EmptyIntervention,
-  Intervention,
-  EmptyLevel,
-  Level,
-  EmptySurvey,
-  Survey,
-} from '../classes';
+import { EmptyEntity, Entity } from '../entities/utils';
+import { EmptyIntervention, Intervention } from '../interventions/utils';
+import { EmptyLevel, Level } from '../levels/utils';
+import { EmptySurvey, Survey } from '../survey/utils';
 
 const dataModal = {
   namespaced: true,
@@ -45,15 +39,15 @@ const dataModal = {
 
     /* ENTITY DRAFT: SET & RESET */
     setENTITYDraft: (state, {
-      id, name, description, levelId, upperEntityId, tagIds,
+      id, name, description, entityLevelId, parentEntityID, _version,
     }) => {
       state.dataDraft = new Entity({
         id,
         name,
         description,
-        levelId,
-        upperEntityId,
-        tagIds,
+        entityLevelId,
+        parentEntityID,
+        _version,
       });
     },
     resetENTITYDraft: (state) => {
@@ -64,16 +58,16 @@ const dataModal = {
     setLEVELDraft: (
       state,
       {
-        id, name, description, upperLevelId, allowedInterventions, tagIds,
+        id, name, description, parentLevelID, allowedInterventions, _version,
       },
     ) => {
       state.dataDraft = new Level({
         id,
         name,
         description,
-        upperLevelId,
+        parentLevelID,
         allowedInterventions,
-        tagIds,
+        _version,
       });
     },
     resetLEVELDraft: (state) => {
@@ -82,7 +76,7 @@ const dataModal = {
 
     /* INTERVENTION DRAFT: SET & RESET */
     setINTERVENTIONDraft: (state, {
-      id, name, description, tagIds, contents,
+      id, name, description, tagIds, contents, _version,
     }) => {
       state.dataDraft = new Intervention({
         id,
@@ -90,6 +84,7 @@ const dataModal = {
         description,
         tagIds,
         contents,
+        _version,
       });
     },
     resetINTERVENTIONDraft: (state) => {
@@ -100,7 +95,7 @@ const dataModal = {
     setSURVEYDraft: (
       state,
       {
-        id, name, description, tags, type, questionIds, creationDate, lastEditDate,
+        id, name, description, tags, type, questionIds, creationDate, lastEditDate, _version,
       },
     ) => {
       state.dataDraft = new Survey({
@@ -112,6 +107,7 @@ const dataModal = {
         questionIds,
         creationDate,
         lastEditDate,
+        _version,
       });
     },
     resetSURVEYDraft: (state) => {
@@ -171,11 +167,7 @@ const dataModal = {
     deleteData: async ({ dispatch, getters }, { dataType }) => {
       if (getters.getEntityModalMode === modalModesDict.read) return;
       if (getters.getEntityModalMode === modalModesDict.create) return;
-      await dispatch(
-        `${dataType}_Data/APIdelete`,
-        { id: getters.getDataIdInFocus },
-        { root: true },
-      );
+      await dispatch(`${dataType}_Data/APIdelete`, getters.getDataDraft, { root: true });
     },
   },
 };

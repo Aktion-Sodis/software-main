@@ -27,13 +27,13 @@ const entitiesUI = {
   },
   mutations: {
     /* CREATE, UPDATE, DELETE */
-    setEntityDraft: (state, { id, name, description, id, upperEntityId, tagIds }) => {
+    setEntityDraft: (state, { id, name, description, id, parentEntityID, tagIds }) => {
       state.entityDraft = new Entity({
         id,
         name,
         description,
         id,
-        upperEntityId,
+        parentEntityID,
         tagIds,
       });
     },

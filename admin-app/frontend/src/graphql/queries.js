@@ -22,11 +22,7 @@ export const getUser = /* GraphQL */ `
   }
 `;
 export const listUsers = /* GraphQL */ `
-  query ListUsers(
-    $filter: ModelUserFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListUsers($filter: ModelUserFilterInput, $limit: Int, $nextToken: String) {
     listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         firstName
@@ -56,12 +52,7 @@ export const syncUsers = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncUsers(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncUsers(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         firstName
         lastName
@@ -106,11 +97,7 @@ export const getConfig = /* GraphQL */ `
   }
 `;
 export const listConfigs = /* GraphQL */ `
-  query ListConfigs(
-    $filter: ModelConfigFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListConfigs($filter: ModelConfigFilterInput, $limit: Int, $nextToken: String) {
     listConfigs(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name
@@ -142,12 +129,7 @@ export const syncConfigs = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncConfigs(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncConfigs(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         name
         colorTheme {
@@ -217,11 +199,7 @@ export const getLevel = /* GraphQL */ `
   }
 `;
 export const listLevels = /* GraphQL */ `
-  query ListLevels(
-    $filter: ModelLevelFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListLevels($filter: ModelLevelFilterInput, $limit: Int, $nextToken: String) {
     listLevels(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name {
@@ -240,6 +218,10 @@ export const listLevels = /* GraphQL */ `
         }
         customData {
           id
+          name {
+            languageKeys
+            languageTexts
+          }
           type
         }
         schemeVersion
@@ -262,12 +244,7 @@ export const syncLevels = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncLevels(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncLevels(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         name {
           languageKeys
@@ -380,11 +357,7 @@ export const getIntervention = /* GraphQL */ `
   }
 `;
 export const listInterventions = /* GraphQL */ `
-  query ListInterventions(
-    $filter: ModelInterventionFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListInterventions($filter: ModelInterventionFilterInput, $limit: Int, $nextToken: String) {
     listInterventions(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name {
@@ -432,12 +405,7 @@ export const syncInterventions = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncInterventions(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncInterventions(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         name {
           languageKeys
@@ -527,11 +495,7 @@ export const getContent = /* GraphQL */ `
   }
 `;
 export const listContents = /* GraphQL */ `
-  query ListContents(
-    $filter: ModelContentFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListContents($filter: ModelContentFilterInput, $limit: Int, $nextToken: String) {
     listContents(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name {
@@ -570,12 +534,7 @@ export const syncContents = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncContents(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncContents(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         name {
           languageKeys
@@ -691,11 +650,7 @@ export const getSurvey = /* GraphQL */ `
   }
 `;
 export const listSurveys = /* GraphQL */ `
-  query ListSurveys(
-    $filter: ModelSurveyFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListSurveys($filter: ModelSurveyFilterInput, $limit: Int, $nextToken: String) {
     listSurveys(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name {
@@ -747,12 +702,7 @@ export const syncSurveys = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncSurveys(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncSurveys(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         name {
           languageKeys
@@ -874,11 +824,7 @@ export const getEntity = /* GraphQL */ `
   }
 `;
 export const listEntities = /* GraphQL */ `
-  query ListEntities(
-    $filter: ModelEntityFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListEntities($filter: ModelEntityFilterInput, $limit: Int, $nextToken: String) {
     listEntities(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name {
@@ -891,6 +837,14 @@ export const listEntities = /* GraphQL */ `
         }
         parentEntityID
         level {
+          name {
+            languageKeys
+            languageTexts
+          }
+          description {
+            languageKeys
+            languageTexts
+          }
           parentLevelID
           interventionsAreAllowed
           schemeVersion
@@ -937,12 +891,7 @@ export const syncEntities = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncEntities(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncEntities(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         name {
           languageKeys
@@ -1086,11 +1035,7 @@ export const listAppliedInterventions = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    listAppliedInterventions(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
+    listAppliedInterventions(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         whoDidIt {
           firstName
@@ -1669,11 +1614,7 @@ export const getTask = /* GraphQL */ `
   }
 `;
 export const listTasks = /* GraphQL */ `
-  query ListTasks(
-    $filter: ModelTaskFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListTasks($filter: ModelTaskFilterInput, $limit: Int, $nextToken: String) {
     listTasks(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         title
@@ -1756,12 +1697,7 @@ export const syncTasks = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncTasks(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncTasks(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         title
         text
@@ -1868,11 +1804,7 @@ export const getContentTag = /* GraphQL */ `
   }
 `;
 export const listContentTags = /* GraphQL */ `
-  query ListContentTags(
-    $filter: ModelContentTagFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListContentTags($filter: ModelContentTagFilterInput, $limit: Int, $nextToken: String) {
     listContentTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         text {
@@ -1903,12 +1835,7 @@ export const syncContentTags = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncContentTags(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncContentTags(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         text {
           languageKeys
@@ -1968,11 +1895,7 @@ export const listInterventionTags = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    listInterventionTags(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
+    listInterventionTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         text {
           languageKeys
@@ -2062,11 +1985,7 @@ export const getSurveyTag = /* GraphQL */ `
   }
 `;
 export const listSurveyTags = /* GraphQL */ `
-  query ListSurveyTags(
-    $filter: ModelSurveyTagFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListSurveyTags($filter: ModelSurveyTagFilterInput, $limit: Int, $nextToken: String) {
     listSurveyTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         text {
@@ -2097,12 +2016,7 @@ export const syncSurveyTags = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncSurveyTags(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncSurveyTags(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         text {
           languageKeys
@@ -2454,11 +2368,7 @@ export const listInterventionContentRelations = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    listInterventionContentRelations(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
+    listInterventionContentRelations(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         interventionID

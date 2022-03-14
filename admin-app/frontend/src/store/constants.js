@@ -105,3 +105,9 @@ export const dataModulesDict = Object.freeze({
   level: `${dataTypesDict.level}Data`,
   intervention: `${dataTypesDict.intervention}Data`,
 });
+
+export const syncStatusDict = Object.freeze({
+  inSync: 'inSync',
+  synched: 'synched',
+  synchronizing: 'synchronizing',
+});
