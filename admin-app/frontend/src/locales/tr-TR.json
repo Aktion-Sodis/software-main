@@ -26,9 +26,26 @@
       "about": "Hakkımızda"
     },
     "errorCodes": {
-      "UserNotFoundException": "Üzgünüz, girilen bilgilerle eşleşen bir kullanıcı bulunamadı.",
-      "NotAuthorizedException": "Üzgünüz, girilen bilgilerle eşleşen bir kullanıcı bulunamadı.",
-      "ConditionalCheckFailedException": "Üzgünüz, bir şeyler yanlış gitti."
+      "InternalErrorException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6001",
+      "InvalidLambdaResponseException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6002",
+      "InvalidParameterException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6003",
+      "InvalidSmsRoleAccessPolicyException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6004",
+      "InvalidSmsRoleTrustRelationshipException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6005",
+      "InvalidUserPoolConfigurationException": "Dahili bir hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6006",
+      "NotAuthorizedException": "Üzgünüz, verilen kimlik bilgileriyle eşleşen hesap yok. Hata Kodu: 6007",
+      "PasswordResetRequiredException": "Parola sıfırlama gerekli. Hata Kodu: 608",
+      "ResourceNotFoundException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6009",
+      "TooManyRequestsException": "Çok fazla istek var. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6010",
+      "UnexpectedLambdaException": "Dahili bir hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6011",
+      "UserLambdaValidationException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6012",
+      "UserNotConfirmedException": "Kullanıcı onaylanmadı. Hata Kodu: 6013",
+      "UserNotFoundException": "Üzgünüz, verilen kimlik bilgileriyle eşleşen hesap yok. Hata Kodu: 6014",
+      "ConditionalCheckFailedException": "Üzgünüm, bir şeyler ters gitti. Hata Kodu: 6015",
+      "InvalidPasswordException": "Üzgünüm, bir şeyler ters gitti. Hata Kodu: 6016",
+      "LimitExceededException": "Üzgünüm, bir şeyler ters gitti. Hata Kodu: 6017",
+      "CodeMismatchException": "Kod uyuşmazlığı. Hata Kodu: 6018",
+      "ExpiredCodeException": "Kodun süresi doldu. Hata Kodu: 6019",
+      "TooManyFailedAttemptsException": "Çok fazla başarısız deneme. Hata Kodu: 6020"
     },
     "warningCodes": {
       "sessionExpired": "Oturumun süresi doldu. Lütfen yeniden giriş yap."
