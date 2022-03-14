@@ -32,6 +32,7 @@ dependencies:
   path_provider: ^2.0.9
   path: ^1.8.0
   image_picker: ^0.8.4+10
+  material_design_icons_flutter: ^5.0.6595
 
 dev_dependencies:
   flutter_test:
