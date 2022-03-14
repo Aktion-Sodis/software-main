@@ -83,8 +83,8 @@ const entitiesData = {
         );
         return lowerLevelContainsChildren
           ? allEntitiesInLowerLevel.length
-              - allEntitiesInLowerLevel.reverse().findIndex((e) => e.parentEntityID === entityId)
-              - 1
+          - allEntitiesInLowerLevel.reverse().findIndex((e) => e.parentEntityID === entityId)
+          - 1
           : -1;
       },
     minVerticalOrderOfChildren:
@@ -279,30 +279,30 @@ const entitiesData = {
         new Entity({
           id: '3',
           name: {
-            languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+            languageKeys: ['en-US', 'es-BO', 'tr-TR'],
             languageTexts: ['Sucre', 'Sucre', 'Sucre'],
           },
-          description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+          description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
           entityLevelId: '1',
           parentEntityID: '0',
         }),
         // new Entity({
         //   id: '1',
         //   name: {
-        //     languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+        //     languageKeys: ['en-US', 'es-BO', 'tr-TR'],
         //     languageTexts: ['La Paz', 'La Paz', 'La Paz'],
         //   },
-        //   description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+        //   description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
         //   entityLevelId: '1',
         //   parentEntityID: '0',
         // }),
         // new Entity({
         //   id: '2',
         //   name: {
-        //     languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+        //     languageKeys: ['en-US', 'es-BO', 'tr-TR'],
         //     languageTexts: ['El Alto', 'El Alto', 'El Alto'],
         //   },
-        //   description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+        //   description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
         //   entityLevelId: '2',
         //   parentEntityID: '1',
         // }),

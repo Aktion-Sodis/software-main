@@ -7,7 +7,11 @@
     "verboseName": "Aktion Sodis e.V.", //Name; String
     "bannerPath": "configFiles/banner.png",
     "iconPath": "configFiles/icon.png",
-    "locales": ["es-ES", "en-US", "tr-TR"], // lower the index, higher the priority
+    "locales": [
+      "es-BO",
+      "en-US",
+      "tr-TR"
+    ], // lower the index, higher the priority
     "colors": {
       "primary": "0x00ff00", // Integer hex,
       "secondary": "0x00ff00", // Integer hex,
@@ -39,7 +43,6 @@
     "creationDate": "12345435435", // Date in milliseconds
     "lastEdit": "12345435435" // Date in milliseconds
   },
-
   //Collection users; many documents as below
   "user": {
     "schemeVersion": 0.9,
@@ -51,13 +54,14 @@
         "74ed79f9-c7ac-4565-8b7d-9adc7e558880",
         "d9c743a4-75fd-443f-9c59-e49fa122e241"
       ], //jeweils berechtigung und zugehörige höchste ebenen entity foreign key
-      "createSubentities": ["48904258-6f34-4daa-92b0-f7a91faf799a"]
+      "createSubentities": [
+        "48904258-6f34-4daa-92b0-f7a91faf799a"
+      ]
       //...
     },
     "creationDate": "12345435435", // Date in milliseconds
     "lastEdit": "12345435435" // Date in milliseconds
   },
-
   //collection levels; few but multiple documents as below
   "level": {
     "schemeVersion": 0.9,
@@ -74,7 +78,6 @@
     "creationDate": "12345435435", // Date in milliseconds
     "lastEdit": "12345435435" // Date in milliseconds
   },
-
   //collection technologies; many documents as below
   "technology": {
     "schemeVersion": 0.9,
@@ -87,18 +90,23 @@
         "ID": "48904258-6f34-4daa-92b0-f7a91faf879b", //primary key; uuidv4
         "name": "Bauanleitung", //Name; string
         "description": "Anleitung zum erstellen einer ...", //Beschreibung; string
-        "tags": ["Bauanleitung", "Tutorial", "Kochstelle"] //Liste mit Tags; strings
+        "tags": [
+          "Bauanleitung",
+          "Tutorial",
+          "Kochstelle"
+        ] //Liste mit Tags; strings
       }
       //...
     ],
     "creationDate": "12345435435", // Date in milliseconds
     "lastEdit": "12345435435", // Date in milliseconds
     "surveys": [
-      { "surveyID": "d9c743a4-75fd-443f-9c59-e49fa122e241" } //Fragebögen
+      {
+        "surveyID": "d9c743a4-75fd-443f-9c59-e49fa122e241"
+      } //Fragebögen
       //...
     ]
   },
-
   //collection entities; many documents as below
   "entity": {
     "schemeVersion": 0.9,
@@ -135,7 +143,6 @@
       }
     ]
   },
-
   //Fragebögen
   "survey": {
     "schemeVersion": 0.9,
@@ -155,7 +162,6 @@
             "ID": "dskafdskfjlfd", //primary key, uuidv4
             "text": "Nicht so gut", //antwort text
             "questionType": "MultipleChoice", // enum
-
             //folgefrage wenn sc
             "followingQuestion": {
               //selbe struktur wie question --> kann beliebig genestet werden
@@ -166,7 +172,6 @@
       }
     ]
   },
-
   //collection executedSurveys; many documents as below
   "executedSurvey": {
     "schemeVersion": 0.9,
@@ -204,9 +209,7 @@
       }
     ]
   },
-
   //collection tasks, many documents as below
-
   "task": {
     "schemeVersion": 0.9,
     "ID": "dsafsafkewrt345", //primary key; uuidv4

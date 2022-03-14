@@ -19,7 +19,7 @@ export default {
     return {
       langs: [
         { name: 'English US', abbr: 'en-US' },
-        { name: 'Español España', abbr: 'es-ES' },
+        { name: 'Español España', abbr: 'es-BO' },
         { name: 'Türkçe Türkiye', abbr: 'tr-TR' },
       ],
     };

@@ -191,24 +191,24 @@ const levelsData = {
         newValue: [
           new Level({
             id: 'dummyLevel0',
-            name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
-            description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+            name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+            description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
             parentLevelID: null,
             allowedInterventions: [],
             levelAllowedInterventionsId: [],
           }),
           new Level({
             id: 'dummyLevel1',
-            name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
-            description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+            name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+            description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
             parentLevelID: 'dummyLevel0',
             allowedInterventions: [],
             levelAllowedInterventionsId: [],
           }),
           new Level({
             id: 'dummyLevel2',
-            name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
-            description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+            name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+            description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
             parentLevelID: 'dummyLevel1',
             allowedInterventions: [],
             levelAllowedInterventionsId: [],
@@ -221,9 +221,9 @@ const levelsData = {
           newValue: [
             new Entity({
               id: 'dummyEntity0',
-              name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+              name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
               description: {
-                languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
                 languageTexts: ['', '', ''],
               },
               entityLevelId: 'dummyLevel0',
@@ -232,9 +232,9 @@ const levelsData = {
             }),
             new Entity({
               id: 'dummyEntity1',
-              name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+              name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
               description: {
-                languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
                 languageTexts: ['', '', ''],
               },
               entityLevelId: 'dummyLevel0',
@@ -243,9 +243,9 @@ const levelsData = {
             }),
             new Entity({
               id: 'dummyEntity2',
-              name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+              name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
               description: {
-                languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
                 languageTexts: ['', '', ''],
               },
               entityLevelId: 'dummyLevel1',
@@ -254,9 +254,9 @@ const levelsData = {
             }),
             new Entity({
               id: 'dummyEntity3',
-              name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+              name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
               description: {
-                languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
                 languageTexts: ['', '', ''],
               },
               entityLevelId: 'dummyLevel2',
@@ -265,9 +265,9 @@ const levelsData = {
             }),
             new Entity({
               id: 'dummyEntity4',
-              name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+              name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
               description: {
-                languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
                 languageTexts: ['', '', ''],
               },
               entityLevelId: 'dummyLevel2',
@@ -276,9 +276,9 @@ const levelsData = {
             }),
             new Entity({
               id: 'dummyEntity5',
-              name: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+              name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
               description: {
-                languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
                 languageTexts: ['', '', ''],
               },
               entityLevelId: 'dummyLevel2',
@@ -304,37 +304,37 @@ const levelsData = {
     CreateDummyLevels: async ({ dispatch }) => {
       const levels = [
         new Level({
-          id: '0',
+          id: 'dummyLevel0',
           name: {
-            languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+            languageKeys: ['en-US', 'es-BO', 'tr-TR'],
             languageTexts: ['Country', 'País', 'Ülke'],
           },
-          description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
+          description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
           parentLevelID: null,
           customData: [],
-          levelAllowedInterventionsId: [],
+          interventionsAreAllowed: true,
         }),
         new Level({
-          id: '1',
+          id: 'dummyLevel1',
           name: {
-            languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+            languageKeys: ['en-US', 'es-BO', 'tr-TR'],
             languageTexts: ['City', 'Ciudad', 'Şehir'],
           },
-          description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
-          parentLevelID: '0',
+          description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+          parentLevelID: 'dummyLevel0',
           customData: [],
-          levelAllowedInterventionsId: [],
+          interventionsAreAllowed: true,
         }),
         new Level({
-          id: '2',
+          id: 'dummyLevel2',
           name: {
-            languageKeys: ['en-US', 'es-ES', 'tr-TR'],
+            languageKeys: ['en-US', 'es-BO', 'tr-TR'],
             languageTexts: ['District', 'Distritto', 'Bölge'],
           },
-          description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
-          parentLevelID: '1',
+          description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+          parentLevelID: 'dummyLevel1',
           customData: [],
-          levelAllowedInterventionsId: [],
+          interventionsAreAllowed: true,
         }),
       ];
 

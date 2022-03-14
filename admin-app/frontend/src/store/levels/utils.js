@@ -10,19 +10,12 @@ export class EmptyLevel {
     this.description = '';
     this.parentLevelID = null;
     this.allowedInterventions = [];
-    this.levelAllowedInterventionsId = [];
   }
 }
 
 export class Level {
   constructor({
-    id,
-    name,
-    parentLevelID,
-    allowedInterventions,
-    description,
-    _version,
-    levelAllowedInterventionsId,
+    id, name, parentLevelID, allowedInterventions, description, _version,
   }) {
     this.id = id ?? uuidv4();
     this.name = name;
@@ -30,7 +23,7 @@ export class Level {
     this.parentLevelID = parentLevelID;
     this.allowedInterventions = allowedInterventions;
     this._version = _version;
-    this.levelAllowedInterventionsId = levelAllowedInterventionsId;
+    this.allowedInterventions = allowedInterventions;
   }
 }
 
@@ -44,7 +37,7 @@ export const postNewLevel = async (levelDraft) => API.graphql(
       id: levelDraft.id,
       interventionsAreAllowed: true,
       customData: [],
-      levelAllowedInterventionsId: levelDraft.allowedInterventions,
+      allowedInterventions: levelDraft.allowedInterventions,
     },
   }),
 );

@@ -46,7 +46,7 @@ export default {
   data: () => ({
     langs: [
       { name: 'English US', abbr: 'en-US' },
-      { name: 'Español España', abbr: 'es-ES' },
+      { name: 'Español Bolivia', abbr: 'es-BO' },
       { name: 'Türkçe Türkiye', abbr: 'tr-TR' },
     ],
   }),
