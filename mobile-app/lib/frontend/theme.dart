@@ -4,16 +4,26 @@ Future<ThemeData> getThemeData() async {
   return ThemeData(
       primaryColor: Colors.blue,
       inputDecorationTheme: InputDecorationTheme(
-          labelStyle: TextStyle(color: Colors.blue, fontSize: 12),
-          hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
+          labelStyle: const TextStyle(color: Colors.blue, fontSize: 12),
+          hintStyle: const TextStyle(color: Colors.grey, fontSize: 18),
           border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
-              borderRadius: BorderRadius.all(Radius.circular(8))),
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(15),
+          ),
           focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.blue),
-              borderRadius: BorderRadius.all(Radius.circular(8))),
-          errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red),
+            borderSide: const BorderSide(color: ThemeColors.green, width: 2),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          errorBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: ThemeColors.red),
               borderRadius: BorderRadius.all(Radius.circular(8))),
           prefixIconColor: Colors.grey));
 }
