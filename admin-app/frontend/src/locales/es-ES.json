@@ -26,9 +26,27 @@
       "about": "Acerca de"
     },
     "errorCodes": {
-      "UserNotFoundException": "Perdón, no hay ninguna cuenta que coincida con las credenciales proporcionadas.",
-      "NotAuthorizedException": "Perdón, no hay ninguna cuenta que coincida con las credenciales proporcionadas.",
-      "ConditionalCheckFailedException": "Perdón, algo salió mal."
+      "InternalErrorException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6001",
+      "InvalidLambdaResponseException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6002",
+      "InvalidParameterException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6003",
+      "InvalidSmsRoleAccessPolicyException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6004",
+      "InvalidSmsRoleTrustRelationshipException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6005",
+      "InvalidUserPoolConfigurationException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6006",
+      "NotAuthorizedException": "Lo sentimos, no existe una cuenta coincidente para las credenciales proporcionadas. Código de error: 6001",
+      "PasswordResetRequiredException": "Se requiere restablecer la contraseña. Código de error: 6007",
+      "ResourceNotFoundException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6008",
+      "TooManyRequestsException": "Demasiadas solicitudes. Vuelve a intentarlo más tarde. Código de error: 6009",
+      "UnexpectedLambdaException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6010",
+      "UserLambdaValidationException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6011",
+      "UserNotConfirmedException": "Usuario no confirmado. Código de error: 6012",
+      "UserNotFoundException": "Lo sentimos, no hay una cuenta coincidente para las credenciales proporcionadas. Código de error: 6013",
+      "ConditionalCheckFailedException": "Lo siento, algo salió mal. Código de error: 6014",
+      "InvalidPasswordException": "Lo siento, algo salió mal. Código de error: 6015",
+      "LimitExceededException": "Lo siento, algo salió mal. Código de error: 6016",
+      "CodeMismatchException": "Código no coincidente. Código de error: 6017",
+      "ExpiredCodeException": "El código ha caducado. Código de error: 6018",
+      "TooManyFailedAttemptsException": "Demasiados intentos fallidos. Código de error: 6019"
+
     },
     "warningCodes": {
       "sessionExpired": "Su sesión ha caducado. Inicie sesión de nuevo."
