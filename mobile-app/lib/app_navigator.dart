@@ -10,6 +10,7 @@ import 'package:mobile_app/backend/repositories/UserRepository.dart';
 import 'package:mobile_app/frontend/pages/loading_view.dart';
 import 'package:mobile_app/frontend/pages/login_view.dart';
 import 'package:mobile_app/frontend/pages/update_password_view.dart';
+import 'package:mobile_app/frontend/pages/user_data_view.dart';
 import 'package:mobile_app/frontend/session_view.dart';
 
 import 'backend/Blocs/auth/auth_repository.dart';
@@ -42,6 +43,7 @@ class AppNavigator extends StatelessWidget {
             MaterialPage(
               child: BlocProvider<UserBloc>(
                   create: (context) => UserBloc(
+                      userState: UserState(user: state.user),
                       authRepo: context.read<AuthRepository>(),
                       userID: state.userID,
                       userRepository: context.read<UserRepository>()),
@@ -52,14 +54,8 @@ class AppNavigator extends StatelessWidget {
                         if (state.user == null)
                           //todo: user initialization page
                           MaterialPage(
-                              child: Scaffold(
-                                  body: Container(
-                                      child: Center(
-                                          child: IconButton(
-                                              icon: Icon(Icons.time_to_leave),
-                                              onPressed: () => context
-                                                  .read<SessionCubit>()
-                                                  .signOut()))))),
+                              child: UserDataView(
+                                  userBloc: context.read<UserBloc>())),
                         if (state.user != null)
 
                           ///hier beginnt der beef/App-Inhalt

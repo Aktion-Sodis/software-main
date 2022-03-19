@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -13,6 +12,7 @@ class UserRepository {
         amp.User.classType,
         where: amp.User.ID.eq(userId),
       );
+      print("userQuery has REsults: ${users.length}");
       return users.isNotEmpty ? User.fromAmplifyModel(users.first) : null;
     } catch (e) {
       rethrow;
