@@ -5,7 +5,7 @@ import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_events.dart';
 import 'package:mobile_app/backend/Blocs/user/user_state.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
-import 'package:mobile_app/frontend/buttons.dart';
+import 'package:mobile_app/frontend/components/audio/buttons.dart';
 import 'package:mobile_app/frontend/strings.dart' as strings;
 
 import '../dependentsizes.dart';
