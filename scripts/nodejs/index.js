@@ -40,7 +40,7 @@ const sqlPool = mysql.createPool({
   });
 
 await migrateSurveys(sqlPool);
-/*
+
 
 console.log(`Successfully connected to old database ${sqlPool}.`)
 
@@ -121,4 +121,3 @@ migrateAppliedInterventions(sqlPool, defaultUser);
 console.log("Migrating executed surveys and answers...");
 migrateExecutedSurveys(sqlPool, defaultUser);
 console.log("Successfully finished migration.");
-*/
