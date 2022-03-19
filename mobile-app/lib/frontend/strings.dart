@@ -29,7 +29,7 @@ Map<String, dynamic> stringMap = {
         "For security reasons, please set your own password!",
     "new_password": "New password",
     "new_password_validation": "New password (validation)",
-    "test_list": "Tests"
+    "test_list": "Tests",
     "user_forename": "Forename",
     "user_surname": "Surname",
     "user_please_enter_forename": "Please enter your forename",
