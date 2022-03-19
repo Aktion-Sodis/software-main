@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile_app/backend/repositories/UserRepository.dart';
 import 'package:mobile_app/frontend/pages/main_menu_components/main_menu_home.dart';
 import 'package:mobile_app/frontend/pages/main_menu_components/main_menu_organization.dart';
 import 'package:mobile_app/frontend/pages/main_menu_components/main_menu_tasks.dart';
@@ -21,16 +22,27 @@ class MainMenuState extends State<MainMenu> {
   @override
   initState() {
     pageController = PageController(initialPage: 0);
+    currentIndex = 0;
     super.initState();
   }
 
   late PageController pageController;
 
+  late int currentIndex;
+
+  onNavigationTap(int i) {
+    setState(() {
+      currentIndex = i;
+    });
+    pageController.animateToPage(i,
+        duration: Duration(milliseconds: 300), curve: Curves.easeInOutCubic);
+  }
+
   PageView mainPageView() => PageView(
         controller: pageController,
         pageSnapping: false,
         children: [
-          MainMenuHome(),
+          MainMenuHome(onNavigationTap),
           MainMenuOrganization(),
           MainMenuTasks(),
           MainMenuWiki()
@@ -38,9 +50,8 @@ class MainMenuState extends State<MainMenu> {
       );
 
   BottomNavigationBar bottomNavigationBar() => BottomNavigationBar(
-          onTap: (i) => pageController.animateToPage(i,
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeInOutCubic),
+          currentIndex: currentIndex,
+          onTap: onNavigationTap,
           items: [
             BottomNavigationBarItem(
                 icon: const Icon(FontAwesomeIcons.home),
@@ -60,9 +71,11 @@ class MainMenuState extends State<MainMenu> {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
         providers: [
+          RepositoryProvider(create: (context) => UserRepository())
           //todo: add task repository for first page and to show badge on tasks icon
         ],
         child: Scaffold(
-            bottomNavigationBar: bottomNavigationBar(), body: mainPageView()));
+            bottomNavigationBar: bottomNavigationBar(),
+            body: SafeArea(child: mainPageView())));
   }
 }
