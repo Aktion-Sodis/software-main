@@ -4,10 +4,10 @@
 
 //todo: in klasse machen
 
-String currentLanguage = "en";
+String currentLanguage = "en-US";
 
 Map<String, dynamic> stringMap = {
-  "en": {
+  "en-US": {
     "emailorphonenumber": "E-Mail/Phone number",
     "email": "E-Mail",
     "phonenumber": "Phone number",
@@ -28,9 +28,33 @@ Map<String, dynamic> stringMap = {
     "change_password_text":
         "For security reasons, please set your own password!",
     "new_password": "New password",
-    "new_password_validation": "New password (validation)"
+    "new_password_validation": "New password (validation)",
+    "user_forename": "Forename",
+    "user_surname": "Surname",
+    "user_please_enter_forename": "Please enter your forename",
+    "user_please_enter_surename": "Please enter your surename",
+    "user_create_save": "Okay",
+    "user_create_info":
+        "Please enter your prename and surname to finish account creation. If you want, you can take a profile pic!",
+    "logout": "Log out"
   }
 };
+
+String get user_forename => stringMap[currentLanguage]["user_forename"];
+
+String get user_surname => stringMap[currentLanguage]["user_surname"];
+
+String get user_please_enter_forename =>
+    stringMap[currentLanguage]["user_please_enter_forename"];
+
+String get user_please_enter_surename =>
+    stringMap[currentLanguage]["user_please_enter_surename"];
+
+String get user_create_save => stringMap[currentLanguage]["user_create_save"];
+
+String get user_create_info => stringMap[currentLanguage]["user_create_info"];
+
+String get logout => stringMap[currentLanguage]["logout"];
 
 String get new_password => stringMap[currentLanguage]["new_password"];
 

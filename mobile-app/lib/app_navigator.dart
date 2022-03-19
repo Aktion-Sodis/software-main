@@ -43,6 +43,7 @@ class AppNavigator extends StatelessWidget {
             MaterialPage(
               child: BlocProvider<UserBloc>(
                   create: (context) => UserBloc(
+                      userState: UserState(user: state.user),
                       authRepo: context.read<AuthRepository>(),
                       userID: state.userID,
                       userRepository: context.read<UserRepository>()),

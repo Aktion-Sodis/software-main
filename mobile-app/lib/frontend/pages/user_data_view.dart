@@ -5,6 +5,7 @@ import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_events.dart';
 import 'package:mobile_app/backend/Blocs/user/user_state.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
+import 'package:mobile_app/frontend/buttons.dart';
 import 'package:mobile_app/frontend/strings.dart' as strings;
 
 import '../dependentsizes.dart';
@@ -58,7 +59,7 @@ class UserDataViewState extends State<UserDataView> {
                               alignment: Alignment.center,
                               child: Container(
                                   width: width(context) * .45,
-                                  height: height(context) * .45,
+                                  height: width(context) * .45,
                                   decoration: state.userPic != null
                                       ? BoxDecoration(
                                           shape: BoxShape.circle,
@@ -68,25 +69,28 @@ class UserDataViewState extends State<UserDataView> {
                                       : const BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.grey))),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: MaterialButton(
-                                onPressed: updatePic,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: width(context) * .1,
-                                  height: width(context) * .1,
-                                  decoration: const BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
-                                      color: Colors.white),
-                                  child: Icon(FontAwesomeIcons.camera,
-                                      color: Colors.grey,
-                                      size: width(context) * .07),
-                                )),
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: CustomIconButton(
+                                updatePic,
+                                FontAwesomeIcons.camera,
+                                Size(
+                                    width(context) * .15, width(context) * .15),
+                                true,
+                                padding: EdgeInsets.all(width(context) * .04)),
                           )
                         ],
                       )))),
+          Container(
+              margin: EdgeInsets.only(
+                  left: width(context) * .1,
+                  right: width(context) * .1,
+                  top: width(context) * .1),
+              child: Text(
+                strings.user_create_info,
+                style: Theme.of(context).textTheme.bodyText1,
+              )),
           Container(
               margin: EdgeInsets.all(width(context) * .1),
               child: Form(
@@ -103,33 +107,28 @@ class UserDataViewState extends State<UserDataView> {
                     children: [
                       Container(
                           child: TextFormField(
+                        controller: textEdigtingControllerFirstName,
                         decoration: InputDecoration(
                             prefixIcon: const Icon(FontAwesomeIcons.user),
-                            hintText: "Forname",
-                            labelText:
-                                textEdigtingControllerFirstName.text.isEmpty
-                                    ? ""
-                                    : "Forname"),
+                            labelText: strings.user_forename),
                         textInputAction: TextInputAction.next,
                         enableSuggestions: true,
-                        validator: (value) =>
-                            (value ?? "").isNotEmpty ? null : "Please enter",
+                        validator: (value) => (value ?? "").isNotEmpty
+                            ? null
+                            : strings.user_please_enter_forename,
                       )),
                       Container(
                           margin: EdgeInsets.only(top: defaultPadding(context)),
                           child: TextFormField(
+                            controller: textEditingControllerLastName,
                             decoration: InputDecoration(
                                 prefixIcon: const Icon(FontAwesomeIcons.user),
-                                hintText: "Surname",
-                                labelText:
-                                    textEdigtingControllerFirstName.text.isEmpty
-                                        ? ""
-                                        : "Surname"),
+                                labelText: strings.user_surname),
                             textInputAction: TextInputAction.next,
                             enableSuggestions: true,
                             validator: (value) => (value ?? "").isNotEmpty
                                 ? null
-                                : "Please enter",
+                                : strings.user_please_enter_surename,
                           )),
                       Row(
                           mainAxisSize: MainAxisSize.max,
@@ -139,35 +138,35 @@ class UserDataViewState extends State<UserDataView> {
                                 margin: EdgeInsets.only(
                                     top: defaultPadding(context)),
                                 child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    textStyle: MaterialStateProperty.all(
-                                        TextStyle(fontSize: 18)),
-                                    shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8))),
-                                    minimumSize: MaterialStateProperty.all(Size(
-                                        width(context) * .6,
-                                        width(context) * .12)),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.green), //todo: change
-                                  ),
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      context.read<UserBloc>().add(
-                                          CreateUserEvent(User(
-                                              firstName:
-                                                  textEdigtingControllerFirstName
-                                                      .text,
-                                              lastName:
-                                                  textEditingControllerLastName
-                                                      .text,
-                                              id: widget.userBloc.userID,
-                                              permissions: [])));
-                                    }
-                                  },
-                                  child: Text(strings.login),
-                                ))
+                                    style: ButtonStyle(
+                                      textStyle: MaterialStateProperty.all(
+                                          TextStyle(fontSize: 18)),
+                                      shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8))),
+                                      minimumSize: MaterialStateProperty.all(
+                                          Size(width(context) * .6,
+                                              width(context) * .12)),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.green), //todo: change
+                                    ),
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        context.read<UserBloc>().add(
+                                            CreateUserEvent(User(
+                                                firstName:
+                                                    textEdigtingControllerFirstName
+                                                        .text,
+                                                lastName:
+                                                    textEditingControllerLastName
+                                                        .text,
+                                                id: widget.userBloc.userID,
+                                                permissions: [])));
+                                      }
+                                    },
+                                    child: Text(strings.user_create_save)))
                           ])
                     ],
                   ),
