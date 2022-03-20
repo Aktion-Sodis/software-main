@@ -133,9 +133,7 @@ class UpdatePasswordViewState extends State<UpdatePasswordView> {
                     obscureText: true,
                     decoration: InputDecoration(
                         prefixIcon: const Icon(FontAwesomeIcons.key),
-                        hintText: strings.new_password,
-                        labelText:
-                            !passwordOneEmpty() ? strings.new_password : null),
+                        labelText: strings.new_password),
                     validator: (value) => passwordOneEmpty()
                         ? strings.enterpassword
                         : !passwordIsValid()
@@ -155,10 +153,7 @@ class UpdatePasswordViewState extends State<UpdatePasswordView> {
                         obscureText: true,
                         decoration: InputDecoration(
                             prefixIcon: const Icon(FontAwesomeIcons.key),
-                            hintText: strings.new_password_validation,
-                            labelText: !passwordTwoEmpty()
-                                ? strings.new_password_validation
-                                : null),
+                            labelText: strings.new_password_validation),
                         validator: (value) => passwordTwoEmpty()
                             ? strings.enterpassword
                             : !passwordIsValid()
