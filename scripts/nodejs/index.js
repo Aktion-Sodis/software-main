@@ -7,7 +7,7 @@ import mysql from 'mysql';
 import createTestSurvey from "./src/migrators/createTestSurvey.js";
 import createBaseLevels from "./src/migrators/createBaseLevels.js"
 import migrateVillages from "./src/migrators/migrateVillages.js"
-import {deleteAppliedInterventions, deleteLevels} from "./src/utils/deleteUtils.js";
+import {deleteAppliedInterventions, deleteLevels, deleteEntities} from "./src/utils/deleteUtils.js";
 import createMigrationUser from "./src/migrators/createMigrationUser.js";
 import migrateFamilies from "./src/migrators/migrateFamilies.js";
 import migrateAppliedInterventions from "./src/migrators/migrateAppliedInterventions.js";
@@ -48,7 +48,7 @@ console.log(`Successfully connected to old database ${sqlPool}.`)
 console.log("Clean up erroneous writes of villageLevel to remove erroneous entries...")
 await deleteLevels(); //todo: ggf nicht deleten, sondern prüfen ob vorhanden
 await deleteAppliedInterventions(); //todo: ggf. nicht deleten, sondern prüfen ob vorhanden
-
+await deleteEntities();
 //todo: delete interventions -> haben fixe IDs, also wenn dann updaten
 //todo: delete surveys -> haben fixe IDs, also wenn dann updaten
 //todo: delte entities -> haben fixe IDs, also wenn dann updaten
@@ -90,11 +90,24 @@ const {villageLevel, familyLevel} = response;
 console.log("levels created");
 
 //todo: create level to project connections
-await createLevelToInterventionConnections(familyLevel);
+
+try {
+  await createLevelToInterventionConnections(familyLevel);
+}
+catch(e) {
+  console.log("error in creating leveltoInterventionConnection");
+  console.log(e);
+}
+
+console.log("levelinterventionconnections created");
 
 await createTestEntities(villageLevel, familyLevel);
 
+console.log("test entities created");
+
 await createTestSurvey();
+
+console.log("test survey created");
 /*
 console.log("InterventionLevel connections drawn");
 

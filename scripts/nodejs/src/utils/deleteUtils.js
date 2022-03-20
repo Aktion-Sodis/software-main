@@ -18,6 +18,19 @@ export async function deleteAppliedInterventions() {
 
 }
 
+export async function deleteEntities() {
+    const entityQuery = await API.graphql({query: queries.listEntities});
+    const deleteEntities = entityQuery.data.listEntities.items.filter((obj) => !obj._deleted);
+    deleteEntities.forEach((obj) => {
+        API.graphql(graphqlOperation(mutations.deleteEntity, {
+            input: {
+                id: obj.id,
+                _version: obj._version
+            }
+        }))
+    });
+}
+
 export async function deleteLevels() {
     const levelQuery = await API.graphql(
         {
@@ -43,5 +56,16 @@ export async function deleteLevels() {
             )
         )
     });
+
+    const levelInterventionConnextion = await API.graphql(
+        {
+            query: queries.listLevelInterventionRelations
+        }
+    );
+    const deleteInterventionConnectionList = levelInterventionConnextion.data.listLevelInterventionRelations.items.filter((obj) => !obj._deleted);
+    deleteInterventionConnectionList.forEach((obj) => API.graphql(graphqlOperation(mutations.deleteLevelInterventionRelation, {input: {
+        id: obj.id,
+        _version: obj._version
+    }})));
 }
 
