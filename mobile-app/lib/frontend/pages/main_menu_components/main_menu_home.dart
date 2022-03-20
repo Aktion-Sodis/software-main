@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile_app/frontend/components/audio/buttons.dart';
+import 'package:mobile_app/frontend/components/buttons.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
 import 'package:mobile_app/frontend/pages/main_menu.dart';
 import 'package:mobile_app/frontend/strings.dart' as strings;
