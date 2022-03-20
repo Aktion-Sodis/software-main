@@ -24,7 +24,23 @@ class MainMenuOrganizationState extends State<MainMenuOrganization> {
             builder: (context) => Container(
                     child: Center(
                   child: CustomIconButton(
-                      () => context.read<EntityRepository>().getAllEntities(),
+                      () => context
+                          .read<EntityRepository>()
+                          .getAllEntities()
+                          .then((value) => value.forEach((element) {
+                                print("entity: ${element.name}");
+                                print(element.level.interventionsAreAllowed
+                                    .toString());
+                                if (element.level.interventionsAreAllowed) {
+                                  print(element
+                                      .level.allowedInterventions!.length
+                                      .toString());
+                                  element.level.allowedInterventions!
+                                      .forEach((element) {
+                                    print(element.intervention.toString());
+                                  });
+                                }
+                              })),
                       FontAwesomeIcons.ad,
                       Size(width(context) * .1, width(context) * .1),
                       true),
