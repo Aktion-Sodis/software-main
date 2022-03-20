@@ -18,6 +18,7 @@ import migrateExecutedSurveys from "./src/migrators/migrateExecutedSurveys.js";
 import createConfig from "./src/migrators/createConfig.js";
 import createMigratorTag from "./src/migrators/createMigratorTag.js";
 import createLevelToInterventionConnections from './src/migrators/createLevelToInterventionConnections.js';
+import createTestEntities from './src/migrators/createTestEntities.js';
 
 Amplify.default.configure(awsconfig);
 
@@ -39,7 +40,7 @@ const sqlPool = mysql.createPool({
     connectionLimit: 10,
   });
 
-await migrateSurveys(sqlPool);
+//await migrateSurveys(sqlPool);
 
 
 console.log(`Successfully connected to old database ${sqlPool}.`)
@@ -91,6 +92,10 @@ console.log("levels created");
 //todo: create level to project connections
 await createLevelToInterventionConnections(familyLevel);
 
+await createTestEntities(villageLevel, familyLevel);
+
+await createTestSurvey();
+/*
 console.log("InterventionLevel connections drawn");
 
 //läuft bis hier her
@@ -121,3 +126,4 @@ migrateAppliedInterventions(sqlPool, defaultUser);
 console.log("Migrating executed surveys and answers...");
 migrateExecutedSurveys(sqlPool, defaultUser);
 console.log("Successfully finished migration.");
+*/
