@@ -19,6 +19,14 @@ class UserRepository {
     }
   }
 
+  static Future<amp.User> getAmpUserByID(String userID) async {
+    final List<amp.User> users = await Amplify.DataStore.query(
+      amp.User.classType,
+      where: amp.User.ID.eq(userID),
+    );
+    return users.first;
+  }
+
   Future createUser(User user) async {
     ///creates a user
     ///ID always has to be set as it should equal the authentication ID

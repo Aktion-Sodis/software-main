@@ -1,5 +1,7 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:mobile_app/backend/callableModels/Entity.dart';
+import 'package:mobile_app/backend/repositories/AppliedInterventionRepository.dart';
+import 'package:mobile_app/backend/repositories/LevelRepository.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class EntityRepository {
@@ -7,10 +9,27 @@ class EntityRepository {
     List<amp.Entity> allAmpEntities = await Amplify.DataStore.query(
       amp.Entity.classType,
     );
-    List<Entity> toReturn = [];
-    for (amp.Entity amplifyEntity in allAmpEntities) {
-      print(amplifyEntity.toJson());
-    }
-    return toReturn;
+    List<amp.Entity> popluatedEntities =
+        await _populateMultipleConnections(allAmpEntities);
+
+    return List.generate(popluatedEntities.length,
+        (index) => Entity.fromAmplifyModel(popluatedEntities[index]));
+  }
+
+  static Future<amp.Entity> _populateConnections(amp.Entity entity) async {
+    amp.Entity amplifyEntity = entity;
+    amplifyEntity = amplifyEntity.copyWith(
+        level:
+            await LevelRepository.getAmpLevelByID(amplifyEntity.entityLevelId),
+        appliedInterventions: await AppliedInterventionRepository
+            .getAmpAppliedInterventionsByEntityID(amplifyEntity.id));
+    return amplifyEntity;
+  }
+
+  static Future<List<amp.Entity>> _populateMultipleConnections(
+      List<amp.Entity> entities) {
+    List<Future<amp.Entity>> populateFutures = List.generate(
+        entities.length, (index) => _populateConnections(entities[index]));
+    return Future.wait(populateFutures);
   }
 }

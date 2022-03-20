@@ -20,13 +20,14 @@ class MainMenuOrganizationState extends State<MainMenuOrganization> {
           RepositoryProvider<EntityRepository>(
               create: (context) => EntityRepository())
         ],
-        child: Container(
-            child: Center(
-          child: CustomIconButton(
-              () => context.read<EntityRepository>().getAllEntities(),
-              FontAwesomeIcons.ad,
-              width(context) * .1,
-              true),
-        )));
+        child: Builder(
+            builder: (context) => Container(
+                    child: Center(
+                  child: CustomIconButton(
+                      () => context.read<EntityRepository>().getAllEntities(),
+                      FontAwesomeIcons.ad,
+                      Size(width(context) * .1, width(context) * .1),
+                      true),
+                ))));
   }
 }

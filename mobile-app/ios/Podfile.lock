@@ -66,9 +66,17 @@ PODS:
     - Amplify (= 1.19.0)
     - AWSCore (~> 2.27.0)
   - Flutter (1.0.0)
+  - flutter_sound (8.5.0):
+    - Flutter
+    - flutter_sound_core (= 8.5.0)
+    - mobile-ffmpeg-audio (= 4.4.LTS)
+  - flutter_sound_core (8.5.0)
   - image_picker (0.0.1):
     - Flutter
+  - mobile-ffmpeg-audio (4.4.LTS)
   - ObjectMapper (4.2.0)
+  - path_provider_ios (0.0.1):
+    - Flutter
   - SQLite.swift (0.12.2):
     - SQLite.swift/standard (= 0.12.2)
   - SQLite.swift/standard (0.12.2)
@@ -83,7 +91,9 @@ DEPENDENCIES:
   - amplify_datastore (from `.symlinks/plugins/amplify_datastore/ios`)
   - amplify_flutter (from `.symlinks/plugins/amplify_flutter/ios`)
   - Flutter (from `Flutter`)
+  - flutter_sound (from `.symlinks/plugins/flutter_sound/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -96,6 +106,8 @@ SPEC REPOS:
     - AWSCore
     - AWSMobileClient
     - AWSPluginsCore
+    - flutter_sound_core
+    - mobile-ffmpeg-audio
     - ObjectMapper
     - SQLite.swift
     - Starscream
@@ -115,8 +127,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/amplify_flutter/ios"
   Flutter:
     :path: Flutter
+  flutter_sound:
+    :path: ".symlinks/plugins/flutter_sound/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
 
 SPEC CHECKSUMS:
   Amplify: 7906ce8bc77c2c9a97545581024eb90ec6f2e03a
@@ -134,13 +150,17 @@ SPEC CHECKSUMS:
   AWSMobileClient: 9c1edcbe7088b3c9b910aaf6faf2db43a8f1568d
   AWSPluginsCore: a74522db575247a0156f97d868713627099f3297
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_sound: ba7daf658dea78e9f18b79657338bfc222489f4f
+  flutter_sound_core: d9396f10752a0df9aa3197f4c431d62d934918cc
   image_picker: 541dcbb3b9cf32d87eacbd957845d8651d6c62c3
+  mobile-ffmpeg-audio: 1e0a053f8a6de57114e50ff48b3a85ff1c60f902
   ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
+  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   SQLite.swift: d2b4642190917051ce6bd1d49aab565fe794eea3
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   SwiftFormat: 8acc16efcecb563206cbe90b4cb047cfdf9aafdb
   SwiftLint: 6bc52a21f0fd44cab9aa2dc8e534fb9f5e3ec507
 
-PODFILE CHECKSUM: cc1f88378b4bfcf93a6ce00d2c587857c6008d3b
+PODFILE CHECKSUM: 9dd008972b980afe8bf7e319635b90600d72cd33
 
 COCOAPODS: 1.11.2
