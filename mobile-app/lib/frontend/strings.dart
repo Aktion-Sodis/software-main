@@ -29,6 +29,7 @@ Map<String, dynamic> stringMap = {
         "For security reasons, please set your own password!",
     "new_password": "New password",
     "new_password_validation": "New password (validation)",
+    "test_list": "Tests",
     "user_forename": "Forename",
     "user_surname": "Surname",
     "user_please_enter_forename": "Please enter your forename",
@@ -37,9 +38,21 @@ Map<String, dynamic> stringMap = {
     "user_create_info":
         "Please enter your prename and surname to finish account creation. If you want, you can take a profile pic!",
     "logout": "Log out",
-    "test_list": "Tests"
+    "main_menu_home": "Home",
+    "main_menu_organization": "Organization",
+    "main_menu_tasks": "Tasks",
+    "main_menu_wiki": "Wiki"
   }
 };
+
+String get main_menu_home => stringMap[currentLanguage]["main_menu_home"];
+
+String get main_menu_organization =>
+    stringMap[currentLanguage]["main_menu_organization"];
+
+String get main_menu_tasks => stringMap[currentLanguage]["main_menu_tasks"];
+
+String get main_menu_wiki => stringMap[currentLanguage]["main_menu_wiki"];
 
 String get user_forename => stringMap[currentLanguage]["user_forename"];
 

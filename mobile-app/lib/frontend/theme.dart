@@ -5,6 +5,12 @@ Future<ThemeData> getThemeData() async {
       primaryColor: Colors.blue,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       buttonTheme: ButtonThemeData(height: 4),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: Colors.green,
+          unselectedItemColor: Colors.grey,
+          selectedLabelStyle: TextStyle(color: Colors.green),
+          unselectedLabelStyle: TextStyle(color: Colors.grey),
+          showUnselectedLabels: true),
       textTheme: TextTheme(
           overline: TextStyle(color: Colors.black87),
           headline1: TextStyle(color: Colors.blue),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/backend/Blocs/auth/auth_cubit.dart';
 import 'package:mobile_app/backend/Blocs/auth/auth_repository.dart';
+import 'package:mobile_app/backend/Blocs/inapp/inapp_bloc.dart';
+import 'package:mobile_app/backend/Blocs/inapp/inapp_state.dart';
 import 'package:mobile_app/backend/Blocs/session/session_cubit.dart';
 import 'package:mobile_app/backend/Blocs/session/session_state.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
@@ -9,6 +11,7 @@ import 'package:mobile_app/backend/Blocs/user/user_state.dart';
 import 'package:mobile_app/backend/repositories/UserRepository.dart';
 import 'package:mobile_app/frontend/pages/loading_view.dart';
 import 'package:mobile_app/frontend/pages/login_view.dart';
+import 'package:mobile_app/frontend/pages/main_menu.dart';
 import 'package:mobile_app/frontend/pages/update_password_view.dart';
 import 'package:mobile_app/frontend/pages/user_data_view.dart';
 import 'package:mobile_app/frontend/session_view.dart';
@@ -57,17 +60,21 @@ class AppNavigator extends StatelessWidget {
                               child: UserDataView(
                                   userBloc: context.read<UserBloc>())),
                         if (state.user != null)
-
-                          ///hier beginnt der beef/App-Inhalt
                           MaterialPage(
-                              child: Scaffold(
-                                  body: Container(
-                                      child: Center(
-                                          child: IconButton(
-                                              icon: Icon(Icons.time_to_leave),
-                                              onPressed: () => context
-                                                  .read<SessionCubit>()
-                                                  .signOut())))))
+                              child: BlocProvider<InAppBloc>(
+                                  create: (context) => InAppBloc(),
+                                  child: BlocBuilder<InAppBloc, InAppState>(
+                                      builder: (context, inAppState) {
+                                    //todo: change to switch
+                                    if (inAppState.currentArea ==
+                                        CurrentArea.MAIN_MENU) {
+                                      return MainMenu();
+                                    } else {
+                                      return Scaffold(body: Container());
+                                    }
+                                  })))
+
+                        ///hier beginnt der beef/App-Inhalt
                       ],
                       onPopPage: (route, result) => route.didPop(result),
                     );

@@ -9,3 +9,5 @@ height(BuildContext context) {
 }
 
 defaultPadding(BuildContext context) => width(context) * .04;
+
+appBarHeight(BuildContext context) => height(context) * .1;
