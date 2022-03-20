@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/repositories/EntityRepository.dart';
+import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
 import 'package:mobile_app/frontend/components/buttons.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
 
@@ -18,13 +20,21 @@ class MainMenuOrganizationState extends State<MainMenuOrganization> {
     return MultiRepositoryProvider(
         providers: [
           RepositoryProvider<EntityRepository>(
-              create: (context) => EntityRepository())
+              create: (context) => EntityRepository()),
+          RepositoryProvider<SurveyRepository>(
+              create: (context) => SurveyRepository())
         ],
         child: Builder(
             builder: (context) => Container(
                     child: Center(
-                  child: CustomIconButton(
-                      () => context
+                  child: CustomIconButton(() async {
+                    print("querying");
+                    Survey survey =
+                        await SurveyRepository.getSurveyByID("test_survey");
+                    print("survey successfully loaded");
+                  }
+
+                      /*context
                           .read<EntityRepository>()
                           .getAllEntities()
                           .then((value) => value.forEach((element) {
@@ -40,10 +50,9 @@ class MainMenuOrganizationState extends State<MainMenuOrganization> {
                                     print(element.intervention.toString());
                                   });
                                 }
-                              })),
-                      FontAwesomeIcons.ad,
-                      Size(width(context) * .1, width(context) * .1),
-                      true),
+                              }))*/
+                      , FontAwesomeIcons.ad,
+                      Size(width(context) * .1, width(context) * .1), true),
                 ))));
   }
 }

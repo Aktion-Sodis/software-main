@@ -13,6 +13,7 @@ class SurveyRepository {
     List<amp.Survey> results = await Amplify.DataStore.query(
         amp.Survey.classType,
         where: amp.Survey.ID.eq(surveyID));
+    print("now populating");
     return _populate(results.first);
   }
 
@@ -24,12 +25,23 @@ class SurveyRepository {
   }
 
   static Future<amp.Survey> _populate(amp.Survey survey,
-      {amp.Intervention? intervention}) async {
+      {amp.Intervention? passedIntervention}) async {
     amp.Survey toReturn = survey;
+    amp.Intervention? toPass = passedIntervention;
+    print("toPass: ${toPass == null}");
+    if (toPass == null) {
+      if (survey.intervention != null) {
+        print("loading according to stored intervention");
+        toPass = survey.intervention;
+        toPass =
+            toPass!.copyWith(surveys: [], contents: [], tags: [], levels: []);
+      } else {}
+    }
+    print("now loading surveyTagRelations");
     toReturn = toReturn.copyWith(
-        intervention: intervention ??
-            await InterventionRepository.getAmplifyInterventionBySurvey(survey),
+        intervention: toPass,
         tags: await surveySurveyTagRelationsBySurvey(survey));
+    print("now returning");
     return toReturn;
   }
 
@@ -42,6 +54,6 @@ class SurveyRepository {
   static Future<List<amp.SurveySurveyTagRelation>>
       surveySurveyTagRelationsBySurvey(amp.Survey survey) async {
     return Amplify.DataStore.query(amp.SurveySurveyTagRelation.classType,
-        where: amp.SurveySurveyTagRelation.SURVEY.eq(survey));
+        where: amp.SurveySurveyTagRelation.SURVEY.eq(survey.id));
   }
 }

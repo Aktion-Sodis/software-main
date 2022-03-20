@@ -12,12 +12,13 @@ class InterventionRepository {
     return _populate(toReturn);
   }
 
-  static Future<amp.Intervention> getAmplifyInterventionBySurvey(
+  static Future<amp.Intervention?> getAmplifyInterventionBySurvey(
       amp.Survey survey) async {
-    var interventions = await Amplify.DataStore.query(
+    /*var interventions = await Amplify.DataStore.query(
         amp.Intervention.classType,
-        where: amp.Intervention.SURVEYS.contains(survey.id));
-    return _populate(interventions.first);
+        where: amp.Intervention;*/
+    return null;
+    //return _populate(interventions.first);
     //todo: query könnte falsch sein
   }
 
