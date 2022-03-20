@@ -21,6 +21,7 @@
 
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -31,9 +32,9 @@ class InterventionTag extends Model {
   final String id;
   final I18nString? _text;
   final int? _schemeVersion;
+  final List<InterventionInterventionTagRelation>? _interventions;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
-  final String? _interventionTagsId;
 
   @override
   getInstanceType() => classType;
@@ -60,6 +61,19 @@ class InterventionTag extends Model {
     return _schemeVersion;
   }
   
+  List<InterventionInterventionTagRelation> get interventions {
+    try {
+      return _interventions!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
   TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -68,18 +82,14 @@ class InterventionTag extends Model {
     return _updatedAt;
   }
   
-  String? get interventionTagsId {
-    return _interventionTagsId;
-  }
+  const InterventionTag._internal({required this.id, required text, schemeVersion, required interventions, createdAt, updatedAt}): _text = text, _schemeVersion = schemeVersion, _interventions = interventions, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  const InterventionTag._internal({required this.id, required text, schemeVersion, createdAt, updatedAt, interventionTagsId}): _text = text, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _interventionTagsId = interventionTagsId;
-  
-  factory InterventionTag({String? id, required I18nString text, int? schemeVersion, String? interventionTagsId}) {
+  factory InterventionTag({String? id, required I18nString text, int? schemeVersion, required List<InterventionInterventionTagRelation> interventions}) {
     return InterventionTag._internal(
       id: id == null ? UUID.getUUID() : id,
       text: text,
       schemeVersion: schemeVersion,
-      interventionTagsId: interventionTagsId);
+      interventions: interventions != null ? List<InterventionInterventionTagRelation>.unmodifiable(interventions) : interventions);
   }
   
   bool equals(Object other) {
@@ -93,7 +103,7 @@ class InterventionTag extends Model {
       id == other.id &&
       _text == other._text &&
       _schemeVersion == other._schemeVersion &&
-      _interventionTagsId == other._interventionTagsId;
+      DeepCollectionEquality().equals(_interventions, other._interventions);
   }
   
   @override
@@ -108,19 +118,18 @@ class InterventionTag extends Model {
     buffer.write("text=" + (_text != null ? _text!.toString() : "null") + ", ");
     buffer.write("schemeVersion=" + (_schemeVersion != null ? _schemeVersion!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null") + ", ");
-    buffer.write("interventionTagsId=" + "$_interventionTagsId");
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  InterventionTag copyWith({String? id, I18nString? text, int? schemeVersion, String? interventionTagsId}) {
+  InterventionTag copyWith({String? id, I18nString? text, int? schemeVersion, List<InterventionInterventionTagRelation>? interventions}) {
     return InterventionTag._internal(
       id: id ?? this.id,
       text: text ?? this.text,
       schemeVersion: schemeVersion ?? this.schemeVersion,
-      interventionTagsId: interventionTagsId ?? this.interventionTagsId);
+      interventions: interventions ?? this.interventions);
   }
   
   InterventionTag.fromJson(Map<String, dynamic> json)  
@@ -129,18 +138,25 @@ class InterventionTag extends Model {
         ? I18nString.fromJson(new Map<String, dynamic>.from(json['text']['serializedData']))
         : null,
       _schemeVersion = (json['schemeVersion'] as num?)?.toInt(),
+      _interventions = json['interventions'] is List
+        ? (json['interventions'] as List)
+          .where((e) => e?['serializedData'] != null)
+          .map((e) => InterventionInterventionTagRelation.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
-      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null,
-      _interventionTagsId = json['interventionTagsId'];
+      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'text': _text?.toJson(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'interventionTagsId': _interventionTagsId
+    'id': id, 'text': _text?.toJson(), 'schemeVersion': _schemeVersion, 'interventions': _interventions?.map((InterventionInterventionTagRelation? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "interventionTag.id");
   static final QueryField TEXT = QueryField(fieldName: "text");
   static final QueryField SCHEMEVERSION = QueryField(fieldName: "schemeVersion");
-  static final QueryField INTERVENTIONTAGSID = QueryField(fieldName: "interventionTagsId");
+  static final QueryField INTERVENTIONS = QueryField(
+    fieldName: "interventions",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (InterventionInterventionTagRelation).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "InterventionTag";
     modelSchemaDefinition.pluralName = "InterventionTags";
@@ -159,6 +175,13 @@ class InterventionTag extends Model {
       ofType: ModelFieldType(ModelFieldTypeEnum.int)
     ));
     
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
+      key: InterventionTag.INTERVENTIONS,
+      isRequired: true,
+      ofModelName: (InterventionInterventionTagRelation).toString(),
+      associatedKey: InterventionInterventionTagRelation.INTERVENTIONTAG
+    ));
+    
     modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
       fieldName: 'createdAt',
       isRequired: false,
@@ -171,12 +194,6 @@ class InterventionTag extends Model {
       isRequired: false,
       isReadOnly: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: InterventionTag.INTERVENTIONTAGSID,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
   });
 }

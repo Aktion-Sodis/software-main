@@ -10,7 +10,7 @@ class Content {
   late I18nString description_ml;
   late List<amp.InterventionContentRelation>
       interventions; //many to many -> maybe change
-  late List<ContentTag> tags;
+  late List<amp.ContentContentTagRelation> tagConnections;
   int? schemeVersion;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -23,12 +23,31 @@ class Content {
 
   set description(String description) => description_ml.text = description;
 
+  List<ContentTag> get tags => List.generate(tagConnections.length,
+      (index) => ContentTag.fromAmplifyModel(tagConnections[index].contentTag));
+
+  void addContentTag(ContentTag contentTag) {
+    tagConnections.add(amp.ContentContentTagRelation(
+        content: toAmplifyModel(), contentTag: contentTag.toAmplifyModel()));
+  }
+
+  void updateContentTag(ContentTag contentTag) {
+    int index = tagConnections
+        .indexWhere((element) => element.contentTag.id == contentTag.id);
+    if (index >= 0) {
+      tagConnections[index] = tagConnections[index]
+          .copyWith(contentTag: contentTag.toAmplifyModel());
+    } else {
+      addContentTag(contentTag);
+    }
+  }
+
   Content(
       {required this.id,
       required this.name_ml,
       required this.description_ml,
       required this.interventions,
-      required this.tags,
+      required this.tagConnections,
       this.schemeVersion,
       this.createdAt,
       this.updatedAt});
@@ -38,8 +57,7 @@ class Content {
     name_ml = I18nString.fromAmplifyModel(content.name);
     description_ml = I18nString.fromAmplifyModel(content.description);
     interventions = content.interventions;
-    tags = List.generate(content.tags.length,
-        (index) => ContentTag.fromAmplifyModel(content.tags[index]));
+    tagConnections = content.tags;
     schemeVersion = content.schemeVersion;
     createdAt = content.createdAt?.getDateTimeInUtc();
     updatedAt = content.updatedAt?.getDateTimeInUtc();
@@ -51,8 +69,7 @@ class Content {
         name: name_ml.toAmplifyModel(),
         description: description_ml.toAmplifyModel(),
         interventions: interventions,
-        tags:
-            List.generate(tags.length, (index) => tags[index].toAmplifyModel()),
+        tags: tagConnections,
         schemeVersion: schemeVersion));
   }
 }

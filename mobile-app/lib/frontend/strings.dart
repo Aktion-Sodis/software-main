@@ -36,7 +36,8 @@ Map<String, dynamic> stringMap = {
     "user_create_save": "Okay",
     "user_create_info":
         "Please enter your prename and surname to finish account creation. If you want, you can take a profile pic!",
-    "logout": "Log out"
+    "logout": "Log out",
+    "test_list": "Tests"
   }
 };
 
@@ -94,3 +95,5 @@ String get login => stringMap[currentLanguage]["login"];
 String get or => stringMap[currentLanguage]["or"];
 
 String get google_sign_in => stringMap[currentLanguage]["google_sign_in"];
+
+String get test_list => stringMap[currentLanguage]["test_list"];

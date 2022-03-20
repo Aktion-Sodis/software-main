@@ -12,7 +12,8 @@ class Intervention {
   late InterventionType interventionType;
   late List<amp.InterventionContentRelation> interventionContentRelations;
   late List<Survey> surveys;
-  late List<InterventionTag> tags;
+  late List<amp.InterventionInterventionTagRelation> tagConnections;
+  late List<amp.LevelInterventionRelation> levelConnections;
   int? schemeVersion;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -25,6 +26,28 @@ class Intervention {
 
   set description(String description) => description_ml.text = description;
 
+  List<InterventionTag> get tags => List.generate(
+      tagConnections.length,
+      (index) => InterventionTag.fromAmplifyModel(
+          tagConnections[index].interventionTag));
+
+  void addInterventionTag(InterventionTag interventionTag) {
+    tagConnections.add(amp.InterventionInterventionTagRelation(
+        intervention: toAmplifyModel(),
+        interventionTag: interventionTag.toAmplifyModel()));
+  }
+
+  void updateInterventionTag(InterventionTag interventionTag) {
+    int index = tagConnections.indexWhere(
+        (element) => element.interventionTag.id == interventionTag.id);
+    if (index >= 0) {
+      tagConnections[index] = tagConnections[index]
+          .copyWith(interventionTag: interventionTag.toAmplifyModel());
+    } else {
+      addInterventionTag(interventionTag);
+    }
+  }
+
   Intervention(
       {this.id,
       required this.name_ml,
@@ -32,7 +55,8 @@ class Intervention {
       required this.interventionType,
       required this.interventionContentRelations,
       required this.surveys,
-      required this.tags,
+      required this.tagConnections,
+      required this.levelConnections,
       this.schemeVersion,
       this.createdAt,
       this.updatedAt});
@@ -46,11 +70,11 @@ class Intervention {
     interventionContentRelations = intervention.contents;
     surveys = List.generate(intervention.surveys.length,
         (index) => Survey.fromAmplifyModel(intervention.surveys[index]));
-    tags = List.generate(intervention.tags.length,
-        (index) => InterventionTag.fromAmplifyModel(intervention.tags[index]));
+    tagConnections = intervention.tags;
     schemeVersion = intervention.schemeVersion;
     createdAt = intervention.createdAt?.getDateTimeInUtc();
     updatedAt = intervention.updatedAt?.getDateTimeInUtc();
+    levelConnections = intervention.levels;
   }
 
   amp.Intervention toAmplifyModel() {
@@ -61,10 +85,10 @@ class Intervention {
         interventionType:
             amplifyInterventionTypeFromInterventionType(interventionType),
         contents: interventionContentRelations,
-        tags:
-            List.generate(tags.length, (index) => tags[index].toAmplifyModel()),
+        tags: tagConnections,
         surveys: List.generate(
             surveys.length, (index) => surveys[index].toAmplifyModel()),
+        levels: levelConnections,
         schemeVersion: schemeVersion));
   }
 }

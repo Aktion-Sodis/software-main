@@ -23,104 +23,115 @@ import 'package:amplify_core/amplify_core.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
-
 /** This is an auto generated class representing the I18nString type in your schema. */
 @immutable
 class I18nString {
   final List<String>? _languageKeys;
-  final List<String>? _languageTexts;
+  final List<String?>? _languageTexts;
 
   List<String> get languageKeys {
     try {
       return _languageKeys!;
-    } catch(e) {
+    } catch (e) {
       throw new AmplifyCodeGenModelException(
-          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
+          AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
     }
   }
-  
-  List<String> get languageTexts {
+
+  List<String?> get languageTexts {
     try {
       return _languageTexts!;
-    } catch(e) {
+    } catch (e) {
       throw new AmplifyCodeGenModelException(
-          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
+          AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
     }
   }
-  
-  const I18nString._internal({required languageKeys, required languageTexts}): _languageKeys = languageKeys, _languageTexts = languageTexts;
-  
-  factory I18nString({required List<String> languageKeys, required List<String> languageTexts}) {
+
+  const I18nString._internal({required languageKeys, required languageTexts})
+      : _languageKeys = languageKeys,
+        _languageTexts = languageTexts;
+
+  factory I18nString(
+      {required List<String> languageKeys,
+      required List<String?> languageTexts}) {
     return I18nString._internal(
-      languageKeys: languageKeys != null ? List<String>.unmodifiable(languageKeys) : languageKeys,
-      languageTexts: languageTexts != null ? List<String>.unmodifiable(languageTexts) : languageTexts);
+        languageKeys: languageKeys != null
+            ? List<String>.unmodifiable(languageKeys)
+            : languageKeys,
+        languageTexts: languageTexts != null
+            ? List<String>.unmodifiable(languageTexts)
+            : languageTexts);
   }
-  
+
   bool equals(Object other) {
     return this == other;
   }
-  
+
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is I18nString &&
-      DeepCollectionEquality().equals(_languageKeys, other._languageKeys) &&
-      DeepCollectionEquality().equals(_languageTexts, other._languageTexts);
+        DeepCollectionEquality().equals(_languageKeys, other._languageKeys) &&
+        DeepCollectionEquality().equals(_languageTexts, other._languageTexts);
   }
-  
+
   @override
   int get hashCode => toString().hashCode;
-  
+
   @override
   String toString() {
     var buffer = new StringBuffer();
-    
+
     buffer.write("I18nString {");
-    buffer.write("languageKeys=" + (_languageKeys != null ? _languageKeys!.toString() : "null") + ", ");
-    buffer.write("languageTexts=" + (_languageTexts != null ? _languageTexts!.toString() : "null"));
+    buffer.write("languageKeys=" +
+        (_languageKeys != null ? _languageKeys!.toString() : "null") +
+        ", ");
+    buffer.write("languageTexts=" +
+        (_languageTexts != null ? _languageTexts!.toString() : "null"));
     buffer.write("}");
-    
+
     return buffer.toString();
   }
-  
-  I18nString copyWith({List<String>? languageKeys, List<String>? languageTexts}) {
-    return I18nString._internal(
-      languageKeys: languageKeys ?? this.languageKeys,
-      languageTexts: languageTexts ?? this.languageTexts);
-  }
-  
-  I18nString.fromJson(Map<String, dynamic> json)  
-    : _languageKeys = json['languageKeys']?.cast<String>(),
-      _languageTexts = json['languageTexts']?.cast<String>();
-  
-  Map<String, dynamic> toJson() => {
-    'languageKeys': _languageKeys, 'languageTexts': _languageTexts
-  };
 
-  static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
+  I18nString copyWith(
+      {List<String>? languageKeys, List<String>? languageTexts}) {
+    return I18nString._internal(
+        languageKeys: languageKeys ?? this.languageKeys,
+        languageTexts: languageTexts ?? this.languageTexts);
+  }
+
+  I18nString.fromJson(Map<String, dynamic> json)
+      : _languageKeys = json['languageKeys']?.cast<String>(),
+        _languageTexts = json['languageTexts']?.cast<String>();
+
+  Map<String, dynamic> toJson() =>
+      {'languageKeys': _languageKeys, 'languageTexts': _languageTexts};
+
+  static var schema =
+      Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "I18nString";
     modelSchemaDefinition.pluralName = "I18nStrings";
-    
+
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'languageKeys',
-      isRequired: true,
-      isArray: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.collection, ofModelName: describeEnum(ModelFieldTypeEnum.string))
-    ));
-    
+        fieldName: 'languageKeys',
+        isRequired: true,
+        isArray: true,
+        ofType: ModelFieldType(ModelFieldTypeEnum.collection,
+            ofModelName: describeEnum(ModelFieldTypeEnum.string))));
+
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'languageTexts',
-      isRequired: true,
-      isArray: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.collection, ofModelName: describeEnum(ModelFieldTypeEnum.string))
-    ));
+        fieldName: 'languageTexts',
+        isRequired: true,
+        isArray: true,
+        ofType: ModelFieldType(ModelFieldTypeEnum.collection,
+            ofModelName: describeEnum(ModelFieldTypeEnum.string))));
   });
 }

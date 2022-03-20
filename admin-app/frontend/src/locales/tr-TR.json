@@ -3,12 +3,14 @@
     "notYetImplemented": "Bu fonksiyonalite henüz tamamlanmadı. Eğer bug arayışındaysan lütfen görmezden gel! 🐞🔍"
   },
   "general": {
+    "edit": "Düzenle",
     "searchBox": "Her yerde ara",
     "cancel": "İptal",
     "save": "Kaydet",
     "delete": "Sil",
     "form": {
       "maxCharExceeded": "Maksimum {maxChar} karakter.",
+      "minCharNotMet": "En az {minChar} uzunluğunda olmalı.",
       "required": "Zorunlu alan.",
       "unsavedChanges": "Kaydedilmemiş değişiklikler var. Çıkmak istediğinizden emin misiniz?"
     },
@@ -18,23 +20,88 @@
       "organizationStructure": "Organizasyonel yapı",
       "interventions": "Müdahaleler",
       "login": "Giriş",
-      "regıster": "Kayıt"
+      "completeUserInfo": "Kullanıcı bilgilerini tamamla",
+      "changePassword": "Şifre Değiştir",
+      "forgotPassword": "Şifremi Unuttum",
+      "about": "Hakkımızda"
+    },
+    "errorCodes": {
+      "InternalErrorException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6001",
+      "InvalidLambdaResponseException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6002",
+      "InvalidParameterException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6003",
+      "InvalidSmsRoleAccessPolicyException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6004",
+      "InvalidSmsRoleTrustRelationshipException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6005",
+      "InvalidUserPoolConfigurationException": "Dahili bir hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6006",
+      "NotAuthorizedException": "Üzgünüz, verilen kimlik bilgileriyle eşleşen hesap yok. Hata Kodu: 6007",
+      "PasswordResetRequiredException": "Parola sıfırlama gerekli. Hata Kodu: 608",
+      "ResourceNotFoundException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6009",
+      "TooManyRequestsException": "Çok fazla istek var. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6010",
+      "UnexpectedLambdaException": "Dahili bir hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6011",
+      "UserLambdaValidationException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6012",
+      "UserNotConfirmedException": "Kullanıcı onaylanmadı. Hata Kodu: 6013",
+      "UserNotFoundException": "Üzgünüz, verilen kimlik bilgileriyle eşleşen hesap yok. Hata Kodu: 6014",
+      "ConditionalCheckFailedException": "Üzgünüm, bir şeyler ters gitti. Hata Kodu: 6015",
+      "InvalidPasswordException": "Üzgünüm, bir şeyler ters gitti. Hata Kodu: 6016",
+      "LimitExceededException": "Üzgünüm, bir şeyler ters gitti. Hata Kodu: 6017",
+      "CodeMismatchException": "Kod uyuşmazlığı. Hata Kodu: 6018",
+      "ExpiredCodeException": "Kodun süresi doldu. Hata Kodu: 6019",
+      "TooManyFailedAttemptsException": "Çok fazla başarısız deneme. Hata Kodu: 6020"
+    },
+    "warningCodes": {
+      "sessionExpired": "Oturumun süresi doldu. Lütfen yeniden giriş yap."
+    },
+    "api": {
+      "inSync": "Yenile",
+      "synched": "Senkronize",
+      "synchronizing": "senkronize ediliyor..."
     }
   },
   "login": {
     "title": "Hoş geldin!",
-    "subtitle": "Lütfen giriş yap ya da kaydol.",
-    "username": "Kullanıcı adı",
+    "subtitle": "Lütfen giriş yap.",
+    "email": "Email",
     "password": "Şifre",
     "rememberMe": "Oturumu hatırla",
     "forgotPassword": "Şifremi unuttum",
     "signIn": "Giriş yap",
-    "signInWithGoogle": "Google'la giriş yap",
+    "withGoogle": "Google'la giriş yap",
     "dontHaveAnAccount": "Hesabın yok mu?",
-    "registerHere": "Buradan kaydol"
+    "askYourAdmin": "Erişim için bir dernek yetkilisine danış."
+  },
+  "completeUserInfo": {
+    "title": "Bir şey daha...",
+    "subtitle": "Görünen o ki sen buralarda yenisin. Lütfen Admin-App'i kullanmaya başlamak için profilini tamamla.",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "password": {
+      "label": "Yeni şifre",
+      "hint": "Lütfen bu şifreni unutma ve bir yerde sakladığından emin ol."
+    },
+    "start": "Başla"
   },
   "home": {
     "title": "Ana Sayfa"
+  },
+  "changePassword": {
+    "title": "Şifreni güncelle",
+    "subtitle": "Eski ve yeni şifrelerini gir",
+    "oldPassword": {
+      "label": "Eski Şifre",
+      "hint": "Şu anda sahip olduğunuz şifre. Unuttuysanız, şifrenizi sıfırlamayı deneyin."
+    },
+    "newPassword": {
+      "label": "Yeni Şifre",
+      "hint": "Yeni şifre oluşturun"
+    }
+  },
+  "forgotPassword": {
+    "title": "Şifremi Unuttum",
+    "subtitle": "E-posta adresinizi giriniz. Size bir doğrulama kodu göndereceğiz. Lütfen kodu girin ve hesabınız için yeni bir şifre belirleyin.",
+    "emailedCode": "Kod",
+    "newPassword1": "Yeni Şifre",
+    "newPassword2": "Yeni Şifre Tekrar",
+    "sendCode": "Kod Gönder",
+    "confirm": "Onay"
   },
   "baseData": {
     "title": "Temel Veriler",
@@ -49,6 +116,7 @@
     "addNewEntity": "Yeni oluşum ekle",
     "addNewLevel": "Yeni seviye ekle",
     "hasNoInterventions": "Bu seviyede henüz hiç müdahale yok.",
+    "hasNoEntities": "Bu seviyede henüz hiç oluşum yok.",
     "levelModal": {
       "modalTitle": {
         "edit": "Seviyeyi düzenle: ",
@@ -66,6 +134,8 @@
       "upperLevel": "Seviyenin üst seviyesi"
     },
     "entityModal": {
+      "moreStuffTitle": "Daha fazlası yakında...",
+      "moreStuffDescription": "Konum, Özel Veriler ve Etiketlerin eklenmesi bir sonraki büyük güncellemede gelecek.",
       "modalTitle": {
         "edit": "Oluşumu düzenle: ",
         "create": "Yeni oluşum yarat",

@@ -11,11 +11,12 @@ import FEEDBACK_UI from './feedback/ui';
 import levelsData from './levels/data';
 import entitiesData from './entities/data';
 import dataModal from './modal/ui';
+import SYNC_UI from './sync/ui';
 
 // persist
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
-  modules: ['auth'],
+  modules: ['auth', 'INTERVENTION_Data'],
 });
 
 Vue.use(Vuex);
@@ -54,6 +55,7 @@ export default new Vuex.Store({
     INTERVENTION_Data: interventionsData,
     QUESTION_UI,
     FEEDBACK_UI,
+    SYNC_UI,
   },
   plugins: [vuexLocal.plugin],
 });

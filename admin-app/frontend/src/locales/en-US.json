@@ -3,12 +3,14 @@
     "notYetImplemented": "This feature is yet to be implemented. Please ignore if you are on bug hunting! 🐞🔍"
   },
   "general": {
+    "edit": "Edit",
     "searchBox": "Search anything",
     "cancel": "Cancel",
     "save": "Save",
     "delete": "Delete",
     "form": {
       "maxCharExceeded": "Maximum {maxChar} characters.",
+      "minCharNotMet": "Minimum {minChar} characters.",
       "required": "Required.",
       "unsavedChanges": "There are unsaved changes. Are you sure you want to leave?"
     },
@@ -18,23 +20,88 @@
       "organizationStructure": "Organization structure",
       "interventions": "Interventions",
       "login": "Login",
-      "register": "Register"
+      "completeUserInfo": "Complete user information",
+      "changePassword": "Change password",
+      "forgotPassword": "Forgot Password",
+      "about": "About"
+    },
+    "errorCodes": {
+      "InternalErrorException": "An internal error has occurred. Please try again later. Error Code: 6001",
+      "InvalidLambdaResponseException": "An internal error has occurred. Please try again later. Error Code: 6002",
+      "InvalidParameterException": "An internal error has occurred. Please try again later. Error Code: 6003",
+      "InvalidSmsRoleAccessPolicyException": "An internal error has occurred. Please try again later. Error Code: 6004",
+      "InvalidSmsRoleTrustRelationshipException": "An internal error has occurred. Please try again later. Error Code: 6005",
+      "InvalidUserPoolConfigurationException": "An internal error has occurred. Please try again later. Error Code: 6006",
+      "NotAuthorizedException": "Sorry, there is no matcing account for the given credentials. Error Code: 6001",
+      "PasswordResetRequiredException": "Password reset is required. Error Code: 6007",
+      "ResourceNotFoundException": "An internal error has occurred. Please try again later. Error Code: 6008",
+      "TooManyRequestsException": "Too many requests. Please try again later. Error Code: 6009",
+      "UnexpectedLambdaException": "An internal error has occurred. Please try again later. Error Code: 6010",
+      "UserLambdaValidationException": "An internal error has occurred. Please try again later. Error Code: 6011",
+      "UserNotConfirmedException": "User is not confirmed. Error Code: 6012",
+      "UserNotFoundException": "Sorry, there is no matcing account for the given credentials. Error Code: 6013",
+      "ConditionalCheckFailedException": "Sorry, something went wrong. Error Code: 6014",
+      "InvalidPasswordException": "Sorry, something went wrong. Error Code: 6015",
+      "LimitExceededException": "Sorry, something went wrong. Error Code: 6016",
+      "CodeMismatchException": "Code mismatch. Error Code: 6017",
+      "ExpiredCodeException": "Code has expired. Error Code: 6018",
+      "TooManyFailedAttemptsException": "Too many failed attempts. Error Code: 6019"
+    },
+    "warningCodes": {
+      "sessionExpired": "Your session has expired. Please sign in again."
+    },
+    "api": {
+      "inSync": "Refresh",
+      "synched": "In sync",
+      "synchronizing": "synchronizing..."
     }
   },
   "login": {
     "title": "Welcome back!",
-    "subtitle": "Please sign in with your credentials or register.",
-    "username": "Username",
+    "subtitle": "Please sign in with your credentials.",
+    "email": "Email",
     "password": "Password",
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot Password",
     "signIn": "Sign in",
-    "signInWithGoogle": "Sign in with Google",
+    "withGoogle": "Sign in with Google",
     "dontHaveAnAccount": "Don't have an account?",
-    "registerHere": "Register here"
+    "askYourAdmin": "Ask your administrator for access."
+  },
+  "completeUserInfo": {
+    "title": "One more thing...",
+    "subtitle": "Looks like you are new here. Please finish your profile to start using the Admin-App.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "password": {
+      "label": "New password",
+      "hint": "Make sure you don't forget this password and note it down."
+    },
+    "start": "Start"
   },
   "home": {
     "title": "Home"
+  },
+  "changePassword": {
+    "title": "Update your password",
+    "subtitle": "Enter your old and the new one.",
+    "oldPassword": {
+      "label": "Old password",
+      "hint": "The password that you currently have. If you forgot it, try resetting your password."
+    },
+    "newPassword": {
+      "label": "New password",
+      "hint": "The password that you want to have."
+    }
+  },
+  "forgotPassword": {
+    "title": "Forgot Password",
+    "subtitle": "Enter your email address. If there is an account for it, we will email you a verification code. Please enter the code and set a new password for your account.",
+    "emailedCode": "Code",
+    "newPassword1": "New password",
+    "newPassword2": "New password again",
+    "sendCode": "Send code",
+    "confirm": "Confirm"
   },
   "baseData": {
     "title": "Base Data",
@@ -49,6 +116,7 @@
     "addNewEntity": "Add new entity",
     "addNewLevel": "Add new level",
     "hasNoInterventions": "There are no interventions for this level.",
+    "hasNoEntities": "There are no entities for this level.",
     "levelModal": {
       "modalTitle": {
         "edit": "Edit level ",
@@ -66,6 +134,8 @@
       "upperLevel": "Level is subordinate to"
     },
     "entityModal": {
+      "moreStuffTitle": "More stuff coming soon...",
+      "moreStuffDescription": "Adding Location, Custom Data and Tags will come in the next major update.",
       "modalTitle": {
         "edit": "Edit entity ",
         "create": "Create new entity",
