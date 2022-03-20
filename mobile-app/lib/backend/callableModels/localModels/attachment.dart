@@ -1,5 +1,5 @@
 abstract class Attachment {
-  final String URI;
+  final String uri;
 
-  Attachment(this.URI);
+  Attachment(this.uri);
 }
