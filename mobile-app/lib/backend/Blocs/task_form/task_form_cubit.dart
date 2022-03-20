@@ -8,16 +8,30 @@ part 'task_form_state.dart';
 abstract class TaskFormCubit extends Cubit<TaskFormState> {
   TaskFormCubit() : super(TaskFormFillingOut());
 
-  void recordAudio();
+  void takePhoto() {
+    // TODO: implement takePhoto
+  }
 
-  void takePhoto();
+  @override
+  void addEntity(Entity entity) {
+    // TODO: implement addEntity
+  }
 
-  void setDeadline(DateTime dateTime);
+  @override
+  void openCalendarToSetDeadline() {
+    // TODO: implement openCalendarToSetDeadline
+  }
 
-  void openCalendarToSetDeadline();
+  @override
+  void recordAudio() {
+    // TODO: implement recordAudio
+  }
 
-  void addEntity(Entity entity);
+  @override
+  void setDeadline(DateTime dateTime) {
+    // TODO: implement setDeadline
+  }
 
   void submit(String text, List<Attachment> attachments, List<Entity> entities,
-      DateTime deadline);
+      DateTime? deadline);
 }
