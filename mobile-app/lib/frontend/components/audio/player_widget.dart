@@ -39,7 +39,7 @@ class _PlayerWidgetState extends AudioStatefulWidgetState<PlayerWidget> {
       });
     }
 
-    widget.audio.player.startPlayer(
+    widget.audio.startPlayer(
         fromURI: widget.audioURL,
         whenFinished: () {
           // Refresh UI
@@ -58,7 +58,7 @@ class _PlayerWidgetState extends AudioStatefulWidgetState<PlayerWidget> {
       });
     }
 
-    widget.audio.player.stopPlayer();
+    widget.audio.stopPlayer();
   }
 
   @override

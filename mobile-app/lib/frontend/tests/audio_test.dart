@@ -46,12 +46,12 @@ class _AudioTestState extends State<AudioTest> {
 
   void _startPlaying() {
     if (_recordedURI != null)
-      audio.player.startPlayer(fromURI: _recordedURI);
+      audio.startPlayer(fromURI: _recordedURI);
     else
       print("Nothing has been recorded yet");
   }
 
-  Future<void> _stopPlaying() => audio.player.stopPlayer();
+  Future<void> _stopPlaying() => audio.stopPlayer();
 
   @override
   Widget build(BuildContext context) {
