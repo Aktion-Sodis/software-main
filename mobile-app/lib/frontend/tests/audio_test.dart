@@ -125,7 +125,7 @@ class _AudioTestState extends State<AudioTest> {
                   loadingViewBuilder: () {
                     return Text("loading");
                   },
-                  recordingViewBuilder: (stopPlaying) {
+                  playingViewBuilder: (stopPlaying) {
                     return ElevatedButton(
                         onPressed: stopPlaying,
                         child: const Text("Stop playing"));
