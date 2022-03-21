@@ -5,6 +5,7 @@ import 'package:mobile_app/backend/Blocs/session/session_cubit.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/repositories/UserRepository.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
+import 'package:mobile_app/frontend/pages/survey.dart';
 import 'package:mobile_app/frontend/theme.dart';
 
 import 'package:mobile_app/services/amplify.dart';
