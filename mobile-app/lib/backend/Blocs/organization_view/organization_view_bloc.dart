@@ -17,7 +17,11 @@ class OrganizationViewBloc
   OrganizationViewBloc(
       this.entityRepository, this.appliedInterventionRepository, this.inAppBloc)
       : super(LoadingOrganizationViewState()) {
+    on<OrganizationViewEvent>(_mapEventToState);
     entityRepository.getAllEntities().then((value) {
+      value.forEach((element) {
+        print(element.toAmplifyModel().toJson());
+      });
       List<Entity> startingEntities =
           List.from(value.where((element) => element.parentEntityID == null));
       String startingAppBarString = startingEntities.first.level.name;

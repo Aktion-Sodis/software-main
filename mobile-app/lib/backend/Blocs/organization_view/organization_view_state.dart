@@ -17,6 +17,9 @@ class EntitiesLoadedOrganizationViewState extends OrganizationViewState {
         allEntities.where((element) => element.parentEntityID == id));
   }
 
+  bool hasChildren(String entityID) =>
+      allEntities.any((obj) => obj.parentEntityID == entityID);
+
   List<Level> getLevelsInOrder() {
     List<Level> toOrder = [];
     allEntities.forEach((element) {

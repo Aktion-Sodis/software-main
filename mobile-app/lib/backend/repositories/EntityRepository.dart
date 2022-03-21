@@ -9,6 +9,7 @@ class EntityRepository {
     List<amp.Entity> allAmpEntities = await Amplify.DataStore.query(
       amp.Entity.classType,
     );
+    print("allAmpEntities: ${allAmpEntities.length}");
     List<amp.Entity> popluatedEntities =
         await _populateMultipleConnections(allAmpEntities);
 

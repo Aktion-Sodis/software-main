@@ -2,7 +2,26 @@ import 'package:flutter/material.dart';
 
 Future<ThemeData> getThemeData() async {
   return ThemeData(
-      primaryColor: Colors.blue,
+      cardTheme: CardTheme(
+          color: Colors.white,
+          shadowColor: Colors.grey,
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)))),
+      colorScheme: ColorScheme(
+          primary: Colors.blue,
+          primaryVariant: Colors.blueAccent,
+          secondary: Colors.green,
+          secondaryVariant: Colors.lightGreen,
+          surface: Colors.white,
+          background: Colors.white,
+          error: Colors.red,
+          onPrimary: Colors.white,
+          onSecondary: Colors.white,
+          onSurface: Colors.black,
+          onBackground: Colors.black,
+          onError: Colors.white,
+          brightness: Brightness.light),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       buttonTheme: ButtonThemeData(height: 4),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(

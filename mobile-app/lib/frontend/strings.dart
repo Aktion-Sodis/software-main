@@ -52,9 +52,13 @@ Map<String, dynamic> stringMap = {
     "organization_view_entity_name": "Name",
     "organization_view_entity_description": "Description",
     "organization_view_entity_save_entity": "Save Entity",
-    "organization_view_entity_save_changes": "Save Changes"
+    "organization_view_entity_save_changes": "Save Changes",
+    "organization_view_info_button": "Info"
   }
 };
+
+String get organization_view_info_button =>
+    stringMap[currentLanguage]["organization_view_info_button"];
 
 String get organization_view_history =>
     stringMap[currentLanguage]["organization_view_history"];
