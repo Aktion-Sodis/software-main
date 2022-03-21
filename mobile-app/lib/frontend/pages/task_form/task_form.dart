@@ -18,7 +18,7 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
   final TextEditingController _taskTextController = TextEditingController();
   final TextEditingController _searchTextController = TextEditingController();
 
-  final TaskFormCubit _cubit = TaskFormCubit.initialize<T>();
+  TaskFormCubit _cubit = TaskFormCubit.initialize<T>();
 
   Widget _subtitle(String text) => Text(
         text,
@@ -49,9 +49,11 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TaskFormCubit>(
-      create: (context) => _cubit,
+      create: (context) => TaskFormCubit.initialize<T>(),
       child: BlocBuilder<TaskFormCubit, TaskFormState>(
         builder: (context, state) {
+          _cubit = BlocProvider.of<TaskFormCubit>(context);
+
           return KeyboardDismisser(
               child: Material(
             child: Scrollbar(
