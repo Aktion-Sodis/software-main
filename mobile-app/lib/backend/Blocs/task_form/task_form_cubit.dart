@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:mobile_app/backend/Blocs/task_form/add_task_cubit.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/callableModels/localModels/attachment.dart';
+import 'package:mobile_app/backend/callableModels/localModels/audio_attachment.dart';
 
 part 'task_form_state.dart';
 
@@ -20,22 +21,30 @@ abstract class TaskFormCubit extends Cubit<TaskFormState> {
     // TODO: implement takePhoto
   }
 
-  @override
   void addEntity(Entity entity) {
     // TODO: implement addEntity
   }
 
-  @override
   void openCalendarToSetDeadline() {
     // TODO: implement openCalendarToSetDeadline
   }
 
-  @override
   void addAttachment(Attachment attachment) {
-    // TODO: implement addAttachment
+    if (state is TaskFormFillingOut) {
+      List<Attachment> newAttachments = state.attachments.toList()
+        ..add(attachment);
+      emit((state as TaskFormFillingOut).copyWith(attachments: newAttachments));
+    }
   }
 
-  @override
+  void removeAttachment(Attachment attachment) {
+    if (state is TaskFormFillingOut) {
+      List<Attachment> newAttachments = state.attachments.toList()
+        ..remove(attachment);
+      emit((state as TaskFormFillingOut).copyWith(attachments: newAttachments));
+    }
+  }
+
   void setDeadline(DateTime dateTime) {
     // TODO: implement setDeadline
   }

@@ -19,6 +19,16 @@ class TaskFormFillingOut extends TaskFormState {
       DateTime? deadline,
       List<Entity>? entities})
       : super(attachments: attachments, deadline: deadline, entities: entities);
+
+  TaskFormFillingOut copyWith(
+      {List<Attachment>? attachments,
+      DateTime? deadline,
+      List<Entity>? entities}) {
+    return TaskFormFillingOut(
+        attachments: attachments ?? this.attachments,
+        deadline: deadline ?? this.deadline,
+        entities: entities ?? this.entities);
+  }
 }
 
 class TaskFormSuccessfullSubmitted extends TaskFormState {}

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mobile_app/backend/Blocs/task_form/task_form_cubit.dart';
+import 'package:mobile_app/backend/callableModels/localModels/audio_attachment.dart';
+import 'package:mobile_app/frontend/components/audio/recorder_widget.dart';
 import 'package:mobile_app/frontend/components/keyboard_dismisser.dart';
 import 'package:mobile_app/frontend/components/nisaba_app_bar.dart';
 import 'package:mobile_app/frontend/components/shadow_box.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
 import 'package:mobile_app/frontend/pages/task_category_search.dart';
+import 'package:mobile_app/frontend/pages/task_form/attachments_list.dart';
 import 'package:mobile_app/frontend/pages/task_form/small_button.dart';
 import 'package:mobile_app/frontend/theme.dart';
 
@@ -62,7 +65,7 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                 padding: MediaQuery.of(context).padding,
                 controller: _scrollController,
                 children: [
-                  const NisabaAppBar(title: "New task"),
+                  NisabaAppBar(title: title),
                   const SizedBox(
                     height: 19,
                   ),
@@ -104,7 +107,9 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // TODO: implement attachment list
+                  state.attachments.isNotEmpty
+                      ? const AttachmentsList()
+                      : const SizedBox.shrink(),
                   Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: defaultPadding(context)),
@@ -113,8 +118,23 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                           Expanded(
                               child: Row(
                             children: [
-                              _iconButton(
-                                  MdiIcons.microphoneOutline, () => null),
+                              RecorderWidget(
+                                  restingViewBuilder: (startPlaying) {
+                                return _iconButton(
+                                    MdiIcons.microphoneOutline, startPlaying);
+                              }, recordingViewBuilder: (stopPlaying) {
+                                return _iconButton(
+                                    MdiIcons.stopCircleOutline, stopPlaying);
+                              }, onAudioRecorded: (uri) {
+                                _cubit.addAttachment(AudioAttachment(uri));
+                              }, loadingViewBuilder: () {
+                                return _iconButton(MdiIcons.microphoneOutline,
+                                    () {
+                                  // TODO: add explaining toast, that widget is not ready yet
+                                  debugPrint(
+                                      "Recorder widget is not ready yet");
+                                });
+                              }),
                               SizedBox(
                                 width: defaultPadding(context),
                               ),
