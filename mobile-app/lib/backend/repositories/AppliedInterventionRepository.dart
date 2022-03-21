@@ -1,4 +1,5 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/repositories/ExecutedSurveyRepository.dart';
 import 'package:mobile_app/backend/repositories/InterventionRepository.dart';
 import 'UserRepository.dart';
@@ -11,6 +12,19 @@ class AppliedInterventionRepository {
         amp.AppliedIntervention.classType,
         where:
             amp.AppliedIntervention.ENTITYAPPLIEDINTERVENTIONSID.eq(entityID)));
+  }
+
+  static Future<String> createAppliedIntervention(
+      AppliedIntervention appliedIntervention) async {
+    String id = UUID().toString();
+    appliedIntervention.id = id;
+    Amplify.DataStore.save(appliedIntervention.toAmplifyModel());
+    return id;
+  }
+
+  static Future updateAppliedIntervention(
+      AppliedIntervention appliedIntervention) async {
+    await Amplify.DataStore.save(appliedIntervention.toAmplifyModel());
   }
 
   static Future<amp.AppliedIntervention> appliedInterventionByExecutedSurvey(

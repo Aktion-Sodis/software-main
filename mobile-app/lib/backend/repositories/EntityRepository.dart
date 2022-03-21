@@ -32,4 +32,15 @@ class EntityRepository {
         entities.length, (index) => _populateConnections(entities[index]));
     return Future.wait(populateFutures);
   }
+
+  static Future<String> createEntity(Entity entity) async {
+    String id = UUID().toString();
+    entity.id = id;
+    Amplify.DataStore.save(entity.toAmplifyModel());
+    return id;
+  }
+
+  static Future updateEntity(Entity entity) async {
+    Amplify.DataStore.save(entity.toAmplifyModel());
+  }
 }

@@ -41,9 +41,53 @@ Map<String, dynamic> stringMap = {
     "main_menu_home": "Home",
     "main_menu_organization": "Organization",
     "main_menu_tasks": "Tasks",
-    "main_menu_wiki": "Wiki"
+    "main_menu_wiki": "Wiki",
+    "organization_view_taks": "Tasks",
+    "organization_view_surveys": "Surveys",
+    "organization_view_applied_interventions": "Interventions",
+    "organization_view_info": "Information",
+    "organization_view_history": "History",
+    "organization_view_dialog_add_entity": "Add Entity",
+    "organization_view_dialog_edit_entity": "Edit Entity",
+    "organization_view_entity_name": "Name",
+    "organization_view_entity_description": "Description",
+    "organization_view_entity_save_entity": "Save Entity",
+    "organization_view_entity_save_changes": "Save Changes"
   }
 };
+
+String get organization_view_history =>
+    stringMap[currentLanguage]["organization_view_history"];
+
+String get organization_view_taks =>
+    stringMap[currentLanguage]["organization_view_taks"];
+
+String get organization_view_surveys =>
+    stringMap[currentLanguage]["organization_view_surveys"];
+
+String get organization_view_applied_interventions =>
+    stringMap[currentLanguage]["organization_view_applied_interventions"];
+
+String get organization_view_info =>
+    stringMap[currentLanguage]["organization_view_info"];
+
+String get organization_view_dialog_add_entity =>
+    stringMap[currentLanguage]["organization_view_dialog_add_entity"];
+
+String get organization_view_dialog_edit_entity =>
+    stringMap[currentLanguage]["organization_view_dialog_edit_entity"];
+
+String get organization_view_entity_name =>
+    stringMap[currentLanguage]["organization_view_entity_name"];
+
+String get organization_view_entity_description =>
+    stringMap[currentLanguage]["organization_view_entity_description"];
+
+String get organization_view_entity_save_entity =>
+    stringMap[currentLanguage]["organization_view_entity_save_entity"];
+
+String get organization_view_entity_save_changes =>
+    stringMap[currentLanguage]["organization_view_entity_save_changes"];
 
 String get main_menu_home => stringMap[currentLanguage]["main_menu_home"];
 
