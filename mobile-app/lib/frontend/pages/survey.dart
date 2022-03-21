@@ -4,6 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/frontend/common_widgets.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
+import 'package:mobile_app/frontend/strings.dart';
 import '../../backend/callableModels/ExecutedSurvey.dart';
 import '../../backend/callableModels/Survey.dart';
 
@@ -65,6 +66,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
           height: defaultPadding(context),
         ),
         addTaskWidget(context: context, surveyTitle: widget.survey.name, addTask: addTask),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
         Expanded(
           child: PageView(
               physics: const NeverScrollableScrollPhysics(),
@@ -91,7 +95,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
     return widget.survey.questions.map((e) {
       switch (e.type) {
         case QuestionType.SINGLECHOICE:
-          return scQuestionWidget(context: context);
+          return scQuestionWidget(context: context, question: e);
         default:
           //TODO: Container löschen
           return Container();
@@ -105,6 +109,20 @@ class SurveyWidgetState extends State<SurveyWidget> {
       shrinkWrap: true,
       children: [
         imageForQuestion(question: question),
+      ],
+    );
+  }
+
+  static Widget questionTitleWidget({required Question question, required BuildContext context}){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          children: [
+            Text(question.text, style: Theme.of(context).textTheme.bodyText1,),
+            Text(resolveQuestionTypeDescriptionFromQuestion(question: question)),
+          ],
+        ),
       ],
     );
   }
@@ -204,6 +222,19 @@ class SurveyWidgetState extends State<SurveyWidget> {
         ],
       ),
     );
+  }
+
+  static String resolveQuestionTypeDescriptionFromQuestion({required Question question}){
+    switch (question.type){
+      case QuestionType.SINGLECHOICE:
+        return singleChoiceTypeDescription;
+      case QuestionType.MULTIPLECHOICE:
+        return multipleChoiceTypeDescription;
+      case QuestionType.TEXT:
+        return textFieldTypeDescription;
+      default:
+        return '';
+    }
   }
 
   static Widget imageForQuestion({required Question question}){
