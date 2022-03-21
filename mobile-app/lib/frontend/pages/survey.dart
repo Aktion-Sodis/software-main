@@ -64,6 +64,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
         SizedBox(
           height: defaultPadding(context),
         ),
+        addTaskWidget(context: context, surveyTitle: widget.survey.name, addTask: addTask),
         Expanded(
           child: PageView(
               physics: const NeverScrollableScrollPhysics(),
@@ -99,16 +100,16 @@ class SurveyWidgetState extends State<SurveyWidget> {
     }).toList();
   }
 
-  Widget scQuestionWidget({required BuildContext context}) {
+  Widget scQuestionWidget({required BuildContext context, required Question question}) {
     return ListView(
       shrinkWrap: true,
       children: [
-        addTask(context: context, surveyTitle: widget.survey.name, addTask: (){})
+        imageForQuestion(question: question),
       ],
     );
   }
 
-  static Widget addTask({required BuildContext context, required String surveyTitle, required Function addTask}){
+  static Widget addTaskWidget({required BuildContext context, required String surveyTitle, required Function addTask}){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
       child: Row(
@@ -205,8 +206,18 @@ class SurveyWidgetState extends State<SurveyWidget> {
     );
   }
 
-  static Widget progressBar(double progress, {required BuildContext context}) {
-    return AnimatedProgressBar(progress);
+  static Widget imageForQuestion({required Question question}){
+
+    //TODO: resolve Image from question
+
+    return Image.asset('assets/test/demo_pic.jpg');
+  }
+
+  Future<bool?> addTask()async{
+
+    //TODO: connect addTask
+
+    return false;
   }
 }
 
