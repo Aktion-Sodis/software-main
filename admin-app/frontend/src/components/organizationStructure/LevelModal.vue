@@ -25,6 +25,7 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" class="pb-0 px-0 px-sm-3">
+                <text-box></text-box>
                 <h2 v-if="read && levelInFocus">
                   {{ levelInFocus.name.languageTexts[0] }}
                 </h2>
@@ -67,6 +68,7 @@
               </v-col>
 
               <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
+                <LocaleTextBox :label="$t('organizationStructure.levelModal.name')" />
                 <v-card-title class="pt-0 pt-sm-2">
                   {{ $t('organizationStructure.levelModal.interventions') }}
                 </v-card-title>
@@ -149,6 +151,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
+import LocaleTextBox from '../global/LocaleTextBox.vue';
 
 const levelDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_LEVEL_DESCRIPTION_MAX_CHAR, 10),
@@ -156,6 +159,7 @@ const levelDescriptionMaxChar = Math.max(
 );
 
 export default {
+  components: { LocaleTextBox },
   name: 'LevelModal',
   data() {
     return {

@@ -2,8 +2,9 @@ import Vue from 'vue';
 import { dataTypesDict, modalModesDict } from '../constants';
 import { EmptyEntity, Entity } from '../entities/utils';
 import { EmptyIntervention, Intervention } from '../interventions/utils';
-import { EmptyLevel, Level } from '../levels/utils';
+import { emptyLevel } from '../levels/utils';
 import { EmptySurvey, Survey } from '../survey/utils';
+import { Level } from '../../models';
 
 const dataModal = {
   namespaced: true,
@@ -71,7 +72,7 @@ const dataModal = {
       });
     },
     resetLEVELDraft: (state) => {
-      state.dataDraft = new EmptyLevel();
+      state.dataDraft = emptyLevel();
     },
 
     /* INTERVENTION DRAFT: SET & RESET */
