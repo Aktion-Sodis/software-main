@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { validate as uuidValidate } from 'uuid';
+// import { validate as uuidValidate } from 'uuid';
 
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 
@@ -41,7 +41,7 @@ export default {
   props: {
     entityLevelId: {
       required: true,
-      validator: (v) => uuidValidate(v) || v === null || v.slice(0, 10) === 'dummyLevel',
+      // validator: (v) => uuidValidate(v) || v === null || v.slice(0, 10) === 'dummyLevel',
     },
   },
   computed: {

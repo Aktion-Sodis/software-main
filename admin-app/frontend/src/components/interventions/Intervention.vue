@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { validate as uuidValidate } from 'uuid';
+// import { validate as uuidValidate } from 'uuid';
 import { mapGetters, mapActions } from 'vuex';
 import { dataTypesDict } from '../../store/constants';
 
@@ -24,7 +24,7 @@ export default {
   props: {
     id: {
       required: true,
-      validator: (e) => uuidValidate(e) || e === null,
+      // validator: (e) => uuidValidate(e) || e === null,
     },
     interventionName: {
       type: Object,
@@ -36,11 +36,11 @@ export default {
     },
     interventionTagIds: {
       type: Array,
-      validator: (a) => a.every((e) => uuidValidate(e)),
+      // validator: (a) => a.every((e) => uuidValidate(e)),
     },
     interventionContent: {
       type: Array,
-      validator: (a) => a.every((e) => uuidValidate(e.id)),
+      // validator: (a) => a.every((e) => uuidValidate(e.id)),
     },
   },
   computed: {

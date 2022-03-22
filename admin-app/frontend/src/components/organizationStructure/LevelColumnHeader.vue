@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { validate as uuidValidate } from 'uuid';
+// import { validate as uuidValidate } from 'uuid';
 import { mapActions, mapGetters } from 'vuex';
 import { dataTypesDict } from '../../store/constants';
 
@@ -54,7 +54,7 @@ export default {
     id: {
       type: String,
       required: true,
-      validator: (v) => uuidValidate(v) || v.slice(0, 10) === 'dummyLevel',
+      // validator: (v) => uuidValidate(v) || v.slice(0, 10) === 'dummyLevel',
     },
   },
   computed: {
