@@ -1,5 +1,7 @@
+import { DataStore } from '@aws-amplify/datastore';
+import { Level, I18nString } from '../../models';
 import {
-  Level, postNewLevel, putLevel, deleteLevel, getAllLevels,
+  putLevel, deleteLevel, getAllLevels,
 } from './utils';
 import { Entity } from '../entities/utils';
 import { dataTypesDict, modalModesDict } from '../constants';
@@ -7,39 +9,7 @@ import { dataTypesDict, modalModesDict } from '../constants';
 const levelsData = {
   namespaced: true,
   state: () => ({
-    // levels: [
-    //   {
-    //     id: '5a93459f-f23d-44e6-a112-c41e90473a2d',
-    //     name: 'Gemeinde',
-    //     description: 'Some description',
-    //     parentLevelID: null,
-    //     allowedInterventions: [],
-    //     tagIds: [],
-    //   },
-    //   {
-    //     id: 'e7a03934-90b9-405b-807b-3f748b15ae69',
-    //     name: 'Dorf',
-    //     description: 'Some description',
-    //     parentLevelID: '5a93459f-f23d-44e6-a112-c41e90473a2d',
-    //     allowedInterventions: ['bd5f6df6-a64c-4d60-9df2-8f29bb7944d5'],
-    //     tagIds: ['468084f3-6ec4-42ea-bdb2-40900816b64f', 'e5ebc38b-abed-498d-9052-6c8767cc341e'],
-    //   },
-    //   {
-    //     id: 'd1faef12-cf15-4b5e-9637-b4ffbd156954',
-    //     name: 'Family',
-    //     description: 'Some description',
-    //     parentLevelID: 'e7a03934-90b9-405b-807b-3f748b15ae69',
-    //     allowedInterventions: [
-    //       'bd5f6df6-a64c-4d60-9df2-8f29bb7944d5',
-    //       '59fe15e7-59ad-46bf-a196-cbab81885d5b',
-    //       'c220fb83-a0e4-4463-a28a-f21b260e609a',
-    //     ],
-    //     tagIds: ['468084f3-6ec4-42ea-bdb2-40900816b64f'],
-    //   },
-    // ],
-
     levels: [],
-
     levelTags: [
       { tagId: '468084f3-6ec4-42ea-bdb2-40900816b64f', name: 'Tag 1' },
       { tagId: 'e5ebc38b-abed-498d-9052-6c8767cc341e', name: 'Tag 2' },
@@ -57,6 +27,7 @@ const levelsData = {
     sortedLevels: (_, getters) => getters.getLevels.sort((a, b) => getters.hierarchySort(a, b)),
     // used in the getter "sortedLevels". Don't use directly outside of Vuex environment.
     hierarchySort: (_, getters) => (a, b) => {
+      console.log(a);
       if (a.parentLevelID === null) return -1;
       if (b.parentLevelID === null) return 1;
       if (a.id === b.parentLevelID) return -1;
@@ -127,25 +98,24 @@ const levelsData = {
   actions: {
     APIpost: async ({ commit, dispatch }, levelDraft) => {
       commit('setLoading', { newValue: true });
-      const postResponse = await postNewLevel(levelDraft);
-      if (postResponse?.errors.length > 0) {
-        commit('setLoading', { newValue: false });
-        // error in API request
-        return;
-      }
-      commit('addLevel', postResponse);
-      dispatch(
-        'dataModal/readData',
-        {
-          dataId: postResponse.id,
-          dataType: dataTypesDict.level,
-        },
-        {
-          root: true,
-        },
-      );
-
-      commit('setLoading', { newValue: false });
+      DataStore.save(levelDraft)
+        .then((postResponse) => {
+          commit('addLevel', postResponse);
+          dispatch(
+            'dataModal/readData',
+            {
+              dataId: postResponse.id,
+              dataType: dataTypesDict.level,
+            },
+            {
+              root: true,
+            },
+          );
+          commit('setLoading', { newValue: false });
+        })
+        .catch(() => {
+          commit('setLoading', { newValue: false });
+        });
     },
     APIput: async ({ commit, dispatch }, levelDraft) => {
       commit('setLoading', { newValue: true });
@@ -191,27 +161,63 @@ const levelsData = {
         newValue: [
           new Level({
             id: 'dummyLevel0',
-            name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-            description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+            name: new I18nString(
+              {
+                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+                languageTexts: ['Name', 'Isimo', 'İsim'],
+              },
+            ),
+            description: new I18nString(
+              {
+                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+                languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
+              },
+            ),
             parentLevelID: null,
+            interventionsAreAllowed: true,
             allowedInterventions: [],
-            levelAllowedInterventionsId: [],
+            customData: [],
+            schemeVersion: 1020,
           }),
           new Level({
             id: 'dummyLevel1',
-            name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-            description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-            parentLevelID: 'dummyLevel0',
+            name: new I18nString(
+              {
+                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+                languageTexts: ['Name', 'Isimo', 'İsim'],
+              },
+            ),
+            description: new I18nString(
+              {
+                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+                languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
+              },
+            ),
+            parentLevelID: null,
+            interventionsAreAllowed: true,
             allowedInterventions: [],
-            levelAllowedInterventionsId: [],
+            customData: [],
+            schemeVersion: 1020,
           }),
           new Level({
             id: 'dummyLevel2',
-            name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-            description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-            parentLevelID: 'dummyLevel1',
+            name: new I18nString(
+              {
+                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+                languageTexts: ['Name', 'Isimo', 'İsim'],
+              },
+            ),
+            description: new I18nString(
+              {
+                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+                languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
+              },
+            ),
+            parentLevelID: null,
+            interventionsAreAllowed: true,
             allowedInterventions: [],
-            levelAllowedInterventionsId: [],
+            customData: [],
+            schemeVersion: 1020,
           }),
         ],
       });
@@ -305,36 +311,23 @@ const levelsData = {
       const levels = [
         new Level({
           id: 'dummyLevel0',
-          name: {
-            languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-            languageTexts: ['Country', 'País', 'Ülke'],
-          },
-          description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+          name: new I18nString(
+            {
+              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+              languageTexts: ['Name', 'Isimo', 'İsim'],
+            },
+          ),
+          description: new I18nString(
+            {
+              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+              languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
+            },
+          ),
           parentLevelID: null,
-          customData: [],
           interventionsAreAllowed: true,
-        }),
-        new Level({
-          id: 'dummyLevel1',
-          name: {
-            languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-            languageTexts: ['City', 'Ciudad', 'Şehir'],
-          },
-          description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-          parentLevelID: 'dummyLevel0',
+          allowedInterventions: [],
           customData: [],
-          interventionsAreAllowed: true,
-        }),
-        new Level({
-          id: 'dummyLevel2',
-          name: {
-            languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-            languageTexts: ['District', 'Distritto', 'Bölge'],
-          },
-          description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-          parentLevelID: 'dummyLevel1',
-          customData: [],
-          interventionsAreAllowed: true,
+          schemeVersion: 1020,
         }),
       ];
 

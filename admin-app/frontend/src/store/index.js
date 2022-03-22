@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
+import i18n from '../i18n';
 
 // import modules
 import authModule from './authModule';
@@ -31,6 +32,7 @@ export default new Vuex.Store({
     getLineColors: (state) => state.lineColors,
     getCreatingEntityInLevelId: ({ creatingEntityInLevelId }) => creatingEntityInLevelId,
     getSurveyModalCompletionIndex: ({ surveyModalCompletionIndex }) => surveyModalCompletionIndex,
+    fallbackLocaleIndex: () => i18n.availableLocales.findIndex((l) => l === i18n.fallbackLocale),
   },
   mutations: {
     setCreatingEntityInLevelId: (state, { id }) => {
