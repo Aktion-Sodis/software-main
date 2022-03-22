@@ -6,8 +6,10 @@ import 'package:mobile_app/backend/Blocs/inapp/inapp_bloc.dart';
 import 'package:mobile_app/backend/Blocs/inapp/inapp_state.dart';
 import 'package:mobile_app/backend/Blocs/session/session_cubit.dart';
 import 'package:mobile_app/backend/Blocs/session/session_state.dart';
+import 'package:mobile_app/backend/Blocs/task/task_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_state.dart';
+import 'package:mobile_app/backend/repositories/TaskRepository.dart';
 import 'package:mobile_app/backend/repositories/UserRepository.dart';
 import 'package:mobile_app/frontend/pages/loading_view.dart';
 import 'package:mobile_app/frontend/pages/login_view.dart';
@@ -61,8 +63,14 @@ class AppNavigator extends StatelessWidget {
                                   userBloc: context.read<UserBloc>())),
                         if (state.user != null)
                           MaterialPage(
-                              child: BlocProvider<InAppBloc>(
-                                  create: (context) => InAppBloc(),
+                              child: MultiBlocProvider(
+                                  providers: [
+                                BlocProvider<InAppBloc>(
+                                    create: (context) => InAppBloc()),
+                                BlocProvider(
+                                    create: (context) =>
+                                        TaskBloc(TaskRepository(state.user!)))
+                              ],
                                   child: BlocBuilder<InAppBloc, InAppState>(
                                       builder: (context, inAppState) {
                                     //todo: change to switch

@@ -18,10 +18,7 @@ class OrganizationViewBloc
       this.entityRepository, this.appliedInterventionRepository, this.inAppBloc)
       : super(LoadingOrganizationViewState()) {
     on<OrganizationViewEvent>(_mapEventToState);
-    entityRepository.getAllEntities().then((value) {
-      value.forEach((element) {
-        print(element.toAmplifyModel().toJson());
-      });
+    EntityRepository.getAllEntities().then((value) {
       List<Entity> startingEntities =
           List.from(value.where((element) => element.parentEntityID == null));
       String startingAppBarString = startingEntities.first.level.name;
@@ -48,11 +45,15 @@ class OrganizationViewBloc
             if (loadedState.currentListEntities.first.parentEntityID != null) {
               Entity parentEntity = loadedState.entityByID(
                   loadedState.currentListEntities.first.parentEntityID!);
+              print("parent Entity found");
               List<Entity> newListEntities =
-                  loadedState.entitiesByParentID(parentEntity.id);
+                  loadedState.entitiesByParentID(parentEntity.parentEntityID);
+              print("daughters of new parent: ${newListEntities.length}");
+              print("daughters of new list: ${newListEntities.first.name}");
               String appBarName = newListEntities.first.level.name;
               emit(loadedState.copyWith(
-                  allEntities: newListEntities, appBarString: appBarName));
+                  currentListEntities: newListEntities,
+                  appBarString: appBarName));
             }
             break;
           case OrganizationViewType.OVERVIEW:

@@ -31,9 +31,12 @@ Future<ThemeData> getThemeData() async {
           unselectedLabelStyle: TextStyle(color: Colors.grey),
           showUnselectedLabels: true),
       textTheme: TextTheme(
-          overline: TextStyle(color: Colors.black87),
-          headline1: TextStyle(color: Colors.blue),
-          headline2: TextStyle(color: Colors.black87)),
+        overline: TextStyle(color: Colors.black87),
+        headline1: TextStyle(color: Colors.blue, fontSize: 26),
+        headline2: TextStyle(color: Colors.black87, fontSize: 26),
+        subtitle1: TextStyle(color: Colors.black87, fontSize: 22),
+        subtitle2: TextStyle(color: Colors.black87, fontSize: 20),
+      ),
       inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.grey, fontSize: 18),
           floatingLabelStyle: TextStyle(color: Colors.blue, fontSize: 18),

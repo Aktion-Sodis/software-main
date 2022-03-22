@@ -14,6 +14,14 @@ class AppliedInterventionRepository {
             amp.AppliedIntervention.ENTITYAPPLIEDINTERVENTIONSID.eq(entityID)));
   }
 
+  static Future<amp.AppliedIntervention> getAmpAppliedInterventionByID(
+      String id) async {
+    var result = await Amplify.DataStore.query(
+        amp.AppliedIntervention.classType,
+        where: amp.AppliedIntervention.ID.eq(id));
+    return _populate(result.first);
+  }
+
   static Future<String> createAppliedIntervention(
       AppliedIntervention appliedIntervention) async {
     String id = UUID().toString();

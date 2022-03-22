@@ -23,7 +23,7 @@ class EntitiesLoadedOrganizationViewState extends OrganizationViewState {
   List<Level> getLevelsInOrder() {
     List<Level> toOrder = [];
     allEntities.forEach((element) {
-      if (!toOrder.contains(element.level)) {
+      if (!toOrder.any((l) => l.id == element.level.id)) {
         toOrder.add(element.level);
       }
     });
@@ -38,8 +38,18 @@ class EntitiesLoadedOrganizationViewState extends OrganizationViewState {
     return inOrder;
   }
 
+  bool addChildPossible(Entity entity) {
+    List<Level> levelsInOrder = getLevelsInOrder();
+    return levelsInOrder.last.id != entity.level.id;
+  }
+
   Level getCurrentLevel() {
     return currentListEntities.first.level;
+  }
+
+  Level? getDaughterLevel(Level level) {
+    return getLevelsInOrder()
+        .firstWhere((element) => element.parentLevelID == level.id);
   }
 
   EntitiesLoadedOrganizationViewState(

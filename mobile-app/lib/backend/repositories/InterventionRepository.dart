@@ -1,4 +1,5 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:mobile_app/backend/callableModels/Intervention.dart';
 import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
@@ -11,6 +12,10 @@ class InterventionRepository {
     amp.Intervention toReturn = interventions.first;
     return _populate(toReturn);
   }
+
+  //todo: implement pic
+  static String getInterventionIconPath(Intervention intervention) => "";
+  static String getInterventionImagePath(Intervention intervention) => "";
 
   static Future<amp.Intervention?> getAmplifyInterventionBySurvey(
       amp.Survey survey) async {
