@@ -45,12 +45,14 @@ class EntityRepository {
 
   static Future<String> createEntity(Entity entity) async {
     String id = UUID().toString();
-    entity.id = id;
-    Amplify.DataStore.save(entity.toAmplifyModel());
-    return id;
+    entity.id = entity.id ?? id;
+    Amplify.DataStore.save(
+        entity.toAmplifyModel().copyWith(entityLevelId: entity.level.id));
+    return entity.id!;
   }
 
   static Future updateEntity(Entity entity) async {
-    Amplify.DataStore.save(entity.toAmplifyModel());
+    Amplify.DataStore.save(
+        entity.toAmplifyModel().copyWith(entityLevelId: entity.level.id));
   }
 }

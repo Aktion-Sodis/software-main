@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mobile_app/backend/Blocs/inapp/inapp_bloc.dart';
 import 'package:mobile_app/backend/Blocs/organization_view/organization_view_bloc.dart';
@@ -10,6 +12,7 @@ import 'package:mobile_app/backend/Blocs/organization_view/organization_view_eve
 import 'package:mobile_app/backend/Blocs/organization_view/organization_view_state.dart';
 import 'package:mobile_app/backend/Blocs/task/task_bloc.dart';
 import 'package:mobile_app/backend/Blocs/task/task_state.dart';
+import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/repositories/AppliedInterventionRepository.dart';
 import 'package:mobile_app/backend/repositories/EntityRepository.dart';
@@ -22,6 +25,7 @@ import 'package:mobile_app/frontend/dependentsizes.dart';
 import 'package:mobile_app/frontend/pages/main_menu_components/main_menu_commonwidgets.dart';
 import 'package:mobile_app/frontend/strings.dart' as strings;
 import 'package:mobile_app/frontend/common_widgets.dart';
+import 'package:mobile_app/services/photo_capturing.dart';
 
 class MainMenuOrganization extends StatelessWidget {
   Widget appBarWidget(BuildContext context,
@@ -97,6 +101,8 @@ class MainMenuOrganization extends StatelessWidget {
   Widget mainWidget(BuildContext context,
       EntitiesLoadedOrganizationViewState organizationViewState) {
     Widget actualWidget() {
+      print(
+          "getting actual Widget for ${organizationViewState.organizationViewType}");
       switch (organizationViewState.organizationViewType) {
         case OrganizationViewType.LIST:
           return Container(
@@ -106,7 +112,7 @@ class MainMenuOrganization extends StatelessWidget {
                   entities: organizationViewState.currentListEntities,
                   onInfoTapped: (entity) => context
                       .read<OrganizationViewBloc>()
-                      .add(NavigateToEntityInfo(entity)),
+                      .add(NavigateToEntityOverview(entity)),
                   onChildTapped: (entity) => context
                       .read<OrganizationViewBloc>()
                       .add(NavigateToDaughterView(entity.id!)),
@@ -121,34 +127,37 @@ class MainMenuOrganization extends StatelessWidget {
                       : ""));
           break;
         case OrganizationViewType.OVERVIEW:
-          return OverviewWidget(
-              entity: organizationViewState.currentDetailEntity!,
-              onTasksTapped: (entity) {
-                context
-                    .read<OrganizationViewBloc>()
-                    .add(NavigateToEntityTasks(entity));
-              },
-              onSurveysTapped: (entity) {
-                context
-                    .read<OrganizationViewBloc>()
-                    .add(NavigateToEntitySurveys(entity));
-              },
-              onAppliedInterventionsTapped: (entity) {
-                context
-                    .read<OrganizationViewBloc>()
-                    .add(NavigateToEntityAppliedInterventions(entity));
-              },
-              onUpdateEntityTapped: (entity) {
-                showEntityDialog(
-                        context, entity, entity.level, entity.parentEntityID)
-                    .then((value) {
-                  if (value != null) {
+          return Container(
+              child: OverviewWidget(
+                  entity: organizationViewState.currentDetailEntity!,
+                  onTasksTapped: (entity) {
                     context
                         .read<OrganizationViewBloc>()
-                        .add(UpdateEntity(value));
-                  }
-                });
-              });
+                        .add(NavigateToEntityTasks(entity));
+                  },
+                  onSurveysTapped: (entity) {
+                    context
+                        .read<OrganizationViewBloc>()
+                        .add(NavigateToEntitySurveys(entity));
+                  },
+                  onAppliedInterventionsTapped: (entity) {
+                    context
+                        .read<OrganizationViewBloc>()
+                        .add(NavigateToEntityAppliedInterventions(entity));
+                  },
+                  onUpdateEntityTapped: (entity) {
+                    showEntityDialog(context, entity, entity.level,
+                            entity.parentEntityID)
+                        .then((value) {
+                      if (value != null) {
+                        context
+                            .read<OrganizationViewBloc>()
+                            .add(UpdateEntity(value));
+                      }
+                    });
+                  }));
+        case OrganizationViewType.APPLIEDINTERVENTIONS:
+          return Container()
         default:
           return Container();
           break;
@@ -286,19 +295,27 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
       List<AppliedCustomData> appliedCustomDatas =
           List.generate(widget.level.customData.length, (index) {
         CustomData customData = widget.level.customData[index];
+        print("input: ${customDataControllers[index].text.trim()}");
         return AppliedCustomData(
           customDataID: customData.id!,
           type: customData.type,
           name: customData.name,
           intValue: customData.type == CustomDataType.INT
-              ? int.fromEnvironment(customDataControllers[index].text)
+              ? int.tryParse(customDataControllers[index].text.trim()) ?? 0
               : null,
           stringValue: customData.type == CustomDataType.STRING
               ? customDataControllers[index].text.trim()
               : null,
         );
       });
-
+      print("saving entity: customData");
+      appliedCustomDatas.forEach((element) {
+        print(element.name +
+            " " +
+            element.intValue.toString() +
+            " " +
+            (element.stringValue ?? "e"));
+      });
       if (create) {
         Entity toSave = Entity(
             name_ml: I18nString.fromString(string: nameEditingController.text),
@@ -697,10 +714,11 @@ class OverviewWidget extends StatelessWidget {
                         style: Theme.of(context).textTheme.headline2)),
                 SizedBox(width: defaultPadding(context)),
                 CustomIconButton(
-                    () => onUpdateEntityTapped(entity),
-                    MdiIcons.pen,
-                    Size(width(context) * .1, width(context) * .1),
-                    true)
+                  () => onUpdateEntityTapped(entity),
+                  MdiIcons.pen,
+                  Size(width(context) * .1, width(context) * .1),
+                  true,
+                )
               ])),
           if (entity.customData.isNotEmpty)
             Container(
@@ -719,7 +737,7 @@ class OverviewWidget extends StatelessWidget {
                             child: RichText(
                                 text: TextSpan(children: [
                               TextSpan(
-                                  text: entity.customData[index].name,
+                                  text: entity.customData[index].name + ": ",
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
@@ -859,3 +877,166 @@ class OverviewWidget extends StatelessWidget {
     return ListView.builder(itemBuilder: childWidget, itemCount: 4);
   }
 }
+
+class AppliedInterventionOverviewPage extends StatelessWidget {
+  const AppliedInterventionOverviewPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+
+}
+
+class AppliedInterventionPage extends StatefulWidget {
+  const AppliedInterventionPage({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
+  }
+  
+}
+
+Future<AppliedIntervention?> showAppliedInterventionDialog(BuildContext buildContext, Entity entity,
+    AppliedIntervention? appliedIntervention) async {
+  return showDialog(
+      context: buildContext,
+      builder: (context) {
+        return AppliedInterventionDialog(entity, appliedIntervention);
+      });
+}
+
+class AppliedInterventionDialog extends StatefulWidget {
+  Entity entity;
+
+  AppliedIntervention? appliedIntervention;
+  
+  AppliedInterventionDialog(this.entity, this.appliedIntervention);
+
+  @override
+  State<StatefulWidget> createState() {
+    return EntityDialogWidgetState();
+  }
+}
+
+class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
+  final _formKey = GlobalKey<FormState>();
+
+  bool create = true;
+  AppliedIntervention? appliedIntervention;
+  Intervention? intervention;
+
+  Widget customDataField(int index) {
+    return Container(
+        margin: EdgeInsets.only(
+            top: defaultPadding(context),
+            left: defaultPadding(context),
+            right: defaultPadding(context)),
+        child: TextFormField(
+          controller: customDataControllers[index],
+          decoration: InputDecoration(
+              prefixIcon: const Icon(MdiIcons.pen),
+              labelText: widget.level.customData[index].name),
+          textInputAction: TextInputAction.next,
+          keyboardType:
+              widget.level.customData[index].type == CustomDataType.INT
+                  ? TextInputType.number
+                  : null,
+          enableSuggestions: true,
+          validator: (value) => null,
+        ));
+  }
+
+  File? imageFile;
+
+  List<Intervention>? interventions;
+
+  bool loaded = false;
+
+  updatePic() async {
+    XFile? r = await CameraFunctionality.takePicture(context: context);
+    if(r!=null) {
+      
+      //todo: implement pic save
+      //todo: update imageFile
+    }
+    
+  }
+
+  @override
+  void initState() {
+    if(widget.appliedIntervention!=null) {
+      create = false;
+      appliedIntervention = widget.appliedIntervention;
+      loaded = true;
+    }
+    super.initState();
+    if(widget.appliedIntervention == null) {
+      InterventionRepository.getInterventionsByLevelConnections(widget.entity.level.allowedInterventions!).then((value) => setState(() {interventions = value; loaded = true;}));
+    }
+  }
+
+  void save() async {
+    //todo: save pic when posessing ID
+  }
+
+  String getpicPath() {
+    if(appliedIntervention!=null) {
+      return AppliedInterventionRepository.getFotoPath(appliedIntervention!);
+    }
+    return "";
+  }
+
+  Widget interventionItem(BuildContext buildContext, int index) {
+    //todo: implement localization
+    return interventionRow(context, interventions![index], InterventionRepository.getInterventionIconPath(interventions![index]), separator: (index!=interventions!.length-1), pressable: true, onPressed: () {
+      AppliedIntervention toCreate = AppliedIntervention(id: UUID().toString(), whoDidIt: buildContext.read<UserBloc>().state.user!, intervention: interventions![index], executedSurveys: []);
+      setState(() {
+        appliedIntervention = toCreate;
+      });
+      buildContext.read<OrganizationViewBloc>().add(AddAppliedIntervention(widget.entity, toCreate));
+    });
+  }
+
+  
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        bottom: false,
+        top: false,
+        child: Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            body: Column(children: [!loaded?Center(child: loadingSign(context)):appliedIntervention==null?
+            Container(
+              child: ListView.builder(itemBuilder: interventionItem)
+            ):Container(
+              child: Column(children: [
+                Card(margin: EdgeInsets.all(defaultPadding(context)), child: Container(
+          margin: EdgeInsets.all(defaultPadding(context)),
+          height: height(context) * .3,
+          width: width(context) * .92,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              ImageWidget(
+                  path: getpicPath(),
+                  imageFile: imageFile,
+                  width: width(context) * .92,
+                  height: height(context) * .3,
+                  borderRadius: BorderRadius.circular(8)),
+              Positioned(
+                  right: defaultPadding(context),
+                  bottom: defaultPadding(context),
+                  child: CustomIconButton(updatePic, MdiIcons.camera,
+                      Size(width(context) * .1, width(context) * .1), true))
+            ],
+          )),),
+          Container(margin: EdgeInsets.all(defaultPadding(context)))
+              ],)
+            )])));
+  }
+}
+

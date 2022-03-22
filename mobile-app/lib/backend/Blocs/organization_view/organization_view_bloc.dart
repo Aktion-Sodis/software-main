@@ -63,6 +63,12 @@ class OrganizationViewBloc
                 appBarString:
                     loadedState.currentListEntities.first.level.name));
             break;
+          case OrganizationViewType.APPLIEDINTERVENTIONS:
+            emit(loadedState.copyWith(
+                organizationViewType: OrganizationViewType.OVERVIEW,
+                currentDetailEntity: loadedState.currentDetailEntity,
+                appBarString: loadedState.currentDetailEntity!.name));
+            break;
           default:
             emit(loadedState.copyWith(
                 organizationViewType: OrganizationViewType.OVERVIEW,
@@ -140,11 +146,12 @@ class OrganizationViewBloc
         }
         emit(loadedState.copyWith(
             allEntities: newAllEntities,
-            currentListEntities: newCurrentEntities));
+            currentListEntities: newCurrentEntities,
+            currentDetailEntity: event.entity));
       } else if (event is AddAppliedIntervention) {
         String id =
             await AppliedInterventionRepository.createAppliedIntervention(
-                event.appliedIntervention);
+                event.appliedIntervention, event.entity);
         AppliedIntervention toAdd = event.appliedIntervention;
         toAdd.id = id;
         List<Entity> newAllEntities = loadedState.allEntities;
@@ -167,7 +174,7 @@ class OrganizationViewBloc
             currentDetailEntity: newCurrentEntity));
       } else if (event is UpdateAppliedIntervention) {
         AppliedInterventionRepository.updateAppliedIntervention(
-            event.appliedIntervention);
+            event.appliedIntervention, event.entity);
         AppliedIntervention toAdd = event.appliedIntervention;
         Entity toSet = event.entity;
         int aIIndex = toSet.appliedInterventions.indexWhere(

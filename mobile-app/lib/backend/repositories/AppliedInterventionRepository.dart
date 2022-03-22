@@ -23,16 +23,20 @@ class AppliedInterventionRepository {
   }
 
   static Future<String> createAppliedIntervention(
-      AppliedIntervention appliedIntervention) async {
-    String id = UUID().toString();
-    appliedIntervention.id = id;
-    Amplify.DataStore.save(appliedIntervention.toAmplifyModel());
-    return id;
+      AppliedIntervention appliedIntervention, Entity entity) async {
+    appliedIntervention.id = appliedIntervention.id ?? UUID().toString();
+    amp.AppliedIntervention ampModel = appliedIntervention.toAmplifyModel();
+    ampModel.copyWith(entityAppliedInterventionsId: entity.id);
+    Amplify.DataStore.save(ampModel);
+    return appliedIntervention.id!;
   }
 
   static Future updateAppliedIntervention(
-      AppliedIntervention appliedIntervention) async {
-    await Amplify.DataStore.save(appliedIntervention.toAmplifyModel());
+      AppliedIntervention appliedIntervention, Entity entity) async {
+    appliedIntervention.id = appliedIntervention.id ?? UUID().toString();
+    amp.AppliedIntervention ampModel = appliedIntervention.toAmplifyModel();
+    ampModel.copyWith(entityAppliedInterventionsId: entity.id);
+    Amplify.DataStore.save(ampModel);
   }
 
   static Future<amp.AppliedIntervention> appliedInterventionByExecutedSurvey(
@@ -62,4 +66,7 @@ class AppliedInterventionRepository {
           List<amp.AppliedIntervention> appliedInterventions) =>
       Future.wait(List.generate(appliedInterventions.length,
           (index) => _populate(appliedInterventions[index])));
+
+  //todo: implement pic logic
+  static String getFotoPath(AppliedIntervention appliedIntervention) => "";
 }
