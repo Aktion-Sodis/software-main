@@ -23,6 +23,36 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
 
   TaskFormCubit _cubit = TaskFormCubit.initialize<T>();
 
+  // Methods for handling dates
+  DateTime get _now => DateTime.now();
+  DateTime get _tomorrow => _now.add(Duration(days: 1));
+  DateTime get _nextWeek => _now.add(Duration(days: 7));
+  DateTime get _nextMonth => _now.add(Duration(days: 30));
+
+  bool _customDateSelected(DateTime date) {
+    return !areEqualStandardizedDates(date, _now) &&
+        !areEqualStandardizedDates(date, _tomorrow) &&
+        !areEqualStandardizedDates(date, _nextWeek) &&
+        !areEqualStandardizedDates(date, _nextMonth);
+  }
+
+  bool areEqualStandardizedDates(DateTime date1, DateTime date2) {
+    return standardizeDate(date1).isAtSameMomentAs(standardizeDate(date2));
+  }
+
+  DateTime standardizeDate(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
+  }
+
+  String _formatDate(DateTime deadline) {
+    return deadline.day.toString() +
+        "." +
+        deadline.month.toString() +
+        "." +
+        deadline.year.toString();
+  }
+
+  // Subwidgets
   Widget _subtitle(String text) => Text(
         text,
         style: const TextStyle(fontSize: 22),
@@ -208,25 +238,36 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                         runSpacing: 7,
                         children: [
                           SmallButton(
-                            onPressed: () {},
+                            onPressed: () => _cubit.setDeadline(_now),
                             iconData: MdiIcons.circleMedium,
                             text: "Today",
-                            selected: true,
+                            selected: state.deadline != null &&
+                                areEqualStandardizedDates(
+                                    state.deadline!, _now),
                           ),
                           SmallButton(
-                            onPressed: () {},
+                            onPressed: () => _cubit.setDeadline(_tomorrow),
                             iconData: MdiIcons.skipNextOutline,
                             text: "Tomorrow",
+                            selected: state.deadline != null &&
+                                areEqualStandardizedDates(
+                                    state.deadline!, _tomorrow),
                           ),
                           SmallButton(
-                            onPressed: () {},
+                            onPressed: () => _cubit.setDeadline(_nextWeek),
                             iconData: MdiIcons.skipForwardOutline,
                             text: "Next week",
+                            selected: state.deadline != null &&
+                                areEqualStandardizedDates(
+                                    state.deadline!, _nextWeek),
                           ),
                           SmallButton(
-                            onPressed: () {},
+                            onPressed: () => _cubit.setDeadline(_nextMonth),
                             iconData: MdiIcons.calendarRefreshOutline,
                             text: "Next month",
+                            selected: state.deadline != null &&
+                                areEqualStandardizedDates(
+                                    state.deadline!, _nextMonth),
                           ),
                         ],
                       )),
@@ -241,9 +282,17 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                       child: Wrap(
                         children: [
                           SmallButton(
-                            onPressed: () {},
+                            onPressed: () =>
+                                _cubit.openCalendarToSetDeadline(context),
                             iconData: MdiIcons.calendarOutline,
-                            text: "Set a date",
+                            text: state.deadline != null &&
+                                    _customDateSelected(state.deadline!)
+                                ? "Deadline: " + _formatDate(state.deadline!)
+                                : "Set a date",
+                            outlinedWhenSelected: true,
+                            keepClickable: true,
+                            selected: state.deadline != null &&
+                                _customDateSelected(state.deadline!),
                           ),
                         ],
                       )),

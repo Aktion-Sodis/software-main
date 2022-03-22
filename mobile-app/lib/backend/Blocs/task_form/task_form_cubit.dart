@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile_app/backend/Blocs/task_form/add_task_cubit.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
@@ -25,8 +27,16 @@ abstract class TaskFormCubit extends Cubit<TaskFormState> {
     // TODO: implement addEntity
   }
 
-  void openCalendarToSetDeadline() {
-    // TODO: implement openCalendarToSetDeadline
+  void openCalendarToSetDeadline(BuildContext context) {
+    // TODO: auto setting correct locale
+    LocaleType locale = LocaleType.en;
+
+    DatePicker.showDatePicker(context, showTitleActions: true,
+        onChanged: (date) {
+      setDeadline(date);
+    }, onConfirm: (date) {
+      setDeadline(date);
+    }, currentTime: DateTime.now(), minTime: DateTime.now(), locale: locale);
   }
 
   void addAttachment(Attachment attachment) {
@@ -46,7 +56,9 @@ abstract class TaskFormCubit extends Cubit<TaskFormState> {
   }
 
   void setDeadline(DateTime dateTime) {
-    // TODO: implement setDeadline
+    if (state is TaskFormFillingOut) {
+      emit((state as TaskFormFillingOut).copyWith(deadline: dateTime));
+    }
   }
 
   void submit(String text, List<Attachment> attachments, List<Entity> entities,
