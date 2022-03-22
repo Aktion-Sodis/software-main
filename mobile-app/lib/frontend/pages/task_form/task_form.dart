@@ -208,27 +208,26 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                         runSpacing: 7,
                         children: [
                           SmallButton(
-                              onPressed: () {},
-                              iconData: MdiIcons.circleMedium,
-                              text: "Today",
-                              selected: true,
-                              color: ThemeColors.red),
+                            onPressed: () {},
+                            iconData: MdiIcons.circleMedium,
+                            text: "Today",
+                            selected: true,
+                          ),
                           SmallButton(
-                              onPressed: () {},
-                              iconData: MdiIcons.skipNextOutline,
-                              text: "Tomorrow",
-                              textColor: ThemeColors.black,
-                              color: ThemeColors.yellow),
+                            onPressed: () {},
+                            iconData: MdiIcons.skipNextOutline,
+                            text: "Tomorrow",
+                          ),
                           SmallButton(
-                              onPressed: () {},
-                              iconData: MdiIcons.skipForwardOutline,
-                              text: "Next week",
-                              color: ThemeColors.darkGrey),
+                            onPressed: () {},
+                            iconData: MdiIcons.skipForwardOutline,
+                            text: "Next week",
+                          ),
                           SmallButton(
-                              onPressed: () {},
-                              iconData: MdiIcons.calendarRefreshOutline,
-                              text: "Next month",
-                              color: ThemeColors.mobster),
+                            onPressed: () {},
+                            iconData: MdiIcons.calendarRefreshOutline,
+                            text: "Next month",
+                          ),
                         ],
                       )),
                   Padding(
@@ -242,12 +241,10 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                       child: Wrap(
                         children: [
                           SmallButton(
-                              onPressed: () {},
-                              iconData: MdiIcons.calendarOutline,
-                              text: "Set a date",
-                              isOutlined: true,
-                              textColor: ThemeColors.black,
-                              color: ThemeColors.black),
+                            onPressed: () {},
+                            iconData: MdiIcons.calendarOutline,
+                            text: "Set a date",
+                          ),
                         ],
                       )),
                   Padding(
