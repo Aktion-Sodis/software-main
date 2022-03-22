@@ -70,18 +70,6 @@ class AppNavigator extends StatelessWidget {
                                   child: BlocBuilder<InAppBloc, InAppState>(
                                       builder: (context, inAppState) {
                                     if(inAppState is MainInAppState){
-                                      return Center(
-                                        child: MaterialButton(
-                                          onPressed: ()async{
-                                            final Survey survey = await SurveyRepository.getSurveyByID('test_survey');
-                                            BlocProvider.of<InAppBloc>(context).add(PerformSurveyEvent(survey: survey));
-                                          },
-                                          child: Container(
-                                            child: Text('Test Survey'),
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                      );
                                       return const MainMenu();
                                     }else if(inAppState is SurveyInAppState){
                                       return SurveyWidget(survey: inAppState.survey);
