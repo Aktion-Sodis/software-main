@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isLevelModalDisplayed" max-width="800px" persistent @keydown.esc="escHandler">
+  <v-dialog v-model="isLevelModalDisplayed" max-width="1200px" persistent @keydown.esc="escHandler">
     <v-card class="px-0 pt-0 px-md-4 pt-md-4">
       <v-form lazy-validation>
         <v-card-title>
@@ -24,21 +24,34 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6" class="pb-0 px-0 px-sm-3">
-                <text-box></text-box>
+              <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
+                <v-card-title class="pt-0 pt-sm-2">
+                  {{ $t('organizationStructure.levelModal.name') }}
+                </v-card-title>
                 <h2 v-if="read && levelInFocus">
                   {{ levelInFocus.name.languageTexts[0] }}
                 </h2>
-                <v-text-field
+                <LocaleTextBox
                   v-else
-                  autofocus
-                  v-model="name"
-                  :label="$t('organizationStructure.levelModal.name')"
-                  required
-                  outlined
-                  dense
-                ></v-text-field>
+                  labelPrefixI18nSelector="organizationStructure.levelModal.name"
+                  @res="nameUpdatedHandler"
+                >
+                  <template v-slot:text-input="slotProps">
+                    <v-text-field
+                      autofocus
+                      required
+                      outlined
+                      dense
+                      :label="slotProps.label"
+                      v-model="slotProps.model"
+                      @input="slotProps.inputHandler"
+                    ></v-text-field>
+                  </template>
+                </LocaleTextBox>
 
+                <v-card-title class="pt-4">
+                  {{ $t('organizationStructure.levelModal.description') }}
+                </v-card-title>
                 <div
                   v-if="read && levelInFocus"
                   class="d-flex flex-column justify-center"
@@ -48,16 +61,24 @@
                     {{ levelInFocus.description.languageTexts[0] }}
                   </h3>
                 </div>
-                <v-textarea
+                <LocaleTextBox
                   v-else
-                  v-model="description"
-                  :counter="description.length > levelDescriptionMaxChar - 20"
-                  :rules="[rules.maxChar]"
-                  :label="$t('organizationStructure.levelModal.description')"
-                  required
-                  outlined
-                  dense
-                ></v-textarea>
+                  labelPrefixI18nSelector="organizationStructure.levelModal.description"
+                  @res="descriptionUpdatedHandler"
+                >
+                  <template v-slot:text-input="slotProps">
+                    <v-textarea
+                      :counter="description.length > levelDescriptionMaxChar - 20"
+                      autofocus
+                      required
+                      outlined
+                      dense
+                      :label="slotProps.label"
+                      v-model="slotProps.model"
+                      @input="slotProps.inputHandler"
+                    ></v-textarea>
+                  </template>
+                </LocaleTextBox>
 
                 <div v-if="read && levelInFocus" style="min-height: 5rem">
                   <h3 v-if="levelInFocus.parentLevelID">
@@ -68,7 +89,6 @@
               </v-col>
 
               <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
-                <LocaleTextBox :label="$t('organizationStructure.levelModal.name')" />
                 <v-card-title class="pt-0 pt-sm-2">
                   {{ $t('organizationStructure.levelModal.interventions') }}
                 </v-card-title>
@@ -130,7 +150,9 @@
           <v-btn x-large color="secondary" text @click="closeHandler">
             {{ read ? 'Close' : $t('general.cancel') }}
           </v-btn>
-          <v-btn x-large v-if="read" color="primary" text @click="editHandler"> {{ $t('general.edit') }} </v-btn>
+          <v-btn x-large v-if="read" color="primary" text @click="editHandler">
+            {{ $t('general.edit') }}
+          </v-btn>
           <v-btn
             x-large
             v-if="!read"
@@ -138,7 +160,7 @@
             color="primary"
             text
             @click.prevent="submitHandler"
-            :disabled="!isFormInvalid"
+            :disabled="isFormInvalid"
           >
             {{ $t('general.save') }}
           </v-btn>
@@ -152,6 +174,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
+import { I18nString } from '../../models';
 
 const levelDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_LEVEL_DESCRIPTION_MAX_CHAR, 10),
@@ -164,11 +187,14 @@ export default {
   data() {
     return {
       levelDescriptionMaxChar,
-      rules: {
-        maxChar: (value) => value.length <= levelDescriptionMaxChar || this.maxCharExceededi18n,
-      },
-      name: '',
-      description: '',
+      name: new I18nString({
+        languageKeys: this.$i18n.availableLocales,
+        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
+      }),
+      description: new I18nString({
+        languageKeys: this.$i18n.availableLocales,
+        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
+      }),
       allowedInterventions: [],
       tagIds: [],
     };
@@ -190,6 +216,8 @@ export default {
       LEVELById: 'LEVEL_Data/LEVELById',
 
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
+
+      fallbackLocaleIndex: 'fallbackLocaleIndex',
     }),
     isLevelModalDisplayed() {
       return this.isModalDisplayed && this.dataType === dataTypesDict.level;
@@ -206,7 +234,7 @@ export default {
       });
     },
     isFormInvalid() {
-      return !!this.name;
+      return !this.name.languageTexts[this.fallbackLocaleIndex];
     },
     edit() {
       return this.modalMode === modalModesDict.edit;
@@ -289,6 +317,12 @@ export default {
       this.description = this.levelDraft?.description ?? '';
       this.tagIds = this.levelDraft?.tagIds ?? [];
       this.allowedInterventions = this.levelDraft?.allowedInterventions ?? [];
+    },
+    nameUpdatedHandler(res) {
+      this.name = res;
+    },
+    descriptionUpdatedHandler(res) {
+      this.description = res;
     },
   },
 };

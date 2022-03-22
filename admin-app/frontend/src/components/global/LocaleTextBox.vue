@@ -1,26 +1,36 @@
 <template>
-  <div class="form-group">
-    <div class="changeLanguange">
-      <v-select
-        v-if="openSelectBox"
-        class="selectBox"
-        :items="avaliableLocales"
-        @change="openSelectBox = false"
-        v-model="selectedLanguange"
-        :label="selectedLanguange"
-      ></v-select>
-      <v-icon @click="openSelectBox = !openSelectBox" style="height: auto" large>
-        mdi-plus
-      </v-icon>
+  <div class="d-flex flex-column">
+    <div
+      v-for="selectedLocale in selectedLocales"
+      :key="selectedLocale"
+      class="d-flex align-center"
+    >
+      <slot
+        :inputHandler="(e) => inputHandler(e, selectedLocale)"
+        name="text-input"
+        :label="`${$t(labelPrefixI18nSelector)} (${selectedLocale})`"
+      ></slot>
+      <div class="pb-7" v-if="selectedLocale !== $i18n.fallbackLocale">
+        <v-btn
+          color="primary"
+          outlined
+          icon
+          class="ml-2"
+          @click="removeSelectedLocale(selectedLocale)"
+        >
+          <v-icon> mdi-minus </v-icon>
+        </v-btn>
+      </div>
     </div>
-    <v-text-field
-      autofocus
-      v-model="res[selectedLanguange]"
-      :label="openSelectBox ? '' : label"
-      required
-      outlined
-      dense
-    ></v-text-field>
+    <div class="d-flex justify-center" v-if="isAddNewLocaleButtonShown">
+      <v-btn color="primary" rounded x-large @click="addNewLocale">
+        <v-icon class="mr-2"> mdi-plus </v-icon>
+        <span class="overflow-hidden">
+          {{ $t('general.form.addInNewLocale') }}
+        </span>
+      </v-btn>
+    </div>
+    {{ res }}
   </div>
 </template>
 
@@ -28,101 +38,55 @@
 import { I18nString } from '../../models';
 
 export default {
-  props: ['label'],
+  props: {
+    labelPrefixI18nSelector: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
-      selectedLanguange: this.$i18n.locale,
-      res: {},
-      // res: {
-      //   languageKeys: [this.$i18n.locale],
-      //   languageTexts: [],
-      // },
-      avaliableLocales: this.$i18n.availableLocales,
-      openSelectBox: false,
+      selectedLocales: [this.$i18n.fallbackLocale],
+      res: new I18nString({
+        languageKeys: this.$i18n.availableLocales,
+        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
+      }),
     };
   },
-  watch: {
-    res: {
-      handler() {
-        const languageKeys = [];
-        const languageTexts = [];
-        /*eslint-disable */
-        Object.keys(this.res).forEach(key => {
-          languageKeys.push(key);
-          languageTexts.push(this.res[key]);
-        });
-        /* eslint-enable */
-        this.$emit('res', new I18nString({
-          languageKeys,
-          languageTexts,
-        }));
-      },
-      deep: true,
-      immediate: true, //  Also very important the immediate in case you need it, the callback will be called immediately after the start of the observation
+  computed: {
+    avaliableLocales() {
+      return this.$i18n.availableLocales;
     },
-    openSelectBox: {
-      handler(newVal) {
-        if (newVal === true) {
-          this.selectedLanguange = '';
-        }
-      },
-      deep: true,
-      immediate: true, //  Also very important the immediate in case you need it, the callback will be called immediately after the start of the observation
+    isAddNewLocaleButtonShown() {
+      return this.avaliableLocales.length > this.selectedLocales.length;
     },
   },
-  // methods: {
-  //   onChange() {
-  //     console.log('asd');
-  //     // this.$emit('res', new I18nString(this.res));
-  //   },
-  // },
+  methods: {
+    removeSelectedLocale(locale) {
+      const foundIndex = this.res.languageKeys.findIndex((k) => k === locale);
+      const languageTexts = this.res.languageTexts.map((t, i) => (i === foundIndex ? null : t));
+      this.res = new I18nString({
+        languageKeys: this.res.languageKeys,
+        languageTexts,
+      });
+      this.selectedLocales = this.selectedLocales.filter((l) => l !== locale);
+    },
+    addNewLocale() {
+      const availableLocales = this.avaliableLocales;
+      const newLocale = availableLocales.find((l) => !this.selectedLocales.includes(l));
+      this.selectedLocales.push(newLocale);
+    },
+    inputHandler(value, locale) {
+      if (!value && value !== '') return;
+      const foundIndex = this.res.languageKeys.findIndex((k) => k === locale);
+      const languageTexts = this.res.languageTexts.map((t, i) => (i === foundIndex ? value : t));
+      this.res = new I18nString({
+        languageKeys: this.res.languageKeys,
+        languageTexts,
+      });
+
+      this.$emit('res', this.res);
+    },
+  },
 };
 </script>
-
-<style scoped>
-.v-text-field {
-  padding-top: 0px !important;
-  margin-top: 4px;
-}
-.v-icon.v-icon::after {
-  height: 0px;
-}
-.v-icon.v-icon {
-  align-items: flex-start;
-}
-.selectBox {
-  height: auto;
-  width: 50%;
-}
-.form-group {
-  position: relative;
-}
-.languangeArea {
-  position: absolute;
-  top: 80%;
-  left: 0;
-  right: 0;
-  z-index: 1;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-top: none;
-  padding: 10px;
-  /* overflow: scroll; */
-}
-.closeModal {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 1;
-  color: rgba(71, 4, 4, 0.774) !important;
-}
-.changeLanguange {
-  position: absolute;
-  right: 7px;
-  top: 2px;
-  z-index: 10;
-  cursor: pointer;
-  display: flex;
-  height: auto;
-}
-</style>
