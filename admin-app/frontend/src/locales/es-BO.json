@@ -12,7 +12,9 @@
       "maxCharExceeded": "Máximo {maxChar} caracteres.",
       "minCharNotMet": "Al menos {minChar} carácteres.",
       "required": "Necesario.",
-      "unsavedChanges": "Hay cambios sin guardar. ¿Estás seguro de que quieres salir?"
+      "unsavedChanges": "Hay cambios sin guardar. ¿Estás seguro de que quieres salir?",
+      "addInNewLocale": "En otra lengua",
+      "fallbackLocaleMustExistError": "When entering a text for any kind of data, it must always be given in the main locale ({fallbackLocale})."
     },
     "routes": {
       "home": "Inicio",
