@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/backend/Blocs/task_form/task_form_cubit.dart';
 import 'package:mobile_app/backend/callableModels/localModels/attachment.dart';
 import 'package:mobile_app/backend/callableModels/localModels/audio_attachment.dart';
+import 'package:mobile_app/backend/callableModels/localModels/image_attachment.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
 import 'package:mobile_app/frontend/pages/task_form/audio_attachment_box.dart';
+import 'package:mobile_app/frontend/pages/task_form/image_attachment_box.dart';
 import 'package:mobile_app/frontend/theme.dart';
 
 class AttachmentsList extends StatelessWidget {
@@ -58,6 +60,8 @@ class AttachmentsList extends StatelessWidget {
       attachmentBox = AudioAttachmentBox(
         attachment: attachment,
       );
+    } else if (attachment is ImageAttachment) {
+      attachmentBox = ImageAttachmentBox(attachment: attachment);
     }
 
     return Padding(

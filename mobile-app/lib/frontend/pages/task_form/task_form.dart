@@ -179,7 +179,8 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                           Expanded(
                               child: Row(
                             children: [
-                              _iconButton(MdiIcons.cameraOutline, () {}),
+                              _iconButton(MdiIcons.cameraOutline,
+                                  () => _cubit.takePhoto(context)),
                               SizedBox(
                                 width: defaultPadding(context),
                               ),
