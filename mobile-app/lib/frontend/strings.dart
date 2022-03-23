@@ -56,8 +56,19 @@ Map<String, dynamic> stringMap = {
     "organization_view_info_button": "Info",
     "organization_view_entity_enter_name": "Please enter a name",
     "organization_view_entity_enter_description": "Please enter a description",
+    "organization_view_dialog_add_appliedintervention": "Add Intervention",
+    "organization_view_dialog_update_appliedintervention":
+        "Update Intervention",
   }
 };
+
+String get organization_view_dialog_add_appliedintervention =>
+    stringMap[currentLanguage]
+        ["organization_view_dialog_add_appliedintervention"];
+
+String get organization_view_dialog_update_appliedintervention =>
+    stringMap[currentLanguage]
+        ["organization_view_dialog_update_appliedintervention"];
 
 String get organization_view_entity_enter_name =>
     stringMap[currentLanguage]["organization_view_entity_enter_name"];

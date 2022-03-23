@@ -39,15 +39,17 @@ Widget defaultGreenButton(BuildContext context, VoidCallback onPressed,
         onPressed: onPressed,
         child: Center(
             child: Container(
-                child: Row(children: [
-          if (icon != null)
-            Icon(icon,
-                size: width(context) * .1,
-                color: Theme.of(context).colorScheme.onSecondary),
-          if (text != null)
-            Container(
-                child: Text(text,
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Theme.of(context).colorScheme.onSecondary)))
-        ]))));
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+              if (icon != null)
+                Icon(icon,
+                    size: width(context) * .1,
+                    color: Theme.of(context).colorScheme.onSecondary),
+              if (text != null)
+                Container(
+                    child: Text(text,
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Theme.of(context).colorScheme.onSecondary)))
+            ]))));

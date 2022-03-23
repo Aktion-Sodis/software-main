@@ -152,6 +152,7 @@ class OrganizationViewBloc
         String id =
             await AppliedInterventionRepository.createAppliedIntervention(
                 event.appliedIntervention, event.entity);
+        print("new InterventionID: $id");
         AppliedIntervention toAdd = event.appliedIntervention;
         toAdd.id = id;
         List<Entity> newAllEntities = loadedState.allEntities;

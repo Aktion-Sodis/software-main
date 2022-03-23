@@ -15,6 +15,7 @@ class InterventionRepository {
 
   static Future<List<Intervention>> getInterventionsByLevelConnections(
       List<amp.LevelInterventionRelation> relations) async {
+    print("interventions to populate from connections: ${relations.length}");
     List<amp.Intervention> toWait = List.generate(
         relations.length, (index) => relations[index].intervention);
     var populated = await _populateList(toWait);

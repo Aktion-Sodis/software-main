@@ -44,7 +44,7 @@ class EntityRepository {
   }
 
   static Future<String> createEntity(Entity entity) async {
-    String id = UUID().toString();
+    String id = UUID.getUUID();
     entity.id = entity.id ?? id;
     Amplify.DataStore.save(
         entity.toAmplifyModel().copyWith(entityLevelId: entity.level.id));

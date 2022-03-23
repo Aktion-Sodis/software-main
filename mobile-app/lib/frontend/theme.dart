@@ -5,7 +5,7 @@ Future<ThemeData> getThemeData() async {
       cardTheme: CardTheme(
           color: Colors.white,
           shadowColor: Colors.grey,
-          elevation: 5,
+          elevation: 3,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8)))),
       colorScheme: ColorScheme(

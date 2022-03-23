@@ -157,7 +157,7 @@ class MainMenuOrganization extends StatelessWidget {
                     });
                   }));
         case OrganizationViewType.APPLIEDINTERVENTIONS:
-          return Container()
+          return Container();
         default:
           return Container();
           break;
@@ -218,7 +218,7 @@ Future<Entity?> showEntityDialog(BuildContext buildContext, Entity? entity,
   return showDialog(
       context: buildContext,
       builder: (context) {
-        return EntityDialogWidget(entity, level, parentEntityID);
+        return EntityDialogWidget(entity, level, parentEntityID, buildContext);
       });
 }
 
@@ -226,7 +226,9 @@ class EntityDialogWidget extends StatefulWidget {
   Entity? entity;
   Level level;
   String? parentEntityID;
-  EntityDialogWidget(this.entity, this.level, this.parentEntityID);
+  BuildContext buildContext;
+  EntityDialogWidget(
+      this.entity, this.level, this.parentEntityID, this.buildContext);
 
   @override
   State<StatefulWidget> createState() {
@@ -853,8 +855,26 @@ class OverviewWidget extends StatelessWidget {
             ),
           Container(
               margin: EdgeInsets.only(top: defaultPadding(context) / 2),
-              child: defaultGreenButton(context, () => onSurveysTapped(entity),
-                  icon: MdiIcons.arrowRight, minWidth: width(context) * .84))
+              child: defaultGreenButton(context, () async {
+                if (firstThreeAppliedInterventions.isEmpty) {
+                  AppliedIntervention? aI = await showAppliedInterventionDialog(
+                      context,
+                      entity,
+                      null,
+                      context.read<UserBloc>().state.user!);
+                  if (aI != null) {
+                    context
+                        .read<OrganizationViewBloc>()
+                        .add(AddAppliedIntervention(entity, aI));
+                  }
+                } else {
+                  onAppliedInterventionsTapped(entity);
+                }
+              },
+                  icon: firstThreeAppliedInterventions.isEmpty
+                      ? MdiIcons.plus
+                      : MdiIcons.arrowRight,
+                  minWidth: width(context) * .84))
         ]));
   }
 
@@ -886,7 +906,6 @@ class AppliedInterventionOverviewPage extends StatelessWidget {
     // TODO: implement build
     throw UnimplementedError();
   }
-
 }
 
 class AppliedInterventionPage extends StatefulWidget {
@@ -897,15 +916,18 @@ class AppliedInterventionPage extends StatefulWidget {
     // TODO: implement createState
     throw UnimplementedError();
   }
-  
 }
 
-Future<AppliedIntervention?> showAppliedInterventionDialog(BuildContext buildContext, Entity entity,
-    AppliedIntervention? appliedIntervention) async {
+Future<AppliedIntervention?> showAppliedInterventionDialog(
+    BuildContext buildContext,
+    Entity entity,
+    AppliedIntervention? appliedIntervention,
+    User user) async {
   return showDialog(
       context: buildContext,
       builder: (context) {
-        return AppliedInterventionDialog(entity, appliedIntervention);
+        return AppliedInterventionDialog(
+            entity, appliedIntervention, buildContext, user);
       });
 }
 
@@ -913,12 +935,15 @@ class AppliedInterventionDialog extends StatefulWidget {
   Entity entity;
 
   AppliedIntervention? appliedIntervention;
-  
-  AppliedInterventionDialog(this.entity, this.appliedIntervention);
+  BuildContext buildContext;
+  User user;
+
+  AppliedInterventionDialog(
+      this.entity, this.appliedIntervention, this.buildContext, this.user);
 
   @override
   State<StatefulWidget> createState() {
-    return EntityDialogWidgetState();
+    return AppliedInterventionDialogState();
   }
 }
 
@@ -929,27 +954,6 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
   AppliedIntervention? appliedIntervention;
   Intervention? intervention;
 
-  Widget customDataField(int index) {
-    return Container(
-        margin: EdgeInsets.only(
-            top: defaultPadding(context),
-            left: defaultPadding(context),
-            right: defaultPadding(context)),
-        child: TextFormField(
-          controller: customDataControllers[index],
-          decoration: InputDecoration(
-              prefixIcon: const Icon(MdiIcons.pen),
-              labelText: widget.level.customData[index].name),
-          textInputAction: TextInputAction.next,
-          keyboardType:
-              widget.level.customData[index].type == CustomDataType.INT
-                  ? TextInputType.number
-                  : null,
-          enableSuggestions: true,
-          validator: (value) => null,
-        ));
-  }
-
   File? imageFile;
 
   List<Intervention>? interventions;
@@ -958,24 +962,27 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
 
   updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
-    if(r!=null) {
-      
+    if (r != null) {
       //todo: implement pic save
       //todo: update imageFile
     }
-    
   }
 
   @override
   void initState() {
-    if(widget.appliedIntervention!=null) {
+    if (widget.appliedIntervention != null) {
       create = false;
       appliedIntervention = widget.appliedIntervention;
       loaded = true;
     }
     super.initState();
-    if(widget.appliedIntervention == null) {
-      InterventionRepository.getInterventionsByLevelConnections(widget.entity.level.allowedInterventions!).then((value) => setState(() {interventions = value; loaded = true;}));
+    if (widget.appliedIntervention == null) {
+      InterventionRepository.getInterventionsByLevelConnections(
+              widget.entity.level.allowedInterventions!)
+          .then((value) => setState(() {
+                interventions = value;
+                loaded = true;
+              }));
     }
   }
 
@@ -984,7 +991,7 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
   }
 
   String getpicPath() {
-    if(appliedIntervention!=null) {
+    if (appliedIntervention != null) {
       return AppliedInterventionRepository.getFotoPath(appliedIntervention!);
     }
     return "";
@@ -992,16 +999,21 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
 
   Widget interventionItem(BuildContext buildContext, int index) {
     //todo: implement localization
-    return interventionRow(context, interventions![index], InterventionRepository.getInterventionIconPath(interventions![index]), separator: (index!=interventions!.length-1), pressable: true, onPressed: () {
-      AppliedIntervention toCreate = AppliedIntervention(id: UUID().toString(), whoDidIt: buildContext.read<UserBloc>().state.user!, intervention: interventions![index], executedSurveys: []);
+    return interventionRow(context, interventions![index],
+        InterventionRepository.getInterventionIconPath(interventions![index]),
+        separator: (index != interventions!.length - 1),
+        pressable: true, onPressed: () {
+      AppliedIntervention toCreate = AppliedIntervention(
+          id: UUID.getUUID(),
+          whoDidIt: widget.user,
+          intervention: interventions![index],
+          executedSurveys: []);
       setState(() {
         appliedIntervention = toCreate;
       });
-      buildContext.read<OrganizationViewBloc>().add(AddAppliedIntervention(widget.entity, toCreate));
     });
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -1009,34 +1021,92 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
         top: false,
         child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
-            body: Column(children: [!loaded?Center(child: loadingSign(context)):appliedIntervention==null?
-            Container(
-              child: ListView.builder(itemBuilder: interventionItem)
-            ):Container(
-              child: Column(children: [
-                Card(margin: EdgeInsets.all(defaultPadding(context)), child: Container(
-          margin: EdgeInsets.all(defaultPadding(context)),
-          height: height(context) * .3,
-          width: width(context) * .92,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              ImageWidget(
-                  path: getpicPath(),
-                  imageFile: imageFile,
-                  width: width(context) * .92,
-                  height: height(context) * .3,
-                  borderRadius: BorderRadius.circular(8)),
-              Positioned(
-                  right: defaultPadding(context),
-                  bottom: defaultPadding(context),
-                  child: CustomIconButton(updatePic, MdiIcons.camera,
-                      Size(width(context) * .1, width(context) * .1), true))
-            ],
-          )),),
-          Container(margin: EdgeInsets.all(defaultPadding(context)))
-              ],)
-            )])));
+            body: Column(children: [
+              Container(
+                  height: height(context) * .1,
+                  width: width(context),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: defaultPadding(context)),
+                            child: CommonWidgets.defaultBackwardButton(
+                                context: context,
+                                goBack: () => Navigator.of(context)
+                                    .pop(appliedIntervention))),
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                  child: Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          widget.appliedIntervention == null
+                                              ? strings
+                                                  .organization_view_dialog_add_appliedintervention
+                                              : strings
+                                                  .organization_view_dialog_update_appliedintervention,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline2))),
+                            ],
+                          ),
+                        )
+                      ])),
+              !loaded
+                  ? Center(child: loadingSign(context))
+                  : appliedIntervention == null
+                      ? Container(
+                          child: ListView.builder(
+                              itemBuilder: interventionItem,
+                              itemCount: interventions!.length,
+                              shrinkWrap: true))
+                      : Container(
+                          child: Column(
+                          children: [
+                            Card(
+                              margin: EdgeInsets.all(defaultPadding(context)),
+                              child: Container(
+                                  margin:
+                                      EdgeInsets.all(defaultPadding(context)),
+                                  height: height(context) * .3,
+                                  width: width(context) * .92,
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      ImageWidget(
+                                          path: getpicPath(),
+                                          imageFile: imageFile,
+                                          width: width(context) * .92,
+                                          height: height(context) * .3,
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
+                                      Positioned(
+                                          right: defaultPadding(context),
+                                          bottom: defaultPadding(context),
+                                          child: CustomIconButton(
+                                              updatePic,
+                                              MdiIcons.camera,
+                                              Size(width(context) * .1,
+                                                  width(context) * .1),
+                                              true))
+                                    ],
+                                  )),
+                            ),
+                            Container(
+                                margin: EdgeInsets.all(defaultPadding(context)),
+                                child: defaultGreenButton(
+                                    context,
+                                    () => Navigator.of(context)
+                                        .pop(appliedIntervention),
+                                    text: strings
+                                        .organization_view_entity_save_entity,
+                                    minWidth: width(context) * .92))
+                          ],
+                        ))
+            ])));
   }
 }
-

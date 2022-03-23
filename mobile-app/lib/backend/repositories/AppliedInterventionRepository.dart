@@ -8,10 +8,14 @@ import 'package:mobile_app/models/ModelProvider.dart' as amp;
 class AppliedInterventionRepository {
   static Future<List<amp.AppliedIntervention>>
       getAmpAppliedInterventionsByEntityID(String entityID) async {
-    return _populateList(await Amplify.DataStore.query(
-        amp.AppliedIntervention.classType,
-        where:
-            amp.AppliedIntervention.ENTITYAPPLIEDINTERVENTIONSID.eq(entityID)));
+    print("applied Interventions by Entity: $entityID");
+    List<amp.AppliedIntervention> appliedIntervention =
+        await Amplify.DataStore.query(amp.AppliedIntervention.classType,
+            where: amp.AppliedIntervention.ENTITYAPPLIEDINTERVENTIONSID
+                .eq(entityID));
+    print("number: ${appliedIntervention.length}");
+
+    return _populateList(appliedIntervention);
   }
 
   static Future<amp.AppliedIntervention> getAmpAppliedInterventionByID(
@@ -24,16 +28,19 @@ class AppliedInterventionRepository {
 
   static Future<String> createAppliedIntervention(
       AppliedIntervention appliedIntervention, Entity entity) async {
-    appliedIntervention.id = appliedIntervention.id ?? UUID().toString();
+    print("inOriginal: " + entity.id!);
+    appliedIntervention.id = appliedIntervention.id ?? UUID.getUUID();
     amp.AppliedIntervention ampModel = appliedIntervention.toAmplifyModel();
-    ampModel.copyWith(entityAppliedInterventionsId: entity.id);
+    print("inAmpModel1: " + (ampModel.entityAppliedInterventionsId ?? "null"));
+    ampModel = ampModel.copyWith(entityAppliedInterventionsId: entity.id);
+    print("inAmpModel2: " + (ampModel.entityAppliedInterventionsId ?? "null"));
     Amplify.DataStore.save(ampModel);
     return appliedIntervention.id!;
   }
 
   static Future updateAppliedIntervention(
       AppliedIntervention appliedIntervention, Entity entity) async {
-    appliedIntervention.id = appliedIntervention.id ?? UUID().toString();
+    appliedIntervention.id = appliedIntervention.id ?? UUID.getUUID();
     amp.AppliedIntervention ampModel = appliedIntervention.toAmplifyModel();
     ampModel.copyWith(entityAppliedInterventionsId: entity.id);
     Amplify.DataStore.save(ampModel);

@@ -48,7 +48,7 @@ class TaskRepository {
   }
 
   Future<Task> createTask(Task task) async {
-    task.id = task.id ?? UUID().toString();
+    task.id = task.id ?? UUID.getUUID();
     Amplify.DataStore.save(task.toAmplifyModel());
     return task;
   }
