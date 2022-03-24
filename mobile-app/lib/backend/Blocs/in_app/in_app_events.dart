@@ -12,3 +12,10 @@ class PerformSurveyEvent extends InAppEvent {
 class MainViewEvent extends InAppEvent {}
 
 class GoToUserPageEvent extends InAppEvent {}
+
+class FinishAndSaveExecutedSurvey extends InAppEvent {
+  final ExecutedSurvey executedSurvey;
+  final AppliedIntervention appliedIntervention;
+
+  FinishAndSaveExecutedSurvey(this.executedSurvey, this.appliedIntervention);
+}

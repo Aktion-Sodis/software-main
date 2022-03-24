@@ -51,4 +51,13 @@ class ExecutedSurveyRepository {
         (index) => _populate(executedSurveys[index],
             appliedIntervention: appliedIntervention)));
   }
+
+  static Future<ExecutedSurvey> saveExecutedSurvey(
+      ExecutedSurvey executedSurvey) async {
+    executedSurvey.id = executedSurvey.id ?? UUID.getUUID();
+    amp.ExecutedSurvey toSave = executedSurvey.toAmplifyModel();
+    //todo: testen ob applied intervention auch gespeichert werden muss
+    Amplify.DataStore.save(toSave);
+    return executedSurvey;
+  }
 }

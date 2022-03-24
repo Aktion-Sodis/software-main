@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mobile_app/backend/Blocs/in_app/in_app_bloc.dart';
+import 'package:mobile_app/backend/Blocs/in_app/in_app_events.dart';
+import 'package:mobile_app/backend/Blocs/in_app/in_app_state.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/frontend/common_widgets.dart';
@@ -84,7 +87,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
                   _pageController.nextPage(
                       duration: _pageSlideDuration, curve: _pageSlideCurve);
                 }),
-            successFullyEndedSurvey(context: context, onProceed: _leaveSurveyRegular),
+            successFullyEndedSurvey(
+                context: context, onProceed: _leaveSurveyRegular),
           ],
         )));
   }
@@ -97,7 +101,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
       required Function onProceed}) {
     return Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Align(
           alignment: Alignment.centerLeft,
@@ -126,32 +130,31 @@ class SurveyWidgetState extends State<SurveyWidget> {
   }
 
   static Widget successFullyEndedSurvey(
-      {required BuildContext context,
-        required Function onProceed}) {
+      {required BuildContext context, required Function onProceed}) {
     return Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.all(defaultPadding(context)),
-                child: Text(
-                  savedSurvey,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              ),
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: EdgeInsets.all(defaultPadding(context)),
+            child: Text(
+              savedSurvey,
+              style: Theme.of(context).textTheme.bodyText1,
             ),
-            Padding(
-              padding: EdgeInsets.all(defaultPadding(context)),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: CommonWidgets.defaultForwardButton(
-                    context: context, proceed: onProceed),
-              ),
-            ),
-          ],
-        ));
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(defaultPadding(context)),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: CommonWidgets.defaultForwardButton(
+                context: context, proceed: onProceed),
+          ),
+        ),
+      ],
+    ));
   }
 
   static Widget summaryWidget(
@@ -866,8 +869,17 @@ class SurveyWidgetState extends State<SurveyWidget> {
       }
       surveyAnswersAsList[toReplace] = pair.value;
     }
-
-    //TODO: save Executed Survey
+    //todo: add location
+    var surveyState = context.read<InAppBloc>().state as SurveyInAppState;
+    var userState = context.read<UserBloc>().state;
+    ExecutedSurvey executedSurvey = ExecutedSurvey(
+        appliedIntervention: surveyState.appliedIntervention,
+        survey: survey,
+        whoExecutedIt: userState.user!,
+        date: DateTime.now(),
+        answers: surveyAnswersAsList);
+    context.read<InAppBloc>().add(FinishAndSaveExecutedSurvey(
+        executedSurvey, surveyState.appliedIntervention));
   }
 
   static Widget getEditQuestionWidget(
