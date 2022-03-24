@@ -27,8 +27,12 @@ class I18nString {
       int index = languageKeys.indexOf(str.currentLanguage);
       languageTexts[index] = text;
     } else {
-      languageKeys.add(str.currentLanguage);
-      languageTexts.add(text);
+      List<String> languageKeysToSet = List.from(languageKeys);
+      List<String> languageTextesToSet = List.from(languageKeys);
+      languageKeysToSet.add(str.currentLanguage);
+      languageTextesToSet.add(text);
+      languageKeys = languageKeysToSet;
+      languageTexts = languageTextesToSet;
     }
   }
 

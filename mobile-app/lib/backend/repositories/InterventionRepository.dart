@@ -1,4 +1,5 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:mobile_app/backend/callableModels/Intervention.dart';
 import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
@@ -12,6 +13,20 @@ class InterventionRepository {
     return _populate(toReturn);
   }
 
+  static Future<List<Intervention>> getInterventionsByLevelConnections(
+      List<amp.LevelInterventionRelation> relations) async {
+    print("interventions to populate from connections: ${relations.length}");
+    List<amp.Intervention> toWait = List.generate(
+        relations.length, (index) => relations[index].intervention);
+    var populated = await _populateList(toWait);
+    return List.generate(populated.length,
+        (index) => Intervention.fromAmplifyModel(populated[index]));
+  }
+
+  //todo: implement pic
+  static String getInterventionIconPath(Intervention intervention) => "";
+  static String getInterventionImagePath(Intervention intervention) => "";
+
   static Future<amp.Intervention?> getAmplifyInterventionBySurvey(
       amp.Survey survey) async {
     /*var interventions = await Amplify.DataStore.query(
@@ -20,6 +35,13 @@ class InterventionRepository {
     return null;
     //return _populate(interventions.first);
     //todo: query könnte falsch sein
+  }
+
+  static Future<List<amp.Intervention>> _populateList(
+      List<amp.Intervention> interventions) {
+    List<Future<amp.Intervention>> toWait = List.generate(
+        interventions.length, (index) => _populate(interventions[index]));
+    return Future.wait(toWait);
   }
 
   static Future<amp.Intervention> _populate(

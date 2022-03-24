@@ -13,6 +13,7 @@ class AppliedIntervention {
   DateTime? createdAt;
   DateTime? updatedAt;
   late List<ExecutedSurvey> executedSurveys;
+  late bool working;
 
   AppliedIntervention(
       {this.id,
@@ -22,7 +23,8 @@ class AppliedIntervention {
       this.schemeVersion,
       this.createdAt,
       this.updatedAt,
-      required this.executedSurveys});
+      required this.executedSurveys,
+      required this.working});
 
   AppliedIntervention.fromAmplifyModel(
       amp.AppliedIntervention appliedIntervention) {
@@ -38,6 +40,7 @@ class AppliedIntervention {
         appliedIntervention.executedSurveys.length,
         (index) => ExecutedSurvey.fromAmplifyModel(
             appliedIntervention.executedSurveys[index]));
+    working = true;
   }
 
   amp.AppliedIntervention toAmplifyModel() {
@@ -52,4 +55,6 @@ class AppliedIntervention {
         appliedInterventionInterventionId: intervention.id!,
         appliedInterventionWhoDidItId: whoDidIt.id!));
   }
+
+  //todo: integrate working boolean
 }

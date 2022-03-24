@@ -27,8 +27,10 @@ class AmplifyIntegration {
     await Amplify.configure(amplifyconfig);
     Amplify.DataStore.streamController.stream.asBroadcastStream().listen((t) {
       print("amplify data store event:");
-      print(t.toString());
+      print((t as DataStoreHubEvent).eventName);
+      print((t as DataStoreHubEvent).payload.toString());
     });
+    //Amplify.DataStore.clear();
     Amplify.DataStore.start();
     print("amplify successfully initialized");
     return true;
