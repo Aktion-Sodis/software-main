@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app/backend/Blocs/inapp/inapp_bloc.dart';
-import 'package:mobile_app/backend/Blocs/inapp/inapp_event.dart';
+import 'package:mobile_app/backend/Blocs/in_app/in_app_bloc.dart';
+import 'package:mobile_app/backend/Blocs/in_app/in_app_events.dart';
 import 'package:mobile_app/backend/Blocs/organization_view/organization_view_events.dart';
 import 'package:mobile_app/backend/Blocs/organization_view/organization_view_state.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
@@ -150,8 +150,9 @@ class OrganizationViewBloc
             appBarString: strings.organization_view_applied_interventions +
                 " (${event.entity.name})"));
       } else if (event is StartSurvey) {
-        inAppBloc
-            .add(StartSurveyEvent(event.survey, event.appliedIntervention));
+        inAppBloc.add(PerformSurveyEvent(
+            survey: event.survey,
+            appliedIntervention: event.appliedIntervention));
       } else if (event is AddEntity) {
         Entity newEntity = event.entity;
         String id = await EntityRepository.createEntity(newEntity);

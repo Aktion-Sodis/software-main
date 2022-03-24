@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mobile_app/backend/Blocs/inapp/inapp_bloc.dart';
-import 'package:mobile_app/backend/Blocs/inapp/inapp_event.dart';
+import 'package:mobile_app/backend/Blocs/in_app/in_app_bloc.dart';
+import 'package:mobile_app/backend/Blocs/in_app/in_app_events.dart';
 import 'package:mobile_app/backend/Blocs/session/session_cubit.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_events.dart';
@@ -56,7 +56,7 @@ class UserDataViewState extends State<UserDataView> {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-          context.read<InAppBloc>().add(GoToMainMenu());
+          context.read<InAppBloc>().add(MainViewEvent());
           return false;
         },
         child: Scaffold(
@@ -82,7 +82,7 @@ class UserDataViewState extends State<UserDataView> {
                                         context: context,
                                         goBack: () => context
                                             .read<InAppBloc>()
-                                            .add(GoToMainMenu()))),
+                                            .add(MainViewEvent()))),
                                 Expanded(
                                   child: Container(
                                       margin: EdgeInsets.only(
@@ -261,7 +261,7 @@ class UserDataViewState extends State<UserDataView> {
                                                   .add(UpdateUserEvent(user));
                                               context
                                                   .read<InAppBloc>()
-                                                  .add(GoToMainMenu());
+                                                  .add(MainViewEvent());
                                             } else {
                                               context.read<UserBloc>().add(
                                                   CreateUserEvent(User(
