@@ -22,6 +22,9 @@ class ExecutedSurveyRepository {
 
   static Future<List<amp.ExecutedSurvey>> executedSurveysByAppliedIntervention(
       amp.AppliedIntervention appliedIntervention) async {
+    print("executed survey by applied intervention");
+    print("applied intervention: ");
+    print(appliedIntervention.whoDidIt.toString());
     List<amp.ExecutedSurvey> toReturn = await Amplify.DataStore.query(
         amp.ExecutedSurvey.classType,
         where:
@@ -31,15 +34,18 @@ class ExecutedSurveyRepository {
 
   static Future<amp.ExecutedSurvey> _populate(amp.ExecutedSurvey executedSurvey,
       {amp.AppliedIntervention? appliedIntervention}) async {
-    amp.ExecutedSurvey toReturn = executedSurvey;
-    executedSurvey.copyWith(
+    print("Populating executed Survey");
+    print("applied Intervention (passed)");
+    print(appliedIntervention.toString());
+    print(appliedIntervention?.whoDidIt.toString());
+    amp.ExecutedSurvey toReturn = executedSurvey.copyWith(
         appliedIntervention: appliedIntervention ??
             await AppliedInterventionRepository
                 .appliedInterventionByExecutedSurvey(executedSurvey),
         whoExecutedIt: await UserRepository.getAmpUserByID(
-            toReturn.executedSurveyWhoExecutedItId),
+            executedSurvey.executedSurveyWhoExecutedItId),
         survey: await SurveyRepository.getAmpSurveyByID(
-            toReturn.executedSurveySurveyId));
+            executedSurvey.executedSurveySurveyId));
     return toReturn;
   }
 
@@ -50,5 +56,14 @@ class ExecutedSurveyRepository {
         executedSurveys.length,
         (index) => _populate(executedSurveys[index],
             appliedIntervention: appliedIntervention)));
+  }
+
+  static Future<ExecutedSurvey> saveExecutedSurvey(
+      ExecutedSurvey executedSurvey) async {
+    executedSurvey.id = executedSurvey.id ?? UUID.getUUID();
+    amp.ExecutedSurvey toSave = executedSurvey.toAmplifyModel();
+    //todo: testen ob applied intervention auch gespeichert werden muss
+    Amplify.DataStore.save(toSave);
+    return executedSurvey;
   }
 }

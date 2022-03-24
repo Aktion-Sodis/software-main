@@ -42,16 +42,113 @@ Map<String, dynamic> stringMap = {
     "main_menu_organization": "Organization",
     "main_menu_tasks": "Tasks",
     "main_menu_wiki": "Wiki",
-    "question_type_descriptions":{
-      "sc" : "One answer only",
-      "mc" : "Multiple answers possible",
+    "question_type_descriptions": {
+      "sc": "One answer only",
+      "mc": "Multiple answers possible",
       "text_field": "Write down your answer",
     },
-    "summary":"summary",
-    "end_survey":"Are you sure you want to end the survey?",
-    "saved_survey":"Thank you for answering the survey",
+    "summary": "summary",
+    "end_survey": "Are you sure you want to end the survey?",
+    "saved_survey": "Thank you for answering the survey",
+    "organization_view_taks": "Tasks",
+    "organization_view_surveys": "Surveys",
+    "organization_view_applied_interventions": "Interventions",
+    "organization_view_info": "Information",
+    "organization_view_history": "History",
+    "organization_view_dialog_add_entity": "Add Entity",
+    "organization_view_dialog_edit_entity": "Edit Entity",
+    "organization_view_entity_name": "Name",
+    "organization_view_entity_description": "Description",
+    "organization_view_entity_save_entity": "Save Entity",
+    "organization_view_entity_save_changes": "Save Changes",
+    "organization_view_info_button": "Info",
+    "organization_view_entity_enter_name": "Please enter a name",
+    "organization_view_entity_enter_description": "Please enter a description",
+    "organization_view_dialog_add_appliedintervention": "Add Intervention",
+    "organization_view_dialog_update_appliedintervention":
+        "Update Intervention",
+    "organization_view_appliedintervention_detail_techonology_working":
+        "Is the technology working?",
+    "yes": "Yes",
+    "no": "No",
+    "remaining": "Remaining",
+    "day": "day",
+    "days": "days",
+    "tasks_more_behind": "More behind",
+    "profile": "Profile",
+    "user_update": "Save changes"
   }
 };
+
+String get user_update => stringMap[currentLanguage]["user_update"];
+
+String get profile => stringMap[currentLanguage]["profile"];
+
+String get tasks_more_behind => stringMap[currentLanguage]["tasks_more_behind"];
+
+String get remaining => stringMap[currentLanguage]["remaining"];
+
+String get day => stringMap[currentLanguage]["day"];
+
+String get days => stringMap[currentLanguage]["days"];
+
+String get organization_view_appliedintervention_detail_techonology_working =>
+    stringMap[currentLanguage]
+        ["organization_view_appliedintervention_detail_techonology_working"];
+
+String get yes => stringMap[currentLanguage]["yes"];
+
+String get no => stringMap[currentLanguage]["no"];
+
+String get organization_view_dialog_add_appliedintervention =>
+    stringMap[currentLanguage]
+        ["organization_view_dialog_add_appliedintervention"];
+
+String get organization_view_dialog_update_appliedintervention =>
+    stringMap[currentLanguage]
+        ["organization_view_dialog_update_appliedintervention"];
+
+String get organization_view_entity_enter_name =>
+    stringMap[currentLanguage]["organization_view_entity_enter_name"];
+
+String get organization_view_entity_enter_description =>
+    stringMap[currentLanguage]["organization_view_entity_enter_description"];
+
+String get organization_view_info_button =>
+    stringMap[currentLanguage]["organization_view_info_button"];
+
+String get organization_view_history =>
+    stringMap[currentLanguage]["organization_view_history"];
+
+String get organization_view_taks =>
+    stringMap[currentLanguage]["organization_view_taks"];
+
+String get organization_view_surveys =>
+    stringMap[currentLanguage]["organization_view_surveys"];
+
+String get organization_view_applied_interventions =>
+    stringMap[currentLanguage]["organization_view_applied_interventions"];
+
+String get organization_view_info =>
+    stringMap[currentLanguage]["organization_view_info"];
+
+String get organization_view_dialog_add_entity =>
+    stringMap[currentLanguage]["organization_view_dialog_add_entity"];
+
+String get organization_view_dialog_edit_entity =>
+    stringMap[currentLanguage]["organization_view_dialog_edit_entity"];
+
+String get organization_view_entity_name =>
+    stringMap[currentLanguage]["organization_view_entity_name"];
+
+String get organization_view_entity_description =>
+    stringMap[currentLanguage]["organization_view_entity_description"];
+
+String get organization_view_entity_save_entity =>
+    stringMap[currentLanguage]["organization_view_entity_save_entity"];
+
+String get organization_view_entity_save_changes =>
+    stringMap[currentLanguage]["organization_view_entity_save_changes"];
 
 String get main_menu_home => stringMap[currentLanguage]["main_menu_home"];
 
@@ -119,9 +216,12 @@ String get google_sign_in => stringMap[currentLanguage]["google_sign_in"];
 
 String get test_list => stringMap[currentLanguage]["test_list"];
 
-String get singleChoiceTypeDescription => stringMap[currentLanguage]["question_type_descriptions"]["sc"];
-String get multipleChoiceTypeDescription => stringMap[currentLanguage]["question_type_descriptions"]["mc"];
-String get textFieldTypeDescription => stringMap[currentLanguage]["question_type_descriptions"]["text_field"];
+String get singleChoiceTypeDescription =>
+    stringMap[currentLanguage]["question_type_descriptions"]["sc"];
+String get multipleChoiceTypeDescription =>
+    stringMap[currentLanguage]["question_type_descriptions"]["mc"];
+String get textFieldTypeDescription =>
+    stringMap[currentLanguage]["question_type_descriptions"]["text_field"];
 String get summary => stringMap[currentLanguage]["summary"];
 String get endSurvey => stringMap[currentLanguage]["end_survey"];
 String get savedSurvey => stringMap[currentLanguage]["saved_survey"];

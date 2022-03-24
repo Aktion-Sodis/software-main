@@ -41,6 +41,7 @@ class MainMenuState extends State<MainMenu> {
   PageView mainPageView() => PageView(
         controller: pageController,
         pageSnapping: false,
+        physics: NeverScrollableScrollPhysics(),
         children: [
           MainMenuHome(onNavigationTap),
           MainMenuOrganization(),
