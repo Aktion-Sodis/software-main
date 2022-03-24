@@ -1,3 +1,4 @@
+import 'package:mobile_app/backend/callableModels/Entity.dart';
 import 'package:mobile_app/backend/callableModels/Task.dart';
 
 abstract class TaskState {}
@@ -6,9 +7,9 @@ class LoadingTaskState extends TaskState {}
 
 class LoadedTaskState extends TaskState {
   final List<Task> allTasks;
-  LoadedTaskState(this.allTasks);
-  LoadedTaskState copyWith(List<Task> allTasks) {
-    return LoadedTaskState(allTasks);
+  LoadedTaskState({required this.allTasks});
+  LoadedTaskState copyWith({List<Task>? allTasks}) {
+    return LoadedTaskState(allTasks: allTasks ?? this.allTasks);
   }
 
   List<Task> tasksByEntity(String entityID) =>
@@ -28,5 +29,68 @@ class LoadedTaskState extends TaskState {
     } else {
       return toSort.sublist(0, 3);
     }
+  }
+
+  List<Task> tasksDueToday({Entity? entity}) {
+    print("tasks Due Today searched: ${allTasks.length}");
+    List<Task> toSort = entity != null ? tasksByEntity(entity.id!) : allTasks;
+    toSort.removeWhere(
+        (element) => !sameDayOrBefore(DateTime.now(), element.dueDate!));
+    toSort.sort((a, b) => compareTasks(a, b));
+    return toSort;
+  }
+
+  List<Task> tasksDueTomorrow({Entity? entity}) {
+    print("tasks Due Tomorrow searched: ${allTasks.length}");
+    List<Task> toSort = entity != null ? tasksByEntity(entity.id!) : allTasks;
+    toSort.removeWhere((element) =>
+        !sameDay(DateTime.now().add(Duration(days: 1)), element.dueDate!));
+    toSort.sort((a, b) => compareTasks(a, b));
+    return toSort;
+  }
+
+  List<Task> otherTasks({Entity? entity}) {
+    print("other tasks searched: ${allTasks.length}");
+    List<Task> toSort = entity != null ? tasksByEntity(entity.id!) : allTasks;
+    toSort.removeWhere((element) =>
+        !isAfterDay(DateTime.now().add(Duration(days: 2)), element.dueDate!));
+    toSort.sort((a, b) => compareTasks(a, b));
+    return toSort;
+  }
+}
+
+bool sameDay(DateTime one, DateTime two) =>
+    (one.year == two.year && one.month == two.month) && (one.day == two.day);
+
+bool sameDayOrBefore(DateTime max, DateTime one) {
+  if (one.isBefore(max)) {
+    return true;
+  } else {
+    return sameDay(max, one);
+  }
+}
+
+bool isAfterDay(DateTime min, DateTime compare) {
+  DateTime tocompare = DateTime(min.year, min.month, min.day);
+  if (compare.isAfter(tocompare) || compare.isAtSameMomentAs(tocompare)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+int compareTasks(Task one, Task two) {
+  bool oneFinished = one.finishedDate != null;
+  bool twoFinished = two.finishedDate != null;
+  if (oneFinished && !twoFinished) {
+    return 1;
+  } else if (twoFinished && !oneFinished) {
+    return -1;
+  } else {
+    Duration timeDifference = (one.dueDate ??
+            DateTime.now().add(Duration(days: 100)))
+        .difference((one.dueDate ?? DateTime.now().add(Duration(days: 100))));
+    //negativ, wenn b nach a
+    return timeDifference.inHours;
   }
 }

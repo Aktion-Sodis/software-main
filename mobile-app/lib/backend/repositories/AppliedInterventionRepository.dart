@@ -42,7 +42,7 @@ class AppliedInterventionRepository {
       AppliedIntervention appliedIntervention, Entity entity) async {
     appliedIntervention.id = appliedIntervention.id ?? UUID.getUUID();
     amp.AppliedIntervention ampModel = appliedIntervention.toAmplifyModel();
-    ampModel.copyWith(entityAppliedInterventionsId: entity.id);
+    ampModel = ampModel.copyWith(entityAppliedInterventionsId: entity.id);
     Amplify.DataStore.save(ampModel);
   }
 

@@ -26,25 +26,29 @@ class MainMenuHomeState extends State<MainMenuHome> {
       Container(
         width: width(context),
         height: appBarHeight(context),
-        child: Row(
-          children: [
-            //todo: add back button
-            Container(
-                margin: EdgeInsets.only(left: width(context) * .1),
-                child: Image.asset("assets/test/logo.png",
-                    height: width(context) * .1)),
-            Expanded(child: Container()),
-            /*Expanded(
+        child: Column(children: [
+          Expanded(
+              child: Row(
+            children: [
+              //todo: add back button
+              Container(
+                  margin: EdgeInsets.only(left: width(context) * .1),
+                  child: Image.asset("assets/test/logo.png",
+                      height: width(context) * .1)),
+              Expanded(child: Container()),
+              /*Expanded(
                 child: Container(
                     margin: EdgeInsets.symmetric(
                         horizontal: defaultPadding(context)),
                     alignment: Alignment.centerLeft,
                     child: Text(strings.main_menu_home,
                         style: Theme.of(context).textTheme.headline2))),*/
-            CustomIconButton(() {}, MdiIcons.human,
-                Size(width(context) * .1, width(context) * .1), true)
-          ],
-        ),
+              CustomIconButton(() {}, MdiIcons.human,
+                  Size(width(context) * .1, width(context) * .1), true)
+            ],
+          )),
+          Container(width: width(context), height: 1, color: Colors.grey)
+        ]),
       ),
       Expanded(
           child: Container(

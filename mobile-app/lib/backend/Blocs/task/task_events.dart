@@ -2,12 +2,14 @@ import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 
 abstract class TaskEvent {}
 
-class CreateTask {
+class CreateTask extends TaskEvent {
   final Task task;
+
   CreateTask(this.task);
 }
 
-class UpdateTask {
+class UpdateTask extends TaskEvent {
   final Task task;
+
   UpdateTask(this.task);
 }

@@ -41,6 +41,11 @@ class NavigateToEntityAppliedInterventions extends OrganizationViewEvent {
   NavigateToEntityAppliedInterventions(this.entity);
 }
 
+class NavigateToEntityAppliedInterventionDetail extends OrganizationViewEvent {
+  AppliedIntervention appliedIntervention;
+  NavigateToEntityAppliedInterventionDetail(this.appliedIntervention);
+}
+
 class StartSurvey extends OrganizationViewEvent {
   Survey survey;
   AppliedIntervention appliedIntervention;

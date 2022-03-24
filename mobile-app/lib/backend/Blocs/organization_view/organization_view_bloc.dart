@@ -69,6 +69,24 @@ class OrganizationViewBloc
                 currentDetailEntity: loadedState.currentDetailEntity,
                 appBarString: loadedState.currentDetailEntity!.name));
             break;
+          case OrganizationViewType.APPLIEDINTERVENTIONDETAIL:
+            emit(loadedState.copyWith(
+                organizationViewType: OrganizationViewType.APPLIEDINTERVENTIONS,
+                currentDetailEntity: loadedState.currentDetailEntity,
+                appBarString: strings.organization_view_applied_interventions));
+            break;
+          case OrganizationViewType.SURVEYS:
+            emit(loadedState.copyWith(
+                organizationViewType: OrganizationViewType.OVERVIEW,
+                currentDetailEntity: loadedState.currentDetailEntity,
+                appBarString: loadedState.currentDetailEntity!.name));
+            break;
+          case OrganizationViewType.TASKS:
+            emit(loadedState.copyWith(
+                organizationViewType: OrganizationViewType.OVERVIEW,
+                currentDetailEntity: loadedState.currentDetailEntity,
+                appBarString: loadedState.currentDetailEntity!.name));
+            break;
           default:
             emit(loadedState.copyWith(
                 organizationViewType: OrganizationViewType.OVERVIEW,
@@ -198,7 +216,18 @@ class OrganizationViewBloc
         emit(loadedState.copyWith(
             allEntities: newAllEntities,
             currentListEntities: newCurrentEntities,
-            currentDetailEntity: newCurrentEntity));
+            currentDetailEntity: newCurrentEntity,
+            currentDetailAppliedIntervention:
+                loadedState.currentDetailAppliedIntervention != null
+                    ? toAdd
+                    : null));
+      } else if (event is NavigateToEntityAppliedInterventionDetail) {
+        emit(loadedState.copyWith(
+            appBarString: event.appliedIntervention.intervention.name,
+            currentDetailEntity: loadedState.currentDetailEntity,
+            organizationViewType:
+                OrganizationViewType.APPLIEDINTERVENTIONDETAIL,
+            currentDetailAppliedIntervention: event.appliedIntervention));
       }
     }
   }

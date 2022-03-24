@@ -59,8 +59,32 @@ Map<String, dynamic> stringMap = {
     "organization_view_dialog_add_appliedintervention": "Add Intervention",
     "organization_view_dialog_update_appliedintervention":
         "Update Intervention",
+    "organization_view_appliedintervention_detail_techonology_working":
+        "Is the technology working?",
+    "yes": "Yes",
+    "no": "No",
+    "remaining": "Remaining",
+    "day": "day",
+    "days": "days",
+    "tasks_more_behind": "More behind"
   }
 };
+
+String get tasks_more_behind => stringMap[currentLanguage]["tasks_more_behind"];
+
+String get remaining => stringMap[currentLanguage]["remaining"];
+
+String get day => stringMap[currentLanguage]["day"];
+
+String get days => stringMap[currentLanguage]["days"];
+
+String get organization_view_appliedintervention_detail_techonology_working =>
+    stringMap[currentLanguage]
+        ["organization_view_appliedintervention_detail_techonology_working"];
+
+String get yes => stringMap[currentLanguage]["yes"];
+
+String get no => stringMap[currentLanguage]["no"];
 
 String get organization_view_dialog_add_appliedintervention =>
     stringMap[currentLanguage]
