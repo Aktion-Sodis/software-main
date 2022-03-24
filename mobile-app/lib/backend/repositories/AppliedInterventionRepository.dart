@@ -48,24 +48,28 @@ class AppliedInterventionRepository {
 
   static Future<amp.AppliedIntervention> appliedInterventionByExecutedSurvey(
       amp.ExecutedSurvey executedSurvey) async {
+    print("applied intervention by executed survey");
     List<amp.AppliedIntervention> results = await Amplify.DataStore.query(
         amp.AppliedIntervention.classType,
         where: amp.AppliedIntervention.EXECUTEDSURVEYS
             .contains(executedSurvey.id));
     //todo: möglich, dass querying falsch
-    return _populate(results.first);
+    return _populate(results.first, executedSurveys: []);
   }
 
   static Future<amp.AppliedIntervention> _populate(
-      amp.AppliedIntervention appliedIntervention) async {
+      amp.AppliedIntervention appliedIntervention,
+      {List<amp.ExecutedSurvey>? executedSurveys}) async {
     amp.AppliedIntervention toReturn = appliedIntervention.copyWith(
-        whoDidIt: await UserRepository.getAmpUserByID(
-            appliedIntervention.appliedInterventionWhoDidItId),
-        intervention: await InterventionRepository.getAmpInterventionByID(
-            appliedIntervention.appliedInterventionInterventionId),
-        executedSurveys:
+      whoDidIt: await UserRepository.getAmpUserByID(
+          appliedIntervention.appliedInterventionWhoDidItId),
+      intervention: await InterventionRepository.getAmpInterventionByID(
+          appliedIntervention.appliedInterventionInterventionId),
+    );
+    toReturn = toReturn.copyWith(
+        executedSurveys: executedSurveys ??
             await ExecutedSurveyRepository.executedSurveysByAppliedIntervention(
-                appliedIntervention));
+                toReturn));
     return toReturn;
   }
 

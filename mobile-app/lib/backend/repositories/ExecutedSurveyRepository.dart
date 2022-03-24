@@ -31,15 +31,18 @@ class ExecutedSurveyRepository {
 
   static Future<amp.ExecutedSurvey> _populate(amp.ExecutedSurvey executedSurvey,
       {amp.AppliedIntervention? appliedIntervention}) async {
-    amp.ExecutedSurvey toReturn = executedSurvey;
-    executedSurvey.copyWith(
+    print("Populating executed Survey");
+    print("applied Intervention (passed)");
+    print(appliedIntervention.toString());
+    print(appliedIntervention?.whoDidIt.toString());
+    amp.ExecutedSurvey toReturn = executedSurvey.copyWith(
         appliedIntervention: appliedIntervention ??
             await AppliedInterventionRepository
                 .appliedInterventionByExecutedSurvey(executedSurvey),
         whoExecutedIt: await UserRepository.getAmpUserByID(
-            toReturn.executedSurveyWhoExecutedItId),
+            executedSurvey.executedSurveyWhoExecutedItId),
         survey: await SurveyRepository.getAmpSurveyByID(
-            toReturn.executedSurveySurveyId));
+            executedSurvey.executedSurveySurveyId));
     return toReturn;
   }
 
