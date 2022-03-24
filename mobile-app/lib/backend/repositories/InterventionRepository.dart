@@ -6,11 +6,23 @@ import 'package:mobile_app/models/ModelProvider.dart' as amp;
 class InterventionRepository {
   static Future<amp.Intervention> getAmpInterventionByID(
       String interventionID) async {
-    var interventions = await Amplify.DataStore.query(
-        amp.Intervention.classType,
-        where: amp.Intervention.ID.eq(interventionID));
-    amp.Intervention toReturn = interventions.first;
-    return _populate(toReturn);
+    try {
+      var interventions = await Amplify.DataStore.query(
+          amp.Intervention.classType,
+          where: amp.Intervention.ID.eq(interventionID));
+      amp.Intervention toReturn = interventions.first;
+      print("returned intervention by id");
+      return _populate(toReturn);
+    } catch (e) {
+      print("error in getting intervention by id");
+      print(e.toString());
+      var interventions = await Amplify.DataStore.query(
+          amp.Intervention.classType,
+          where: amp.Intervention.ID.eq(interventionID));
+      amp.Intervention toReturn = interventions.first;
+      print("returned intervention by id");
+      return _populate(toReturn);
+    }
   }
 
   static Future<List<Intervention>> getInterventionsByLevelConnections(

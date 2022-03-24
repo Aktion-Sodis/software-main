@@ -60,16 +60,24 @@ class AppliedInterventionRepository {
   static Future<amp.AppliedIntervention> _populate(
       amp.AppliedIntervention appliedIntervention,
       {List<amp.ExecutedSurvey>? executedSurveys}) async {
+//todo: hier liegt der fehler
+    amp.Intervention intervention =
+        await InterventionRepository.getAmpInterventionByID(
+            appliedIntervention.appliedInterventionInterventionId);
+    amp.User user = await UserRepository.getAmpUserByID(
+        appliedIntervention.appliedInterventionWhoDidItId);
+    print("intervention gotten by id");
+    print("intervention: $intervention");
+    print("user gotten by id");
+    print("user: $user");
     amp.AppliedIntervention toReturn = appliedIntervention.copyWith(
-      whoDidIt: await UserRepository.getAmpUserByID(
-          appliedIntervention.appliedInterventionWhoDidItId),
-      intervention: await InterventionRepository.getAmpInterventionByID(
-          appliedIntervention.appliedInterventionInterventionId),
-    );
+        intervention: intervention, whoDidIt: user, executedSurveys: []);
+
     toReturn = toReturn.copyWith(
         executedSurveys: executedSurveys ??
             await ExecutedSurveyRepository.executedSurveysByAppliedIntervention(
                 toReturn));
+
     return toReturn;
   }
 

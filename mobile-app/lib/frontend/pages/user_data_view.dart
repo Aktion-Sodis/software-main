@@ -79,6 +79,9 @@ class UserDataViewState extends State<UserDataView> {
                                     margin: EdgeInsets.symmetric(
                                         vertical: defaultPadding(context)),
                                     child: CommonWidgets.defaultBackwardButton(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                defaultPadding(context)),
                                         context: context,
                                         goBack: () => context
                                             .read<InAppBloc>()

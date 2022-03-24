@@ -22,6 +22,9 @@ class ExecutedSurveyRepository {
 
   static Future<List<amp.ExecutedSurvey>> executedSurveysByAppliedIntervention(
       amp.AppliedIntervention appliedIntervention) async {
+    print("executed survey by applied intervention");
+    print("applied intervention: ");
+    print(appliedIntervention.whoDidIt.toString());
     List<amp.ExecutedSurvey> toReturn = await Amplify.DataStore.query(
         amp.ExecutedSurvey.classType,
         where:

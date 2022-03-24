@@ -44,6 +44,10 @@ class Survey {
     }
   }
 
+  Question questionByID(String id) {
+    return questions.firstWhere((element) => element.id == id);
+  }
+
   Survey(
       {this.id,
       required this.name_ml,

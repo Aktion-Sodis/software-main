@@ -6,10 +6,11 @@ abstract class CommonWidgets {
   static Widget defaultBackwardButton(
       {required BuildContext context,
       Function? goBack,
-      ButtonSizes buttonSizes = ButtonSizes.medium}) {
+      ButtonSizes buttonSizes = ButtonSizes.medium,
+      EdgeInsets? padding}) {
     return MaterialButton(
       minWidth: 0,
-      padding: EdgeInsets.zero,
+      padding: padding ?? EdgeInsets.zero,
       color: Theme.of(context).canvasColor,
       onPressed: () {
         goBack?.call();
@@ -19,14 +20,15 @@ abstract class CommonWidgets {
               color: Theme.of(context).buttonTheme.colorScheme?.background ??
                   Colors.green,
               width: 1)),
-      child: Padding(
-        padding: EdgeInsets.all(defaultPadding(context)),
-        child: Icon(
-          MdiIcons.arrowLeft,
-          color: Theme.of(context).buttonTheme.colorScheme?.background ??
-              Colors.green,
-        ),
-      ),
+      child: Container(
+          padding: EdgeInsets.all(defaultPadding(context)),
+          child: Center(
+            child: Icon(
+              MdiIcons.arrowLeft,
+              color: Theme.of(context).buttonTheme.colorScheme?.background ??
+                  Colors.green,
+            ),
+          )),
     );
   }
 

@@ -248,6 +248,7 @@ class OrganizationViewBloc
           appBarString: event.executedSurvey.date.toString() +
               ": " +
               event.executedSurvey.survey.name,
+          executedSurveyToDisplay: event.executedSurvey,
           currentDetailEntity: loadedState.currentDetailEntity,
           organizationViewType: OrganizationViewType.EXECUTEDSURVEY,
         ));

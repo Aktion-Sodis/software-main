@@ -27,6 +27,7 @@ import 'package:mobile_app/frontend/pages/main_menu_components/main_menu_tasks.d
 import 'package:mobile_app/frontend/strings.dart' as strings;
 import 'package:mobile_app/frontend/common_widgets.dart';
 import 'package:mobile_app/services/photo_capturing.dart';
+import 'package:mobile_app/frontend/pages/survey.dart' as surveyarea;
 
 class MainMenuOrganization extends StatelessWidget {
   Widget appBarWidget(BuildContext context,
@@ -46,6 +47,8 @@ class MainMenuOrganization extends StatelessWidget {
                   margin:
                       EdgeInsets.symmetric(vertical: defaultPadding(context)),
                   child: CommonWidgets.defaultBackwardButton(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: defaultPadding(context)),
                       context: context,
                       goBack: () => context
                           .read<OrganizationViewBloc>()
@@ -213,8 +216,9 @@ class MainMenuOrganization extends StatelessWidget {
           return ExecutedSurveyHistory(
               entity: organizationViewState.currentDetailEntity!);
         case OrganizationViewType.EXECUTEDSURVEY:
-          //TODO: implemnt with moritz
-          return Container();
+          return ExecutedSurveyWidget(
+              organizationViewState.executedSurveyToDisplay!);
+
         default:
           return Container();
           break;
@@ -466,6 +470,8 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
                                 margin: EdgeInsets.symmetric(
                                     vertical: defaultPadding(context)),
                                 child: CommonWidgets.defaultBackwardButton(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: defaultPadding(context)),
                                     context: context,
                                     goBack: () => Navigator.of(context).pop())),
                             Expanded(
@@ -1266,6 +1272,8 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
                             margin: EdgeInsets.symmetric(
                                 vertical: defaultPadding(context)),
                             child: CommonWidgets.defaultBackwardButton(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: defaultPadding(context)),
                                 context: context,
                                 goBack: () => Navigator.of(context)
                                     .pop(appliedIntervention))),
@@ -1454,5 +1462,23 @@ class ExecutedSurveyHistory extends StatelessWidget {
               });
             },
             itemCount: executedSurveys.length));
+  }
+}
+
+class ExecutedSurveyWidget extends StatelessWidget {
+  final ExecutedSurvey executedSurvey;
+  ExecutedSurveyWidget(this.executedSurvey);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemBuilder: (context, index) {
+          return surveyarea.SurveyWidgetState.questionSummary(
+              question: executedSurvey.survey
+                  .questionByID(executedSurvey.answers[index].questionID),
+              context: context,
+              questionAnswer: executedSurvey.answers[index]);
+        },
+        itemCount: executedSurvey.answers.length);
   }
 }
