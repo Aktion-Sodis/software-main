@@ -49,7 +49,7 @@ class TaskWidget extends StatelessWidget {
 
   Widget todayWidget(BuildContext context) {
     //todo: change widget according to arthur
-    List<Task> todayTasks = (context.read<TaskBloc>().state as LoadedTaskState)
+    List<Task> todayTasks = (context.watch<TaskBloc>().state as LoadedTaskState)
         .tasksDueToday(entity: entity);
 
     if (todayTasks.isNotEmpty) {
@@ -83,7 +83,7 @@ class TaskWidget extends StatelessWidget {
 
   Widget tomorrowWidget(BuildContext context) {
     //todo: change widget according to arthur
-    List<Task> todayTasks = (context.read<TaskBloc>().state as LoadedTaskState)
+    List<Task> todayTasks = (context.watch<TaskBloc>().state as LoadedTaskState)
         .tasksDueTomorrow(entity: entity);
     if (todayTasks.isNotEmpty) {
       return Container(
@@ -117,7 +117,7 @@ class TaskWidget extends StatelessWidget {
 
   Widget restWidget(BuildContext context) {
     //todo: change widget according to arthur
-    List<Task> todayTasks = (context.read<TaskBloc>().state as LoadedTaskState)
+    List<Task> todayTasks = (context.watch<TaskBloc>().state as LoadedTaskState)
         .otherTasks(entity: entity);
 
     if (todayTasks.isNotEmpty) {

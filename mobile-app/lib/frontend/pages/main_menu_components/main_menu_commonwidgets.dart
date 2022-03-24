@@ -7,6 +7,7 @@ import 'package:mobile_app/backend/Blocs/organization_view/organization_view_blo
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/callableModels/Survey.dart';
 import 'package:mobile_app/backend/repositories/InterventionRepository.dart';
+import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
 import 'package:mobile_app/frontend/buttons.dart';
 import 'package:mobile_app/frontend/common_widgets.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
@@ -195,7 +196,7 @@ Widget taskRow(BuildContext context, Task task,
     bool separator = false,
     ValueChanged<Task>? onPressed,
     bool showDate = false}) {
-  return Column(children: [
+  return Column(key: ValueKey(task), children: [
     RawMaterialButton(
         onPressed: () {
           if (onPressed != null) {
@@ -211,36 +212,106 @@ Widget taskRow(BuildContext context, Task task,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                    child: Row(
-                  children: [
-                    Expanded(
-                        child: Column(children: [
-                      Container(
-                          child: Text(task.title,
-                              style: Theme.of(context).textTheme.bodyText1)),
-                      if (showDate && task.dueDate != null)
-                        Container(
-                            margin:
-                                EdgeInsets.only(top: defaultPadding(context)),
-                            child: Text(strings.remaining +
-                                ": " +
-                                task.dueDate!
-                                    .difference(DateTime.now())
-                                    .inDays
-                                    .toString() +
-                                (task.dueDate!
-                                            .difference(DateTime.now())
-                                            .inDays >
-                                        1
-                                    ? strings.days
-                                    : strings.day)))
-                    ])),
-                    if (checkChangePossible)
-                      Checkbox(
-                          value: task.finishedDate != null,
-                          onChanged: (b) => onCheckChanged!(task))
-                  ],
-                ))
+                    child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: defaultPadding(context)),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                  Container(
+                                      child: Text(task.title,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2)),
+                                  if (showDate && task.dueDate != null)
+                                    Container(
+                                        margin: EdgeInsets.only(
+                                            top: defaultPadding(context)),
+                                        child: Text(strings.remaining +
+                                            ": " +
+                                            task.dueDate!
+                                                .difference(DateTime.now())
+                                                .inDays
+                                                .toString() +
+                                            (task.dueDate!
+                                                        .difference(
+                                                            DateTime.now())
+                                                        .inDays >
+                                                    1
+                                                ? strings.days
+                                                : strings.day)))
+                                ])),
+                            if (checkChangePossible)
+                              Checkbox(
+                                  value: task.finishedDate != null,
+                                  onChanged: (b) => onCheckChanged!(task))
+                          ],
+                        )))
+              ],
+            ))),
+    if (separator)
+      Container(
+          margin: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
+          color: Colors.grey,
+          height: 1)
+  ]);
+}
+
+Widget executedSurveyRow(
+    BuildContext context, ExecutedSurvey executedSurvey, VoidCallback onPressed,
+    {bool separator = false}) {
+  return Column(key: ValueKey(executedSurvey), children: [
+    RawMaterialButton(
+        onPressed: onPressed,
+        child: Container(
+            padding: EdgeInsets.symmetric(
+                horizontal: defaultPadding(context) / 2,
+                vertical: defaultPadding(context)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CustomPicButton(
+                    filePath:
+                        SurveyRepository.getIconFilePath(executedSurvey.survey),
+                    onPressed: () {},
+                    size: Size(width(context) * .1, width(context) * .1),
+                    pressable: false),
+                SizedBox(width: defaultPadding(context)),
+                Expanded(
+                    child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: defaultPadding(context)),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                  Container(
+                                      child: Text(executedSurvey.survey.name,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2)),
+                                  Container(
+                                      margin: EdgeInsets.only(
+                                          top: defaultPadding(context)),
+                                      child:
+                                          Text(executedSurvey.date.toString()))
+                                ])),
+                            CommonWidgets.defaultIconButton(
+                                onPressed: onPressed,
+                                context: context,
+                                iconData: MdiIcons.arrowRight,
+                                buttonSizes: ButtonSizes.small,
+                                fillColor:
+                                    Theme.of(context).colorScheme.secondary)
+                          ],
+                        )))
               ],
             ))),
     if (separator)

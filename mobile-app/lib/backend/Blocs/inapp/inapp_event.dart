@@ -10,3 +10,5 @@ class StartSurveyEvent extends InAppEvent {
 
   StartSurveyEvent(this.survey, this.appliedIntervention);
 }
+
+class GoToMainMenu extends InAppEvent {}

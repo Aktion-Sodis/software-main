@@ -6,7 +6,10 @@ import 'package:mobile_app/frontend/dependentsizes.dart';
 
 Widget CustomIconButton(
     VoidCallback onPressed, IconData iconData, Size size, bool pressable,
-    {EdgeInsets? padding}) {
+    {EdgeInsets? padding,
+    bool selected = false,
+    Color selectedColor = Colors.green,
+    Color onSelectedColor = Colors.white}) {
   return MaterialButton(
       height: pressable ? 5 : 0,
       onPressed: onPressed,
@@ -16,10 +19,11 @@ Widget CustomIconButton(
         height: size.height,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            color: Colors.white,
+            color: selected ? selectedColor : Colors.white,
             border: Border.all(color: Colors.black45, width: 1)),
         child: Icon(iconData,
-            color: Colors.black87, size: min(size.width, size.height) * .6),
+            color: selected ? onSelectedColor : Colors.black87,
+            size: min(size.width, size.height) * .6),
       ));
 }
 

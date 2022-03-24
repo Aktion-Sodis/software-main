@@ -1,7 +1,11 @@
 class InAppState {
-  CurrentArea currentArea;
+  final CurrentArea currentArea;
 
   InAppState({required this.currentArea});
+
+  InAppState copyWith({CurrentArea? currentArea}) {
+    return InAppState(currentArea: currentArea ?? this.currentArea);
+  }
 }
 
 enum CurrentArea {

@@ -19,6 +19,10 @@ import 'package:mobile_app/frontend/pages/user_data_view.dart';
 import 'package:mobile_app/frontend/session_view.dart';
 
 import 'backend/Blocs/auth/auth_repository.dart';
+import 'backend/Blocs/organization_view/organization_view_bloc.dart';
+import 'backend/repositories/AppliedInterventionRepository.dart';
+import 'backend/repositories/EntityRepository.dart';
+import 'backend/repositories/SurveyRepository.dart';
 
 class AppNavigator extends StatelessWidget {
   const AppNavigator({Key? key}) : super(key: key);
@@ -63,24 +67,59 @@ class AppNavigator extends StatelessWidget {
                                   userBloc: context.read<UserBloc>())),
                         if (state.user != null)
                           MaterialPage(
-                              child: MultiBlocProvider(
+                              child: MultiRepositoryProvider(
                                   providers: [
-                                BlocProvider<InAppBloc>(
-                                    create: (context) => InAppBloc()),
-                                BlocProvider(
+                                RepositoryProvider<EntityRepository>(
+                                    create: (context) => EntityRepository()),
+                                RepositoryProvider<SurveyRepository>(
+                                    create: (context) => SurveyRepository()),
+                                RepositoryProvider<
+                                        AppliedInterventionRepository>(
                                     create: (context) =>
-                                        TaskBloc(TaskRepository(state.user!)))
+                                        AppliedInterventionRepository())
                               ],
-                                  child: BlocBuilder<InAppBloc, InAppState>(
-                                      builder: (context, inAppState) {
-                                    //todo: change to switch
-                                    if (inAppState.currentArea ==
-                                        CurrentArea.MAIN_MENU) {
-                                      return MainMenu();
-                                    } else {
-                                      return Scaffold(body: Container());
-                                    }
-                                  })))
+                                  child: Builder(
+                                      builder: (context) => MultiBlocProvider(
+                                              providers: [
+                                                BlocProvider<InAppBloc>(
+                                                    create: (context) =>
+                                                        InAppBloc()),
+                                                BlocProvider(
+                                                    create: (context) =>
+                                                        TaskBloc(TaskRepository(
+                                                            state.user!))),
+                                                BlocProvider<
+                                                    OrganizationViewBloc>(
+                                                  create: (context) =>
+                                                      OrganizationViewBloc(
+                                                          context.read<
+                                                              EntityRepository>(),
+                                                          context.read<
+                                                              AppliedInterventionRepository>(),
+                                                          context.read<
+                                                              InAppBloc>()),
+                                                )
+                                              ],
+                                              child: BlocBuilder<InAppBloc,
+                                                      InAppState>(
+                                                  builder:
+                                                      (context, inAppState) {
+                                                //todo: change to switch
+                                                if (inAppState.currentArea ==
+                                                    CurrentArea.MAIN_MENU) {
+                                                  return MainMenu();
+                                                } else if (inAppState
+                                                        .currentArea ==
+                                                    CurrentArea.USER) {
+                                                  return UserDataView(
+                                                      userBloc: context
+                                                          .read<UserBloc>(),
+                                                      inApp: true);
+                                                } else {
+                                                  return Scaffold(
+                                                      body: Container());
+                                                }
+                                              })))))
 
                         ///hier beginnt der beef/App-Inhalt
                       ],

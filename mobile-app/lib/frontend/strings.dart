@@ -66,9 +66,15 @@ Map<String, dynamic> stringMap = {
     "remaining": "Remaining",
     "day": "day",
     "days": "days",
-    "tasks_more_behind": "More behind"
+    "tasks_more_behind": "More behind",
+    "profile": "Profile",
+    "user_update": "Save changes"
   }
 };
+
+String get user_update => stringMap[currentLanguage]["user_update"];
+
+String get profile => stringMap[currentLanguage]["profile"];
 
 String get tasks_more_behind => stringMap[currentLanguage]["tasks_more_behind"];
 

@@ -6,8 +6,18 @@ abstract class TaskState {}
 class LoadingTaskState extends TaskState {}
 
 class LoadedTaskState extends TaskState {
-  final List<Task> allTasks;
-  LoadedTaskState({required this.allTasks});
+  late List<Task> _allTasks;
+  List<Task> get allTasks {
+    return _allTasks;
+  }
+
+  set allTasks(List<Task> toSet) {
+    _allTasks = toSet;
+  }
+
+  LoadedTaskState({required List<Task> allTasks}) {
+    this.allTasks = allTasks;
+  }
   LoadedTaskState copyWith({List<Task>? allTasks}) {
     return LoadedTaskState(allTasks: allTasks ?? this.allTasks);
   }
@@ -16,7 +26,8 @@ class LoadedTaskState extends TaskState {
       List.from(allTasks.where((obj) => obj.entity?.id == entityID));
 
   List<Task> firstThreeUndoneTasks({String? entityID}) {
-    List<Task> toSort = entityID != null ? tasksByEntity(entityID) : allTasks;
+    List<Task> toSort =
+        entityID != null ? tasksByEntity(entityID) : List.from(allTasks);
     toSort.sort((a, b) {
       Duration timeDifference = (a.dueDate ??
               DateTime.now().add(Duration(days: 100)))
@@ -32,8 +43,8 @@ class LoadedTaskState extends TaskState {
   }
 
   List<Task> tasksDueToday({Entity? entity}) {
-    print("tasks Due Today searched: ${allTasks.length}");
-    List<Task> toSort = entity != null ? tasksByEntity(entity.id!) : allTasks;
+    List<Task> toSort =
+        entity != null ? tasksByEntity(entity.id!) : List.from(allTasks);
     toSort.removeWhere(
         (element) => !sameDayOrBefore(DateTime.now(), element.dueDate!));
     toSort.sort((a, b) => compareTasks(a, b));
@@ -41,8 +52,8 @@ class LoadedTaskState extends TaskState {
   }
 
   List<Task> tasksDueTomorrow({Entity? entity}) {
-    print("tasks Due Tomorrow searched: ${allTasks.length}");
-    List<Task> toSort = entity != null ? tasksByEntity(entity.id!) : allTasks;
+    List<Task> toSort =
+        entity != null ? tasksByEntity(entity.id!) : List.from(allTasks);
     toSort.removeWhere((element) =>
         !sameDay(DateTime.now().add(Duration(days: 1)), element.dueDate!));
     toSort.sort((a, b) => compareTasks(a, b));
@@ -50,8 +61,8 @@ class LoadedTaskState extends TaskState {
   }
 
   List<Task> otherTasks({Entity? entity}) {
-    print("other tasks searched: ${allTasks.length}");
-    List<Task> toSort = entity != null ? tasksByEntity(entity.id!) : allTasks;
+    List<Task> toSort =
+        entity != null ? tasksByEntity(entity.id!) : List.from(allTasks);
     toSort.removeWhere((element) =>
         !isAfterDay(DateTime.now().add(Duration(days: 2)), element.dueDate!));
     toSort.sort((a, b) => compareTasks(a, b));

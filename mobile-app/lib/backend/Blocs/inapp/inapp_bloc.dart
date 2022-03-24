@@ -11,8 +11,10 @@ class InAppBloc extends Bloc<InAppEvent, InAppState> {
   }
 
   void _mapEventToState(InAppEvent event, Emitter<InAppState> emit) async {
-    //todo: implement
+    if (event is GoToMainMenu) {
+      emit(state.copyWith(currentArea: CurrentArea.MAIN_MENU));
+    } else if (event is GoToUserPageEvent) {
+      emit(state.copyWith(currentArea: CurrentArea.USER));
+    }
   }
 }
-
-class InAppMenuState {}

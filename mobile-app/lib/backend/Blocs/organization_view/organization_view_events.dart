@@ -31,6 +31,11 @@ class NavigateToEntitySurveys extends OrganizationViewEvent {
   NavigateToEntitySurveys(this.entity);
 }
 
+class NavigateToExecutedSurvey extends OrganizationViewEvent {
+  ExecutedSurvey executedSurvey;
+  NavigateToExecutedSurvey(this.executedSurvey);
+}
+
 class NavigateToEntityHistory extends OrganizationViewEvent {
   Entity entity;
   NavigateToEntityHistory(this.entity);

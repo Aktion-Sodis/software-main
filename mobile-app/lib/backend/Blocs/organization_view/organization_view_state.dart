@@ -10,6 +10,7 @@ class EntitiesLoadedOrganizationViewState extends OrganizationViewState {
   final String appBarString;
   final bool addEntityPossible;
   final AppliedIntervention? currentDetailAppliedIntervention;
+  final ExecutedSurvey? executedSurveyToDisplay;
 
   Entity entityByID(String id) => allEntities.firstWhere((e) => e.id == id);
 
@@ -60,7 +61,8 @@ class EntitiesLoadedOrganizationViewState extends OrganizationViewState {
       required this.currentListEntities,
       required this.appBarString,
       required this.addEntityPossible,
-      this.currentDetailAppliedIntervention});
+      this.currentDetailAppliedIntervention,
+      this.executedSurveyToDisplay});
 
   EntitiesLoadedOrganizationViewState copyWith(
       {List<Entity>? allEntities,
@@ -69,7 +71,8 @@ class EntitiesLoadedOrganizationViewState extends OrganizationViewState {
       List<Entity>? currentListEntities,
       String? appBarString,
       bool? addEntityPossible,
-      AppliedIntervention? currentDetailAppliedIntervention}) {
+      AppliedIntervention? currentDetailAppliedIntervention,
+      ExecutedSurvey? executedSurveyToDisplay}) {
     return EntitiesLoadedOrganizationViewState(
         allEntities: allEntities ?? this.allEntities,
         organizationViewType: organizationViewType ?? this.organizationViewType,
@@ -78,7 +81,8 @@ class EntitiesLoadedOrganizationViewState extends OrganizationViewState {
         appBarString: appBarString ?? this.appBarString,
         addEntityPossible: addEntityPossible ?? this.addEntityPossible,
         currentDetailAppliedIntervention: currentDetailAppliedIntervention ??
-            this.currentDetailAppliedIntervention);
+            this.currentDetailAppliedIntervention,
+        executedSurveyToDisplay: executedSurveyToDisplay);
   }
 }
 
@@ -90,7 +94,8 @@ enum OrganizationViewType {
   APPLIEDINTERVENTIONS,
   APPLIEDINTERVENTIONDETAIL,
   TASKS,
-  HISTORY
+  HISTORY,
+  EXECUTEDSURVEY
 }
 
 class LoadingOrganizationViewState extends OrganizationViewState {}

@@ -98,6 +98,31 @@ class MainMenuOrganization extends StatelessWidget {
                                 buttonSizes: ButtonSizes.small,
                                 fillColor:
                                     Theme.of(context).colorScheme.secondary)),
+                      if (organizationViewState.organizationViewType ==
+                              OrganizationViewType.SURVEYS ||
+                          organizationViewState.organizationViewType ==
+                              OrganizationViewType.HISTORY)
+                        Container(
+                            child: CustomIconButton(
+                          () {
+                            if (organizationViewState.organizationViewType ==
+                                OrganizationViewType.SURVEYS) {
+                              context.read<OrganizationViewBloc>().add(
+                                  NavigateToEntityHistory(organizationViewState
+                                      .currentDetailEntity!));
+                            } else {
+                              context
+                                  .read<OrganizationViewBloc>()
+                                  .add(BackTapEvent());
+                            }
+                          },
+                          MdiIcons.history,
+                          Size(width(context) * .1, width(context) * .1),
+                          true,
+                          selected:
+                              organizationViewState.organizationViewType ==
+                                  OrganizationViewType.HISTORY,
+                        ))
                     ],
                   )),
             )
@@ -184,6 +209,12 @@ class MainMenuOrganization extends StatelessWidget {
                   entity: organizationViewState.currentDetailEntity,
                   key: ValueKey(organizationViewState.currentDetailEntity)));
           break;
+        case OrganizationViewType.HISTORY:
+          return ExecutedSurveyHistory(
+              entity: organizationViewState.currentDetailEntity!);
+        case OrganizationViewType.EXECUTEDSURVEY:
+          //TODO: implemnt with moritz
+          return Container();
         default:
           return Container();
           break;
@@ -201,41 +232,21 @@ class MainMenuOrganization extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider<EntityRepository>(
-              create: (context) => EntityRepository()),
-          RepositoryProvider<SurveyRepository>(
-              create: (context) => SurveyRepository()),
-          RepositoryProvider<EntityRepository>(
-              create: (context) => EntityRepository()),
-          RepositoryProvider<AppliedInterventionRepository>(
-              create: (context) => AppliedInterventionRepository())
-        ],
-        child: Builder(
-            builder: (context) => BlocProvider<OrganizationViewBloc>(
-                  create: (context) => OrganizationViewBloc(
-                      context.read<EntityRepository>(),
-                      context.read<AppliedInterventionRepository>(),
-                      context.read<InAppBloc>()),
-                  child:
-                      BlocBuilder<OrganizationViewBloc, OrganizationViewState>(
-                          builder: (context, state) {
-                    if (state is LoadingOrganizationViewState) {
-                      return Center(child: loadingSign(context));
-                    } else {
-                      return Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          appBarWidget(context,
-                              state as EntitiesLoadedOrganizationViewState),
-                          levelIndicatorWidget(context, state),
-                          Expanded(child: mainWidget(context, state))
-                        ],
-                      );
-                    }
-                  }),
-                )));
+    return BlocBuilder<OrganizationViewBloc, OrganizationViewState>(
+        builder: (context, state) {
+      if (state is LoadingOrganizationViewState) {
+        return Center(child: loadingSign(context));
+      } else {
+        return Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            appBarWidget(context, state as EntitiesLoadedOrganizationViewState),
+            levelIndicatorWidget(context, state),
+            Expanded(child: mainWidget(context, state))
+          ],
+        );
+      }
+    });
   }
 }
 
@@ -783,34 +794,44 @@ class OverviewWidget extends StatelessWidget {
   }
 
   Widget taskCardContent(BuildContext context) {
-    TaskState taskState = context.read<TaskBloc>().state;
+    return BlocBuilder<TaskBloc, TaskState>(builder: (context, state) {
+      List<Task> firstThreeTasks = [];
 
-    List<Task> firstThreeTasks = [];
+      if (state is LoadedTaskState) {
+        firstThreeTasks = state.firstThreeUndoneTasks(entityID: entity.id);
+      }
 
-    if (taskState is LoadedTaskState) {
-      firstThreeTasks = taskState.firstThreeUndoneTasks(entityID: entity.id);
-    }
-
-    return Container(
-        padding: EdgeInsets.all(defaultPadding(context)),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(
-              margin: EdgeInsets.only(bottom: defaultPadding(context) / 2),
-              child: Text(strings.main_menu_tasks,
-                  style: Theme.of(context).textTheme.headline2)),
-          if (firstThreeTasks.isNotEmpty)
-            Column(
-              children: List.generate(
-                  firstThreeTasks.length,
-                  (index) => taskRow(context, firstThreeTasks[index],
-                      checkChangePossible: false,
-                      separator: (index != firstThreeTasks.length - 1))),
-            ),
-          Container(
-              margin: EdgeInsets.only(top: defaultPadding(context) / 2),
-              child: defaultGreenButton(context, () => onTasksTapped(entity),
-                  icon: MdiIcons.arrowRight, minWidth: width(context) * .84))
-        ]));
+      return Container(
+          padding: EdgeInsets.all(defaultPadding(context)),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+                margin: EdgeInsets.only(bottom: defaultPadding(context) / 2),
+                child: Text(strings.main_menu_tasks,
+                    style: Theme.of(context).textTheme.headline2)),
+            if (firstThreeTasks.isNotEmpty)
+              Column(
+                children: List.generate(
+                    firstThreeTasks.length,
+                    (index) => taskRow(context, firstThreeTasks[index],
+                        checkChangePossible: false,
+                        separator: (index != firstThreeTasks.length - 1))),
+              ),
+            Container(
+                margin: EdgeInsets.only(top: defaultPadding(context) / 2),
+                child: defaultGreenButton(context, () {
+                  if (firstThreeTasks.isNotEmpty) {
+                    onTasksTapped(entity);
+                  } else {
+                    addTask(context, entity: entity);
+                  }
+                },
+                    icon: firstThreeTasks.isNotEmpty
+                        ? MdiIcons.arrowRight
+                        : MdiIcons.plus,
+                    minWidth: width(context) * .84))
+          ]));
+    });
   }
 
   Widget surveyCardContent(BuildContext context) {
@@ -1411,5 +1432,27 @@ class SurveyWidgetState extends State<SurveyWidget> {
                 itemCount: currentlyDisplayedSurveys.length))
       ],
     );
+  }
+}
+
+class ExecutedSurveyHistory extends StatelessWidget {
+  const ExecutedSurveyHistory({Key? key, required this.entity})
+      : super(key: key);
+  final Entity entity;
+
+  @override
+  Widget build(BuildContext context) {
+    List<ExecutedSurvey> executedSurveys = entity.executedSurveysDescending();
+    return Container(
+        child: ListView.builder(
+            itemBuilder: (context, index) {
+              return executedSurveyRow(context, executedSurveys[index],
+                  () async {
+                context
+                    .read<OrganizationViewBloc>()
+                    .add(NavigateToExecutedSurvey(executedSurveys[index]));
+              });
+            },
+            itemCount: executedSurveys.length));
   }
 }

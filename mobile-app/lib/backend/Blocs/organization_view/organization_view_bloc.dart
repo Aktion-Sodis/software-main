@@ -87,6 +87,20 @@ class OrganizationViewBloc
                 currentDetailEntity: loadedState.currentDetailEntity,
                 appBarString: loadedState.currentDetailEntity!.name));
             break;
+          case OrganizationViewType.HISTORY:
+            emit(loadedState.copyWith(
+                organizationViewType: OrganizationViewType.SURVEYS,
+                currentDetailEntity: loadedState.currentDetailEntity,
+                appBarString: strings.organization_view_surveys +
+                    " (${loadedState.currentDetailEntity!.name})"));
+            break;
+          case OrganizationViewType.EXECUTEDSURVEY:
+            emit(loadedState.copyWith(
+                organizationViewType: OrganizationViewType.HISTORY,
+                currentDetailEntity: loadedState.currentDetailEntity,
+                appBarString: strings.organization_view_history +
+                    " (${loadedState.currentDetailEntity!.name})"));
+            break;
           default:
             emit(loadedState.copyWith(
                 organizationViewType: OrganizationViewType.OVERVIEW,
@@ -228,6 +242,14 @@ class OrganizationViewBloc
             organizationViewType:
                 OrganizationViewType.APPLIEDINTERVENTIONDETAIL,
             currentDetailAppliedIntervention: event.appliedIntervention));
+      } else if (event is NavigateToExecutedSurvey) {
+        emit(loadedState.copyWith(
+          appBarString: event.executedSurvey.date.toString() +
+              ": " +
+              event.executedSurvey.survey.name,
+          currentDetailEntity: loadedState.currentDetailEntity,
+          organizationViewType: OrganizationViewType.EXECUTEDSURVEY,
+        ));
       }
     }
   }
