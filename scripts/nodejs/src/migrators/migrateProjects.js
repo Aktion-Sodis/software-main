@@ -44,9 +44,7 @@ const migrateProjects = async (sqlPool) => {
 
         }
 
-        let interventionTagRelation = {
-
-        }
+        
 
         try {
             const newInterventionEntry = await API.graphql({

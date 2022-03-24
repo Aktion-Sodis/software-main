@@ -2,7 +2,7 @@ import * as mutations from '../graphql/mutations.js';
 import { API, graphqlOperation } from "aws-amplify";
 import * as queries from '../graphql/queries.js';
 
-const createConfig = async ()=> {
+const createConfigMigrator = async () => {
     let config = {
         id: "sodis_config",
         name: "Fundación Sodis/Aktion Sodis e.V.",
@@ -15,8 +15,10 @@ const createConfig = async ()=> {
             backgroundTwoDark: "test"
         },
     }
+    
     try {
-       const createdConfig = await API.graphql(
+        console.log("trying to create config");
+       var createdConfig = await API.graphql(
         {
             query: mutations.createConfig,
             variables: {
@@ -24,9 +26,13 @@ const createConfig = async ()=> {
             } 
         }
         );
-        return createdConfig;
+        console.log("created config: ");
+        console.log(createdConfig);
+        return createdConfig.data.createConfig;
     }catch(e) {
-        const currentConfig = await API.graphql({
+        console.log("updates currentConfig");
+        console.log(e);
+        var currentConfig = await API.graphql({
             query: queries.getConfig,
             variables: {
                 id: config.id
@@ -40,10 +46,10 @@ const createConfig = async ()=> {
                 input: config,
             }
             });
-            return updatedConfig;
+            return updatedConfig.data.updateConfig;
     }
     
     
 }
 
-export default createConfig;
+export default createConfigMigrator;

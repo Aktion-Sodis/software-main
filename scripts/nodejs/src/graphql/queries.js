@@ -189,27 +189,6 @@ export const getLevel = /* GraphQL */ `
           id
           levelID
           interventionID
-          level {
-            parentLevelID
-            interventionsAreAllowed
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           createdAt
           updatedAt
           _version
@@ -256,25 +235,11 @@ export const listLevels = /* GraphQL */ `
         parentLevelID
         interventionsAreAllowed
         allowedInterventions {
-          items {
-            id
-            levelID
-            interventionID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         customData {
           id
-          name {
-            languageKeys
-            languageTexts
-          }
           type
         }
         schemeVersion
@@ -315,25 +280,11 @@ export const syncLevels = /* GraphQL */ `
         parentLevelID
         interventionsAreAllowed
         allowedInterventions {
-          items {
-            id
-            levelID
-            interventionID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         customData {
           id
-          name {
-            languageKeys
-            languageTexts
-          }
           type
         }
         schemeVersion
@@ -366,25 +317,6 @@ export const getIntervention = /* GraphQL */ `
           id
           interventionID
           contentID
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          content {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           createdAt
           updatedAt
           _version
@@ -396,33 +328,6 @@ export const getIntervention = /* GraphQL */ `
       }
       surveys {
         items {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          questions {
-            id
-            type
-            isFollowUpQuestion
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           surveyType
           schemeVersion
           id
@@ -441,25 +346,6 @@ export const getIntervention = /* GraphQL */ `
           id
           interventionID
           interventionTagID
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          interventionTag {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           createdAt
           updatedAt
           _version
@@ -475,27 +361,6 @@ export const getIntervention = /* GraphQL */ `
           id
           levelID
           interventionID
-          level {
-            parentLevelID
-            interventionsAreAllowed
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           createdAt
           updatedAt
           _version
@@ -532,60 +397,19 @@ export const listInterventions = /* GraphQL */ `
         }
         interventionType
         contents {
-          items {
-            id
-            interventionID
-            contentID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         surveys {
-          items {
-            surveyType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            interventionSurveysId
-          }
           nextToken
           startedAt
         }
         tags {
-          items {
-            id
-            interventionID
-            interventionTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         schemeVersion
         levels {
-          items {
-            id
-            levelID
-            interventionID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -625,60 +449,19 @@ export const syncInterventions = /* GraphQL */ `
         }
         interventionType
         contents {
-          items {
-            id
-            interventionID
-            contentID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         surveys {
-          items {
-            surveyType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            interventionSurveysId
-          }
           nextToken
           startedAt
         }
         tags {
-          items {
-            id
-            interventionID
-            interventionTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         schemeVersion
         levels {
-          items {
-            id
-            levelID
-            interventionID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -710,25 +493,6 @@ export const getContent = /* GraphQL */ `
           id
           interventionID
           contentID
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          content {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           createdAt
           updatedAt
           _version
@@ -743,24 +507,6 @@ export const getContent = /* GraphQL */ `
           id
           contentID
           contentTagID
-          content {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          contentTag {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           createdAt
           updatedAt
           _version
@@ -797,30 +543,10 @@ export const listContents = /* GraphQL */ `
           languageTexts
         }
         interventions {
-          items {
-            id
-            interventionID
-            contentID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         tags {
-          items {
-            id
-            contentID
-            contentTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -860,30 +586,10 @@ export const syncContents = /* GraphQL */ `
           languageTexts
         }
         interventions {
-          items {
-            id
-            interventionID
-            contentID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         tags {
-          items {
-            id
-            contentID
-            contentTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -922,60 +628,19 @@ export const getSurvey = /* GraphQL */ `
         }
         interventionType
         contents {
-          items {
-            id
-            interventionID
-            contentID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         surveys {
-          items {
-            surveyType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            interventionSurveysId
-          }
           nextToken
           startedAt
         }
         tags {
-          items {
-            id
-            interventionID
-            interventionTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         schemeVersion
         levels {
-          items {
-            id
-            levelID
-            interventionID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -995,10 +660,6 @@ export const getSurvey = /* GraphQL */ `
         type
         questionOptions {
           id
-          text {
-            languageKeys
-            languageTexts
-          }
           followUpQuestionID
         }
         isFollowUpQuestion
@@ -1008,26 +669,6 @@ export const getSurvey = /* GraphQL */ `
           id
           surveyID
           surveyTagID
-          survey {
-            surveyType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            interventionSurveysId
-          }
-          surveyTag {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           createdAt
           updatedAt
           _version
@@ -1066,32 +707,8 @@ export const listSurveys = /* GraphQL */ `
           languageTexts
         }
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -1101,28 +718,10 @@ export const listSurveys = /* GraphQL */ `
         }
         questions {
           id
-          text {
-            languageKeys
-            languageTexts
-          }
           type
-          questionOptions {
-            id
-            followUpQuestionID
-          }
           isFollowUpQuestion
         }
         tags {
-          items {
-            id
-            surveyID
-            surveyTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -1164,32 +763,8 @@ export const syncSurveys = /* GraphQL */ `
           languageTexts
         }
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -1199,28 +774,10 @@ export const syncSurveys = /* GraphQL */ `
         }
         questions {
           id
-          text {
-            languageKeys
-            languageTexts
-          }
           type
-          questionOptions {
-            id
-            followUpQuestionID
-          }
           isFollowUpQuestion
         }
         tags {
-          items {
-            id
-            surveyID
-            surveyTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -1263,25 +820,11 @@ export const getEntity = /* GraphQL */ `
         parentLevelID
         interventionsAreAllowed
         allowedInterventions {
-          items {
-            id
-            levelID
-            interventionID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         customData {
           id
-          name {
-            languageKeys
-            languageTexts
-          }
           type
         }
         schemeVersion
@@ -1305,36 +848,6 @@ export const getEntity = /* GraphQL */ `
       }
       appliedInterventions {
         items {
-          whoDidIt {
-            firstName
-            lastName
-            bio
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          location {
-            latitude
-            longitude
-          }
-          executedSurveys {
-            nextToken
-            startedAt
-          }
           schemeVersion
           id
           createdAt
@@ -1378,24 +891,8 @@ export const listEntities = /* GraphQL */ `
         }
         parentEntityID
         level {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           parentLevelID
           interventionsAreAllowed
-          allowedInterventions {
-            nextToken
-            startedAt
-          }
-          customData {
-            id
-            type
-          }
           schemeVersion
           id
           createdAt
@@ -1416,18 +913,6 @@ export const listEntities = /* GraphQL */ `
           stringValue
         }
         appliedInterventions {
-          items {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            entityAppliedInterventionsId
-            appliedInterventionWhoDidItId
-            appliedInterventionInterventionId
-          }
           nextToken
           startedAt
         }
@@ -1469,24 +954,8 @@ export const syncEntities = /* GraphQL */ `
         }
         parentEntityID
         level {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           parentLevelID
           interventionsAreAllowed
-          allowedInterventions {
-            nextToken
-            startedAt
-          }
-          customData {
-            id
-            type
-          }
           schemeVersion
           id
           createdAt
@@ -1507,18 +976,6 @@ export const syncEntities = /* GraphQL */ `
           stringValue
         }
         appliedInterventions {
-          items {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            entityAppliedInterventionsId
-            appliedInterventionWhoDidItId
-            appliedInterventionInterventionId
-          }
           nextToken
           startedAt
         }
@@ -1566,60 +1023,19 @@ export const getAppliedIntervention = /* GraphQL */ `
         }
         interventionType
         contents {
-          items {
-            id
-            interventionID
-            contentID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         surveys {
-          items {
-            surveyType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            interventionSurveysId
-          }
           nextToken
           startedAt
         }
         tags {
-          items {
-            id
-            interventionID
-            interventionTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         schemeVersion
         levels {
-          items {
-            id
-            levelID
-            interventionID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -1636,53 +1052,7 @@ export const getAppliedIntervention = /* GraphQL */ `
       }
       executedSurveys {
         items {
-          appliedIntervention {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            entityAppliedInterventionsId
-            appliedInterventionWhoDidItId
-            appliedInterventionInterventionId
-          }
-          survey {
-            surveyType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            interventionSurveysId
-          }
-          whoExecutedIt {
-            firstName
-            lastName
-            bio
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           date
-          location {
-            latitude
-            longitude
-          }
-          answers {
-            id
-            questionID
-            date
-            type
-            text
-          }
           schemeVersion
           id
           createdAt
@@ -1726,10 +1096,6 @@ export const listAppliedInterventions = /* GraphQL */ `
           firstName
           lastName
           bio
-          permissions {
-            permissionType
-            allowedEntities
-          }
           schemeVersion
           id
           createdAt
@@ -1739,32 +1105,8 @@ export const listAppliedInterventions = /* GraphQL */ `
           _lastChangedAt
         }
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -1777,19 +1119,6 @@ export const listAppliedInterventions = /* GraphQL */ `
           longitude
         }
         executedSurveys {
-          items {
-            date
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            appliedInterventionExecutedSurveysId
-            executedSurveySurveyId
-            executedSurveyWhoExecutedItId
-          }
           nextToken
           startedAt
         }
@@ -1827,10 +1156,6 @@ export const syncAppliedInterventions = /* GraphQL */ `
           firstName
           lastName
           bio
-          permissions {
-            permissionType
-            allowedEntities
-          }
           schemeVersion
           id
           createdAt
@@ -1840,32 +1165,8 @@ export const syncAppliedInterventions = /* GraphQL */ `
           _lastChangedAt
         }
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -1878,19 +1179,6 @@ export const syncAppliedInterventions = /* GraphQL */ `
           longitude
         }
         executedSurveys {
-          items {
-            date
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            appliedInterventionExecutedSurveysId
-            executedSurveySurveyId
-            executedSurveyWhoExecutedItId
-          }
           nextToken
           startedAt
         }
@@ -1918,10 +1206,6 @@ export const getExecutedSurvey = /* GraphQL */ `
           firstName
           lastName
           bio
-          permissions {
-            permissionType
-            allowedEntities
-          }
           schemeVersion
           id
           createdAt
@@ -1931,32 +1215,8 @@ export const getExecutedSurvey = /* GraphQL */ `
           _lastChangedAt
         }
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -1969,19 +1229,6 @@ export const getExecutedSurvey = /* GraphQL */ `
           longitude
         }
         executedSurveys {
-          items {
-            date
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            appliedInterventionExecutedSurveysId
-            executedSurveySurveyId
-            executedSurveyWhoExecutedItId
-          }
           nextToken
           startedAt
         }
@@ -2006,32 +1253,8 @@ export const getExecutedSurvey = /* GraphQL */ `
           languageTexts
         }
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -2041,28 +1264,10 @@ export const getExecutedSurvey = /* GraphQL */ `
         }
         questions {
           id
-          text {
-            languageKeys
-            languageTexts
-          }
           type
-          questionOptions {
-            id
-            followUpQuestionID
-          }
           isFollowUpQuestion
         }
         tags {
-          items {
-            id
-            surveyID
-            surveyTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -2105,10 +1310,6 @@ export const getExecutedSurvey = /* GraphQL */ `
         text
         questionOptions {
           id
-          text {
-            languageKeys
-            languageTexts
-          }
           followUpQuestionID
         }
         markings {
@@ -2141,36 +1342,6 @@ export const listExecutedSurveys = /* GraphQL */ `
     listExecutedSurveys(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         appliedIntervention {
-          whoDidIt {
-            firstName
-            lastName
-            bio
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          location {
-            latitude
-            longitude
-          }
-          executedSurveys {
-            nextToken
-            startedAt
-          }
           schemeVersion
           id
           createdAt
@@ -2183,33 +1354,6 @@ export const listExecutedSurveys = /* GraphQL */ `
           appliedInterventionInterventionId
         }
         survey {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          questions {
-            id
-            type
-            isFollowUpQuestion
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           surveyType
           schemeVersion
           id
@@ -2224,10 +1368,6 @@ export const listExecutedSurveys = /* GraphQL */ `
           firstName
           lastName
           bio
-          permissions {
-            permissionType
-            allowedEntities
-          }
           schemeVersion
           id
           createdAt
@@ -2247,17 +1387,6 @@ export const listExecutedSurveys = /* GraphQL */ `
           date
           type
           text
-          questionOptions {
-            id
-            followUpQuestionID
-          }
-          markings {
-            x
-            y
-            rx
-            ry
-            text
-          }
         }
         schemeVersion
         id
@@ -2290,36 +1419,6 @@ export const syncExecutedSurveys = /* GraphQL */ `
     ) {
       items {
         appliedIntervention {
-          whoDidIt {
-            firstName
-            lastName
-            bio
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          location {
-            latitude
-            longitude
-          }
-          executedSurveys {
-            nextToken
-            startedAt
-          }
           schemeVersion
           id
           createdAt
@@ -2332,33 +1431,6 @@ export const syncExecutedSurveys = /* GraphQL */ `
           appliedInterventionInterventionId
         }
         survey {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          questions {
-            id
-            type
-            isFollowUpQuestion
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           surveyType
           schemeVersion
           id
@@ -2373,10 +1445,6 @@ export const syncExecutedSurveys = /* GraphQL */ `
           firstName
           lastName
           bio
-          permissions {
-            permissionType
-            allowedEntities
-          }
           schemeVersion
           id
           createdAt
@@ -2396,17 +1464,6 @@ export const syncExecutedSurveys = /* GraphQL */ `
           date
           type
           text
-          questionOptions {
-            id
-            followUpQuestionID
-          }
-          markings {
-            x
-            y
-            rx
-            ry
-            text
-          }
         }
         schemeVersion
         id
@@ -2462,24 +1519,8 @@ export const getTask = /* GraphQL */ `
         }
         parentEntityID
         level {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           parentLevelID
           interventionsAreAllowed
-          allowedInterventions {
-            nextToken
-            startedAt
-          }
-          customData {
-            id
-            type
-          }
           schemeVersion
           id
           createdAt
@@ -2500,18 +1541,6 @@ export const getTask = /* GraphQL */ `
           stringValue
         }
         appliedInterventions {
-          items {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            entityAppliedInterventionsId
-            appliedInterventionWhoDidItId
-            appliedInterventionInterventionId
-          }
           nextToken
           startedAt
         }
@@ -2529,10 +1558,6 @@ export const getTask = /* GraphQL */ `
           firstName
           lastName
           bio
-          permissions {
-            permissionType
-            allowedEntities
-          }
           schemeVersion
           id
           createdAt
@@ -2542,32 +1567,8 @@ export const getTask = /* GraphQL */ `
           _lastChangedAt
         }
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -2580,19 +1581,6 @@ export const getTask = /* GraphQL */ `
           longitude
         }
         executedSurveys {
-          items {
-            date
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            appliedInterventionExecutedSurveysId
-            executedSurveySurveyId
-            executedSurveyWhoExecutedItId
-          }
           nextToken
           startedAt
         }
@@ -2609,36 +1597,6 @@ export const getTask = /* GraphQL */ `
       }
       executedSurvey {
         appliedIntervention {
-          whoDidIt {
-            firstName
-            lastName
-            bio
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          location {
-            latitude
-            longitude
-          }
-          executedSurveys {
-            nextToken
-            startedAt
-          }
           schemeVersion
           id
           createdAt
@@ -2651,33 +1609,6 @@ export const getTask = /* GraphQL */ `
           appliedInterventionInterventionId
         }
         survey {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          questions {
-            id
-            type
-            isFollowUpQuestion
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           surveyType
           schemeVersion
           id
@@ -2692,10 +1623,6 @@ export const getTask = /* GraphQL */ `
           firstName
           lastName
           bio
-          permissions {
-            permissionType
-            allowedEntities
-          }
           schemeVersion
           id
           createdAt
@@ -2715,17 +1642,6 @@ export const getTask = /* GraphQL */ `
           date
           type
           text
-          questionOptions {
-            id
-            followUpQuestionID
-          }
-          markings {
-            x
-            y
-            rx
-            ry
-            text
-          }
         }
         schemeVersion
         id
@@ -2772,10 +1688,6 @@ export const listTasks = /* GraphQL */ `
           firstName
           lastName
           bio
-          permissions {
-            permissionType
-            allowedEntities
-          }
           schemeVersion
           id
           createdAt
@@ -2785,41 +1697,7 @@ export const listTasks = /* GraphQL */ `
           _lastChangedAt
         }
         entity {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           parentEntityID
-          level {
-            parentLevelID
-            interventionsAreAllowed
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          location {
-            latitude
-            longitude
-          }
-          customData {
-            customDataID
-            type
-            name
-            intValue
-            stringValue
-          }
-          appliedInterventions {
-            nextToken
-            startedAt
-          }
           schemeVersion
           id
           createdAt
@@ -2830,36 +1708,6 @@ export const listTasks = /* GraphQL */ `
           entityLevelId
         }
         appliedIntervention {
-          whoDidIt {
-            firstName
-            lastName
-            bio
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          location {
-            latitude
-            longitude
-          }
-          executedSurveys {
-            nextToken
-            startedAt
-          }
           schemeVersion
           id
           createdAt
@@ -2872,53 +1720,7 @@ export const listTasks = /* GraphQL */ `
           appliedInterventionInterventionId
         }
         executedSurvey {
-          appliedIntervention {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            entityAppliedInterventionsId
-            appliedInterventionWhoDidItId
-            appliedInterventionInterventionId
-          }
-          survey {
-            surveyType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            interventionSurveysId
-          }
-          whoExecutedIt {
-            firstName
-            lastName
-            bio
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           date
-          location {
-            latitude
-            longitude
-          }
-          answers {
-            id
-            questionID
-            date
-            type
-            text
-          }
           schemeVersion
           id
           createdAt
@@ -2973,10 +1775,6 @@ export const syncTasks = /* GraphQL */ `
           firstName
           lastName
           bio
-          permissions {
-            permissionType
-            allowedEntities
-          }
           schemeVersion
           id
           createdAt
@@ -2986,41 +1784,7 @@ export const syncTasks = /* GraphQL */ `
           _lastChangedAt
         }
         entity {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           parentEntityID
-          level {
-            parentLevelID
-            interventionsAreAllowed
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          location {
-            latitude
-            longitude
-          }
-          customData {
-            customDataID
-            type
-            name
-            intValue
-            stringValue
-          }
-          appliedInterventions {
-            nextToken
-            startedAt
-          }
           schemeVersion
           id
           createdAt
@@ -3031,36 +1795,6 @@ export const syncTasks = /* GraphQL */ `
           entityLevelId
         }
         appliedIntervention {
-          whoDidIt {
-            firstName
-            lastName
-            bio
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          location {
-            latitude
-            longitude
-          }
-          executedSurveys {
-            nextToken
-            startedAt
-          }
           schemeVersion
           id
           createdAt
@@ -3073,53 +1807,7 @@ export const syncTasks = /* GraphQL */ `
           appliedInterventionInterventionId
         }
         executedSurvey {
-          appliedIntervention {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            entityAppliedInterventionsId
-            appliedInterventionWhoDidItId
-            appliedInterventionInterventionId
-          }
-          survey {
-            surveyType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            interventionSurveysId
-          }
-          whoExecutedIt {
-            firstName
-            lastName
-            bio
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           date
-          location {
-            latitude
-            longitude
-          }
-          answers {
-            id
-            questionID
-            date
-            type
-            text
-          }
           schemeVersion
           id
           createdAt
@@ -3161,24 +1849,6 @@ export const getContentTag = /* GraphQL */ `
           id
           contentID
           contentTagID
-          content {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          contentTag {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           createdAt
           updatedAt
           _version
@@ -3211,16 +1881,6 @@ export const listContentTags = /* GraphQL */ `
         }
         schemeVersion
         contents {
-          items {
-            id
-            contentID
-            contentTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -3256,16 +1916,6 @@ export const syncContentTags = /* GraphQL */ `
         }
         schemeVersion
         contents {
-          items {
-            id
-            contentID
-            contentTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -3294,25 +1944,6 @@ export const getInterventionTag = /* GraphQL */ `
           id
           interventionID
           interventionTagID
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          interventionTag {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           createdAt
           updatedAt
           _version
@@ -3349,16 +1980,6 @@ export const listInterventionTags = /* GraphQL */ `
         }
         schemeVersion
         interventions {
-          items {
-            id
-            interventionID
-            interventionTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -3394,16 +2015,6 @@ export const syncInterventionTags = /* GraphQL */ `
         }
         schemeVersion
         interventions {
-          items {
-            id
-            interventionID
-            interventionTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -3432,26 +2043,6 @@ export const getSurveyTag = /* GraphQL */ `
           id
           surveyID
           surveyTagID
-          survey {
-            surveyType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            interventionSurveysId
-          }
-          surveyTag {
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           createdAt
           updatedAt
           _version
@@ -3484,16 +2075,6 @@ export const listSurveyTags = /* GraphQL */ `
         }
         schemeVersion
         surveys {
-          items {
-            id
-            surveyID
-            surveyTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -3529,16 +2110,6 @@ export const syncSurveyTags = /* GraphQL */ `
         }
         schemeVersion
         surveys {
-          items {
-            id
-            surveyID
-            surveyTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -3651,25 +2222,11 @@ export const getLevelInterventionRelation = /* GraphQL */ `
         parentLevelID
         interventionsAreAllowed
         allowedInterventions {
-          items {
-            id
-            levelID
-            interventionID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         customData {
           id
-          name {
-            languageKeys
-            languageTexts
-          }
           type
         }
         schemeVersion
@@ -3691,60 +2248,19 @@ export const getLevelInterventionRelation = /* GraphQL */ `
         }
         interventionType
         contents {
-          items {
-            id
-            interventionID
-            contentID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         surveys {
-          items {
-            surveyType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            interventionSurveysId
-          }
           nextToken
           startedAt
         }
         tags {
-          items {
-            id
-            interventionID
-            interventionTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         schemeVersion
         levels {
-          items {
-            id
-            levelID
-            interventionID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -3779,24 +2295,8 @@ export const listLevelInterventionRelations = /* GraphQL */ `
         levelID
         interventionID
         level {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           parentLevelID
           interventionsAreAllowed
-          allowedInterventions {
-            nextToken
-            startedAt
-          }
-          customData {
-            id
-            type
-          }
           schemeVersion
           id
           createdAt
@@ -3806,32 +2306,8 @@ export const listLevelInterventionRelations = /* GraphQL */ `
           _lastChangedAt
         }
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -3868,24 +2344,8 @@ export const syncLevelInterventionRelations = /* GraphQL */ `
         levelID
         interventionID
         level {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           parentLevelID
           interventionsAreAllowed
-          allowedInterventions {
-            nextToken
-            startedAt
-          }
-          customData {
-            id
-            type
-          }
           schemeVersion
           id
           createdAt
@@ -3895,32 +2355,8 @@ export const syncLevelInterventionRelations = /* GraphQL */ `
           _lastChangedAt
         }
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -3956,60 +2392,19 @@ export const getInterventionContentRelation = /* GraphQL */ `
         }
         interventionType
         contents {
-          items {
-            id
-            interventionID
-            contentID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         surveys {
-          items {
-            surveyType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            interventionSurveysId
-          }
           nextToken
           startedAt
         }
         tags {
-          items {
-            id
-            interventionID
-            interventionTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         schemeVersion
         levels {
-          items {
-            id
-            levelID
-            interventionID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -4030,30 +2425,10 @@ export const getInterventionContentRelation = /* GraphQL */ `
           languageTexts
         }
         interventions {
-          items {
-            id
-            interventionID
-            contentID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         tags {
-          items {
-            id
-            contentID
-            contentTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -4089,32 +2464,8 @@ export const listInterventionContentRelations = /* GraphQL */ `
         interventionID
         contentID
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -4123,22 +2474,6 @@ export const listInterventionContentRelations = /* GraphQL */ `
           _lastChangedAt
         }
         content {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
-          interventions {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
           id
           createdAt
@@ -4176,32 +2511,8 @@ export const syncInterventionContentRelations = /* GraphQL */ `
         interventionID
         contentID
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -4210,22 +2521,6 @@ export const syncInterventionContentRelations = /* GraphQL */ `
           _lastChangedAt
         }
         content {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
-          interventions {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
           id
           createdAt
@@ -4262,60 +2557,19 @@ export const getInterventionInterventionTagRelation = /* GraphQL */ `
         }
         interventionType
         contents {
-          items {
-            id
-            interventionID
-            contentID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         surveys {
-          items {
-            surveyType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            interventionSurveysId
-          }
           nextToken
           startedAt
         }
         tags {
-          items {
-            id
-            interventionID
-            interventionTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         schemeVersion
         levels {
-          items {
-            id
-            levelID
-            interventionID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -4333,16 +2587,6 @@ export const getInterventionInterventionTagRelation = /* GraphQL */ `
         }
         schemeVersion
         interventions {
-          items {
-            id
-            interventionID
-            interventionTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -4377,32 +2621,8 @@ export const listInterventionInterventionTagRelations = /* GraphQL */ `
         interventionID
         interventionTagID
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -4411,15 +2631,7 @@ export const listInterventionInterventionTagRelations = /* GraphQL */ `
           _lastChangedAt
         }
         interventionTag {
-          text {
-            languageKeys
-            languageTexts
-          }
           schemeVersion
-          interventions {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -4456,32 +2668,8 @@ export const syncInterventionInterventionTagRelations = /* GraphQL */ `
         interventionID
         interventionTagID
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -4490,15 +2678,7 @@ export const syncInterventionInterventionTagRelations = /* GraphQL */ `
           _lastChangedAt
         }
         interventionTag {
-          text {
-            languageKeys
-            languageTexts
-          }
           schemeVersion
-          interventions {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -4533,30 +2713,10 @@ export const getContentContentTagRelation = /* GraphQL */ `
           languageTexts
         }
         interventions {
-          items {
-            id
-            interventionID
-            contentID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
         tags {
-          items {
-            id
-            contentID
-            contentTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -4575,16 +2735,6 @@ export const getContentContentTagRelation = /* GraphQL */ `
         }
         schemeVersion
         contents {
-          items {
-            id
-            contentID
-            contentTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -4619,22 +2769,6 @@ export const listContentContentTagRelations = /* GraphQL */ `
         contentID
         contentTagID
         content {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
-          interventions {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
           id
           createdAt
@@ -4644,15 +2778,7 @@ export const listContentContentTagRelations = /* GraphQL */ `
           _lastChangedAt
         }
         contentTag {
-          text {
-            languageKeys
-            languageTexts
-          }
           schemeVersion
-          contents {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -4689,22 +2815,6 @@ export const syncContentContentTagRelations = /* GraphQL */ `
         contentID
         contentTagID
         content {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
-          interventions {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
           id
           createdAt
@@ -4714,15 +2824,7 @@ export const syncContentContentTagRelations = /* GraphQL */ `
           _lastChangedAt
         }
         contentTag {
-          text {
-            languageKeys
-            languageTexts
-          }
           schemeVersion
-          contents {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -4757,32 +2859,8 @@ export const getSurveySurveyTagRelation = /* GraphQL */ `
           languageTexts
         }
         intervention {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
           interventionType
-          contents {
-            nextToken
-            startedAt
-          }
-          surveys {
-            nextToken
-            startedAt
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           schemeVersion
-          levels {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -4792,28 +2870,10 @@ export const getSurveySurveyTagRelation = /* GraphQL */ `
         }
         questions {
           id
-          text {
-            languageKeys
-            languageTexts
-          }
           type
-          questionOptions {
-            id
-            followUpQuestionID
-          }
           isFollowUpQuestion
         }
         tags {
-          items {
-            id
-            surveyID
-            surveyTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -4834,16 +2894,6 @@ export const getSurveySurveyTagRelation = /* GraphQL */ `
         }
         schemeVersion
         surveys {
-          items {
-            id
-            surveyID
-            surveyTagID
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
           nextToken
           startedAt
         }
@@ -4878,33 +2928,6 @@ export const listSurveySurveyTagRelations = /* GraphQL */ `
         surveyID
         surveyTagID
         survey {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          questions {
-            id
-            type
-            isFollowUpQuestion
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           surveyType
           schemeVersion
           id
@@ -4916,15 +2939,7 @@ export const listSurveySurveyTagRelations = /* GraphQL */ `
           interventionSurveysId
         }
         surveyTag {
-          text {
-            languageKeys
-            languageTexts
-          }
           schemeVersion
-          surveys {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt
@@ -4961,33 +2976,6 @@ export const syncSurveySurveyTagRelations = /* GraphQL */ `
         surveyID
         surveyTagID
         survey {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
-          intervention {
-            interventionType
-            schemeVersion
-            id
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-          }
-          questions {
-            id
-            type
-            isFollowUpQuestion
-          }
-          tags {
-            nextToken
-            startedAt
-          }
           surveyType
           schemeVersion
           id
@@ -4999,15 +2987,7 @@ export const syncSurveySurveyTagRelations = /* GraphQL */ `
           interventionSurveysId
         }
         surveyTag {
-          text {
-            languageKeys
-            languageTexts
-          }
           schemeVersion
-          surveys {
-            nextToken
-            startedAt
-          }
           id
           createdAt
           updatedAt

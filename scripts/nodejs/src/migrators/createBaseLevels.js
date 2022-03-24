@@ -7,6 +7,7 @@ import mlString from '../utils/stringFormatter.js';
 
 const createBaseLevels = async () => {
     try {
+        console.log("creating pueblo");
         let response = await API.graphql({
         query: mutations.createLevel,
         variables: {input: {
@@ -21,6 +22,7 @@ const createBaseLevels = async () => {
         }},
     })
     const villageLevel = response.data.createLevel;
+    console.log("created pueblo");
 
     console.log("Created villageLevel entry:");
     console.log(villageLevel);

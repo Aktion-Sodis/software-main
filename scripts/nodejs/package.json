@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-amplify": "^4.3.15",
+    "aws-amplify": "^4.3.17",
     "dotenv": "^16.0.0",
     "esm": "^3.2.25",
     "mysql": "^2.18.1"
