@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/backend/Blocs/auth/auth_cubit.dart';
 import 'package:mobile_app/backend/Blocs/auth/auth_repository.dart';
-import 'package:mobile_app/backend/Blocs/inapp/inapp_bloc.dart';
-import 'package:mobile_app/backend/Blocs/inapp/inapp_state.dart';
+import 'package:mobile_app/backend/Blocs/in_app/in_app_bloc.dart';
+import 'package:mobile_app/backend/Blocs/in_app/in_app_events.dart';
+import 'package:mobile_app/backend/Blocs/in_app/in_app_state.dart';
 import 'package:mobile_app/backend/Blocs/session/session_cubit.dart';
 import 'package:mobile_app/backend/Blocs/session/session_state.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_state.dart';
+import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
 import 'package:mobile_app/backend/repositories/UserRepository.dart';
 import 'package:mobile_app/frontend/pages/loading_view.dart';
 import 'package:mobile_app/frontend/pages/login_view.dart';
@@ -17,6 +19,8 @@ import 'package:mobile_app/frontend/pages/user_data_view.dart';
 import 'package:mobile_app/frontend/session_view.dart';
 
 import 'backend/Blocs/auth/auth_repository.dart';
+import 'backend/callableModels/Survey.dart';
+import 'frontend/pages/survey.dart';
 
 class AppNavigator extends StatelessWidget {
   const AppNavigator({Key? key}) : super(key: key);
@@ -65,13 +69,12 @@ class AppNavigator extends StatelessWidget {
                                   create: (context) => InAppBloc(),
                                   child: BlocBuilder<InAppBloc, InAppState>(
                                       builder: (context, inAppState) {
-                                    //todo: change to switch
-                                    if (inAppState.currentArea ==
-                                        CurrentArea.MAIN_MENU) {
-                                      return MainMenu();
-                                    } else {
-                                      return Scaffold(body: Container());
+                                    if(inAppState is MainInAppState){
+                                      return const MainMenu();
+                                    }else if(inAppState is SurveyInAppState){
+                                      return SurveyWidget(survey: inAppState.survey);
                                     }
+                                    return Scaffold(body: Container());
                                   })))
 
                         ///hier beginnt der beef/App-Inhalt

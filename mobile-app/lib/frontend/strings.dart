@@ -41,7 +41,15 @@ Map<String, dynamic> stringMap = {
     "main_menu_home": "Home",
     "main_menu_organization": "Organization",
     "main_menu_tasks": "Tasks",
-    "main_menu_wiki": "Wiki"
+    "main_menu_wiki": "Wiki",
+    "question_type_descriptions":{
+      "sc" : "One answer only",
+      "mc" : "Multiple answers possible",
+      "text_field": "Write down your answer",
+    },
+    "summary":"summary",
+    "end_survey":"Are you sure you want to end the survey?",
+    "saved_survey":"Thank you for answering the survey",
   }
 };
 
@@ -110,3 +118,10 @@ String get or => stringMap[currentLanguage]["or"];
 String get google_sign_in => stringMap[currentLanguage]["google_sign_in"];
 
 String get test_list => stringMap[currentLanguage]["test_list"];
+
+String get singleChoiceTypeDescription => stringMap[currentLanguage]["question_type_descriptions"]["sc"];
+String get multipleChoiceTypeDescription => stringMap[currentLanguage]["question_type_descriptions"]["mc"];
+String get textFieldTypeDescription => stringMap[currentLanguage]["question_type_descriptions"]["text_field"];
+String get summary => stringMap[currentLanguage]["summary"];
+String get endSurvey => stringMap[currentLanguage]["end_survey"];
+String get savedSurvey => stringMap[currentLanguage]["saved_survey"];
