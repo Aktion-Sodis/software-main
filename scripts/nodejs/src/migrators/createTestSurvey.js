@@ -94,5 +94,40 @@ await API.graphql({
         console.log(e);
     }
 
+    const testContent = {
+        name: mlString("Important Paper"),
+        description: mlString("Created by Laura, Larissa and Kianna.")
+    }
+
+    try {
+        const content = await API.graphql({
+            query: mutations.createContent,
+            variables: {input: testContent}
+        });
+        const contentInterventionoRelation = {
+            contentID: content.data.createContent.id,
+            interventionID: "6"
+        }
+        const createdContentRelation = await API.graphql({
+            query: mutations.createInterventionContentRelation,
+            variables: {
+                input: contentInterventionoRelation
+            }
+        });
+        const contentContentTagRelation = {
+            contentID: content.data.createContent.id,
+            contentTagID: "migration_tag"
+        }
+        const createdContentContentTagRelation = await API.graphql({
+            query: mutations.createContentContentTagRelation,
+            variables: {
+                input: contentContentTagRelation
+            }
+        })
+    }catch(e) {
+        console.log("error in creation of content");
+        console.log(e);
+    }
+
      
 }
