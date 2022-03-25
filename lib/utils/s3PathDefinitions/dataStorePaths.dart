@@ -23,8 +23,8 @@ enum DataStorePaths {
   questionAudioAnswerPath,
   appliedInterventionPicPath,
   entityPicPath,
-  taskPicPath,
-  taskAudioPath
+  taskPicPathes,
+  taskAudioPathes
 }
 
 ///Map of ontoligies including the replacable parameters
@@ -85,12 +85,12 @@ final Map<DataStorePaths, dynamic> databaseOntologies = {
     "path": "entityFiles/entityID/pic.png",
     "toBeReplaced": ["entityID"],
   },
-  DataStorePaths.taskPicPath: {
-    "path": "taskFiles/taskID/pic.png",
+  DataStorePaths.taskPicPathes: {
+    "path": "taskFiles/taskID/pic",
     "toBeReplaced": ["taskID"]
   },
-  DataStorePaths.taskAudioPath: {
-    "path": "taskFiles/taskID/audio.mp3",
+  DataStorePaths.taskAudioPathes: {
+    "path": "taskFiles/taskID/audio",
     "toBeReplaced": ["taskID"],
   },
 };

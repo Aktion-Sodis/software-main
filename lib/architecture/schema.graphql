@@ -161,7 +161,7 @@ type Location {
 type AppliedCustomData {
   customDataID: ID! # todo: we might possibly annotate the connection
   type: Type!
-  name: String!
+  name: I18nString!
   intValue: Int
   stringValue: String
 }
@@ -173,6 +173,7 @@ type AppliedIntervention @model {
   whoDidIt: User! @hasOne
   intervention: Intervention! @hasOne
   location: Location
+  isOkay: Boolean @default(value: true)
   executedSurveys: [ExecutedSurvey!]! @hasMany
   schemeVersion: Int @default(value: "0")
 }
@@ -214,7 +215,7 @@ type Task @model {
   dueDate: AWSDateTime
   finishedDate: AWSDateTime
   location: Location
-  user: User! @hasOne
+  user: User! @hasOne @index(name: "byUser", queryField: "taskByUserID")
   entity: Entity @hasOne
   appliedIntervention: AppliedIntervention @hasOne
   executedSurvey: ExecutedSurvey @hasOne
