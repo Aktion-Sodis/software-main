@@ -76,7 +76,11 @@ Map<String, dynamic> stringMap = {
     "days": "days",
     "tasks_more_behind": "More behind",
     "profile": "Profile",
-    "user_update": "Save changes"
+    "user_update": "Save changes",
+    "abort_survey": "Abort survey?",
+    "abort_survey_warn": "You wont be able to proceed later and will have to start again",
+    "confirm_abort": "Abort",
+    "do_not_abort": "Continue",
   }
 };
 
@@ -225,3 +229,7 @@ String get textFieldTypeDescription =>
 String get summary => stringMap[currentLanguage]["summary"];
 String get endSurvey => stringMap[currentLanguage]["end_survey"];
 String get savedSurvey => stringMap[currentLanguage]["saved_survey"];
+String get abortSurvey  => stringMap[currentLanguage]["abort_survey"];
+String get abortSurveyText  => stringMap[currentLanguage]["abort_survey_warn"];
+String get confirmAbort  => stringMap[currentLanguage]["confirm_abort"];
+String get doNotAbort  => stringMap[currentLanguage]["do_not_abort"];

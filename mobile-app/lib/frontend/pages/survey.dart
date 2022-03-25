@@ -82,7 +82,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
                 onProceed: () async {
                   await saveSurvey(
                       context: context,
-                      answers: answers,
+                      answers: answers.values.toList(),
                       survey: widget.survey);
                   _pageController.nextPage(
                       duration: _pageSlideDuration, curve: _pageSlideCurve);
@@ -163,8 +163,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
       required Survey survey,
       required Map<Question, QuestionAnswer> answers,
       QuestionEditor? onEditGenerator,
-      required onDismiss,
-      required onProceed}) {
+        onDismiss,
+        onProceed}) {
     return Column(
       children: [
         SizedBox(
@@ -213,7 +213,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
             ],
           ),
         ),
-        Padding(
+        if(!(onProceed==null&&onDismiss==null)) Padding(
           padding: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -225,7 +225,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
             ],
           ),
         ),
-        SizedBox(
+        if(!(onProceed==null&&onDismiss==null)) SizedBox(
           height: defaultPadding(context),
         ),
       ],
@@ -456,8 +456,53 @@ class SurveyWidgetState extends State<SurveyWidget> {
     _inSurveyPageController.jumpToPage(questions.indexOf(targetQuestion));
   }
 
-  void _dismissSurvey() {}
-  void _leaveSurveyRegular() {}
+  void _dismissSurvey() async{
+    bool confirmation = await showDialog(context: context, builder: (context) => AlertDialog(
+      title: Text(abortSurvey, style: Theme.of(context).textTheme.bodyText1),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              abortSurveyText
+            ),
+          ),
+          SizedBox(
+            height: defaultPadding(context),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              MaterialButton(
+                  child: Padding(
+                    padding: EdgeInsets.all(defaultPadding(context)),
+                    child: Text(confirmAbort, style: Theme.of(context).textTheme.bodyText1,),
+                  ),
+                  onPressed: (){
+                  Navigator.of(context).pop(true);
+              }),
+              MaterialButton(
+
+                  child: Padding(
+                    padding: EdgeInsets.all(defaultPadding(context)),
+                    child: Text(doNotAbort, style: Theme.of(context).textTheme.bodyText1,),
+                  ),
+                  onPressed: (){
+                    Navigator.of(context).pop(false);
+                  }),
+            ],
+          ),
+        ],
+      )
+    ));
+    if(confirmation){
+      BlocProvider.of<InAppBloc>(context).add(MainViewEvent());
+    }
+  }
+  void _leaveSurveyRegular() {
+    BlocProvider.of<InAppBloc>(context).add(MainViewEvent());
+  }
 
   List<Widget> convertSurveyQuestionsToWidgetList(
       {required BuildContext context}) {
@@ -853,22 +898,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
   static Future<void> saveSurvey(
       {required Survey survey,
-      required Map<Question, QuestionAnswer> answers,
+      required List<QuestionAnswer> answers,
       required BuildContext context}) async {
-    List<QuestionAnswer> surveyAnswersAsList = List.generate(
-        survey.questions.length,
-        (index) => QuestionAnswer(
-            questionID: survey.questions[index].id!,
-            date: DateTime.now(),
-            type: survey.questions[index].type));
-    for (MapEntry<Question, QuestionAnswer> pair in answers.entries) {
-      int toReplace = surveyAnswersAsList
-          .indexWhere((element) => element.questionID == pair.key.id);
-      if (toReplace < 0) {
-        throw 'Answer for question that is not in survey ${survey.name} was given and assigned to this survey';
-      }
-      surveyAnswersAsList[toReplace] = pair.value;
-    }
     //todo: add location
     var surveyState = context.read<InAppBloc>().state as SurveyInAppState;
     var userState = context.read<UserBloc>().state;
@@ -877,7 +908,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
         survey: survey,
         whoExecutedIt: userState.user!,
         date: DateTime.now(),
-        answers: surveyAnswersAsList);
+        answers: answers);
     context.read<InAppBloc>().add(FinishAndSaveExecutedSurvey(
         executedSurvey, surveyState.appliedIntervention));
   }

@@ -1467,11 +1467,26 @@ class ExecutedSurveyHistory extends StatelessWidget {
 
 class ExecutedSurveyWidget extends StatelessWidget {
   final ExecutedSurvey executedSurvey;
-  ExecutedSurveyWidget(this.executedSurvey);
+
+  Map<Question, QuestionAnswer> mappedAnswers = {};
+
+  ExecutedSurveyWidget(this.executedSurvey){
+    for(Question question in executedSurvey.survey.questions){
+      var answers = executedSurvey.answers.where((element) => element.questionID == question.id);
+      QuestionAnswer? answer = answers.length>0?answers.first:null;
+      if(answer!=null){
+        mappedAnswers[question] = answer;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return true? surveyarea.SurveyWidgetState.summaryWidget(
+      survey: executedSurvey.survey,
+      answers: mappedAnswers,
+      context: context,
+    ):ListView.builder(
         itemBuilder: (context, index) {
           return surveyarea.SurveyWidgetState.questionSummary(
               question: executedSurvey.survey
