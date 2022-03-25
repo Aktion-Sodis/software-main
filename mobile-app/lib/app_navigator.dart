@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/backend/Blocs/auth/auth_cubit.dart';
 import 'package:mobile_app/backend/Blocs/auth/auth_repository.dart';
+import 'package:mobile_app/backend/Blocs/content/content_bloc.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_bloc.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_events.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_state.dart';
@@ -10,6 +11,7 @@ import 'package:mobile_app/backend/Blocs/session/session_state.dart';
 import 'package:mobile_app/backend/Blocs/task/task_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_state.dart';
+import 'package:mobile_app/backend/repositories/ContentRepository.dart';
 import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
 import 'package:mobile_app/backend/repositories/TaskRepository.dart';
 import 'package:mobile_app/backend/repositories/UserRepository.dart';
@@ -73,6 +75,8 @@ class AppNavigator extends StatelessWidget {
                           MaterialPage(
                               child: MultiRepositoryProvider(
                                   providers: [
+                                RepositoryProvider<ContentRepository>(
+                                    create: (context) => ContentRepository()),
                                 RepositoryProvider<EntityRepository>(
                                     create: (context) => EntityRepository()),
                                 RepositoryProvider<SurveyRepository>(
@@ -88,6 +92,10 @@ class AppNavigator extends StatelessWidget {
                                                 BlocProvider<InAppBloc>(
                                                     create: (context) =>
                                                         InAppBloc()),
+                                                BlocProvider<ContentBloc>(
+                                                    create: (context) =>
+                                                        ContentBloc(context.read<
+                                                            ContentRepository>())),
                                                 BlocProvider(
                                                     create: (context) =>
                                                         TaskBloc(TaskRepository(
