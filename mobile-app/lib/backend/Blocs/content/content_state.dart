@@ -12,6 +12,7 @@ class LoadedContentState extends ContentState {
 
   final List<Content> contentsToDisplay;
   final List<Intervention> selectedInterventions;
+  final List<Intervention> allInterventions;
 
   bool isSelectedIntervention(Intervention intervention) {
     return selectedInterventions
@@ -22,18 +23,21 @@ class LoadedContentState extends ContentState {
       {required this.allRelations,
       required this.allContents,
       required this.contentsToDisplay,
-      required this.selectedInterventions});
+      required this.selectedInterventions,
+      required this.allInterventions});
 
   LoadedContentState copyWith(
       {List<amp.InterventionContentRelation>? allRelations,
       List<Content>? allContents,
       List<Content>? contentsToDisplay,
-      List<Intervention>? selectedInterventions}) {
+      List<Intervention>? selectedInterventions,
+      List<Intervention>? allInterventions}) {
     return LoadedContentState(
         allRelations: allRelations ?? this.allRelations,
         allContents: allContents ?? this.allContents,
         contentsToDisplay: contentsToDisplay ?? this.contentsToDisplay,
         selectedInterventions:
-            selectedInterventions ?? this.selectedInterventions);
+            selectedInterventions ?? this.selectedInterventions,
+        allInterventions: allInterventions ?? this.allInterventions);
   }
 }

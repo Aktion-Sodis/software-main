@@ -25,6 +25,9 @@ dependencies:
   amplify_auth_cognito: ^0.4.0-rc.1
 
   
+  advance_pdf_viewer: ^2.0.1
+
+  
 
 
   font_awesome_flutter: ^9.2.0
@@ -42,6 +45,8 @@ dev_dependencies:
   flutter_lints: ^1.0.0
 
 flutter:
+  uses-material-design: true
+
   assets:
       - assets/test/
       - assets/fixAssets/

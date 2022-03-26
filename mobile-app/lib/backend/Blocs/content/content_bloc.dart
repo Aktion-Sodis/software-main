@@ -10,17 +10,27 @@ class ContentBloc extends Bloc<ContentEvent, ContentState> {
 
   ContentBloc(this.contentRepository) : super(LoadingContentState()) {
     on<ContentEvent>(_mapEventToState);
-    ContentRepository.getAllRelationsWithPopulatedContents().then((value) {
+    ContentRepository.getAllRelationsWithPopulatedContentsAndInterventions()
+        .then((value) {
       List<InterventionContentRelation> all = value;
       List<Content> allContents = List.generate(
           all.length, (index) => Content.fromAmplifyModel(all[index].content));
       List<Intervention> toDisplayInterventions = [];
       List<Content> toDisplayContents = List.from(allContents);
+      List<Intervention> allInterventions = [];
+      for (InterventionContentRelation relation in all) {
+        if (!allInterventions
+            .any((element) => element.id == relation.intervention.id)) {
+          allInterventions
+              .add(Intervention.fromAmplifyModel(relation.intervention));
+        }
+      }
       emit(LoadedContentState(
           allRelations: all,
           allContents: allContents,
           contentsToDisplay: toDisplayContents,
-          selectedInterventions: toDisplayInterventions));
+          selectedInterventions: toDisplayInterventions,
+          allInterventions: allInterventions));
     });
   }
 
@@ -41,6 +51,13 @@ class ContentBloc extends Bloc<ContentEvent, ContentState> {
             List.from(loadedState.selectedInterventions);
         newInterventions.removeWhere((obj) =>
             (event as AddInterventionFilter).intervention.id == obj.id);
+        List<Content> toDisplayContent =
+            toDisplay(loadedState, newInterventions);
+        emit(loadedState.copyWith(
+            selectedInterventions: newInterventions,
+            contentsToDisplay: toDisplayContent));
+      } else if (event is UpdateSelectedInterventions) {
+        List<Intervention> newInterventions = event.selectedInterventions;
         List<Content> toDisplayContent =
             toDisplay(loadedState, newInterventions);
         emit(loadedState.copyWith(

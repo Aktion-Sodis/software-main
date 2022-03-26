@@ -12,7 +12,7 @@ class InterventionRepository {
           where: amp.Intervention.ID.eq(interventionID));
       amp.Intervention toReturn = interventions.first;
       print("returned intervention by id");
-      return _populate(toReturn);
+      return populate(toReturn);
     } catch (e) {
       print("error in getting intervention by id");
       print(e.toString());
@@ -21,7 +21,7 @@ class InterventionRepository {
           where: amp.Intervention.ID.eq(interventionID));
       amp.Intervention toReturn = interventions.first;
       print("returned intervention by id");
-      return _populate(toReturn);
+      return populate(toReturn);
     }
   }
 
@@ -30,7 +30,7 @@ class InterventionRepository {
     print("interventions to populate from connections: ${relations.length}");
     List<amp.Intervention> toWait = List.generate(
         relations.length, (index) => relations[index].intervention);
-    var populated = await _populateList(toWait);
+    var populated = await populateList(toWait);
     return List.generate(populated.length,
         (index) => Intervention.fromAmplifyModel(populated[index]));
   }
@@ -45,18 +45,18 @@ class InterventionRepository {
         amp.Intervention.classType,
         where: amp.Intervention;*/
     return null;
-    //return _populate(interventions.first);
+    //return populate(interventions.first);
     //todo: query könnte falsch sein
   }
 
-  static Future<List<amp.Intervention>> _populateList(
+  static Future<List<amp.Intervention>> populateList(
       List<amp.Intervention> interventions) {
     List<Future<amp.Intervention>> toWait = List.generate(
-        interventions.length, (index) => _populate(interventions[index]));
+        interventions.length, (index) => populate(interventions[index]));
     return Future.wait(toWait);
   }
 
-  static Future<amp.Intervention> _populate(
+  static Future<amp.Intervention> populate(
       amp.Intervention intervention) async {
     amp.Intervention toReturn = intervention;
     toReturn = toReturn.copyWith(
