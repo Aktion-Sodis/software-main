@@ -8,6 +8,7 @@ import 'dart:core';
 ///todo: when integrating into the app the method has to be tested
 ///this was not possible when creating the cluss due to a missing runnable environment
 
+
 ///enum of available paths to avoid errors due to wrong string spelling
 enum DataStorePaths {
   userPicPath,
