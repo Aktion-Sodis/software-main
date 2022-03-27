@@ -171,6 +171,7 @@
       },
       "name": "Müdahale adı",
       "description": "Müdahale açıklaması",
+      "image": "Intervention Image",
       "noDocuments": "Henüz hiç döküman yüklenmemiş.",
       "noImages": "Henüz hiç resim yüklenmemiş.",
       "noVideos": "Henüz hiç video yüklenmemiş.",

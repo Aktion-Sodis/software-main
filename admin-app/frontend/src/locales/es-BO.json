@@ -172,6 +172,7 @@
       },
       "name": "Nombre de la intervención",
       "description": "Descripción de la intervención",
+      "image": "Intervention Image",
       "noDocuments": "No se han subido documentos.",
       "noImages": "No se han subido imágenes.",
       "noVideos": "No se han subido vídeos.",
