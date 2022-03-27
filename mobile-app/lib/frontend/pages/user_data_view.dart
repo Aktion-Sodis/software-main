@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class UserDataViewState extends State<UserDataView> {
   late TextEditingController textEdigtingControllerFirstName;
   late TextEditingController textEditingControllerLastName;
   final _formKey = GlobalKey<FormState>();
+  File? file;
 
   @override
   void initState() {
@@ -45,11 +47,12 @@ class UserDataViewState extends State<UserDataView> {
           widget.userBloc.state.user!.firstName;
       textEditingControllerLastName.text = widget.userBloc.state.user!.lastName;
     }
+    //todo: datei pic initialize user pic -> file
     super.initState();
   }
 
   void updatePic() async {
-    //todo: implement
+    //todo: datei
   }
 
   @override
@@ -147,12 +150,11 @@ class UserDataViewState extends State<UserDataView> {
                                       child: Container(
                                           width: width(context) * .45,
                                           height: width(context) * .45,
-                                          decoration: state.userPic != null
+                                          decoration: file != null
                                               ? BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   image: DecorationImage(
-                                                      image: FileImage(
-                                                          state.userPic!),
+                                                      image: FileImage(file!),
                                                       fit: BoxFit.fitWidth))
                                               : const BoxDecoration(
                                                   shape: BoxShape.circle,
