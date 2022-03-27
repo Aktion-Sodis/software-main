@@ -88,7 +88,8 @@ export default async function createTestEntities(villageLevel, familyLevel) {
     ];
     try {
         for(const entity of testEntities) {
-            await API.graphql(
+            try {
+await API.graphql(
                 {
                     query: mutations.createEntity,
                     variables: {
@@ -96,10 +97,17 @@ export default async function createTestEntities(villageLevel, familyLevel) {
                     }
                     }
             )
+            }catch(e) {
+                console.log("error in creating test entities");
+                console.log(e);
+                console.log(entity.customData[0].name);
+            }
+            
         }
     }
     catch(e) {
         console.log("error in creating test entities");
         console.log(e);
+        
     }
 }

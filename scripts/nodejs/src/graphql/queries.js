@@ -842,12 +842,16 @@ export const getEntity = /* GraphQL */ `
       customData {
         customDataID
         type
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         intValue
         stringValue
       }
       appliedInterventions {
         items {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -908,7 +912,6 @@ export const listEntities = /* GraphQL */ `
         customData {
           customDataID
           type
-          name
           intValue
           stringValue
         }
@@ -971,7 +974,6 @@ export const syncEntities = /* GraphQL */ `
         customData {
           customDataID
           type
-          name
           intValue
           stringValue
         }
@@ -1050,6 +1052,7 @@ export const getAppliedIntervention = /* GraphQL */ `
         latitude
         longitude
       }
+      isOkay
       executedSurveys {
         items {
           date
@@ -1118,6 +1121,7 @@ export const listAppliedInterventions = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1178,6 +1182,7 @@ export const syncAppliedInterventions = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1228,6 +1233,7 @@ export const getExecutedSurvey = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1342,6 +1348,7 @@ export const listExecutedSurveys = /* GraphQL */ `
     listExecutedSurveys(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1419,6 +1426,7 @@ export const syncExecutedSurveys = /* GraphQL */ `
     ) {
       items {
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1508,6 +1516,7 @@ export const getTask = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
+      userID
       entity {
         name {
           languageKeys
@@ -1536,7 +1545,6 @@ export const getTask = /* GraphQL */ `
         customData {
           customDataID
           type
-          name
           intValue
           stringValue
         }
@@ -1580,6 +1588,7 @@ export const getTask = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1597,6 +1606,7 @@ export const getTask = /* GraphQL */ `
       }
       executedSurvey {
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1655,6 +1665,8 @@ export const getTask = /* GraphQL */ `
         executedSurveyWhoExecutedItId
       }
       schemeVersion
+      picIDs
+      audioIDs
       id
       createdAt
       updatedAt
@@ -1696,6 +1708,7 @@ export const listTasks = /* GraphQL */ `
           _deleted
           _lastChangedAt
         }
+        userID
         entity {
           parentEntityID
           schemeVersion
@@ -1708,6 +1721,7 @@ export const listTasks = /* GraphQL */ `
           entityLevelId
         }
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1733,6 +1747,8 @@ export const listTasks = /* GraphQL */ `
           executedSurveyWhoExecutedItId
         }
         schemeVersion
+        picIDs
+        audioIDs
         id
         createdAt
         updatedAt
@@ -1783,6 +1799,7 @@ export const syncTasks = /* GraphQL */ `
           _deleted
           _lastChangedAt
         }
+        userID
         entity {
           parentEntityID
           schemeVersion
@@ -1795,6 +1812,7 @@ export const syncTasks = /* GraphQL */ `
           entityLevelId
         }
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1820,6 +1838,8 @@ export const syncTasks = /* GraphQL */ `
           executedSurveyWhoExecutedItId
         }
         schemeVersion
+        picIDs
+        audioIDs
         id
         createdAt
         updatedAt
@@ -3000,6 +3020,99 @@ export const syncSurveySurveyTagRelations = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const taskByUserID = /* GraphQL */ `
+  query TaskByUserID(
+    $userID: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelTaskFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    taskByUserID(
+      userID: $userID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        title
+        text
+        dueDate
+        finishedDate
+        location {
+          latitude
+          longitude
+        }
+        user {
+          firstName
+          lastName
+          bio
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        userID
+        entity {
+          parentEntityID
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          entityLevelId
+        }
+        appliedIntervention {
+          isOkay
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          entityAppliedInterventionsId
+          appliedInterventionWhoDidItId
+          appliedInterventionInterventionId
+        }
+        executedSurvey {
+          date
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          appliedInterventionExecutedSurveysId
+          executedSurveySurveyId
+          executedSurveyWhoExecutedItId
+        }
+        schemeVersion
+        picIDs
+        audioIDs
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        taskUserId
+        taskEntityId
+        taskAppliedInterventionId
+        taskExecutedSurveyId
       }
       nextToken
       startedAt

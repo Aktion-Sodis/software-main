@@ -944,12 +944,16 @@ export const onCreateEntity = /* GraphQL */ `
       customData {
         customDataID
         type
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         intValue
         stringValue
       }
       appliedInterventions {
         items {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1021,12 +1025,16 @@ export const onUpdateEntity = /* GraphQL */ `
       customData {
         customDataID
         type
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         intValue
         stringValue
       }
       appliedInterventions {
         items {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1098,12 +1106,16 @@ export const onDeleteEntity = /* GraphQL */ `
       customData {
         customDataID
         type
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         intValue
         stringValue
       }
       appliedInterventions {
         items {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1186,6 +1198,7 @@ export const onCreateAppliedIntervention = /* GraphQL */ `
         latitude
         longitude
       }
+      isOkay
       executedSurveys {
         items {
           date
@@ -1273,6 +1286,7 @@ export const onUpdateAppliedIntervention = /* GraphQL */ `
         latitude
         longitude
       }
+      isOkay
       executedSurveys {
         items {
           date
@@ -1360,6 +1374,7 @@ export const onDeleteAppliedIntervention = /* GraphQL */ `
         latitude
         longitude
       }
+      isOkay
       executedSurveys {
         items {
           date
@@ -1420,6 +1435,7 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1555,6 +1571,7 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1690,6 +1707,7 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1822,6 +1840,7 @@ export const onCreateTask = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
+      userID
       entity {
         name {
           languageKeys
@@ -1850,7 +1869,6 @@ export const onCreateTask = /* GraphQL */ `
         customData {
           customDataID
           type
-          name
           intValue
           stringValue
         }
@@ -1894,6 +1912,7 @@ export const onCreateTask = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1911,6 +1930,7 @@ export const onCreateTask = /* GraphQL */ `
       }
       executedSurvey {
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1969,6 +1989,8 @@ export const onCreateTask = /* GraphQL */ `
         executedSurveyWhoExecutedItId
       }
       schemeVersion
+      picIDs
+      audioIDs
       id
       createdAt
       updatedAt
@@ -2009,6 +2031,7 @@ export const onUpdateTask = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
+      userID
       entity {
         name {
           languageKeys
@@ -2037,7 +2060,6 @@ export const onUpdateTask = /* GraphQL */ `
         customData {
           customDataID
           type
-          name
           intValue
           stringValue
         }
@@ -2081,6 +2103,7 @@ export const onUpdateTask = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -2098,6 +2121,7 @@ export const onUpdateTask = /* GraphQL */ `
       }
       executedSurvey {
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -2156,6 +2180,8 @@ export const onUpdateTask = /* GraphQL */ `
         executedSurveyWhoExecutedItId
       }
       schemeVersion
+      picIDs
+      audioIDs
       id
       createdAt
       updatedAt
@@ -2196,6 +2222,7 @@ export const onDeleteTask = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
+      userID
       entity {
         name {
           languageKeys
@@ -2224,7 +2251,6 @@ export const onDeleteTask = /* GraphQL */ `
         customData {
           customDataID
           type
-          name
           intValue
           stringValue
         }
@@ -2268,6 +2294,7 @@ export const onDeleteTask = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -2285,6 +2312,7 @@ export const onDeleteTask = /* GraphQL */ `
       }
       executedSurvey {
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -2343,6 +2371,8 @@ export const onDeleteTask = /* GraphQL */ `
         executedSurveyWhoExecutedItId
       }
       schemeVersion
+      picIDs
+      audioIDs
       id
       createdAt
       updatedAt

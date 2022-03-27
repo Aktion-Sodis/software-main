@@ -78,7 +78,7 @@ export async function deleteLevels() {
     console.log(levelInterventionConnextion.data.listLevelInterventionRelations);
     const deleteInterventionConnectionList = levelInterventionConnextion.data.listLevelInterventionRelations.items.filter((obj) => !obj._deleted);
     console.log("to delete connections: " + deleteInterventionConnectionList.length);
-    for (const levelInterventionConnection of deleteInterventionConnectionList) {
+    for (const obj of deleteInterventionConnectionList) {
         await API.graphql(graphqlOperation(mutations.deleteLevelInterventionRelation, {input: {
             id: obj.id,
             _version: obj._version
