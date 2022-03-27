@@ -3,62 +3,52 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 
 import 'dataStorePaths.dart';
 
-
 class StorageRepository {
-  // Question: Does the singleton implementation make sense? What is the standard Dart design pattern for accessing a repository class?
-  StorageRepository._privateConstructor();
-
-  static final StorageRepository _instance = StorageRepository._privateConstructor();
-
-  factory StorageRepository() {
-    return _instance;
-  }
-
-  Future<void> downloadFile(DataStorePaths dataStorePath, File downloadToFile) async {
-    String url = await getUrlForFile(dataStorePath);
+  static Future<void> downloadFile(File toDownload, String path) async {
+    String url = await getUrlForFile(path);
 
     //Try to download the specified file, and write it to the localCacheFile.
     try {
-      await Amplify.Storage.downloadFile(key: url, local: downloadToFile);
+      await Amplify.Storage.downloadFile(key: url, local: toDownload);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<String> uploadFile(File file, DataStorePaths dataStorePath) async {
+  static Future<String> uploadFile(File file, String dataStorePath) async {
     try {
       String url = await getUrlForFile(dataStorePath);
       final result = await Amplify.Storage.uploadFile(
         local: file,
         key: url,
       );
-      
+
       return result.key;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<String> getUrlForFile(DataStorePaths dataStorePath) async {
+  static Future<String> getUrlForFile(String path) async {
     try {
-      final result = await Amplify.Storage.getUrl(key: dataStorePath.name);
+      final result = await Amplify.Storage.getUrl(key: path);
       return result.url;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<String> removeFile(String key) async {
+  static Future<String> removeFile(String path) async {
     try {
       // RemoveOptions options =
       // RemoveOptions(accessLevel: StorageAccessLevel.guest);
-      final result = await Amplify.Storage.remove(key: key, 
+      final result = await Amplify.Storage.remove(
+        key: await getUrlForFile(path),
         // options: options
-        );
+      );
       return result.key;
     } catch (e) {
       rethrow;
     }
   }
-
 }

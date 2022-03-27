@@ -1,60 +1,56 @@
 import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'dataStorePaths.dart';
 import 'storage_repository.dart';
 
-// Question: How will this be used? --> 
-// TODO: implement readImageFile, readPDFFile, readMP3File, ...
-// TODO: implement writeImageFile, writePDFFile, writeMP3File, ...
-// write --> save locally --> update cloaud
-// test case: View with upload, display, delete
-class SynchedFile {
-  DataStorePaths dataStorePath;
-  StorageRepository storageRepository = StorageRepository();
+class SyncedFile {
+  SyncedFile(this.path);
 
-  // Question: What should be returned? Local File? Binary? Image?
-  Future<File> get cachedFile async {
-    File localCacheFile = await getCache();
+  String path;
+
+  Future<File?> file() async {
+    File localCacheFile = await getCachePath();
     bool cached = await localCacheFile.exists();
-    if (!cached){
-      storageRepository.downloadFile(dataStorePath, localCacheFile);
+    if (!cached) {
+      StorageRepository.downloadFile(localCacheFile, path);
     }
 
     cached = await localCacheFile.exists();
 
-    if (!cached){
-      throw Exception('Failed to cache file ${dataStorePath.name}');
+    if (!cached) {
+      return null;
     }
-    
+
     return localCacheFile;
   }
 
-  SynchedFile(this.dataStorePath);
-
-  Future<File> getCache() async {
-    String url = await storageRepository.getUrlForFile(dataStorePath);
+  Future<File> getCachePath() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    File localCacheFile = File('${appDocDir.path}/$url');
+    File localCacheFile = File('${appDocDir.path}/$path');
     return localCacheFile;
   }
 
-  // Question: Where does this file come from? What is actually passed to this method? Binary? Image object?
-  Future<void> update(File newFile) async {
-    File localCacheFile = await getCache();
-    newFile.copySync(localCacheFile.path); 
-    await storageRepository.uploadFile(newFile, dataStorePath);
+  Future<void> update(String utf8String) async {
+    File localCacheFile = await getCachePath();
+    await localCacheFile.writeAsString(utf8String);
+    await StorageRepository.uploadFile(localCacheFile, path);
   }
 
-  // Question: 
-  Future<void> deleteLocal(File newFile) async {
-    File localCacheFile = await getCache();
-    await localCacheFile.delete();
+  Future<File?> updateAsPic(XFile xfile) async {
+    await update(await xfile.readAsString());
+    return await getCachePath();
   }
 
-  // Question: 
-  Future<void> deleteCloud(File newFile) async {
-    File localCacheFile = await getCache();
+  Future<File?> updateAsAudio(File file) async {
+    await update(await file.readAsString());
+    return await getCachePath();
+  }
+
+  Future<void> deleteLocal() async {
+    File localCacheFile = await getCachePath();
     await localCacheFile.delete();
+    await StorageRepository.removeFile(path);
   }
 }

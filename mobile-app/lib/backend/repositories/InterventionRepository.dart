@@ -1,6 +1,8 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:mobile_app/backend/callableModels/Intervention.dart';
 import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
+import 'package:mobile_app/backend/storage/dataStorePaths.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class InterventionRepository {
@@ -92,5 +94,11 @@ class InterventionRepository {
           amp.Intervention intervention) async {
     return Amplify.DataStore.query(amp.LevelInterventionRelation.classType,
         where: amp.LevelInterventionRelation.INTERVENTION.eq(intervention.id));
+  }
+
+  static SyncedFile getInterventionPic(Intervention intervention) {
+    String path =
+        dataStorePath(DataStorePaths.interventionPicPath, [intervention.id!]);
+    return SyncedFile(path);
   }
 }
