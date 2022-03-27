@@ -30,22 +30,73 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" class="pb-0 px-0 px-sm-3">
+                <v-card-title class="pt-0 pt-sm-2">
+                  {{ $t('interventions.interventionModal.name') }}
+                </v-card-title>
                 <h2 v-if="read && interventionInFocus">
-                  {{ interventionInFocus.name.languageTexts[0] }}
+                  {{
+                    calculateUILocaleString({
+                      languageTexts: interventionInFocus.name.languageTexts,
+                    })
+                  }}
                 </h2>
-                <v-text-field
+                <LocaleTextBox
                   v-else
-                  v-model="name"
-                  :label="$t('interventions.interventionModal.name')"
-                  required
-                  outlined
-                  dense
-                ></v-text-field>
+                  labelPrefixI18nSelector="interventions.interventionModal.name"
+                  @res="nameUpdatedHandler"
+                >
+                  <template v-slot:text-input="slotProps">
+                    <v-text-field
+                      :label="slotProps.label"
+                      v-model="slotProps.model"
+                      autofocus
+                      required
+                      outlined
+                      dense
+                      @input="slotProps.inputHandler"
+                    ></v-text-field>
+                    <!-- <v-text-field -->
+                    <!-- :label="$t('interventions.interventionModal.name')" -->
+                    <!-- ></v-text-field> -->
+                  </template>
+                </LocaleTextBox>
 
-                <h3 v-if="read && interventionInFocus" class="py-12">
-                  {{ interventionInFocus.description.languageTexts[0] }}
-                </h3>
-                <v-textarea
+                <v-card-title class="pt-4">
+                  {{ $t('interventions.interventionModal.description') }}
+                </v-card-title>
+                <div
+                  v-if="read && interventionInFocus"
+                  class="d-flex flex-column justify-center"
+                  style="min-height: 10rem"
+                >
+                  <h3>
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: interventionInFocus.description.languageTexts,
+                      })
+                    }}
+                  </h3>
+                </div>
+
+                <LocaleTextBox
+                  v-else
+                  labelPrefixI18nSelector="interventions.interventionModal.description"
+                  @res="descriptionUpdatedHandler"
+                >
+                  <template v-slot:text-input="slotProps">
+                    <v-textarea
+                      :counter="description.length > levelDescriptionMaxChar - 20"
+                      autofocus
+                      required
+                      outlined
+                      dense
+                      :label="slotProps.label"
+                      v-model="slotProps.model"
+                      @input="slotProps.inputHandler"
+                    ></v-textarea>
+                  </template>
+                </LocaleTextBox>
+                <!-- <v-textarea
                   v-else
                   v-model="description"
                   :counter="description.length > interventionDescriptionMaxChar - 20"
@@ -54,7 +105,9 @@
                   required
                   outlined
                   dense
-                ></v-textarea>
+                ></v-textarea> -->
+              </v-col>
+              <v-col cols="12" sm="6" class="pt-6 pt-sm-3 px-0 px-sm-3">
                 <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" max-height="200px">
                   <v-btn v-if="!read" fab class="iv-edit-icon" color="primary" @click="selectImg">
                     <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
@@ -67,8 +120,7 @@
                     style="display: none"
                   />
                 </v-img>
-              </v-col>
-              <v-col cols="12" sm="6" class="pt-6 pt-sm-3 px-0 px-sm-3">
+
                 <div v-if="read && interventionInFocus">
                   <v-card-title class="pt-0">
                     {{ $t('baseData.tags') }}
@@ -239,6 +291,8 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
+import LocaleTextBox from '../global/LocaleTextBox.vue';
+import { I18nString } from '../../models';
 
 const interventionDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_INTERVENTION_DESCRIPTION_MAX_CHAR, 10),
@@ -247,6 +301,7 @@ const interventionDescriptionMaxChar = Math.max(
 
 export default {
   name: 'InterventionModal',
+  components: { LocaleTextBox },
   data() {
     return {
       interventionDescriptionMaxChar,
@@ -254,8 +309,14 @@ export default {
         maxChar: (value) => value.length <= interventionDescriptionMaxChar || this.maxCharExceededi18n,
       },
       id: null,
-      name: '',
-      description: '',
+      name: new I18nString({
+        languageKeys: this.$i18n.availableLocales,
+        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
+      }),
+      description: new I18nString({
+        languageKeys: this.$i18n.availableLocales,
+        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
+      }),
       tagIds: [],
       contents: [],
     };
@@ -276,6 +337,8 @@ export default {
       allInterventionTags: 'INTERVENTION_Data/getInterventionTags',
       tagById: 'INTERVENTION_Data/tagById',
       interventionContentTagById: 'INTERVENTION_Data/interventionContentTagById',
+
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
     isInterventionModalDisplayed() {
       return this.isDataModalDisplayed && this.dataType === dataTypesDict.intervention;
@@ -330,6 +393,12 @@ export default {
     deleteHandler() {
       if (this.read) return;
       this.deleteInterventionHandler({ dataType: dataTypesDict.intervention });
+    },
+    nameUpdatedHandler(res) {
+      this.name = res;
+    },
+    descriptionUpdatedHandler(res) {
+      this.description = res;
     },
     closeHandler() {
       if (this.read) this.abortReadInterventionHandler();
