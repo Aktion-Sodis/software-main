@@ -13,7 +13,6 @@ Widget MainMenuAppBar(
         Expanded(
             child: Row(
           children: [
-            //todo: add back button
             if (showBackButton)
               Container(
                   margin:
