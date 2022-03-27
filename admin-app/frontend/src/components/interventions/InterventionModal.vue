@@ -10,7 +10,7 @@
         <v-card-title>
           <h2 v-if="edit">
             {{ $t('interventions.interventionModal.modalTitle.edit') }}
-            <i>{{ interventionInFocus.name }}</i>
+            <i>{{ interventionInFocus.name.languageTexts[0] }}</i>
           </h2>
           <h2 v-else-if="create">
             {{ $t('interventions.interventionModal.modalTitle.create') }}
@@ -31,7 +31,7 @@
             <v-row>
               <v-col cols="12" sm="6" class="pb-0 px-0 px-sm-3">
                 <h2 v-if="read && interventionInFocus">
-                  {{ interventionInFocus.name }}
+                  {{ interventionInFocus.name.languageTexts[0] }}
                 </h2>
                 <v-text-field
                   v-else
@@ -43,7 +43,7 @@
                 ></v-text-field>
 
                 <h3 v-if="read && interventionInFocus" class="py-12">
-                  {{ interventionInFocus.description }}
+                  {{ interventionInFocus.description.languageTexts[0] }}
                 </h3>
                 <v-textarea
                   v-else
@@ -292,14 +292,17 @@ export default {
       return !!this.name;
     },
     allDocumentsOfIntervention() {
-      const res = this.interventionInFocus.contents.filter((c) => c.type === 'MarkdownDocument') || [];
-      return res;
+      // const res = this.interventionInFocus.contents.filter((c) => c.type === 'MarkdownDocument') || [];
+      // return res;
+      return [];
     },
     allVideosOfIntervention() {
-      return this.interventionInFocus.contents.filter((c) => c.type === 'Video') || [];
+      // return this.interventionInFocus.contents.filter((c) => c.type === 'Video') || [];
+      return [];
     },
     allImagesOfIntervention() {
-      return this.interventionInFocus.contents.filter((c) => c.type === 'Image') || [];
+      // return this.interventionInFocus.contents.filter((c) => c.type === 'Image') || [];
+      return [];
     },
     edit() {
       return this.dataModalMode === modalModesDict.edit;

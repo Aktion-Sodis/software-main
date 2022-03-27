@@ -52,16 +52,17 @@ class ExecutedSurvey {
 
   amp.ExecutedSurvey toAmplifyModel() {
     return amp.ExecutedSurvey(
-        id: id,
-        appliedIntervention: appliedIntervention.toAmplifyModel(),
-        survey: survey.toAmplifyModel(),
-        whoExecutedIt: whoExecutedIt.toAmplifyModel(),
-        date: TemporalDateTime(date),
-        location: location?.toAmplifyModel(),
-        answers: List.generate(
-            answers.length, (index) => answers[index].toAmplifyModel()),
-        schemeVersion: schemeVersion,
-        executedSurveySurveyId: survey.id!,
-        executedSurveyWhoExecutedItId: whoExecutedIt.id!);
+      id: id,
+      appliedIntervention: appliedIntervention.toAmplifyModel(),
+      survey: survey.toAmplifyModel(),
+      whoExecutedIt: whoExecutedIt.toAmplifyModel(),
+      date: TemporalDateTime(date),
+      location: location?.toAmplifyModel(),
+      answers: List.generate(
+          answers.length, (index) => answers[index].toAmplifyModel()),
+      schemeVersion: schemeVersion,
+      executedSurveySurveyId: survey.id!,
+      executedSurveyWhoExecutedItId: whoExecutedIt.id!,
+    );
   }
 }

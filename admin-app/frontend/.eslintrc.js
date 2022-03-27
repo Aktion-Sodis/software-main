@@ -13,5 +13,6 @@ module.exports = {
     'max-classes-per-file': 'off',
     'max-len': 'off',
     'import/prefer-default-export': 0,
+    'no-underscore-dangle': 'off',
   },
 };

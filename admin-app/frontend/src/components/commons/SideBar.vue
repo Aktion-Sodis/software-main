@@ -1,16 +1,18 @@
 <template>
   <v-navigation-drawer permanent expand-on-hover class="primary-dark" width="17rem" fixed>
-    <!-- expand-on-hover -->
     <div class="side-bar-inner-wrapper overflow-hidden">
       <v-list>
         <v-list-item class="px-2">
           <v-list-item-avatar class="my-0">
             <v-img src="../../static/aktionSodisSmall.png"></v-img>
           </v-list-item-avatar>
-          <v-list-item-title class="white--text text-body-1 ml-3">{{
-            societyName
-          }}</v-list-item-title>
+          <v-list-item-title class="white--text text-body-1 ml-3">
+            {{ societyName }}
+          </v-list-item-title>
         </v-list-item>
+        <SyncAction />
+        <!-- <v-btn @click="CreateDummyLevels">Create dummy levels</v-btn> -->
+        <!-- <v-btn @click="CreateDummyEntities">Create dummy entities</v-btn> -->
       </v-list>
 
       <v-list nav dense class="mt-12">
@@ -75,12 +77,12 @@
           </v-list-item-avatar>
           <div class="next-to-avatar">
             <v-list-item-content>
-              <v-list-item-title class="text-h6 white--text"
-                >{{ credentials.firstname }} {{ credentials.lastname }}</v-list-item-title
+              <v-list-item-title class="text-h6 white--text" style="white-space: initial"
+                >{{ credentials.firstName }} {{ credentials.lastName }}</v-list-item-title
               >
-              <v-list-item-subtitle class="white--text">{{
-                credentials.email
-              }}</v-list-item-subtitle>
+              <v-list-item-subtitle class="white--text" style="white-space: initial">
+                {{ credentials.email }}
+              </v-list-item-subtitle>
             </v-list-item-content>
             <v-btn @click="logout" class="mx-2" fab elevation="0" small color="primary">
               <v-icon color="white">mdi-exit-to-app</v-icon>
@@ -94,10 +96,12 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import SyncAction from './SyncAction.vue';
 
 const societyName = process.env.VUE_APP_SOCIETY_VERBOSE_NAME;
 
 export default {
+  components: { SyncAction },
   name: 'SideBar',
   data: () => ({ societyName }),
   computed: {
@@ -105,12 +109,16 @@ export default {
       isAuthenticated: 'auth/getIsAuthenticated',
       credentials: 'auth/credentials',
     }),
+    currentRouteName() {
+      return this.$route.name;
+    },
   },
-  props: { currentRouteName: String },
   methods: {
     ...mapActions({
       deleteSession: 'auth/deleteSession',
       showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
+      CreateDummyLevels: 'LEVEL_Data/CreateDummyLevels',
+      CreateDummyEntities: 'ENTITY_Data/CreateDummyEntities',
     }),
     logout() {
       this.deleteSession();

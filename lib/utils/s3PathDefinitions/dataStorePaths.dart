@@ -87,12 +87,12 @@ final Map<DataStorePaths, dynamic> databaseOntologies = {
     "toBeReplaced": ["entityID"],
   },
   DataStorePaths.taskPicPath: {
-    "path": "taskFiles/taskID/pic.png",
-    "toBeReplaced": ["taskID"]
+    "path": "taskFiles/taskID/picID.png",
+    "toBeReplaced": ["taskID", "picID"]
   },
   DataStorePaths.taskAudioPath: {
-    "path": "taskFiles/taskID/audio.mp3",
-    "toBeReplaced": ["taskID"],
+    "path": "taskFiles/taskID/audioID.mpr",
+    "toBeReplaced": ["taskID", "audioID"],
   },
 };
 

@@ -7,6 +7,7 @@ class SurveyTag {
   int? schemeVersion;
   DateTime? createdAt;
   DateTime? updatedAt;
+  late List<amp.SurveySurveyTagRelation> surveys;
 
   String get text => text_ml.text;
 
@@ -16,6 +17,7 @@ class SurveyTag {
       {this.id,
       required this.text_ml,
       this.schemeVersion,
+      required this.surveys,
       this.createdAt,
       this.updatedAt});
 
@@ -25,10 +27,14 @@ class SurveyTag {
     schemeVersion = tag.schemeVersion;
     createdAt = tag.createdAt?.getDateTimeInUtc();
     updatedAt = tag.updatedAt?.getDateTimeInUtc();
+    surveys = tag.surveys;
   }
 
   amp.SurveyTag toAmplifyModel() {
     return amp.SurveyTag(
-        text: text_ml.toAmplifyModel(), id: id, schemeVersion: schemeVersion);
+        text: text_ml.toAmplifyModel(),
+        id: id,
+        schemeVersion: schemeVersion,
+        surveys: surveys);
   }
 }

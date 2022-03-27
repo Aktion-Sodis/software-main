@@ -14,8 +14,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc(
       {required this.authRepo,
       required this.userID,
-      required this.userRepository})
-      : super(UserState()) {
+      required this.userRepository,
+      UserState? userState})
+      : super(userState ?? UserState()) {
     on<UserEvent>(_mapEventToState);
   }
 
