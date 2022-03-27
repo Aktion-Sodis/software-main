@@ -25,6 +25,13 @@ class AmplifyIntegration {
     await Amplify.addPlugins(
         [_amplifyDataStore, _amplifyAPI, _amplifyAuthCognito]);
     await Amplify.configure(amplifyconfig);
+    Amplify.DataStore.streamController.stream.asBroadcastStream().listen((t) {
+      print("amplify data store event:");
+      print((t as DataStoreHubEvent).eventName);
+      print((t as DataStoreHubEvent).payload.toString());
+    });
+    //Amplify.DataStore.clear();
+    Amplify.DataStore.start();
     print("amplify successfully initialized");
     return true;
   }

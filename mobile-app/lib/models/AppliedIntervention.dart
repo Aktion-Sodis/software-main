@@ -33,6 +33,7 @@ class AppliedIntervention extends Model {
   final User? _whoDidIt;
   final Intervention? _intervention;
   final Location? _location;
+  final bool? _isOkay;
   final List<ExecutedSurvey>? _executedSurveys;
   final int? _schemeVersion;
   final TemporalDateTime? _createdAt;
@@ -77,6 +78,19 @@ class AppliedIntervention extends Model {
   
   Location? get location {
     return _location;
+  }
+  
+  bool get isOkay {
+    try {
+      return _isOkay!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   List<ExecutedSurvey> get executedSurveys {
@@ -134,14 +148,15 @@ class AppliedIntervention extends Model {
     }
   }
   
-  const AppliedIntervention._internal({required this.id, required whoDidIt, required intervention, location, required executedSurveys, schemeVersion, createdAt, updatedAt, entityAppliedInterventionsId, required appliedInterventionWhoDidItId, required appliedInterventionInterventionId}): _whoDidIt = whoDidIt, _intervention = intervention, _location = location, _executedSurveys = executedSurveys, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _entityAppliedInterventionsId = entityAppliedInterventionsId, _appliedInterventionWhoDidItId = appliedInterventionWhoDidItId, _appliedInterventionInterventionId = appliedInterventionInterventionId;
+  const AppliedIntervention._internal({required this.id, required whoDidIt, required intervention, location, required isOkay, required executedSurveys, schemeVersion, createdAt, updatedAt, entityAppliedInterventionsId, required appliedInterventionWhoDidItId, required appliedInterventionInterventionId}): _whoDidIt = whoDidIt, _intervention = intervention, _location = location, _isOkay = isOkay, _executedSurveys = executedSurveys, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _entityAppliedInterventionsId = entityAppliedInterventionsId, _appliedInterventionWhoDidItId = appliedInterventionWhoDidItId, _appliedInterventionInterventionId = appliedInterventionInterventionId;
   
-  factory AppliedIntervention({String? id, required User whoDidIt, required Intervention intervention, Location? location, required List<ExecutedSurvey> executedSurveys, int? schemeVersion, String? entityAppliedInterventionsId, required String appliedInterventionWhoDidItId, required String appliedInterventionInterventionId}) {
+  factory AppliedIntervention({String? id, required User whoDidIt, required Intervention intervention, Location? location, required bool isOkay, required List<ExecutedSurvey> executedSurveys, int? schemeVersion, String? entityAppliedInterventionsId, required String appliedInterventionWhoDidItId, required String appliedInterventionInterventionId}) {
     return AppliedIntervention._internal(
       id: id == null ? UUID.getUUID() : id,
       whoDidIt: whoDidIt,
       intervention: intervention,
       location: location,
+      isOkay: isOkay,
       executedSurveys: executedSurveys != null ? List<ExecutedSurvey>.unmodifiable(executedSurveys) : executedSurveys,
       schemeVersion: schemeVersion,
       entityAppliedInterventionsId: entityAppliedInterventionsId,
@@ -161,6 +176,7 @@ class AppliedIntervention extends Model {
       _whoDidIt == other._whoDidIt &&
       _intervention == other._intervention &&
       _location == other._location &&
+      _isOkay == other._isOkay &&
       DeepCollectionEquality().equals(_executedSurveys, other._executedSurveys) &&
       _schemeVersion == other._schemeVersion &&
       _entityAppliedInterventionsId == other._entityAppliedInterventionsId &&
@@ -178,6 +194,7 @@ class AppliedIntervention extends Model {
     buffer.write("AppliedIntervention {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("location=" + (_location != null ? _location!.toString() : "null") + ", ");
+    buffer.write("isOkay=" + (_isOkay != null ? _isOkay!.toString() : "null") + ", ");
     buffer.write("schemeVersion=" + (_schemeVersion != null ? _schemeVersion!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null") + ", ");
@@ -189,12 +206,13 @@ class AppliedIntervention extends Model {
     return buffer.toString();
   }
   
-  AppliedIntervention copyWith({String? id, User? whoDidIt, Intervention? intervention, Location? location, List<ExecutedSurvey>? executedSurveys, int? schemeVersion, String? entityAppliedInterventionsId, String? appliedInterventionWhoDidItId, String? appliedInterventionInterventionId}) {
+  AppliedIntervention copyWith({String? id, User? whoDidIt, Intervention? intervention, Location? location, bool? isOkay, List<ExecutedSurvey>? executedSurveys, int? schemeVersion, String? entityAppliedInterventionsId, String? appliedInterventionWhoDidItId, String? appliedInterventionInterventionId}) {
     return AppliedIntervention._internal(
       id: id ?? this.id,
       whoDidIt: whoDidIt ?? this.whoDidIt,
       intervention: intervention ?? this.intervention,
       location: location ?? this.location,
+      isOkay: isOkay ?? this.isOkay,
       executedSurveys: executedSurveys ?? this.executedSurveys,
       schemeVersion: schemeVersion ?? this.schemeVersion,
       entityAppliedInterventionsId: entityAppliedInterventionsId ?? this.entityAppliedInterventionsId,
@@ -213,6 +231,7 @@ class AppliedIntervention extends Model {
       _location = json['location']?['serializedData'] != null
         ? Location.fromJson(new Map<String, dynamic>.from(json['location']['serializedData']))
         : null,
+      _isOkay = json['isOkay'],
       _executedSurveys = json['executedSurveys'] is List
         ? (json['executedSurveys'] as List)
           .where((e) => e?['serializedData'] != null)
@@ -227,7 +246,7 @@ class AppliedIntervention extends Model {
       _appliedInterventionInterventionId = json['appliedInterventionInterventionId'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'whoDidIt': _whoDidIt?.toJson(), 'intervention': _intervention?.toJson(), 'location': _location?.toJson(), 'executedSurveys': _executedSurveys?.map((ExecutedSurvey? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'entityAppliedInterventionsId': _entityAppliedInterventionsId, 'appliedInterventionWhoDidItId': _appliedInterventionWhoDidItId, 'appliedInterventionInterventionId': _appliedInterventionInterventionId
+    'id': id, 'whoDidIt': _whoDidIt?.toJson(), 'intervention': _intervention?.toJson(), 'location': _location?.toJson(), 'isOkay': _isOkay, 'executedSurveys': _executedSurveys?.map((ExecutedSurvey? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'entityAppliedInterventionsId': _entityAppliedInterventionsId, 'appliedInterventionWhoDidItId': _appliedInterventionWhoDidItId, 'appliedInterventionInterventionId': _appliedInterventionInterventionId
   };
 
   static final QueryField ID = QueryField(fieldName: "appliedIntervention.id");
@@ -238,6 +257,7 @@ class AppliedIntervention extends Model {
     fieldName: "intervention",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Intervention).toString()));
   static final QueryField LOCATION = QueryField(fieldName: "location");
+  static final QueryField ISOKAY = QueryField(fieldName: "isOkay");
   static final QueryField EXECUTEDSURVEYS = QueryField(
     fieldName: "executedSurveys",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (ExecutedSurvey).toString()));
@@ -269,6 +289,12 @@ class AppliedIntervention extends Model {
       fieldName: 'location',
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'Location')
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: AppliedIntervention.ISOKAY,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.bool)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(

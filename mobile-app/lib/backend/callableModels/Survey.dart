@@ -44,6 +44,10 @@ class Survey {
     }
   }
 
+  Question questionByID(String id) {
+    return questions.firstWhere((element) => element.id == id);
+  }
+
   Survey(
       {this.id,
       required this.name_ml,
@@ -57,6 +61,8 @@ class Survey {
       required this.surveyType});
 
   Survey.fromAmplifyModel(amp.Survey survey) {
+    print(survey.intervention.toString());
+
     id = survey.id;
     name_ml = I18nString.fromAmplifyModel(survey.name);
     description_ml = I18nString.fromAmplifyModel(survey.description);

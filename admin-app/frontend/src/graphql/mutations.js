@@ -2,7 +2,10 @@
 // this is an auto generated file. This will be overwritten
 
 export const createUser = /* GraphQL */ `
-  mutation CreateUser($input: CreateUserInput!, $condition: ModelUserConditionInput) {
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
     createUser(input: $input, condition: $condition) {
       firstName
       lastName
@@ -22,7 +25,10 @@ export const createUser = /* GraphQL */ `
   }
 `;
 export const updateUser = /* GraphQL */ `
-  mutation UpdateUser($input: UpdateUserInput!, $condition: ModelUserConditionInput) {
+  mutation UpdateUser(
+    $input: UpdateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
     updateUser(input: $input, condition: $condition) {
       firstName
       lastName
@@ -42,7 +48,10 @@ export const updateUser = /* GraphQL */ `
   }
 `;
 export const deleteUser = /* GraphQL */ `
-  mutation DeleteUser($input: DeleteUserInput!, $condition: ModelUserConditionInput) {
+  mutation DeleteUser(
+    $input: DeleteUserInput!
+    $condition: ModelUserConditionInput
+  ) {
     deleteUser(input: $input, condition: $condition) {
       firstName
       lastName
@@ -62,7 +71,10 @@ export const deleteUser = /* GraphQL */ `
   }
 `;
 export const createConfig = /* GraphQL */ `
-  mutation CreateConfig($input: CreateConfigInput!, $condition: ModelConfigConditionInput) {
+  mutation CreateConfig(
+    $input: CreateConfigInput!
+    $condition: ModelConfigConditionInput
+  ) {
     createConfig(input: $input, condition: $condition) {
       name
       colorTheme {
@@ -84,7 +96,10 @@ export const createConfig = /* GraphQL */ `
   }
 `;
 export const updateConfig = /* GraphQL */ `
-  mutation UpdateConfig($input: UpdateConfigInput!, $condition: ModelConfigConditionInput) {
+  mutation UpdateConfig(
+    $input: UpdateConfigInput!
+    $condition: ModelConfigConditionInput
+  ) {
     updateConfig(input: $input, condition: $condition) {
       name
       colorTheme {
@@ -106,7 +121,10 @@ export const updateConfig = /* GraphQL */ `
   }
 `;
 export const deleteConfig = /* GraphQL */ `
-  mutation DeleteConfig($input: DeleteConfigInput!, $condition: ModelConfigConditionInput) {
+  mutation DeleteConfig(
+    $input: DeleteConfigInput!
+    $condition: ModelConfigConditionInput
+  ) {
     deleteConfig(input: $input, condition: $condition) {
       name
       colorTheme {
@@ -128,7 +146,10 @@ export const deleteConfig = /* GraphQL */ `
   }
 `;
 export const createLevel = /* GraphQL */ `
-  mutation CreateLevel($input: CreateLevelInput!, $condition: ModelLevelConditionInput) {
+  mutation CreateLevel(
+    $input: CreateLevelInput!
+    $condition: ModelLevelConditionInput
+  ) {
     createLevel(input: $input, condition: $condition) {
       name {
         languageKeys
@@ -142,16 +163,6 @@ export const createLevel = /* GraphQL */ `
       interventionsAreAllowed
       allowedInterventions {
         items {
-          name {
-            languageKeys
-            languageTexts
-          }
-          description {
-            languageKeys
-            languageTexts
-          }
-          interventionType
-          schemeVersion
           id
           levelID
           interventionID
@@ -183,7 +194,10 @@ export const createLevel = /* GraphQL */ `
   }
 `;
 export const updateLevel = /* GraphQL */ `
-  mutation UpdateLevel($input: UpdateLevelInput!, $condition: ModelLevelConditionInput) {
+  mutation UpdateLevel(
+    $input: UpdateLevelInput!
+    $condition: ModelLevelConditionInput
+  ) {
     updateLevel(input: $input, condition: $condition) {
       name {
         languageKeys
@@ -228,7 +242,10 @@ export const updateLevel = /* GraphQL */ `
   }
 `;
 export const deleteLevel = /* GraphQL */ `
-  mutation DeleteLevel($input: DeleteLevelInput!, $condition: ModelLevelConditionInput) {
+  mutation DeleteLevel(
+    $input: DeleteLevelInput!
+    $condition: ModelLevelConditionInput
+  ) {
     deleteLevel(input: $input, condition: $condition) {
       name {
         languageKeys
@@ -519,7 +536,10 @@ export const deleteIntervention = /* GraphQL */ `
   }
 `;
 export const createContent = /* GraphQL */ `
-  mutation CreateContent($input: CreateContentInput!, $condition: ModelContentConditionInput) {
+  mutation CreateContent(
+    $input: CreateContentInput!
+    $condition: ModelContentConditionInput
+  ) {
     createContent(input: $input, condition: $condition) {
       name {
         languageKeys
@@ -568,7 +588,10 @@ export const createContent = /* GraphQL */ `
   }
 `;
 export const updateContent = /* GraphQL */ `
-  mutation UpdateContent($input: UpdateContentInput!, $condition: ModelContentConditionInput) {
+  mutation UpdateContent(
+    $input: UpdateContentInput!
+    $condition: ModelContentConditionInput
+  ) {
     updateContent(input: $input, condition: $condition) {
       name {
         languageKeys
@@ -617,7 +640,10 @@ export const updateContent = /* GraphQL */ `
   }
 `;
 export const deleteContent = /* GraphQL */ `
-  mutation DeleteContent($input: DeleteContentInput!, $condition: ModelContentConditionInput) {
+  mutation DeleteContent(
+    $input: DeleteContentInput!
+    $condition: ModelContentConditionInput
+  ) {
     deleteContent(input: $input, condition: $condition) {
       name {
         languageKeys
@@ -666,7 +692,10 @@ export const deleteContent = /* GraphQL */ `
   }
 `;
 export const createSurvey = /* GraphQL */ `
-  mutation CreateSurvey($input: CreateSurveyInput!, $condition: ModelSurveyConditionInput) {
+  mutation CreateSurvey(
+    $input: CreateSurveyInput!
+    $condition: ModelSurveyConditionInput
+  ) {
     createSurvey(input: $input, condition: $condition) {
       name {
         languageKeys
@@ -750,7 +779,10 @@ export const createSurvey = /* GraphQL */ `
   }
 `;
 export const updateSurvey = /* GraphQL */ `
-  mutation UpdateSurvey($input: UpdateSurveyInput!, $condition: ModelSurveyConditionInput) {
+  mutation UpdateSurvey(
+    $input: UpdateSurveyInput!
+    $condition: ModelSurveyConditionInput
+  ) {
     updateSurvey(input: $input, condition: $condition) {
       name {
         languageKeys
@@ -834,7 +866,10 @@ export const updateSurvey = /* GraphQL */ `
   }
 `;
 export const deleteSurvey = /* GraphQL */ `
-  mutation DeleteSurvey($input: DeleteSurveyInput!, $condition: ModelSurveyConditionInput) {
+  mutation DeleteSurvey(
+    $input: DeleteSurveyInput!
+    $condition: ModelSurveyConditionInput
+  ) {
     deleteSurvey(input: $input, condition: $condition) {
       name {
         languageKeys
@@ -918,7 +953,10 @@ export const deleteSurvey = /* GraphQL */ `
   }
 `;
 export const createEntity = /* GraphQL */ `
-  mutation CreateEntity($input: CreateEntityInput!, $condition: ModelEntityConditionInput) {
+  mutation CreateEntity(
+    $input: CreateEntityInput!
+    $condition: ModelEntityConditionInput
+  ) {
     createEntity(input: $input, condition: $condition) {
       name {
         languageKeys
@@ -946,10 +984,6 @@ export const createEntity = /* GraphQL */ `
         }
         customData {
           id
-          name {
-            languageKeys
-            languageTexts
-          }
           type
         }
         schemeVersion
@@ -967,12 +1001,16 @@ export const createEntity = /* GraphQL */ `
       customData {
         customDataID
         type
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         intValue
         stringValue
       }
       appliedInterventions {
         items {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -999,7 +1037,10 @@ export const createEntity = /* GraphQL */ `
   }
 `;
 export const updateEntity = /* GraphQL */ `
-  mutation UpdateEntity($input: UpdateEntityInput!, $condition: ModelEntityConditionInput) {
+  mutation UpdateEntity(
+    $input: UpdateEntityInput!
+    $condition: ModelEntityConditionInput
+  ) {
     updateEntity(input: $input, condition: $condition) {
       name {
         languageKeys
@@ -1044,12 +1085,16 @@ export const updateEntity = /* GraphQL */ `
       customData {
         customDataID
         type
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         intValue
         stringValue
       }
       appliedInterventions {
         items {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1076,7 +1121,10 @@ export const updateEntity = /* GraphQL */ `
   }
 `;
 export const deleteEntity = /* GraphQL */ `
-  mutation DeleteEntity($input: DeleteEntityInput!, $condition: ModelEntityConditionInput) {
+  mutation DeleteEntity(
+    $input: DeleteEntityInput!
+    $condition: ModelEntityConditionInput
+  ) {
     deleteEntity(input: $input, condition: $condition) {
       name {
         languageKeys
@@ -1121,12 +1169,16 @@ export const deleteEntity = /* GraphQL */ `
       customData {
         customDataID
         type
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         intValue
         stringValue
       }
       appliedInterventions {
         items {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1212,6 +1264,7 @@ export const createAppliedIntervention = /* GraphQL */ `
         latitude
         longitude
       }
+      isOkay
       executedSurveys {
         items {
           date
@@ -1302,6 +1355,7 @@ export const updateAppliedIntervention = /* GraphQL */ `
         latitude
         longitude
       }
+      isOkay
       executedSurveys {
         items {
           date
@@ -1392,6 +1446,7 @@ export const deleteAppliedIntervention = /* GraphQL */ `
         latitude
         longitude
       }
+      isOkay
       executedSurveys {
         items {
           date
@@ -1455,6 +1510,7 @@ export const createExecutedSurvey = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1593,6 +1649,7 @@ export const updateExecutedSurvey = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1731,6 +1788,7 @@ export const deleteExecutedSurvey = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1837,7 +1895,10 @@ export const deleteExecutedSurvey = /* GraphQL */ `
   }
 `;
 export const createTask = /* GraphQL */ `
-  mutation CreateTask($input: CreateTaskInput!, $condition: ModelTaskConditionInput) {
+  mutation CreateTask(
+    $input: CreateTaskInput!
+    $condition: ModelTaskConditionInput
+  ) {
     createTask(input: $input, condition: $condition) {
       title
       text
@@ -1863,6 +1924,7 @@ export const createTask = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
+      userID
       entity {
         name {
           languageKeys
@@ -1891,7 +1953,6 @@ export const createTask = /* GraphQL */ `
         customData {
           customDataID
           type
-          name
           intValue
           stringValue
         }
@@ -1935,6 +1996,7 @@ export const createTask = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1952,6 +2014,7 @@ export const createTask = /* GraphQL */ `
       }
       executedSurvey {
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -2010,6 +2073,8 @@ export const createTask = /* GraphQL */ `
         executedSurveyWhoExecutedItId
       }
       schemeVersion
+      picIDs
+      audioIDs
       id
       createdAt
       updatedAt
@@ -2024,7 +2089,10 @@ export const createTask = /* GraphQL */ `
   }
 `;
 export const updateTask = /* GraphQL */ `
-  mutation UpdateTask($input: UpdateTaskInput!, $condition: ModelTaskConditionInput) {
+  mutation UpdateTask(
+    $input: UpdateTaskInput!
+    $condition: ModelTaskConditionInput
+  ) {
     updateTask(input: $input, condition: $condition) {
       title
       text
@@ -2050,6 +2118,7 @@ export const updateTask = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
+      userID
       entity {
         name {
           languageKeys
@@ -2078,7 +2147,6 @@ export const updateTask = /* GraphQL */ `
         customData {
           customDataID
           type
-          name
           intValue
           stringValue
         }
@@ -2122,6 +2190,7 @@ export const updateTask = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -2139,6 +2208,7 @@ export const updateTask = /* GraphQL */ `
       }
       executedSurvey {
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -2197,6 +2267,8 @@ export const updateTask = /* GraphQL */ `
         executedSurveyWhoExecutedItId
       }
       schemeVersion
+      picIDs
+      audioIDs
       id
       createdAt
       updatedAt
@@ -2211,7 +2283,10 @@ export const updateTask = /* GraphQL */ `
   }
 `;
 export const deleteTask = /* GraphQL */ `
-  mutation DeleteTask($input: DeleteTaskInput!, $condition: ModelTaskConditionInput) {
+  mutation DeleteTask(
+    $input: DeleteTaskInput!
+    $condition: ModelTaskConditionInput
+  ) {
     deleteTask(input: $input, condition: $condition) {
       title
       text
@@ -2237,6 +2312,7 @@ export const deleteTask = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
+      userID
       entity {
         name {
           languageKeys
@@ -2265,7 +2341,6 @@ export const deleteTask = /* GraphQL */ `
         customData {
           customDataID
           type
-          name
           intValue
           stringValue
         }
@@ -2309,6 +2384,7 @@ export const deleteTask = /* GraphQL */ `
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -2326,6 +2402,7 @@ export const deleteTask = /* GraphQL */ `
       }
       executedSurvey {
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -2384,6 +2461,8 @@ export const deleteTask = /* GraphQL */ `
         executedSurveyWhoExecutedItId
       }
       schemeVersion
+      picIDs
+      audioIDs
       id
       createdAt
       updatedAt

@@ -26,9 +26,26 @@
       "about": "About"
     },
     "errorCodes": {
-      "UserNotFoundException": "Sorry, there is no matcing account for the given credentials.",
-      "NotAuthorizedException": "Sorry, there is no matcing account for the given credentials.",
-      "ConditionalCheckFailedException": "Sorry, something went wrong."
+      "InternalErrorException": "An internal error has occurred. Please try again later. Error Code: 6001",
+      "InvalidLambdaResponseException": "An internal error has occurred. Please try again later. Error Code: 6002",
+      "InvalidParameterException": "An internal error has occurred. Please try again later. Error Code: 6003",
+      "InvalidSmsRoleAccessPolicyException": "An internal error has occurred. Please try again later. Error Code: 6004",
+      "InvalidSmsRoleTrustRelationshipException": "An internal error has occurred. Please try again later. Error Code: 6005",
+      "InvalidUserPoolConfigurationException": "An internal error has occurred. Please try again later. Error Code: 6006",
+      "NotAuthorizedException": "Sorry, there is no matcing account for the given credentials. Error Code: 6001",
+      "PasswordResetRequiredException": "Password reset is required. Error Code: 6007",
+      "ResourceNotFoundException": "An internal error has occurred. Please try again later. Error Code: 6008",
+      "TooManyRequestsException": "Too many requests. Please try again later. Error Code: 6009",
+      "UnexpectedLambdaException": "An internal error has occurred. Please try again later. Error Code: 6010",
+      "UserLambdaValidationException": "An internal error has occurred. Please try again later. Error Code: 6011",
+      "UserNotConfirmedException": "User is not confirmed. Error Code: 6012",
+      "UserNotFoundException": "Sorry, there is no matcing account for the given credentials. Error Code: 6013",
+      "ConditionalCheckFailedException": "Sorry, something went wrong. Error Code: 6014",
+      "InvalidPasswordException": "Sorry, something went wrong. Error Code: 6015",
+      "LimitExceededException": "Sorry, something went wrong. Error Code: 6016",
+      "CodeMismatchException": "Code mismatch. Error Code: 6017",
+      "ExpiredCodeException": "Code has expired. Error Code: 6018",
+      "TooManyFailedAttemptsException": "Too many failed attempts. Error Code: 6019"
     },
     "warningCodes": {
       "sessionExpired": "Your session has expired. Please sign in again."
