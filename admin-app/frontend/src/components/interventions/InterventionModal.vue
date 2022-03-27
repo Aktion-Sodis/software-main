@@ -85,7 +85,6 @@
                 >
                   <template v-slot:text-input="slotProps">
                     <v-textarea
-                      :counter="description.length > levelDescriptionMaxChar - 20"
                       autofocus
                       required
                       outlined
@@ -96,18 +95,13 @@
                     ></v-textarea>
                   </template>
                 </LocaleTextBox>
-                <!-- <v-textarea
-                  v-else
-                  v-model="description"
-                  :counter="description.length > interventionDescriptionMaxChar - 20"
-                  :rules="[rules.maxChar]"
-                  :label="$t('interventions.interventionModal.description')"
-                  required
-                  outlined
-                  dense
-                ></v-textarea> -->
               </v-col>
+
               <v-col cols="12" sm="6" class="pt-6 pt-sm-3 px-0 px-sm-3">
+                <v-card-title class="pt-0 pt-sm-2">
+                  {{ $t('interventions.interventionModal.image') }}
+                </v-card-title>
+
                 <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" max-height="200px">
                   <v-btn v-if="!read" fab class="iv-edit-icon" color="primary" @click="selectImg">
                     <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
@@ -121,12 +115,17 @@
                   />
                 </v-img>
 
+                <v-card-title>
+                  {{ $t('baseData.tags') }}
+                </v-card-title>
+
                 <div v-if="read && interventionInFocus">
-                  <v-card-title class="pt-0">
-                    {{ $t('baseData.tags') }}
-                  </v-card-title>
                   <v-chip v-for="tagId in interventionInFocus.tagIds" :key="tagId">
-                    {{ tagById({ tagId }).name }}
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: tagById({ tagId }).name,
+                      })
+                    }}
                   </v-chip>
                 </div>
                 <v-select
@@ -134,14 +133,28 @@
                   v-model="tagIds"
                   :items="allInterventionTags"
                   item-value="tagId"
-                  item-text="name"
                   deletable-chips
                   chips
                   dense
                   :label="$t('baseData.tags')"
                   multiple
                   outlined
-                ></v-select>
+                >
+                  <template v-slot:selection="data">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: data.item.text.languageTexts,
+                      })
+                    }}
+                  </template>
+                  <template v-slot:item="data">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: data.item.text.languageTexts,
+                      })
+                    }}
+                  </template>
+                </v-select>
 
                 <v-card-title>
                   {{ $t('baseData.documents') }}
