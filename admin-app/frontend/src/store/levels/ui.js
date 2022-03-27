@@ -27,14 +27,14 @@ const levelsUI = {
     setLevelDraft: (
       state,
       {
-        id, name, description, upperLevelId, allowedInterventions, tagIds,
+        id, name, description, parentLevelID, allowedInterventions, tagIds,
       },
     ) => {
       state.levelDraft = new Level({
         id,
         name,
         description,
-        upperLevelId,
+        parentLevelID,
         allowedInterventions,
         tagIds,
       });
@@ -114,7 +114,7 @@ const levelsUI = {
       // 1. DELETE this in the ./data.js
       // 2. Await the response DB object
       // 3. Put the response DB object to levels
-      await dispatch('LEVEL_Data/APIdelete', getters.getLevelIdInFocus, {
+      await dispatch('LEVEL_Data/APIdelete', getters.levelInFocus, {
         root: true,
       });
     },

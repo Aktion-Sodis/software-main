@@ -1,5 +1,6 @@
 import 'package:mobile_app/backend/callableModels/AppliedCustomData.dart';
 import 'package:mobile_app/backend/callableModels/AppliedIntervention.dart';
+import 'package:mobile_app/backend/callableModels/ExecutedSurvey.dart';
 import 'package:mobile_app/backend/callableModels/Level.dart';
 import 'package:mobile_app/backend/callableModels/Location.dart';
 import 'package:mobile_app/backend/callableModels/I18nString.dart';
@@ -76,5 +77,14 @@ class Entity {
             (index) => appliedInterventions[index].toAmplifyModel()),
         schemeVersion: schemeVersion,
         entityLevelId: level.id!));
+  }
+
+  List<ExecutedSurvey> executedSurveysDescending() {
+    List<ExecutedSurvey> toSort = [];
+    for (AppliedIntervention appliedIntervention in appliedInterventions) {
+      toSort.addAll(appliedIntervention.executedSurveys);
+    }
+    toSort.sort((a, b) => b.date.difference(a.date).inHours);
+    return toSort;
   }
 }

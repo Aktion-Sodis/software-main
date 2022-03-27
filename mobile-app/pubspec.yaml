@@ -24,10 +24,19 @@ dependencies:
   amplify_api: ^0.4.0-rc.1
   amplify_auth_cognito: ^0.4.0-rc.1
 
+  
+  advance_pdf_viewer: ^2.0.1
+
+  
+
 
   font_awesome_flutter: ^9.2.0
   cupertino_icons: ^1.0.2
+  material_design_icons_flutter: ^5.0.6595
   flutter_bloc: ^8.0.1
+  flutter_sound: ^8.3.9
+  path_provider: ^2.0.9
+  path: ^1.8.0
   image_picker: ^0.8.4+10
 
 dev_dependencies:
@@ -36,6 +45,8 @@ dev_dependencies:
   flutter_lints: ^1.0.0
 
 flutter:
+  uses-material-design: true
+
   assets:
       - assets/test/
       - assets/fixAssets/

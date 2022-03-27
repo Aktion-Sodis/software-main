@@ -7,7 +7,7 @@ input AMPLIFY {
 
 type I18nString {
   languageKeys: [String!]!
-  languageTexts: [String!]!
+  languageTexts: [String]!
 } 
 
 type User @model {
@@ -56,7 +56,7 @@ type Level @model {
   description: I18nString!
   parentLevelID: ID
   interventionsAreAllowed: Boolean!
-  allowedInterventions: [Intervention!] @hasMany
+  allowedInterventions: [Intervention!] @manyToMany(relationName: "LevelInterventionRelation")
   customData: [CustomData!]!
   schemeVersion: Int @default(value: "0")
 }
@@ -80,8 +80,9 @@ type Intervention @model {
   interventionType: InterventionType!
   contents: [Content!]! @manyToMany(relationName: "InterventionContentRelation")
   surveys: [Survey!]! @hasMany
-  tags: [InterventionTag!]! @hasMany
+  tags: [InterventionTag!]! @manyToMany(relationName: "InterventionInterventionTagRelation")
   schemeVersion: Int @default(value: "0")
+  levels: [Level!]! @manyToMany(relationName: "LevelInterventionRelation")
 }
 
 enum InterventionType {
@@ -95,7 +96,7 @@ type Content @model {
   description: I18nString!
   interventions: [Intervention!]!
     @manyToMany(relationName: "InterventionContentRelation")
-  tags: [ContentTag!]! @hasMany
+  tags: [ContentTag!]! @manyToMany(relationName: "ContentContentTagRelation")
   schemeVersion: Int @default(value: "0")
 }
 
@@ -105,7 +106,7 @@ type Survey @model {
   description: I18nString!
   intervention: Intervention @belongsTo
   questions: [Question!]!
-  tags: [SurveyTag!]! @hasMany
+  tags: [SurveyTag!]! @manyToMany(relationName: "SurveySurveyTagRelation")
   surveyType: SurveyType!
   schemeVersion: Int @default(value: "0")
 }
@@ -160,7 +161,7 @@ type Location {
 type AppliedCustomData {
   customDataID: ID! # todo: we might possibly annotate the connection
   type: Type!
-  name: String!
+  name: I18nString!
   intValue: Int
   stringValue: String
 }
@@ -172,6 +173,7 @@ type AppliedIntervention @model {
   whoDidIt: User! @hasOne
   intervention: Intervention! @hasOne
   location: Location
+  isOkay: Boolean! @default(value: "true")
   executedSurveys: [ExecutedSurvey!]! @hasMany
   schemeVersion: Int @default(value: "0")
 }
@@ -213,27 +215,32 @@ type Task @model {
   dueDate: AWSDateTime
   finishedDate: AWSDateTime
   location: Location
-  user: User! @hasOne
+  user: User! @hasOne 
+  userID: String! @index(name: "byUser", queryField: "taskByUserID")
   entity: Entity @hasOne
   appliedIntervention: AppliedIntervention @hasOne
   executedSurvey: ExecutedSurvey @hasOne
   schemeVersion: Int @default(value: "0")
-  # todo: what to do with audio
+  picIDs: [Int!]!
+  audioIDs: [Int!]!
 }
 
 type ContentTag @model {
   text: I18nString!
   schemeVersion: Int @default(value: "0")
+  contents: [Content!]! @manyToMany(relationName: "ContentContentTagRelation")
 }
 
 type InterventionTag @model {
   text: I18nString!
   schemeVersion: Int @default(value: "0")
+  interventions: [Intervention!]! @manyToMany(relationName: "InterventionInterventionTagRelation")
 }
 
 type SurveyTag @model {
   text: I18nString!
   schemeVersion: Int @default(value: "0")
+  surveys: [Survey!]! @manyToMany(relationName: "SurveySurveyTagRelation")
 }
 
 type SessionData @model {

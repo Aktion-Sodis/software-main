@@ -33,7 +33,7 @@ class Content extends Model {
   final I18nString? _name;
   final I18nString? _description;
   final List<InterventionContentRelation>? _interventions;
-  final List<ContentTag>? _tags;
+  final List<ContentContentTagRelation>? _tags;
   final int? _schemeVersion;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
@@ -85,7 +85,7 @@ class Content extends Model {
     }
   }
   
-  List<ContentTag> get tags {
+  List<ContentContentTagRelation> get tags {
     try {
       return _tags!;
     } catch(e) {
@@ -112,13 +112,13 @@ class Content extends Model {
   
   const Content._internal({required this.id, required name, required description, required interventions, required tags, schemeVersion, createdAt, updatedAt}): _name = name, _description = description, _interventions = interventions, _tags = tags, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Content({String? id, required I18nString name, required I18nString description, required List<InterventionContentRelation> interventions, required List<ContentTag> tags, int? schemeVersion}) {
+  factory Content({String? id, required I18nString name, required I18nString description, required List<InterventionContentRelation> interventions, required List<ContentContentTagRelation> tags, int? schemeVersion}) {
     return Content._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
       description: description,
       interventions: interventions != null ? List<InterventionContentRelation>.unmodifiable(interventions) : interventions,
-      tags: tags != null ? List<ContentTag>.unmodifiable(tags) : tags,
+      tags: tags != null ? List<ContentContentTagRelation>.unmodifiable(tags) : tags,
       schemeVersion: schemeVersion);
   }
   
@@ -157,7 +157,7 @@ class Content extends Model {
     return buffer.toString();
   }
   
-  Content copyWith({String? id, I18nString? name, I18nString? description, List<InterventionContentRelation>? interventions, List<ContentTag>? tags, int? schemeVersion}) {
+  Content copyWith({String? id, I18nString? name, I18nString? description, List<InterventionContentRelation>? interventions, List<ContentContentTagRelation>? tags, int? schemeVersion}) {
     return Content._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -184,7 +184,7 @@ class Content extends Model {
       _tags = json['tags'] is List
         ? (json['tags'] as List)
           .where((e) => e?['serializedData'] != null)
-          .map((e) => ContentTag.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .map((e) => ContentContentTagRelation.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
       _schemeVersion = (json['schemeVersion'] as num?)?.toInt(),
@@ -192,7 +192,7 @@ class Content extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name?.toJson(), 'description': _description?.toJson(), 'interventions': _interventions?.map((InterventionContentRelation? e) => e?.toJson()).toList(), 'tags': _tags?.map((ContentTag? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'name': _name?.toJson(), 'description': _description?.toJson(), 'interventions': _interventions?.map((InterventionContentRelation? e) => e?.toJson()).toList(), 'tags': _tags?.map((ContentContentTagRelation? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "content.id");
@@ -203,7 +203,7 @@ class Content extends Model {
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (InterventionContentRelation).toString()));
   static final QueryField TAGS = QueryField(
     fieldName: "tags",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (ContentTag).toString()));
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (ContentContentTagRelation).toString()));
   static final QueryField SCHEMEVERSION = QueryField(fieldName: "schemeVersion");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Content";
@@ -233,8 +233,8 @@ class Content extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
       key: Content.TAGS,
       isRequired: true,
-      ofModelName: (ContentTag).toString(),
-      associatedKey: ContentTag.CONTENTTAGSID
+      ofModelName: (ContentContentTagRelation).toString(),
+      associatedKey: ContentContentTagRelation.CONTENT
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

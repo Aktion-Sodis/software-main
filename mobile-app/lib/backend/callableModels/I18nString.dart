@@ -8,16 +8,16 @@ class I18nString {
   String get text {
     if (languageKeys.contains(str.currentLanguage)) {
       int index = languageKeys.indexOf(str.currentLanguage);
-      if (languageTexts[index] != "") {
-        return languageTexts[index];
+      if (languageTexts[index] != null) {
+        return languageTexts[index]!;
       } else {
-        String toReturn = languageTexts.firstWhere((element) => element != "",
-            orElse: () => "");
+        String toReturn = languageTexts.firstWhere((element) => element != null,
+            orElse: () => "")!;
         return toReturn;
       }
     } else {
-      String toReturn = languageTexts.firstWhere((element) => element != "",
-          orElse: () => "");
+      String toReturn = languageTexts.firstWhere((element) => element != null,
+          orElse: () => "")!;
       return toReturn;
     }
   }
@@ -27,8 +27,12 @@ class I18nString {
       int index = languageKeys.indexOf(str.currentLanguage);
       languageTexts[index] = text;
     } else {
-      languageKeys.add(str.currentLanguage);
-      languageTexts.add(text);
+      List<String> languageKeysToSet = List.from(languageKeys);
+      List<String> languageTextesToSet = List.from(languageKeys);
+      languageKeysToSet.add(str.currentLanguage);
+      languageTextesToSet.add(text);
+      languageKeys = languageKeysToSet;
+      languageTexts = languageTextesToSet;
     }
   }
 

@@ -3,12 +3,14 @@
     "notYetImplemented": "Esta función aún no se ha implementado. ¡Por favor, ignora si estás en búsqueda de errores! 🐞🔍"
   },
   "general": {
+    "edit": "Editar",
     "searchBox": "Búsqueda",
     "cancel": "Cancelar",
     "save": "Guardar",
     "delete": "Eliminar",
     "form": {
       "maxCharExceeded": "Máximo {maxChar} caracteres.",
+      "minCharNotMet": "Al menos {minChar} carácteres.",
       "required": "Necesario.",
       "unsavedChanges": "Hay cambios sin guardar. ¿Estás seguro de que quieres salir?"
     },
@@ -18,23 +20,89 @@
       "organizationStructure": "Estructura organizativa",
       "interventions": "Intervenciones",
       "login": "Iniciar sesión",
-      "register": "Registrar"
+      "completeUserInfo": "Complete la información del usuario",
+      "changePassword": "Cambiar mi contraseña",
+      "forgotPassword": "Olvidé mi contraseña",
+      "about": "Acerca de"
+    },
+    "errorCodes": {
+      "InternalErrorException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6001",
+      "InvalidLambdaResponseException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6002",
+      "InvalidParameterException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6003",
+      "InvalidSmsRoleAccessPolicyException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6004",
+      "InvalidSmsRoleTrustRelationshipException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6005",
+      "InvalidUserPoolConfigurationException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6006",
+      "NotAuthorizedException": "Lo sentimos, no existe una cuenta coincidente para las credenciales proporcionadas. Código de error: 6001",
+      "PasswordResetRequiredException": "Se requiere restablecer la contraseña. Código de error: 6007",
+      "ResourceNotFoundException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6008",
+      "TooManyRequestsException": "Demasiadas solicitudes. Vuelve a intentarlo más tarde. Código de error: 6009",
+      "UnexpectedLambdaException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6010",
+      "UserLambdaValidationException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6011",
+      "UserNotConfirmedException": "Usuario no confirmado. Código de error: 6012",
+      "UserNotFoundException": "Lo sentimos, no hay una cuenta coincidente para las credenciales proporcionadas. Código de error: 6013",
+      "ConditionalCheckFailedException": "Lo siento, algo salió mal. Código de error: 6014",
+      "InvalidPasswordException": "Lo siento, algo salió mal. Código de error: 6015",
+      "LimitExceededException": "Lo siento, algo salió mal. Código de error: 6016",
+      "CodeMismatchException": "Código no coincidente. Código de error: 6017",
+      "ExpiredCodeException": "El código ha caducado. Código de error: 6018",
+      "TooManyFailedAttemptsException": "Demasiados intentos fallidos. Código de error: 6019"
+
+    },
+    "warningCodes": {
+      "sessionExpired": "Su sesión ha caducado. Inicie sesión de nuevo."
+    },
+    "api": {
+      "inSync": "Refrescar",
+      "synched": "En sintonía",
+      "synchronizing": "sincronizando..."
     }
   },
   "login": {
     "title": "¡Bienvenido de nuevo!",
     "subtitle": "Por favor, inicie sesión con sus credenciales o regístrese.",
-    "username": "Usuario",
+    "email": "Email",
     "password": "Contraseña",
     "rememberMe": "Recuérdalo",
     "forgotPassword": "Contraseña olvidada",
     "signIn": "Iniciar sesión",
-    "signInWithGoogle": "Iniciar sesión con Google",
+    "withGoogle": "Iniciar sesión con Google",
     "dontHaveAnAccount": "Todavía no tengo cuenta",
-    "registerHere": "Registar"
+    "askYourAdmin": "Solicite acceso a su administrador."
+  },
+  "completeUserInfo": {
+    "title": "Una cosa más...",
+    "subtitle": "Parece que eres nuevo aquí. Finalice su perfil para comenzar a usar la Admin App.",
+    "firstName": "Primer nombre",
+    "lastName": "Apellido",
+    "password": {
+      "label": "Nueva contraseña",
+      "hint": "Asegúrese de no olvidar esta contraseña y anótela."
+    },
+    "start": "Comienzo"
   },
   "home": {
     "title": "Inicio"
+  },
+  "changePassword": {
+    "title": "Actualiza tu contraseña",
+    "subtitle": "Ingrese sus contraseñas anterior y nueva",
+    "oldPassword": {
+      "label": "Contraseña anterior",
+      "hint": "La contraseña que tiene actualmente. Si la olvidaste, intenta restablecer tu contraseña."
+    },
+    "newPassword": {
+      "label": "Nueva contraseña",
+      "hint": "La contraseña que desea tener."
+    }
+  },
+  "forgotPassword": {
+    "title": "Has olvidado tu contraseña",
+    "subtitle": "Introduzca su dirección de correo electrónico. Si hay una cuenta para ello, le enviaremos un correo electrónico con un código de verificación. Ingrese el código y establezca una nueva contraseña para su cuenta.",
+    "emailedCode": "Código",
+    "newPassword1": "Nueva contraseña",
+    "newPassword2": "Nueva contraseña de nuevo",
+    "sendCode": "Enviar código",
+    "confirm": "Confirmar"
   },
   "baseData": {
     "title": "Datos básicos",
@@ -49,6 +117,7 @@
     "addNewEntity": "Añadir entidad",
     "addNewLevel": "Añadir un nuevo nivel",
     "hasNoInterventions": "No existen intervenciones para este nivel.",
+    "hasNoEntities": "No hay entidades para este nivel.",
     "levelModal": {
       "modalTitle": {
         "edit": "Editar nivel ",
@@ -66,6 +135,8 @@
       "upperLevel": "El nivel está subordinado a"
     },
     "entityModal": {
+      "moreStuffTitle": "Próximamente más cosas...",
+      "moreStuffDescription": "Agregar ubicación, datos personalizados y etiquetas vendrá en la próxima actualización importante.",
       "modalTitle": {
         "edit": "Editar entidad ",
         "create": "Crear nueva entidad",
