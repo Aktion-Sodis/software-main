@@ -7,15 +7,15 @@ Future<ThemeData> getThemeData() async {
           labelStyle: const TextStyle(color: Colors.blue, fontSize: 12),
           hintStyle: const TextStyle(color: Colors.grey, fontSize: 18),
           border: OutlineInputBorder(
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
             borderRadius: BorderRadius.circular(15),
           ),
           disabledBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
             borderRadius: BorderRadius.circular(15),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
             borderRadius: BorderRadius.circular(15),
           ),
           focusedBorder: OutlineInputBorder(
