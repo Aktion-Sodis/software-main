@@ -30,7 +30,6 @@
         </span>
       </v-btn>
     </div>
-    {{ res }}
   </div>
 </template>
 
