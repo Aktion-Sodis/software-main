@@ -7,6 +7,7 @@ class InterventionTag {
   int? schemeVersion;
   DateTime? createdAt;
   DateTime? updatedAt;
+  late List<amp.InterventionInterventionTagRelation> interventions;
 
   String get text => text_ml.text;
 
@@ -16,6 +17,7 @@ class InterventionTag {
       {this.id,
       required this.text_ml,
       this.schemeVersion,
+      required this.interventions,
       this.createdAt,
       this.updatedAt});
 
@@ -25,10 +27,14 @@ class InterventionTag {
     schemeVersion = tag.schemeVersion;
     createdAt = tag.createdAt?.getDateTimeInUtc();
     updatedAt = tag.updatedAt?.getDateTimeInUtc();
+    interventions = tag.interventions;
   }
 
   amp.InterventionTag toAmplifyModel() {
     return amp.InterventionTag(
-        text: text_ml.toAmplifyModel(), id: id, schemeVersion: schemeVersion);
+        text: text_ml.toAmplifyModel(),
+        id: id,
+        schemeVersion: schemeVersion,
+        interventions: interventions);
   }
 }

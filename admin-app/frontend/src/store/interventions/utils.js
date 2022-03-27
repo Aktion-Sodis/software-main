@@ -1,4 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
+import { API, graphqlOperation } from 'aws-amplify';
+import { listInterventions, listInterventionTags } from '../../graphql/queries';
+import { createIntervention } from '../../graphql/mutations';
 
 export class EmptyIntervention {
   constructor() {
@@ -25,6 +28,18 @@ export class Intervention {
 }
 
 // Mock API calls
-export const postNewIntervention = async (interventionDraft) => interventionDraft;
+export const postNewIntervention = async ({ id, name, description }) => API.graphql(
+  graphqlOperation(createIntervention, {
+    input: {
+      id,
+      name,
+      description,
+      interventionType: 'TECHNOLOGY',
+      tags: [],
+    },
+  }),
+);
 export const putIntervention = async (interventionDraft) => interventionDraft;
 export const deleteIntervention = async () => ({ errors: [] });
+export const getAllInterventions = async () => API.graphql(graphqlOperation(listInterventions));
+export const getAllInterventionTags = async () => API.graphql(graphqlOperation(listInterventionTags));

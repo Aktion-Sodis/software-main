@@ -22,11 +22,7 @@ export const getUser = /* GraphQL */ `
   }
 `;
 export const listUsers = /* GraphQL */ `
-  query ListUsers(
-    $filter: ModelUserFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListUsers($filter: ModelUserFilterInput, $limit: Int, $nextToken: String) {
     listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         firstName
@@ -56,12 +52,7 @@ export const syncUsers = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncUsers(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncUsers(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         firstName
         lastName
@@ -106,11 +97,7 @@ export const getConfig = /* GraphQL */ `
   }
 `;
 export const listConfigs = /* GraphQL */ `
-  query ListConfigs(
-    $filter: ModelConfigFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListConfigs($filter: ModelConfigFilterInput, $limit: Int, $nextToken: String) {
     listConfigs(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name
@@ -142,12 +129,7 @@ export const syncConfigs = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncConfigs(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncConfigs(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         name
         colorTheme {
@@ -186,15 +168,14 @@ export const getLevel = /* GraphQL */ `
       interventionsAreAllowed
       allowedInterventions {
         items {
-          interventionType
-          schemeVersion
           id
+          levelID
+          interventionID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         nextToken
         startedAt
@@ -218,11 +199,7 @@ export const getLevel = /* GraphQL */ `
   }
 `;
 export const listLevels = /* GraphQL */ `
-  query ListLevels(
-    $filter: ModelLevelFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListLevels($filter: ModelLevelFilterInput, $limit: Int, $nextToken: String) {
     listLevels(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name {
@@ -241,6 +218,10 @@ export const listLevels = /* GraphQL */ `
         }
         customData {
           id
+          name {
+            languageKeys
+            languageTexts
+          }
           type
         }
         schemeVersion
@@ -263,12 +244,7 @@ export const syncLevels = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncLevels(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncLevels(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         name {
           languageKeys
@@ -344,35 +320,44 @@ export const getIntervention = /* GraphQL */ `
       }
       tags {
         items {
-          schemeVersion
           id
+          interventionID
+          interventionTagID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
         }
         nextToken
         startedAt
       }
       schemeVersion
+      levels {
+        items {
+          id
+          levelID
+          interventionID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      levelAllowedInterventionsId
     }
   }
 `;
 export const listInterventions = /* GraphQL */ `
-  query ListInterventions(
-    $filter: ModelInterventionFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListInterventions($filter: ModelInterventionFilterInput, $limit: Int, $nextToken: String) {
     listInterventions(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name {
@@ -397,13 +382,16 @@ export const listInterventions = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       nextToken
       startedAt
@@ -417,12 +405,7 @@ export const syncInterventions = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncInterventions(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncInterventions(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         name {
           languageKeys
@@ -446,13 +429,16 @@ export const syncInterventions = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       nextToken
       startedAt
@@ -486,14 +472,14 @@ export const getContent = /* GraphQL */ `
       }
       tags {
         items {
-          schemeVersion
           id
+          contentID
+          contentTagID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          contentTagsId
         }
         nextToken
         startedAt
@@ -509,11 +495,7 @@ export const getContent = /* GraphQL */ `
   }
 `;
 export const listContents = /* GraphQL */ `
-  query ListContents(
-    $filter: ModelContentFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListContents($filter: ModelContentFilterInput, $limit: Int, $nextToken: String) {
     listContents(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name {
@@ -552,12 +534,7 @@ export const syncContents = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncContents(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncContents(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         name {
           languageKeys
@@ -622,13 +599,16 @@ export const getSurvey = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       questions {
         id
@@ -645,14 +625,14 @@ export const getSurvey = /* GraphQL */ `
       }
       tags {
         items {
-          schemeVersion
           id
+          surveyID
+          surveyTagID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          surveyTagsId
         }
         nextToken
         startedAt
@@ -670,11 +650,7 @@ export const getSurvey = /* GraphQL */ `
   }
 `;
 export const listSurveys = /* GraphQL */ `
-  query ListSurveys(
-    $filter: ModelSurveyFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListSurveys($filter: ModelSurveyFilterInput, $limit: Int, $nextToken: String) {
     listSurveys(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name {
@@ -694,7 +670,6 @@ export const listSurveys = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         questions {
           id
@@ -727,12 +702,7 @@ export const syncSurveys = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncSurveys(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncSurveys(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         name {
           languageKeys
@@ -751,7 +721,6 @@ export const syncSurveys = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         questions {
           id
@@ -855,11 +824,7 @@ export const getEntity = /* GraphQL */ `
   }
 `;
 export const listEntities = /* GraphQL */ `
-  query ListEntities(
-    $filter: ModelEntityFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListEntities($filter: ModelEntityFilterInput, $limit: Int, $nextToken: String) {
     listEntities(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name {
@@ -872,6 +837,14 @@ export const listEntities = /* GraphQL */ `
         }
         parentEntityID
         level {
+          name {
+            languageKeys
+            languageTexts
+          }
+          description {
+            languageKeys
+            languageTexts
+          }
           parentLevelID
           interventionsAreAllowed
           schemeVersion
@@ -918,12 +891,7 @@ export const syncEntities = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncEntities(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncEntities(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         name {
           languageKeys
@@ -1016,13 +984,16 @@ export const getAppliedIntervention = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       location {
         latitude
@@ -1064,11 +1035,7 @@ export const listAppliedInterventions = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    listAppliedInterventions(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
+    listAppliedInterventions(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         whoDidIt {
           firstName
@@ -1091,7 +1058,6 @@ export const listAppliedInterventions = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         location {
           latitude
@@ -1152,7 +1118,6 @@ export const syncAppliedInterventions = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         location {
           latitude
@@ -1203,7 +1168,6 @@ export const getExecutedSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         location {
           latitude
@@ -1242,7 +1206,6 @@ export const getExecutedSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         questions {
           id
@@ -1557,7 +1520,6 @@ export const getTask = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         location {
           latitude
@@ -1652,11 +1614,7 @@ export const getTask = /* GraphQL */ `
   }
 `;
 export const listTasks = /* GraphQL */ `
-  query ListTasks(
-    $filter: ModelTaskFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListTasks($filter: ModelTaskFilterInput, $limit: Int, $nextToken: String) {
     listTasks(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         title
@@ -1739,12 +1697,7 @@ export const syncTasks = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncTasks(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncTasks(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         title
         text
@@ -1827,22 +1780,31 @@ export const getContentTag = /* GraphQL */ `
         languageTexts
       }
       schemeVersion
+      contents {
+        items {
+          id
+          contentID
+          contentTagID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      contentTagsId
     }
   }
 `;
 export const listContentTags = /* GraphQL */ `
-  query ListContentTags(
-    $filter: ModelContentTagFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListContentTags($filter: ModelContentTagFilterInput, $limit: Int, $nextToken: String) {
     listContentTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         text {
@@ -1850,13 +1812,16 @@ export const listContentTags = /* GraphQL */ `
           languageTexts
         }
         schemeVersion
+        contents {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        contentTagsId
       }
       nextToken
       startedAt
@@ -1870,25 +1835,23 @@ export const syncContentTags = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncContentTags(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncContentTags(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         text {
           languageKeys
           languageTexts
         }
         schemeVersion
+        contents {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        contentTagsId
       }
       nextToken
       startedAt
@@ -1903,13 +1866,26 @@ export const getInterventionTag = /* GraphQL */ `
         languageTexts
       }
       schemeVersion
+      interventions {
+        items {
+          id
+          interventionID
+          interventionTagID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      interventionTagsId
     }
   }
 `;
@@ -1919,24 +1895,23 @@ export const listInterventionTags = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    listInterventionTags(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
+    listInterventionTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         text {
           languageKeys
           languageTexts
         }
         schemeVersion
+        interventions {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        interventionTagsId
       }
       nextToken
       startedAt
@@ -1962,13 +1937,16 @@ export const syncInterventionTags = /* GraphQL */ `
           languageTexts
         }
         schemeVersion
+        interventions {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        interventionTagsId
       }
       nextToken
       startedAt
@@ -1983,22 +1961,31 @@ export const getSurveyTag = /* GraphQL */ `
         languageTexts
       }
       schemeVersion
+      surveys {
+        items {
+          id
+          surveyID
+          surveyTagID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      surveyTagsId
     }
   }
 `;
 export const listSurveyTags = /* GraphQL */ `
-  query ListSurveyTags(
-    $filter: ModelSurveyTagFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
+  query ListSurveyTags($filter: ModelSurveyTagFilterInput, $limit: Int, $nextToken: String) {
     listSurveyTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         text {
@@ -2006,13 +1993,16 @@ export const listSurveyTags = /* GraphQL */ `
           languageTexts
         }
         schemeVersion
+        surveys {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        surveyTagsId
       }
       nextToken
       startedAt
@@ -2026,25 +2016,23 @@ export const syncSurveyTags = /* GraphQL */ `
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncSurveyTags(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
+    syncSurveyTags(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
       items {
         text {
           languageKeys
           languageTexts
         }
         schemeVersion
+        surveys {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        surveyTagsId
       }
       nextToken
       startedAt
@@ -2130,6 +2118,177 @@ export const syncSessionData = /* GraphQL */ `
     }
   }
 `;
+export const getLevelInterventionRelation = /* GraphQL */ `
+  query GetLevelInterventionRelation($id: ID!) {
+    getLevelInterventionRelation(id: $id) {
+      id
+      levelID
+      interventionID
+      level {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        parentLevelID
+        interventionsAreAllowed
+        allowedInterventions {
+          nextToken
+          startedAt
+        }
+        customData {
+          id
+          type
+        }
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      intervention {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        interventionType
+        contents {
+          nextToken
+          startedAt
+        }
+        surveys {
+          nextToken
+          startedAt
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listLevelInterventionRelations = /* GraphQL */ `
+  query ListLevelInterventionRelations(
+    $filter: ModelLevelInterventionRelationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listLevelInterventionRelations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        levelID
+        interventionID
+        level {
+          parentLevelID
+          interventionsAreAllowed
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        intervention {
+          interventionType
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncLevelInterventionRelations = /* GraphQL */ `
+  query SyncLevelInterventionRelations(
+    $filter: ModelLevelInterventionRelationFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncLevelInterventionRelations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        levelID
+        interventionID
+        level {
+          parentLevelID
+          interventionsAreAllowed
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        intervention {
+          interventionType
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const getInterventionContentRelation = /* GraphQL */ `
   query GetInterventionContentRelation($id: ID!) {
     getInterventionContentRelation(id: $id) {
@@ -2159,13 +2318,16 @@ export const getInterventionContentRelation = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       content {
         name {
@@ -2206,11 +2368,7 @@ export const listInterventionContentRelations = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    listInterventionContentRelations(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
+    listInterventionContentRelations(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         interventionID
@@ -2224,7 +2382,6 @@ export const listInterventionContentRelations = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         content {
           schemeVersion
@@ -2272,9 +2429,474 @@ export const syncInterventionContentRelations = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         content {
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getInterventionInterventionTagRelation = /* GraphQL */ `
+  query GetInterventionInterventionTagRelation($id: ID!) {
+    getInterventionInterventionTagRelation(id: $id) {
+      id
+      interventionID
+      interventionTagID
+      intervention {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        interventionType
+        contents {
+          nextToken
+          startedAt
+        }
+        surveys {
+          nextToken
+          startedAt
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      interventionTag {
+        text {
+          languageKeys
+          languageTexts
+        }
+        schemeVersion
+        interventions {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listInterventionInterventionTagRelations = /* GraphQL */ `
+  query ListInterventionInterventionTagRelations(
+    $filter: ModelInterventionInterventionTagRelationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listInterventionInterventionTagRelations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        interventionID
+        interventionTagID
+        intervention {
+          interventionType
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        interventionTag {
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncInterventionInterventionTagRelations = /* GraphQL */ `
+  query SyncInterventionInterventionTagRelations(
+    $filter: ModelInterventionInterventionTagRelationFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncInterventionInterventionTagRelations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        interventionID
+        interventionTagID
+        intervention {
+          interventionType
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        interventionTag {
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getContentContentTagRelation = /* GraphQL */ `
+  query GetContentContentTagRelation($id: ID!) {
+    getContentContentTagRelation(id: $id) {
+      id
+      contentID
+      contentTagID
+      content {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        interventions {
+          nextToken
+          startedAt
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      contentTag {
+        text {
+          languageKeys
+          languageTexts
+        }
+        schemeVersion
+        contents {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listContentContentTagRelations = /* GraphQL */ `
+  query ListContentContentTagRelations(
+    $filter: ModelContentContentTagRelationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listContentContentTagRelations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        contentID
+        contentTagID
+        content {
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        contentTag {
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncContentContentTagRelations = /* GraphQL */ `
+  query SyncContentContentTagRelations(
+    $filter: ModelContentContentTagRelationFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncContentContentTagRelations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        contentID
+        contentTagID
+        content {
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        contentTag {
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getSurveySurveyTagRelation = /* GraphQL */ `
+  query GetSurveySurveyTagRelation($id: ID!) {
+    getSurveySurveyTagRelation(id: $id) {
+      id
+      surveyID
+      surveyTagID
+      survey {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        intervention {
+          interventionType
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        questions {
+          id
+          type
+          isFollowUpQuestion
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        surveyType
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        interventionSurveysId
+      }
+      surveyTag {
+        text {
+          languageKeys
+          languageTexts
+        }
+        schemeVersion
+        surveys {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listSurveySurveyTagRelations = /* GraphQL */ `
+  query ListSurveySurveyTagRelations(
+    $filter: ModelSurveySurveyTagRelationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSurveySurveyTagRelations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        surveyID
+        surveyTagID
+        survey {
+          surveyType
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionSurveysId
+        }
+        surveyTag {
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncSurveySurveyTagRelations = /* GraphQL */ `
+  query SyncSurveySurveyTagRelations(
+    $filter: ModelSurveySurveyTagRelationFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncSurveySurveyTagRelations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        surveyID
+        surveyTagID
+        survey {
+          surveyType
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          interventionSurveysId
+        }
+        surveyTag {
           schemeVersion
           id
           createdAt
