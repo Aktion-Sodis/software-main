@@ -251,6 +251,7 @@ Widget taskRow(BuildContext context, Task task,
 Widget executedSurveyRow(
     BuildContext context, ExecutedSurvey executedSurvey, VoidCallback onPressed,
     {bool separator = false}) {
+  //todo: datei synced file als übergabe
   return Column(key: ValueKey(executedSurvey), children: [
     RawMaterialButton(
         onPressed: onPressed,
