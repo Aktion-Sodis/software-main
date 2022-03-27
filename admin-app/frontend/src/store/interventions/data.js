@@ -17,7 +17,7 @@ const interventionsData = {
   }),
   getters: {
     /* READ */
-    getInterventions: ({ interventions }) => interventions,
+    getInterventions: ({ interventions }) => interventions.sort((a, b) => a.id - b.id),
     getInterventionTags: ({ interventionTags }) => interventionTags,
     getLoading: ({ loading }) => loading,
 
