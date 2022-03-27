@@ -16,6 +16,7 @@
       "addInNewLocale": "Başka bir dilde",
       "fallbackLocaleMustExistError": "When entering a text for any kind of data, it must always be given in the main locale ({fallbackLocale})."
     },
+    "noTextProvided": "No text was provided.",
     "routes": {
       "home": "Ana sayfa",
       "baseData": "Temel veriler",

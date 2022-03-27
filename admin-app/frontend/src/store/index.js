@@ -33,6 +33,8 @@ export default new Vuex.Store({
     getCreatingEntityInLevelId: ({ creatingEntityInLevelId }) => creatingEntityInLevelId,
     getSurveyModalCompletionIndex: ({ surveyModalCompletionIndex }) => surveyModalCompletionIndex,
     fallbackLocaleIndex: () => i18n.availableLocales.findIndex((l) => l === i18n.fallbackLocale),
+    calculateLocalizedString:
+      (_, { fallbackLocaleIndex }) => ({ languageTexts }) => languageTexts[fallbackLocaleIndex] || i18n.t('general.noTextProvided'),
   },
   mutations: {
     setCreatingEntityInLevelId: (state, { id }) => {

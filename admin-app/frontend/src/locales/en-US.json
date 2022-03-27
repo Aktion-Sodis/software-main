@@ -16,6 +16,7 @@
       "addInNewLocale": "In another language",
       "fallbackLocaleMustExistError": "When entering a text for any kind of data, it must always be given in the main locale ({fallbackLocale})."
     },
+    "noTextProvided": "No text was provided.",
     "routes": {
       "home": "Home",
       "baseData": "Base data",
