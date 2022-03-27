@@ -10,51 +10,6 @@ import { dataTypesDict, modalModesDict } from '../constants';
 const entitiesData = {
   namespaced: true,
   state: () => ({
-    // entities: [
-    //   {
-    //     id: 'f77a7d3f-fb7f-434e-8be3-32b74269083c',
-    //     name: 'Aachen',
-    //     description: 'Some description',
-    //     entityLevelId: '5a93459f-f23d-44e6-a112-c41e90473a2d',
-    //     parentEntityID: null,
-    //   },
-    //   {
-    //     id: 'afd8874d-ac52-4508-8351-f35f8f7e28a0',
-    //     name: 'Sinop',
-    //     description: 'Some description',
-    //     entityLevelId: '5a93459f-f23d-44e6-a112-c41e90473a2d',
-    //     parentEntityID: null,
-    //   },
-    //   {
-    //     id: '0b38df2a-84f5-4066-9c0c-f447b93e8278',
-    //     name: 'Nizzaallee',
-    //     description: 'Some description',
-    //     entityLevelId: 'e7a03934-90b9-405b-807b-3f748b15ae69',
-    //     parentEntityID: 'f77a7d3f-fb7f-434e-8be3-32b74269083c',
-    //   },
-    //   {
-    //     id: '3d29c7aa-f422-41bc-99ae-35480a1f415e',
-    //     name: 'Mies van der Rohe Straße',
-    //     description: 'Some description',
-    //     entityLevelId: 'e7a03934-90b9-405b-807b-3f748b15ae69',
-    //     parentEntityID: 'f77a7d3f-fb7f-434e-8be3-32b74269083c',
-    //   },
-    //   {
-    //     id: '327ac9b8-ab56-47e0-a1c5-bd4c978645a0',
-    //     name: 'Atatürk Caddesi',
-    //     description: 'Some description',
-    //     entityLevelId: 'e7a03934-90b9-405b-807b-3f748b15ae69',
-    //     parentEntityID: 'afd8874d-ac52-4508-8351-f35f8f7e28a0',
-    //   },
-    //   {
-    //     id: 'b046cde7-4f18-4fc9-9b13-eb49c98f226c',
-    //     name: 'Eine 4er WG',
-    //     description: 'Some description',
-    //     entityLevelId: 'd1faef12-cf15-4b5e-9637-b4ffbd156954',
-    //     parentEntityID: '0b38df2a-84f5-4066-9c0c-f447b93e8278',
-    //   },
-    // ],
-
     entities: [],
 
     loading: false,
@@ -83,8 +38,8 @@ const entitiesData = {
         );
         return lowerLevelContainsChildren
           ? allEntitiesInLowerLevel.length
-          - allEntitiesInLowerLevel.reverse().findIndex((e) => e.parentEntityID === entityId)
-          - 1
+              - allEntitiesInLowerLevel.reverse().findIndex((e) => e.parentEntityID === entityId)
+              - 1
           : -1;
       },
     minVerticalOrderOfChildren:
@@ -286,26 +241,6 @@ const entitiesData = {
           entityLevelId: '1',
           parentEntityID: '0',
         }),
-        // new Entity({
-        //   id: '1',
-        //   name: {
-        //     languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-        //     languageTexts: ['La Paz', 'La Paz', 'La Paz'],
-        //   },
-        //   description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-        //   entityLevelId: '1',
-        //   parentEntityID: '0',
-        // }),
-        // new Entity({
-        //   id: '2',
-        //   name: {
-        //     languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-        //     languageTexts: ['El Alto', 'El Alto', 'El Alto'],
-        //   },
-        //   description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-        //   entityLevelId: '2',
-        //   parentEntityID: '1',
-        // }),
       ];
 
       // eslint-disable-next-line
