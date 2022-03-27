@@ -31,4 +31,16 @@ class TaskFormFillingOut extends TaskFormState {
   }
 }
 
-class TaskFormSuccessfullSubmitted extends TaskFormState {}
+class TaskFormSavingInProgress extends TaskFormState {
+  TaskFormSavingInProgress(
+      {List<Attachment>? attachments,
+      DateTime? deadline,
+      List<Entity>? entities})
+      : super(attachments: attachments, deadline: deadline, entities: entities);
+}
+
+class TaskFormSuccessfullSubmitted extends TaskFormState {
+  final Task? task;
+
+  TaskFormSuccessfullSubmitted(this.task);
+}

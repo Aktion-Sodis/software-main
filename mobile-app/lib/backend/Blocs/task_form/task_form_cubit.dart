@@ -8,11 +8,20 @@ import 'package:mobile_app/backend/Blocs/task_form/add_task_cubit.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/callableModels/localModels/attachment.dart';
 import 'package:mobile_app/backend/callableModels/localModels/image_attachment.dart';
+import 'package:mobile_app/frontend/pages/task_form/task_form.dart';
 import 'package:mobile_app/services/photo_capturing.dart';
 import 'package:mobile_app/services/storage.dart';
 import 'package:path_provider/path_provider.dart';
 
 part 'task_form_state.dart';
+
+void openTaskForm<T extends TaskFormCubit>(BuildContext context, String title) {
+  showDialog(
+      context: context,
+      builder: (context) => TaskForm<T>(
+            title: title,
+          ));
+}
 
 abstract class TaskFormCubit extends Cubit<TaskFormState> {
   TaskFormCubit() : super(TaskFormFillingOut());
@@ -97,6 +106,27 @@ abstract class TaskFormCubit extends Cubit<TaskFormState> {
     }
   }
 
-  void submit(String text, List<Attachment> attachments, List<Entity> entities,
-      DateTime? deadline);
+  Future<void> submit(String text, List<Attachment> attachments,
+      List<Entity> entities, DateTime? deadline) async {
+    emit(TaskFormSavingInProgress(
+      attachments: attachments,
+      entities: entities,
+      deadline: deadline,
+    ));
+
+    try {
+      Task? result = await saveTask(text, attachments, entities, deadline);
+      emit(TaskFormSuccessfullSubmitted(result));
+    } catch (e) {
+      // TODO: show error messages
+      emit(TaskFormFillingOut(
+        attachments: attachments,
+        entities: entities,
+        deadline: deadline,
+      ));
+    }
+  }
+
+  Future<Task?> saveTask(String text, List<Attachment> attachments,
+      List<Entity> entities, DateTime? deadline);
 }

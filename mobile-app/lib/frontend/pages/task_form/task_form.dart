@@ -14,6 +14,7 @@ import 'package:mobile_app/frontend/pages/task_form/attachments_list.dart';
 import 'package:mobile_app/frontend/pages/task_form/small_button.dart';
 import 'package:mobile_app/frontend/theme.dart';
 
+@immutable
 class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
   TaskForm({Key? key, required this.title}) : super(key: key);
 
@@ -84,7 +85,12 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<TaskFormCubit>(
       create: (context) => TaskFormCubit.initialize<T>(),
-      child: BlocBuilder<TaskFormCubit, TaskFormState>(
+      child: BlocConsumer<TaskFormCubit, TaskFormState>(
+        listener: (context, state) {
+          if (state is TaskFormSuccessfullSubmitted) {
+            Navigator.pop(context, state.task);
+          }
+        },
         builder: (context, state) {
           _cubit = BlocProvider.of<TaskFormCubit>(context);
 
@@ -327,7 +333,15 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(15.0),
                               ))),
                           onPressed: () {},
-                          child: const Text("Save task")))
+                          child: (state is TaskFormSavingInProgress)
+                              ? const SizedBox(
+                                  width: 17,
+                                  height: 17,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Text("Save task")))
                 ],
               ),
             ),
