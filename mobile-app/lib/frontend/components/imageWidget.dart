@@ -2,21 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/frontend/components/loadingsign.dart';
 
 class ImageWidget extends StatefulWidget {
-  final String path;
-  final File? imageFile;
+  final SyncedFile? imageFile;
   final BoxConstraints? boxConstraints;
   final double? width;
   final double? height;
   final BorderRadius? borderRadius;
 
-  //todo: datei change to synced file
-
-  ImageWidget(
-      {required this.path,
-      this.imageFile,
+  const ImageWidget(
+      {required this.imageFile,
       this.boxConstraints,
       this.width,
       this.height,
@@ -32,26 +29,19 @@ class ImageWidgetState extends State<ImageWidget> {
   bool loading = true;
   File? imageFile;
 
-  Future<File?> fileFromPath(String path) async {
-    //todo: datei
-    return null;
-  }
-
   @override
   void initState() {
-    if (widget.imageFile != null) {
-      imageFile = widget.imageFile;
-      loading = false;
-    }
-    super.initState();
-    if (widget.imageFile == null) {
-      fileFromPath(widget.path).then((value) {
+    widget.imageFile?.file().then((value){
+      if(mounted){
         setState(() {
           imageFile = value;
           loading = false;
         });
-      });
-    }
+      }else{
+        imageFile = value;
+        loading = false;
+      }
+    });
   }
 
   @override

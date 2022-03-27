@@ -18,9 +18,6 @@ class EntityRepository {
         (index) => Entity.fromAmplifyModel(popluatedEntities[index]));
   }
 
-  //todo: implement pic
-  static String getFilePath(Entity) => "";
-
   static Future<amp.Entity> ampEntityByID(String id) async {
     List<amp.Entity> results = await Amplify.DataStore.query(
         amp.Entity.classType,
@@ -60,6 +57,11 @@ class EntityRepository {
 
   static SyncedFile getEntityPic(Entity entity) {
     String path = dataStorePath(DataStorePaths.entityPicPath, [entity.id!]);
+    return SyncedFile(path);
+  }
+
+  static SyncedFile getEntityPicByID(String entityId) {
+    String path = dataStorePath(DataStorePaths.entityPicPath, [entityId]);
     return SyncedFile(path);
   }
 }

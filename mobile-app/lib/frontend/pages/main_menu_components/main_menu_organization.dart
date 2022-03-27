@@ -18,6 +18,7 @@ import 'package:mobile_app/backend/repositories/AppliedInterventionRepository.da
 import 'package:mobile_app/backend/repositories/EntityRepository.dart';
 import 'package:mobile_app/backend/repositories/InterventionRepository.dart';
 import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/frontend/components/buttons.dart';
 import 'package:mobile_app/frontend/components/imageWidget.dart';
 import 'package:mobile_app/frontend/components/loadingsign.dart';
@@ -282,12 +283,15 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
 
   bool create = true;
   Entity? entity;
+  String? _preliminaryEntityId;
+  
+  String? get preliminaryEntityId => entity?.id ?? _preliminaryEntityId;
+  set preliminaryEntityId(String? entityId) => _preliminaryEntityId = entityId;
+  
   late TextEditingController nameEditingController;
   late TextEditingController descriptionEditingController;
   late List<TextEditingController> customDataControllers;
-
-  File? imageFile;
-
+  
   Widget customDataField(int index) {
     return Container(
         margin: EdgeInsets.only(
@@ -361,6 +365,7 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
       });
       if (create) {
         Entity toSave = Entity(
+            id: preliminaryEntityId,
             name_ml: I18nString.fromString(string: nameEditingController.text),
             description_ml: I18nString.fromString(
                 string: descriptionEditingController.text),
@@ -384,7 +389,34 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
   }
 
   void updatePic() async {
-    //todo: datei
+    XFile? r = await CameraFunctionality.takePicture(context: context);
+    if(r!=null){
+      if(entity==null&&preliminaryEntityId == null){
+        preliminaryEntityId = UUID.getUUID();
+      }
+      SyncedFile syncedFile = getEntityPic()!;
+      await syncedFile!.updateAsPic(r);
+      setStateIfMounted((){});
+    }
+  }
+  
+  SyncedFile? getEntityPic(){
+    if(entity!=null){
+      return EntityRepository.getEntityPic(entity!);
+    }if(preliminaryEntityId!=null){
+      return EntityRepository.getEntityPicByID(preliminaryEntityId!);
+    }
+    return null;
+  }
+  
+  void setStateIfMounted(Function function){
+    if(mounted){
+      setState(() {
+        function();
+      });
+    }else{
+      function();
+    }
   }
 
   List<Widget> columnChildren() {
@@ -398,11 +430,9 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
             children: [
               //todo: datei synced image
               ImageWidget(
-                  path: getpicPath(),
-                  imageFile: imageFile,
                   width: width(context) * .92,
                   height: height(context) * .2,
-                  borderRadius: BorderRadius.circular(8)),
+                  borderRadius: BorderRadius.circular(8), imageFile: getEntityPic(),),
               Positioned(
                   right: defaultPadding(context),
                   bottom: defaultPadding(context),
@@ -565,8 +595,7 @@ class ListWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               ImageWidget(
-                //todo: datei -> siehe erst imagewidget
-                path: entityImagePath(index),
+                imageFile: EntityRepository.getEntityPic(entities[index]),
                 width: width(buildContext) - defaultPadding(buildContext) * 2,
                 height: height(buildContext) * .2,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
@@ -741,7 +770,7 @@ class OverviewWidget extends StatelessWidget {
         children: [
           ImageWidget(
             //todo: datei -> siehe erst image widget
-            path: getEntityPicPath(),
+            imageFile: EntityRepository.getEntityPic(entity),
             width: width(context) * .92,
             height: height(context) * .2,
             borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
@@ -864,8 +893,8 @@ class OverviewWidget extends StatelessWidget {
                   (index) => surveyRow(
                       context,
                       firstThreeSurveys[index],
-                      SurveyRepository.getIconFilePath(
-                          firstThreeSurveys[index]),
+                      image: SyncedFile(SurveyRepository.getIconFilePath(
+                          firstThreeSurveys[index])),
                       separator: index != firstThreeSurveys.length - 1)),
             ),
           Container(
@@ -954,7 +983,7 @@ class AppliedInterventionOverviewPage extends StatelessWidget {
         .appliedInterventions;
     Intervention intervention = interventions[index].intervention;
     return interventionRow(buildContext, intervention,
-        InterventionRepository.getInterventionIconPath(intervention),
+        image: SyncedFile(InterventionRepository.getInterventionIconPath(intervention)),
         separator: interventions.length - 1 != index,
         pressable: true, onPressed: () async {
       buildContext
@@ -1018,14 +1047,18 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
   late AppliedIntervention appliedIntervention;
   late Entity entity;
 
-  File? imageFile; //todo: datei -> synced
+  late SyncedFile imageFileSynced;
+  File? imageFile;
 
   updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
     if (r != null) {
-      //todo: datei
-      //todo: implement pic save
-      //todo: update imageFile
+      await imageFileSynced.updateAsPic(r);
+      imageFileSynced.file().then((value){
+        setState(() {
+          imageFile = value;
+        });
+      });
     }
   }
 
@@ -1046,6 +1079,12 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
     entity = (context.read<OrganizationViewBloc>().state
             as EntitiesLoadedOrganizationViewState)
         .currentDetailEntity!;
+    imageFileSynced = SyncedFile(AppliedInterventionRepository.getFotoPath(appliedIntervention));
+    imageFileSynced.file().then((value){
+      setState(() {
+        imageFile = value;
+      });
+    });
     super.initState();
   }
 
@@ -1063,9 +1102,7 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
                 fit: StackFit.expand,
                 children: [
                   ImageWidget(
-                      //todo: datei -> erst image widget
-                      path: getpicPath(),
-                      imageFile: imageFile,
+                      imageFile: imageFileSynced,
                       width: width(context) * .92,
                       height: height(context) * .3,
                       borderRadius: BorderRadius.circular(8)),
@@ -1130,9 +1167,9 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
                                   context,
                                   appliedIntervention
                                       .intervention.surveys[index - 1],
-                                  SurveyRepository.getIconFilePath(
+                                  image: SyncedFile(SurveyRepository.getIconFilePath(
                                       appliedIntervention
-                                          .intervention.surveys[index - 1]),
+                                          .intervention.surveys[index - 1])),
                                   pressable: true,
                                   onPressed: () {
                                     context.read<OrganizationViewBloc>().add(
@@ -1180,22 +1217,49 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
   final _formKey = GlobalKey<FormState>();
 
   bool create = true;
-  AppliedIntervention? appliedIntervention;
+  AppliedIntervention? _appliedIntervention;
   Intervention? intervention;
 
+  SyncedFile? syncedFile;
   File?
-      imageFile; //todo: datei -> datei erst verfügbar wenn appliedIntervention ungleich null (zweites view, weil dann id vorliegt)
+      imageFile; //datei erst verfügbar wenn appliedIntervention ungleich null (zweites view, weil dann id vorliegt)
 
   List<Intervention>? interventions;
 
   bool loaded = false;
+  
+  AppliedIntervention? get appliedIntervention => _appliedIntervention;
+  
+  set appliedIntervention(AppliedIntervention? appliedIntervention) {
+    _appliedIntervention = appliedIntervention;
+    syncedFile = SyncedFile(AppliedInterventionRepository.getFotoPath(appliedIntervention!));
+    syncedFile!.file().then((value) {
+      setStateIfMounted((){
+      imageFile = value;
+      });
+    });
+  }
 
   updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
-    if (r != null) {
-      //todo: datei
-      //todo: implement pic save
-      //todo: update imageFile
+    if (r != null&&appliedIntervention!=null) {
+      syncedFile ??= SyncedFile(AppliedInterventionRepository.getFotoPath(appliedIntervention!));
+      await syncedFile!.updateAsPic(r);
+      syncedFile?.file().then((value) {
+        setStateIfMounted((){
+          imageFile = value;
+        });
+      });
+    }
+  }
+  
+  void setStateIfMounted(Function function){
+    if(mounted){
+      setState(() {
+        function();
+      });
+    }else{
+      function();
     }
   }
 
@@ -1204,7 +1268,14 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
     if (widget.appliedIntervention != null) {
       create = false;
       appliedIntervention = widget.appliedIntervention;
-      loaded = true;
+      syncedFile = SyncedFile(AppliedInterventionRepository.getFotoPath(appliedIntervention!));
+      syncedFile!.file().then((value) {
+        setStateIfMounted((){
+          imageFile = value;
+          loaded = true;
+        });
+      });
+      
     }
     super.initState();
     if (widget.appliedIntervention == null) {
@@ -1220,8 +1291,8 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
   Widget interventionItem(BuildContext buildContext, int index) {
     //todo: implement localization
     return interventionRow(context, interventions![index],
-        InterventionRepository.getInterventionIconPath(interventions![index]),
         separator: (index != interventions!.length - 1),
+        image: SyncedFile(InterventionRepository.getInterventionIconPath(interventions![index])),
         pressable: true, onPressed: () {
       AppliedIntervention toCreate = AppliedIntervention(
           id: UUID.getUUID(),
@@ -1299,12 +1370,10 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
                                     fit: StackFit.expand,
                                     children: [
                                       ImageWidget(
-                                          path: getpicPath(),
-                                          imageFile: imageFile,
                                           width: width(context) * .92,
                                           height: height(context) * .3,
                                           borderRadius:
-                                              BorderRadius.circular(8)),
+                                              BorderRadius.circular(8), imageFile: syncedFile,),
                                       Positioned(
                                           right: defaultPadding(context),
                                           bottom: defaultPadding(context),
@@ -1391,9 +1460,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
   Widget listItem(BuildContext buildContext, int i) {
     return surveyRow(
         context,
-        currentlyDisplayedSurveys[i]["survey"],
-        SurveyRepository.getIconFilePath(
-            currentlyDisplayedSurveys[i]["survey"]),
+        currentlyDisplayedSurveys[i]["survey"], 
+        image: SyncedFile(SurveyRepository.getIconFilePath(
+            currentlyDisplayedSurveys[i]["survey"])),
         pressable: true, onPressed: () {
       buildContext.read<OrganizationViewBloc>().add(StartSurvey(
           currentlyDisplayedSurveys[i]["survey"],

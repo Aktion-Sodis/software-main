@@ -81,11 +81,10 @@ class PDFViewWidget extends StatefulWidget {
 }
 
 class PDFViewWidgetState extends State<PDFViewWidget> {
-  late SyncedFile syncedFile;
+  late final SyncedFile syncedFile;
 
   @override
   void initState() {
-    //todo: datei
     syncedFile = ContentRepository.getContentPDFFile(widget.content);
     pdfFuture = getPDF();
     super.initState();

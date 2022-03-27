@@ -12,6 +12,8 @@ import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_events.dart';
 import 'package:mobile_app/backend/Blocs/user/user_state.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
+import 'package:mobile_app/backend/repositories/UserRepository.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/frontend/common_widgets.dart';
 
 import 'package:mobile_app/frontend/components/buttons.dart';
@@ -36,7 +38,8 @@ class UserDataViewState extends State<UserDataView> {
   late TextEditingController textEdigtingControllerFirstName;
   late TextEditingController textEditingControllerLastName;
   final _formKey = GlobalKey<FormState>();
-  File? file;
+  SyncedFile? userPicSynced;
+  File? userPicFile;
 
   @override
   void initState() {
@@ -47,7 +50,12 @@ class UserDataViewState extends State<UserDataView> {
           widget.userBloc.state.user!.firstName;
       textEditingControllerLastName.text = widget.userBloc.state.user!.lastName;
     }
-    //todo: datei pic initialize user pic -> file
+    widget.userBloc.userRepository.getUserById(widget.userBloc.userID).then((user)async{
+      if(user!=null){
+        userPicSynced = UserRepository.getUserPicFile(user);
+        userPicFile = await userPicSynced?.file();
+      }
+    });
     super.initState();
   }
 
@@ -150,11 +158,11 @@ class UserDataViewState extends State<UserDataView> {
                                       child: Container(
                                           width: width(context) * .45,
                                           height: width(context) * .45,
-                                          decoration: file != null
+                                          decoration: userPicFile != null
                                               ? BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   image: DecorationImage(
-                                                      image: FileImage(file!),
+                                                      image: FileImage(userPicFile!),
                                                       fit: BoxFit.fitWidth))
                                               : const BoxDecoration(
                                                   shape: BoxShape.circle,
