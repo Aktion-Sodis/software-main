@@ -87,7 +87,7 @@ export declare class Location {
 export declare class AppliedCustomData {
   readonly customDataID: string;
   readonly type: Type | keyof typeof Type;
-  readonly name: string;
+  readonly name: I18nString;
   readonly intValue?: number;
   readonly stringValue?: string;
   constructor(init: ModelInit<AppliedCustomData>);
@@ -327,6 +327,7 @@ export declare class AppliedIntervention {
   readonly whoDidIt: User;
   readonly intervention: Intervention;
   readonly location?: Location;
+  readonly isOkay: boolean;
   readonly executedSurveys: ExecutedSurvey[];
   readonly schemeVersion?: number;
   readonly createdAt?: string;
@@ -363,10 +364,13 @@ export declare class Task {
   readonly finishedDate?: string;
   readonly location?: Location;
   readonly user: User;
+  readonly userID: string;
   readonly entity?: Entity;
   readonly appliedIntervention?: AppliedIntervention;
   readonly executedSurvey?: ExecutedSurvey;
   readonly schemeVersion?: number;
+  readonly picIDs: number[];
+  readonly audioIDs: number[];
   readonly createdAt?: string;
   readonly updatedAt?: string;
   readonly taskUserId: string;

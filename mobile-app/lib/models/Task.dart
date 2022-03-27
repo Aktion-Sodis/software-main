@@ -21,6 +21,7 @@
 
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -35,10 +36,13 @@ class Task extends Model {
   final TemporalDateTime? _finishedDate;
   final Location? _location;
   final User? _user;
+  final String? _userID;
   final Entity? _entity;
   final AppliedIntervention? _appliedIntervention;
   final ExecutedSurvey? _executedSurvey;
   final int? _schemeVersion;
+  final List<int>? _picIDs;
+  final List<int>? _audioIDs;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
   final String? _taskUserId;
@@ -96,6 +100,19 @@ class Task extends Model {
     }
   }
   
+  String get userID {
+    try {
+      return _userID!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
   Entity? get entity {
     return _entity;
   }
@@ -110,6 +127,32 @@ class Task extends Model {
   
   int? get schemeVersion {
     return _schemeVersion;
+  }
+  
+  List<int> get picIDs {
+    try {
+      return _picIDs!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  List<int> get audioIDs {
+    try {
+      return _audioIDs!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   TemporalDateTime? get createdAt {
@@ -145,9 +188,9 @@ class Task extends Model {
     return _taskExecutedSurveyId;
   }
   
-  const Task._internal({required this.id, required title, text, dueDate, finishedDate, location, required user, entity, appliedIntervention, executedSurvey, schemeVersion, createdAt, updatedAt, required taskUserId, taskEntityId, taskAppliedInterventionId, taskExecutedSurveyId}): _title = title, _text = text, _dueDate = dueDate, _finishedDate = finishedDate, _location = location, _user = user, _entity = entity, _appliedIntervention = appliedIntervention, _executedSurvey = executedSurvey, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _taskUserId = taskUserId, _taskEntityId = taskEntityId, _taskAppliedInterventionId = taskAppliedInterventionId, _taskExecutedSurveyId = taskExecutedSurveyId;
+  const Task._internal({required this.id, required title, text, dueDate, finishedDate, location, required user, required userID, entity, appliedIntervention, executedSurvey, schemeVersion, required picIDs, required audioIDs, createdAt, updatedAt, required taskUserId, taskEntityId, taskAppliedInterventionId, taskExecutedSurveyId}): _title = title, _text = text, _dueDate = dueDate, _finishedDate = finishedDate, _location = location, _user = user, _userID = userID, _entity = entity, _appliedIntervention = appliedIntervention, _executedSurvey = executedSurvey, _schemeVersion = schemeVersion, _picIDs = picIDs, _audioIDs = audioIDs, _createdAt = createdAt, _updatedAt = updatedAt, _taskUserId = taskUserId, _taskEntityId = taskEntityId, _taskAppliedInterventionId = taskAppliedInterventionId, _taskExecutedSurveyId = taskExecutedSurveyId;
   
-  factory Task({String? id, required String title, String? text, TemporalDateTime? dueDate, TemporalDateTime? finishedDate, Location? location, required User user, Entity? entity, AppliedIntervention? appliedIntervention, ExecutedSurvey? executedSurvey, int? schemeVersion, required String taskUserId, String? taskEntityId, String? taskAppliedInterventionId, String? taskExecutedSurveyId}) {
+  factory Task({String? id, required String title, String? text, TemporalDateTime? dueDate, TemporalDateTime? finishedDate, Location? location, required User user, required String userID, Entity? entity, AppliedIntervention? appliedIntervention, ExecutedSurvey? executedSurvey, int? schemeVersion, required List<int> picIDs, required List<int> audioIDs, required String taskUserId, String? taskEntityId, String? taskAppliedInterventionId, String? taskExecutedSurveyId}) {
     return Task._internal(
       id: id == null ? UUID.getUUID() : id,
       title: title,
@@ -156,10 +199,13 @@ class Task extends Model {
       finishedDate: finishedDate,
       location: location,
       user: user,
+      userID: userID,
       entity: entity,
       appliedIntervention: appliedIntervention,
       executedSurvey: executedSurvey,
       schemeVersion: schemeVersion,
+      picIDs: picIDs != null ? List<int>.unmodifiable(picIDs) : picIDs,
+      audioIDs: audioIDs != null ? List<int>.unmodifiable(audioIDs) : audioIDs,
       taskUserId: taskUserId,
       taskEntityId: taskEntityId,
       taskAppliedInterventionId: taskAppliedInterventionId,
@@ -181,10 +227,13 @@ class Task extends Model {
       _finishedDate == other._finishedDate &&
       _location == other._location &&
       _user == other._user &&
+      _userID == other._userID &&
       _entity == other._entity &&
       _appliedIntervention == other._appliedIntervention &&
       _executedSurvey == other._executedSurvey &&
       _schemeVersion == other._schemeVersion &&
+      DeepCollectionEquality().equals(_picIDs, other._picIDs) &&
+      DeepCollectionEquality().equals(_audioIDs, other._audioIDs) &&
       _taskUserId == other._taskUserId &&
       _taskEntityId == other._taskEntityId &&
       _taskAppliedInterventionId == other._taskAppliedInterventionId &&
@@ -205,7 +254,10 @@ class Task extends Model {
     buffer.write("dueDate=" + (_dueDate != null ? _dueDate!.format() : "null") + ", ");
     buffer.write("finishedDate=" + (_finishedDate != null ? _finishedDate!.format() : "null") + ", ");
     buffer.write("location=" + (_location != null ? _location!.toString() : "null") + ", ");
+    buffer.write("userID=" + "$_userID" + ", ");
     buffer.write("schemeVersion=" + (_schemeVersion != null ? _schemeVersion!.toString() : "null") + ", ");
+    buffer.write("picIDs=" + (_picIDs != null ? _picIDs!.toString() : "null") + ", ");
+    buffer.write("audioIDs=" + (_audioIDs != null ? _audioIDs!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null") + ", ");
     buffer.write("taskUserId=" + "$_taskUserId" + ", ");
@@ -217,7 +269,7 @@ class Task extends Model {
     return buffer.toString();
   }
   
-  Task copyWith({String? id, String? title, String? text, TemporalDateTime? dueDate, TemporalDateTime? finishedDate, Location? location, User? user, Entity? entity, AppliedIntervention? appliedIntervention, ExecutedSurvey? executedSurvey, int? schemeVersion, String? taskUserId, String? taskEntityId, String? taskAppliedInterventionId, String? taskExecutedSurveyId}) {
+  Task copyWith({String? id, String? title, String? text, TemporalDateTime? dueDate, TemporalDateTime? finishedDate, Location? location, User? user, String? userID, Entity? entity, AppliedIntervention? appliedIntervention, ExecutedSurvey? executedSurvey, int? schemeVersion, List<int>? picIDs, List<int>? audioIDs, String? taskUserId, String? taskEntityId, String? taskAppliedInterventionId, String? taskExecutedSurveyId}) {
     return Task._internal(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -226,10 +278,13 @@ class Task extends Model {
       finishedDate: finishedDate ?? this.finishedDate,
       location: location ?? this.location,
       user: user ?? this.user,
+      userID: userID ?? this.userID,
       entity: entity ?? this.entity,
       appliedIntervention: appliedIntervention ?? this.appliedIntervention,
       executedSurvey: executedSurvey ?? this.executedSurvey,
       schemeVersion: schemeVersion ?? this.schemeVersion,
+      picIDs: picIDs ?? this.picIDs,
+      audioIDs: audioIDs ?? this.audioIDs,
       taskUserId: taskUserId ?? this.taskUserId,
       taskEntityId: taskEntityId ?? this.taskEntityId,
       taskAppliedInterventionId: taskAppliedInterventionId ?? this.taskAppliedInterventionId,
@@ -248,6 +303,7 @@ class Task extends Model {
       _user = json['user']?['serializedData'] != null
         ? User.fromJson(new Map<String, dynamic>.from(json['user']['serializedData']))
         : null,
+      _userID = json['userID'],
       _entity = json['entity']?['serializedData'] != null
         ? Entity.fromJson(new Map<String, dynamic>.from(json['entity']['serializedData']))
         : null,
@@ -258,6 +314,8 @@ class Task extends Model {
         ? ExecutedSurvey.fromJson(new Map<String, dynamic>.from(json['executedSurvey']['serializedData']))
         : null,
       _schemeVersion = (json['schemeVersion'] as num?)?.toInt(),
+      _picIDs = (json['picIDs'] as List?)?.map((e) => (e as num).toInt()).toList(),
+      _audioIDs = (json['audioIDs'] as List?)?.map((e) => (e as num).toInt()).toList(),
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null,
       _taskUserId = json['taskUserId'],
@@ -266,7 +324,7 @@ class Task extends Model {
       _taskExecutedSurveyId = json['taskExecutedSurveyId'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'title': _title, 'text': _text, 'dueDate': _dueDate?.format(), 'finishedDate': _finishedDate?.format(), 'location': _location?.toJson(), 'user': _user?.toJson(), 'entity': _entity?.toJson(), 'appliedIntervention': _appliedIntervention?.toJson(), 'executedSurvey': _executedSurvey?.toJson(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'taskUserId': _taskUserId, 'taskEntityId': _taskEntityId, 'taskAppliedInterventionId': _taskAppliedInterventionId, 'taskExecutedSurveyId': _taskExecutedSurveyId
+    'id': id, 'title': _title, 'text': _text, 'dueDate': _dueDate?.format(), 'finishedDate': _finishedDate?.format(), 'location': _location?.toJson(), 'user': _user?.toJson(), 'userID': _userID, 'entity': _entity?.toJson(), 'appliedIntervention': _appliedIntervention?.toJson(), 'executedSurvey': _executedSurvey?.toJson(), 'schemeVersion': _schemeVersion, 'picIDs': _picIDs, 'audioIDs': _audioIDs, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'taskUserId': _taskUserId, 'taskEntityId': _taskEntityId, 'taskAppliedInterventionId': _taskAppliedInterventionId, 'taskExecutedSurveyId': _taskExecutedSurveyId
   };
 
   static final QueryField ID = QueryField(fieldName: "task.id");
@@ -278,6 +336,7 @@ class Task extends Model {
   static final QueryField USER = QueryField(
     fieldName: "user",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (User).toString()));
+  static final QueryField USERID = QueryField(fieldName: "userID");
   static final QueryField ENTITY = QueryField(
     fieldName: "entity",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Entity).toString()));
@@ -288,6 +347,8 @@ class Task extends Model {
     fieldName: "executedSurvey",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (ExecutedSurvey).toString()));
   static final QueryField SCHEMEVERSION = QueryField(fieldName: "schemeVersion");
+  static final QueryField PICIDS = QueryField(fieldName: "picIDs");
+  static final QueryField AUDIOIDS = QueryField(fieldName: "audioIDs");
   static final QueryField TASKUSERID = QueryField(fieldName: "taskUserId");
   static final QueryField TASKENTITYID = QueryField(fieldName: "taskEntityId");
   static final QueryField TASKAPPLIEDINTERVENTIONID = QueryField(fieldName: "taskAppliedInterventionId");
@@ -335,6 +396,12 @@ class Task extends Model {
       associatedKey: User.ID
     ));
     
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Task.USERID,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
     modelSchemaDefinition.addField(ModelFieldDefinition.hasOne(
       key: Task.ENTITY,
       isRequired: false,
@@ -360,6 +427,20 @@ class Task extends Model {
       key: Task.SCHEMEVERSION,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.int)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Task.PICIDS,
+      isRequired: true,
+      isArray: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.collection, ofModelName: describeEnum(ModelFieldTypeEnum.int))
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Task.AUDIOIDS,
+      isRequired: true,
+      isArray: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.collection, ofModelName: describeEnum(ModelFieldTypeEnum.int))
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(

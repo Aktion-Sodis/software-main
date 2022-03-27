@@ -921,6 +921,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "isOkay": {
+                    "name": "isOkay",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "executedSurveys": {
                     "name": "executedSurveys",
                     "isArray": true,
@@ -1174,6 +1181,13 @@ export const schema = {
                         "targetName": "taskUserId"
                     }
                 },
+                "userID": {
+                    "name": "userID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "entity": {
                     "name": "entity",
                     "isArray": false,
@@ -1222,6 +1236,22 @@ export const schema = {
                     "type": "Int",
                     "isRequired": false,
                     "attributes": []
+                },
+                "picIDs": {
+                    "name": "picIDs",
+                    "isArray": true,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": false
+                },
+                "audioIDs": {
+                    "name": "audioIDs",
+                    "isArray": true,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": false
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -1274,6 +1304,16 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byUser",
+                        "queryField": "taskByUserID",
+                        "fields": [
+                            "userID"
+                        ]
+                    }
                 }
             ]
         },
@@ -1955,7 +1995,9 @@ export const schema = {
                 "name": {
                     "name": "name",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "nonModel": "I18nString"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
@@ -2078,5 +2120,5 @@ export const schema = {
             }
         }
     },
-    "version": "7d9cdd256f2ab5e5a95666032cdb4fc4"
+    "version": "0dfb644911edae5a7f8ee8ff051f9b6b"
 };

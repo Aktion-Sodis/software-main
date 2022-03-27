@@ -342,7 +342,7 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
         return AppliedCustomData(
           customDataID: customData.id!,
           type: customData.type,
-          name: customData.name,
+          name_ml: customData.name_ml,
           intValue: customData.type == CustomDataType.INT
               ? int.tryParse(customDataControllers[index].text.trim()) ?? 0
               : null,
@@ -1042,7 +1042,7 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
 
   void updateState(bool? okay) async {
     setState(() {
-      appliedIntervention.working = okay ?? false;
+      appliedIntervention.isOkay = okay ?? false;
     });
     context
         .read<OrganizationViewBloc>()
@@ -1107,13 +1107,13 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
                                 style: Theme.of(context).textTheme.headline2)),
                         RadioListTile(
                             value: true,
-                            groupValue: appliedIntervention.working,
+                            groupValue: appliedIntervention.isOkay,
                             onChanged: updateState,
                             title: Text(strings.yes,
                                 style: Theme.of(context).textTheme.bodyText1)),
                         RadioListTile(
                             value: false,
-                            groupValue: appliedIntervention.working,
+                            groupValue: appliedIntervention.isOkay,
                             onChanged: updateState,
                             title: Text(strings.no,
                                 style: Theme.of(context).textTheme.bodyText1))
@@ -1247,7 +1247,7 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
           whoDidIt: widget.user,
           intervention: interventions![index],
           executedSurveys: [],
-          working: true);
+          isOkay: true);
       setState(() {
         appliedIntervention = toCreate;
       });
