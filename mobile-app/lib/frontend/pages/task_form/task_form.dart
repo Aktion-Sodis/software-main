@@ -332,7 +332,17 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                                   RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),
                               ))),
-                          onPressed: () {},
+                          onPressed: (state is TaskFormSavingInProgress)
+                              ? null
+                              : () {
+                                  BlocProvider.of<TaskFormCubit>(context)
+                                      .submit(
+                                          _taskTextController.text,
+                                          state.attachments,
+                                          state.entities,
+                                          state.deadline);
+                                },
+
                           child: (state is TaskFormSavingInProgress)
                               ? const SizedBox(
                                   width: 17,
