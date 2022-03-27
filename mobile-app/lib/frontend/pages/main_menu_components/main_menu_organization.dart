@@ -384,12 +384,7 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
   }
 
   void updatePic() async {
-    //todo: implement
-  }
-
-  String getpicPath() {
-    //todo: implement
-    return "";
+    //todo: datei
   }
 
   List<Widget> columnChildren() {
@@ -401,6 +396,7 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
           child: Stack(
             fit: StackFit.expand,
             children: [
+              //todo: datei synced image
               ImageWidget(
                   path: getpicPath(),
                   imageFile: imageFile,
@@ -554,9 +550,7 @@ class ListWidget extends StatelessWidget {
       required Key key})
       : super(key: key);
 
-  //todo: implement picture access
-  String entityImagePath(int index) =>
-      EntityRepository.getFilePath(entities[index]);
+  //todo: datei
 
   Widget listItem(BuildContext buildContext, int index) => Card(
       margin: EdgeInsets.symmetric(
@@ -571,6 +565,7 @@ class ListWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               ImageWidget(
+                //todo: datei -> siehe erst imagewidget
                 path: entityImagePath(index),
                 width: width(buildContext) - defaultPadding(buildContext) * 2,
                 height: height(buildContext) * .2,
@@ -731,8 +726,7 @@ class OverviewWidget extends StatelessWidget {
   ValueChanged<Entity> onUpdateEntityTapped;
   Entity entity;
 
-  //todo: implement pic
-  String getEntityPicPath() => EntityRepository.getFilePath(entity);
+  //todo: datei
 
   String getSurveyIconPath(Survey survey) =>
       SurveyRepository.getIconFilePath(survey);
@@ -746,6 +740,7 @@ class OverviewWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ImageWidget(
+            //todo: datei -> siehe erst image widget
             path: getEntityPicPath(),
             width: width(context) * .92,
             height: height(context) * .2,
@@ -1023,21 +1018,15 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
   late AppliedIntervention appliedIntervention;
   late Entity entity;
 
-  File? imageFile;
+  File? imageFile; //todo: datei -> synced
 
   updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
     if (r != null) {
+      //todo: datei
       //todo: implement pic save
       //todo: update imageFile
     }
-  }
-
-  String getpicPath() {
-    if (appliedIntervention != null) {
-      return AppliedInterventionRepository.getFotoPath(appliedIntervention);
-    }
-    return "";
   }
 
   void updateState(bool? okay) async {
@@ -1074,6 +1063,7 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
                 fit: StackFit.expand,
                 children: [
                   ImageWidget(
+                      //todo: datei -> erst image widget
                       path: getpicPath(),
                       imageFile: imageFile,
                       width: width(context) * .92,
@@ -1193,7 +1183,8 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
   AppliedIntervention? appliedIntervention;
   Intervention? intervention;
 
-  File? imageFile;
+  File?
+      imageFile; //todo: datei -> datei erst verfügbar wenn appliedIntervention ungleich null (zweites view, weil dann id vorliegt)
 
   List<Intervention>? interventions;
 
@@ -1202,6 +1193,7 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
   updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
     if (r != null) {
+      //todo: datei
       //todo: implement pic save
       //todo: update imageFile
     }
@@ -1223,17 +1215,6 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
                 loaded = true;
               }));
     }
-  }
-
-  void save() async {
-    //todo: save pic when posessing ID
-  }
-
-  String getpicPath() {
-    if (appliedIntervention != null) {
-      return AppliedInterventionRepository.getFotoPath(appliedIntervention!);
-    }
-    return "";
   }
 
   Widget interventionItem(BuildContext buildContext, int index) {

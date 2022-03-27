@@ -24,6 +24,8 @@ class CustomPicButton extends StatefulWidget {
   IconData? defaultIconData;
   bool selected;
 
+  //todo: datei -> hier synced image als übergabe
+
   CustomPicButton(
       {this.onPressed,
       required this.filePath,
@@ -105,6 +107,7 @@ Widget surveyRow(BuildContext context, Survey survey, String filePath,
     File? image,
     bool pressable = false,
     bool separator = false}) {
+  //todo: datei SyncedFile als übergabe
   return Column(mainAxisSize: MainAxisSize.min, children: [
     Container(
         padding: EdgeInsets.symmetric(
@@ -151,6 +154,7 @@ Widget interventionRow(
     File? image,
     bool pressable = false,
     bool separator = false}) {
+  //todo: datei synced file als übergabe
   return Column(mainAxisSize: MainAxisSize.min, children: [
     Container(
         padding: EdgeInsets.symmetric(
@@ -265,6 +269,7 @@ Widget taskRow(BuildContext context, Task task,
 Widget executedSurveyRow(
     BuildContext context, ExecutedSurvey executedSurvey, VoidCallback onPressed,
     {bool separator = false}) {
+  //todo: datei synced file als übergabe
   return Column(key: ValueKey(executedSurvey), children: [
     RawMaterialButton(
         onPressed: onPressed,
@@ -325,6 +330,7 @@ Widget executedSurveyRow(
 
 Widget contentRow(BuildContext context, Content content, VoidCallback onPressed,
     {bool separator = false}) {
+  //todo: synced file als übergabe
   return Column(key: ValueKey(content), children: [
     RawMaterialButton(
         onPressed: onPressed,

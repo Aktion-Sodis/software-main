@@ -12,6 +12,8 @@ class ImageWidget extends StatefulWidget {
   final double? height;
   final BorderRadius? borderRadius;
 
+  //todo: datei change to synced file
+
   ImageWidget(
       {required this.path,
       this.imageFile,
@@ -31,7 +33,7 @@ class ImageWidgetState extends State<ImageWidget> {
   File? imageFile;
 
   Future<File?> fileFromPath(String path) async {
-    //todo: implement
+    //todo: datei
     return null;
   }
 
