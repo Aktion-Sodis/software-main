@@ -200,7 +200,9 @@ Future<Task> addTask(BuildContext buildContext,
       user: buildContext.read<UserBloc>().state.user!,
       id: UUID.getUUID(),
       entity: entity,
-      dueDate: DateTime.now());
+      dueDate: DateTime.now(),
+      audioList: [],
+      picList: [0]);
   buildContext.read<TaskBloc>().add(CreateTask(toCreate));
   return toCreate;
 }

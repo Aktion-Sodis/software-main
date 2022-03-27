@@ -173,7 +173,7 @@ type AppliedIntervention @model {
   whoDidIt: User! @hasOne
   intervention: Intervention! @hasOne
   location: Location
-  isOkay: Boolean @default(value: true)
+  isOkay: Boolean! @default(value: "true")
   executedSurveys: [ExecutedSurvey!]! @hasMany
   schemeVersion: Int @default(value: "0")
 }
@@ -215,12 +215,14 @@ type Task @model {
   dueDate: AWSDateTime
   finishedDate: AWSDateTime
   location: Location
-  user: User! @hasOne @index(name: "byUser", queryField: "taskByUserID")
+  user: User! @hasOne 
+  userID: String! @index(name: "byUser", queryField: "taskByUserID")
   entity: Entity @hasOne
   appliedIntervention: AppliedIntervention @hasOne
   executedSurvey: ExecutedSurvey @hasOne
   schemeVersion: Int @default(value: "0")
-  # todo: what to do with audio
+  picIDs: [Int!]!
+  audioIDs: [Int!]!
 }
 
 type ContentTag @model {

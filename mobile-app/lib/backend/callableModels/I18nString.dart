@@ -3,7 +3,7 @@ import 'package:mobile_app/frontend/strings.dart' as str;
 
 class I18nString {
   late List<String> languageKeys;
-  late List<String?> languageTexts;
+  late List<String> languageTexts;
 
   String get text {
     if (languageKeys.contains(str.currentLanguage)) {
@@ -40,7 +40,7 @@ class I18nString {
 
   I18nString.fromString({String? string}) {
     languageKeys = [str.currentLanguage];
-    languageTexts = [string];
+    languageTexts = [string ?? ""];
   }
 
   I18nString.fromAmplifyModel(amp.I18nString I18nString) {
