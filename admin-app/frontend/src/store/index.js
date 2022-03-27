@@ -37,7 +37,7 @@ export default new Vuex.Store({
     calculateLocalizedString:
       (_, { fallbackLocaleIndex }) => ({ languageTexts }) => languageTexts[fallbackLocaleIndex] || i18n.t('general.noTextProvided'),
     calculateUILocaleString:
-      (_, { uiLocaleIndex }) => ({ languageTexts }) => languageTexts[uiLocaleIndex] || i18n.t('general.noTextProvided'),
+      (_, { uiLocaleIndex, calculateLocalizedString }) => ({ languageTexts }) => languageTexts[uiLocaleIndex] || calculateLocalizedString({ languageTexts }),
   },
   mutations: {
     setCreatingEntityInLevelId: (state, { id }) => {
