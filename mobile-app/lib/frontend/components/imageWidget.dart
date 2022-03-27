@@ -12,6 +12,7 @@ class ImageWidget extends StatefulWidget {
   final double? height;
   final BorderRadius? borderRadius;
 
+
   const ImageWidget(
       {required this.imageFile,
       this.boxConstraints,
@@ -64,5 +65,36 @@ class ImageWidgetState extends State<ImageWidget> {
             color: Colors.grey,
             borderRadius: widget.borderRadius),
         child: loading ? Center(child: loadingSign(context)) : Container());
+  }
+}
+
+class ImageFromSyncedFile extends StatefulWidget {
+  final SyncedFile? syncedFile;
+
+  const ImageFromSyncedFile({Key? key,this.syncedFile}) : super(key: key);
+
+  @override
+  State<ImageFromSyncedFile> createState() => _ImageFromSyncedFileState();
+}
+
+class _ImageFromSyncedFileState extends State<ImageFromSyncedFile> {
+  File? imageFile;
+
+  @override
+  void initState() {
+    widget.syncedFile?.file().then((value){
+      if(mounted){
+        setState(() {
+          imageFile = value;
+        });
+      }else{
+        imageFile = value;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return imageFile==null?Container():Image.file(imageFile!);
   }
 }

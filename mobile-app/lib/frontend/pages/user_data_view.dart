@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_bloc.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_events.dart';
@@ -19,6 +20,7 @@ import 'package:mobile_app/frontend/common_widgets.dart';
 import 'package:mobile_app/frontend/components/buttons.dart';
 
 import 'package:mobile_app/frontend/strings.dart' as strings;
+import 'package:mobile_app/services/photo_capturing.dart';
 
 import '../dependentsizes.dart';
 
@@ -60,7 +62,14 @@ class UserDataViewState extends State<UserDataView> {
   }
 
   void updatePic() async {
-    //todo: datei
+    XFile? r = await CameraFunctionality.takePicture(context: context);
+    if(r!=null){
+    await userPicSynced?.updateAsPic(r);
+    userPicFile = await userPicSynced?.file();
+    setState(() {
+
+    });
+    }
   }
 
   @override

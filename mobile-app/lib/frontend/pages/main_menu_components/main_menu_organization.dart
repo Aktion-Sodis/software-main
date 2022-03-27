@@ -218,7 +218,7 @@ class MainMenuOrganization extends StatelessWidget {
               entity: organizationViewState.currentDetailEntity!);
         case OrganizationViewType.EXECUTEDSURVEY:
           return ExecutedSurveyWidget(
-              organizationViewState.executedSurveyToDisplay!);
+              organizationViewState.executedSurveyToDisplay!,(context.read<OrganizationViewBloc>().state as EntitiesLoadedOrganizationViewState).currentDetailAppliedIntervention!);
 
         default:
           return Container();
@@ -428,7 +428,6 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              //todo: datei synced image
               ImageWidget(
                   width: width(context) * .92,
                   height: height(context) * .2,
@@ -580,7 +579,6 @@ class ListWidget extends StatelessWidget {
       required Key key})
       : super(key: key);
 
-  //todo: datei
 
   Widget listItem(BuildContext buildContext, int index) => Card(
       margin: EdgeInsets.symmetric(
@@ -755,7 +753,6 @@ class OverviewWidget extends StatelessWidget {
   ValueChanged<Entity> onUpdateEntityTapped;
   Entity entity;
 
-  //todo: datei
 
   String getSurveyIconPath(Survey survey) =>
       SurveyRepository.getIconFilePath(survey);
@@ -769,7 +766,6 @@ class OverviewWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ImageWidget(
-            //todo: datei -> siehe erst image widget
             imageFile: EntityRepository.getEntityPic(entity),
             width: width(context) * .92,
             height: height(context) * .2,
@@ -1517,13 +1513,16 @@ class ExecutedSurveyHistory extends StatelessWidget {
 
 class ExecutedSurveyWidget extends StatelessWidget {
   final ExecutedSurvey executedSurvey;
-  ExecutedSurveyWidget(this.executedSurvey);
+  final AppliedIntervention appliedIntervention;
+  ExecutedSurveyWidget(this.executedSurvey, this.appliedIntervention);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         itemBuilder: (context, index) {
           return surveyarea.SurveyWidgetState.questionSummary(
+              appliedIntervention: appliedIntervention,
+              executedSurveyId: executedSurvey.id!,
               question: executedSurvey.survey
                   .questionByID(executedSurvey.answers[index].questionID),
               context: context,
