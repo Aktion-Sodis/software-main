@@ -6,6 +6,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:mobile_app/backend/Blocs/organization_view/organization_view_bloc.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/callableModels/Survey.dart';
+import 'package:mobile_app/backend/repositories/ContentRepository.dart';
 import 'package:mobile_app/backend/repositories/InterventionRepository.dart';
 import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
 import 'package:mobile_app/frontend/buttons.dart';
@@ -302,6 +303,64 @@ Widget executedSurveyRow(
                                           top: defaultPadding(context)),
                                       child:
                                           Text(executedSurvey.date.toString()))
+                                ])),
+                            CommonWidgets.defaultIconButton(
+                                onPressed: onPressed,
+                                context: context,
+                                iconData: MdiIcons.arrowRight,
+                                buttonSizes: ButtonSizes.small,
+                                fillColor:
+                                    Theme.of(context).colorScheme.secondary)
+                          ],
+                        )))
+              ],
+            ))),
+    if (separator)
+      Container(
+          margin: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
+          color: Colors.grey,
+          height: 1)
+  ]);
+}
+
+Widget contentRow(BuildContext context, Content content, VoidCallback onPressed,
+    {bool separator = false}) {
+  return Column(key: ValueKey(content), children: [
+    RawMaterialButton(
+        onPressed: onPressed,
+        child: Container(
+            padding: EdgeInsets.symmetric(
+                horizontal: defaultPadding(context) / 2,
+                vertical: defaultPadding(context)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CustomPicButton(
+                    filePath: ContentRepository.getContentFilePath(content),
+                    onPressed: () {},
+                    size: Size(width(context) * .1, width(context) * .1),
+                    pressable: false),
+                SizedBox(width: defaultPadding(context)),
+                Expanded(
+                    child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: defaultPadding(context)),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                  Container(
+                                      child: Text(content.name,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2)),
+                                  Container(
+                                      margin: EdgeInsets.only(
+                                          top: defaultPadding(context)),
+                                      child: Text(content.description))
                                 ])),
                             CommonWidgets.defaultIconButton(
                                 onPressed: onPressed,
