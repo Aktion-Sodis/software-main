@@ -17,6 +17,11 @@ part 'task_form_state.dart';
 abstract class TaskFormCubit extends Cubit<TaskFormState> {
   TaskFormCubit() : super(TaskFormFillingOut());
 
+  Future<List<Entity>> searchForEntities(String? query) async {
+    // TODO: implement search for entities
+    return Future.value([]);
+  }
+
   static TaskFormCubit initialize<T extends TaskFormCubit>() {
     switch (T) {
       default:
@@ -45,7 +50,17 @@ abstract class TaskFormCubit extends Cubit<TaskFormState> {
   }
 
   void addEntity(Entity entity) {
-    // TODO: implement addEntity
+    if (state is TaskFormFillingOut) {
+      List<Entity> newEntities = state.entities.toList()..add(entity);
+      emit((state as TaskFormFillingOut).copyWith(entities: newEntities));
+    }
+  }
+
+  void removeEntity(Entity entity) {
+    if (state is TaskFormFillingOut) {
+      List<Entity> newEntities = state.entities.toList()..remove(entity);
+      emit((state as TaskFormFillingOut).copyWith(entities: newEntities));
+    }
   }
 
   void openCalendarToSetDeadline(BuildContext context) {

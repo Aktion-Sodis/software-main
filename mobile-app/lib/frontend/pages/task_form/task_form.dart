@@ -1,14 +1,15 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mobile_app/backend/Blocs/task_form/task_form_cubit.dart';
+import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/callableModels/localModels/audio_attachment.dart';
 import 'package:mobile_app/frontend/components/audio/recorder_widget.dart';
 import 'package:mobile_app/frontend/components/keyboard_dismisser.dart';
 import 'package:mobile_app/frontend/components/nisaba_app_bar.dart';
 import 'package:mobile_app/frontend/components/shadow_box.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
-import 'package:mobile_app/frontend/pages/task_category_search.dart';
 import 'package:mobile_app/frontend/pages/task_form/attachments_list.dart';
 import 'package:mobile_app/frontend/pages/task_form/small_button.dart';
 import 'package:mobile_app/frontend/theme.dart';
@@ -176,6 +177,9 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                               ))
                             ],
                           )),
+                          SizedBox(
+                            width: defaultPadding(context),
+                          ),
                           Expanded(
                               child: Row(
                             children: [
@@ -198,36 +202,48 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                       padding: EdgeInsets.all(defaultPadding(context)),
                       child: _subtitle("Where is the task?")),
                   Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: defaultPadding(context)),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ShadowBox(
-                                child: TextField(
-                              controller: _searchTextController,
+                    padding: EdgeInsets.symmetric(
+                        horizontal: defaultPadding(context)),
+                    child: ShadowBox(
+                      child: DropdownSearch<Entity>.multiSelection(
+                          searchDelay: const Duration(seconds: 0),
+                          onFind: _cubit.searchForEntities,
+                          popupOnItemAdded: (entitiesList, entity) =>
+                              _cubit.addEntity(entity),
+                          popupOnItemRemoved: (entitiesList, entity) =>
+                              _cubit.removeEntity(entity),
+                          mode: Mode.MENU,
+                          itemAsString: (entity) => entity!.name,
+                          isFilteredOnline: true,
+                          showSearchBox: true,
+                          compareFn: (e1, e2) {
+                            return e1 == e2;
+                          },
+                          searchFieldProps: TextFieldProps(
                               decoration: const InputDecoration(
-                                  hintText: "Search here"),
-                            )),
+                                  hintText: "Search here")),
+                          emptyBuilder: (context, sss) {
+                            return const Center(
+                              child: Text("No entities have been found"),
+                            );
+                          },
+                          loadingBuilder: (context, searchEntry) {
+                            return const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            );
+                          },
+                          dropDownButton: const Icon(
+                            MdiIcons.accountSearch,
                           ),
-                          Padding(
-                            padding:
-                                EdgeInsets.only(left: defaultPadding(context)),
-                            child: _iconButton(
-                              MdiIcons.magnify,
-                              () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            TaskCategorySearch(
-                                                textEditingController:
-                                                    _searchTextController)));
-                              },
-                            ),
-                          )
-                        ],
-                      )),
+                          items: [],
+                          dropdownSearchDecoration: const InputDecoration(
+                              hintText: "Add entity",
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 8)),
+                          onChanged: print,
+                          selectedItems: []),
+                    ),
+                  ),
                   Padding(
                       padding: EdgeInsets.all(defaultPadding(context)),
                       child: _subtitle("When will you do it?")),
