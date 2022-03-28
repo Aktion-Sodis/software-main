@@ -1,7 +1,7 @@
 const mlString = (toPass) => {
   return {
-    languageKeys: ["es-BO"],
-    languageTexts: [toPass],
+    languageKeys: ["en-US", "es-BO", "tr-TR"],
+    languageTexts: [null, toPass, null],
   };
 };
 
