@@ -34,6 +34,11 @@ PODS:
     - Flutter
     - SwiftFormat/CLI
     - SwiftLint
+  - amplify_storage_s3 (0.0.1):
+    - Amplify (= 1.19.0)
+    - amplify_core
+    - AmplifyPlugins/AWSS3StoragePlugin (= 1.19.0)
+    - Flutter
   - AmplifyPlugins/AWSAPIPlugin (1.19.0):
     - AppSyncRealTimeClient (~> 1.4)
     - AWSCore (~> 2.27.0)
@@ -49,6 +54,10 @@ PODS:
     - AWSCore (~> 2.27.0)
     - AWSPluginsCore (= 1.19.0)
     - SQLite.swift (= 0.12.2)
+  - AmplifyPlugins/AWSS3StoragePlugin (1.19.0):
+    - AWSCore (~> 2.27.0)
+    - AWSPluginsCore (= 1.19.0)
+    - AWSS3 (~> 2.27.0)
   - AppSyncRealTimeClient (1.7.0):
     - Starscream (~> 4.0.4)
   - AWSAuthCore (2.27.1):
@@ -67,6 +76,8 @@ PODS:
   - AWSPluginsCore (1.19.0):
     - Amplify (= 1.19.0)
     - AWSCore (~> 2.27.0)
+  - AWSS3 (2.27.1):
+    - AWSCore (= 2.27.1)
   - Flutter (1.0.0)
   - flutter_sound (8.5.0):
     - Flutter
@@ -99,6 +110,7 @@ DEPENDENCIES:
   - amplify_core (from `.symlinks/plugins/amplify_core/ios`)
   - amplify_datastore (from `.symlinks/plugins/amplify_datastore/ios`)
   - amplify_flutter (from `.symlinks/plugins/amplify_flutter/ios`)
+  - amplify_storage_s3 (from `.symlinks/plugins/amplify_storage_s3/ios`)
   - Flutter (from `Flutter`)
   - flutter_sound (from `.symlinks/plugins/flutter_sound/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
@@ -116,6 +128,7 @@ SPEC REPOS:
     - AWSCore
     - AWSMobileClient
     - AWSPluginsCore
+    - AWSS3
     - flutter_sound_core
     - FMDB
     - mobile-ffmpeg-audio
@@ -138,6 +151,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/amplify_datastore/ios"
   amplify_flutter:
     :path: ".symlinks/plugins/amplify_flutter/ios"
+  amplify_storage_s3:
+    :path: ".symlinks/plugins/amplify_storage_s3/ios"
   Flutter:
     :path: Flutter
   flutter_sound:
@@ -157,6 +172,7 @@ SPEC CHECKSUMS:
   amplify_core: e67fe0c53845db08aced670bfc7370b1329d2798
   amplify_datastore: a08d00ffda5eabaad23b28d2d85b1a58e951d014
   amplify_flutter: 565399b1213f406463a5d99443ea5973a78f494c
+  amplify_storage_s3: 75177da2ac83c3af4c8818fe4ef9b1d995d24bdf
   AmplifyPlugins: 3f43645652234700ee62aba927a67ff4eebacf46
   AppSyncRealTimeClient: 3a9c0d6685974e7f5d9ce1c157ef9873b87706b1
   AWSAuthCore: 9528c60ccdac6df6024fb0af1ed6a43782fd2d3d
@@ -165,6 +181,7 @@ SPEC CHECKSUMS:
   AWSCore: f859f6955a8e52dcb3e79fac95fef058639d1049
   AWSMobileClient: 9c1edcbe7088b3c9b910aaf6faf2db43a8f1568d
   AWSPluginsCore: a74522db575247a0156f97d868713627099f3297
+  AWSS3: 3389c12e5b0cbfdfb6894c5921c094f58ec84df0
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_sound: ba7daf658dea78e9f18b79657338bfc222489f4f
   flutter_sound_core: d9396f10752a0df9aa3197f4c431d62d934918cc
