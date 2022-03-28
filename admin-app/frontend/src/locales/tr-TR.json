@@ -173,6 +173,7 @@
       "description": "Müdahale açıklaması",
       "image": "Intervention Image",
       "noDocuments": "Henüz hiç döküman yüklenmemiş.",
+      "levels": "Levels where this intervention is allowed",
       "noImages": "Henüz hiç resim yüklenmemiş.",
       "noVideos": "Henüz hiç video yüklenmemiş.",
       "noSurveys": "Henüz hiç anket yüklenmemiş."

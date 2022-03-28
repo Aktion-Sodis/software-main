@@ -172,6 +172,7 @@
       "name": "Intervention Name",
       "description": "Intervention Description",
       "image": "Intervention Image",
+      "levels": "Levels where this intervention is allowed",
       "noDocuments": "No documents uploaded.",
       "noImages": "No images uploaded.",
       "noVideos": "No videos uploaded.",
