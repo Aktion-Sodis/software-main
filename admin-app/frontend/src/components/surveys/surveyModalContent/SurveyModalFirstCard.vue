@@ -27,31 +27,63 @@
         <v-container>
           <v-row>
             <v-col cols="12" sm="6" class="pb-0 px-0 px-md-3">
+              <v-card-title class="pt-0 pt-sm-2">
+                {{ $t('interventions.surveyModal.firstCard.form.name') }}
+              </v-card-title>
               <h2 v-if="read">
-                {{ surveyName }}
+                {{
+                  calculateUILocaleString({
+                    languageTexts: name.languageTexts,
+                  })
+                }}
               </h2>
-              <v-text-field
+              <LocaleTextBox
                 v-else
-                autofocus
-                v-model="surveyName"
-                :label="$t('interventions.surveyModal.firstCard.form.name')"
-                outlined
-                dense
-              ></v-text-field>
+                labelPrefixI18nSelector="interventions.surveyModal.firstCard.form.name"
+                @res="nameUpdatedHandler"
+              >
+                <template v-slot:text-input="slotProps">
+                  <v-text-field
+                    :label="slotProps.label"
+                    v-model="slotProps.model"
+                    autofocus
+                    required
+                    outlined
+                    dense
+                    @input="slotProps.inputHandler"
+                  ></v-text-field>
+                </template>
+              </LocaleTextBox>
 
-              <h3 v-if="read" class="py-12">
-                {{ surveyDescription }}
-              </h3>
-              <v-textarea
+              <v-card-title class="pt-4">
+                {{ $t('interventions.surveyModal.firstCard.form.description') }}
+              </v-card-title>
+              <div v-if="read" class="d-flex flex-column justify-center" style="min-height: 10rem">
+                <h3>
+                  {{
+                    calculateUILocaleString({
+                      languageTexts: description.languageTexts,
+                    })
+                  }}
+                </h3>
+              </div>
+              <LocaleTextBox
                 v-else
-                v-model="surveyDescription"
-                :counter="surveyDescription.length > surveyDescriptionMaxChar - 20"
-                :rules="[rules.maxChar]"
-                :label="$t('interventions.surveyModal.firstCard.form.description')"
-                outlined
-                dense
-                class="mt-4"
-              ></v-textarea>
+                labelPrefixI18nSelector="interventions.surveyModal.firstCard.form.description"
+                @res="descriptionUpdatedHandler"
+              >
+                <template v-slot:text-input="slotProps">
+                  <v-textarea
+                    autofocus
+                    required
+                    outlined
+                    dense
+                    :label="slotProps.label"
+                    v-model="slotProps.model"
+                    @input="slotProps.inputHandler"
+                  ></v-textarea>
+                </template>
+              </LocaleTextBox>
             </v-col>
             <v-col cols="12" sm="6" class="pt-0 px-0 px-md-3">
               <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" max-height="200px">
@@ -107,6 +139,8 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict } from '../../../store/constants';
+import LocaleTextBox from '../../global/LocaleTextBox.vue';
+import { I18nString } from '../../../models';
 
 const surveyDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_SURVEY_DESCRIPTION_MAX_CHAR, 10),
@@ -115,14 +149,21 @@ const surveyDescriptionMaxChar = Math.max(
 
 export default {
   name: 'SurveyModalFirstCard',
+  components: { LocaleTextBox },
   data() {
     return {
       surveyDescriptionMaxChar,
       rules: {
         maxChar: (value) => value.length <= surveyDescriptionMaxChar || this.maxCharExceededi18n,
       },
-      surveyName: '',
-      surveyDescription: '',
+      name: new I18nString({
+        languageKeys: this.$i18n.availableLocales,
+        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
+      }),
+      description: new I18nString({
+        languageKeys: this.$i18n.availableLocales,
+        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
+      }),
       surveyTags: [],
     };
   },
@@ -137,6 +178,9 @@ export default {
       SURVEYById: 'SURVEY_Data/SURVEYById',
       allSurveyTags: 'SURVEY_Data/getSurveyTags',
       tagById: 'SURVEY_Data/tagById',
+
+      fallbackLocaleIndex: 'fallbackLocaleIndex',
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
     surveyInFocus() {
       return this.SURVEYById({ id: this.dataIdInFocus });
@@ -154,7 +198,8 @@ export default {
       return this.surveyModalMode === modalModesDict.read;
     },
     canAdvance() {
-      return this.read || this.surveyName !== '';
+      console.log(this.name);
+      return this.read || this.name.languageTexts[this.fallbackLocaleIndex] !== '';
     },
     maxCharExceededi18n() {
       return this.$t('general.form.maxCharExceeded', {
@@ -179,15 +224,15 @@ export default {
     },
     nextStepHandler() {
       this.setSurveyDraft({
-        name: this.surveyName,
-        description: this.surveyDescription,
+        name: this.name,
+        description: this.description,
         tags: this.surveyTags,
       });
       this.incrementCompletionIndex();
     },
     prefillComponentDataFromSurveyDraft() {
-      this.surveyName = this.surveyDraft?.name ?? '';
-      this.surveyDescription = this.surveyDraft?.description ?? '';
+      this.name = this.surveyDraft?.name ?? '';
+      this.description = this.surveyDraft?.description ?? '';
       this.surveyTags = this.surveyDraft?.tags ?? [];
     },
     exitHandler() {
@@ -202,6 +247,12 @@ export default {
       if (this.create) {
         this.abortNewSurveyHandler({ dataType: 'SURVEY' });
       }
+    },
+    nameUpdatedHandler(res) {
+      this.name = res;
+    },
+    descriptionUpdatedHandler(res) {
+      this.description = res;
     },
   },
 };
