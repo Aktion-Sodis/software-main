@@ -1,5 +1,5 @@
-import * as mutations from '../graphql/mutations.js';
-import { inferQuestionType } from './inferQuestionType.js';
+import * as mutations from "../graphql/mutations.js";
+import { inferQuestionType } from "./inferQuestionType.js";
 
 const listQuestions = `
     SELECT
@@ -16,30 +16,35 @@ const listQuestions = `
         ON question.input_type_id=input_type.id;
     `;
 
-        
 const migrateQuestions = async (sqlPool) => {
-    const oldQuestions = await sqlPool.query(listQuestions, function (err, result, fields) {
-        if (err) throw err;
-        return Object.values(result);
-    });
+  const oldQuestions = await sqlPool.query(
+    listQuestions,
+    function (err, result, fields) {
+      if (err) throw err;
+      return Object.values(result);
+    }
+  );
 
-    for (let oldQuestion of oldQuestions){
-        const newQuestion = {
-            id: oldQuestion.id,
-            text: oldQuestion.question_name,
-            type: inferQuestionType(oldQuestion),
-        }
-        try {
-            const newQuestionEntry = await API.graphql({
-                query: mutations.createQuestion, // missing in graph-QL api?
-                variables: {input: newQuestion}
-            })
-            console.log("Created question" + JSON.stringify(newQuestionEntry));
-            
-        } catch (error) {
-            console.log("Error writing question option" + JSON.stringify(newQuestionOption) + error);
-        }
-    }   
-}
+  for (let oldQuestion of oldQuestions) {
+    const newQuestion = {
+      id: oldQuestion.id,
+      text: oldQuestion.question_name,
+      type: inferQuestionType(oldQuestion),
+    };
+    try {
+      const newQuestionEntry = await API.graphql({
+        query: mutations.createQuestion, // missing in graph-QL api?
+        variables: { input: newQuestion },
+      });
+      console.log("Created question" + JSON.stringify(newQuestionEntry));
+    } catch (error) {
+      console.log(
+        "Error writing question option" +
+          JSON.stringify(newQuestionOption) +
+          error
+      );
+    }
+  }
+};
 
 export default migrateQuestions;

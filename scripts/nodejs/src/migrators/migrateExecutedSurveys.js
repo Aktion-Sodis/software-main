@@ -1,5 +1,5 @@
-import * as mutations from '../graphql/mutations.js';
-import { QuestionType } from '../models/index.js';
+import * as mutations from "../graphql/mutations.js";
+import { QuestionType } from "../models/index.js";
 
 const listExecutedSurveys = `
     SELECT
@@ -25,9 +25,9 @@ const listExecutedSurveys = `
         intervention_name;
     `;
 
-async function getAnswersForSurveyId(sqlPool, surveyId){
-    var answers = [];
-    const getAnswerQuery = `
+async function getAnswersForSurveyId(sqlPool, surveyId) {
+  var answers = [];
+  const getAnswerQuery = `
         SELECT 
             answer_text,
             question_id,
@@ -35,72 +35,94 @@ async function getAnswersForSurveyId(sqlPool, surveyId){
             answers.id AS answer_id
         FROM answers
         WHERE completed_survey_id = ${surveyId}
-    `
-    const oldAnswers = await sqlPool.query(getAnswerQuery, function (err, result, fields) {
-            if (err) throw err;
-            return Object.values(result);
-    });
-
-    for (let oldAnswer of oldAnswers){
-        const newAnswer = {
-            id: oldAnswer.answer_id,
-            questionID: oldAnswer.question_id,
-            type: oldAnswer.answer_text != null ? QuestionType.TEXT : QuestionType.MULTIPLECHOICE,
-            text: oldAnswer.answer_text
-        }
-        answers.push(newAnswer);
+    `;
+  const oldAnswers = await sqlPool.query(
+    getAnswerQuery,
+    function (err, result, fields) {
+      if (err) throw err;
+      return Object.values(result);
     }
-    return answers;
+  );
+
+  for (let oldAnswer of oldAnswers) {
+    const newAnswer = {
+      id: oldAnswer.answer_id,
+      questionID: oldAnswer.question_id,
+      type:
+        oldAnswer.answer_text != null
+          ? QuestionType.TEXT
+          : QuestionType.MULTIPLECHOICE,
+      text: oldAnswer.answer_text,
+    };
+    answers.push(newAnswer);
+  }
+  return answers;
+}
+
+const migrateExecutedSurveys = async (sqlPool, defaultUser) => {
+  const executedSurveys = await sqlPool.query(
+    listExecutedSurveys,
+    function (err, result, fields) {
+      if (err) throw err;
+      return Object.values(result);
+    }
+  );
+
+  for (let executedSurvey in executedSurveys) {
+    const answers = getAnswersForSurveyId(
+      sqlPool,
+      executedSurvey.executed_survey_id
+    );
+    const newExecutedSurvey = executedSurveysTransformer(
+      executedSurvey,
+      defaultUser,
+      answers
+    );
+    try {
+      const newExecutedSurveyEntry = await API.graphql({
+        query: mutations.createExecutedSurvey,
+        variables: { input: newExecutedSurvey },
+      });
+      console.log(
+        "Created executed survey" + JSON.stringify(newExecutedSurveyEntry)
+      );
+    } catch (error) {
+      console.log(
+        "Error writing survey" + JSON.stringify(newExecutedSurvey) + error
+      );
+    }
+  }
 };
 
-        
-const migrateExecutedSurveys = async (sqlPool, defaultUser) => {
-    const executedSurveys = await sqlPool.query(listExecutedSurveys, function (err, result, fields) {
-        if (err) throw err;
-        return Object.values(result);
-    });
-        
-    for (let executedSurvey in executedSurveys){
-        const answers = getAnswersForSurveyId(sqlPool, executedSurvey.executed_survey_id)
-        const newExecutedSurvey = executedSurveysTransformer(executedSurvey, defaultUser, answers)    
-        try {
-            const newExecutedSurveyEntry = await API.graphql({
-                query: mutations.createExecutedSurvey,
-                variables: {input: newExecutedSurvey}
-            })
-            console.log("Created executed survey" + JSON.stringify(newExecutedSurveyEntry));
-            
-        } catch (error) {
-            console.log("Error writing survey" + JSON.stringify(newExecutedSurvey) + error);
-        }
-    }    
-}
-
-const executedSurveysTransformer = (executedSurveyData, defaultUser, answers) => {
-    const newExecutedSurvey = {
-        whoDidIt: defaultUser,
-        appliedIntervention: {
-            name: executedSurveyData.intervention_name,
-            id: executedSurveyData.intervention_id,
-            interventionType: InterventionType.TECHNOLOGY,
-            appliedInterventionWhoDidItId: defaultUser.id,
-        },
-        whoExecutedIt: defaultUser,
-        survey: {
-            name: executedSurveyData.survey_name,
-            id: executedSurveyData.survey_id,
-            tags: ["migrated"],
-            createdAt: executedSurveyData.creation_date,
-        },
-        date: executedSurveyData.creation_date,
-        location: {
-            latitude: executedSurveyData.latitude,
-            longitude: executedSurveyData.longitude,
-        },
-        answers : answers,
-        id: executedSurveyData.executed_survey_id,
-    }
-    return newExecutedSurvey;
-}
+const executedSurveysTransformer = (
+  executedSurveyData,
+  defaultUser,
+  answers
+) => {
+  const newExecutedSurvey = {
+    whoDidIt: defaultUser,
+    appliedIntervention: {
+      name: executedSurveyData.intervention_name,
+      id: executedSurveyData.intervention_id,
+      interventionType: InterventionType.TECHNOLOGY,
+      appliedInterventionWhoDidItId: defaultUser.id,
+    },
+    whoExecutedIt: defaultUser,
+    survey: {
+      name: executedSurveyData.survey_name,
+      id: executedSurveyData.survey_id,
+      tags: ["migrated"],
+      createdAt: executedSurveyData.creation_date,
+    },
+    date: executedSurveyData.creation_date,
+    location: {
+      latitude: executedSurveyData.latitude,
+      longitude: executedSurveyData.longitude,
+    },
+    answers: answers,
+    id: executedSurveyData.executed_survey_id,
+  };
+  return newExecutedSurvey;
+};
 
 export default migrateExecutedSurveys;

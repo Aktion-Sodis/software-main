@@ -1,8 +1,8 @@
 const mlString = (toPass) => {
-    return {
-        languageKeys: ["es-BO"],
-        languageTexts: [toPass]
-    }
-}
+  return {
+    languageKeys: ["es-BO"],
+    languageTexts: [toPass],
+  };
+};
 
-export default mlString
+export default mlString;

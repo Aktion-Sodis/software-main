@@ -1,4 +1,4 @@
-import * as mutations from '../graphql/mutations.js';
+import * as mutations from "../graphql/mutations.js";
 
 const listAppliedInterventionsQuery = `
     SELECT 
@@ -18,45 +18,54 @@ const listAppliedInterventionsQuery = `
     ON project.id=survey_header.project_id
     GROUP BY interviewee_id, intervention_name;
     `;
-        
-const migrateAppliedInterventions = async (sqlPool, defaultUser) => {
-    const executedSurveyDatas = await sqlPool.query(listAppliedInterventionsQuery, function (err, result, fields) {
-        if (err) throw err;
-        return Object.values(result);
-    });
 
-    for (let executedSurveyData of executedSurveyDatas){
-        const newAppliedIntervention = appliedInterventionTransformer(executedSurveyData, defaultUser)    
-        try {
-            const newAppliedInterventionEntry = await API.graphql({
-                query: mutations.createAppliedIntervention,
-                variables: {input: newAppliedIntervention}
-            })
-            console.log("Created family entity" + JSON.stringify(newAppliedInterventionEntry));
-            
-        } catch (error) {
-            console.log("Error writing family" + JSON.stringify(newAppliedIntervention) + error);
-        }
+const migrateAppliedInterventions = async (sqlPool, defaultUser) => {
+  const executedSurveyDatas = await sqlPool.query(
+    listAppliedInterventionsQuery,
+    function (err, result, fields) {
+      if (err) throw err;
+      return Object.values(result);
     }
-}
+  );
+
+  for (let executedSurveyData of executedSurveyDatas) {
+    const newAppliedIntervention = appliedInterventionTransformer(
+      executedSurveyData,
+      defaultUser
+    );
+    try {
+      const newAppliedInterventionEntry = await API.graphql({
+        query: mutations.createAppliedIntervention,
+        variables: { input: newAppliedIntervention },
+      });
+      console.log(
+        "Created family entity" + JSON.stringify(newAppliedInterventionEntry)
+      );
+    } catch (error) {
+      console.log(
+        "Error writing family" + JSON.stringify(newAppliedIntervention) + error
+      );
+    }
+  }
+};
 
 const appliedInterventionTransformer = (executedSurveyData, defaultUser) => {
-    const newAppliedIntervention = {
-        whoDidIt: defaultUser,
-        intervention: {
-            name: executedSurveyData.intervention_name,
-            id: executedSurveyData.intervention_id,
-            interventionType: InterventionType.TECHNOLOGY,
-        },
-        location: {
-            latitude: executedSurveyData.latitude,
-            longitude: executedSurveyData.longitude,
-        },
-        // excecutedSurvey: {
-        // ... : executedSurveyData.executed_survey_id
-        // }
-    }
-    return newAppliedIntervention;
-}
+  const newAppliedIntervention = {
+    whoDidIt: defaultUser,
+    intervention: {
+      name: executedSurveyData.intervention_name,
+      id: executedSurveyData.intervention_id,
+      interventionType: InterventionType.TECHNOLOGY,
+    },
+    location: {
+      latitude: executedSurveyData.latitude,
+      longitude: executedSurveyData.longitude,
+    },
+    // excecutedSurvey: {
+    // ... : executedSurveyData.executed_survey_id
+    // }
+  };
+  return newAppliedIntervention;
+};
 
 export default migrateAppliedInterventions;

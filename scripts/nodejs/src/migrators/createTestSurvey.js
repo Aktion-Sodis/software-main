@@ -1,133 +1,129 @@
-import * as mutations from '../graphql/mutations.js';
-import { InterventionType,  SurveyType, QuestionType } from '../models/index.js';
+import * as mutations from "../graphql/mutations.js";
+import { InterventionType, SurveyType, QuestionType } from "../models/index.js";
 import { API, graphqlOperation } from "aws-amplify";
-import mlString from '../utils/stringFormatter.js';
-import * as queries from '../graphql/queries.js';
+import mlString from "../utils/stringFormatter.js";
+import * as queries from "../graphql/queries.js";
 
 export default async function createTestSurvey() {
-    const testSurvey = {
-        id: "test_survey",
-        interventionSurveysId: "6",
-        name: mlString("TestSurvey"),
-        description: mlString("This is a test survey"),
-        surveyType: SurveyType.DEFAULT,
-        questions: [
-            {
-                id: "question_1",
-                text: mlString("Is this a good question?"),
-                type: QuestionType.SINGLECHOICE,
-                questionOptions: [
-                    {
-                        id: "question_1_option_1",
-                        text: mlString("Yes"),
-                    },
-                    {
-                        id: "question_1_option_2",
-                        text: mlString("No (has follow up -> test follow up function)"),
-                        followUpQuestionID: "question_1_fu_1"
-                    }
-                ],
-                isFollowUpQuestion: false
-            },
-            {
-                id: "question_1_fu_1",
-                text: mlString("Why didn't you like it?"),
-                type: QuestionType.TEXT,
-                isFollowUpQuestion: true
-            },
-            {
-                id: "question_2",
-                text: mlString("Try those multiple choice boxes!"),
-                type: QuestionType.MULTIPLECHOICE,
-                questionOptions: [
-                    {
-                        id: "question_1_option_1",
-                        text: mlString("Box 1")
-                    },
-                    {
-                        id: "question_1_option_2",
-                        text: mlString("Box 2")
-                    },
-                    {
-                        id: "question_1_option_3",
-                        text: mlString("Box 3")
-                    },
-                ],
-                isFollowUpQuestion: false
-            },
-            {
-                id: "question_3",
-                text: mlString("Take a pic of big chungus for testing reasons and upload ist :D <3"),
-                type: QuestionType.PICTURE,
-                isFollowUpQuestion: false
-            }
+  const testSurvey = {
+    id: "test_survey",
+    interventionSurveysId: "6",
+    name: mlString("TestSurvey"),
+    description: mlString("This is a test survey"),
+    surveyType: SurveyType.DEFAULT,
+    questions: [
+      {
+        id: "question_1",
+        text: mlString("Is this a good question?"),
+        type: QuestionType.SINGLECHOICE,
+        questionOptions: [
+          {
+            id: "question_1_option_1",
+            text: mlString("Yes"),
+          },
+          {
+            id: "question_1_option_2",
+            text: mlString("No (has follow up -> test follow up function)"),
+            followUpQuestionID: "question_1_fu_1",
+          },
         ],
-    }
-    try {
-       await API.graphql(
-            {
-            query: mutations.createSurvey,
-            variables: {
-                input: testSurvey
-            }
-            }
-        );
-        
-     
-    } catch(e) {
-        console.log("error in surveycreation");
-        console.log(e);
-    }
+        isFollowUpQuestion: false,
+      },
+      {
+        id: "question_1_fu_1",
+        text: mlString("Why didn't you like it?"),
+        type: QuestionType.TEXT,
+        isFollowUpQuestion: true,
+      },
+      {
+        id: "question_2",
+        text: mlString("Try those multiple choice boxes!"),
+        type: QuestionType.MULTIPLECHOICE,
+        questionOptions: [
+          {
+            id: "question_1_option_1",
+            text: mlString("Box 1"),
+          },
+          {
+            id: "question_1_option_2",
+            text: mlString("Box 2"),
+          },
+          {
+            id: "question_1_option_3",
+            text: mlString("Box 3"),
+          },
+        ],
+        isFollowUpQuestion: false,
+      },
+      {
+        id: "question_3",
+        text: mlString(
+          "Take a pic of big chungus for testing reasons and upload ist :D <3"
+        ),
+        type: QuestionType.PICTURE,
+        isFollowUpQuestion: false,
+      },
+    ],
+  };
+  try {
+    await API.graphql({
+      query: mutations.createSurvey,
+      variables: {
+        input: testSurvey,
+      },
+    });
+  } catch (e) {
+    console.log("error in surveycreation");
+    console.log(e);
+  }
 
-    try {
-await API.graphql({
-            query: mutations.createSurveySurveyTagRelation,
-            variables: {
-                input: {
-                    surveyID: "test_survey",
-                    surveyTagID: "migration_tag"
-                }
-            }
-        });
-    }catch(e) {
-        console.log("error in creating surveytagconnection");
-        console.log(e);
-    }
+  try {
+    await API.graphql({
+      query: mutations.createSurveySurveyTagRelation,
+      variables: {
+        input: {
+          surveyID: "test_survey",
+          surveyTagID: "migration_tag",
+        },
+      },
+    });
+  } catch (e) {
+    console.log("error in creating surveytagconnection");
+    console.log(e);
+  }
 
-    const testContent = {
-        name: mlString("Important Paper"),
-        description: mlString("Created by Laura, Larissa and Kianna.")
-    }
+  const testContent = {
+    name: mlString("Important Paper"),
+    description: mlString("Created by Laura, Larissa and Kianna."),
+  };
 
-    try {
-        const content = await API.graphql({
-            query: mutations.createContent,
-            variables: {input: testContent}
-        });
-        const contentInterventionoRelation = {
-            contentID: content.data.createContent.id,
-            interventionID: "6"
-        }
-        const createdContentRelation = await API.graphql({
-            query: mutations.createInterventionContentRelation,
-            variables: {
-                input: contentInterventionoRelation
-            }
-        });
-        const contentContentTagRelation = {
-            contentID: content.data.createContent.id,
-            contentTagID: "migration_tag"
-        }
-        const createdContentContentTagRelation = await API.graphql({
-            query: mutations.createContentContentTagRelation,
-            variables: {
-                input: contentContentTagRelation
-            }
-        })
-    }catch(e) {
-        console.log("error in creation of content");
-        console.log(e);
-    }
-
-     
+  try {
+    const content = await API.graphql({
+      query: mutations.createContent,
+      variables: { input: testContent },
+    });
+    const contentInterventionoRelation = {
+      contentID: content.data.createContent.id,
+      interventionID: "6",
+    };
+    const createdContentRelation = await API.graphql({
+      query: mutations.createInterventionContentRelation,
+      variables: {
+        input: contentInterventionoRelation,
+      },
+    });
+    const contentContentTagRelation = {
+      contentID: content.data.createContent.id,
+      contentTagID: "migration_tag",
+    };
+    const createdContentContentTagRelation = await API.graphql({
+      query: mutations.createContentContentTagRelation,
+      variables: {
+        input: contentContentTagRelation,
+      },
+    });
+  } catch (e) {
+    console.log("error in creation of content");
+    console.log(e);
+  }
 }
