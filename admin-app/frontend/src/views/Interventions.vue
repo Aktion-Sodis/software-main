@@ -26,7 +26,7 @@
             :interventionContent="intervention.content"
           />
         </v-col>
-        <v-col v-for="index in 3" :key="index" cols="12" sm="6" md="4" xl="3">
+        <v-col v-for="index in ['s1', 's2', 's3']" :key="index" cols="12" sm="6" md="4" xl="3">
           <InterventionSkeleton v-if="loading" />
         </v-col>
       </v-row>
