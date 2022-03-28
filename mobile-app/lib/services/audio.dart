@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'dart:typed_data';
+
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:mobile_app/frontend/components/audio/audio_stateful_widget.dart';
 
@@ -10,16 +11,20 @@ import 'package:mobile_app/frontend/components/audio/audio_stateful_widget.dart'
 /// Also, take a look at `RecorderWidget` and `PlayerWidget`,
 /// handling opened sessions automatically
 class Audio {
-  final FlutterSoundPlayer player = FlutterSoundPlayer();
+  static final Audio instance = Audio();
+
+  final FlutterSoundPlayer _player = FlutterSoundPlayer();
   final FlutterSoundRecorder recorder = FlutterSoundRecorder();
   final List<AudioStatefulWidget> attachedTo = [];
   bool keepSessionOpened = false;
   bool _sessionOpened = false;
   bool get sessionOpened => _sessionOpened;
 
+  void Function()? _onPlayerStop;
+
   /// You have to open the audio session before using it. The method initState() is a good place for it.
   Future<void> openSession() async {
-    await player.openAudioSession();
+    await _player.openAudioSession();
     await recorder.openAudioSession();
     _sessionOpened = true;
     _refreshAttachedWidgets();
@@ -27,10 +32,33 @@ class Audio {
 
   /// You have to close the audio session to release all the resources, used by the plugin. The method dispose() is a good place for it.
   Future<void> closeSession() async {
-    await player.closeAudioSession();
+    await _player.closeAudioSession();
     await recorder.closeAudioSession();
     _sessionOpened = false;
     _refreshAttachedWidgets();
+  }
+
+  Future<void> startPlayer({
+    String? fromURI,
+    Uint8List? fromDataBuffer,
+    Codec codec = Codec.aacADTS,
+    void Function()? whenFinished,
+  }) async {
+    if (_onPlayerStop != null) _onPlayerStop!();
+    _onPlayerStop = whenFinished;
+    await _player.startPlayer(
+        fromURI: fromURI,
+        fromDataBuffer: fromDataBuffer,
+        codec: codec,
+        whenFinished: () {
+          _onPlayerStop = null;
+          if (whenFinished != null) whenFinished();
+        });
+  }
+
+  Future<void> stopPlayer() async {
+    _onPlayerStop = null;
+    await _player.stopPlayer();
   }
 
   Future<void> attachTo(AudioStatefulWidget widget) async {

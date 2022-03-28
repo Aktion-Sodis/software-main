@@ -26,7 +26,7 @@ class RecorderWidget extends AudioStatefulWidget {
       : super(key: key, audio: audio);
 
   final Function(String audioURL) onAudioRecorded;
-  final Widget Function(Function()? startRecording) restingViewBuilder;
+  final Widget Function(Function() startRecording) restingViewBuilder;
   final Widget Function() loadingViewBuilder;
   final Widget Function(Function() stopRecording) recordingViewBuilder;
 
