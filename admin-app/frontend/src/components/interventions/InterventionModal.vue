@@ -10,7 +10,13 @@
         <v-card-title>
           <h2 v-if="edit">
             {{ $t('interventions.interventionModal.modalTitle.edit') }}
-            <i>{{ interventionInFocus.name.languageTexts[0] }}</i>
+            <i>
+              {{
+                calculateUILocaleString({
+                  languageTexts: interventionInFocus.name.languageTexts,
+                })
+              }}
+            </i>
           </h2>
           <h2 v-else-if="create">
             {{ $t('interventions.interventionModal.modalTitle.create') }}
@@ -92,6 +98,23 @@
                     ></v-textarea>
                   </template>
                 </LocaleTextBox>
+
+                <v-card-title class="pt-0 pt-sm-2">
+                  {{ $t('interventions.interventionModal.levels') }}
+                </v-card-title>
+                <div
+                  v-if="read && interventionInFocus"
+                  class="d-flex flex-column justify-center"
+                  style="min-height: 10rem"
+                >
+                  <v-chip v-for="levelId in interventionInFocus.levels" :key="levelId">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: LEVELById({ levelId }).name,
+                      })
+                    }}
+                  </v-chip>
+                </div>
               </v-col>
 
               <v-col cols="12" sm="6" class="pt-6 pt-sm-3 px-0 px-sm-3">
@@ -328,6 +351,7 @@ export default {
         languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
       }),
       tagIds: [],
+      levelIds: [],
       contents: [],
     };
   },
@@ -343,6 +367,7 @@ export default {
       dataIdInFocus: 'dataModal/getDataIdInFocus',
       interventionDraft: 'dataModal/getDataDraft',
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
+      LEVELById: 'LEVEL_Data/LEVELById',
 
       allInterventionTags: 'INTERVENTION_Data/getInterventionTags',
       tagById: 'INTERVENTION_Data/tagById',
