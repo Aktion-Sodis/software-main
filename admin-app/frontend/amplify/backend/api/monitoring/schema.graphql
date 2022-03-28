@@ -7,7 +7,7 @@ input AMPLIFY {
 
 type I18nString {
   languageKeys: [String!]!
-  languageTexts: [String]!
+  languageTexts: [String!]!
 } 
 
 type User @model {
