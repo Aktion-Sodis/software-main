@@ -1150,7 +1150,7 @@ class _AudioPlayerWidgetFromSyncFileState
             audioURL: audioFile!.path,
             restingViewBuilder: (a) => const Icon(MdiIcons.play),
             loadingViewBuilder: () => Container(),
-            recordingViewBuilder: (a) => const Icon(MdiIcons.pause));
+            playingViewBuilder: (a) => const Icon(MdiIcons.pause));
   }
 
   @override
