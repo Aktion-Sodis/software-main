@@ -1,10 +1,13 @@
 import Vue from 'vue';
 import { dataTypesDict, modalModesDict } from '../constants';
-import { EmptyEntity, Entity } from '../entities/utils';
-import { EmptyIntervention, Intervention } from '../interventions/utils';
+import {
+  Level, Entity, Intervention, Survey,
+} from '../../models';
+
+import { EmptyEntity } from '../entities/utils';
+// import { EmptyIntervention } from '../interventions/utils';
 import { emptyLevel } from '../levels/utils';
-import { EmptySurvey, Survey } from '../survey/utils';
-import { Level } from '../../models';
+import { EmptySurvey } from '../survey/utils';
 
 const dataModal = {
   namespaced: true,
@@ -13,7 +16,7 @@ const dataModal = {
     mode: modalModesDict.read,
     isDisplayed: false,
     dataIdInFocus: null,
-    dataDraft: new EmptyEntity(),
+    dataDraft: null,
   }),
   getters: {
     /* READ */
@@ -76,20 +79,11 @@ const dataModal = {
     },
 
     /* INTERVENTION DRAFT: SET & RESET */
-    setINTERVENTIONDraft: (state, {
-      id, name, description, tagIds, contents, _version,
-    }) => {
-      state.dataDraft = new Intervention({
-        id,
-        name,
-        description,
-        tagIds,
-        contents,
-        _version,
-      });
+    setINTERVENTIONDraft: (state, data) => {
+      state.dataDraft = data;
     },
     resetINTERVENTIONDraft: (state) => {
-      state.dataDraft = new EmptyIntervention();
+      state.dataDraft = new Intervention();
     },
 
     /* SURVEY DRAFT: SET & RESET */
