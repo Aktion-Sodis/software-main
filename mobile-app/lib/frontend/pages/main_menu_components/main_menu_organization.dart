@@ -1531,6 +1531,8 @@ class ExecutedSurveyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return surveyarea.SurveyWidgetState.summaryWidget(
       survey: executedSurvey.survey,
+      appliedIntervention: appliedIntervention,
+      executedSurveyId: executedSurvey.id!,
       answers: mappedAnswers,
       context: context,
     );
