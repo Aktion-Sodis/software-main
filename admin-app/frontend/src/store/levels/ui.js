@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import { EmptyLevel, Level } from './utils';
+import { Level } from '../../models';
+import { EmptyLevel } from './utils';
 import { modalModesDict } from '../constants';
 
 const levelsUI = {

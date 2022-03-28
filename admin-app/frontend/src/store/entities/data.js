@@ -1,6 +1,6 @@
+import { DataStore } from '@aws-amplify/datastore';
+import { Entity } from '../../models';
 import {
-  Entity,
-  postEntityController,
   putEntityController,
   deleteEntityController,
   getAllEntities,
@@ -167,25 +167,24 @@ const entitiesData = {
   actions: {
     APIpost: async ({ commit, dispatch }, entityDraft) => {
       commit('setLoading', { newValue: true });
-      const postResponse = await postEntityController(entityDraft);
-      if (postResponse?.errors?.length > 0) {
-        commit('setLoading', { newValue: false });
-        // error in API request
-        return;
-      }
-      commit('addEntity', postResponse.data.createEntity);
-      dispatch(
-        'dataModal/readData',
-        {
-          dataId: postResponse.data.createEntity.id,
-          dataType: dataTypesDict.entity,
-        },
-        {
-          root: true,
-        },
-      );
-
-      commit('setLoading', { newValue: false });
+      DataStore.save(entityDraft)
+        .then((postResponse) => {
+          commit('addEntity', postResponse);
+          dispatch(
+            'dataModal/readData',
+            {
+              dataId: postResponse.data.createEntity.id,
+              dataType: dataTypesDict.entity,
+            },
+            {
+              root: true,
+            },
+          );
+          commit('setLoading', { newValue: false });
+        })
+        .catch(() => {
+          commit('setLoading', { newValue: false });
+        });
     },
     APIput: async ({ commit, dispatch }, entityDraft) => {
       commit('setLoading', { newValue: true });

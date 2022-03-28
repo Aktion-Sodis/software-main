@@ -35,7 +35,7 @@ export enum Type {
 
 export declare class I18nString {
   readonly languageKeys: string[];
-  readonly languageTexts: (string | null)[];
+  readonly languageTexts: string[];
   constructor(init: ModelInit<I18nString>);
 }
 

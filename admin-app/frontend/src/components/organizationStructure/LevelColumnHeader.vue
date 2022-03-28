@@ -65,7 +65,7 @@ export default {
     localizedName() {
       return (
         this.name.languageTexts[
-          this.name.languageKeys.findIndex((key) => key === this.$i18n.locale)
+          this.$store.getters.fallbackLocaleIndex
         ] ?? ''
       );
     },
