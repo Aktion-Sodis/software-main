@@ -3,6 +3,8 @@ import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/repositories/AppliedInterventionRepository.dart';
 import 'package:mobile_app/backend/repositories/EntityRepository.dart';
 import 'package:mobile_app/backend/repositories/ExecutedSurveyRepository.dart';
+import 'package:mobile_app/backend/storage/dataStorePaths.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class TaskRepository {
@@ -56,5 +58,15 @@ class TaskRepository {
   Future<Task> updateTask(Task task) async {
     Amplify.DataStore.save(task.toAmplifyModel());
     return task;
+  }
+
+  static SyncedFile getTaskPic(Task task) {
+    String path = dataStorePath(DataStorePaths.taskPicPath, [task.id!]);
+    return SyncedFile(path);
+  }
+
+  static SyncedFile getTaskAudio(Task task) {
+    String path = dataStorePath(DataStorePaths.taskAudioPath, [task.id!]);
+    return SyncedFile(path);
   }
 }

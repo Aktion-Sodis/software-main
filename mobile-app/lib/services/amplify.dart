@@ -2,6 +2,7 @@ import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/amplifyconfiguration.dart';
 import 'package:mobile_app/models/ModelProvider.dart';
@@ -19,11 +20,12 @@ class AmplifyIntegration {
   ///auth for api and storage
   static final AmplifyAuthCognito _amplifyAuthCognito = AmplifyAuthCognito();
 
+  static final AmplifyStorageS3 _amplifyStorageS3 = AmplifyStorageS3();
   ///prior to any actions regarding amplify in app, this method has to be awaited once
   /// -> integrated as first step in app start
   static Future<bool> initialize() async {
     await Amplify.addPlugins(
-        [_amplifyDataStore, _amplifyAPI, _amplifyAuthCognito]);
+        [_amplifyDataStore, _amplifyAPI, _amplifyAuthCognito, _amplifyStorageS3]);
     await Amplify.configure(amplifyconfig);
     Amplify.DataStore.streamController.stream.asBroadcastStream().listen((t) {
       print("amplify data store event:");

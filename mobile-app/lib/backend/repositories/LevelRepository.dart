@@ -1,5 +1,7 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
+import 'package:mobile_app/backend/storage/dataStorePaths.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class LevelRepository {
@@ -21,5 +23,16 @@ class LevelRepository {
       levelInterventionRelationsByLevel(amp.Level level) async {
     return Amplify.DataStore.query(amp.LevelInterventionRelation.classType,
         where: amp.LevelInterventionRelation.LEVEL.eq(level.id));
+  }
+
+  static SyncedFile getLevelPicFile(Level level) {
+    String path = dataStorePath(DataStorePaths.levelPicPath, [level.id!]);
+    return SyncedFile(path);
+  }
+
+  static SyncedFile getCustomDataPicFile(Level level, CustomData customData) {
+    String path = dataStorePath(
+        DataStorePaths.levelCustomDataPicPath, [level.id!, customData.id!]);
+    return SyncedFile(path);
   }
 }

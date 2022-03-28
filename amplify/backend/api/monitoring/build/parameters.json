@@ -1,0 +1,7 @@
+{
+    "AppSyncApiName": "monitoring",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "S3DeploymentBucket": "amplify-monitoring-dev-182045-deployment",
+    "S3DeploymentRootKey": "amplify-appsync-files/4d1e3388433b33fbc8fd7f4398780f8be3f7a88c"
+}

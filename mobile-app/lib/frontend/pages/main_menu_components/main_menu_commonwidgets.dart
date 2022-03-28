@@ -6,8 +6,10 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:mobile_app/backend/Blocs/organization_view/organization_view_bloc.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/callableModels/Survey.dart';
+import 'package:mobile_app/backend/repositories/ContentRepository.dart';
 import 'package:mobile_app/backend/repositories/InterventionRepository.dart';
 import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/frontend/buttons.dart';
 import 'package:mobile_app/frontend/common_widgets.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
@@ -15,8 +17,7 @@ import 'package:mobile_app/frontend/strings.dart' as strings;
 
 class CustomPicButton extends StatefulWidget {
   VoidCallback? onPressed;
-  String filePath;
-  File? file;
+  SyncedFile syncedFile;
   Size size;
   bool pressable;
   EdgeInsets? padding;
@@ -25,8 +26,7 @@ class CustomPicButton extends StatefulWidget {
 
   CustomPicButton(
       {this.onPressed,
-      required this.filePath,
-      this.file,
+      required this.syncedFile,
       required this.size,
       required this.pressable,
       this.padding,
@@ -43,26 +43,15 @@ class CustomPicButtonState extends State<CustomPicButton> {
   bool loading = true;
   File? imageFile;
 
-  Future<File?> fileFromPath(String path) async {
-    //todo: implement
-    return null;
-  }
-
   @override
   void initState() {
-    if (widget.file != null) {
-      imageFile = widget.file;
-      loading = false;
-    }
-    super.initState();
-    if (widget.file == null) {
-      fileFromPath(widget.filePath).then((value) {
-        setState(() {
-          imageFile = value;
-          loading = false;
-        });
+    widget.syncedFile.file().then((value){
+      setState(() {
+        imageFile = value;
+        loading = false;
       });
-    }
+    });
+    super.initState();
   }
 
   @override
@@ -99,9 +88,9 @@ class CustomPicButtonState extends State<CustomPicButton> {
   }
 }
 
-Widget surveyRow(BuildContext context, Survey survey, String filePath,
+Widget surveyRow(BuildContext context, Survey survey,
     {VoidCallback? onPressed,
-    File? image,
+    required SyncedFile image,
     bool pressable = false,
     bool separator = false}) {
   return Column(mainAxisSize: MainAxisSize.min, children: [
@@ -113,8 +102,7 @@ Widget surveyRow(BuildContext context, Survey survey, String filePath,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomPicButton(
-                filePath: filePath,
-                file: image,
+                syncedFile: image,
                 onPressed: () {},
                 size: Size(width(context) * .1, width(context) * .1),
                 pressable: false),
@@ -145,9 +133,9 @@ Widget surveyRow(BuildContext context, Survey survey, String filePath,
 }
 
 Widget interventionRow(
-    BuildContext context, Intervention intervention, String filePath,
+    BuildContext context, Intervention intervention,
     {VoidCallback? onPressed,
-    File? image,
+    required SyncedFile image,
     bool pressable = false,
     bool separator = false}) {
   return Column(mainAxisSize: MainAxisSize.min, children: [
@@ -159,8 +147,7 @@ Widget interventionRow(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomPicButton(
-                filePath: filePath,
-                file: image,
+                syncedFile: image,
                 onPressed: () {},
                 size: Size(width(context) * .1, width(context) * .1),
                 pressable: false),
@@ -264,6 +251,7 @@ Widget taskRow(BuildContext context, Task task,
 Widget executedSurveyRow(
     BuildContext context, ExecutedSurvey executedSurvey, VoidCallback onPressed,
     {bool separator = false}) {
+  //todo: datei synced file als übergabe
   return Column(key: ValueKey(executedSurvey), children: [
     RawMaterialButton(
         onPressed: onPressed,
@@ -275,8 +263,7 @@ Widget executedSurveyRow(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CustomPicButton(
-                    filePath:
-                        SurveyRepository.getIconFilePath(executedSurvey.survey),
+                    syncedFile: SyncedFile(SurveyRepository.getIconFilePath(executedSurvey.survey)),
                     onPressed: () {},
                     size: Size(width(context) * .1, width(context) * .1),
                     pressable: false),
@@ -302,6 +289,66 @@ Widget executedSurveyRow(
                                           top: defaultPadding(context)),
                                       child:
                                           Text(executedSurvey.date.toString()))
+                                ])),
+                            CommonWidgets.defaultIconButton(
+                                onPressed: onPressed,
+                                context: context,
+                                iconData: MdiIcons.arrowRight,
+                                buttonSizes: ButtonSizes.small,
+                                fillColor:
+                                    Theme.of(context).colorScheme.secondary)
+                          ],
+                        )))
+              ],
+            ))),
+    if (separator)
+      Container(
+          margin: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
+          color: Colors.grey,
+          height: 1)
+  ]);
+}
+
+Widget contentRow(BuildContext context, Content content, VoidCallback onPressed,
+    {bool separator = false}) {
+  //todo: synced file als übergabe
+  return Column(key: ValueKey(content), children: [
+    RawMaterialButton(
+        onPressed: onPressed,
+        child: Container(
+            padding: EdgeInsets.symmetric(
+                horizontal: defaultPadding(context) / 2,
+                vertical: defaultPadding(context)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CustomPicButton(
+
+                    syncedFile: SyncedFile(ContentRepository.getContentPic(content).path),
+                    onPressed: () {},
+                    size: Size(width(context) * .1, width(context) * .1),
+                    pressable: false),
+                SizedBox(width: defaultPadding(context)),
+                Expanded(
+                    child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: defaultPadding(context)),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                  Container(
+                                      child: Text(content.name,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2)),
+                                  Container(
+                                      margin: EdgeInsets.only(
+                                          top: defaultPadding(context)),
+                                      child: Text(content.description))
                                 ])),
                             CommonWidgets.defaultIconButton(
                                 onPressed: onPressed,
@@ -368,7 +415,7 @@ class InterventionFilterWidgetState extends State<InterventionFilterWidget> {
             selectionChange(index);
           }
         },
-        filePath: filePath,
+        syncedFile: SyncedFile(filePath),
         size: widget.selectable
             ? Size(width(context) * .15, width(context) * .15)
             : Size(width(context) * .1, width(context) * .1),

@@ -19,15 +19,8 @@ class UpdateUserEvent extends UserEvent {
 
 class InitializeUserEvent extends UserEvent {
   final User? user;
-  final File? userPic;
 
-  InitializeUserEvent(this.user, this.userPic);
-}
-
-class UpdatePicUserEvent extends UserEvent {
-  final File userPic;
-
-  UpdatePicUserEvent(this.userPic);
+  InitializeUserEvent(this.user);
 }
 
 class LogOutUserEvent extends UserEvent {

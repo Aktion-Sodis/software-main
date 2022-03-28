@@ -81,6 +81,7 @@ Map<String, dynamic> stringMap = {
     "abort_survey_warn": "You wont be able to proceed later and will have to start again",
     "confirm_abort": "Abort",
     "do_not_abort": "Continue",
+    "your shot": "Your shot:",
   }
 };
 
@@ -233,3 +234,4 @@ String get abortSurvey  => stringMap[currentLanguage]["abort_survey"];
 String get abortSurveyText  => stringMap[currentLanguage]["abort_survey_warn"];
 String get confirmAbort  => stringMap[currentLanguage]["confirm_abort"];
 String get doNotAbort  => stringMap[currentLanguage]["do_not_abort"];
+String get yourShot => stringMap[currentLanguage]["your shot"];

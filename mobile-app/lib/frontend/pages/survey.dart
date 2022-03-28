@@ -1,14 +1,23 @@
+import 'dart:io';
+
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_bloc.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_events.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_state.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
+import 'package:mobile_app/backend/repositories/ExecutedSurveyRepository.dart';
+import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/frontend/buttons.dart';
 import 'package:mobile_app/frontend/common_widgets.dart';
+import 'package:mobile_app/frontend/components/audio/player_widget.dart';
+import 'package:mobile_app/frontend/components/audio/recorder_widget.dart';
 import 'package:mobile_app/frontend/components/imageWidget.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
 import 'package:mobile_app/frontend/strings.dart';
@@ -25,6 +34,16 @@ class AnimatedProgressBar extends StatefulWidget {
 
   @override
   State<AnimatedProgressBar> createState() => _AnimatedProgressBarState();
+}
+
+class AudioPlayerWidgetFromSyncFile extends StatefulWidget {
+  final SyncedFile? syncedFile;
+  const AudioPlayerWidgetFromSyncFile({Key? key, this.syncedFile})
+      : super(key: key);
+
+  @override
+  State<AudioPlayerWidgetFromSyncFile> createState() =>
+      _AudioPlayerWidgetFromSyncFileState();
 }
 
 class SurveyWidget extends StatefulWidget {
@@ -47,6 +66,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
   Map<Question, QuestionAnswer> answers = {};
   late List<Question> questions;
+  late final String preliminaryExecutedSurveyId;
 
   Future<bool?> addTask() async {
     //TODO: connect addTask
@@ -86,7 +106,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
                 onProceed: () async {
                   await saveSurvey(
                       context: context,
-                      answers: answers.values.toList(),
+                      answers: answers,
+                      preliminaryId: preliminaryExecutedSurveyId,
                       survey: widget.survey);
                   _pageController.nextPage(
                       duration: _pageSlideDuration, curve: _pageSlideCurve);
@@ -102,15 +123,20 @@ class SurveyWidgetState extends State<SurveyWidget> {
     return questions.map((e) {
       switch (e.type) {
         case QuestionType.SINGLECHOICE:
-          return scQuestionWidget(context: context, question: e);
+          return scQuestionWidget(
+              context: context, question: e, survey: widget.survey);
         case QuestionType.MULTIPLECHOICE:
-          return mcQuestionWidget(context: context, question: e);
+          return mcQuestionWidget(
+              context: context, question: e, survey: widget.survey);
         case QuestionType.PICTURE:
-          return takePhotoQuestionWidget(context: context, question: e);
+          return takePhotoQuestionWidget(
+              context: context, question: e, survey: widget.survey);
         case QuestionType.AUDIO:
-          return takeAudioQuestionWidget(context: context, question: e);
+          return takeAudioQuestionWidget(
+              context: context, question: e, survey: widget.survey);
         case QuestionType.TEXT:
-          return textQuestionWidget(context: context, question: e);
+          return textQuestionWidget(
+              context: context, question: e, survey: widget.survey);
         default:
 
           //TODO: Container löschen
@@ -122,6 +148,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
   @override
   void initState() {
+    preliminaryExecutedSurveyId = UUID.getUUID();
     surveyImage = Image.asset('assets/test/demo_pic.jpg');
     questions = widget.survey.questions
         .where((element) => !element.isFollowUpQuestion)
@@ -243,11 +270,14 @@ class SurveyWidgetState extends State<SurveyWidget> {
   }
 
   Widget mcQuestionWidget(
-      {required BuildContext context, required Question question}) {
+      {required BuildContext context,
+      required Question question,
+      required Survey survey}) {
     return ListView(
       shrinkWrap: true,
       children: [
-        imageForQuestion(question: question),
+        imageForQuestion(
+            syncedFile: SurveyRepository.getQuestionPic(survey, question)),
         SizedBox(
           height: defaultPadding(context),
         ),
@@ -311,11 +341,14 @@ class SurveyWidgetState extends State<SurveyWidget> {
   }
 
   Widget scQuestionWidget(
-      {required BuildContext context, required Question question}) {
+      {required BuildContext context,
+      required Question question,
+      required Survey survey}) {
     return ListView(
       shrinkWrap: true,
       children: [
-        imageForQuestion(question: question),
+        imageForQuestion(
+            syncedFile: SurveyRepository.getQuestionPic(survey, question)),
         SizedBox(
           height: defaultPadding(context),
         ),
@@ -382,11 +415,14 @@ class SurveyWidgetState extends State<SurveyWidget> {
   }
 
   Widget takeAudioQuestionWidget(
-      {required BuildContext context, required Question question}) {
+      {required BuildContext context,
+      required Question question,
+      required Survey survey}) {
     return ListView(
       shrinkWrap: true,
       children: [
-        imageForQuestion(question: question),
+        imageForQuestion(
+            syncedFile: SurveyRepository.getQuestionPic(survey, question)),
         SizedBox(
           height: defaultPadding(context),
         ),
@@ -405,18 +441,37 @@ class SurveyWidgetState extends State<SurveyWidget> {
         SizedBox(
           height: defaultPadding(context) * 2,
         ),
+        AudioPlayerWidgetFromSyncFile(
+          syncedFile: ExecutedSurveyRepository.getQuestionAnswerAudio(
+              (context.read<InAppBloc>().state as SurveyInAppState)
+                  .appliedIntervention,
+              preliminaryExecutedSurveyId,
+              question),
+        ),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
         getTakeAudioWidget(
-            question: question, callback: () {}, context: context),
+            question: question,
+            callback: () {},
+            context: context,
+            appliedIntervention:
+                (context.read<InAppBloc>().state as SurveyInAppState)
+                    .appliedIntervention,
+            executedSurveyId: preliminaryExecutedSurveyId),
       ],
     );
   }
 
   Widget takePhotoQuestionWidget(
-      {required BuildContext context, required Question question}) {
+      {required BuildContext context,
+      required Question question,
+      required Survey survey}) {
     return ListView(
       shrinkWrap: true,
       children: [
-        imageForQuestion(question: question),
+        imageForQuestion(
+            syncedFile: SurveyRepository.getQuestionPic(survey, question)),
         SizedBox(
           height: defaultPadding(context),
         ),
@@ -435,18 +490,38 @@ class SurveyWidgetState extends State<SurveyWidget> {
         SizedBox(
           height: defaultPadding(context) * 2,
         ),
+        imageForQuestion(
+            syncedFile: ExecutedSurveyRepository.getQuestionAnswerPic(
+                (context.read<InAppBloc>().state as SurveyInAppState)
+                    .appliedIntervention,
+                preliminaryExecutedSurveyId,
+                question)),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
         getTakePhotoWidget(
-            question: question, callback: () {}, context: context),
+            question: question,
+            callback: () {
+              setState(() {});
+            },
+            context: context,
+            appliedIntervention:
+                (context.read<InAppBloc>().state as SurveyInAppState)
+                    .appliedIntervention,
+            executedSurveyID: preliminaryExecutedSurveyId),
       ],
     );
   }
 
   Widget textQuestionWidget(
-      {required BuildContext context, required Question question}) {
+      {required BuildContext context,
+      required Question question,
+      required Survey survey}) {
     return ListView(
       shrinkWrap: true,
       children: [
-        imageForQuestion(question: question),
+        imageForQuestion(
+            syncedFile: SurveyRepository.getQuestionPic(survey, question)),
         SizedBox(
           height: defaultPadding(context),
         ),
@@ -471,56 +546,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
     );
   }
 
-  void _dismissSurvey() async {
-    bool confirmation = await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-            title:
-                Text(abortSurvey, style: Theme.of(context).textTheme.bodyText1),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(abortSurveyText),
-                ),
-                SizedBox(
-                  height: defaultPadding(context),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MaterialButton(
-                        child: Padding(
-                          padding: EdgeInsets.all(defaultPadding(context)),
-                          child: Text(
-                            confirmAbort,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop(true);
-                        }),
-                    MaterialButton(
-                        child: Padding(
-                          padding: EdgeInsets.all(defaultPadding(context)),
-                          child: Text(
-                            doNotAbort,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        }),
-                  ],
-                ),
-              ],
-            )));
-    if (confirmation) {
-      BlocProvider.of<InAppBloc>(context).add(MainViewEvent());
-    }
-  }
-
+  void _dismissSurvey() {}
   void _goToInSurveyPage(Question targetQuestion) async {
     if (!questions.contains(targetQuestion)) {
       throw 'Question does not exist';
@@ -530,9 +556,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
     _inSurveyPageController.jumpToPage(questions.indexOf(targetQuestion));
   }
 
-  void _leaveSurveyRegular() {
-    BlocProvider.of<InAppBloc>(context).add(MainViewEvent());
-  }
+  void _leaveSurveyRegular() {}
 
   void _proceedToNextPage(Question currentQuestion) {
     if (questions.indexOf(currentQuestion) == questions.length - 1) {
@@ -554,6 +578,10 @@ class SurveyWidgetState extends State<SurveyWidget> {
                 : 0
             : 0,
         survey: widget.survey,
+        executedSurveyId: preliminaryExecutedSurveyId,
+        appliedIntervention:
+            (context.read<InAppBloc>().state as SurveyInAppState)
+                .appliedIntervention,
         answers: answers,
         onEditGenerator: (Question question) {
           return () {
@@ -665,19 +693,33 @@ class SurveyWidgetState extends State<SurveyWidget> {
   }
 
   static Widget getReadOutWidget({required Question question}) {
-    //TODO: add correct Widget From Bene, connect read out functionality
-
-    return Container(
-      child: const Icon(MdiIcons.speaker),
-    );
+    return Container();
   }
 
   static Widget getTakeAudioWidget(
       {required Question question,
+      required AppliedIntervention appliedIntervention,
+      required String executedSurveyId,
       required VoidCallback callback,
       required BuildContext context}) {
     //TODO: connect with Bene
 
+    return RecorderWidget(
+        restingViewBuilder: (a) => Container(
+              child: Icon(
+                MdiIcons.record,
+              ),
+            ),
+        recordingViewBuilder: (a) => Container(
+              child: Icon(MdiIcons.pause),
+            ),
+        onAudioRecorded: (path) {
+          SyncedFile syncedFile =
+              ExecutedSurveyRepository.getQuestionAnswerAudio(
+                  appliedIntervention, executedSurveyId, question);
+          syncedFile.updateAsAudio(File(path));
+        },
+        loadingViewBuilder: () => Container());
     return MaterialButton(
       onPressed: () {},
       child: Container(
@@ -691,13 +733,22 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
   static Widget getTakePhotoWidget(
       {required Question question,
+      required executedSurveyID,
+      required AppliedIntervention appliedIntervention,
       required VoidCallback callback,
       required BuildContext context}) {
     //TODO: connect with Bene
 
+    //return CustomIconButton(onPressed, iconData, size, true)
     return MaterialButton(
-      onPressed: () {
-        CameraFunctionality.takePicture(context: context);
+      onPressed: () async {
+        XFile? r = await CameraFunctionality.takePicture(context: context);
+        if (r != null) {
+          SyncedFile syncedFile = ExecutedSurveyRepository.getQuestionAnswerPic(
+              appliedIntervention, executedSurveyID, question);
+          await syncedFile.updateAsPic(r);
+        }
+        callback.call();
       },
       child: Container(
         child: const Icon(
@@ -708,16 +759,18 @@ class SurveyWidgetState extends State<SurveyWidget> {
     );
   }
 
-  static Widget imageForQuestion({required Question question}) {
-    //TODO: resolve Image from question
-
-    return Image.asset('assets/test/demo_pic.jpg');
+  static Widget imageForQuestion({required SyncedFile syncedFile}) {
+    return ImageFromSyncedFile(
+      syncedFile: syncedFile,
+    );
   }
 
   static Widget questionSummary(
       {Function? onEdit,
       required Question question,
       QuestionAnswer? questionAnswer,
+      required AppliedIntervention appliedIntervention,
+      required String executedSurveyId,
       required BuildContext context}) {
     if (question.isFollowUpQuestion) {
       if (questionAnswer == null) {
@@ -744,7 +797,14 @@ class SurveyWidgetState extends State<SurveyWidget> {
           answerWidget = Text(answers);
           break;
         case QuestionType.PICTURE:
-          answerWidget = imageForQuestion(question: question);
+          answerWidget = Column(
+            children: [
+              Text(yourShot),
+              imageForQuestion(
+                  syncedFile: ExecutedSurveyRepository.getQuestionAnswerPic(
+                      appliedIntervention, executedSurveyId, question)),
+            ],
+          );
           break;
         case QuestionType.TEXT:
           answerWidget = Text(questionAnswer.text!);
@@ -831,17 +891,33 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
   static Future<void> saveSurvey(
       {required Survey survey,
-      required List<QuestionAnswer> answers,
-      required BuildContext context}) async {
+      required Map<Question, QuestionAnswer> answers,
+      required BuildContext context,
+      String? preliminaryId}) async {
+    List<QuestionAnswer> surveyAnswersAsList = List.generate(
+        survey.questions.length,
+        (index) => QuestionAnswer(
+            questionID: survey.questions[index].id!,
+            date: DateTime.now(),
+            type: survey.questions[index].type));
+    for (MapEntry<Question, QuestionAnswer> pair in answers.entries) {
+      int toReplace = surveyAnswersAsList
+          .indexWhere((element) => element.questionID == pair.key.id);
+      if (toReplace < 0) {
+        throw 'Answer for question that is not in survey ${survey.name} was given and assigned to this survey';
+      }
+      surveyAnswersAsList[toReplace] = pair.value;
+    }
     //todo: add location
     var surveyState = context.read<InAppBloc>().state as SurveyInAppState;
     var userState = context.read<UserBloc>().state;
     ExecutedSurvey executedSurvey = ExecutedSurvey(
+        id: preliminaryId,
         appliedIntervention: surveyState.appliedIntervention,
         survey: survey,
         whoExecutedIt: userState.user!,
         date: DateTime.now(),
-        answers: answers);
+        answers: surveyAnswersAsList);
     context.read<InAppBloc>().add(FinishAndSaveExecutedSurvey(
         executedSurvey, surveyState.appliedIntervention));
   }
@@ -879,9 +955,11 @@ class SurveyWidgetState extends State<SurveyWidget> {
       double? progress,
       required Survey survey,
       required Map<Question, QuestionAnswer> answers,
-      QuestionEditor? onEditGenerator,
-      onDismiss,
-      onProceed}) {
+      required AppliedIntervention appliedIntervention,
+      required String executedSurveyId,
+      required QuestionEditor? onEditGenerator,
+      required onDismiss,
+      required onProceed}) {
     return Column(
       children: [
         SizedBox(
@@ -921,6 +999,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
               ...List.generate(
                   survey.questions.length,
                   (index) => questionSummary(
+                      appliedIntervention: appliedIntervention,
+                      executedSurveyId: executedSurveyId,
                       question: survey.questions[index],
                       questionAnswer: answers[survey.questions[index]],
                       context: context,
@@ -930,23 +1010,21 @@ class SurveyWidgetState extends State<SurveyWidget> {
             ],
           ),
         ),
-        if (!(onProceed == null && onDismiss == null))
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CommonWidgets.defaultDismissButton(
-                    context: context, dismiss: onDismiss),
-                CommonWidgets.defaultForwardButton(
-                    context: context, proceed: onProceed),
-              ],
-            ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CommonWidgets.defaultDismissButton(
+                  context: context, dismiss: onDismiss),
+              CommonWidgets.defaultForwardButton(
+                  context: context, proceed: onProceed),
+            ],
           ),
-        if (!(onProceed == null && onDismiss == null))
-          SizedBox(
-            height: defaultPadding(context),
-          ),
+        ),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
       ],
     );
   }
@@ -1056,6 +1134,36 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar>
       ..addListener(() {
         setState(() {});
       });
+    super.initState();
+  }
+}
+
+class _AudioPlayerWidgetFromSyncFileState
+    extends State<AudioPlayerWidgetFromSyncFile> {
+  File? audioFile;
+
+  @override
+  Widget build(BuildContext context) {
+    return audioFile == null
+        ? Container()
+        : PlayerWidget(
+            audioURL: audioFile!.path,
+            restingViewBuilder: (a) => const Icon(MdiIcons.play),
+            loadingViewBuilder: () => Container(),
+            recordingViewBuilder: (a) => const Icon(MdiIcons.pause));
+  }
+
+  @override
+  void initState() {
+    widget.syncedFile?.file().then((value) {
+      try {
+        setState(() {
+          audioFile = value;
+        });
+      } on Exception catch (e) {
+        audioFile = value;
+      }
+    });
     super.initState();
   }
 }
