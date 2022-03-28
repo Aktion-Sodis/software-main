@@ -55,9 +55,6 @@
                       dense
                       @input="slotProps.inputHandler"
                     ></v-text-field>
-                    <!-- <v-text-field -->
-                    <!-- :label="$t('interventions.interventionModal.name')" -->
-                    <!-- ></v-text-field> -->
                   </template>
                 </LocaleTextBox>
 
