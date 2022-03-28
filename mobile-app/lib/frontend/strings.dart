@@ -76,7 +76,8 @@ Map<String, dynamic> stringMap = {
     "days": "days",
     "tasks_more_behind": "More behind",
     "profile": "Profile",
-    "user_update": "Save changes"
+    "user_update": "Save changes",
+    "your shot": "Your shot:",
   }
 };
 
@@ -225,3 +226,4 @@ String get textFieldTypeDescription =>
 String get summary => stringMap[currentLanguage]["summary"];
 String get endSurvey => stringMap[currentLanguage]["end_survey"];
 String get savedSurvey => stringMap[currentLanguage]["saved_survey"];
+String get yourShot => stringMap[currentLanguage]["your shot"];
