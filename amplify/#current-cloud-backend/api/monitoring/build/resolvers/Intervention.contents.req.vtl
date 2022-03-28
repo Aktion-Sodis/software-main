@@ -1,0 +1,106 @@
+#if( $ctx.source.deniedField )
+  #return($util.toJson(null))
+#end
+#if( $util.isNull($ctx.source.id) )
+  #set( $result = {
+  "items":   []
+} )
+  #return($result)
+#else
+  #set( $limit = $util.defaultIfNull($context.args.limit, 100) )
+  #set( $query = {
+  "expression": "#partitionKey = :partitionKey",
+  "expressionNames": {
+      "#partitionKey": "interventionID"
+  },
+  "expressionValues": {
+      ":partitionKey": $util.dynamodb.toDynamoDB($context.source.id)
+  }
+} )
+  ## [Start] Applying Key Condition **
+  #if( !$util.isNull($ctx.args.contentID) && !$util.isNull($ctx.args.contentID.beginsWith) )
+    #set( $query.expression = "$query.expression AND begins_with(#sortKey, :sortKey)" )
+    $util.qr($query.expressionNames.put("#sortKey", "contentID"))
+    $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.contentID.beginsWith" }))
+  #end
+  #if( !$util.isNull($ctx.args.contentID) && !$util.isNull($ctx.args.contentID.between) )
+    #set( $query.expression = "$query.expression AND #sortKey BETWEEN :sortKey0 AND :sortKey1" )
+    $util.qr($query.expressionNames.put("#sortKey", "contentID"))
+    $util.qr($query.expressionValues.put(":sortKey0", { "S": "$ctx.args.contentID.between[0]" }))
+    $util.qr($query.expressionValues.put(":sortKey1", { "S": "$ctx.args.contentID.between[1]" }))
+  #end
+  #if( !$util.isNull($ctx.args.contentID) && !$util.isNull($ctx.args.contentID.eq) )
+    #set( $query.expression = "$query.expression AND #sortKey = :sortKey" )
+    $util.qr($query.expressionNames.put("#sortKey", "contentID"))
+    $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.contentID.eq" }))
+  #end
+  #if( !$util.isNull($ctx.args.contentID) && !$util.isNull($ctx.args.contentID.lt) )
+    #set( $query.expression = "$query.expression AND #sortKey < :sortKey" )
+    $util.qr($query.expressionNames.put("#sortKey", "contentID"))
+    $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.contentID.lt" }))
+  #end
+  #if( !$util.isNull($ctx.args.contentID) && !$util.isNull($ctx.args.contentID.le) )
+    #set( $query.expression = "$query.expression AND #sortKey <= :sortKey" )
+    $util.qr($query.expressionNames.put("#sortKey", "contentID"))
+    $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.contentID.le" }))
+  #end
+  #if( !$util.isNull($ctx.args.contentID) && !$util.isNull($ctx.args.contentID.gt) )
+    #set( $query.expression = "$query.expression AND #sortKey > :sortKey" )
+    $util.qr($query.expressionNames.put("#sortKey", "contentID"))
+    $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.contentID.gt" }))
+  #end
+  #if( !$util.isNull($ctx.args.contentID) && !$util.isNull($ctx.args.contentID.ge) )
+    #set( $query.expression = "$query.expression AND #sortKey >= :sortKey" )
+    $util.qr($query.expressionNames.put("#sortKey", "contentID"))
+    $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.contentID.ge" }))
+  #end
+  ## [End] Applying Key Condition **
+  #set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
+  #if( !$util.isNullOrEmpty($ctx.stash.authFilter) )
+    #set( $filter = $ctx.stash.authFilter )
+    #if( !$util.isNullOrEmpty($args.filter) )
+      #set( $filter = {
+  "and":   [$filter, $args.filter]
+} )
+    #end
+  #else
+    #if( !$util.isNullOrEmpty($args.filter) )
+      #set( $filter = $args.filter )
+    #end
+  #end
+  #if( !$util.isNullOrEmpty($filter) )
+    #set( $filterExpression = $util.parseJson($util.transform.toDynamoDBFilterExpression($filter)) )
+    #if( !$util.isNullOrBlank($filterExpression.expression) )
+      #if( $filterExpression.expressionValues.size() == 0 )
+        $util.qr($filterExpression.remove("expressionValues"))
+      #end
+      #set( $filter = $filterExpression )
+    #end
+  #end
+{
+      "version": "2018-05-29",
+      "operation": "Query",
+      "query":     $util.toJson($query),
+      "scanIndexForward":     #if( $context.args.sortDirection )
+      #if( $context.args.sortDirection == "ASC" )
+true
+      #else
+false
+      #end
+    #else
+true
+    #end,
+      "filter":     #if( $filter )
+$util.toJson($filter)
+    #else
+null
+    #end,
+      "limit": $limit,
+      "nextToken":     #if( $context.args.nextToken )
+$util.toJson($context.args.nextToken)
+    #else
+null
+    #end,
+      "index": "byIntervention"
+  }
+#end

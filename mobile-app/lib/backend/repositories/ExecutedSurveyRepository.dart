@@ -3,6 +3,8 @@ import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/repositories/AppliedInterventionRepository.dart';
 import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
 import 'package:mobile_app/backend/repositories/UserRepository.dart';
+import 'package:mobile_app/backend/storage/dataStorePaths.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class ExecutedSurveyRepository {
@@ -65,5 +67,23 @@ class ExecutedSurveyRepository {
     //todo: testen ob applied intervention auch gespeichert werden muss
     Amplify.DataStore.save(toSave);
     return executedSurvey;
+  }
+
+  static SyncedFile getQuestionAnswerPic(
+      AppliedIntervention appliedIntervention,
+      String executedSurveyID,
+      Question question) {
+    String path = dataStorePath(DataStorePaths.questionPicAnswerPath,
+        [appliedIntervention.id!, executedSurveyID, question.id!]);
+    return SyncedFile(path);
+  }
+
+  static SyncedFile getQuestionAnswerAudio(
+      AppliedIntervention appliedIntervention,
+      String executedSurveyID,
+      Question question) {
+    String path = dataStorePath(DataStorePaths.questionAudioAnswerPath,
+        [appliedIntervention.id!, executedSurveyID, question.id!]);
+    return SyncedFile(path);
   }
 }

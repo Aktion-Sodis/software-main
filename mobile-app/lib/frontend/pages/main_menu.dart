@@ -71,10 +71,7 @@ class MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider(create: (context) => UserRepository())
-          //todo: add task repository for first page and to show badge on tasks icon
-        ],
+        providers: [RepositoryProvider(create: (context) => UserRepository())],
         child: Scaffold(
             bottomNavigationBar: bottomNavigationBar(),
             body: SafeArea(child: mainPageView())));
