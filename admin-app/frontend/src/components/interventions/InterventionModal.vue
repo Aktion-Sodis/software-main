@@ -110,7 +110,7 @@
                   <v-chip v-for="levelId in interventionInFocus.levels" :key="levelId">
                     {{
                       calculateUILocaleString({
-                        languageTexts: LEVELById({ levelId }).name,
+                        languageTexts: LEVELById({ id: levelId }).name,
                       })
                     }}
                   </v-chip>
@@ -118,6 +118,49 @@
               </v-col>
 
               <v-col cols="12" sm="6" class="pt-6 pt-sm-3 px-0 px-sm-3">
+                <v-card-title class="pt-0 pt-sm-2">
+                  {{ $t('interventions.type.title') }}:
+
+                  <div v-if="read && interventionInFocus">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-avatar v-bind="attrs" v-on="on">
+                          <v-icon>{{
+                            interventionInFocus.interventionType === InterventionType.TECHNOLOGY
+                              ? 'mdi-hammer-wrench'
+                              : 'mdi-school'
+                          }}</v-icon>
+                        </v-avatar>
+                      </template>
+                      <span>{{
+                        $t(`interventions.type.types.${interventionInFocus.interventionType}`)
+                      }}</span>
+                    </v-tooltip>
+                  </div>
+
+                  <v-select
+                    v-model="type"
+                    class="mt-6"
+                    outlined
+                    dense
+                    :items="Object.keys(InterventionType)"
+                    v-else
+                  >
+                    <template v-slot:selection="data">
+                      <v-icon>
+                        {{
+                          data.item === InterventionType.TECHNOLOGY
+                            ? 'mdi-hammer-wrench'
+                            : 'mdi-school'
+                        }}
+                      </v-icon>
+                    </template>
+                    <template v-slot:item="data">
+                      {{ $t(`interventions.type.types.${data.item}`) }}
+                    </template>
+                  </v-select>
+                </v-card-title>
+
                 <v-card-title class="pt-0 pt-sm-2">
                   {{ $t('interventions.interventionModal.image') }}
                 </v-card-title>
@@ -325,7 +368,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
-import { I18nString } from '../../models';
+import { I18nString, Intervention, InterventionType } from '../../models';
 
 const interventionDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_INTERVENTION_DESCRIPTION_MAX_CHAR, 10),
@@ -338,17 +381,19 @@ export default {
   data() {
     return {
       interventionDescriptionMaxChar,
+      InterventionType,
       rules: {
         maxChar: (value) => value.length <= interventionDescriptionMaxChar || this.maxCharExceededi18n,
       },
       id: null,
       name: new I18nString({
         languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
+        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
       }),
+      type: InterventionType.TECHNOLOGY,
       description: new I18nString({
         languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
+        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
       }),
       tagIds: [],
       levelIds: [],
@@ -384,6 +429,8 @@ export default {
       });
     },
     interventionInFocus() {
+      console.log('in focus', this.INTERVENTIONById({ id: this.dataIdInFocus }));
+      console.log('id in focus', this.dataIdInFocus);
       return this.INTERVENTIONById({ id: this.dataIdInFocus });
     },
     interventionFormIsInvalid() {
@@ -455,13 +502,17 @@ export default {
       this.closeInterventionModal();
     },
     async submitHandler() {
-      this.setINTERVENTIONDraft({
-        id: this.dataIdInFocus,
-        name: this.name,
-        description: this.description,
-        tagIds: this.tagIds,
-        contents: this.contents,
-      });
+      this.setINTERVENTIONDraft(
+        new Intervention({
+          name: this.name,
+          description: this.description,
+          interventionType: this.type,
+          tags: this.tagIds,
+          surveys: [], // TODO
+          levels: [], // TODO
+          contents: this.contents,
+        }),
+      );
       await this.$nextTick();
       this.saveInterventionHandler({ dataType: dataTypesDict.intervention });
     },

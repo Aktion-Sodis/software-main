@@ -1,13 +1,12 @@
 import Vue from 'vue';
 import { dataTypesDict, modalModesDict } from '../constants';
-import {
-  Level, Entity, Intervention, Survey,
-} from '../../models';
+import { Level, Entity, Survey } from '../../models';
 
 import { EmptyEntity } from '../entities/utils';
 // import { EmptyIntervention } from '../interventions/utils';
 import { emptyLevel } from '../levels/utils';
 import { EmptySurvey } from '../survey/utils';
+import { emptyIntervention } from '../classes';
 
 const dataModal = {
   namespaced: true,
@@ -89,7 +88,7 @@ const dataModal = {
       state.dataDraft = data;
     },
     resetINTERVENTIONDraft: (state) => {
-      state.dataDraft = new Intervention();
+      state.dataDraft = emptyIntervention();
     },
 
     /* SURVEY DRAFT: SET & RESET */
@@ -157,6 +156,7 @@ const dataModal = {
     saveData: async ({ dispatch, getters }, { dataType }) => {
       if (getters.getMode === modalModesDict.read) return;
       const draft = getters.getDataDraft;
+      console.log({ draft });
       if (getters.getMode === modalModesDict.create) {
         await dispatch(`${dataType}_Data/APIpost`, draft, { root: true });
         return;

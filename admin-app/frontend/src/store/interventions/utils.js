@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { API, graphqlOperation } from 'aws-amplify';
+import { DataStore } from '@aws-amplify/datastore';
 import { listInterventions, listInterventionTags } from '../../graphql/queries';
-import { createIntervention } from '../../graphql/mutations';
+import { Intervention } from '../../models';
 
 export class EmptyIntervention {
   constructor() {
@@ -14,29 +15,17 @@ export class EmptyIntervention {
   }
 }
 
-export class Intervention {
-  constructor({
-    id, name, description, tagIds, contents,
-  }) {
-    this.id = id ?? uuidv4();
-    this.name = name ?? '';
-    this.description = description ?? '';
-    this.tagIds = tagIds ?? [];
-    this.contents = contents ?? [];
-    this.isEmptyIntervention = false;
-  }
-}
-
 // Mock API calls
-export const postNewIntervention = async ({ id, name, description }) => API.graphql(
-  graphqlOperation(createIntervention, {
-    input: {
-      id,
-      name,
-      description,
-      interventionType: 'TECHNOLOGY',
-      tags: [],
-    },
+export const postNewIntervention = async (intervention) => DataStore.save(
+  new Intervention({
+    name: intervention.name,
+    description: intervention.description,
+    interventionType: intervention.interventionType,
+    contents: [],
+    surveys: [],
+    tags: [],
+    schemeVersion: 0,
+    levels: [],
   }),
 );
 export const putIntervention = async (interventionDraft) => interventionDraft;
