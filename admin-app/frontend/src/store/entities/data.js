@@ -169,7 +169,7 @@ const entitiesData = {
           dispatch(
             'dataModal/readData',
             {
-              dataId: postResponse.data.createEntity.id,
+              dataId: postResponse.id,
               dataType: dataTypesDict.entity,
             },
             {
