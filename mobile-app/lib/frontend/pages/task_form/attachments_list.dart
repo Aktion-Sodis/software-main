@@ -37,14 +37,15 @@ class AttachmentsList extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView.builder(
+              child: Scrollbar(
+                  child: ListView.builder(
                 padding: EdgeInsets.only(
                     left: defaultPadding(context), top: 5, bottom: 10),
                 scrollDirection: Axis.horizontal,
                 itemCount: state.attachments.length,
                 itemBuilder: (context, index) =>
                     _attachmentItemBuilder(context, index, state.attachments),
-              ),
+              )),
             )
           ],
         ),

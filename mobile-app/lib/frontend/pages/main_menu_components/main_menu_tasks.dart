@@ -76,7 +76,7 @@ class TaskWidget extends StatelessWidget {
               return SmallButton(
                 onPressed: () {},
                 iconData: MdiIcons.skipNextOutline,
-                text: "Today",
+                text: strings.task_today,
                 selected: true,
               );
             }
@@ -110,7 +110,7 @@ class TaskWidget extends StatelessWidget {
               return SmallButton(
                 onPressed: () {},
                 iconData: MdiIcons.skipNextOutline,
-                text: "Tomorrow",
+                text: strings.task_tomorrow,
                 selected: false,
               );
             }
@@ -145,7 +145,7 @@ class TaskWidget extends StatelessWidget {
               return SmallButton(
                 onPressed: () {},
                 iconData: MdiIcons.skipForwardOutline,
-                text: "Later",
+                text: strings.task_later_in_future,
                 selected: false,
               );
             }
@@ -176,14 +176,15 @@ class TaskWidget extends StatelessWidget {
             child: Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                  child: Column(
+              child: Scrollbar(
+                  child: SingleChildScrollView(
+                      child: Column(
                 children: [
                   todayWidget(context),
                   tomorrowWidget(context),
                   restWidget(context)
                 ],
-              )),
+              ))),
             ),
             Container(
                 margin: EdgeInsets.all(defaultPadding(context)),

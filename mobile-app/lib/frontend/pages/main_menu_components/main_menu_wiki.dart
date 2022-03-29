@@ -44,21 +44,23 @@ class MainMenuWiki extends StatelessWidget {
                     height: 1,
                     color: Colors.grey),
                 Expanded(
-                    child: ListView.builder(
-                        itemCount: loadedContentState.contentsToDisplay.length,
-                        itemBuilder: (context, index) => contentRow(context,
-                                loadedContentState.contentsToDisplay[index],
-                                () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => PDFViewWidget(
-                                        content: loadedContentState
-                                            .contentsToDisplay[index],
-                                      )));
-                            },
-                                separator: index !=
-                                    (loadedContentState
-                                            .contentsToDisplay.length -
-                                        1))))
+                    child: Scrollbar(
+                        child: ListView.builder(
+                            itemCount:
+                                loadedContentState.contentsToDisplay.length,
+                            itemBuilder: (context, index) => contentRow(context,
+                                    loadedContentState.contentsToDisplay[index],
+                                    () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => PDFViewWidget(
+                                            content: loadedContentState
+                                                .contentsToDisplay[index],
+                                          )));
+                                },
+                                    separator: index !=
+                                        (loadedContentState
+                                                .contentsToDisplay.length -
+                                            1)))))
               ],
             );
           } else {

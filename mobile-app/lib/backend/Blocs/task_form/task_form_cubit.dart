@@ -175,6 +175,7 @@ class TaskFormCubit extends Cubit<TaskFormState> {
       {required List<Attachment> attachments,
       Task? task,
       String? text,
+      String? description,
       Entity? entity,
       DateTime? deadline,
       AppliedIntervention? appliedIntervention,
@@ -198,6 +199,7 @@ class TaskFormCubit extends Cubit<TaskFormState> {
           task: task,
           attachments: attachments,
           entity: entity,
+          description: description,
           deadline: deadline,
           appliedIntervention: appliedIntervention,
           executedSurvey: executedSurvey,
@@ -238,6 +240,7 @@ class TaskFormCubit extends Cubit<TaskFormState> {
       DateTime? deadline,
       AppliedIntervention? appliedIntervention,
       ExecutedSurvey? executedSurvey,
+      String? description,
       required TaskBloc taskBloc,
       required OrganizationViewBloc organizationViewBloc,
       required UserBloc userBloc}) async {
@@ -270,6 +273,7 @@ class TaskFormCubit extends Cubit<TaskFormState> {
           id: UUID.getUUID(),
           title: text,
           dueDate: deadline,
+          text: description,
           appliedIntervention: appliedIntervention,
           executedSurvey: executedSurvey,
           entity: entity,
@@ -286,6 +290,7 @@ class TaskFormCubit extends Cubit<TaskFormState> {
       toSave.user = userBloc.state.user!;
       toSave.audioList = audioList;
       toSave.picList = picList;
+      toSave.text = description;
     }
     if (task != null) {
       taskBloc.add(UpdateTask(toSave));
