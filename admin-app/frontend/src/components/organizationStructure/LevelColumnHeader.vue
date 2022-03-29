@@ -3,7 +3,7 @@
     <div style="width: 100%" class="d-flex flex-column align-center">
       <v-skeleton-loader v-if="getLoading" type="button"></v-skeleton-loader>
       <v-btn v-else plain rounded class="text-none black--text" @click="clickOnLevelHandler">
-        <span class="text-h5">{{ localizedName }}</span>
+        <span class="text-h5">{{ name }}</span>
       </v-btn>
       <div style="width: 100%">
         <div
@@ -48,7 +48,7 @@ export default {
       required: true,
     },
     name: {
-      type: Object,
+      type: String,
       required: true,
     },
     id: {
@@ -62,13 +62,6 @@ export default {
       getLoading: 'LEVEL_Data/getLoading',
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
     }),
-    localizedName() {
-      return (
-        this.name.languageTexts[
-          this.name.languageKeys.findIndex((key) => key === this.$i18n.locale)
-        ] ?? ''
-      );
-    },
   },
   methods: {
     ...mapActions({

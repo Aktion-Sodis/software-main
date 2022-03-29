@@ -48,7 +48,7 @@ export default {
       selectedLocales: [this.$i18n.fallbackLocale],
       res: new I18nString({
         languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
+        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
       }),
     };
   },

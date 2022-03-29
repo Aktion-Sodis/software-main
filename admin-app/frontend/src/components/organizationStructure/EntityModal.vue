@@ -5,7 +5,9 @@
         <v-card-title>
           <h2 v-if="edit && entityInFocus">
             {{ $t('organizationStructure.entityModal.modalTitle.edit') }}
-            <i>{{ entityInFocus.name.languageTexts[0] }}</i>
+            <i>
+              {{ calculateUILocaleString({ languageTexts: entityInFocus.name.languageTexts }) }}
+            </i>
           </h2>
           <h2 v-else-if="create">
             {{ $t('organizationStructure.entityModal.modalTitle.create') }}
@@ -20,23 +22,32 @@
         <v-card-subtitle v-else-if="create">
           {{ $t('organizationStructure.entityModal.modalDescription.create') }}
         </v-card-subtitle>
-
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6" class="pb-0 px-0 px-sm-3">
+              <v-col cols="12" sm="6" class="pb-0 px-0 mb-3 px-sm-3">
                 <h2 v-if="read && entityInFocus">
-                  {{ entityInFocus.name.languageTexts[0] }}
+                  {{ calculateUILocaleString({ languageTexts: entityInFocus.name.languageTexts }) }}
                 </h2>
-                <v-text-field
+
+                <LocaleTextBox
                   v-else
-                  autofocus
-                  v-model="name"
-                  :label="$t('organizationStructure.entityModal.name')"
-                  required
-                  outlined
-                  dense
-                ></v-text-field>
+                  labelPrefixI18nSelector="organizationStructure.entityModal.name"
+                  @res="nameUpdatedHandler"
+                >
+                  <template v-slot:text-input="slotProps">
+                    <v-text-field
+                      :counter="name.length > entityDescriptionMaxChar - 20"
+                      autofocus
+                      required
+                      outlined
+                      dense
+                      :label="slotProps.label"
+                      v-model="slotProps.model"
+                      @input="slotProps.inputHandler"
+                    ></v-text-field>
+                  </template>
+                </LocaleTextBox>
 
                 <div
                   v-if="read && entityInFocus"
@@ -44,24 +55,39 @@
                   style="min-height: 10rem"
                 >
                   <h3>
-                    {{ entityInFocus.description.languageTexts[0] }}
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: entityInFocus.description.languageTexts,
+                      })
+                    }}
                   </h3>
                 </div>
-                <v-textarea
+                <LocaleTextBox
                   v-else
-                  v-model="description"
-                  :counter="description.length > entityDescriptionMaxChar - 20"
-                  :rules="[rules.maxChar]"
-                  :label="$t('organizationStructure.entityModal.description')"
-                  required
-                  outlined
-                  dense
-                ></v-textarea>
-
+                  labelPrefixI18nSelector="organizationStructure.entityModal.description"
+                  @res="descriptionUpdatedHandler"
+                >
+                  <template v-slot:text-input="slotProps">
+                    <v-textarea
+                      :label="slotProps.label"
+                      v-model="slotProps.model"
+                      @input="slotProps.inputHandler"
+                      required
+                      outlined
+                      dense
+                    ></v-textarea>
+                  </template>
+                </LocaleTextBox>
                 <div v-if="read && entityInFocus" style="min-height: 5rem">
                   <h3 v-if="entityInFocus.parentEntityID">
                     {{ $t('organizationStructure.entityModal.upperEntity') }}:
-                    {{ ENTITYById({ id: entityInFocus.parentEntityID }).name.languageTexts[0] }}
+
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: ENTITYById({ id: entityInFocus.parentEntityID }).name
+                          .languageTexts,
+                      })
+                    }}
                   </h3>
                 </div>
                 <v-select
@@ -77,9 +103,9 @@
                 ></v-select>
               </v-col>
               <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
-               <v-card-title
-                  class="pt-0 pt-sm-2"
-                >{{ $t('organizationStructure.entityModal.moreStuffTitle') }}</v-card-title>
+                <v-card-title class="pt-0 pt-sm-2">
+                  {{ $t('organizationStructure.entityModal.moreStuffTitle') }}
+                </v-card-title>
                 <p>{{ $t('organizationStructure.entityModal.moreStuffDescription') }}</p>
               </v-col>
             </v-row>
@@ -95,7 +121,9 @@
           <v-btn x-large color="secondary" text @click="closeHandler">
             {{ read ? 'Close' : $t('general.cancel') }}
           </v-btn>
-          <v-btn x-large v-if="read" color="primary" text @click="editHandler"> {{ $t('general.edit') }} </v-btn>
+          <v-btn x-large v-if="read" color="primary" text @click="editHandler">
+            {{ $t('general.edit') }}
+          </v-btn>
           <v-btn
             x-large
             v-if="!read"
@@ -116,6 +144,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
+import LocaleTextBox from '../global/LocaleTextBox.vue';
 
 const entityDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_ENTITY_DESCRIPTION_MAX_CHAR, 10),
@@ -124,6 +153,9 @@ const entityDescriptionMaxChar = Math.max(
 
 export default {
   name: 'EntityModal',
+  components: {
+    LocaleTextBox,
+  },
   data() {
     return {
       entityDescriptionMaxChar,
@@ -154,6 +186,7 @@ export default {
 
       ENTITYById: 'ENTITY_Data/ENTITYById',
       getCreatingEntityInLevelId: 'getCreatingEntityInLevelId',
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
     entityInFocus() {
       return this.dataIdInFocus ? this.ENTITYById({ id: this.dataIdInFocus }) : null;
@@ -165,7 +198,15 @@ export default {
       const currentLevel = this.LEVELById({
         id: this.edit ? this.entityInFocus?.entityLevelId : this.getCreatingEntityInLevelId,
       });
-      return this.allEntitiesOfLevel({ entityLevelId: currentLevel?.parentLevelID }) ?? [];
+      const currentLevelList = this.allEntitiesOfLevel({ entityLevelId: currentLevel?.parentLevelID }) ?? [];
+      const resCurrentLevelList = [];
+      currentLevelList.forEach((level) => {
+        resCurrentLevelList.push({
+          ...currentLevelList,
+          name: level.name.languageTexts[this.$store.getters.fallbackLocaleIndex],
+        });
+      });
+      return resCurrentLevelList;
     },
     edit() {
       return this.modalMode === modalModesDict.edit;
@@ -186,7 +227,7 @@ export default {
     },
     areThereChanges() {
       return (
-        this.name !== this.entityDraft.name
+        this.name !== this.entityDraft.name.en
         || this.description !== this.entityDraft.description
         || this.parentEntityID !== this.entityDraft.parentEntityID
       );
@@ -247,6 +288,12 @@ export default {
       this.description = this.entityDraft?.description ?? '';
       this.parentEntityID = this.entityDraft?.parentEntityID ?? null;
       this.contents = this.entityDraft?.contents ?? [];
+    },
+    descriptionUpdatedHandler(res) {
+      this.description = res;
+    },
+    nameUpdatedHandler(res) {
+      this.name = res;
     },
   },
 };

@@ -43,15 +43,15 @@ const dataModal = {
 
     /* ENTITY DRAFT: SET & RESET */
     setENTITYDraft: (state, {
-      id, name, description, entityLevelId, parentEntityID, _version,
+      name, description, entityLevelId, parentEntityID, _version,
     }) => {
       state.dataDraft = new Entity({
-        id,
         name,
         description,
         entityLevelId,
         parentEntityID,
         _version,
+        customData: [],
       });
     },
     resetENTITYDraft: (state) => {
@@ -62,17 +62,19 @@ const dataModal = {
     setLEVELDraft: (
       state,
       {
-        id, name, description, parentLevelID, allowedInterventions, _version,
+        name, description, parentLevelID, allowedInterventions, _version,
       },
     ) => {
-      state.dataDraft = new Level({
-        id,
+      const newLevel = new Level({
         name,
         description,
         parentLevelID,
         allowedInterventions,
         _version,
+        interventionsAreAllowed: true,
+        customData: [],
       });
+      state.dataDraft = newLevel;
     },
     resetLEVELDraft: (state) => {
       state.dataDraft = emptyLevel();

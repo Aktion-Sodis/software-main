@@ -10,8 +10,10 @@
       :id="entity.id"
       :parentEntityID="entity.parentEntityID"
       :entityLevelId="entityLevelId"
-      :entityName="entity.name"
-      :entityDescription="entity.description"
+      :entityName="calculateUILocaleString({ languageTexts: entity.name.languageTexts })"
+      :entityDescription="
+        calculateUILocaleString({ languageTexts: entity.description.languageTexts })
+      "
       :index="index"
       class="d-flex flex-column align-center my-4"
       style="position: relative; height: 128px"
@@ -60,6 +62,7 @@ export default {
       getLoading: 'LEVEL_Data/getLoading',
       lineColors: 'getLineColors',
       calculatedLinesByLevelId: 'ENTITY_Data/calculatedLinesByLevelId',
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
   },
 };

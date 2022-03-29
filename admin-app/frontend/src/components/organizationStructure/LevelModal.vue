@@ -5,7 +5,7 @@
         <v-card-title>
           <h2 v-if="edit && levelInFocus">
             {{ $t('organizationStructure.levelModal.modalTitle.edit') }}
-            <i>{{ levelInFocus.name.languageTexts[0] }}</i>
+            <i>{{ calculateUILocaleString({ languageTexts: levelInFocus.name.languageTexts }) }}</i>
           </h2>
           <h2 v-else-if="create">
             {{ $t('organizationStructure.levelModal.modalTitle.create') }}
@@ -29,7 +29,7 @@
                   {{ $t('organizationStructure.levelModal.name') }}
                 </v-card-title>
                 <h2 v-if="read && levelInFocus">
-                  {{ levelInFocus.name.languageTexts[0] }}
+                  {{ calculateUILocaleString({ languageTexts: levelInFocus.name.languageTexts }) }}
                 </h2>
                 <LocaleTextBox
                   v-else
@@ -58,7 +58,11 @@
                   style="min-height: 10rem"
                 >
                   <h3>
-                    {{ levelInFocus.description.languageTexts[0] }}
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: levelInFocus.description.languageTexts,
+                      })
+                    }}
                   </h3>
                 </div>
                 <LocaleTextBox
@@ -83,7 +87,12 @@
                 <div v-if="read && levelInFocus" style="min-height: 5rem">
                   <h3 v-if="levelInFocus.parentLevelID">
                     {{ $t('organizationStructure.levelModal.upperLevel') }}:
-                    {{ LEVELById({ id: levelInFocus.parentLevelID }).name.languageTexts[0] }}
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: LEVELById({ id: levelInFocus.parentLevelID }).name
+                          .languageTexts,
+                      })
+                    }}
                   </h3>
                 </div>
               </v-col>
@@ -98,14 +107,18 @@
                       <v-icon> mdi-hammer-wrench </v-icon>
                     </v-avatar>
                     <span v-if="INTERVENTIONById({ id })">
-                      {{ INTERVENTIONById({ id }).name }}
+                      {{
+                        calculateUILocaleString({
+                          languageTexts: INTERVENTIONById({ id }).name.languageTexts,
+                        })
+                      }}
                     </span>
                   </div>
                 </div>
                 <v-select
                   v-else
                   v-model="allowedInterventions"
-                  :items="interventions"
+                  :items="localizeInterventions"
                   :label="$t('organizationStructure.levelModal.manageAllowedInterventions')"
                   multiple
                   dense
@@ -120,7 +133,11 @@
                 </v-card-title>
                 <div v-if="read && levelInFocus">
                   <v-chip v-for="tagId in levelInFocus.tagIds" :key="tagId">
-                    {{ tagById({ tagId }).name }}
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: tagById({ tagId }).name.languageTexts,
+                      })
+                    }}
                   </v-chip>
                 </div>
                 <v-select
@@ -189,11 +206,11 @@ export default {
       levelDescriptionMaxChar,
       name: new I18nString({
         languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
+        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
       }),
       description: new I18nString({
         languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
+        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
       }),
       allowedInterventions: [],
       tagIds: [],
@@ -217,8 +234,14 @@ export default {
 
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
 
-      fallbackLocaleIndex: 'fallbackLocaleIndex',
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
+    localizeInterventions() {
+      return this.interventions.map((intervention) => ({
+        ...intervention,
+        name: intervention.name.languageTexts[this.$store.getters.fallbackLocaleIndex],
+      }));
+    },
     isLevelModalDisplayed() {
       return this.isModalDisplayed && this.dataType === dataTypesDict.level;
     },
@@ -301,7 +324,7 @@ export default {
     escHandler() {
       this.closeHandler();
     },
-    submitHandler() {
+    async submitHandler() {
       this.setLevelDraft({
         id: this.dataIdInFocus,
         name: this.name,
@@ -316,6 +339,7 @@ export default {
       this.name = this.levelDraft?.name ?? '';
       this.description = this.levelDraft?.description ?? '';
       this.tagIds = this.levelDraft?.tagIds ?? [];
+      // console.log(this.levelDraft?.allowedInterventions);
       this.allowedInterventions = this.levelDraft?.allowedInterventions ?? [];
     },
     nameUpdatedHandler(res) {
