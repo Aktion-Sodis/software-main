@@ -1,40 +1,107 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mobile_app/backend/Blocs/task_form/add_task_cubit.dart';
+import 'package:mobile_app/backend/Blocs/organization_view/organization_view_bloc.dart';
+import 'package:mobile_app/backend/Blocs/organization_view/organization_view_state.dart';
+import 'package:mobile_app/backend/Blocs/task/task_bloc.dart';
+import 'package:mobile_app/backend/Blocs/task/task_events.dart';
+import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/callableModels/localModels/attachment.dart';
 import 'package:mobile_app/backend/callableModels/localModels/image_attachment.dart';
+import 'package:mobile_app/backend/repositories/TaskRepository.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
+import 'package:mobile_app/backend/storage/storage_repository.dart';
 import 'package:mobile_app/frontend/pages/task_form/task_form.dart';
 import 'package:mobile_app/services/photo_capturing.dart';
 import 'package:mobile_app/services/storage.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:mobile_app/frontend/strings.dart' as strings;
 
 part 'task_form_state.dart';
 
-void openTaskForm<T extends TaskFormCubit>(BuildContext context, String title) {
+void openTaskForm<T extends TaskFormCubit>(
+    {required BuildContext context,
+    Task? task,
+    Entity? entity,
+    AppliedIntervention? appliedIntervention,
+    ExecutedSurvey? executedSurvey,
+    required TaskBloc taskBloc,
+    required OrganizationViewBloc organizationViewBloc,
+    required UserBloc userBloc,
+    List<Attachment>? attachment}) {
   showDialog(
       context: context,
       builder: (context) => TaskForm<T>(
-            title: title,
-          ));
+          title: strings.main_menu_tasks,
+          entity: entity,
+          task: task,
+          appliedIntervention: appliedIntervention,
+          executedSurvey: executedSurvey,
+          taskBloc: taskBloc,
+          organizationViewBloc: organizationViewBloc,
+          userBloc: userBloc,
+          attachments: attachment));
 }
 
-abstract class TaskFormCubit extends Cubit<TaskFormState> {
-  TaskFormCubit() : super(TaskFormFillingOut());
+class TaskFormCubit extends Cubit<TaskFormState> {
+  TaskFormCubit(
+      {Task? task,
+      Entity? entity,
+      AppliedIntervention? appliedIntervention,
+      ExecutedSurvey? executedSurvey,
+      required TaskBloc taskBloc,
+      required OrganizationViewBloc organizationViewBloc,
+      required UserBloc userBloc,
+      List<Attachment>? attachments})
+      : super(TaskFormFillingOut(
+            task: task,
+            entity: entity,
+            appliedIntervention: appliedIntervention,
+            executedSurvey: executedSurvey,
+            taskBloc: taskBloc,
+            organizationViewBloc: organizationViewBloc,
+            userBloc: userBloc,
+            attachments: attachments ?? [],
+            deadline: task?.dueDate));
 
   Future<List<Entity>> searchForEntities(String? query) async {
-    // TODO: implement search for entities
-    return Future.value([]);
+    return (state.organizationViewBloc.state
+            as EntitiesLoadedOrganizationViewState)
+        .entitiesByName(query ?? "");
   }
 
-  static TaskFormCubit initialize<T extends TaskFormCubit>() {
+  static TaskFormCubit initialize<T extends TaskFormCubit>(
+      {Task? task,
+      Entity? entity,
+      AppliedIntervention? appliedIntervention,
+      ExecutedSurvey? executedSurvey,
+      required TaskBloc taskBloc,
+      required OrganizationViewBloc organizationViewBloc,
+      required UserBloc userBloc,
+      List<Attachment>? attachments}) {
     switch (T) {
       default:
-        return AddTaskCubit();
+        if (task != null) {
+          entity = task.entity;
+          appliedIntervention = task.appliedIntervention;
+          executedSurvey = task.executedSurvey;
+        }
+
+        return TaskFormCubit(
+            task: task,
+            entity: entity,
+            appliedIntervention: appliedIntervention,
+            executedSurvey: executedSurvey,
+            taskBloc: taskBloc,
+            organizationViewBloc: organizationViewBloc,
+            userBloc: userBloc,
+            attachments: attachments);
     }
   }
 
@@ -58,17 +125,15 @@ abstract class TaskFormCubit extends Cubit<TaskFormState> {
     }
   }
 
-  void addEntity(Entity entity) {
+  void updateEntity(Entity entity) {
     if (state is TaskFormFillingOut) {
-      List<Entity> newEntities = state.entities.toList()..add(entity);
-      emit((state as TaskFormFillingOut).copyWith(entities: newEntities));
+      emit((state as TaskFormFillingOut).copyWith(entity: entity));
     }
   }
 
-  void removeEntity(Entity entity) {
+  void clearEntity() {
     if (state is TaskFormFillingOut) {
-      List<Entity> newEntities = state.entities.toList()..remove(entity);
-      emit((state as TaskFormFillingOut).copyWith(entities: newEntities));
+      emit((state as TaskFormFillingOut).copyWith(entity: null));
     }
   }
 
@@ -106,27 +171,139 @@ abstract class TaskFormCubit extends Cubit<TaskFormState> {
     }
   }
 
-  Future<void> submit(String text, List<Attachment> attachments,
-      List<Entity> entities, DateTime? deadline) async {
+  Future<void> submit(
+      {required List<Attachment> attachments,
+      Task? task,
+      String? text,
+      Entity? entity,
+      DateTime? deadline,
+      AppliedIntervention? appliedIntervention,
+      ExecutedSurvey? executedSurvey,
+      required TaskBloc taskBloc,
+      required OrganizationViewBloc organizationViewBloc,
+      required UserBloc userBloc}) async {
     emit(TaskFormSavingInProgress(
-      attachments: attachments,
-      entities: entities,
-      deadline: deadline,
-    ));
+        attachments: attachments,
+        entity: entity,
+        deadline: deadline,
+        appliedIntervention: appliedIntervention,
+        executedSurvey: executedSurvey,
+        taskBloc: taskBloc,
+        organizationViewBloc: organizationViewBloc,
+        userBloc: userBloc));
 
     try {
-      Task? result = await saveTask(text, attachments, entities, deadline);
-      emit(TaskFormSuccessfullSubmitted(result));
+      Task? result = await saveTask(
+          text: text!,
+          task: task,
+          attachments: attachments,
+          entity: entity,
+          deadline: deadline,
+          appliedIntervention: appliedIntervention,
+          executedSurvey: executedSurvey,
+          taskBloc: taskBloc,
+          userBloc: userBloc,
+          organizationViewBloc: organizationViewBloc);
+      emit(TaskFormSuccessfullSubmitted(
+          task: result,
+          attachments: attachments,
+          userBloc: userBloc,
+          taskBloc: taskBloc,
+          organizationViewBloc: organizationViewBloc,
+          appliedIntervention: appliedIntervention,
+          executedSurvey: executedSurvey,
+          deadline: deadline,
+          entity: entity));
     } catch (e) {
       // TODO: show error messages
       emit(TaskFormFillingOut(
         attachments: attachments,
-        entities: entities,
+        entity: entity,
+        task: task,
+        appliedIntervention: appliedIntervention,
+        executedSurvey: executedSurvey,
+        taskBloc: taskBloc,
+        organizationViewBloc: organizationViewBloc,
+        userBloc: userBloc,
         deadline: deadline,
       ));
     }
   }
 
-  Future<Task?> saveTask(String text, List<Attachment> attachments,
-      List<Entity> entities, DateTime? deadline);
+  Future<Task?> saveTask(
+      {required List<Attachment> attachments,
+      Task? task,
+      required String text,
+      Entity? entity,
+      DateTime? deadline,
+      AppliedIntervention? appliedIntervention,
+      ExecutedSurvey? executedSurvey,
+      required TaskBloc taskBloc,
+      required OrganizationViewBloc organizationViewBloc,
+      required UserBloc userBloc}) async {
+    List<int> audioList = [];
+    List<int> picList = [];
+    for (var element in attachments) {
+      if (element.isPic) {
+        int toSetInt;
+        if (picList.isEmpty) {
+          toSetInt = 0;
+        } else {
+          toSetInt = picList.reduce(max) + 1;
+        }
+        picList.add(toSetInt);
+        element.number = toSetInt;
+      } else {
+        int toSetInt;
+        if (audioList.isEmpty) {
+          toSetInt = 0;
+        } else {
+          toSetInt = audioList.reduce(max) + 1;
+        }
+        audioList.add(toSetInt);
+        element.number = toSetInt;
+      }
+    }
+    Task toSave;
+    if (task == null) {
+      toSave = Task(
+          id: UUID.getUUID(),
+          title: text,
+          dueDate: deadline,
+          appliedIntervention: appliedIntervention,
+          executedSurvey: executedSurvey,
+          entity: entity,
+          user: userBloc.state.user!,
+          audioList: audioList,
+          picList: picList);
+    } else {
+      toSave = task;
+      toSave.title = text;
+      toSave.dueDate = deadline;
+      toSave.appliedIntervention = appliedIntervention;
+      toSave.executedSurvey = executedSurvey;
+      toSave.entity = entity;
+      toSave.user = userBloc.state.user!;
+      toSave.audioList = audioList;
+      toSave.picList = picList;
+    }
+    if (task != null) {
+      taskBloc.add(UpdateTask(toSave));
+    } else {
+      taskBloc.add(CreateTask(toSave));
+    }
+    for (Attachment attachment in attachments) {
+      if (attachment.isPic) {
+        SyncedFile syncedFile =
+            TaskRepository.getTaskPic(toSave, attachment.number!);
+        syncedFile.update(attachment.toFile().readAsStringSync());
+      } else {
+        SyncedFile syncedFile =
+            TaskRepository.getTaskAudio(toSave, attachment.number!);
+        syncedFile.updateAsAudio(attachment.toFile());
+      }
+    }
+
+    return toSave;
+  }
 }

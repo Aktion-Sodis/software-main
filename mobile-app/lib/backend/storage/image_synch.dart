@@ -57,7 +57,9 @@ class SyncedFile {
   }
 
   Future<File?> updateAsAudio(File file) async {
-    await update(await file.readAsString());
+    File localCacheFile = await getCachePath();
+    await localCacheFile.writeAsBytes(file.readAsBytesSync());
+    await StorageRepository.uploadFile(localCacheFile, path);
     return await getCachePath();
   }
 
