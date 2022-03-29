@@ -32,8 +32,11 @@ export default new Vuex.Store({
     getLineColors: (state) => state.lineColors,
     getCreatingEntityInLevelId: ({ creatingEntityInLevelId }) => creatingEntityInLevelId,
     getSurveyModalCompletionIndex: ({ surveyModalCompletionIndex }) => surveyModalCompletionIndex,
+
+    // NOTE: You probably will never need the following two getters. Use the latter two instead, since they are based on these two!
     fallbackLocaleIndex: () => i18n.availableLocales.findIndex((l) => l === i18n.fallbackLocale),
     uiLocaleIndex: () => i18n.availableLocales.findIndex((l) => l === i18n.locale),
+
     calculateLocalizedString:
       (_, { fallbackLocaleIndex }) => ({ languageTexts }) => languageTexts[fallbackLocaleIndex] || i18n.t('general.noTextProvided'),
 
