@@ -1,8 +1,6 @@
 import { DataStore } from '@aws-amplify/datastore';
 import { Level, I18nString } from '../../models';
-import {
-  putLevel, deleteLevel, getAllLevels,
-} from './utils';
+import { putLevel, deleteLevel, getAllLevels } from './utils';
 import { Entity } from '../entities/utils';
 import { dataTypesDict, modalModesDict } from '../constants';
 
@@ -27,7 +25,6 @@ const levelsData = {
     sortedLevels: (_, getters) => getters.getLevels.sort((a, b) => getters.hierarchySort(a, b)),
     // used in the getter "sortedLevels". Don't use directly outside of Vuex environment.
     hierarchySort: (_, getters) => (a, b) => {
-      console.log(a);
       if (a.parentLevelID === null) return -1;
       if (b.parentLevelID === null) return 1;
       if (a.id === b.parentLevelID) return -1;
@@ -161,18 +158,14 @@ const levelsData = {
         newValue: [
           new Level({
             id: 'dummyLevel0',
-            name: new I18nString(
-              {
-                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-                languageTexts: ['Name', 'Isimo', 'İsim'],
-              },
-            ),
-            description: new I18nString(
-              {
-                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-                languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
-              },
-            ),
+            name: new I18nString({
+              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+              languageTexts: ['Name', 'Isimo', 'İsim'],
+            }),
+            description: new I18nString({
+              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+              languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
+            }),
             parentLevelID: null,
             interventionsAreAllowed: true,
             allowedInterventions: [],
@@ -181,18 +174,14 @@ const levelsData = {
           }),
           new Level({
             id: 'dummyLevel1',
-            name: new I18nString(
-              {
-                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-                languageTexts: ['Name', 'Isimo', 'İsim'],
-              },
-            ),
-            description: new I18nString(
-              {
-                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-                languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
-              },
-            ),
+            name: new I18nString({
+              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+              languageTexts: ['Name', 'Isimo', 'İsim'],
+            }),
+            description: new I18nString({
+              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+              languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
+            }),
             parentLevelID: null,
             interventionsAreAllowed: true,
             allowedInterventions: [],
@@ -201,18 +190,14 @@ const levelsData = {
           }),
           new Level({
             id: 'dummyLevel2',
-            name: new I18nString(
-              {
-                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-                languageTexts: ['Name', 'Isimo', 'İsim'],
-              },
-            ),
-            description: new I18nString(
-              {
-                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-                languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
-              },
-            ),
+            name: new I18nString({
+              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+              languageTexts: ['Name', 'Isimo', 'İsim'],
+            }),
+            description: new I18nString({
+              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+              languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
+            }),
             parentLevelID: null,
             interventionsAreAllowed: true,
             allowedInterventions: [],
@@ -311,18 +296,14 @@ const levelsData = {
       const levels = [
         new Level({
           id: 'dummyLevel0',
-          name: new I18nString(
-            {
-              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-              languageTexts: ['Name', 'Isimo', 'İsim'],
-            },
-          ),
-          description: new I18nString(
-            {
-              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-              languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
-            },
-          ),
+          name: new I18nString({
+            languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+            languageTexts: ['Name', 'Isimo', 'İsim'],
+          }),
+          description: new I18nString({
+            languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+            languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
+          }),
           parentLevelID: null,
           interventionsAreAllowed: true,
           allowedInterventions: [],
