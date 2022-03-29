@@ -44,7 +44,7 @@
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  entityName: 'Entity',
+  name: 'Entity',
   props: {
     id: {
       required: true,
