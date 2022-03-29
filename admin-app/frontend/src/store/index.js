@@ -36,6 +36,8 @@ export default new Vuex.Store({
     uiLocaleIndex: () => i18n.availableLocales.findIndex((l) => l === i18n.locale),
     calculateLocalizedString:
       (_, { fallbackLocaleIndex }) => ({ languageTexts }) => languageTexts[fallbackLocaleIndex] || i18n.t('general.noTextProvided'),
+
+    // For the localization, you will most probably only need this getter and no other! Please don't consider using the others.
     calculateUILocaleString:
       (_, { uiLocaleIndex, calculateLocalizedString }) => ({ languageTexts }) => languageTexts[uiLocaleIndex] || calculateLocalizedString({ languageTexts }),
   },
