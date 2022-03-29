@@ -403,8 +403,12 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
     }
   }
 
+
+  
   SyncedFile? getEntityPic() {
     if (entity != null) {
+
+      
       return EntityRepository.getEntityPic(entity!);
     }
     if (preliminaryEntityId != null) {
@@ -413,8 +417,10 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
     return null;
   }
 
+
   void setStateIfMounted(Function function) {
     if (mounted) {
+
       setState(() {
         function();
       });
@@ -1261,8 +1267,10 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
     }
   }
 
+
   void setStateIfMounted(Function function) {
     if (mounted) {
+
       setState(() {
         function();
       });
@@ -1283,7 +1291,7 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
           imageFile = value;
           loaded = true;
         });
-      });
+
     }
     super.initState();
     if (widget.appliedIntervention == null) {
@@ -1469,7 +1477,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
   }
 
   Widget listItem(BuildContext buildContext, int i) {
+
     return surveyRow(context, currentlyDisplayedSurveys[i]["survey"],
+
         image: SyncedFile(SurveyRepository.getIconFilePath(
             currentlyDisplayedSurveys[i]["survey"])),
         pressable: true, onPressed: () {
@@ -1528,22 +1538,30 @@ class ExecutedSurveyHistory extends StatelessWidget {
 
 class ExecutedSurveyWidget extends StatelessWidget {
   final ExecutedSurvey executedSurvey;
+
+  Map<Question, QuestionAnswer> mappedAnswers = {};
   final AppliedIntervention appliedIntervention;
-  ExecutedSurveyWidget(this.executedSurvey, this.appliedIntervention);
+
+  ExecutedSurveyWidget(this.executedSurvey, this.appliedIntervention){
+    for(Question question in executedSurvey.survey.questions){
+      var answers = executedSurvey.answers.where((element) => element.questionID == question.id);
+      QuestionAnswer? answer = answers.length>0?answers.first:null;
+      if(answer!=null){
+        mappedAnswers[question] = answer;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
-        child: ListView.builder(
-            itemBuilder: (context, index) {
-              return surveyarea.SurveyWidgetState.questionSummary(
-                  appliedIntervention: appliedIntervention,
-                  executedSurveyId: executedSurvey.id!,
-                  question: executedSurvey.survey
-                      .questionByID(executedSurvey.answers[index].questionID),
-                  context: context,
-                  questionAnswer: executedSurvey.answers[index]);
-            },
-            itemCount: executedSurvey.answers.length));
+
+    return surveyarea.SurveyWidgetState.summaryWidget(
+      survey: executedSurvey.survey,
+      appliedIntervention: appliedIntervention,
+      executedSurveyId: executedSurvey.id!,
+      answers: mappedAnswers,
+      context: context,
+    );
+
   }
 }
