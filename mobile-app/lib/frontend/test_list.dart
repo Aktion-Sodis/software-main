@@ -26,13 +26,14 @@ class TestList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(test_list),
-      ),
-      body: ListView.builder(
-        itemBuilder: _itemBuilder,
-        itemCount: _allTests.length,
-      ),
-    );
+        appBar: AppBar(
+          title: Text(test_list),
+        ),
+        body: Scrollbar(
+          child: ListView.builder(
+            itemBuilder: _itemBuilder,
+            itemCount: _allTests.length,
+          ),
+        ));
   }
 }

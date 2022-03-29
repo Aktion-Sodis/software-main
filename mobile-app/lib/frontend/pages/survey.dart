@@ -273,7 +273,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
       {required BuildContext context,
       required Question question,
       required Survey survey}) {
-    return ListView(
+    return Scrollbar(
+        child: ListView(
       shrinkWrap: true,
       children: [
         imageForQuestion(
@@ -337,14 +338,15 @@ class SurveyWidgetState extends State<SurveyWidget> {
                   ),
                 )),
       ],
-    );
+    ));
   }
 
   Widget scQuestionWidget(
       {required BuildContext context,
       required Question question,
       required Survey survey}) {
-    return ListView(
+    return Scrollbar(
+        child: ListView(
       shrinkWrap: true,
       children: [
         imageForQuestion(
@@ -411,14 +413,15 @@ class SurveyWidgetState extends State<SurveyWidget> {
                   },
                 ))
       ],
-    );
+    ));
   }
 
   Widget takeAudioQuestionWidget(
       {required BuildContext context,
       required Question question,
       required Survey survey}) {
-    return ListView(
+    return Scrollbar(
+        child: ListView(
       shrinkWrap: true,
       children: [
         imageForQuestion(
@@ -460,14 +463,15 @@ class SurveyWidgetState extends State<SurveyWidget> {
                     .appliedIntervention,
             executedSurveyId: preliminaryExecutedSurveyId),
       ],
-    );
+    ));
   }
 
   Widget takePhotoQuestionWidget(
       {required BuildContext context,
       required Question question,
       required Survey survey}) {
-    return ListView(
+    return Scrollbar(
+        child: ListView(
       shrinkWrap: true,
       children: [
         imageForQuestion(
@@ -510,14 +514,15 @@ class SurveyWidgetState extends State<SurveyWidget> {
                     .appliedIntervention,
             executedSurveyID: preliminaryExecutedSurveyId),
       ],
-    );
+    ));
   }
 
   Widget textQuestionWidget(
       {required BuildContext context,
       required Question question,
       required Survey survey}) {
-    return ListView(
+    return Scrollbar(
+        child: ListView(
       shrinkWrap: true,
       children: [
         imageForQuestion(
@@ -543,7 +548,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
           ),
         ),
       ],
-    );
+    ));
   }
 
   void _dismissSurvey() async{
@@ -1035,7 +1040,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
           height: defaultPadding(context),
         ),
         Expanded(
-          child: ListView(
+          child: Scrollbar(
+              child: ListView(
             children: [
               SizedBox(
                 height: defaultPadding(context),
@@ -1052,7 +1058,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
                           ? onEditGenerator(survey.questions[index])
                           : null))
             ],
-          ),
+          )),
         ),
         if(!(onProceed==null&&onDismiss==null)) Padding(
           padding: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
@@ -1194,7 +1200,7 @@ class _AudioPlayerWidgetFromSyncFileState
             audioURL: audioFile!.path,
             restingViewBuilder: (a) => const Icon(MdiIcons.play),
             loadingViewBuilder: () => Container(),
-            recordingViewBuilder: (a) => const Icon(MdiIcons.pause));
+            playingViewBuilder: (a) => const Icon(MdiIcons.pause));
   }
 
   @override

@@ -50,6 +50,7 @@ class ContentRepository {
 
   static SyncedFile getContentPDFFile(Content content) {
     String path = dataStorePath(DataStorePaths.docPdfPath, [content.id!]);
+    print("synced pdf file called for path: $path");
     return SyncedFile(path);
   }
 

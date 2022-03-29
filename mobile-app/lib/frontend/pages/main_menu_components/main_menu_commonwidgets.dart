@@ -7,7 +7,9 @@ import 'package:mobile_app/backend/Blocs/organization_view/organization_view_blo
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/callableModels/Survey.dart';
 import 'package:mobile_app/backend/repositories/ContentRepository.dart';
+import 'package:mobile_app/backend/repositories/EntityRepository.dart';
 import 'package:mobile_app/backend/repositories/InterventionRepository.dart';
+import 'package:mobile_app/backend/repositories/LevelRepository.dart';
 import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
 import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/frontend/buttons.dart';
@@ -45,7 +47,7 @@ class CustomPicButtonState extends State<CustomPicButton> {
 
   @override
   void initState() {
-    widget.syncedFile.file().then((value){
+    widget.syncedFile.file().then((value) {
       setState(() {
         imageFile = value;
         loading = false;
@@ -132,8 +134,28 @@ Widget surveyRow(BuildContext context, Survey survey,
   ]);
 }
 
-Widget interventionRow(
-    BuildContext context, Intervention intervention,
+Widget entityRow(BuildContext context, Entity entity) {
+  return Container(
+      padding: EdgeInsets.symmetric(
+          vertical: defaultPadding(context) / 2,
+          horizontal: defaultPadding(context) / 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CustomPicButton(
+              syncedFile: LevelRepository.getLevelPicFile(entity.level),
+              size: Size(width(context) * .1, width(context) * .1),
+              pressable: false),
+          SizedBox(width: defaultPadding(context) / 2),
+          Container(
+              child: Text(entity.name,
+                  style: Theme.of(context).textTheme.bodyText1))
+        ],
+      ));
+}
+
+Widget interventionRow(BuildContext context, Intervention intervention,
     {VoidCallback? onPressed,
     required SyncedFile image,
     bool pressable = false,
@@ -263,7 +285,8 @@ Widget executedSurveyRow(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CustomPicButton(
-                    syncedFile: SyncedFile(SurveyRepository.getIconFilePath(executedSurvey.survey)),
+                    syncedFile: SyncedFile(SurveyRepository.getIconFilePath(
+                        executedSurvey.survey)),
                     onPressed: () {},
                     size: Size(width(context) * .1, width(context) * .1),
                     pressable: false),
@@ -323,8 +346,8 @@ Widget contentRow(BuildContext context, Content content, VoidCallback onPressed,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CustomPicButton(
-
-                    syncedFile: SyncedFile(ContentRepository.getContentPic(content).path),
+                    syncedFile: SyncedFile(
+                        ContentRepository.getContentPic(content).path),
                     onPressed: () {},
                     size: Size(width(context) * .1, width(context) * .1),
                     pressable: false),
