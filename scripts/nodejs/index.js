@@ -1,4 +1,4 @@
-import Amplify, { API } from "aws-amplify";
+import Amplify, { API, Auth } from "aws-amplify";
 import * as queries from "./src/graphql/queries.js";
 import * as mutations from "./src/graphql/mutations.js";
 import dotenv from "dotenv";
@@ -27,10 +27,10 @@ import createConfigMigrator from "./src/migrators/createConfig.js";
 import createMigratorTag from "./src/migrators/createMigratorTag.js";
 import createLevelToInterventionConnections from "./src/migrators/createLevelToInterventionConnections.js";
 import createTestEntities from "./src/migrators/createTestEntities.js";
+import uploadTestFiles from "./src/migrators/uploadTestFiles.js";
 
 Amplify.default.configure(awsconfig);
 
-//await createTestSurvey();
 
 dotenv.config();
 
