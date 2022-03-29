@@ -159,6 +159,13 @@
     "title": "Interventions",
     "newIntervention": "New intervention",
     "newSurvey": "New survey",
+    "type": {
+      "title": "Intervention Type",
+      "types": {
+        "TECHNOLOGY": "Technology",
+        "EDUCATION": "Education"
+      }
+    },
     "interventionModal": {
       "modalTitle": {
         "read": "Viewing intervention",

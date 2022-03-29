@@ -49,7 +49,6 @@
       "CodeMismatchException": "Código no coincidente. Código de error: 6017",
       "ExpiredCodeException": "El código ha caducado. Código de error: 6018",
       "TooManyFailedAttemptsException": "Demasiados intentos fallidos. Código de error: 6019"
-
     },
     "warningCodes": {
       "sessionExpired": "Su sesión ha caducado. Inicie sesión de nuevo."
@@ -160,6 +159,13 @@
     "title": "Intervenciones",
     "newIntervention": "Nueva intervención",
     "newSurvey": "Nueva encuesta",
+    "type": {
+      "title": "Tipo de Intervención",
+      "types": {
+        "TECHNOLOGY": "Tecnología",
+        "EDUCATION": "Educación"
+      }
+    },
     "interventionModal": {
       "modalTitle": {
         "read": "Observando intervención",

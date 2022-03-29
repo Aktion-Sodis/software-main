@@ -159,6 +159,13 @@
     "title": "Müdahaleler",
     "newIntervention": "Yeni müdahale",
     "newSurvey": "Yeni anket",
+    "type": {
+      "title": "Müdahale türü",
+      "types": {
+        "TECHNOLOGY": "Teknoloji",
+        "EDUCATION": "Eğitim"
+      }
+    },
     "interventionModal": {
       "modalTitle": {
         "read": "Müdahale",
