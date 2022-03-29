@@ -218,7 +218,10 @@ class MainMenuOrganization extends StatelessWidget {
               entity: organizationViewState.currentDetailEntity!);
         case OrganizationViewType.EXECUTEDSURVEY:
           return ExecutedSurveyWidget(
-              organizationViewState.executedSurveyToDisplay!,(context.read<OrganizationViewBloc>().state as EntitiesLoadedOrganizationViewState).currentDetailAppliedIntervention!);
+              organizationViewState.executedSurveyToDisplay!,
+              (context.read<OrganizationViewBloc>().state
+                      as EntitiesLoadedOrganizationViewState)
+                  .currentDetailAppliedIntervention!);
 
         default:
           return Container();
@@ -284,14 +287,14 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
   bool create = true;
   Entity? entity;
   String? _preliminaryEntityId;
-  
+
   String? get preliminaryEntityId => entity?.id ?? _preliminaryEntityId;
   set preliminaryEntityId(String? entityId) => _preliminaryEntityId = entityId;
-  
+
   late TextEditingController nameEditingController;
   late TextEditingController descriptionEditingController;
   late List<TextEditingController> customDataControllers;
-  
+
   Widget customDataField(int index) {
     return Container(
         margin: EdgeInsets.only(
@@ -390,31 +393,32 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
 
   void updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
-    if(r!=null){
-      if(entity==null&&preliminaryEntityId == null){
+    if (r != null) {
+      if (entity == null && preliminaryEntityId == null) {
         preliminaryEntityId = UUID.getUUID();
       }
       SyncedFile syncedFile = getEntityPic()!;
-      await syncedFile!.updateAsPic(r);
-      setStateIfMounted((){});
+      await syncedFile.updateAsPic(r);
+      setStateIfMounted(() {});
     }
   }
-  
-  SyncedFile? getEntityPic(){
-    if(entity!=null){
+
+  SyncedFile? getEntityPic() {
+    if (entity != null) {
       return EntityRepository.getEntityPic(entity!);
-    }if(preliminaryEntityId!=null){
+    }
+    if (preliminaryEntityId != null) {
       return EntityRepository.getEntityPicByID(preliminaryEntityId!);
     }
     return null;
   }
-  
-  void setStateIfMounted(Function function){
-    if(mounted){
+
+  void setStateIfMounted(Function function) {
+    if (mounted) {
       setState(() {
         function();
       });
-    }else{
+    } else {
       function();
     }
   }
@@ -429,9 +433,11 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
             fit: StackFit.expand,
             children: [
               ImageWidget(
-                  width: width(context) * .92,
-                  height: height(context) * .2,
-                  borderRadius: BorderRadius.circular(8), imageFile: getEntityPic(),),
+                width: width(context) * .92,
+                height: height(context) * .2,
+                borderRadius: BorderRadius.circular(8),
+                imageFile: getEntityPic(),
+              ),
               Positioned(
                   right: defaultPadding(context),
                   bottom: defaultPadding(context),
@@ -521,12 +527,13 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
                       child: Form(
                           key: _formKey,
                           child: Container(
-                              child: SingleChildScrollView(
+                              child: Scrollbar(
+                                  child: SingleChildScrollView(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: columnChildren(),
                             ),
-                          )))),
+                          ))))),
                   Container(
                       margin: EdgeInsets.all(defaultPadding(context)),
                       child: ElevatedButton(
@@ -578,7 +585,6 @@ class ListWidget extends StatelessWidget {
       required this.parentEntityName,
       required Key key})
       : super(key: key);
-
 
   Widget listItem(BuildContext buildContext, int index) => Card(
       margin: EdgeInsets.symmetric(
@@ -732,8 +738,9 @@ class ListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child:
-          ListView.builder(itemBuilder: listItem, itemCount: entities.length),
+      child: Scrollbar(
+          child: ListView.builder(
+              itemBuilder: listItem, itemCount: entities.length)),
     );
   }
 }
@@ -752,7 +759,6 @@ class OverviewWidget extends StatelessWidget {
   ValueChanged<Entity> onAppliedInterventionsTapped;
   ValueChanged<Entity> onUpdateEntityTapped;
   Entity entity;
-
 
   String getSurveyIconPath(Survey survey) =>
       SurveyRepository.getIconFilePath(survey);
@@ -886,9 +892,7 @@ class OverviewWidget extends StatelessWidget {
             Column(
               children: List.generate(
                   firstThreeSurveys.length,
-                  (index) => surveyRow(
-                      context,
-                      firstThreeSurveys[index],
+                  (index) => surveyRow(context, firstThreeSurveys[index],
                       image: SyncedFile(SurveyRepository.getIconFilePath(
                           firstThreeSurveys[index])),
                       separator: index != firstThreeSurveys.length - 1)),
@@ -964,7 +968,8 @@ class OverviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemBuilder: childWidget, itemCount: 4);
+    return Scrollbar(
+        child: ListView.builder(itemBuilder: childWidget, itemCount: 4));
   }
 }
 
@@ -979,7 +984,8 @@ class AppliedInterventionOverviewPage extends StatelessWidget {
         .appliedInterventions;
     Intervention intervention = interventions[index].intervention;
     return interventionRow(buildContext, intervention,
-        image: SyncedFile(InterventionRepository.getInterventionIconPath(intervention)),
+        image: SyncedFile(
+            InterventionRepository.getInterventionIconPath(intervention)),
         separator: interventions.length - 1 != index,
         pressable: true, onPressed: () async {
       buildContext
@@ -994,13 +1000,14 @@ class AppliedInterventionOverviewPage extends StatelessWidget {
         child: Column(
       children: [
         Expanded(
-            child: ListView.builder(
-                itemBuilder: listItem,
-                itemCount: (context.read<OrganizationViewBloc>().state
-                        as EntitiesLoadedOrganizationViewState)
-                    .currentDetailEntity!
-                    .appliedInterventions
-                    .length)),
+            child: Scrollbar(
+                child: ListView.builder(
+                    itemBuilder: listItem,
+                    itemCount: (context.read<OrganizationViewBloc>().state
+                            as EntitiesLoadedOrganizationViewState)
+                        .currentDetailEntity!
+                        .appliedInterventions
+                        .length))),
         Container(
           margin: EdgeInsets.all(
             defaultPadding(context),
@@ -1050,7 +1057,7 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
     XFile? r = await CameraFunctionality.takePicture(context: context);
     if (r != null) {
       await imageFileSynced.updateAsPic(r);
-      imageFileSynced.file().then((value){
+      imageFileSynced.file().then((value) {
         setState(() {
           imageFile = value;
         });
@@ -1075,8 +1082,9 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
     entity = (context.read<OrganizationViewBloc>().state
             as EntitiesLoadedOrganizationViewState)
         .currentDetailEntity!;
-    imageFileSynced = SyncedFile(AppliedInterventionRepository.getFotoPath(appliedIntervention));
-    imageFileSynced.file().then((value){
+    imageFileSynced = SyncedFile(
+        AppliedInterventionRepository.getFotoPath(appliedIntervention));
+    imageFileSynced.file().then((value) {
       setState(() {
         imageFile = value;
       });
@@ -1086,8 +1094,9 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: Column(
+    return Scrollbar(
+        child: SingleChildScrollView(
+            child: Column(
       children: [
         Card(
           margin: EdgeInsets.all(defaultPadding(context)),
@@ -1163,9 +1172,10 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
                                   context,
                                   appliedIntervention
                                       .intervention.surveys[index - 1],
-                                  image: SyncedFile(SurveyRepository.getIconFilePath(
-                                      appliedIntervention
-                                          .intervention.surveys[index - 1])),
+                                  image: SyncedFile(
+                                      SurveyRepository.getIconFilePath(
+                                          appliedIntervention.intervention
+                                              .surveys[index - 1])),
                                   pressable: true,
                                   onPressed: () {
                                     context.read<OrganizationViewBloc>().add(
@@ -1176,7 +1186,7 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
                                   },
                                 )))))
       ],
-    ));
+    )));
   }
 }
 
@@ -1223,38 +1233,40 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
   List<Intervention>? interventions;
 
   bool loaded = false;
-  
+
   AppliedIntervention? get appliedIntervention => _appliedIntervention;
-  
+
   set appliedIntervention(AppliedIntervention? appliedIntervention) {
     _appliedIntervention = appliedIntervention;
-    syncedFile = SyncedFile(AppliedInterventionRepository.getFotoPath(appliedIntervention!));
+    syncedFile = SyncedFile(
+        AppliedInterventionRepository.getFotoPath(appliedIntervention!));
     syncedFile!.file().then((value) {
-      setStateIfMounted((){
-      imageFile = value;
+      setStateIfMounted(() {
+        imageFile = value;
       });
     });
   }
 
   updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
-    if (r != null&&appliedIntervention!=null) {
-      syncedFile ??= SyncedFile(AppliedInterventionRepository.getFotoPath(appliedIntervention!));
+    if (r != null && appliedIntervention != null) {
+      syncedFile ??= SyncedFile(
+          AppliedInterventionRepository.getFotoPath(appliedIntervention!));
       await syncedFile!.updateAsPic(r);
       syncedFile?.file().then((value) {
-        setStateIfMounted((){
+        setStateIfMounted(() {
           imageFile = value;
         });
       });
     }
   }
-  
-  void setStateIfMounted(Function function){
-    if(mounted){
+
+  void setStateIfMounted(Function function) {
+    if (mounted) {
       setState(() {
         function();
       });
-    }else{
+    } else {
       function();
     }
   }
@@ -1264,14 +1276,14 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
     if (widget.appliedIntervention != null) {
       create = false;
       appliedIntervention = widget.appliedIntervention;
-      syncedFile = SyncedFile(AppliedInterventionRepository.getFotoPath(appliedIntervention!));
+      syncedFile = SyncedFile(
+          AppliedInterventionRepository.getFotoPath(appliedIntervention!));
       syncedFile!.file().then((value) {
-        setStateIfMounted((){
+        setStateIfMounted(() {
           imageFile = value;
           loaded = true;
         });
       });
-      
     }
     super.initState();
     if (widget.appliedIntervention == null) {
@@ -1288,7 +1300,8 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
     //todo: implement localization
     return interventionRow(context, interventions![index],
         separator: (index != interventions!.length - 1),
-        image: SyncedFile(InterventionRepository.getInterventionIconPath(interventions![index])),
+        image: SyncedFile(InterventionRepository.getInterventionIconPath(
+            interventions![index])),
         pressable: true, onPressed: () {
       AppliedIntervention toCreate = AppliedIntervention(
           id: UUID.getUUID(),
@@ -1350,10 +1363,11 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
                   ? Center(child: loadingSign(context))
                   : appliedIntervention == null
                       ? Container(
-                          child: ListView.builder(
-                              itemBuilder: interventionItem,
-                              itemCount: interventions!.length,
-                              shrinkWrap: true))
+                          child: Scrollbar(
+                              child: ListView.builder(
+                                  itemBuilder: interventionItem,
+                                  itemCount: interventions!.length,
+                                  shrinkWrap: true)))
                       : Container(
                           child: Column(
                           children: [
@@ -1366,10 +1380,11 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
                                     fit: StackFit.expand,
                                     children: [
                                       ImageWidget(
-                                          width: width(context) * .92,
-                                          height: height(context) * .3,
-                                          borderRadius:
-                                              BorderRadius.circular(8), imageFile: syncedFile,),
+                                        width: width(context) * .92,
+                                        height: height(context) * .3,
+                                        borderRadius: BorderRadius.circular(8),
+                                        imageFile: syncedFile,
+                                      ),
                                       Positioned(
                                           right: defaultPadding(context),
                                           bottom: defaultPadding(context),
@@ -1454,9 +1469,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
   }
 
   Widget listItem(BuildContext buildContext, int i) {
-    return surveyRow(
-        context,
-        currentlyDisplayedSurveys[i]["survey"], 
+    return surveyRow(context, currentlyDisplayedSurveys[i]["survey"],
         image: SyncedFile(SurveyRepository.getIconFilePath(
             currentlyDisplayedSurveys[i]["survey"])),
         pressable: true, onPressed: () {
@@ -1481,9 +1494,10 @@ class SurveyWidgetState extends State<SurveyWidget> {
                   updateCurrentlySelectedInterventions(newList),
             )),
         Expanded(
-            child: ListView.builder(
-                itemBuilder: listItem,
-                itemCount: currentlyDisplayedSurveys.length))
+            child: Scrollbar(
+                child: ListView.builder(
+                    itemBuilder: listItem,
+                    itemCount: currentlyDisplayedSurveys.length)))
       ],
     );
   }
@@ -1498,16 +1512,17 @@ class ExecutedSurveyHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     List<ExecutedSurvey> executedSurveys = entity.executedSurveysDescending();
     return Container(
-        child: ListView.builder(
-            itemBuilder: (context, index) {
-              return executedSurveyRow(context, executedSurveys[index],
-                  () async {
-                context
-                    .read<OrganizationViewBloc>()
-                    .add(NavigateToExecutedSurvey(executedSurveys[index]));
-              });
-            },
-            itemCount: executedSurveys.length));
+        child: Scrollbar(
+            child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return executedSurveyRow(context, executedSurveys[index],
+                      () async {
+                    context
+                        .read<OrganizationViewBloc>()
+                        .add(NavigateToExecutedSurvey(executedSurveys[index]));
+                  });
+                },
+                itemCount: executedSurveys.length)));
   }
 }
 
@@ -1518,16 +1533,17 @@ class ExecutedSurveyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemBuilder: (context, index) {
-          return surveyarea.SurveyWidgetState.questionSummary(
-              appliedIntervention: appliedIntervention,
-              executedSurveyId: executedSurvey.id!,
-              question: executedSurvey.survey
-                  .questionByID(executedSurvey.answers[index].questionID),
-              context: context,
-              questionAnswer: executedSurvey.answers[index]);
-        },
-        itemCount: executedSurvey.answers.length);
+    return Scrollbar(
+        child: ListView.builder(
+            itemBuilder: (context, index) {
+              return surveyarea.SurveyWidgetState.questionSummary(
+                  appliedIntervention: appliedIntervention,
+                  executedSurveyId: executedSurvey.id!,
+                  question: executedSurvey.survey
+                      .questionByID(executedSurvey.answers[index].questionID),
+                  context: context,
+                  questionAnswer: executedSurvey.answers[index]);
+            },
+            itemCount: executedSurvey.answers.length));
   }
 }

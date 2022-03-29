@@ -44,21 +44,23 @@ class MainMenuWiki extends StatelessWidget {
                     height: 1,
                     color: Colors.grey),
                 Expanded(
-                    child: ListView.builder(
-                        itemCount: loadedContentState.contentsToDisplay.length,
-                        itemBuilder: (context, index) => contentRow(context,
-                                loadedContentState.contentsToDisplay[index],
-                                () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => PDFViewWidget(
-                                        content: loadedContentState
-                                            .contentsToDisplay[index],
-                                      )));
-                            },
-                                separator: index !=
-                                    (loadedContentState
-                                            .contentsToDisplay.length -
-                                        1))))
+                    child: Scrollbar(
+                        child: ListView.builder(
+                            itemCount:
+                                loadedContentState.contentsToDisplay.length,
+                            itemBuilder: (context, index) => contentRow(context,
+                                    loadedContentState.contentsToDisplay[index],
+                                    () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => PDFViewWidget(
+                                            content: loadedContentState
+                                                .contentsToDisplay[index],
+                                          )));
+                                },
+                                    separator: index !=
+                                        (loadedContentState
+                                                .contentsToDisplay.length -
+                                            1)))))
               ],
             );
           } else {
@@ -86,12 +88,16 @@ class PDFViewWidgetState extends State<PDFViewWidget> {
   @override
   void initState() {
     syncedFile = ContentRepository.getContentPDFFile(widget.content);
+    print("asked for synced file");
     pdfFuture = getPDF();
+    print("init state completed");
     super.initState();
   }
 
   Future<PDFDocument?> getPDF() async {
+    print("NOW CALLING SYNCED FILE .FILE()");
     File? file = await syncedFile.file();
+    print("synced file gotten");
     if (file != null) {
       return PDFDocument.fromFile(file);
     } else {

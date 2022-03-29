@@ -37,7 +37,7 @@ class AmplifyIntegration {
       print((t as DataStoreHubEvent).eventName);
       print((t as DataStoreHubEvent).payload.toString());
     });
-    Amplify.DataStore.clear();
+    //Amplify.DataStore.clear();
     Amplify.DataStore.start();
     print("amplify successfully initialized");
     return true;

@@ -56,82 +56,85 @@ class _AudioTestState extends State<AudioTest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Test of flutter_sound"),
-      ),
-      body: ListView(
-        padding: EdgeInsets.all(defaultPadding(context)),
-        children: [
-          ElevatedButton(
-            onPressed: _openSession,
-            child: const Text("Open session"),
-          ),
-          ElevatedButton(
-            onPressed: _closeSession,
-            child: const Text("Close session"),
-          ),
-          const Divider(),
-          ElevatedButton(
-            onPressed: _startRecording,
-            child: const Text("Start recorder"),
-          ),
-          ElevatedButton(
-            onPressed: _stopRecording,
-            child: const Text("Stop recorder"),
-          ),
-          const Divider(),
-          ElevatedButton(
-            onPressed: _startPlaying,
-            child: const Text("Start player"),
-          ),
-          ElevatedButton(
-            onPressed: _stopPlaying,
-            child: const Text("Stop player"),
-          ),
-          const Divider(),
-          SizedBox(height: 20),
-          Text("Tests of widgets with another instance of Audio()"),
-          SizedBox(height: 10),
-          RecorderWidget(
-              audio: audio_for_widgets,
-              loadingViewBuilder: () {
-                return const ElevatedButton(
-                    onPressed: null, child: Text("Start recording"));
-              },
-              restingViewBuilder: (startRecording) {
-                return ElevatedButton(
-                    onPressed: startRecording, child: Text("Start recording"));
-              },
-              recordingViewBuilder: (stopRecording) {
-                return ElevatedButton(
-                    onPressed: stopRecording, child: Text("Stop recording"));
-              },
-              onAudioRecorded: (url) {
-                _recordedURI = url;
-
-                if (mounted) setState(() {});
-              }),
-          _recordedURI == null
-              ? const ElevatedButton(
-                  onPressed: null, child: Text("Start playing"))
-              : PlayerWidget(
+        appBar: AppBar(
+          title: const Text("Test of flutter_sound"),
+        ),
+        body: Scrollbar(
+          child: ListView(
+            padding: EdgeInsets.all(defaultPadding(context)),
+            children: [
+              ElevatedButton(
+                onPressed: _openSession,
+                child: const Text("Open session"),
+              ),
+              ElevatedButton(
+                onPressed: _closeSession,
+                child: const Text("Close session"),
+              ),
+              const Divider(),
+              ElevatedButton(
+                onPressed: _startRecording,
+                child: const Text("Start recorder"),
+              ),
+              ElevatedButton(
+                onPressed: _stopRecording,
+                child: const Text("Stop recorder"),
+              ),
+              const Divider(),
+              ElevatedButton(
+                onPressed: _startPlaying,
+                child: const Text("Start player"),
+              ),
+              ElevatedButton(
+                onPressed: _stopPlaying,
+                child: const Text("Stop player"),
+              ),
+              const Divider(),
+              SizedBox(height: 20),
+              Text("Tests of widgets with another instance of Audio()"),
+              SizedBox(height: 10),
+              RecorderWidget(
                   audio: audio_for_widgets,
-                  audioURL: _recordedURI!,
-                  restingViewBuilder: (startPlaying) {
-                    return ElevatedButton(
-                        onPressed: startPlaying,
-                        child: const Text("Start playing"));
-                  },
                   loadingViewBuilder: () {
-                    return Text("loading");
+                    return const ElevatedButton(
+                        onPressed: null, child: Text("Start recording"));
                   },
-                  playingViewBuilder: (stopPlaying) {
+                  restingViewBuilder: (startRecording) {
                     return ElevatedButton(
-                        onPressed: stopPlaying,
-                        child: const Text("Stop playing"));
-                  })
-        ],
-      ),
-    );
+                        onPressed: startRecording,
+                        child: Text("Start recording"));
+                  },
+                  recordingViewBuilder: (stopRecording) {
+                    return ElevatedButton(
+                        onPressed: stopRecording,
+                        child: Text("Stop recording"));
+                  },
+                  onAudioRecorded: (url) {
+                    _recordedURI = url;
+
+                    if (mounted) setState(() {});
+                  }),
+              _recordedURI == null
+                  ? const ElevatedButton(
+                      onPressed: null, child: Text("Start playing"))
+                  : PlayerWidget(
+                      audio: audio_for_widgets,
+                      audioURL: _recordedURI!,
+                      restingViewBuilder: (startPlaying) {
+                        return ElevatedButton(
+                            onPressed: startPlaying,
+                            child: const Text("Start playing"));
+                      },
+                      loadingViewBuilder: () {
+                        return Text("loading");
+                      },
+                      playingViewBuilder: (stopPlaying) {
+                        return ElevatedButton(
+                            onPressed: stopPlaying,
+                            child: const Text("Stop playing"));
+                      })
+            ],
+          ),
+        ));
   }
 }
