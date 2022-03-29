@@ -70,8 +70,6 @@
                       :label="slotProps.label"
                       v-model="slotProps.model"
                       @input="slotProps.inputHandler"
-                      :counter="description.length > entityDescriptionMaxChar - 20"
-                      :rules="[rules.maxChar]"
                       required
                       outlined
                       dense
