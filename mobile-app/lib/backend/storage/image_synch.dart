@@ -61,7 +61,7 @@ class SyncedFile {
     return await getCachePath();
   }
 
-  Future<void> deleteLocal() async {
+  Future<void> delete() async {
     File localCacheFile = await getCachePath();
     await localCacheFile.delete();
     await StorageRepository.removeFile(path);
