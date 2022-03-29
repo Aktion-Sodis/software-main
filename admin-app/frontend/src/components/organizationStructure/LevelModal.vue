@@ -5,7 +5,7 @@
         <v-card-title>
           <h2 v-if="edit && levelInFocus">
             {{ $t('organizationStructure.levelModal.modalTitle.edit') }}
-            <i>{{ levelInFocus.name.languageTexts[0] }}</i>
+            <i>{{ calculateUILocaleString({ languageTexts: levelInFocus.name.languageTexts }) }}</i>
           </h2>
           <h2 v-else-if="create">
             {{ $t('organizationStructure.levelModal.modalTitle.create') }}
@@ -29,7 +29,7 @@
                   {{ $t('organizationStructure.levelModal.name') }}
                 </v-card-title>
                 <h2 v-if="read && levelInFocus">
-                  {{ levelInFocus.name.languageTexts[this.$store.getters.fallbackLocaleIndex] }}
+                  {{ calculateUILocaleString({ languageTexts: levelInFocus.name.languageTexts }) }}
                 </h2>
                 <LocaleTextBox
                   v-else
@@ -58,7 +58,11 @@
                   style="min-height: 10rem"
                 >
                   <h3>
-                    {{ levelInFocus.description.languageTexts[this.$store.getters.fallbackLocaleIndex] }}
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: levelInFocus.description.languageTexts,
+                      })
+                    }}
                   </h3>
                 </div>
                 <LocaleTextBox
@@ -83,7 +87,12 @@
                 <div v-if="read && levelInFocus" style="min-height: 5rem">
                   <h3 v-if="levelInFocus.parentLevelID">
                     {{ $t('organizationStructure.levelModal.upperLevel') }}:
-                    {{ LEVELById({ id: levelInFocus.parentLevelID }).name.languageTexts[this.$store.getters.fallbackLocaleIndex] }}
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: LEVELById({ id: levelInFocus.parentLevelID }).name
+                          .languageTexts,
+                      })
+                    }}
                   </h3>
                 </div>
               </v-col>
@@ -98,7 +107,11 @@
                       <v-icon> mdi-hammer-wrench </v-icon>
                     </v-avatar>
                     <span v-if="INTERVENTIONById({ id })">
-                      {{ INTERVENTIONById({ id }).name.languageTexts[this.$store.getters.fallbackLocaleIndex] }}
+                      {{
+                        calculateUILocaleString({
+                          languageTexts: INTERVENTIONById({ id }).name.languageTexts,
+                        })
+                      }}
                     </span>
                   </div>
                 </div>
@@ -120,7 +133,11 @@
                 </v-card-title>
                 <div v-if="read && levelInFocus">
                   <v-chip v-for="tagId in levelInFocus.tagIds" :key="tagId">
-                    {{ tagById({ tagId }).name }}
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: tagById({ tagId }).name.languageTexts,
+                      })
+                    }}
                   </v-chip>
                 </div>
                 <v-select
@@ -217,7 +234,7 @@ export default {
 
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
 
-      fallbackLocaleIndex: 'fallbackLocaleIndex',
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
     localizeInterventions() {
       return this.interventions.map((intervention) => ({
