@@ -108,7 +108,6 @@ String dataStorePath(DataStorePaths path, List<String> parameters) {
       filledPath =
           filledPath.replaceAll(replacementParameters[i], parameters[i]);
     }
-    filledPath = filledPath.replaceAll("/", ":");
     return filledPath;
   } else {
     throw new FormatException(

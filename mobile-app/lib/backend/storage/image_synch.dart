@@ -14,7 +14,10 @@ class SyncedFile {
     File localCacheFile = await getCachePath();
     bool cached = await localCacheFile.exists();
     if (!cached) {
-      StorageRepository.downloadFile(localCacheFile, path);
+      print("file not in cache, loading it");
+      await StorageRepository.downloadFile(localCacheFile, path);
+    } else {
+      print("found in cache: $path");
     }
 
     cached = await localCacheFile.exists();
@@ -28,6 +31,16 @@ class SyncedFile {
 
   Future<File> getCachePath() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
+    List<String> pathParts = path.split("/");
+    pathParts.removeAt(pathParts.length - 1);
+    String toCreateDir = "";
+    for (int i = 0; i < pathParts.length; i++) {
+      toCreateDir += pathParts[i];
+      if (i != pathParts.length - 1) {
+        toCreateDir += "/";
+      }
+    }
+    await Directory(appDocDir.path + "/" + toCreateDir).create(recursive: true);
     File localCacheFile = File('${appDocDir.path}/$path');
     return localCacheFile;
   }
