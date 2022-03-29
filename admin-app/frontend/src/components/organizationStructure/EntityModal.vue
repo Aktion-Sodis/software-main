@@ -90,17 +90,32 @@
                     }}
                   </h3>
                 </div>
+
                 <v-select
                   v-else-if="allEntitiesOfUpperLevel.length > 0"
                   v-model="parentEntityID"
                   :items="allEntitiesOfUpperLevel"
+                  item-value="id"
                   :label="$t('organizationStructure.entityModal.upperEntityLabel')"
                   dense
                   outlined
                   persistent-hint
-                  item-value="id"
-                  item-text="name"
-                ></v-select>
+                >
+                  <template v-slot:item="data">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: data.item.name.languageTexts,
+                      })
+                    }}
+                  </template>
+                  <template v-slot:selection="data">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: data.item.name.languageTexts,
+                      })
+                    }}
+                  </template>
+                </v-select>
               </v-col>
               <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
                 <v-card-title class="pt-0 pt-sm-2">
@@ -198,15 +213,7 @@ export default {
       const currentLevel = this.LEVELById({
         id: this.edit ? this.entityInFocus?.entityLevelId : this.getCreatingEntityInLevelId,
       });
-      const currentLevelList = this.allEntitiesOfLevel({ entityLevelId: currentLevel?.parentLevelID }) ?? [];
-      const resCurrentLevelList = [];
-      currentLevelList.forEach((level) => {
-        resCurrentLevelList.push({
-          ...currentLevelList,
-          name: level.name.languageTexts[this.$store.getters.fallbackLocaleIndex],
-        });
-      });
-      return resCurrentLevelList;
+      return this.allEntitiesOfLevel({ entityLevelId: currentLevel.parentLevelID });
     },
     edit() {
       return this.modalMode === modalModesDict.edit;
@@ -278,6 +285,7 @@ export default {
           ? this.entityInFocus.entityLevelId
           : this.getCreatingEntityInLevelId,
         parentEntityID: this.parentEntityID ?? null,
+        appliedInterventions: [], // TODO
         _version: this.entityDraft._version,
       });
       await this.$nextTick();

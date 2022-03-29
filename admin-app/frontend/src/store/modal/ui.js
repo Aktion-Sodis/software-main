@@ -42,9 +42,12 @@ const dataModal = {
     },
 
     /* ENTITY DRAFT: SET & RESET */
-    setENTITYDraft: (state, {
-      name, description, entityLevelId, parentEntityID, _version,
-    }) => {
+    setENTITYDraft: (
+      state,
+      {
+        name, description, entityLevelId, parentEntityID, _version, appliedInterventions,
+      },
+    ) => {
       state.dataDraft = new Entity({
         name,
         description,
@@ -52,6 +55,7 @@ const dataModal = {
         parentEntityID,
         _version,
         customData: [],
+        appliedInterventions,
       });
     },
     resetENTITYDraft: (state) => {
