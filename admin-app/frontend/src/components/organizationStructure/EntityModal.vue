@@ -5,7 +5,9 @@
         <v-card-title>
           <h2 v-if="edit && entityInFocus">
             {{ $t('organizationStructure.entityModal.modalTitle.edit') }}
-            <i>{{ entityInFocus.name.languageTexts[this.$store.getters.fallbackLocaleIndex] }}</i>
+            <i>
+              {{ calculateUILocaleString({ languageTexts: entityInFocus.name.languageTexts }) }}
+            </i>
           </h2>
           <h2 v-else-if="create">
             {{ $t('organizationStructure.entityModal.modalTitle.create') }}
@@ -25,7 +27,7 @@
             <v-row>
               <v-col cols="12" sm="6" class="pb-0 px-0 mb-3 px-sm-3">
                 <h2 v-if="read && entityInFocus">
-                  {{ entityInFocus.name.languageTexts[this.$store.getters.fallbackLocaleIndex] }}
+                  {{ calculateUILocaleString({ languageTexts: entityInFocus.name.languageTexts }) }}
                 </h2>
 
                 <LocaleTextBox
@@ -54,9 +56,9 @@
                 >
                   <h3>
                     {{
-                      entityInFocus.description.languageTexts[
-                        this.$store.getters.fallbackLocaleIndex
-                      ]
+                      calculateUILocaleString({
+                        languageTexts: entityInFocus.description.languageTexts,
+                      })
                     }}
                   </h3>
                 </div>
@@ -70,8 +72,6 @@
                       :label="slotProps.label"
                       v-model="slotProps.model"
                       @input="slotProps.inputHandler"
-                      :counter="description.length > entityDescriptionMaxChar - 20"
-                      :rules="[rules.maxChar]"
                       required
                       outlined
                       dense
@@ -81,10 +81,12 @@
                 <div v-if="read && entityInFocus" style="min-height: 5rem">
                   <h3 v-if="entityInFocus.parentEntityID">
                     {{ $t('organizationStructure.entityModal.upperEntity') }}:
+
                     {{
-                      ENTITYById({ id: entityInFocus.parentEntityID }).name.languageTexts[
-                        this.$store.getters.fallbackLocaleIndex
-                      ]
+                      calculateUILocaleString({
+                        languageTexts: ENTITYById({ id: entityInFocus.parentEntityID }).name
+                          .languageTexts,
+                      })
                     }}
                   </h3>
                 </div>
@@ -101,9 +103,9 @@
                 ></v-select>
               </v-col>
               <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
-                <v-card-title class="pt-0 pt-sm-2">{{
-                  $t('organizationStructure.entityModal.moreStuffTitle')
-                }}</v-card-title>
+                <v-card-title class="pt-0 pt-sm-2">
+                  {{ $t('organizationStructure.entityModal.moreStuffTitle') }}
+                </v-card-title>
                 <p>{{ $t('organizationStructure.entityModal.moreStuffDescription') }}</p>
               </v-col>
             </v-row>
@@ -184,6 +186,7 @@ export default {
 
       ENTITYById: 'ENTITY_Data/ENTITYById',
       getCreatingEntityInLevelId: 'getCreatingEntityInLevelId',
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
     entityInFocus() {
       return this.dataIdInFocus ? this.ENTITYById({ id: this.dataIdInFocus }) : null;

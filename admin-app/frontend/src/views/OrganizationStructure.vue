@@ -11,7 +11,7 @@
         <LevelColumnHeader
           :id="level.id"
           :allowedInterventions="level.allowedInterventions"
-          :name="level.name"
+          :name="calculateUILocaleString({ languageTexts: level.name.languageTexts })"
         />
         <EntitiesColumn :entityLevelId="level.id" :index="index" />
       </div>
@@ -64,6 +64,8 @@ export default {
       levels: 'LEVEL_Data/sortedLevels',
       isLevelModalDisplayed: 'dataModal/getIsDisplayed',
       entityModalIsDisplayed: 'dataModal/getIsDisplayed',
+
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
   },
   watch: {

@@ -1,10 +1,6 @@
 import { DataStore } from '@aws-amplify/datastore';
 import { Entity } from '../../models';
-import {
-  putEntityController,
-  deleteEntityController,
-  getAllEntities,
-} from './utils';
+import { putEntityController, deleteEntityController, getAllEntities } from './utils';
 import { dataTypesDict, modalModesDict } from '../constants';
 
 const entitiesData = {
@@ -173,7 +169,7 @@ const entitiesData = {
           dispatch(
             'dataModal/readData',
             {
-              dataId: postResponse.data.createEntity.id,
+              dataId: postResponse.id,
               dataType: dataTypesDict.entity,
             },
             {
