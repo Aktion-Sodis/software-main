@@ -19,15 +19,13 @@ export const postNewLevel = async (levelDraft) => API.graphql(
   }),
 );
 export const emptyLevel = () => {
-  const level = new Level(
-    {
-      id: uuidv4(),
-      name: '',
-      description: '',
-      parentLevelID: null,
-      allowedInterventions: [],
-    },
-  );
+  const level = new Level({
+    id: uuidv4(),
+    name: '',
+    description: '',
+    parentLevelID: null,
+    allowedInterventions: [],
+  });
   return level;
 };
 
