@@ -1,17 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
+import { Intervention, InterventionType } from '../models';
 
-class EmptyTag {
-  constructor() {
-    this.id = uuidv4();
-    this.text = '';
-  }
-}
+const emptyIntervention = () => new Intervention({
+  id: uuidv4(),
+  name: '',
+  description: '',
+  tags: [],
+  type: InterventionType.TECHNOLOGY,
+  questionIds: [],
+  contents: [],
+});
 
-class Tag {
-  constructor({ id, text }) {
-    this.id = id;
-    this.text = text;
-  }
-}
-
-export { EmptyTag, Tag };
+export { emptyIntervention };
