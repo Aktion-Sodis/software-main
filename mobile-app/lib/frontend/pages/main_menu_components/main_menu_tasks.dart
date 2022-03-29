@@ -5,6 +5,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:mobile_app/backend/Blocs/task/task_bloc.dart';
 import 'package:mobile_app/backend/Blocs/task/task_events.dart';
 import 'package:mobile_app/backend/Blocs/task/task_state.dart';
+import 'package:mobile_app/backend/Blocs/task_form/task_form_cubit.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/callableModels/Entity.dart';
@@ -195,6 +196,7 @@ Future<Task> addTask(BuildContext buildContext,
     AppliedIntervention? appliedIntervention,
     ExecutedSurvey? executedSurvey}) async {
   //todo: connect with arthur
+  openTaskForm(buildContext, strings.main_menu_tasks);
   Task toCreate = Task(
       title: "Test Title",
       user: buildContext.read<UserBloc>().state.user!,

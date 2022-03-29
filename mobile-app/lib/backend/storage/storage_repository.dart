@@ -6,10 +6,10 @@ import 'dataStorePaths.dart';
 class StorageRepository {
   static Future<void> downloadFile(File toDownload, String path) async {
     String url = await getUrlForFile(path);
-
+    print("url for file: $url");
     //Try to download the specified file, and write it to the localCacheFile.
     try {
-      await Amplify.Storage.downloadFile(key: url, local: toDownload);
+      await Amplify.Storage.downloadFile(key: path, local: toDownload);
     } catch (e) {
       rethrow;
     }
@@ -20,7 +20,7 @@ class StorageRepository {
       String url = await getUrlForFile(dataStorePath);
       final result = await Amplify.Storage.uploadFile(
         local: file,
-        key: url,
+        key: dataStorePath,
       );
 
       return result.key;

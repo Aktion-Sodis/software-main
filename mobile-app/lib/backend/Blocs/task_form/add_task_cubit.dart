@@ -11,7 +11,6 @@ class AddTaskCubit extends TaskFormCubit {
   @override
   Future<Task?> saveTask(String text, List<Attachment> attachments,
       List<Entity> entities, DateTime? deadline) {
-    // TODO: implement saving task
     return Future.value(null);
   }
 }
