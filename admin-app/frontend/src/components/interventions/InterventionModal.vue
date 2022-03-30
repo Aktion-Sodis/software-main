@@ -199,8 +199,6 @@
                   </template>
                 </v-select>
 
-                {{ tagIds }}
-
                 <v-card-title>
                   {{ $t('baseData.documents') }}
                   <v-btn
