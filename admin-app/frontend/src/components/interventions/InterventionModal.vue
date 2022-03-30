@@ -98,23 +98,6 @@
                     ></v-textarea>
                   </template>
                 </LocaleTextBox>
-
-                <v-card-title class="pt-0 pt-sm-2">
-                  {{ $t('interventions.interventionModal.levels') }}
-                </v-card-title>
-                <div
-                  v-if="read && interventionInFocus"
-                  class="d-flex flex-column justify-center"
-                  style="min-height: 10rem"
-                >
-                  <v-chip v-for="levelId in interventionInFocus.levels" :key="levelId">
-                    {{
-                      calculateUILocaleString({
-                        languageTexts: LEVELById({ id: levelId }).name,
-                      })
-                    }}
-                  </v-chip>
-                </div>
               </v-col>
 
               <v-col cols="12" sm="6" class="pt-6 pt-sm-3 px-0 px-sm-3">
