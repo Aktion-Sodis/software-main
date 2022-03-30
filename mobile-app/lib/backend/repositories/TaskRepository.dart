@@ -60,13 +60,15 @@ class TaskRepository {
     return task;
   }
 
-  static SyncedFile getTaskPic(Task task) {
-    String path = dataStorePath(DataStorePaths.taskPicPath, [task.id!]);
+  static SyncedFile getTaskPic(Task task, int index) {
+    String path =
+        dataStorePath(DataStorePaths.taskPicPath, [task.id!, index.toString()]);
     return SyncedFile(path);
   }
 
-  static SyncedFile getTaskAudio(Task task) {
-    String path = dataStorePath(DataStorePaths.taskAudioPath, [task.id!]);
+  static SyncedFile getTaskAudio(Task task, int index) {
+    String path = dataStorePath(
+        DataStorePaths.taskAudioPath, [task.id!, index.toString()]);
     return SyncedFile(path);
   }
 }

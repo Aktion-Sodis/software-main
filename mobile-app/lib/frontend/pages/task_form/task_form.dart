@@ -2,28 +2,61 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mobile_app/backend/Blocs/organization_view/organization_view_bloc.dart';
+import 'package:mobile_app/backend/Blocs/task/task_bloc.dart';
 import 'package:mobile_app/backend/Blocs/task_form/task_form_cubit.dart';
+import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
+import 'package:mobile_app/backend/callableModels/localModels/attachment.dart';
 import 'package:mobile_app/backend/callableModels/localModels/audio_attachment.dart';
 import 'package:mobile_app/frontend/components/audio/recorder_widget.dart';
+import 'package:mobile_app/frontend/components/buttons.dart';
 import 'package:mobile_app/frontend/components/keyboard_dismisser.dart';
 import 'package:mobile_app/frontend/components/nisaba_app_bar.dart';
 import 'package:mobile_app/frontend/components/shadow_box.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
+import 'package:mobile_app/frontend/pages/main_menu_components/main_menu_commonwidgets.dart';
 import 'package:mobile_app/frontend/pages/task_form/attachments_list.dart';
 import 'package:mobile_app/frontend/pages/task_form/small_button.dart';
 import 'package:mobile_app/frontend/theme.dart';
 
+import 'package:mobile_app/frontend/strings.dart' as strings;
+
 @immutable
 class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
-  TaskForm({Key? key, required this.title}) : super(key: key);
+  TaskForm(
+      {Key? key,
+      required this.title,
+      this.task,
+      this.entity,
+      this.appliedIntervention,
+      this.executedSurvey,
+      required this.taskBloc,
+      required this.organizationViewBloc,
+      required this.userBloc,
+      this.attachments})
+      : super(key: key) {
+    if (task != null) {
+      _taskTextController.text = task!.title;
+      _taskDescriptionController.text = task!.text ?? "";
+    }
+  }
+
+  final Task? task;
+  final Entity? entity;
+  final AppliedIntervention? appliedIntervention;
+  final ExecutedSurvey? executedSurvey;
+  final TaskBloc taskBloc;
+  final OrganizationViewBloc organizationViewBloc;
+  final UserBloc userBloc;
+  final List<Attachment>? attachments;
 
   final String title;
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _taskTextController = TextEditingController();
+  final TextEditingController _taskDescriptionController =
+      TextEditingController();
   final TextEditingController _searchTextController = TextEditingController();
-
-  TaskFormCubit _cubit = TaskFormCubit.initialize<T>();
 
   // Methods for handling dates
   DateTime get _now => DateTime.now();
@@ -81,10 +114,20 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
     );
   }
 
+  TaskFormCubit? _cubit;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TaskFormCubit>(
-      create: (context) => TaskFormCubit.initialize<T>(),
+      create: (context) => TaskFormCubit.initialize<T>(
+          task: task,
+          entity: entity,
+          appliedIntervention: appliedIntervention,
+          executedSurvey: executedSurvey,
+          taskBloc: taskBloc,
+          organizationViewBloc: organizationViewBloc,
+          userBloc: userBloc,
+          attachments: attachments),
       child: BlocConsumer<TaskFormCubit, TaskFormState>(
         listener: (context, state) {
           if (state is TaskFormSuccessfullSubmitted) {
@@ -102,14 +145,17 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                 padding: MediaQuery.of(context).padding,
                 controller: _scrollController,
                 children: [
-                  NisabaAppBar(title: title),
+                  NisabaAppBar(
+                      title: task != null
+                          ? strings.task_update_title
+                          : strings.task_create_title),
                   const SizedBox(
                     height: 19,
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: defaultPadding(context)),
-                    child: _subtitle("What is the task?"),
+                    child: _subtitle(strings.task_dialog_what_task),
                   ),
                   Padding(
                     padding: EdgeInsets.all(defaultPadding(context)),
@@ -117,9 +163,9 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                       child: TextField(
                         controller: _taskTextController,
                         keyboardType: TextInputType.multiline,
-                        maxLines: null,
+                        maxLines: 2,
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(
+                            /*border: OutlineInputBorder(
                               borderSide: const BorderSide(
                                   color: Colors.transparent, width: 0),
                               borderRadius: BorderRadius.circular(15),
@@ -139,8 +185,45 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                                   color: ThemeColors.green, width: 2),
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            prefixIcon: const Icon(MdiIcons.pencilOutline),
-                            hintText: "Write down your task"),
+                            prefixIcon: const Icon(MdiIcons.pencilOutline),*/
+                            labelText: strings.task_dialog_title),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: defaultPadding(context),
+                        right: defaultPadding(context),
+                        bottom: defaultPadding(context)),
+                    child: ShadowBox(
+                      child: TextField(
+                        controller: _taskDescriptionController,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 10,
+                        minLines: 4,
+                        decoration: InputDecoration(
+                            /*border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.transparent, width: 0),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            disabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.transparent, width: 0),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.transparent, width: 0),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: ThemeColors.green, width: 2),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            prefixIcon: const Icon(MdiIcons.pencilOutline),*/
+                            labelText: strings.task_dialog_description),
                       ),
                     ),
                   ),
@@ -163,7 +246,7 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                                 return _iconButton(
                                     MdiIcons.stopCircleOutline, stopPlaying);
                               }, onAudioRecorded: (uri) {
-                                _cubit.addAttachment(AudioAttachment(uri));
+                                _cubit!.addAttachment(AudioAttachment(uri));
                               }, loadingViewBuilder: () {
                                 return _iconButton(MdiIcons.microphoneOutline,
                                     () {
@@ -175,9 +258,9 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                               SizedBox(
                                 width: defaultPadding(context),
                               ),
-                              const Expanded(
+                              Expanded(
                                   child: Text(
-                                "Record an audio",
+                                strings.task_dialog_record_audio,
                                 overflow: TextOverflow.visible,
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ))
@@ -190,13 +273,13 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                               child: Row(
                             children: [
                               _iconButton(MdiIcons.cameraOutline,
-                                  () => _cubit.takePhoto(context)),
+                                  () => _cubit!.takePhoto(context)),
                               SizedBox(
                                 width: defaultPadding(context),
                               ),
-                              const Expanded(
+                              Expanded(
                                   child: Text(
-                                "Take a photo",
+                                strings.task_dialog_take_foto,
                                 overflow: TextOverflow.visible,
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ))
@@ -206,53 +289,61 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                       )),
                   Padding(
                       padding: EdgeInsets.all(defaultPadding(context)),
-                      child: _subtitle("Where is the task?")),
+                      child: _subtitle(strings.task_dialog_entity_choose)),
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: defaultPadding(context)),
                     child: ShadowBox(
-                      child: DropdownSearch<Entity>.multiSelection(
-                          searchDelay: const Duration(seconds: 0),
-                          onFind: _cubit.searchForEntities,
-                          popupOnItemAdded: (entitiesList, entity) =>
-                              _cubit.addEntity(entity),
-                          popupOnItemRemoved: (entitiesList, entity) =>
-                              _cubit.removeEntity(entity),
-                          mode: Mode.MENU,
-                          itemAsString: (entity) => entity!.name,
-                          isFilteredOnline: true,
-                          showSearchBox: true,
-                          compareFn: (e1, e2) {
-                            return e1 == e2;
-                          },
-                          searchFieldProps: TextFieldProps(
-                              decoration: const InputDecoration(
-                                  hintText: "Search here")),
-                          emptyBuilder: (context, sss) {
-                            return const Center(
-                              child: Text("No entities have been found"),
-                            );
-                          },
-                          loadingBuilder: (context, searchEntry) {
-                            return const Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            );
-                          },
-                          dropDownButton: const Icon(
-                            MdiIcons.accountSearch,
-                          ),
-                          items: [],
-                          dropdownSearchDecoration: const InputDecoration(
-                              hintText: "Add entity",
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 8)),
-                          onChanged: print,
-                          selectedItems: []),
+                      child: DropdownSearch<Entity>(
+                        selectedItem: _cubit!.state.entity,
+                        searchDelay: const Duration(seconds: 0),
+                        onFind: _cubit!.searchForEntities,
+                        mode: Mode.MENU,
+                        itemAsString: (entity) => entity!.name,
+                        isFilteredOnline: true,
+                        showSearchBox: true,
+                        compareFn: (e1, e2) {
+                          return e1?.id! == e2?.id!;
+                        },
+                        searchFieldProps: TextFieldProps(
+                            decoration: InputDecoration(
+                                hintText: strings.task_dialog_entity_search)),
+                        emptyBuilder: (context, sss) {
+                          return Center(
+                            child: Text(
+                                strings.task_dialog_entity_search_no_result),
+                          );
+                        },
+                        loadingBuilder: (context, searchEntry) {
+                          return const Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          );
+                        },
+                        dropDownButton: const Icon(
+                          MdiIcons.accountSearch,
+                        ),
+                        /*dropdownBuilder: (context, entity) {
+                          return entityRow(context, entity!);
+                        },*/
+                        showClearButton: true,
+                        items: [],
+                        dropdownSearchDecoration: InputDecoration(
+                            hintText: strings.task_dialog_entity_search_hint,
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 8)),
+                        onChanged: (e) {
+                          if (e != null) {
+                            _cubit!.updateEntity(e);
+                          } else {
+                            _cubit!.clearEntity();
+                          }
+                        },
+                      ),
                     ),
                   ),
                   Padding(
                       padding: EdgeInsets.all(defaultPadding(context)),
-                      child: _subtitle("When will you do it?")),
+                      child: _subtitle(strings.task_dialog_when)),
                   Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: defaultPadding(context)),
@@ -261,33 +352,33 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                         runSpacing: 7,
                         children: [
                           SmallButton(
-                            onPressed: () => _cubit.setDeadline(_now),
+                            onPressed: () => _cubit!.setDeadline(_now),
                             iconData: MdiIcons.circleMedium,
-                            text: "Today",
+                            text: strings.task_today,
                             selected: state.deadline != null &&
                                 areEqualStandardizedDates(
                                     state.deadline!, _now),
                           ),
                           SmallButton(
-                            onPressed: () => _cubit.setDeadline(_tomorrow),
+                            onPressed: () => _cubit!.setDeadline(_tomorrow),
                             iconData: MdiIcons.skipNextOutline,
-                            text: "Tomorrow",
+                            text: strings.task_tomorrow,
                             selected: state.deadline != null &&
                                 areEqualStandardizedDates(
                                     state.deadline!, _tomorrow),
                           ),
                           SmallButton(
-                            onPressed: () => _cubit.setDeadline(_nextWeek),
+                            onPressed: () => _cubit!.setDeadline(_nextWeek),
                             iconData: MdiIcons.skipForwardOutline,
-                            text: "Next week",
+                            text: strings.task_next_week,
                             selected: state.deadline != null &&
                                 areEqualStandardizedDates(
                                     state.deadline!, _nextWeek),
                           ),
                           SmallButton(
-                            onPressed: () => _cubit.setDeadline(_nextMonth),
+                            onPressed: () => _cubit!.setDeadline(_nextMonth),
                             iconData: MdiIcons.calendarRefreshOutline,
-                            text: "Next month",
+                            text: strings.task_next_month,
                             selected: state.deadline != null &&
                                 areEqualStandardizedDates(
                                     state.deadline!, _nextMonth),
@@ -298,7 +389,7 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                       padding: EdgeInsets.symmetric(
                           vertical: defaultPadding(context),
                           horizontal: 2.0 * defaultPadding(context)),
-                      child: const Text("or")),
+                      child: Text(strings.task_or)),
                   Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: defaultPadding(context)),
@@ -306,12 +397,14 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                         children: [
                           SmallButton(
                             onPressed: () =>
-                                _cubit.openCalendarToSetDeadline(context),
+                                _cubit!.openCalendarToSetDeadline(context),
                             iconData: MdiIcons.calendarOutline,
                             text: state.deadline != null &&
                                     _customDateSelected(state.deadline!)
-                                ? "Deadline: " + _formatDate(state.deadline!)
-                                : "Set a date",
+                                ? strings.task_deadline +
+                                    ": " +
+                                    _formatDate(state.deadline!)
+                                : strings.task_set_date,
                             outlinedWhenSelected: true,
                             keepClickable: true,
                             selected: state.deadline != null &&
@@ -321,37 +414,33 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                       )),
                   Padding(
                       padding: EdgeInsets.all(defaultPadding(context)),
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(ThemeColors.green),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                  const EdgeInsets.all(18)),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ))),
-                          onPressed: (state is TaskFormSavingInProgress)
-                              ? null
-                              : () {
-                                  BlocProvider.of<TaskFormCubit>(context)
-                                      .submit(
-                                          _taskTextController.text,
-                                          state.attachments,
-                                          state.entities,
-                                          state.deadline);
-                                },
-
-                          child: (state is TaskFormSavingInProgress)
-                              ? const SizedBox(
-                                  width: 17,
-                                  height: 17,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Text("Save task")))
+                      child: defaultGreenButton(
+                        context,
+                        (state is TaskFormSavingInProgress)
+                            ? () {}
+                            : () {
+                                BlocProvider.of<TaskFormCubit>(context).submit(
+                                  attachments: state.attachments,
+                                  entity: state.entity,
+                                  deadline: state.deadline,
+                                  task: state.task,
+                                  appliedIntervention:
+                                      state.appliedIntervention,
+                                  executedSurvey: state.executedSurvey,
+                                  taskBloc: state.taskBloc,
+                                  organizationViewBloc:
+                                      state.organizationViewBloc,
+                                  userBloc: state.userBloc,
+                                  text: _taskTextController.text,
+                                  description: _taskDescriptionController.text,
+                                );
+                              },
+                        minWidth: width(context) * .92,
+                        minHeight: width(context) * .12,
+                        text: task != null
+                            ? strings.task_update_task
+                            : strings.task_save_task,
+                      ))
                 ],
               ),
             ),

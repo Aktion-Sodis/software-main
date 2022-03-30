@@ -273,7 +273,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
       {required BuildContext context,
       required Question question,
       required Survey survey}) {
-    return ListView(
+    return Scrollbar(
+        child: ListView(
       shrinkWrap: true,
       children: [
         imageForQuestion(
@@ -337,14 +338,15 @@ class SurveyWidgetState extends State<SurveyWidget> {
                   ),
                 )),
       ],
-    );
+    ));
   }
 
   Widget scQuestionWidget(
       {required BuildContext context,
       required Question question,
       required Survey survey}) {
-    return ListView(
+    return Scrollbar(
+        child: ListView(
       shrinkWrap: true,
       children: [
         imageForQuestion(
@@ -411,14 +413,15 @@ class SurveyWidgetState extends State<SurveyWidget> {
                   },
                 ))
       ],
-    );
+    ));
   }
 
   Widget takeAudioQuestionWidget(
       {required BuildContext context,
       required Question question,
       required Survey survey}) {
-    return ListView(
+    return Scrollbar(
+        child: ListView(
       shrinkWrap: true,
       children: [
         imageForQuestion(
@@ -460,14 +463,15 @@ class SurveyWidgetState extends State<SurveyWidget> {
                     .appliedIntervention,
             executedSurveyId: preliminaryExecutedSurveyId),
       ],
-    );
+    ));
   }
 
   Widget takePhotoQuestionWidget(
       {required BuildContext context,
       required Question question,
       required Survey survey}) {
-    return ListView(
+    return Scrollbar(
+        child: ListView(
       shrinkWrap: true,
       children: [
         imageForQuestion(
@@ -510,14 +514,15 @@ class SurveyWidgetState extends State<SurveyWidget> {
                     .appliedIntervention,
             executedSurveyID: preliminaryExecutedSurveyId),
       ],
-    );
+    ));
   }
 
   Widget textQuestionWidget(
       {required BuildContext context,
       required Question question,
       required Survey survey}) {
-    return ListView(
+    return Scrollbar(
+        child: ListView(
       shrinkWrap: true,
       children: [
         imageForQuestion(
@@ -543,10 +548,56 @@ class SurveyWidgetState extends State<SurveyWidget> {
           ),
         ),
       ],
-    );
+    ));
   }
 
-  void _dismissSurvey() {}
+  void _dismissSurvey() async{
+    bool confirmation = await showDialog(context: context, builder: (context) => AlertDialog(
+        title: Text(abortSurvey, style: Theme.of(context).textTheme.bodyText1),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                  abortSurveyText
+              ),
+            ),
+            SizedBox(
+              height: defaultPadding(context),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MaterialButton(
+                    child: Padding(
+                      padding: EdgeInsets.all(defaultPadding(context)),
+                      child: Text(confirmAbort, style: Theme.of(context).textTheme.bodyText1,),
+                    ),
+                    onPressed: (){
+                      Navigator.of(context).pop(true);
+                    }),
+                MaterialButton(
+
+                    child: Padding(
+                      padding: EdgeInsets.all(defaultPadding(context)),
+                      child: Text(doNotAbort, style: Theme.of(context).textTheme.bodyText1,),
+                    ),
+                    onPressed: (){
+                      Navigator.of(context).pop(false);
+                    }),
+              ],
+            ),
+          ],
+        )
+    ));
+    if(confirmation){
+      BlocProvider.of<InAppBloc>(context).add(MainViewEvent());
+    }
+  }
+  void _leaveSurveyRegular() {
+    BlocProvider.of<InAppBloc>(context).add(MainViewEvent());
+  }
   void _goToInSurveyPage(Question targetQuestion) async {
     if (!questions.contains(targetQuestion)) {
       throw 'Question does not exist';
@@ -555,8 +606,6 @@ class SurveyWidgetState extends State<SurveyWidget> {
         duration: _pageSlideDuration, curve: _pageSlideCurve);
     _inSurveyPageController.jumpToPage(questions.indexOf(targetQuestion));
   }
-
-  void _leaveSurveyRegular() {}
 
   void _proceedToNextPage(Question currentQuestion) {
     if (questions.indexOf(currentQuestion) == questions.length - 1) {
@@ -957,9 +1006,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
       required Map<Question, QuestionAnswer> answers,
       required AppliedIntervention appliedIntervention,
       required String executedSurveyId,
-      required QuestionEditor? onEditGenerator,
-      required onDismiss,
-      required onProceed}) {
+        QuestionEditor? onEditGenerator,
+        onDismiss,
+       onProceed}) {
     return Column(
       children: [
         SizedBox(
@@ -991,7 +1040,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
           height: defaultPadding(context),
         ),
         Expanded(
-          child: ListView(
+          child: Scrollbar(
+              child: ListView(
             children: [
               SizedBox(
                 height: defaultPadding(context),
@@ -1008,9 +1058,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
                           ? onEditGenerator(survey.questions[index])
                           : null))
             ],
-          ),
+          )),
         ),
-        Padding(
+        if(!(onProceed==null&&onDismiss==null)) Padding(
           padding: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1022,7 +1072,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
             ],
           ),
         ),
-        SizedBox(
+        if(!(onProceed==null&&onDismiss==null)) SizedBox(
           height: defaultPadding(context),
         ),
       ],

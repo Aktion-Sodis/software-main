@@ -8,7 +8,6 @@ import 'dart:core';
 ///todo: when integrating into the app the method has to be tested
 ///this was not possible when creating the cluss due to a missing runnable environment
 
-
 ///enum of available paths to avoid errors due to wrong string spelling
 enum DataStorePaths {
   userPicPath,
@@ -75,7 +74,7 @@ final Map<DataStorePaths, dynamic> databaseOntologies = {
   },
   DataStorePaths.questionAudioAnswerPath: {
     "path":
-        "appliedInterventionFiles/appliedInterventionID/executedSurveyFiles/executedSurveyID/questionFiles/questionID/audio.mp3",
+        "appliedInterventionFiles/appliedInterventionID/executedSurveyFiles/executedSurveyID/questionFiles/questionID/audio.aac",
     "toBeReplaced": ["appliedInterventionID", "executedSurveyID", "questionID"],
   },
   DataStorePaths.appliedInterventionPicPath: {
@@ -87,12 +86,12 @@ final Map<DataStorePaths, dynamic> databaseOntologies = {
     "toBeReplaced": ["entityID"],
   },
   DataStorePaths.taskPicPath: {
-    "path": "taskFiles/taskID/pic.png",
-    "toBeReplaced": ["taskID"]
+    "path": "taskFiles/taskID/picID.png",
+    "toBeReplaced": ["taskID", "picID"]
   },
   DataStorePaths.taskAudioPath: {
-    "path": "taskFiles/taskID/audio.mp3",
-    "toBeReplaced": ["taskID"],
+    "path": "taskFiles/taskID/audioID.aac",
+    "toBeReplaced": ["taskID", "audioID"],
   },
 };
 
