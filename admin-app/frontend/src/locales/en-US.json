@@ -3,6 +3,7 @@
     "notYetImplemented": "This feature is yet to be implemented. Please ignore if you are on bug hunting! 🐞🔍"
   },
   "general": {
+    "update": "Update",
     "edit": "Edit",
     "searchBox": "Search anything",
     "cancel": "Cancel",

@@ -296,7 +296,6 @@ export default {
       abortCreateData: 'dataModal/abortCreateData',
       abortEditData: 'dataModal/abortEditData',
       editData: 'dataModal/editData',
-
       showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
     }),
     ...mapMutations({

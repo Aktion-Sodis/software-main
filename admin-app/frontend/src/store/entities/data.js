@@ -186,36 +186,36 @@ const entitiesData = {
           commit('setLoading', { newValue: false });
         });
     },
-    APIput: async ({ commit, dispatch }, entityDraft) => {
+    APIput: async ({ commit }, entityDraft) => {
       commit('setLoading', { newValue: true });
-
-      DataStore.save(
-        Entity.copyOf(entityDraft, (item) => {
-          item.name = entityDraft.name;
-          item.description = entityDraft.description;
-          item.appliedInterventions = entityDraft.appliedInterventions;
-          item.customData = entityDraft.customData;
-          item.location = entityDraft.location;
-          item.parentEntityID = entityDraft.parentEntityID;
-        }),
-      )
-        .then((putResponse) => {
-          commit('replaceEntity', putResponse);
-          dispatch(
-            'dataModal/readData',
-            {
-              dataId: putResponse.data.updateEntity.id,
-              dataType: dataTypesDict.entity,
-            },
-            {
-              root: true,
-            },
-          );
-          commit('setLoading', { newValue: false });
-        })
-        .catch(() => {
-          commit('setLoading', { newValue: false });
-        });
+      console.log(entityDraft);
+      // DataStore.save(
+      //   Entity.copyOf(entityDraft, (item) => {
+      //     item.name = entityDraft.name;
+      //     item.description = entityDraft.description;
+      //     item.appliedInterventions = entityDraft.appliedInterventions;
+      //     item.customData = entityDraft.customData;
+      //     item.location = entityDraft.location;
+      //     item.parentEntityID = entityDraft.parentEntityID;
+      //   }),
+      // )
+      //   .then((putResponse) => {
+      //     commit('replaceEntity', putResponse);
+      //     dispatch(
+      //       'dataModal/readData',
+      //       {
+      //         dataId: putResponse.data.updateEntity.id,
+      //         dataType: dataTypesDict.entity,
+      //       },
+      //       {
+      //         root: true,
+      //       },
+      //     );
+      //     commit('setLoading', { newValue: false });
+      //   })
+      //   .catch(() => {
+      //     commit('setLoading', { newValue: false });
+      //   });
     },
     APIdelete: async ({ commit, dispatch }, entityDraft) => {
       commit('setLoading', { newValue: true });

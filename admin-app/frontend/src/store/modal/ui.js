@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { API } from 'aws-amplify';
 import { dataTypesDict, modalModesDict } from '../constants';
 import { Level, Entity, Survey } from '../../models';
 
@@ -7,6 +8,7 @@ import { EmptyEntity } from '../entities/utils';
 import { emptyLevel } from '../levels/utils';
 import { EmptySurvey } from '../survey/utils';
 import { emptyIntervention } from '../classes';
+import * as mutations from '../../graphql/mutations';
 
 const dataModal = {
   namespaced: true,
@@ -146,6 +148,17 @@ const dataModal = {
       const data = rootGetters[`${dataType}_Data/${dataType}ById`]({ id: dataId });
       commit(`set${dataType}Draft`, data);
       // commit('setIsDisplayed', { newValue: true });
+    },
+    updateData: async ({ commit }, { data, dataType }) => {
+      console.log(data);
+      console.log(dataType);
+      commit('setMode', { newValue: modalModesDict.edit });
+      // rootGetters[`${dataType}_Data/APIput`]({ entityDraft: data });
+      const updateEntity = await API.graphql({
+        query: mutations.updateEntity,
+        variables: { input: data },
+      });
+      console.log(updateEntity);
     },
     abortEditData: async ({ commit }, { dataType }) => {
       commit(`reset${dataType}Draft`);
