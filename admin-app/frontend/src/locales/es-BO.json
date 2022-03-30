@@ -13,20 +13,19 @@
       "minCharNotMet": "Al menos {minChar} carácteres.",
       "required": "Necesario.",
       "unsavedChanges": "Hay cambios sin guardar. ¿Estás seguro de que quieres salir?",
-      "addInNewLocale": "En otra lengua",
-      "fallbackLocaleMustExistError": "When entering a text for any kind of data, it must always be given in the main locale ({fallbackLocale})."
+      "addInNewLocale": "En otra lengua"
     },
     "noTextProvided": "No text was provided.",
     "routes": {
-      "home": "Inicio",
-      "baseData": "Datos básicos",
-      "organizationStructure": "Estructura organizativa",
-      "interventions": "Intervenciones",
-      "login": "Iniciar sesión",
-      "completeUserInfo": "Complete la información del usuario",
-      "changePassword": "Cambiar mi contraseña",
-      "forgotPassword": "Olvidé mi contraseña",
-      "about": "Acerca de"
+      "Home": "Inicio",
+      "BaseData": "Datos básicos",
+      "OrganizationStructure": "Estructura organizativa",
+      "Interventions": "Intervenciones",
+      "Login": "Iniciar sesión",
+      "CompleteUserInfo": "Complete la información del usuario",
+      "ChangePassword": "Cambiar mi contraseña",
+      "ForgotPassword": "Olvidé mi contraseña",
+      "About": "Acerca de"
     },
     "errorCodes": {
       "InternalErrorException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6001",

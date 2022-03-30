@@ -13,20 +13,19 @@
       "minCharNotMet": "Minimum {minChar} characters.",
       "required": "Required.",
       "unsavedChanges": "There are unsaved changes. Are you sure you want to leave?",
-      "addInNewLocale": "In another language",
-      "fallbackLocaleMustExistError": "When entering a text for any kind of data, it must always be given in the main locale ({fallbackLocale})."
+      "addInNewLocale": "In another language"
     },
     "noTextProvided": "No text was provided.",
     "routes": {
-      "home": "Home",
-      "baseData": "Base data",
-      "organizationStructure": "Organization structure",
-      "interventions": "Interventions",
-      "login": "Login",
-      "completeUserInfo": "Complete user information",
-      "changePassword": "Change password",
-      "forgotPassword": "Forgot Password",
-      "about": "About"
+      "Home": "Home",
+      "BaseData": "Base data",
+      "OrganizationStructure": "Organization structure",
+      "Interventions": "Interventions",
+      "Login": "Login",
+      "CompleteUserInfo": "Complete user information",
+      "ChangePassword": "Change password",
+      "ForgotPassword": "Forgot password",
+      "About": "About"
     },
     "errorCodes": {
       "InternalErrorException": "An internal error has occurred. Please try again later. Error Code: 6001",

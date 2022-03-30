@@ -17,50 +17,17 @@
 
       <v-list nav dense class="mt-12">
         <v-list-item
-          :to="{ name: 'Home' }"
+          v-for="route in routes"
+          :to="{ name: route.name }"
           exact
-          :class="currentRouteName === 'Home' ? 'primary darken-4' : ''"
-          @click="showToBeImplementedFeedback"
+          :class="currentRouteName === route.name ? 'primary darken-4' : ''"
+          :key="route.name"
         >
           <v-list-item-icon>
-            <v-icon color="white">mdi-home-outline</v-icon>
+            <v-icon color="white"> {{ route.icon }} </v-icon>
           </v-list-item-icon>
           <v-list-item-title class="white--text text-body-1">
-            {{ $t('general.routes.home') }}
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item
-          :to="{ name: 'BaseData' }"
-          :class="currentRouteName === 'BaseData' ? 'primary darken-4' : ''"
-          @click="showToBeImplementedFeedback"
-        >
-          <v-list-item-icon>
-            <v-icon color="white">mdi-domain</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title class="white--text text-body-1">
-            {{ $t('general.routes.baseData') }}
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item
-          :to="{ name: 'OrganizationStructure' }"
-          :class="currentRouteName === 'OrganizationStructure' ? 'primary darken-4' : ''"
-        >
-          <v-list-item-icon>
-            <v-icon color="white">mdi-clipboard-text-outline</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title class="white--text text-body-1">
-            {{ $t('general.routes.organizationStructure') }}
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item
-          :to="{ name: 'Interventions' }"
-          :class="currentRouteName === 'Interventions' ? 'primary darken-4' : ''"
-        >
-          <v-list-item-icon>
-            <v-icon color="white">mdi-wrench-outline</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title class="white--text text-body-1">
-            {{ $t('general.routes.interventions') }}
+            {{ $t(`general.routes.${route.name}`) }}
           </v-list-item-title>
         </v-list-item>
       </v-list>
@@ -97,13 +64,24 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import SyncAction from './SyncAction.vue';
+import { routes } from '../../router';
 
 const societyName = process.env.VUE_APP_SOCIETY_VERBOSE_NAME;
 
 export default {
   components: { SyncAction },
   name: 'SideBar',
-  data: () => ({ societyName }),
+  data: () => ({
+    societyName,
+    routes: routes
+      .filter((r) => r.meta.onSideBar)
+      .map((r) => ({
+        name: r.name,
+        onSideBar: r.meta.onSideBar,
+        title: r.meta.title,
+        icon: r.meta.icon,
+      })),
+  }),
   computed: {
     ...mapGetters({
       isAuthenticated: 'auth/getIsAuthenticated',
