@@ -20,7 +20,7 @@ export const routes = [
   //   meta: {
   //     requiresAuth: true,
   //     shouldBeSynced: false,
-  //     title: i18n.t('general.routes.home'),
+  //     title: i18n.t('general.routes.Home'),
   //     onSideBar: false, // TODO: Will change in the future.
   //   },
   // },
@@ -31,7 +31,7 @@ export const routes = [
     meta: {
       requiresAuth: false,
       shouldBeSynced: false,
-      title: i18n.t('general.routes.login'),
+      title: i18n.t('general.routes.Login'),
       onSideBar: false,
     },
   },
@@ -42,7 +42,7 @@ export const routes = [
     meta: {
       requiresAuth: false,
       shouldBeSynced: false,
-      title: i18n.t('general.routes.completeUserInfo'),
+      title: i18n.t('general.routes.CompleteUserInfo'),
       onSideBar: false,
     },
   },
@@ -53,7 +53,7 @@ export const routes = [
     meta: {
       requiresAuth: false,
       shouldBeSynced: false,
-      title: i18n.t('general.routes.changePassword'),
+      title: i18n.t('general.routes.ChangePassword'),
       onSideBar: false,
     },
   },
@@ -64,7 +64,7 @@ export const routes = [
     meta: {
       requiresAuth: false,
       shouldBeSynced: false,
-      title: i18n.t('general.routes.forgotPassword'),
+      title: i18n.t('general.routes.ForgotPassword'),
       onSideBar: false,
     },
   },
@@ -75,7 +75,7 @@ export const routes = [
     meta: {
       requiresAuth: true,
       shouldBeSynced: true,
-      title: i18n.t('general.routes.organizationStructure'),
+      title: i18n.t('general.routes.OrganizationStructure'),
       onSideBar: true,
       icon: 'mdi-clipboard-text-outline',
     },
@@ -87,7 +87,7 @@ export const routes = [
   //   meta: {
   //     requiresAuth: true,
   //     shouldBeSynced: true,
-  //     title: i18n.t('general.routes.baseData'),
+  //     title: i18n.t('general.routes.BaseData'),
   //     onSideBar: false,
   //   },
   // },
@@ -98,7 +98,7 @@ export const routes = [
     meta: {
       requiresAuth: true,
       shouldBeSynced: true,
-      title: i18n.t('general.routes.interventions'),
+      title: i18n.t('general.routes.Interventions'),
       onSideBar: true,
       icon: 'mdi-wrench-outline',
     },
