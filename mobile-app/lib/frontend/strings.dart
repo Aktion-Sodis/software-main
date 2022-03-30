@@ -78,8 +78,36 @@ Map<String, dynamic> stringMap = {
     "profile": "Profile",
     "user_update": "Save changes",
     "your shot": "Your shot:",
+    "accepted": "Accepted",
+    "restricted": "Restricted",
+    "required": "Required",
+    "accept_permissions": "Accept permissions",
+    "accept_all_permissions": "Accept all permissions",
+    "open_settings": "Open settings",
+    "abbrechen": "Abbrechen",
+    "restricted_permissions_warning":
+        "Some of the permissions can be accepted only in the settings. Please, open the settings and accept all the permissions."
   }
 };
+
+String get accepted => stringMap[currentLanguage]["accepted"];
+
+String get abbrechen => stringMap[currentLanguage]["abbrechen"];
+
+String get restricted => stringMap[currentLanguage]["restricted"];
+
+String get required => stringMap[currentLanguage]["required"];
+
+String get accept_permissions =>
+    stringMap[currentLanguage]["accept_permissions"];
+
+String get accept_all_permissions =>
+    stringMap[currentLanguage]["accept_all_permissions"];
+
+String get open_settings => stringMap[currentLanguage]["open_settings"];
+
+String get restricted_permissions_warning =>
+    stringMap[currentLanguage]["restricted_permissions_warning"];
 
 String get user_update => stringMap[currentLanguage]["user_update"];
 
