@@ -121,27 +121,24 @@
                     </v-tooltip>
                   </div>
 
-                  <v-select
-                    v-model="type"
-                    class="mt-6"
-                    outlined
-                    dense
-                    :items="Object.keys(InterventionType)"
-                    v-else
-                  >
-                    <template v-slot:selection="data">
-                      <v-icon>
-                        {{
-                          data.item === InterventionType.TECHNOLOGY
-                            ? 'mdi-hammer-wrench'
-                            : 'mdi-school'
-                        }}
-                      </v-icon>
-                    </template>
-                    <template v-slot:item="data">
-                      {{ $t(`interventions.type.types.${data.item}`) }}
-                    </template>
-                  </v-select>
+                  <v-btn-toggle v-else v-model="typeIndex" mandatory class="ml-2">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn v-bind="attrs" v-on="on">
+                          <v-icon>mdi-hammer-wrench</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ $t('interventions.type.types.TECHNOLOGY') }}</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn v-bind="attrs" v-on="on">
+                          <v-icon>mdi-school</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ $t('interventions.type.types.EDUCATION') }}</span>
+                    </v-tooltip>
+                  </v-btn-toggle>
                 </v-card-title>
 
                 <v-card-title class="pt-0 pt-sm-2">
@@ -373,7 +370,8 @@ export default {
         languageKeys: this.$i18n.availableLocales,
         languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
       }),
-      type: InterventionType.TECHNOLOGY,
+      typeIndex: 0,
+      types: [InterventionType.TECHNOLOGY, InterventionType.EDUCATION],
       description: new I18nString({
         languageKeys: this.$i18n.availableLocales,
         languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
@@ -440,6 +438,9 @@ export default {
     },
     read() {
       return this.dataModalMode === modalModesDict.read;
+    },
+    type() {
+      return this.types[this.typeIndex];
     },
   },
   methods: {
