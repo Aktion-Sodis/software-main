@@ -1,6 +1,8 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:mobile_app/backend/callableModels/Content.dart';
 import 'package:mobile_app/backend/repositories/InterventionRepository.dart';
+import 'package:mobile_app/backend/storage/dataStorePaths.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class ContentRepository {
@@ -46,14 +48,14 @@ class ContentRepository {
     return toReturn;
   }
 
-  static String getContentFilePath(Content content) {
-    return "assets/test/whitepaper.pdf";
-    //todo: implement for doc
-    return "";
+  static SyncedFile getContentPDFFile(Content content) {
+    String path = dataStorePath(DataStorePaths.docPdfPath, [content.id!]);
+    print("synced pdf file called for path: $path");
+    return SyncedFile(path);
   }
 
-  static String getIconFilePath(Content content) {
-    //todo: implement for pic
-    return "";
+  static SyncedFile getContentPic(Content content) {
+    String path = dataStorePath(DataStorePaths.docPicPath, [content.id!]);
+    return SyncedFile(path);
   }
 }

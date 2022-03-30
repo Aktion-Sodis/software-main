@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_bloc.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_events.dart';
@@ -11,11 +13,14 @@ import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_events.dart';
 import 'package:mobile_app/backend/Blocs/user/user_state.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
+import 'package:mobile_app/backend/repositories/UserRepository.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/frontend/common_widgets.dart';
 
 import 'package:mobile_app/frontend/components/buttons.dart';
 
 import 'package:mobile_app/frontend/strings.dart' as strings;
+import 'package:mobile_app/services/photo_capturing.dart';
 
 import '../dependentsizes.dart';
 
@@ -35,6 +40,8 @@ class UserDataViewState extends State<UserDataView> {
   late TextEditingController textEdigtingControllerFirstName;
   late TextEditingController textEditingControllerLastName;
   final _formKey = GlobalKey<FormState>();
+  SyncedFile? userPicSynced;
+  File? userPicFile;
 
   @override
   void initState() {
@@ -45,11 +52,24 @@ class UserDataViewState extends State<UserDataView> {
           widget.userBloc.state.user!.firstName;
       textEditingControllerLastName.text = widget.userBloc.state.user!.lastName;
     }
+    widget.userBloc.userRepository.getUserById(widget.userBloc.userID).then((user)async{
+      if(user!=null){
+        userPicSynced = UserRepository.getUserPicFile(user);
+        userPicFile = await userPicSynced?.file();
+      }
+    });
     super.initState();
   }
 
   void updatePic() async {
-    //todo: implement
+    XFile? r = await CameraFunctionality.takePicture(context: context);
+    if(r!=null){
+    await userPicSynced?.updateAsPic(r);
+    userPicFile = await userPicSynced?.file();
+    setState(() {
+
+    });
+    }
   }
 
   @override
@@ -147,12 +167,11 @@ class UserDataViewState extends State<UserDataView> {
                                       child: Container(
                                           width: width(context) * .45,
                                           height: width(context) * .45,
-                                          decoration: state.userPic != null
+                                          decoration: userPicFile != null
                                               ? BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   image: DecorationImage(
-                                                      image: FileImage(
-                                                          state.userPic!),
+                                                      image: FileImage(userPicFile!),
                                                       fit: BoxFit.fitWidth))
                                               : const BoxDecoration(
                                                   shape: BoxShape.circle,

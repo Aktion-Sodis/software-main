@@ -34,10 +34,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       // Form submitted
     } else if (event is InitializeUserEvent) {
       ///initialize user without saving to db anything
-      emit(state.copyWith(user: event.user, userPic: event.userPic));
-    } else if (event is UpdatePicUserEvent) {
-      emit(state.copyWith(userPic: event.userPic));
-      userRepository.updateUserPic(event.userPic, userID);
+      emit(state.copyWith(user: event.user));
     } else if (event is LogOutUserEvent) {
       emit(UserState());
     }

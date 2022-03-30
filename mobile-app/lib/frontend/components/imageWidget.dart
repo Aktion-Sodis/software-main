@@ -2,19 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/frontend/components/loadingsign.dart';
 
 class ImageWidget extends StatefulWidget {
-  final String path;
-  final File? imageFile;
+  final SyncedFile? imageFile;
   final BoxConstraints? boxConstraints;
   final double? width;
   final double? height;
   final BorderRadius? borderRadius;
 
-  ImageWidget(
-      {required this.path,
-      this.imageFile,
+  const ImageWidget(
+      {required this.imageFile,
       this.boxConstraints,
       this.width,
       this.height,
@@ -30,26 +29,19 @@ class ImageWidgetState extends State<ImageWidget> {
   bool loading = true;
   File? imageFile;
 
-  Future<File?> fileFromPath(String path) async {
-    //todo: implement
-    return null;
-  }
-
   @override
   void initState() {
-    if (widget.imageFile != null) {
-      imageFile = widget.imageFile;
-      loading = false;
-    }
-    super.initState();
-    if (widget.imageFile == null) {
-      fileFromPath(widget.path).then((value) {
+    widget.imageFile?.file().then((value) {
+      if (mounted) {
         setState(() {
           imageFile = value;
           loading = false;
         });
-      });
-    }
+      } else {
+        imageFile = value;
+        loading = false;
+      }
+    });
   }
 
   @override
@@ -72,5 +64,36 @@ class ImageWidgetState extends State<ImageWidget> {
             color: Colors.grey,
             borderRadius: widget.borderRadius),
         child: loading ? Center(child: loadingSign(context)) : Container());
+  }
+}
+
+class ImageFromSyncedFile extends StatefulWidget {
+  final SyncedFile? syncedFile;
+
+  const ImageFromSyncedFile({Key? key, this.syncedFile}) : super(key: key);
+
+  @override
+  State<ImageFromSyncedFile> createState() => _ImageFromSyncedFileState();
+}
+
+class _ImageFromSyncedFileState extends State<ImageFromSyncedFile> {
+  File? imageFile;
+
+  @override
+  void initState() {
+    widget.syncedFile?.file().then((value) {
+      if (mounted) {
+        setState(() {
+          imageFile = value;
+        });
+      } else {
+        imageFile = value;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return imageFile == null ? Container() : Image.file(imageFile!);
   }
 }

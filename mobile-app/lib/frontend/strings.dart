@@ -76,9 +76,67 @@ Map<String, dynamic> stringMap = {
     "days": "days",
     "tasks_more_behind": "More behind",
     "profile": "Profile",
-    "user_update": "Save changes"
+    "user_update": "Save changes",
+    "abort_survey": "Abort survey?",
+    "abort_survey_warn": "You wont be able to proceed later and will have to start again",
+    "confirm_abort": "Abort",
+    "do_not_abort": "Continue",
+    "your shot": "Your shot:",
+    "task_dialog_what_task": "What need's to be done?",
+    "task_dialog_title": "Short summary",
+    "task_dialog_description": "Further description",
+    "task_dialog_record_audio": "Record audio",
+    "task_dialog_take_foto": "Take a foto",
+    "task_dialog_entity_choose": "For whom is the task?",
+    "task_dialog_entity_search": "Enter a name",
+    "task_dialog_entity_search_no_result": "No results found",
+    "task_dialog_entity_search_hint": "Select entity",
+    "task_dialog_when": "When will you do it?",
+    "task_today": "Today",
+    "task_tomorrow": "Tomorrow",
+    "task_next_week": "Next week",
+    "task_next_month": "Next month",
+    "task_or": "Or",
+    "task_deadline": "Due",
+    "task_set_date": "Set a date",
+    "task_save_task": "Save Task",
+    "task_update_task": "Update Task",
+    "task_create_title": "Create Task",
+    "task_update_title": "Update Task",
+    "task_later_in_future": "Later"
   }
 };
+String get task_later_in_future =>
+    stringMap[currentLanguage]["task_later_in_future"];
+String get task_dialog_what_task =>
+    stringMap[currentLanguage]["task_dialog_what_task"];
+String get task_dialog_title => stringMap[currentLanguage]["task_dialog_title"];
+String get task_dialog_description =>
+    stringMap[currentLanguage]["task_dialog_description"];
+String get task_dialog_record_audio =>
+    stringMap[currentLanguage]["task_dialog_record_audio"];
+String get task_dialog_take_foto =>
+    stringMap[currentLanguage]["task_dialog_take_foto"];
+String get task_dialog_entity_choose =>
+    stringMap[currentLanguage]["task_dialog_entity_choose"];
+String get task_dialog_entity_search =>
+    stringMap[currentLanguage]["task_dialog_entity_search"];
+String get task_dialog_entity_search_no_result =>
+    stringMap[currentLanguage]["task_dialog_entity_search_no_result"];
+String get task_dialog_entity_search_hint =>
+    stringMap[currentLanguage]["task_dialog_entity_search_hint"];
+String get task_dialog_when => stringMap[currentLanguage]["task_dialog_when"];
+String get task_today => stringMap[currentLanguage]["task_today"];
+String get task_tomorrow => stringMap[currentLanguage]["task_tomorrow"];
+String get task_next_week => stringMap[currentLanguage]["task_next_week"];
+String get task_next_month => stringMap[currentLanguage]["task_next_month"];
+String get task_or => stringMap[currentLanguage]["task_or"];
+String get task_deadline => stringMap[currentLanguage]["task_deadline"];
+String get task_set_date => stringMap[currentLanguage]["task_set_date"];
+String get task_save_task => stringMap[currentLanguage]["task_save_task"];
+String get task_update_task => stringMap[currentLanguage]["task_update_task"];
+String get task_create_title => stringMap[currentLanguage]["task_create_title"];
+String get task_update_title => stringMap[currentLanguage]["task_update_title"];
 
 String get user_update => stringMap[currentLanguage]["user_update"];
 
@@ -225,3 +283,9 @@ String get textFieldTypeDescription =>
 String get summary => stringMap[currentLanguage]["summary"];
 String get endSurvey => stringMap[currentLanguage]["end_survey"];
 String get savedSurvey => stringMap[currentLanguage]["saved_survey"];
+
+String get abortSurvey  => stringMap[currentLanguage]["abort_survey"];
+String get abortSurveyText  => stringMap[currentLanguage]["abort_survey_warn"];
+String get confirmAbort  => stringMap[currentLanguage]["confirm_abort"];
+String get doNotAbort  => stringMap[currentLanguage]["do_not_abort"];
+String get yourShot => stringMap[currentLanguage]["your shot"];

@@ -2,6 +2,8 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/repositories/ExecutedSurveyRepository.dart';
 import 'package:mobile_app/backend/repositories/InterventionRepository.dart';
+import 'package:mobile_app/backend/storage/dataStorePaths.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'UserRepository.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
@@ -87,5 +89,13 @@ class AppliedInterventionRepository {
           (index) => _populate(appliedInterventions[index])));
 
   //todo: implement pic logic
+
   static String getFotoPath(AppliedIntervention appliedIntervention) => "";
+
+  static SyncedFile appliedInterventionPic(
+      AppliedIntervention appliedIntervention) {
+    String path = dataStorePath(
+        DataStorePaths.appliedInterventionPicPath, [appliedIntervention.id!]);
+    return SyncedFile(path);
+  }
 }

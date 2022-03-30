@@ -7,6 +7,7 @@ import 'package:mobile_app/backend/Blocs/content/content_events.dart';
 import 'package:mobile_app/backend/Blocs/content/content_state.dart';
 import 'package:mobile_app/backend/callableModels/Content.dart';
 import 'package:mobile_app/backend/repositories/ContentRepository.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/frontend/components/loadingsign.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
 import 'package:mobile_app/frontend/pages/main_menu_components/main_menu_app_bar.dart';
@@ -43,26 +44,23 @@ class MainMenuWiki extends StatelessWidget {
                     height: 1,
                     color: Colors.grey),
                 Expanded(
-                    child: ListView.builder(
-                        itemCount: loadedContentState.contentsToDisplay.length,
-                        itemBuilder: (context, index) => contentRow(context,
-                                loadedContentState.contentsToDisplay[index],
-                                () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => PDFViewWidget(
-                                        content: loadedContentState
-                                            .contentsToDisplay[index],
-                                        path: ContentRepository
-                                            .getContentFilePath(
-                                                loadedContentState
-                                                    .contentsToDisplay[index]),
-                                        isAsset: true,
-                                      )));
-                            },
-                                separator: index !=
-                                    (loadedContentState
-                                            .contentsToDisplay.length -
-                                        1))))
+                    child: Scrollbar(
+                        child: ListView.builder(
+                            itemCount:
+                                loadedContentState.contentsToDisplay.length,
+                            itemBuilder: (context, index) => contentRow(context,
+                                    loadedContentState.contentsToDisplay[index],
+                                    () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => PDFViewWidget(
+                                            content: loadedContentState
+                                                .contentsToDisplay[index],
+                                          )));
+                                },
+                                    separator: index !=
+                                        (loadedContentState
+                                                .contentsToDisplay.length -
+                                            1)))))
               ],
             );
           } else {
@@ -75,15 +73,8 @@ class MainMenuWiki extends StatelessWidget {
 }
 
 class PDFViewWidget extends StatefulWidget {
-  PDFViewWidget(
-      {Key? key,
-      required this.path,
-      this.isAsset = false,
-      required this.content})
-      : super(key: key);
+  PDFViewWidget({Key? key, required this.content}) : super(key: key);
   Content content;
-  final String path;
-  final bool isAsset;
 
   @override
   State<StatefulWidget> createState() {
@@ -92,19 +83,29 @@ class PDFViewWidget extends StatefulWidget {
 }
 
 class PDFViewWidgetState extends State<PDFViewWidget> {
+  late final SyncedFile syncedFile;
+
   @override
   void initState() {
-    if (widget.isAsset) {
-      print("widget path: ${widget.path}");
-      pdfFuture = PDFDocument.fromAsset(widget.path);
-    } else {
-      //todo: implement sync
-      pdfFuture = PDFDocument.fromFile(File(widget.path));
-    }
+    syncedFile = ContentRepository.getContentPDFFile(widget.content);
+    print("asked for synced file");
+    pdfFuture = getPDF();
+    print("init state completed");
     super.initState();
   }
 
-  late Future<PDFDocument> pdfFuture;
+  Future<PDFDocument?> getPDF() async {
+    print("NOW CALLING SYNCED FILE .FILE()");
+    File? file = await syncedFile.file();
+    print("synced file gotten");
+    if (file != null) {
+      return PDFDocument.fromFile(file);
+    } else {
+      return null;
+    }
+  }
+
+  late Future<PDFDocument?> pdfFuture;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +114,7 @@ class PDFViewWidgetState extends State<PDFViewWidget> {
             child: Column(children: [
       MainMenuAppBar(context, () {}, widget.content.name, showBackButton: true),
       Expanded(
-          child: FutureBuilder<PDFDocument>(
+          child: FutureBuilder<PDFDocument?>(
               future: pdfFuture,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {

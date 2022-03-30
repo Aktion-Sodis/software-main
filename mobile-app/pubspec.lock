@@ -78,6 +78,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.0-rc.1"
+  amplify_storage_s3:
+    dependency: "direct main"
+    description:
+      name: amplify_storage_s3
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0-rc.1"
   async:
     dependency: transitive
     description:
@@ -155,6 +162,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  dropdown_search:
+    dependency: "direct main"
+    description:
+      name: dropdown_search
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -195,6 +209,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.0"
+  flutter_datetime_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_datetime_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.5.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -504,6 +525,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  string_similarity:
+    dependency: "direct main"
+    description:
+      name: string_similarity
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   synchronized:
     dependency: transitive
     description:

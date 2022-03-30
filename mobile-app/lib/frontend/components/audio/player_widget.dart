@@ -17,13 +17,15 @@ class PlayerWidget extends AudioStatefulWidget {
       required this.audioURL,
       required this.restingViewBuilder,
       required this.loadingViewBuilder,
-      required this.recordingViewBuilder})
+      required this.playingViewBuilder,
+      this.onStatusChange})
       : super(key: key, audio: audio);
 
+  final Function(bool playing)? onStatusChange;
   final String audioURL;
-  final Widget Function(Function()? startPlaying) restingViewBuilder;
+  final Widget Function(Function() startPlaying) restingViewBuilder;
   final Widget Function() loadingViewBuilder;
-  final Widget Function(Function() stopPlaying) recordingViewBuilder;
+  final Widget Function(Function() stopPlaying) playingViewBuilder;
 
   @override
   State<PlayerWidget> createState() => _PlayerWidgetState();
@@ -38,10 +40,12 @@ class _PlayerWidgetState extends AudioStatefulWidgetState<PlayerWidget> {
         _playing = true;
       });
     }
+    if (widget.onStatusChange != null) widget.onStatusChange!(true);
 
-    widget.audio.player.startPlayer(
+    widget.audio.startPlayer(
         fromURI: widget.audioURL,
         whenFinished: () {
+          if (widget.onStatusChange != null) widget.onStatusChange!(false);
           // Refresh UI
           if (mounted) {
             setState(() {
@@ -52,19 +56,20 @@ class _PlayerWidgetState extends AudioStatefulWidgetState<PlayerWidget> {
   }
 
   void _stopPlaying() {
+    if (widget.onStatusChange != null) widget.onStatusChange!(false);
     if (mounted) {
       setState(() {
         _playing = false;
       });
     }
 
-    widget.audio.player.stopPlayer();
+    widget.audio.stopPlayer();
   }
 
   @override
   Widget build(BuildContext context) {
     if (_playing) {
-      return widget.recordingViewBuilder(_stopPlaying);
+      return widget.playingViewBuilder(_stopPlaying);
     } else {
       if (widget.audio.sessionOpened) {
         return widget.restingViewBuilder(_startPlaying);

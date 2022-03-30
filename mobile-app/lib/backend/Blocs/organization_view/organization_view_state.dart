@@ -1,4 +1,5 @@
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
+import 'package:string_similarity/string_similarity.dart';
 
 class OrganizationViewState {}
 
@@ -17,6 +18,25 @@ class EntitiesLoadedOrganizationViewState extends OrganizationViewState {
   List<Entity> entitiesByParentID(String? id) {
     return List.from(
         allEntities.where((element) => element.parentEntityID == id));
+  }
+
+  List<Entity> entitiesByName(String query) {
+    List<Entity> toSort = List.from(allEntities);
+    toSort.sort((a, b) {
+      double aEqualness = StringSimilarity.compareTwoStrings(a.name, query);
+      double bEqualness = StringSimilarity.compareTwoStrings(b.name, query);
+      if (aEqualness == bEqualness) {
+        return 0;
+      } else if (aEqualness > bEqualness) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+    if (toSort.length > 5) {
+      return toSort.sublist(0, 5);
+    }
+    return toSort;
   }
 
   bool hasChildren(String entityID) =>

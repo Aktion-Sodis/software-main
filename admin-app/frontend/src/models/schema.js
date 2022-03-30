@@ -1774,7 +1774,7 @@ export const schema = {
                     "name": "languageTexts",
                     "isArray": true,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "isArrayNullable": false
                 }
@@ -2120,5 +2120,5 @@ export const schema = {
             }
         }
     },
-    "version": "0dfb644911edae5a7f8ee8ff051f9b6b"
+    "version": "76f4bf4d34435dcdab0d95fc5ab09b5e"
 };
