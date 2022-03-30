@@ -403,12 +403,8 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
     }
   }
 
-
-  
   SyncedFile? getEntityPic() {
     if (entity != null) {
-
-      
       return EntityRepository.getEntityPic(entity!);
     }
     if (preliminaryEntityId != null) {
@@ -417,10 +413,8 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
     return null;
   }
 
-
   void setStateIfMounted(Function function) {
     if (mounted) {
-
       setState(() {
         function();
       });
@@ -1267,10 +1261,8 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
     }
   }
 
-
   void setStateIfMounted(Function function) {
     if (mounted) {
-
       setState(() {
         function();
       });
@@ -1291,7 +1283,7 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
           imageFile = value;
           loaded = true;
         });
-
+      });
     }
     super.initState();
     if (widget.appliedIntervention == null) {
@@ -1477,9 +1469,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
   }
 
   Widget listItem(BuildContext buildContext, int i) {
-
     return surveyRow(context, currentlyDisplayedSurveys[i]["survey"],
-
         image: SyncedFile(SurveyRepository.getIconFilePath(
             currentlyDisplayedSurveys[i]["survey"])),
         pressable: true, onPressed: () {
@@ -1542,11 +1532,12 @@ class ExecutedSurveyWidget extends StatelessWidget {
   Map<Question, QuestionAnswer> mappedAnswers = {};
   final AppliedIntervention appliedIntervention;
 
-  ExecutedSurveyWidget(this.executedSurvey, this.appliedIntervention){
-    for(Question question in executedSurvey.survey.questions){
-      var answers = executedSurvey.answers.where((element) => element.questionID == question.id);
-      QuestionAnswer? answer = answers.length>0?answers.first:null;
-      if(answer!=null){
+  ExecutedSurveyWidget(this.executedSurvey, this.appliedIntervention) {
+    for (Question question in executedSurvey.survey.questions) {
+      var answers = executedSurvey.answers
+          .where((element) => element.questionID == question.id);
+      QuestionAnswer? answer = answers.length > 0 ? answers.first : null;
+      if (answer != null) {
         mappedAnswers[question] = answer;
       }
     }
@@ -1554,7 +1545,6 @@ class ExecutedSurveyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return surveyarea.SurveyWidgetState.summaryWidget(
       survey: executedSurvey.survey,
       appliedIntervention: appliedIntervention,
@@ -1562,6 +1552,5 @@ class ExecutedSurveyWidget extends StatelessWidget {
       answers: mappedAnswers,
       context: context,
     );
-
   }
 }
