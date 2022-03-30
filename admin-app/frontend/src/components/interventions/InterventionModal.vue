@@ -175,7 +175,7 @@
                   v-else
                   v-model="tagIds"
                   :items="allInterventionTags"
-                  item-value="tagId"
+                  item-value="id"
                   deletable-chips
                   chips
                   dense
@@ -198,6 +198,8 @@
                     }}
                   </template>
                 </v-select>
+
+                {{ tagIds }}
 
                 <v-card-title>
                   {{ $t('baseData.documents') }}
