@@ -182,7 +182,7 @@
                   </div>
                 </div>
 
-                <div class="d-flex justify-center">
+                <div class="d-flex justify-center" v-if="maxNOptionsAchieved">
                   <v-btn
                     v-if="edit || create"
                     color="primary"
@@ -272,6 +272,7 @@ import { modalModesDict, questionTypesDict } from '../../../store/constants';
 import { EmptyQuestion, EmptyAnswer, Answer } from '../../../store/questions/utils';
 
 const questionTextMaxChar = Math.max(parseInt(process.env.VUE_APP_QUESTION_TEXT_MAX_CHAR, 10), 0);
+const maxNAnswers = Math.min(Number(process.env.VUE_APP_MAX_N_QUESTION_OPTIONS), 0);
 
 export default {
   name: 'SurveyModalQuestion',
@@ -374,7 +375,8 @@ export default {
       return this.read || !this.areThereChanges;
     },
     areAnswersNeeded() {
-      return this.questionType === 'singleChoice' || this.questionType === 'multipleChoice';
+    maxNOptionsAchieved() {
+      return this.options.length >= maxNAnswers;
     },
   },
   methods: {
