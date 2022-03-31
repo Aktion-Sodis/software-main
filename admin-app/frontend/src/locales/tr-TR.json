@@ -221,10 +221,10 @@
           "answer": {
             "title": "Yanıt",
             "typeLabel": "Soru tipi",
-            "answer": "Yanıt",
-            "textLabel": "Yanıt metni",
-            "addImage": "Yanıta resim ekle",
-            "addAnswer": "Yanıt ekle",
+            "answer": "Seçenek",
+            "textLabel": "Seçenek metni",
+            "addImage": "Seçeneğe resim ekle",
+            "addAnswer": "Seçenek ekle",
             "questionTypes": {
               "TEXT": "Metin",
               "SINGLECHOICE": "Çoktan tek seçmeli",

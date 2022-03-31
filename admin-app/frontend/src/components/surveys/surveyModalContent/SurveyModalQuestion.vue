@@ -148,14 +148,14 @@
               <v-divider class="mb-4"></v-divider>
 
               <div v-if="areAnswersNeeded">
-                <div v-for="(answer, index) in options" :key="index">
+                <div v-for="(option, index) in options" :key="index">
                   <h3>
                     {{ $t('surveys.modal.questionCard.form.answer.answer') }}
                     {{ index + 1 }}
                   </h3>
                   <div class="d-flex justify-space-between">
                     <v-text-field
-                      @input="(e) => answerUpdatedHandler(e, index)"
+                      @input="(e) => optionUpdatedHandler(e, index)"
                       :label="$t('surveys.modal.questionCard.form.answer.textLabel')"
                       outlined
                       dense
@@ -169,7 +169,7 @@
                         color="primary"
                         rounded
                         outlined
-                        @click="clickOnAddImgToAnswer"
+                        @click="clickOnAddImgToOption"
                         class="ml-2"
                       >
                         <v-icon class="mr-2"> mdi-image </v-icon>
@@ -181,15 +181,15 @@
                         v-if="edit || create"
                         type="file"
                         accept="image/png, image/jpeg"
-                        :ref="`answer-img-upload`"
+                        :ref="`option-img-upload`"
                         style="display: none"
                       />
                       <v-btn
-                        v-if="edit || create"
+                        v-if="(edit || create) && options.length > 2"
                         color="primary"
                         outlined
                         icon
-                        @click="clickOnRemoveAnswer(index)"
+                        @click="clickOnRemoveOption(index)"
                         class="ml-2"
                       >
                         <v-icon> mdi-minus </v-icon>
@@ -205,7 +205,7 @@
                     rounded
                     x-large
                     class="mt-2"
-                    @click="clickOnAddAnswer"
+                    @click="clickOnAddOption"
                   >
                     <v-icon class="mr-2"> mdi-plus </v-icon>
                     <span class="overflow-hidden">
@@ -290,7 +290,7 @@ import { compareI18nStrings } from '../../../store/utils';
 import LocaleTextBox from '../../global/LocaleTextBox.vue';
 
 const questionTextMaxChar = Math.max(parseInt(process.env.VUE_APP_QUESTION_TEXT_MAX_CHAR, 10), 0);
-const maxNAnswers = Math.min(Number(process.env.VUE_APP_MAX_N_QUESTION_OPTIONS), 0);
+const maxNOptions = Math.min(Number(process.env.VUE_APP_MAX_N_QUESTION_OPTIONS), 0);
 
 export default {
   name: 'SurveyModalQuestion',
@@ -403,7 +403,7 @@ export default {
       return this.type === QuestionType.SINGLECHOICE || this.type === QuestionType.MULTIPLECHOICE;
     },
     maxNOptionsAchieved() {
-      return this.options.length >= maxNAnswers;
+      return this.options.length >= maxNOptions;
     },
   },
   methods: {
@@ -455,11 +455,11 @@ export default {
       // if (optionsCurrentDraft[0].isEmptyAnswer) return;
 
       for (let index = 0; index < optionsCurrentDraft.length; index += 1) {
-        const newAnswer = new QuestionOption({
+        const newOption = new QuestionOption({
           text: optionsCurrentDraft[index].text,
           followUpQuestionID: null,
         });
-        this.options.splice(index, 1, newAnswer);
+        this.options.splice(index, 1, newOption);
       }
     },
     saveQuestion() {
@@ -492,17 +492,17 @@ export default {
       this.showToBeImplementedFeedback();
       // console.log('TODO: do something with', audioInput);
     },
-    clickOnAddAnswer() {
+    clickOnAddOption() {
       this.options.push(emptyQuestionOption());
     },
-    clickOnAddImgToAnswer() {
-      const imgInput = this.$refs['answer-img-upload'];
+    clickOnAddImgToOption() {
+      const imgInput = this.$refs['option-img-upload'];
       if (Array.isArray(imgInput)) imgInput[0].click();
       else imgInput.click();
       this.showToBeImplementedFeedback();
-      // console.log('TODO: handle adding image to answer');
+      // console.log('TODO: handle adding image to option');
     },
-    clickOnRemoveAnswer(index) {
+    clickOnRemoveOption(index) {
       this.options.splice(index, 1);
     },
     nextQuestion() {
@@ -532,7 +532,7 @@ export default {
     questionUpdatedHandler(res) {
       this.text = res;
     },
-    answerUpdatedHandler(value, index) {
+    optionUpdatedHandler(value, index) {
       const languageTexts = Array(this.$i18n.availableLocales.length).fill('');
       languageTexts[this.fallbackLocaleIndex] = value;
       this.options[index] = new QuestionOption({

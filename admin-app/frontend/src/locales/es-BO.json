@@ -221,10 +221,10 @@
           "answer": {
             "title": "Pregunta",
             "typeLabel": "Tipo de pregunta",
-            "answer": "Respuesta",
-            "textLabel": "Texto respuesta",
-            "addImage": "Añadir imágen a la respuresta",
-            "addAnswer": "Añadir respuesta",
+            "answer": "Opción",
+            "textLabel": "Texto Opción",
+            "addImage": "Añadir imágen a la opción",
+            "addAnswer": "Añadir Opción",
             "questionTypes": {
               "TEXT": "Texto",
               "SINGLECHOICE": "Elección única",
