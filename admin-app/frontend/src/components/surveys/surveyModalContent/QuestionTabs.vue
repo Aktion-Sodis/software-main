@@ -63,13 +63,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      questions: 'QUESTION_UI/questionWithAnswersDrafts',
+      questions: 'QUESTION_UI/questionWithOptionDrafts',
       iQuestions: 'QUESTION_UI/getIQuestions',
       nQuestions: 'QUESTION_UI/nQuestions',
     }),
     questions: {
       get() {
-        return this.$store.getters['QUESTION_UI/questionWithAnswersDrafts'];
+        return this.$store.getters['QUESTION_UI/questionWithOptionDrafts'];
       },
       set(value) {
         this.$store.commit('QUESTION_UI/setQuestions', { payload: value }, { root: true });

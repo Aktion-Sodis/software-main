@@ -282,9 +282,7 @@ export default {
       rules: {
         maxChar: (value) => value.length <= questionTextMaxChar || this.maxCharExceededi18n,
       },
-      questionText: new EmptyQuestion().questionText,
-      questionType: new EmptyQuestion().questionType,
-      answers: [new EmptyAnswer()],
+      options: [emptyQuestionOption()],
     };
   },
   beforeRouteLeave(to, from, next) {
@@ -309,7 +307,7 @@ export default {
       SURVEYById: 'SURVEY_Data/SURVEYById',
       surveyModalMode: 'dataModal/getMode',
       questionCurrentDraft: 'QUESTION_UI/questionCurrentDraft',
-      answersCurrentDraft: 'QUESTION_UI/answersCurrentDraft',
+      optionsCurrentDraft: 'QUESTION_UI/optionsCurrentDraft',
       nQuestions: 'QUESTION_UI/nQuestions',
       iQuestions: 'QUESTION_UI/getIQuestions',
       isAtLastQuestion: 'QUESTION_UI/isAtLastQuestion',
@@ -362,7 +360,7 @@ export default {
       if (this.read) return false;
       return (
         (!this.areAnswersNeeded
-          || (this.answers.length > 0 && !this.answers.find((a) => a.answerText === '')))
+          || (this.options.length > 0 && !this.options.find((a) => a.text === '')))
         && (!(this.questionCurrentDraft.isEmptyQuestion ?? true) || this.areThereChanges)
       );
     },
