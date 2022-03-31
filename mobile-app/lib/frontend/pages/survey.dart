@@ -74,11 +74,12 @@ class SurveyWidgetState extends State<SurveyWidget> {
   late final String preliminaryExecutedSurveyId;
 
   void addTask() async {
-    return openTaskForm(context: context, taskBloc: context.read<TaskBloc>(), organizationViewBloc: OrganizationViewBloc(context.read<EntityRepository>(), context.read<AppliedInterventionRepository>(), context.read<InAppBloc>()), userBloc: context.read<UserBloc>(),
+    return openTaskForm(context: context, taskBloc: context.read<TaskBloc>(), organizationViewBloc: context.read<OrganizationViewBloc>(), userBloc: context.read<UserBloc>(),
     appliedIntervention: (context.read<InAppBloc>().state as SurveyInAppState)
         .appliedIntervention,
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
