@@ -794,6 +794,14 @@ class OverviewWidget extends StatelessWidget {
                   true,
                 )
               ])),
+          if (entity.description.isNotEmpty)
+            Container(
+                margin: EdgeInsets.only(
+                    left: defaultPadding(context),
+                    right: defaultPadding(context),
+                    bottom: defaultPadding(context) / 2),
+                child: Text(entity.description,
+                    style: Theme.of(context).textTheme.bodyText1)),
           if (entity.customData.isNotEmpty)
             Container(
                 margin: EdgeInsets.only(
