@@ -1,14 +1,8 @@
 import { DataStore } from '@aws-amplify/datastore';
-import { API } from 'aws-amplify';
-import {
-  // putIntervention,
-  // deleteIntervention,
-  getAllInterventions,
-  getAllInterventionTags,
-} from './utils';
-import { Intervention } from '../../models';
+import { API, graphqlOperation } from 'aws-amplify';
 import { dataTypesDict, modalModesDict } from '../constants';
-import { deleteIntervention } from '../../graphql/mutations';
+import { deleteIntervention, updateIntervention } from '../../graphql/mutations';
+import { listInterventions, listInterventionTags } from '../../graphql/queries';
 
 const interventionsData = {
   namespaced: true,
@@ -30,7 +24,6 @@ const interventionsData = {
   },
   mutations: {
     addIntervention: (state, intervention) => {
-      console.log(intervention.id);
       state.interventions.push(intervention);
     },
     replaceIntervention: (state, intervention) => {
@@ -62,10 +55,7 @@ const interventionsData = {
       commit('setLoading', { newValue: true });
       DataStore.save(interventionDraft)
         .then((postResponse) => {
-          console.log(postResponse.id);
           commit('addIntervention', postResponse);
-          // commit('dataModal/setINTERVENTIONDraft', postResponse, { root: true });
-          // commit('dataModal/setDataIdInFocus', { newValue: postResponse.id }, { root: true });
           dispatch(
             'dataModal/readData',
             {
@@ -78,71 +68,45 @@ const interventionsData = {
           );
           commit('setLoading', { newValue: false });
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log({ err });
           commit('setLoading', { newValue: false });
         });
     },
-
-    APIput: async ({ commit, dispatch }, interventionDraft) => {
+    APIput: async ({ commit, dispatch }, { newData, originalId, originalVersion }) => {
       commit('setLoading', { newValue: true });
-      DataStore.save(
-        Intervention.copyOf(interventionDraft, (updated) => {
-          updated.name = interventionDraft.name;
-          updated.description = interventionDraft.description;
-          updated.interventionType = interventionDraft.interventionType;
-          updated.contents = interventionDraft.contents;
-          updated.surveys = interventionDraft.surveys;
-          updated.surveys = interventionDraft.surveys;
-          updated.tags = interventionDraft.tags;
-          updated.levels = interventionDraft.levels;
-        }),
-      )
+      API.graphql({
+        query: updateIntervention,
+        variables: {
+          input: {
+            id: originalId,
+            _version: originalVersion,
+            name: newData.name,
+            description: newData.description,
+            interventionType: newData.interventionType,
+          },
+        },
+      })
         .then((putResponse) => {
-          console.log({ putResponse });
-          commit('replaceIntervention', putResponse);
           dispatch(
             'dataModal/readData',
             {
-              dataId: putResponse.id,
+              dataId: putResponse.data.updateIntervention.id,
               dataType: dataTypesDict.intervention,
             },
             {
               root: true,
             },
           );
+          commit('replaceIntervention', putResponse.data.updateIntervention);
           commit('setLoading', { newValue: false });
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log({ err });
           commit('setLoading', { newValue: false });
         });
     },
-    // APIdelete: async ({ commit, dispatch }, { id }) => {
-    //   console.log({ id });
-    //   commit('setLoading', { newValue: true });
-    //   const x = await DataStore.query(Intervention, id);
-    //   console.log({ x });
-    //   DataStore.query(Intervention, id).then(async (toDelete) => {
-    //     console.log({ toDelete });
-    //     const deleteResponse = await DataStore.delete(toDelete);
-    //     console.log({ deleteResponse });
-    //     commit('deleteIntervention', {
-    //       id,
-    //     });
-    //     commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
-    //     commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
-    //     dispatch(
-    //       'dataModal/abortReadData',
-    //       {},
-    //       {
-    //         root: true,
-    //       },
-    //     );
-    //   });
-    //   commit('setLoading', { newValue: false });
-    // },
     APIdelete: async ({ commit, dispatch }, { id, _version }) => {
-      console.log('v', _version);
-      console.log({ id, _version });
       commit('setLoading', { newValue: true });
       API.graphql({ query: deleteIntervention, variables: { input: { id, _version } } })
         .then(() => {
@@ -170,15 +134,15 @@ const interventionsData = {
 
       const { apiInterventions, apiInterventionTags } = await dispatch('APIgetAll');
 
-      console.log({ apiInterventions });
-
       commit('setInterventions', { newValue: apiInterventions.map((i) => ({ ...i, levels: [] })) });
       commit('setInterventionTags', { newValue: apiInterventionTags });
       commit('setLoading', { newValue: false });
     },
     APIgetAll: async () => ({
-      apiInterventions: (await getAllInterventions()).data.listInterventions.items,
-      apiInterventionTags: (await getAllInterventionTags()).data.listInterventionTags.items,
+      apiInterventions: (await API.graphql(graphqlOperation(listInterventions))).data
+        .listInterventions.items,
+      apiInterventionTags: (await API.graphql(graphqlOperation(listInterventionTags))).data
+        .listInterventionTags.items,
     }),
   },
 };

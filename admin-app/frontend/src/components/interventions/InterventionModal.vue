@@ -410,8 +410,6 @@ export default {
       });
     },
     interventionInFocus() {
-      console.log('in focus', this.INTERVENTIONById({ id: this.dataIdInFocus }));
-      console.log('id in focus', this.dataIdInFocus);
       return this.INTERVENTIONById({ id: this.dataIdInFocus });
     },
     interventionFormIsInvalid() {
@@ -486,6 +484,7 @@ export default {
       this.closeInterventionModal();
     },
     async submitHandler() {
+      const originalVersion = this.INTERVENTIONById({ id: this.dataIdInFocus })._version;
       this.setINTERVENTIONDraft(
         new Intervention({
           name: this.name,
@@ -493,12 +492,12 @@ export default {
           interventionType: this.type,
           tags: this.tagIds,
           surveys: [], // TODO
-          levels: [], // TODO
-          contents: this.contents,
+          levels: [],
+          contents: this.contents, // TODO
         }),
       );
       await this.$nextTick();
-      this.saveInterventionHandler({ dataType: dataTypesDict.intervention });
+      this.saveInterventionHandler({ dataType: dataTypesDict.intervention, originalVersion });
     },
     selectImg() {
       this.showToBeImplementedFeedback();

@@ -153,7 +153,7 @@ const dataModal = {
       commit('setMode', { newValue: modalModesDict.read });
     },
 
-    saveData: async ({ dispatch, getters }, { dataType }) => {
+    saveData: async ({ dispatch, getters }, { dataType, originalVersion }) => {
       if (getters.getMode === modalModesDict.read) return;
       const draft = getters.getDataDraft;
       console.log({ draft });
@@ -162,13 +162,21 @@ const dataModal = {
         return;
       }
       if (getters.getMode === modalModesDict.edit) {
-        await dispatch(`${dataType}_Data/APIput`, draft, { root: true });
+        await dispatch(
+          `${dataType}_Data/APIput`,
+          { newData: draft, originalId: getters.getDataIdInFocus, originalVersion },
+          { root: true },
+        );
       }
     },
     deleteData: async ({ dispatch, getters }, { dataType }) => {
       if (getters.getEntityModalMode === modalModesDict.read) return;
       if (getters.getEntityModalMode === modalModesDict.create) return;
-      await dispatch(`${dataType}_Data/APIdelete`, getters.getDataDraft, { root: true });
+      await dispatch(
+        `${dataType}_Data/APIdelete`,
+        { id: getters.getDataIdInFocus, _version: getters.getDataDraft._version },
+        { root: true },
+      );
     },
   },
 };
