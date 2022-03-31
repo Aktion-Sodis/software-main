@@ -1,12 +1,10 @@
 import Vue from 'vue';
 import { dataTypesDict, modalModesDict } from '../constants';
-import { Level, Entity, Survey } from '../../models';
+import { Level, Entity } from '../../models';
 
 import { EmptyEntity } from '../entities/utils';
-// import { EmptyIntervention } from '../interventions/utils';
 import { emptyLevel } from '../levels/utils';
-import { EmptySurvey } from '../survey/utils';
-import { emptyIntervention } from '../classes';
+import { emptySurvey, emptyIntervention } from '../classes';
 
 const dataModal = {
   namespaced: true,
@@ -92,26 +90,11 @@ const dataModal = {
     },
 
     /* SURVEY DRAFT: SET & RESET */
-    setSURVEYDraft: (
-      state,
-      {
-        id, name, description, tags, type, questionIds, creationDate, lastEditDate, _version,
-      },
-    ) => {
-      state.dataDraft = new Survey({
-        id,
-        name,
-        description,
-        tags,
-        type,
-        questionIds,
-        creationDate,
-        lastEditDate,
-        _version,
-      });
+    setSURVEYDraft: (state, draft) => {
+      state.dataDraft = draft;
     },
     resetSURVEYDraft: (state) => {
-      state.dataDraft = new EmptySurvey();
+      state.dataDraft = emptySurvey();
     },
   },
   actions: {

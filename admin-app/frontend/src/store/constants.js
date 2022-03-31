@@ -82,12 +82,12 @@ export const questionTypesDict = Object.freeze({
 });
 
 export const questionTypesIconDict = Object.freeze({
-  text: 'mdi-text',
-  singleChoice: 'mdi-radiobox-marked',
-  multipleChoice: 'mdi-dots-horizontal',
-  picture: 'mdi-image',
-  pictureWithTags: 'mdi-message-image',
-  audio: 'mdi-waveform',
+  TEXT: 'mdi-text',
+  SINGLECHOICE: 'mdi-radiobox-marked',
+  MULTIPLECHOICE: 'mdi-dots-horizontal',
+  PICTURE: 'mdi-image',
+  PICTUREWITHTAGS: 'mdi-message-image',
+  AUDIO: 'mdi-waveform',
 });
 
 export const dataTypesDict = Object.freeze({

@@ -23,7 +23,7 @@
               <v-icon> mdi-radiobox-blank </v-icon>
             </div>
             <v-icon v-else large>
-              {{ questionTypesIconDict[q.questionType] }}
+              {{ questionTypesIconDict[q.type] }}
             </v-icon>
           </div>
         </v-badge>
