@@ -6,8 +6,11 @@ import 'package:mobile_app/frontend/theme.dart';
 
 class NisabaAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final bool showBackButton;
 
-  const NisabaAppBar({Key? key, required this.title}) : super(key: key);
+  const NisabaAppBar(
+      {Key? key, required this.title, this.showBackButton = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +19,8 @@ class NisabaAppBar extends StatelessWidget implements PreferredSizeWidget {
             horizontal: defaultPadding(context), vertical: 20),
         child: Row(
           children: [
-            _backButton(context),
-            SizedBox(
+            showBackButton ? _backButton(context) : const SizedBox.shrink(),
+            if(showBackButton) SizedBox(
               width: defaultPadding(context),
             ),
             Text(

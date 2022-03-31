@@ -82,6 +82,15 @@ Map<String, dynamic> stringMap = {
     "confirm_abort": "Abort",
     "do_not_abort": "Continue",
     "your shot": "Your shot:",
+    "accepted": "Accepted",
+    "restricted": "Restricted",
+    "required": "Required",
+    "accept_permissions": "Accept permissions",
+    "accept_all_permissions": "Accept all permissions",
+    "open_settings": "Open settings",
+    "abbrechen": "Abbrechen",
+    "restricted_permissions_warning":
+        "Some of the permissions can be accepted only in the settings. Please, open the settings and accept all the permissions."
     "task_dialog_what_task": "What need's to be done?",
     "task_dialog_title": "Short summary",
     "task_dialog_description": "Further description",
@@ -137,6 +146,25 @@ String get task_save_task => stringMap[currentLanguage]["task_save_task"];
 String get task_update_task => stringMap[currentLanguage]["task_update_task"];
 String get task_create_title => stringMap[currentLanguage]["task_create_title"];
 String get task_update_title => stringMap[currentLanguage]["task_update_title"];
+
+String get accepted => stringMap[currentLanguage]["accepted"];
+
+String get abbrechen => stringMap[currentLanguage]["abbrechen"];
+
+String get restricted => stringMap[currentLanguage]["restricted"];
+
+String get required => stringMap[currentLanguage]["required"];
+
+String get accept_permissions =>
+    stringMap[currentLanguage]["accept_permissions"];
+
+String get accept_all_permissions =>
+    stringMap[currentLanguage]["accept_all_permissions"];
+
+String get open_settings => stringMap[currentLanguage]["open_settings"];
+
+String get restricted_permissions_warning =>
+    stringMap[currentLanguage]["restricted_permissions_warning"];
 
 String get user_update => stringMap[currentLanguage]["user_update"];
 
@@ -288,4 +316,5 @@ String get abortSurvey  => stringMap[currentLanguage]["abort_survey"];
 String get abortSurveyText  => stringMap[currentLanguage]["abort_survey_warn"];
 String get confirmAbort  => stringMap[currentLanguage]["confirm_abort"];
 String get doNotAbort  => stringMap[currentLanguage]["do_not_abort"];
+
 String get yourShot => stringMap[currentLanguage]["your shot"];
