@@ -8,27 +8,36 @@ abstract class CommonWidgets {
       Function? goBack,
       ButtonSizes buttonSizes = ButtonSizes.medium,
       EdgeInsets? padding}) {
-    return MaterialButton(
-      minWidth: 0,
-      padding: padding ?? EdgeInsets.zero,
-      color: Theme.of(context).canvasColor,
-      onPressed: () {
-        goBack?.call();
-      },
-      shape: CircleBorder(
-          side: BorderSide(
-              color: Theme.of(context).buttonTheme.colorScheme?.background ??
-                  Colors.green,
-              width: 1)),
-      child: Container(
-          padding: EdgeInsets.all(defaultPadding(context)),
-          child: Center(
-            child: Icon(
-              MdiIcons.arrowLeft,
-              color: Theme.of(context).buttonTheme.colorScheme?.background ??
-                  Colors.green,
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            child: MaterialButton(
+              minWidth: 0,
+              padding: padding ?? EdgeInsets.zero,
+              color: Theme.of(context).canvasColor,
+              onPressed: () {
+                goBack?.call();
+              },
+              shape: CircleBorder(
+                  side: BorderSide(
+                      color: Theme.of(context).buttonTheme.colorScheme?.background ??
+                          Colors.green,
+                      width: 1)),
+              child: Container(
+                  padding: EdgeInsets.all(defaultPadding(context)),
+                  child: Center(
+                    child: Icon(
+                      MdiIcons.arrowLeft,
+                      color: Theme.of(context).buttonTheme.colorScheme?.background ??
+                          Colors.green,
+                    ),
+                  )),
             ),
-          )),
+          ),
+        ],
+      ),
     );
   }
 
@@ -123,6 +132,13 @@ abstract class CommonWidgets {
                           : 1),
         ),
       ),
+    );
+  }
+
+  static Widget separator({required BuildContext context}){
+    return Container(
+      height: 1,
+      color: Colors.grey,
     );
   }
 }

@@ -82,68 +82,70 @@ class UserDataViewState extends State<UserDataView> {
         child: Scaffold(
             appBar: widget.inApp
                 ? PreferredSize(
-                    preferredSize: Size(width(context), height(context) * .1),
+                    preferredSize: Size(width(context), height(context) * .12),
                     child: Container(
-                        height: appBarHeight(context) +
-                            MediaQuery.of(context).padding.top,
                         padding: EdgeInsets.only(
                             top: MediaQuery.of(context).padding.top),
                         width: width(context),
                         color: Theme.of(context).colorScheme.background,
-                        child: Column(children: [
-                          Expanded(
-                              child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: defaultPadding(context)),
-                                    child: CommonWidgets.defaultBackwardButton(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal:
-                                                defaultPadding(context)),
-                                        context: context,
-                                        goBack: () => context
-                                            .read<InAppBloc>()
-                                            .add(MainViewEvent()))),
-                                Expanded(
-                                  child: Container(
-                                      margin: EdgeInsets.only(
-                                          left: defaultPadding(context)),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                              child: Container(
-                                                  child:
-                                                      Text(strings.profile))),
-                                          Container(
-                                              margin: EdgeInsets.symmetric(
-                                                  vertical:
-                                                      defaultPadding(context)),
-                                              child: CommonWidgets
-                                                  .defaultIconButton(
-                                                      onPressed: () async {
-                                                        context
-                                                            .read<
-                                                                SessionCubit>()
-                                                            .signOut();
-                                                      },
-                                                      context: context,
-                                                      iconData: MdiIcons.logout,
-                                                      buttonSizes:
-                                                          ButtonSizes.small,
-                                                      fillColor:
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .error)),
-                                        ],
-                                      )),
-                                )
-                              ])),
+                        child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                            child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                              Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: defaultPadding(context)),
+                                  child: CommonWidgets.defaultBackwardButton(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal:
+                                              defaultPadding(context)),
+                                      context: context,
+                                      goBack: () => context
+                                          .read<InAppBloc>()
+                                          .add(MainViewEvent()))),
+                              Expanded(
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                        left: defaultPadding(context)),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                            child: Container(
+                                                child:
+                                                    Text(strings.profile))),
+                                        Container(
+                                            margin: EdgeInsets.symmetric(
+                                                vertical:
+                                                    defaultPadding(context)),
+                                            child: CommonWidgets
+                                                .defaultIconButton(
+                                                    onPressed: () async {
+                                                      context
+                                                          .read<
+                                                              SessionCubit>()
+                                                          .signOut();
+                                                    },
+                                                    context: context,
+                                                    iconData: MdiIcons.logout,
+                                                    buttonSizes:
+                                                        ButtonSizes.small,
+                                                    fillColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .error)),
+                                      ],
+                                    )),
+                              )
+                            ]),
+                          ),
                           Container(
                               width: width(context),
                               height: 1,
