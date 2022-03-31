@@ -22,7 +22,7 @@
             {{
               $vuetify.breakpoint.name === 'xs'
                 ? ''
-                : $t('interventions.surveyModal.questionCard.backToDetails')
+                : $t('surveys.modal.questionCard.backToDetails')
             }}
           </v-btn>
           <v-btn
@@ -36,7 +36,7 @@
             {{
               $vuetify.breakpoint.name === 'xs'
                 ? ''
-                : $t('interventions.surveyModal.questionCard.finalizeSurvey')
+                : $t('surveys.modal.questionCard.finalizeSurvey')
             }}
             <v-icon large class="ml-2"> mdi-chevron-right </v-icon>
           </v-btn>
@@ -48,7 +48,7 @@
           <v-row>
             <v-col cols="12" sm="6" class="pb-0 px-0 px-sm-3">
               <h2 class="mb-2">
-                {{ $t('interventions.surveyModal.questionCard.form.question.title') }}
+                {{ $t('surveys.modal.questionCard.form.question.title') }}
               </h2>
               <h3 v-if="read">
                 {{ questionTextInFocus }}
@@ -63,8 +63,7 @@
                 dense
               ></v-textarea>
 
-              <h3>
-                {{ $t('interventions.surveyModal.questionCard.form.question.imageTitle') }}
+                {{ $t('surveys.modal.questionCard.form.question.imageTitle') }}
               </h3>
               <div class="d-flex justify-center">
                 <v-btn
@@ -77,7 +76,7 @@
                 >
                   <v-icon class="mr-2"> mdi-image </v-icon>
                   <span class="overflow-hidden">
-                    {{ $t('interventions.surveyModal.questionCard.form.question.addImage') }}
+                    {{ $t('surveys.modal.questionCard.form.question.addImage') }}
                   </span>
                 </v-btn>
                 <input
@@ -90,7 +89,7 @@
               </div>
 
               <h3 class="mt-8">
-                {{ $t('interventions.surveyModal.questionCard.form.question.audioTitle') }}
+                {{ $t('surveys.modal.questionCard.form.question.audioTitle') }}
               </h3>
               <div class="d-flex justify-center">
                 <v-btn
@@ -103,7 +102,7 @@
                 >
                   <v-icon class="mr-2"> mdi-waveform </v-icon>
                   <span class="overflow-hidden">
-                    {{ $t('interventions.surveyModal.questionCard.form.question.addAudio') }}
+                    {{ $t('surveys.modal.questionCard.form.question.addAudio') }}
                   </span>
                 </v-btn>
                 <input
@@ -118,13 +117,13 @@
 
             <v-col cols="12" sm="6" class="pt-4 px-0 px-sm-3 pt-sm-0">
               <h2 class="mb-2">
-                {{ $t('interventions.surveyModal.questionCard.form.answer.title') }}
+                {{ $t('surveys.modal.questionCard.form.answer.title') }}
               </h2>
               <v-select
                 v-if="edit || create"
                 v-model="questionType"
                 :items="questionTypesItemValue"
-                :label="$t('interventions.surveyModal.questionCard.form.answer.typeLabel')"
+                :label="$t('surveys.modal.questionCard.form.answer.typeLabel')"
                 outlined
                 dense
               ></v-select>
@@ -134,13 +133,12 @@
               <div v-if="areAnswersNeeded">
                 <div v-for="(answer, index) in answers" :key="index">
                   <h3>
-                    {{ $t('interventions.surveyModal.questionCard.form.answer.answer') }}
+                    {{ $t('surveys.modal.questionCard.form.answer.answer') }}
                     {{ index + 1 }}
                   </h3>
                   <div class="d-flex justify-space-between">
                     <v-text-field
-                      v-model="answers[index].answerText"
-                      :label="$t('interventions.surveyModal.questionCard.form.answer.textLabel')"
+                      :label="$t('surveys.modal.questionCard.form.answer.textLabel')"
                       outlined
                       dense
                       :hide-details="true"
@@ -158,7 +156,7 @@
                       >
                         <v-icon class="mr-2"> mdi-image </v-icon>
                         <span class="overflow-hidden">
-                          {{ $t('interventions.surveyModal.questionCard.form.answer.addImage') }}
+                          {{ $t('surveys.modal.questionCard.form.answer.addImage') }}
                         </span>
                       </v-btn>
                       <input
@@ -193,7 +191,7 @@
                   >
                     <v-icon class="mr-2"> mdi-plus </v-icon>
                     <span class="overflow-hidden">
-                      {{ $t('interventions.surveyModal.questionCard.form.answer.addAnswer') }}
+                      {{ $t('surveys.modal.questionCard.form.answer.addAnswer') }}
                     </span>
                   </v-btn>
                   <input

@@ -165,7 +165,7 @@
         "EDUCATION": "Eğitim"
       }
     },
-    "interventionModal": {
+    "modal": {
       "modalTitle": {
         "read": "Müdahale",
         "edit": "Müdahaleyi düzenle: ",
@@ -183,8 +183,18 @@
       "noImages": "Henüz hiç resim yüklenmemiş.",
       "noVideos": "Henüz hiç video yüklenmemiş.",
       "noSurveys": "Henüz hiç anket yüklenmemiş."
+    }
+  },
+  "surveys": {
+    "type": {
+      "title": "Tipo de Encuesta",
+      "types": {
+        "INITIAL": "Başlangıç",
+        "DEFAULT": "Varsayılan"
+      }
     },
-    "surveyModal": {
+    "modal": {
+      "image": "Anket Resmi",
       "firstCard": {
         "title": {
           "edit": "Anket düzenleniyor... ",
@@ -216,12 +226,12 @@
             "addImage": "Yanıta resim ekle",
             "addAnswer": "Yanıt ekle",
             "questionTypes": {
-              "text": "Metin",
-              "singleChoice": "Çoktan tek seçmeli",
-              "multipleChoice": "Çoktan çok seçmeli",
-              "picture": "Resim",
-              "pictureWithTags": "Etiketli resim",
-              "audio": "Ses"
+              "TEXT": "Metin",
+              "SINGLECHOICE": "Çoktan tek seçmeli",
+              "MULTIPLECHOICE": "Çoktan çok seçmeli",
+              "PICTURE": "Resim",
+              "PICTUREWITHTAGS": "Etiketli resim",
+              "AUDIO": "Ses"
             }
           }
         },

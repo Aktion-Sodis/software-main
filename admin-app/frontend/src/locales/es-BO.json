@@ -165,7 +165,7 @@
         "EDUCATION": "Educación"
       }
     },
-    "interventionModal": {
+    "modal": {
       "modalTitle": {
         "read": "Observando intervención",
         "edit": "Editar intervención ",
@@ -183,8 +183,18 @@
       "noImages": "No se han subido imágenes.",
       "noVideos": "No se han subido vídeos.",
       "noSurveys": "No se han subido encuestas."
+    }
+  },
+  "surveys": {
+    "type": {
+      "title": "Tipo de Encuesta",
+      "types": {
+        "INITIAL": "Inicial",
+        "DEFAULT": "Por defecto"
+      }
     },
-    "surveyModal": {
+    "modal": {
+      "image": "Imagen di Encuesta",
       "firstCard": {
         "title": {
           "edit": "Editar encuesta ",
@@ -216,12 +226,12 @@
             "addImage": "Añadir imágen a la respuresta",
             "addAnswer": "Añadir respuesta",
             "questionTypes": {
-              "text": "Texto",
-              "singleChoice": "Elección única",
-              "multipleChoice": "Elección múltiple",
-              "picture": "Imágen",
-              "pictureWithTags": "Imágen con etiquetas",
-              "audio": "Audio"
+              "TEXT": "Texto",
+              "SINGLECHOICE": "Elección única",
+              "MULTIPLECHOICE": "Elección múltiple",
+              "PICTURE": "Imágen",
+              "PICTUREWITHTAGS": "Imágen con etiquetas",
+              "AUDIO": "Audio"
             }
           }
         },
