@@ -348,7 +348,8 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
-import { I18nString, Intervention, InterventionType } from '../../models';
+import { Intervention, InterventionType } from '../../models';
+import { emptyI18nString } from '../../store/classes';
 
 const interventionDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_INTERVENTION_DESCRIPTION_MAX_CHAR, 10),
@@ -366,16 +367,10 @@ export default {
         maxChar: (value) => value.length <= interventionDescriptionMaxChar || this.maxCharExceededi18n,
       },
       id: null,
-      name: new I18nString({
-        languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
-      }),
+      name: emptyI18nString(),
       typeIndex: 0,
       types: [InterventionType.TECHNOLOGY, InterventionType.EDUCATION],
-      description: new I18nString({
-        languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
-      }),
+      description: emptyI18nString(),
       tagIds: [],
       levelIds: [],
       contents: [],
