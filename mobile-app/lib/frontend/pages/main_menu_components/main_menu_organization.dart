@@ -74,12 +74,13 @@ class MainMenuOrganization extends StatelessWidget {
                     children: [
                       Expanded(
                           child: Container(
-                             padding: EdgeInsets.symmetric(
-                               vertical: defaultPadding(context)
-                             ),
-                              child: Text(organizationViewState.appBarString,
-                                  style:
-                                      Theme.of(context).textTheme.headline2, overflow: TextOverflow.ellipsis,))),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: defaultPadding(context)),
+                              child: Text(
+                                organizationViewState.appBarString,
+                                style: Theme.of(context).textTheme.headline2,
+                                overflow: TextOverflow.ellipsis,
+                              ))),
                       if (organizationViewState.organizationViewType ==
                               OrganizationViewType.LIST &&
                           organizationViewState.addEntityPossible)
@@ -220,7 +221,8 @@ class MainMenuOrganization extends StatelessWidget {
               entity: organizationViewState.currentDetailEntity!);
         case OrganizationViewType.EXECUTEDSURVEY:
           return ExecutedSurveyWidget(
-              organizationViewState.executedSurveyToDisplay!,);
+            organizationViewState.executedSurveyToDisplay!,
+          );
 
         default:
           return Container();
@@ -260,6 +262,7 @@ class MainMenuOrganization extends StatelessWidget {
 Future<Entity?> showEntityDialog(BuildContext buildContext, Entity? entity,
     Level level, String? parentEntityID) async {
   return showDialog(
+      barrierColor: Theme.of(buildContext).colorScheme.background,
       context: buildContext,
       builder: (context) {
         return EntityDialogWidget(entity, level, parentEntityID, buildContext);
@@ -1196,6 +1199,7 @@ Future<AppliedIntervention?> showAppliedInterventionDialog(
     AppliedIntervention? appliedIntervention,
     User user) async {
   return showDialog(
+      barrierColor: Theme.of(buildContext).colorScheme.background,
       context: buildContext,
       builder: (context) {
         return AppliedInterventionDialog(

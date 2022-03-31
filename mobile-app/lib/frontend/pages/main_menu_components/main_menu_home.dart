@@ -44,7 +44,7 @@ class MainMenuHomeState extends State<MainMenuHome> {
                   margin: EdgeInsets.only(left: width(context) * .1),
                   child: Image.asset("assets/test/logo.png",
                       height: width(context) * .1)),
-              SizedBox(width: defaultPadding(context)),
+              SizedBox(width: width(context) * .1),
               BlocBuilder<SyncBloc, SyncState>(builder: (context, state) {
                 if (state is FullySyncedState) {
                   return Icon(MdiIcons.cloudCheckOutline,
