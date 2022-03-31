@@ -1,5 +1,9 @@
 import 'dart:io';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile_app/backend/Blocs/sync/sync_bloc.dart';
+import 'package:mobile_app/backend/Blocs/sync/sync_events.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'dataStorePaths.dart';
@@ -67,5 +71,36 @@ class SyncedFile {
     File localCacheFile = await getCachePath();
     await localCacheFile.delete();
     await StorageRepository.removeFile(path);
+  }
+
+  Future<bool> sync(SyncBloc syncBloc) async {
+    syncBloc.add(StartLoadingFileEvent());
+    File localCacheFile = await getCachePath();
+    bool cached = await localCacheFile.exists();
+    if (!cached) {
+      await StorageRepository.downloadFile(localCacheFile, path);
+    } else {
+      ListResult listResult = await Amplify.Storage.list(path: path);
+      if (listResult.items.isEmpty) {
+        StorageRepository.uploadFile(await getCachePath(), path);
+      } else {
+        DateTime? lastModifiedLocal;
+        try {
+          lastModifiedLocal = await localCacheFile.lastModified();
+        } catch (e) {}
+        DateTime? lastModifiedOnline = listResult.items.first.lastModified;
+        if (lastModifiedOnline == null) {
+          await StorageRepository.uploadFile(localCacheFile, path);
+        } else if (lastModifiedLocal == null) {
+          await StorageRepository.downloadFile(localCacheFile, path);
+        } else if (lastModifiedLocal.isAfter(lastModifiedOnline)) {
+          await StorageRepository.uploadFile(localCacheFile, path);
+        } else if (lastModifiedLocal.isBefore(lastModifiedOnline)) {
+          await StorageRepository.downloadFile(localCacheFile, path);
+        }
+      }
+    }
+    syncBloc.add(LoadedFileEvent());
+    return true;
   }
 }
