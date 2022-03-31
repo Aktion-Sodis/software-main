@@ -11,8 +11,6 @@
           </v-list-item-title>
         </v-list-item>
         <SyncAction />
-        <v-btn @click="CreateDummyLevels">Create dummy levels</v-btn>
-        <v-btn @click="CreateDummyEntities">Create dummy entities</v-btn>
       </v-list>
 
       <v-list nav dense class="mt-12">
@@ -95,8 +93,6 @@ export default {
     ...mapActions({
       deleteSession: 'auth/deleteSession',
       showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
-      CreateDummyLevels: 'LEVEL_Data/CreateDummyLevels',
-      CreateDummyEntities: 'ENTITY_Data/CreateDummyEntities',
     }),
     logout() {
       this.deleteSession();

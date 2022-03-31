@@ -292,31 +292,6 @@ const levelsData = {
       );
       commit('setLoading', { newValue: false });
     },
-    CreateDummyLevels: async ({ dispatch }) => {
-      const levels = [
-        new Level({
-          id: 'dummyLevel0',
-          name: new I18nString({
-            languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-            languageTexts: ['Name', 'Isimo', 'İsim'],
-          }),
-          description: new I18nString({
-            languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-            languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
-          }),
-          parentLevelID: null,
-          interventionsAreAllowed: true,
-          allowedInterventions: [],
-          customData: [],
-          schemeVersion: 1020,
-        }),
-      ];
-
-      // eslint-disable-next-line
-      for (const level of levels) {
-        dispatch('APIpost', level);
-      }
-    },
     APIgetAll: async () => (await getAllLevels()).data.listLevels.items,
   },
 };
