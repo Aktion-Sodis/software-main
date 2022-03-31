@@ -17,6 +17,7 @@ import 'package:mobile_app/backend/repositories/InterventionRepository.dart';
 import 'package:mobile_app/backend/repositories/LevelRepository.dart';
 import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
 import 'package:mobile_app/backend/repositories/TaskRepository.dart';
+import 'package:mobile_app/backend/repositories/UserRepository.dart';
 import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/models/InterventionContentRelation.dart';
 
@@ -117,6 +118,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     syncTasks(allTasksToSync);
     syncContents(allContents);
     syncEntities(allEntities);
+    if (userBloc.state.user != null) {
+      syncUser(userBloc.state.user!);
+    }
   }
 
   void syncLevels(List<Level> levels) async {
@@ -196,5 +200,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
         }
       }
     }
+  }
+
+  void syncUser(User user) async {
+    UserRepository.getUserPicFile(user).sync(this);
   }
 }
