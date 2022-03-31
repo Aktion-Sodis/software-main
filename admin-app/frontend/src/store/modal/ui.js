@@ -84,8 +84,8 @@ const dataModal = {
     },
 
     /* INTERVENTION DRAFT: SET & RESET */
-    setINTERVENTIONDraft: (state, data) => {
-      state.dataDraft = data;
+    setINTERVENTIONDraft: (state, draft) => {
+      state.dataDraft = draft;
     },
     resetINTERVENTIONDraft: (state) => {
       state.dataDraft = emptyIntervention();
