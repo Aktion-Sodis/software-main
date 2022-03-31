@@ -12,12 +12,12 @@
         <v-icon v-if="i === nQuestions - 1" large> mdi-plus </v-icon>
         <v-badge v-else color="grey lighten-2" :content="i + 1" bottom overlap>
           <div>
-            <div v-if="q.questionType === 'multipleChoice'">
+            <div v-if="q.type === QuestionType.MULTIPLECHOICE">
               <v-icon> mdi-checkbox-outline </v-icon>
               <v-icon> mdi-checkbox-outline </v-icon>
               <v-icon> mdi-checkbox-blank-outline </v-icon>
             </div>
-            <div v-else-if="q.questionType === 'singleChoice'">
+            <div v-else-if="q.type === QuestionType.SINGLECHOICE">
               <v-icon> mdi-radiobox-marked </v-icon>
               <v-icon> mdi-radiobox-blank </v-icon>
               <v-icon> mdi-radiobox-blank </v-icon>
@@ -36,6 +36,7 @@
 import { mapGetters, mapMutations } from 'vuex';
 import draggable from 'vuedraggable';
 import { questionTypesIconDict } from '../../../store/constants';
+import { QuestionType } from '../../../models';
 
 export default {
   name: 'QuestionTabs',
@@ -45,6 +46,7 @@ export default {
       iQ: 0,
       questionTypesIconDict,
       drag: [],
+      QuestionType,
     };
   },
   mounted() {
