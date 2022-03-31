@@ -70,8 +70,14 @@ const surveysData = {
 
       const questionsWithUnnecessaryLastOne = rootGetters['QUESTION_UI/getQuestionDrafts'];
       const questions = questionsWithUnnecessaryLastOne.slice(0, -1);
-      const optionsWithUnnecessaryLastOnes = rootGetters['QUESTION_UI/getOptionDrafts'];
-      const options = optionsWithUnnecessaryLastOnes.map((os) => os.slice(0, -1));
+      const rawOptions = rootGetters['QUESTION_UI/getOptionDrafts'];
+      const options = [];
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const rawOption of rawOptions) {
+        options.push(rawOption.filter((o) => !o.text.languageTexts.every((t) => t === '')));
+      }
+
       const surveyDraft = rootGetters['dataModal/getDataDraft'];
 
       console.log({ questions, options, surveyDraft });
