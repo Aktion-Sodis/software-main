@@ -191,7 +191,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
-import { I18nString } from '../../models';
+import { I18nString, Level } from '../../models';
 
 const levelDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_LEVEL_DESCRIPTION_MAX_CHAR, 10),
@@ -231,7 +231,7 @@ export default {
       tagById: 'LEVEL_Data/tagById',
       lowestLevelId: 'LEVEL_Data/lowestLevelId',
       LEVELById: 'LEVEL_Data/LEVELById',
-
+      fallbackLocaleIndex: 'fallbackLocaleIndex',
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
 
       calculateUILocaleString: 'calculateUILocaleString',
@@ -299,7 +299,7 @@ export default {
       showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
     }),
     ...mapMutations({
-      setLevelDraft: 'dataModal/setLEVELDraft',
+      setDraft: 'dataModal/setDraft',
     }),
     deleteHandler() {
       if (this.read) return;
@@ -324,15 +324,19 @@ export default {
       this.closeHandler();
     },
     async submitHandler() {
-      this.setLevelDraft({
-        id: this.dataIdInFocus,
-        name: this.name,
-        description: this.description,
-        parentLevelID: this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID,
-        allowedInterventions: this.allowedInterventions || [],
-        tagIds: this.tagIds || [],
-      });
-      this.saveData({ dataType: 'LEVEL' });
+      this.setDraft(
+        new Level({
+          name: this.name,
+          description: this.description,
+          parentLevelID: this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID,
+          interventionsAreAllowed: this.allowedInterventions.length > 0,
+          allowedInterventions: this.allowedInterventions || [],
+          tagIds: this.tagIds || [],
+          customData: [],
+        }),
+      );
+      const originalVersion = this.levelInFocus != null ? this.levelInFocus._version : 0;
+      this.saveData({ dataType: 'LEVEL', originalVersion });
     },
     prefillComponentDataFromLevelDraft() {
       this.name = this.levelDraft?.name ?? '';

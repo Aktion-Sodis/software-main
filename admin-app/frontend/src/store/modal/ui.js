@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { API } from 'aws-amplify';
 import { dataTypesDict, modalModesDict } from '../constants';
-import { Level, Entity, Survey } from '../../models';
+import { Survey } from '../../models';
 
 import { EmptyEntity } from '../entities/utils';
 // import { EmptyIntervention } from '../interventions/utils';
@@ -43,56 +43,30 @@ const dataModal = {
     },
 
     /* ENTITY DRAFT: SET & RESET */
-    setENTITYDraft: (
-      state,
-      {
-        name, description, entityLevelId, parentEntityID, _version, appliedInterventions,
-      },
-    ) => {
-      state.dataDraft = new Entity({
-        name,
-        description,
-        entityLevelId,
-        parentEntityID,
-        _version,
-        customData: [],
-        appliedInterventions,
-      });
+    setENTITYDraft: (state, draft) => {
+      state.dataDraft = draft;
     },
     resetENTITYDraft: (state) => {
       state.dataDraft = new EmptyEntity();
     },
 
-    /* LEVEL DRAFT: SET & RESET */
-    setLEVELDraft: (
-      state,
-      {
-        name, description, parentLevelID, allowedInterventions, _version,
-      },
-    ) => {
-      const newLevel = new Level({
-        name,
-        description,
-        parentLevelID,
-        allowedInterventions,
-        _version,
-        interventionsAreAllowed: true,
-        customData: [],
-      });
-      state.dataDraft = newLevel;
+    setDraft: (state, draft) => {
+      state.dataDraft = draft;
     },
     resetLEVELDraft: (state) => {
       state.dataDraft = emptyLevel();
     },
+<<<<<<< Updated upstream
 
     /* INTERVENTION DRAFT: SET & RESET */
     setINTERVENTIONDraft: (state, data) => {
       state.dataDraft = data;
     },
+=======
+>>>>>>> Stashed changes
     resetINTERVENTIONDraft: (state) => {
       state.dataDraft = emptyIntervention();
     },
-
     /* SURVEY DRAFT: SET & RESET */
     setSURVEYDraft: (
       state,

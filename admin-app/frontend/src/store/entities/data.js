@@ -1,7 +1,9 @@
 import { DataStore } from '@aws-amplify/datastore';
+import { API } from 'aws-amplify';
 import { Entity } from '../../models';
 import { deleteEntityController, getAllEntities } from './utils';
 import { dataTypesDict, modalModesDict } from '../constants';
+import { updateEntity } from '../../graphql/mutations';
 
 const entitiesData = {
   namespaced: true,
@@ -188,6 +190,7 @@ const entitiesData = {
     },
     APIput: async ({ commit }, entityDraft) => {
       commit('setLoading', { newValue: true });
+<<<<<<< Updated upstream
       console.log(entityDraft);
       // DataStore.save(
       //   Entity.copyOf(entityDraft, (item) => {
@@ -216,6 +219,33 @@ const entitiesData = {
       //   .catch(() => {
       //     commit('setLoading', { newValue: false });
       //   });
+=======
+      await API.graphql({
+        query: updateEntity,
+        variables: {
+          input: {
+            id: entityDraft.originalId,
+            name: entityDraft.newData.name,
+            description: entityDraft.newData.description,
+            _version: entityDraft.originalVersion,
+          },
+        },
+      })
+        .then(() => {
+          dispatch(
+            'SYNC_UI/refreshHandler',
+            {
+              routeName: 'OrganizationStructure',
+            },
+            {
+              root: true,
+            },
+          );
+        })
+        .catch(() => {
+          commit('setLoading', { newValue: false });
+        });
+>>>>>>> Stashed changes
     },
     APIdelete: async ({ commit, dispatch }, entityDraft) => {
       commit('setLoading', { newValue: true });

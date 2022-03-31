@@ -454,7 +454,7 @@ export default {
       showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
     }),
     ...mapMutations({
-      setINTERVENTIONDraft: 'dataModal/setINTERVENTIONDraft',
+      setDraft: 'dataModal/setDraft',
     }),
     deleteHandler() {
       if (this.read) return;
@@ -486,7 +486,12 @@ export default {
       this.closeInterventionModal();
     },
     async submitHandler() {
+<<<<<<< Updated upstream
       this.setINTERVENTIONDraft(
+=======
+      const originalVersion = this.INTERVENTIONById({ id: this.dataIdInFocus })._version;
+      this.setDraft(
+>>>>>>> Stashed changes
         new Intervention({
           name: this.name,
           description: this.description,

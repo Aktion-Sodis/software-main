@@ -163,6 +163,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
+import { Entity } from '../../models';
 
 const entityDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_ENTITY_DESCRIPTION_MAX_CHAR, 10),
@@ -256,7 +257,7 @@ export default {
       showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
     }),
     ...mapMutations({
-      setEntityDraft: 'dataModal/setENTITYDraft',
+      setDraft: 'dataModal/setDraft',
     }),
     escHandler() {
       this.closeHandler();
@@ -292,19 +293,23 @@ export default {
       });
     },
     async submitHandler() {
-      this.setEntityDraft({
-        id: this.dataIdInFocus,
-        name: this.name,
-        description: this.description,
-        entityLevelId: this.edit
-          ? this.entityInFocus.entityLevelId
-          : this.getCreatingEntityInLevelId,
-        parentEntityID: this.parentEntityID ?? null,
-        appliedInterventions: [], // TODO
-        _version: this.entityDraft._version,
-      });
+      await this.setDraft(
+        new Entity({
+          name: this.name,
+          description: this.description,
+          entityLevelId: this.edit
+            ? this.entityInFocus.entityLevelId
+            : this.getCreatingEntityInLevelId,
+          parentEntityID: this.parentEntityID ?? null,
+          appliedInterventions: [], // TODO
+        }),
+      );
       await this.$nextTick();
-      this.saveData({ dataType: dataTypesDict.entity });
+      const originalVersion = this.entityInFocus != null ? this.entityInFocus._version : 0;
+      this.saveData({
+        dataType: dataTypesDict.entity,
+        originalVersion,
+      });
     },
     prefillComponentDataFromEntityDraft() {
       this.name = this.entityDraft?.name ?? '';

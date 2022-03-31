@@ -24,22 +24,6 @@ const levelsUI = {
     }) ?? null,
   },
   mutations: {
-    /* CREATE, UPDATE, DELETE */
-    setLevelDraft: (
-      state,
-      {
-        id, name, description, parentLevelID, allowedInterventions, tagIds,
-      },
-    ) => {
-      state.levelDraft = new Level({
-        id,
-        name,
-        description,
-        parentLevelID,
-        allowedInterventions,
-        tagIds,
-      });
-    },
     resetLevelDraft: (state) => {
       state.levelDraft = new EmptyLevel();
     },
