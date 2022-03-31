@@ -15,6 +15,7 @@ Widget MainMenuAppBar(
           children: [
             if (showBackButton)
               Container(
+                  alignment: Alignment.center,
                   margin:
                       EdgeInsets.symmetric(vertical: defaultPadding(context)),
                   child: CommonWidgets.defaultBackwardButton(

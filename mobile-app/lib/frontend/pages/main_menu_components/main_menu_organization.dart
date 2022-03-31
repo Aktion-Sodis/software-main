@@ -34,7 +34,7 @@ class MainMenuOrganization extends StatelessWidget {
   Widget appBarWidget(BuildContext context,
       EntitiesLoadedOrganizationViewState organizationViewState) {
     return Container(
-        height: height(context) * .1,
+        height: height(context) * .11,
         width: width(context),
         child: Column(children: [
           Expanded(
@@ -45,6 +45,7 @@ class MainMenuOrganization extends StatelessWidget {
                 organizationViewState.currentListEntities.first.level.id ==
                     organizationViewState.getLevelsInOrder().first.id))
               Container(
+                  alignment: Alignment.center,
                   margin:
                       EdgeInsets.symmetric(vertical: defaultPadding(context)),
                   child: CommonWidgets.defaultBackwardButton(
@@ -73,9 +74,12 @@ class MainMenuOrganization extends StatelessWidget {
                     children: [
                       Expanded(
                           child: Container(
+                             padding: EdgeInsets.symmetric(
+                               vertical: defaultPadding(context)
+                             ),
                               child: Text(organizationViewState.appBarString,
                                   style:
-                                      Theme.of(context).textTheme.headline2))),
+                                      Theme.of(context).textTheme.headline2, overflow: TextOverflow.ellipsis,))),
                       if (organizationViewState.organizationViewType ==
                               OrganizationViewType.LIST &&
                           organizationViewState.addEntityPossible)
@@ -138,8 +142,6 @@ class MainMenuOrganization extends StatelessWidget {
   Widget mainWidget(BuildContext context,
       EntitiesLoadedOrganizationViewState organizationViewState) {
     Widget actualWidget() {
-      print(
-          "getting actual Widget for ${organizationViewState.organizationViewType}");
       switch (organizationViewState.organizationViewType) {
         case OrganizationViewType.LIST:
           return Container(
@@ -218,10 +220,7 @@ class MainMenuOrganization extends StatelessWidget {
               entity: organizationViewState.currentDetailEntity!);
         case OrganizationViewType.EXECUTEDSURVEY:
           return ExecutedSurveyWidget(
-              organizationViewState.executedSurveyToDisplay!,
-              (context.read<OrganizationViewBloc>().state
-                      as EntitiesLoadedOrganizationViewState)
-                  .currentDetailAppliedIntervention!);
+              organizationViewState.executedSurveyToDisplay!,);
 
         default:
           return Container();
@@ -498,6 +497,7 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
+                                alignment: Alignment.center,
                                 margin: EdgeInsets.symmetric(
                                     vertical: defaultPadding(context)),
                                 child: CommonWidgets.defaultBackwardButton(
@@ -1323,42 +1323,45 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
         child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
             body: Column(children: [
-              Container(
-                  height: height(context) * .1,
-                  width: width(context),
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                            margin: EdgeInsets.symmetric(
-                                vertical: defaultPadding(context)),
-                            child: CommonWidgets.defaultBackwardButton(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: defaultPadding(context)),
-                                context: context,
-                                goBack: () => Navigator.of(context)
-                                    .pop(appliedIntervention))),
-                        Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                  child: Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          widget.appliedIntervention == null
-                                              ? strings
-                                                  .organization_view_dialog_add_appliedintervention
-                                              : strings
-                                                  .organization_view_dialog_update_appliedintervention,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline2))),
-                            ],
-                          ),
-                        )
-                      ])),
+              Flexible(
+                child: Container(
+                    height: height(context) * .1,
+                    width: width(context),
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.symmetric(
+                                  vertical: defaultPadding(context)),
+                              child: CommonWidgets.defaultBackwardButton(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: defaultPadding(context)),
+                                  context: context,
+                                  goBack: () => Navigator.of(context)
+                                      .pop(appliedIntervention))),
+                          Expanded(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                    child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                            widget.appliedIntervention == null
+                                                ? strings
+                                                    .organization_view_dialog_add_appliedintervention
+                                                : strings
+                                                    .organization_view_dialog_update_appliedintervention,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline2))),
+                              ],
+                            ),
+                          )
+                        ])),
+              ),
               !loaded
                   ? Center(child: loadingSign(context))
                   : appliedIntervention == null
@@ -1530,9 +1533,8 @@ class ExecutedSurveyWidget extends StatelessWidget {
   final ExecutedSurvey executedSurvey;
 
   Map<Question, QuestionAnswer> mappedAnswers = {};
-  final AppliedIntervention appliedIntervention;
 
-  ExecutedSurveyWidget(this.executedSurvey, this.appliedIntervention) {
+  ExecutedSurveyWidget(this.executedSurvey) {
     for (Question question in executedSurvey.survey.questions) {
       var answers = executedSurvey.answers
           .where((element) => element.questionID == question.id);
@@ -1547,7 +1549,7 @@ class ExecutedSurveyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return surveyarea.SurveyWidgetState.summaryWidget(
       survey: executedSurvey.survey,
-      appliedIntervention: appliedIntervention,
+      appliedIntervention: executedSurvey.appliedIntervention,
       executedSurveyId: executedSurvey.id!,
       answers: mappedAnswers,
       context: context,

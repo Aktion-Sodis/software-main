@@ -33,6 +33,7 @@ Future<ThemeData> getThemeData() async {
         showUnselectedLabels: true),
     textTheme: TextTheme(
         overline: TextStyle(color: Colors.black87),
+
         headline1: TextStyle(color: Colors.blue, fontSize: 26),
         headline2: TextStyle(color: Colors.black87, fontSize: 26),
         subtitle1: TextStyle(color: Colors.black87, fontSize: 22),
@@ -59,6 +60,7 @@ Future<ThemeData> getThemeData() async {
     iconTheme: const IconThemeData(
       size: 25,
     ),
+
   );
 
 }
