@@ -3,6 +3,7 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { dataTypesDict, modalModesDict } from '../constants';
 import { deleteIntervention, updateIntervention } from '../../graphql/mutations';
 import { listInterventions, listInterventionTags } from '../../graphql/queries';
+import { InterventionInterventionTagRelation } from '../../models';
 
 const interventionsData = {
   namespaced: true,
@@ -51,10 +52,26 @@ const interventionsData = {
     },
   },
   actions: {
-    APIpost: async ({ commit, dispatch }, interventionDraft) => {
+    APIpost: async ({ commit, dispatch, getters }, interventionDraft) => {
       commit('setLoading', { newValue: true });
       DataStore.save(interventionDraft)
-        .then((postResponse) => {
+        .then(async (postResponse) => {
+          const tagIds = interventionDraft.tags;
+
+          // eslint-disable-next-line no-restricted-syntax
+          for (const tagId of tagIds) {
+            const localTag = getters.tagById({ id: tagId });
+            console.log(localTag);
+
+            // eslint-disable-next-line no-await-in-loop
+            await DataStore.save(
+              new InterventionInterventionTagRelation({
+                intervention: postResponse,
+                interventionTag: localTag,
+              }),
+            );
+          }
+
           commit('addIntervention', postResponse);
           dispatch(
             'dataModal/readData',

@@ -163,10 +163,10 @@
                 </v-card-title>
 
                 <div v-if="read && interventionInFocus">
-                  <v-chip v-for="tagId in interventionInFocus.tagIds" :key="tagId">
+                  <v-chip v-for="tagId in interventionInFocus.tags" :key="tagId">
                     {{
                       calculateUILocaleString({
-                        languageTexts: tagById({ tagId }).name,
+                        languageTexts: tagById({ id: tagId }).text.languageTexts,
                       })
                     }}
                   </v-chip>
