@@ -80,20 +80,19 @@ const surveysData = {
 
       const surveyDraft = rootGetters['dataModal/getDataDraft'];
 
-      console.log({ questions, options, surveyDraft });
-
       const survey = new Survey({
         name: surveyDraft.name,
+        interventionSurveysId: surveyDraft.interventionSurveysId,
         description: surveyDraft.description,
-        surveyType: surveyDraft.surveyType,
         questions: questions.map(
           (q, i) => new Question({ ...q, questionOptions: options[i].map((o) => new QuestionOption(o)) }),
         ),
+        tags: [],
+        surveyType: surveyDraft.surveyType,
       });
 
       DataStore.save(survey)
         .then((postResponse) => {
-          console.log({ postResponse });
           commit('addSurvey', postResponse);
           dispatch(
             'dataModal/readData',
@@ -111,12 +110,10 @@ const surveysData = {
           console.log({ err });
           commit('setLoading', { newValue: false });
         });
-
-      console.log(JSON.stringify({ survey }));
-      // APIput: async ({ commit }) => {},
-      // API.graphql({query: createSurvey, variables: {input: surveyDraft}})
-      // APIgetNewSurvey: async ({ commit }) => {},
     },
+    // APIput: async ({ commit }) => {},
+    // API.graphql({query: createSurvey, variables: {input: surveyDraft}})
+    // APIgetNewSurvey: async ({ commit }) => {},
   },
 };
 

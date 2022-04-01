@@ -195,6 +195,7 @@
     },
     "modal": {
       "image": "Anket Resmi",
+      "intervention": "Anketin müdahalesi:",
       "firstCard": {
         "title": {
           "edit": "Anket düzenleniyor... ",

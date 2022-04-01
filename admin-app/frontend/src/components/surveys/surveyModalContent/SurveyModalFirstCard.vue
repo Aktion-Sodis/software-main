@@ -165,6 +165,45 @@
                 outlined
                 class="mt-8"
               ></v-select>
+
+              <v-card-title class="pt-0 pr-0 d-flex justify-space-between">
+                <span class="mr-2">
+                  {{ $t('surveys.modal.intervention') }}
+                </span>
+                <v-chip v-if="read">
+                  {{
+                    calculateUILocaleString({
+                      languageTexts: INTERVENTIONById({ id: surveyInFocus.interventionSurveysId })
+                        .name.languageTexts,
+                    })
+                  }}
+                </v-chip>
+                <v-select
+                  v-else
+                  v-model="interventionId"
+                  :items="interventions"
+                  item-value="id"
+                  dense
+                  :label="$t('interventions.title')"
+                  outlined
+                  class="mt-6"
+                >
+                  <template v-slot:selection="data">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: data.item.name.languageTexts,
+                      })
+                    }}
+                  </template>
+                  <template v-slot:item="data">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: data.item.name.languageTexts,
+                      })
+                    }}
+                  </template>
+                </v-select>
+              </v-card-title>
             </v-col>
           </v-row>
         </v-container>
@@ -183,7 +222,8 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict } from '../../../store/constants';
 import LocaleTextBox from '../../global/LocaleTextBox.vue';
-import { I18nString, Survey, SurveyType } from '../../../models';
+import { Survey, SurveyType } from '../../../models';
+import { emptyI18nString } from '../../../store/classes';
 
 const surveyDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_SURVEY_DESCRIPTION_MAX_CHAR, 10),
@@ -199,18 +239,13 @@ export default {
       rules: {
         maxChar: (value) => value.length <= surveyDescriptionMaxChar || this.maxCharExceededi18n,
       },
-      name: new I18nString({
-        languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
-      }),
-      description: new I18nString({
-        languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
-      }),
+      name: emptyI18nString(),
+      description: emptyI18nString(),
       surveyTags: [],
       SurveyType,
       typeIndex: 0,
       types: [SurveyType.INITIAL, SurveyType.DEFAULT],
+      interventionId: null,
     };
   },
   mounted() {
@@ -227,6 +262,8 @@ export default {
 
       fallbackLocaleIndex: 'fallbackLocaleIndex',
       calculateUILocaleString: 'calculateUILocaleString',
+      INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
+      interventions: 'INTERVENTION_Data/getInterventions',
     }),
     surveyInFocus() {
       return this.SURVEYById({ id: this.dataIdInFocus });
@@ -278,6 +315,7 @@ export default {
           tags: this.surveyTags,
           questions: [],
           surveyType: this.type,
+          interventionSurveysId: this.interventionId,
         }),
       );
       this.incrementCompletionIndex();
