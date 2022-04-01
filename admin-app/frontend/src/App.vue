@@ -5,7 +5,7 @@
         v-if="$vuetify.breakpoint.name !== 'xs'"
         :style="isInAuthView ? '' : 'margin-right: 1rem;'"
       />
-      <SearchBox v-if="!isInAuthView" />
+      <!-- <SearchBox v-if="!isInAuthView" /> -->
     </div>
 
     <v-main :class="vMainClass">
@@ -30,7 +30,7 @@ import BottomNav from './components/commons/BottomNav.vue';
 import DevPhaseSnackbar from './components/commons/DevPhaseSnackbar.vue';
 import Feedback from './components/commons/Feedback.vue';
 import LangSelect from './components/commons/LangSelect.vue';
-import SearchBox from './components/commons/SearchBox.vue';
+// import SearchBox from './components/commons/SearchBox.vue';
 import SideBar from './components/commons/SideBar.vue';
 
 export default {
@@ -40,7 +40,7 @@ export default {
     Feedback,
     BottomNav,
     LangSelect,
-    SearchBox,
+    // SearchBox,
     DevPhaseSnackbar,
   },
   data: () => ({
