@@ -34,6 +34,7 @@ const levelsData = {
     },
 
     lowestLevelId: (_, { sortedLevels }) => sortedLevels[sortedLevels.length - 1].id,
+    highestLevelId: (_, { sortedLevels }) => sortedLevels[0].id,
     upperLevelById:
       (_, { getLevels }) => ({ id }) => {
         const currentLevel = getLevels.find((l) => l.id === id);

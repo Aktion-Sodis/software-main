@@ -33,6 +33,7 @@
                 <LocaleTextBox
                   v-else
                   labelPrefixI18nSelector="organizationStructure.entityModal.name"
+                  :initVal="name"
                   @res="nameUpdatedHandler"
                 >
                   <template v-slot:text-input="slotProps">
@@ -65,6 +66,7 @@
                 <LocaleTextBox
                   v-else
                   labelPrefixI18nSelector="organizationStructure.entityModal.description"
+                  :initVal="description"
                   @res="descriptionUpdatedHandler"
                 >
                   <template v-slot:text-input="slotProps">
@@ -151,6 +153,8 @@
             {{ $t('general.save') }}
           </v-btn>
         </v-card-actions>
+        {{ name }}
+        {{ description }}
       </v-form>
     </v-card>
   </v-dialog>
@@ -160,7 +164,8 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
-import { Entity } from '../../models';
+import { Entity, I18nString } from '../../models';
+import { emptyI18nString } from '../../store/classes';
 
 const entityDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_ENTITY_DESCRIPTION_MAX_CHAR, 10),
@@ -178,8 +183,8 @@ export default {
       rules: {
         maxChar: (value) => value.length <= entityDescriptionMaxChar || this.maxCharExceededi18n,
       },
-      name: '',
-      description: '',
+      name: emptyI18nString(),
+      description: emptyI18nString(),
       parentEntityID: null,
     };
   },
@@ -214,6 +219,7 @@ export default {
       const currentLevel = this.LEVELById({
         id: this.edit ? this.entityInFocus?.entityLevelId : this.getCreatingEntityInLevelId,
       });
+      if (!currentLevel) return [];
       return this.allEntitiesOfLevel({ entityLevelId: currentLevel.parentLevelID });
     },
     edit() {
@@ -280,13 +286,14 @@ export default {
     async submitHandler() {
       await this.setDraft(
         new Entity({
-          name: this.name,
-          description: this.description,
+          name: new I18nString(this.name),
+          description: new I18nString(this.description),
           entityLevelId: this.edit
             ? this.entityInFocus.entityLevelId
             : this.getCreatingEntityInLevelId,
           parentEntityID: this.parentEntityID ?? null,
-          appliedInterventions: [], // TODO
+          appliedInterventions: [], //
+          customData: [], // TODO
         }),
       );
       await this.$nextTick();

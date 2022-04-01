@@ -2,8 +2,7 @@ import Vue from 'vue';
 import { dataTypesDict, modalModesDict } from '../constants';
 
 import { EmptyEntity } from '../entities/utils';
-import { emptyLevel } from '../levels/utils';
-import { emptySurvey, emptyIntervention } from '../classes';
+import { emptySurvey, emptyIntervention, emptyLevel } from '../classes';
 
 const dataModal = {
   namespaced: true,
@@ -93,7 +92,7 @@ const dataModal = {
       commit('setDataIdInFocus', { newValue: dataId });
       commit('setDataType', { newValue: dataType });
       const data = rootGetters[`${dataType}_Data/${dataType}ById`]({ id: dataId });
-      commit(`set${dataType}Draft`, data);
+      commit('setDraft', data);
       // commit('setIsDisplayed', { newValue: true });
     },
     abortEditData: async ({ commit }, { dataType }) => {

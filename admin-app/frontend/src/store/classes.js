@@ -3,6 +3,7 @@ import {
   I18nString,
   Intervention,
   InterventionType,
+  Level,
   Question,
   QuestionOption,
   QuestionType,
@@ -45,6 +46,16 @@ const emptyQuestionOption = () => new QuestionOption({
   text: emptyI18nString(),
   followUpQuestionID: null,
 });
+
+export const emptyLevel = () => {
+  const level = new Level({
+    name: emptyI18nString(),
+    description: emptyI18nString(),
+    parentLevelID: null,
+    allowedInterventions: [],
+  });
+  return level;
+};
 
 export {
   emptyIntervention, emptyI18nString, emptySurvey, emptyQuestion, emptyQuestionOption,

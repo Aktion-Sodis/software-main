@@ -1,12 +1,12 @@
 import Vue from 'vue';
-import { Level } from '../../models';
-import { EmptyLevel } from './utils';
+// import { Level } from '../../models';
+import { emptyLevel } from '../classes';
 import { modalModesDict } from '../constants';
 
 const levelsUI = {
   namespaced: true,
   state: () => ({
-    levelDraft: new EmptyLevel(),
+    levelDraft: emptyLevel(),
 
     levelIdInFocus: null,
     isLevelModalDisplayed: false,
@@ -25,7 +25,7 @@ const levelsUI = {
   },
   mutations: {
     resetLevelDraft: (state) => {
-      state.levelDraft = new EmptyLevel();
+      state.levelDraft = emptyLevel();
     },
     setLevelIdInFocus: (state, { newValue }) => {
       state.levelIdInFocus = newValue;
