@@ -165,7 +165,7 @@
         "EDUCATION": "Education"
       }
     },
-    "interventionModal": {
+    "modal": {
       "modalTitle": {
         "read": "Viewing intervention",
         "edit": "Edit intervention ",
@@ -183,8 +183,19 @@
       "noImages": "No images uploaded.",
       "noVideos": "No videos uploaded.",
       "noSurveys": "No surveys uploaded."
+    }
+  },
+  "surveys": {
+    "type": {
+      "title": "Survey Type",
+      "types": {
+        "INITIAL": "Initial",
+        "DEFAULT": "Default"
+      }
     },
-    "surveyModal": {
+    "modal": {
+      "image": "Survey Image",
+      "intervention": "Survey belongs to:",
       "firstCard": {
         "title": {
           "edit": "Editing survey ",
@@ -211,17 +222,17 @@
           "answer": {
             "title": "Answer",
             "typeLabel": "Question type",
-            "answer": "Answer",
-            "textLabel": "Answer text",
-            "addImage": "Add image to answer",
-            "addAnswer": "Add answer",
+            "answer": "Option",
+            "textLabel": "Option text",
+            "addImage": "Add image to option",
+            "addAnswer": "Add option",
             "questionTypes": {
-              "text": "Text",
-              "singleChoice": "Single choice",
-              "multipleChoice": "Multiple choice",
-              "picture": "Picture",
-              "pictureWithTags": "Picture with tags",
-              "audio": "Audio"
+              "TEXT": "Text",
+              "SINGLECHOICE": "Single choice",
+              "MULTIPLECHOICE": "Multiple choice",
+              "PICTURE": "Picture",
+              "PICTUREWITHTAGS": "Picture with tags",
+              "AUDIO": "Audio"
             }
           }
         },

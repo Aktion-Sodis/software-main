@@ -63,7 +63,7 @@ export default {
   methods: {
     removeSelectedLocale(locale) {
       const foundIndex = this.res.languageKeys.findIndex((k) => k === locale);
-      const languageTexts = this.res.languageTexts.map((t, i) => (i === foundIndex ? null : t));
+      const languageTexts = this.res.languageTexts.map((t, i) => (i === foundIndex ? '' : t));
       this.res = new I18nString({
         languageKeys: this.res.languageKeys,
         languageTexts,

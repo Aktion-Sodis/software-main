@@ -9,7 +9,7 @@
       <v-form lazy-validation>
         <v-card-title>
           <h2 v-if="edit">
-            {{ $t('interventions.interventionModal.modalTitle.edit') }}
+            {{ $t('interventions.modal.modalTitle.edit') }}
             <i>
               {{
                 calculateUILocaleString({
@@ -19,17 +19,17 @@
             </i>
           </h2>
           <h2 v-else-if="create">
-            {{ $t('interventions.interventionModal.modalTitle.create') }}
+            {{ $t('interventions.modal.modalTitle.create') }}
           </h2>
           <h2 v-else>
-            {{ $t('interventions.interventionModal.modalTitle.read') }}
+            {{ $t('interventions.modal.modalTitle.read') }}
           </h2>
         </v-card-title>
         <v-card-subtitle v-if="edit">
-          {{ $t('interventions.interventionModal.modalDescription.edit') }}
+          {{ $t('interventions.modal.modalDescription.edit') }}
         </v-card-subtitle>
         <v-card-subtitle v-else-if="create">
-          {{ $t('interventions.interventionModal.modalDescription.create') }}
+          {{ $t('interventions.modal.modalDescription.create') }}
         </v-card-subtitle>
 
         <v-card-text>
@@ -37,7 +37,7 @@
             <v-row>
               <v-col cols="12" sm="6" class="pb-0 px-0 px-sm-3">
                 <v-card-title class="pt-0 pt-sm-2">
-                  {{ $t('interventions.interventionModal.name') }}
+                  {{ $t('interventions.modal.name') }}
                 </v-card-title>
                 <h2 v-if="read && interventionInFocus">
                   {{
@@ -48,7 +48,7 @@
                 </h2>
                 <LocaleTextBox
                   v-else
-                  labelPrefixI18nSelector="interventions.interventionModal.name"
+                  labelPrefixI18nSelector="interventions.modal.name"
                   @res="nameUpdatedHandler"
                 >
                   <template v-slot:text-input="slotProps">
@@ -65,7 +65,7 @@
                 </LocaleTextBox>
 
                 <v-card-title class="pt-4">
-                  {{ $t('interventions.interventionModal.description') }}
+                  {{ $t('interventions.modal.description') }}
                 </v-card-title>
                 <div
                   v-if="read && interventionInFocus"
@@ -83,7 +83,7 @@
 
                 <LocaleTextBox
                   v-else
-                  labelPrefixI18nSelector="interventions.interventionModal.description"
+                  labelPrefixI18nSelector="interventions.modal.description"
                   @res="descriptionUpdatedHandler"
                 >
                   <template v-slot:text-input="slotProps">
@@ -142,7 +142,7 @@
                 </v-card-title>
 
                 <v-card-title class="pt-0 pt-sm-2">
-                  {{ $t('interventions.interventionModal.image') }}
+                  {{ $t('interventions.modal.image') }}
                 </v-card-title>
 
                 <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" max-height="200px">
@@ -235,7 +235,7 @@
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
-                <p v-else-if="read">{{ $t('interventions.interventionModal.noDocuments') }}</p>
+                <p v-else-if="read">{{ $t('interventions.modal.noDocuments') }}</p>
 
                 <v-card-title>
                   {{ $t('baseData.images') }}
@@ -275,7 +275,7 @@
                     </v-col>
                   </v-row>
                 </div>
-                <p v-else-if="read">{{ $t('interventions.interventionModal.noImages') }}</p>
+                <p v-else-if="read">{{ $t('interventions.modal.noImages') }}</p>
 
                 <v-card-title>
                   {{ $t('baseData.videos') }}
@@ -295,7 +295,7 @@
                     <video width="50"></video>
                   </div>
                 </div>
-                <p v-else-if="read">{{ $t('interventions.interventionModal.noVideos') }}</p>
+                <p v-else-if="read">{{ $t('interventions.modal.noVideos') }}</p>
 
                 <v-card-title>
                   {{ $t('baseData.surveys') }}
@@ -311,7 +311,7 @@
                   </v-btn>
                 </v-card-title>
                 <p v-if="read">
-                  {{ $t('interventions.interventionModal.noSurveys') }}
+                  {{ $t('interventions.modal.noSurveys') }}
                 </p>
               </v-col>
             </v-row>
@@ -348,7 +348,8 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
-import { I18nString, Intervention, InterventionType } from '../../models';
+import { Intervention, InterventionType } from '../../models';
+import { emptyI18nString } from '../../store/classes';
 
 const interventionDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_INTERVENTION_DESCRIPTION_MAX_CHAR, 10),
@@ -366,16 +367,10 @@ export default {
         maxChar: (value) => value.length <= interventionDescriptionMaxChar || this.maxCharExceededi18n,
       },
       id: null,
-      name: new I18nString({
-        languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
-      }),
+      name: emptyI18nString(),
       typeIndex: 0,
       types: [InterventionType.TECHNOLOGY, InterventionType.EDUCATION],
-      description: new I18nString({
-        languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
-      }),
+      description: emptyI18nString(),
       tagIds: [],
       levelIds: [],
       contents: [],
@@ -484,7 +479,9 @@ export default {
       this.closeInterventionModal();
     },
     async submitHandler() {
-      const originalVersion = this.INTERVENTIONById({ id: this.dataIdInFocus })._version;
+      const originalVersion = this.edit
+        ? this.INTERVENTIONById({ id: this.dataIdInFocus })._version
+        : null;
       this.setDraft(
         new Intervention({
           name: this.name,

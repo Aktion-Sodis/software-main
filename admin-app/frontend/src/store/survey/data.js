@@ -1,21 +1,15 @@
-import { Survey } from './utils';
+// import { API, DataStore } from 'aws-amplify';
+// import { createSurvey } from '../../graphql/mutations';
+import { DataStore } from 'aws-amplify';
+import { Question, QuestionOption, Survey } from '../../models';
+import { dataTypesDict } from '../constants';
 
 const surveysData = {
   namespaced: true,
   state: () => ({
-    surveys: [
-      {
-        id: '6a13dbb7-7cc3-45d7-99e9-a6f764156fc6',
-        name: 'My survey',
-        description: 'Just some survey',
-        type: 'Initial',
-        questions: [],
-        creationDate: 1641335580514,
-        lastEditDate: null,
-        tags: ['c3089035-a6c7-417f-bed5-6a2d4ba44ec6'],
-      },
-    ],
-    surveyTags: [{ tagId: 'c3089035-a6c7-417f-bed5-6a2d4ba44ec6', name: 'Some tag' }],
+    surveys: [],
+    surveyTags: [],
+    loading: false,
   }),
   getters: {
     /* READ */
@@ -65,10 +59,60 @@ const surveysData = {
     deleteSurvey: (state, id) => {
       state.surveys = state.surveys.filter((s) => s.id !== id);
     },
+
+    setLoading: (state, { newValue }) => {
+      state.loading = newValue;
+    },
   },
   actions: {
-    // APIpost: async ({ commit }) => {},
+    APIpost: async ({ commit, dispatch, rootGetters }) => {
+      commit('setLoading', { newValue: true });
+
+      const questionsWithUnnecessaryLastOne = rootGetters['QUESTION_UI/getQuestionDrafts'];
+      const questions = questionsWithUnnecessaryLastOne.slice(0, -1);
+      const rawOptions = rootGetters['QUESTION_UI/getOptionDrafts'];
+      const options = [];
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const rawOption of rawOptions) {
+        options.push(rawOption.filter((o) => !o.text.languageTexts.every((t) => t === '')));
+      }
+
+      const surveyDraft = rootGetters['dataModal/getDataDraft'];
+
+      const survey = new Survey({
+        name: surveyDraft.name,
+        interventionSurveysId: surveyDraft.interventionSurveysId,
+        description: surveyDraft.description,
+        questions: questions.map(
+          (q, i) => new Question({ ...q, questionOptions: options[i].map((o) => new QuestionOption(o)) }),
+        ),
+        tags: [],
+        surveyType: surveyDraft.surveyType,
+      });
+
+      DataStore.save(survey)
+        .then((postResponse) => {
+          commit('addSurvey', postResponse);
+          dispatch(
+            'dataModal/readData',
+            {
+              dataId: postResponse.id,
+              dataType: dataTypesDict.survey,
+            },
+            {
+              root: true,
+            },
+          );
+          commit('setLoading', { newValue: false });
+        })
+        .catch((err) => {
+          console.log({ err });
+          commit('setLoading', { newValue: false });
+        });
+    },
     // APIput: async ({ commit }) => {},
+    // API.graphql({query: createSurvey, variables: {input: surveyDraft}})
     // APIgetNewSurvey: async ({ commit }) => {},
   },
 };

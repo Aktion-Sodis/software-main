@@ -3,10 +3,18 @@
     <v-form lazy-validation>
       <v-card-title class="flex-column flex-sm-row">
         <h2 v-if="read">
-          {{ surveyNameInFocus }}
+          {{
+            calculateUILocaleString({
+              languageTexts: surveyNameInFocus.languageTexts,
+            })
+          }}
         </h2>
         <h2 v-else>
-          {{ surveyDraft.name }}
+          {{
+            calculateUILocaleString({
+              languageTexts: surveyDraft.name.languageTexts,
+            })
+          }}
         </h2>
         <v-spacer v-if="$vuetify.breakpoint.name !== 'xs'"></v-spacer>
         <div class="d-flex">
@@ -22,7 +30,7 @@
             {{
               $vuetify.breakpoint.name === 'xs'
                 ? ''
-                : $t('interventions.surveyModal.questionCard.backToDetails')
+                : $t('surveys.modal.questionCard.backToDetails')
             }}
           </v-btn>
           <v-btn
@@ -36,7 +44,7 @@
             {{
               $vuetify.breakpoint.name === 'xs'
                 ? ''
-                : $t('interventions.surveyModal.questionCard.finalizeSurvey')
+                : $t('surveys.modal.questionCard.finalizeSurvey')
             }}
             <v-icon large class="ml-2"> mdi-chevron-right </v-icon>
           </v-btn>
@@ -46,25 +54,33 @@
       <v-card-text>
         <v-container>
           <v-row>
-            <v-col cols="12" sm="6" class="pb-0 px-0 px-sm-3">
+            <v-col cols="12" sm="6" class="py-0 px-0 px-sm-3">
               <h2 class="mb-2">
-                {{ $t('interventions.surveyModal.questionCard.form.question.title') }}
+                {{ $t('surveys.modal.questionCard.form.question.title') }}
               </h2>
               <h3 v-if="read">
                 {{ questionTextInFocus }}
               </h3>
-              <v-textarea
+              <LocaleTextBox
                 v-else
-                autofocus
-                v-model="questionText"
-                :rules="[rules.maxChar]"
-                :label="$t('interventions.surveyModal.questionCard.form.question.textLabel')"
-                outlined
-                dense
-              ></v-textarea>
+                labelPrefixI18nSelector="surveys.modal.questionCard.form.question.textLabel"
+                @res="questionUpdatedHandler"
+              >
+                <template v-slot:text-input="slotProps">
+                  <v-textarea
+                    autofocus
+                    required
+                    outlined
+                    dense
+                    :label="slotProps.label"
+                    v-model="slotProps.model"
+                    @input="slotProps.inputHandler"
+                  ></v-textarea>
+                </template>
+              </LocaleTextBox>
 
-              <h3>
-                {{ $t('interventions.surveyModal.questionCard.form.question.imageTitle') }}
+              <h3 class="mt-4">
+                {{ $t('surveys.modal.questionCard.form.question.imageTitle') }}
               </h3>
               <div class="d-flex justify-center">
                 <v-btn
@@ -77,7 +93,7 @@
                 >
                   <v-icon class="mr-2"> mdi-image </v-icon>
                   <span class="overflow-hidden">
-                    {{ $t('interventions.surveyModal.questionCard.form.question.addImage') }}
+                    {{ $t('surveys.modal.questionCard.form.question.addImage') }}
                   </span>
                 </v-btn>
                 <input
@@ -90,7 +106,7 @@
               </div>
 
               <h3 class="mt-8">
-                {{ $t('interventions.surveyModal.questionCard.form.question.audioTitle') }}
+                {{ $t('surveys.modal.questionCard.form.question.audioTitle') }}
               </h3>
               <div class="d-flex justify-center">
                 <v-btn
@@ -103,7 +119,7 @@
                 >
                   <v-icon class="mr-2"> mdi-waveform </v-icon>
                   <span class="overflow-hidden">
-                    {{ $t('interventions.surveyModal.questionCard.form.question.addAudio') }}
+                    {{ $t('surveys.modal.questionCard.form.question.addAudio') }}
                   </span>
                 </v-btn>
                 <input
@@ -118,13 +134,13 @@
 
             <v-col cols="12" sm="6" class="pt-4 px-0 px-sm-3 pt-sm-0">
               <h2 class="mb-2">
-                {{ $t('interventions.surveyModal.questionCard.form.answer.title') }}
+                {{ $t('surveys.modal.questionCard.form.answer.title') }}
               </h2>
               <v-select
                 v-if="edit || create"
-                v-model="questionType"
+                v-model="type"
                 :items="questionTypesItemValue"
-                :label="$t('interventions.surveyModal.questionCard.form.answer.typeLabel')"
+                :label="$t('surveys.modal.questionCard.form.answer.typeLabel')"
                 outlined
                 dense
               ></v-select>
@@ -132,15 +148,15 @@
               <v-divider class="mb-4"></v-divider>
 
               <div v-if="areAnswersNeeded">
-                <div v-for="(answer, index) in answers" :key="index">
+                <div v-for="(option, index) in options" :key="index">
                   <h3>
-                    {{ $t('interventions.surveyModal.questionCard.form.answer.answer') }}
+                    {{ $t('surveys.modal.questionCard.form.answer.answer') }}
                     {{ index + 1 }}
                   </h3>
                   <div class="d-flex justify-space-between">
                     <v-text-field
-                      v-model="answers[index].answerText"
-                      :label="$t('interventions.surveyModal.questionCard.form.answer.textLabel')"
+                      @input="(e) => optionUpdatedHandler(e, index)"
+                      :label="$t('surveys.modal.questionCard.form.answer.textLabel')"
                       outlined
                       dense
                       :hide-details="true"
@@ -153,27 +169,27 @@
                         color="primary"
                         rounded
                         outlined
-                        @click="clickOnAddImgToAnswer"
+                        @click="clickOnAddImgToOption"
                         class="ml-2"
                       >
                         <v-icon class="mr-2"> mdi-image </v-icon>
                         <span class="overflow-hidden">
-                          {{ $t('interventions.surveyModal.questionCard.form.answer.addImage') }}
+                          {{ $t('surveys.modal.questionCard.form.answer.addImage') }}
                         </span>
                       </v-btn>
                       <input
                         v-if="edit || create"
                         type="file"
                         accept="image/png, image/jpeg"
-                        :ref="`answer-img-upload`"
+                        :ref="`option-img-upload`"
                         style="display: none"
                       />
                       <v-btn
-                        v-if="edit || create"
+                        v-if="(edit || create) && options.length > 2"
                         color="primary"
                         outlined
                         icon
-                        @click="clickOnRemoveAnswer(index)"
+                        @click="clickOnRemoveOption(index)"
                         class="ml-2"
                       >
                         <v-icon> mdi-minus </v-icon>
@@ -182,18 +198,18 @@
                   </div>
                 </div>
 
-                <div class="d-flex justify-center">
+                <div class="d-flex justify-center" v-if="maxNOptionsAchieved">
                   <v-btn
                     v-if="edit || create"
                     color="primary"
                     rounded
                     x-large
                     class="mt-2"
-                    @click="clickOnAddAnswer"
+                    @click="clickOnAddOption"
                   >
                     <v-icon class="mr-2"> mdi-plus </v-icon>
                     <span class="overflow-hidden">
-                      {{ $t('interventions.surveyModal.questionCard.form.answer.addAnswer') }}
+                      {{ $t('surveys.modal.questionCard.form.answer.addAnswer') }}
                     </span>
                   </v-btn>
                   <input
@@ -214,7 +230,7 @@
           {{
             $vuetify.breakpoint.name === 'xs'
               ? ''
-              : $t('interventions.surveyModal.questionCard.discardQuestion')
+              : $t('surveys.modal.questionCard.discardQuestion')
           }}
           <v-icon large> mdi-delete </v-icon>
         </v-btn>
@@ -232,7 +248,7 @@
             {{
               $vuetify.breakpoint.name === 'xs'
                 ? ''
-                : $t('interventions.surveyModal.questionCard.priorQuestion')
+                : $t('surveys.modal.questionCard.priorQuestion')
             }}
           </v-btn>
           <v-btn
@@ -244,9 +260,7 @@
             v-if="!isAtLastQuestion"
           >
             {{
-              $vuetify.breakpoint.name === 'xs'
-                ? ''
-                : $t('interventions.surveyModal.questionCard.nextQuestion')
+              $vuetify.breakpoint.name === 'xs' ? '' : $t('surveys.modal.questionCard.nextQuestion')
             }}
             <v-icon large> mdi-skip-next </v-icon>
           </v-btn>
@@ -254,11 +268,7 @@
 
         <v-spacer></v-spacer>
         <v-btn x-large text class="text-none" @click="saveQuestion" :disabled="!canSave">
-          {{
-            $vuetify.breakpoint.name === 'xs'
-              ? ''
-              : $t('interventions.surveyModal.questionCard.saveDraft')
-          }}
+          {{ $vuetify.breakpoint.name === 'xs' ? '' : $t('surveys.modal.questionCard.saveDraft') }}
           <v-icon large class="ml-2"> mdi-content-save-outline </v-icon>
         </v-btn>
       </v-card-actions>
@@ -268,13 +278,25 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { modalModesDict, questionTypesDict } from '../../../store/constants';
-import { EmptyQuestion, EmptyAnswer, Answer } from '../../../store/questions/utils';
+import { v4 as uuidv4 } from 'uuid';
+import {
+  I18nString, Question, QuestionOption, QuestionType,
+} from '../../../models';
+import { emptyQuestionOption, emptyI18nString } from '../../../store/classes';
+import { modalModesDict } from '../../../store/constants';
+// eslint-disable-next-line import/named
+import { compareI18nStrings } from '../../../store/utils';
+
+import LocaleTextBox from '../../global/LocaleTextBox.vue';
 
 const questionTextMaxChar = Math.max(parseInt(process.env.VUE_APP_QUESTION_TEXT_MAX_CHAR, 10), 0);
+const maxNOptions = Math.min(Number(process.env.VUE_APP_MAX_N_QUESTION_OPTIONS), 0);
 
 export default {
   name: 'SurveyModalQuestion',
+  components: {
+    LocaleTextBox,
+  },
   watch: {
     questionCurrentDraft: 'updateComponentData',
   },
@@ -283,9 +305,9 @@ export default {
       rules: {
         maxChar: (value) => value.length <= questionTextMaxChar || this.maxCharExceededi18n,
       },
-      questionText: new EmptyQuestion().questionText,
-      questionType: new EmptyQuestion().questionType,
-      answers: [new EmptyAnswer()],
+      text: emptyI18nString(),
+      type: QuestionType.TEXT,
+      options: [emptyQuestionOption()],
     };
   },
   beforeRouteLeave(to, from, next) {
@@ -310,20 +332,23 @@ export default {
       SURVEYById: 'SURVEY_Data/SURVEYById',
       surveyModalMode: 'dataModal/getMode',
       questionCurrentDraft: 'QUESTION_UI/questionCurrentDraft',
-      answersCurrentDraft: 'QUESTION_UI/answersCurrentDraft',
+      optionsCurrentDraft: 'QUESTION_UI/optionsCurrentDraft',
       nQuestions: 'QUESTION_UI/nQuestions',
       iQuestions: 'QUESTION_UI/getIQuestions',
       isAtLastQuestion: 'QUESTION_UI/isAtLastQuestion',
       isAtFirstQuestion: 'QUESTION_UI/isAtFirstQuestion',
       surveyDraft: 'dataModal/getDataDraft',
       questionTextInFocus: 'QUESTION_UI/questionTextInFocus',
+
+      calculateUILocaleString: 'calculateUILocaleString',
+      fallbackLocaleIndex: 'fallbackLocaleIndex',
     }),
     surveyNameInFocus() {
       return this.SURVEYById({ id: this.dataIdInFocus });
     },
     questionTypesItemValue() {
-      return Object.keys(questionTypesDict).map((key) => ({
-        text: this.$t(`interventions.surveyModal.questionCard.form.answer.questionTypes.${key}`),
+      return Object.keys(QuestionType).map((key) => ({
+        text: this.$t(`surveys.modal.questionCard.form.answer.questionTypes.${key}`),
         value: key,
       }));
     },
@@ -333,13 +358,14 @@ export default {
       });
     },
     areThereChanges() {
-      if (this.questionText !== this.questionCurrentDraft.questionText) return true;
-      if (this.questionType !== this.questionCurrentDraft.questionType) return true;
+      if (!compareI18nStrings(this.text, this.questionCurrentDraft.text)) return true;
+      if (this.type !== this.questionCurrentDraft.type) return true;
       if (this.areAnswersNeeded) {
-        if (this.answers.length !== this.answersCurrentDraft.length) return true;
+        if (this.options.length !== this.optionsCurrentDraft.length) return true;
         if (
-          this.answers.filter((a, i) => a.answerText !== this.answersCurrentDraft[i].answerText)
-            .length > 0
+          this.options.filter(
+            (a, i) => !compareI18nStrings(a.text, this.optionsCurrentDraft[i].text),
+          ).length > 0
         ) return true;
       }
       return false;
@@ -363,7 +389,7 @@ export default {
       if (this.read) return false;
       return (
         (!this.areAnswersNeeded
-          || (this.answers.length > 0 && !this.answers.find((a) => a.answerText === '')))
+          || (this.options.length > 0 && !this.options.find((a) => a.text === '')))
         && (!(this.questionCurrentDraft.isEmptyQuestion ?? true) || this.areThereChanges)
       );
     },
@@ -374,7 +400,10 @@ export default {
       return this.read || !this.areThereChanges;
     },
     areAnswersNeeded() {
-      return this.questionType === 'singleChoice' || this.questionType === 'multipleChoice';
+      return this.type === QuestionType.SINGLECHOICE || this.type === QuestionType.MULTIPLECHOICE;
+    },
+    maxNOptionsAchieved() {
+      return this.options.length >= maxNOptions;
     },
   },
   methods: {
@@ -413,28 +442,41 @@ export default {
     },
     updateComponentData() {
       const q = this.questionCurrentDraft;
-      const { answersCurrentDraft } = this;
+      const { optionsCurrentDraft } = this;
 
-      this.questionText = q.questionText;
-      this.questionType = q.questionType;
-      this.answers = [new EmptyAnswer()];
-      if (answersCurrentDraft[0].isEmptyAnswer) return;
+      console.log({ optionsCurrentDraft });
+      console.log({ q });
 
-      for (let index = 0; index < answersCurrentDraft.length; index += 1) {
-        const newAnswer = new Answer({ answerText: answersCurrentDraft[index].answerText });
-        this.answers.splice(index, 1, newAnswer);
+      console.log(q.text);
+
+      this.text = new I18nString(q.text);
+      this.type = q.type;
+      this.options = [emptyQuestionOption()];
+      // if (optionsCurrentDraft[0].isEmptyAnswer) return;
+
+      for (let index = 0; index < optionsCurrentDraft.length; index += 1) {
+        const newOption = new QuestionOption({
+          text: optionsCurrentDraft[index].text,
+          followUpQuestionID: null,
+        });
+        this.options.splice(index, 1, newOption);
       }
     },
     saveQuestion() {
       this.saveQuestionHandler({
-        newQuestion: {
-          questionText: this.questionText,
-          questionType: this.questionType,
-        },
+        newQuestion: new Question({
+          id: uuidv4(),
+          text: this.text,
+          type: this.type,
+          isFollowUpQuestion: false,
+          questionOptions: [],
+        }),
         // TODO: See whether reactivity breaks when direct reference is used
         // instead of generating a new array instance as follows
-        newAnswers: [...this.answers.map((a) => ({ answerText: a.answerText }))],
+        newOptions: this.options,
       });
+      this.type = QuestionType.TEXT;
+      this.text = emptyI18nString();
     },
     clickOnAddImage() {
       const imgInput = this.$refs['question-img-upload'];
@@ -450,39 +492,53 @@ export default {
       this.showToBeImplementedFeedback();
       // console.log('TODO: do something with', audioInput);
     },
-    clickOnAddAnswer() {
-      this.answers.push({ answerText: '' });
+    clickOnAddOption() {
+      this.options.push(emptyQuestionOption());
     },
-    clickOnAddImgToAnswer() {
-      const imgInput = this.$refs['answer-img-upload'];
+    clickOnAddImgToOption() {
+      const imgInput = this.$refs['option-img-upload'];
       if (Array.isArray(imgInput)) imgInput[0].click();
       else imgInput.click();
       this.showToBeImplementedFeedback();
-      // console.log('TODO: handle adding image to answer');
+      // console.log('TODO: handle adding image to option');
     },
-    clickOnRemoveAnswer(index) {
-      this.answers.splice(index, 1);
+    clickOnRemoveOption(index) {
+      this.options.splice(index, 1);
     },
     nextQuestion() {
       this.nextQuestionHandler({
-        newQuestion: {
-          questionText: this.questionText,
-          questionType: this.questionType,
-        },
-        // TODO: See whether reactivity breaks when direct reference is used
-        // instead of generating a new array instance as follows
-        newAnswers: [...this.answers.map((a) => ({ answerText: a.answerText }))],
+        newQuestion: new Question({
+          id: uuidv4(),
+          text: this.text,
+          type: this.type,
+          isFollowUpQuestion: false,
+          questionOptions: [],
+        }),
+        newOptions: this.options,
       });
     },
     priorQuestion() {
       this.priorQuestionHandler({
-        newQuestion: {
-          questionText: this.questionText,
-          questionType: this.questionType,
-        },
-        // TODO: See whether reactivity breaks when direct reference is used
-        // instead of generating a new array instance as follows
-        newAnswers: [...this.answers.map((a) => ({ answerText: a.answerText }))],
+        newQuestion: new Question({
+          id: uuidv4(),
+          text: this.text,
+          type: this.type,
+          isFollowUpQuestion: false,
+          questionOptions: [],
+        }),
+        newOptions: this.options,
+      });
+    },
+    questionUpdatedHandler(res) {
+      this.text = res;
+    },
+    optionUpdatedHandler(value, index) {
+      const languageTexts = Array(this.$i18n.availableLocales.length).fill('');
+      languageTexts[this.fallbackLocaleIndex] = value;
+      this.options[index] = new QuestionOption({
+        id: uuidv4(),
+        text: new I18nString({ languageKeys: this.$i18n.availableLocales, languageTexts }),
+        followUpQuestionID: null,
       });
     },
   },

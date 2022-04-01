@@ -1,8 +1,17 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Intervention, InterventionType } from '../models';
+import {
+  I18nString,
+  Intervention,
+  InterventionType,
+  Question,
+  QuestionOption,
+  QuestionType,
+  Survey,
+  SurveyType,
+} from '../models';
+import i18n from '../i18n';
 
 const emptyIntervention = () => new Intervention({
-  id: uuidv4(),
   name: '',
   description: '',
   tags: [],
@@ -11,4 +20,32 @@ const emptyIntervention = () => new Intervention({
   contents: [],
 });
 
-export { emptyIntervention };
+const emptyI18nString = () => new I18nString({
+  languageKeys: i18n.availableLocales,
+  languageTexts: Array(i18n.availableLocales.length).fill(''),
+});
+
+const emptySurvey = () => new Survey({
+  name: '',
+  description: '',
+  questions: [],
+  surveyType: SurveyType.DEFAULT,
+});
+
+const emptyQuestion = () => new Question({
+  id: uuidv4(),
+  text: emptyI18nString(),
+  type: QuestionType.TEXT,
+  questionOptions: [],
+  isFollowUpQuestion: false,
+});
+
+const emptyQuestionOption = () => new QuestionOption({
+  id: uuidv4(),
+  text: emptyI18nString(),
+  followUpQuestionID: null,
+});
+
+export {
+  emptyIntervention, emptyI18nString, emptySurvey, emptyQuestion, emptyQuestionOption,
+};

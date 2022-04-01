@@ -165,7 +165,7 @@
         "EDUCATION": "Eğitim"
       }
     },
-    "interventionModal": {
+    "modal": {
       "modalTitle": {
         "read": "Müdahale",
         "edit": "Müdahaleyi düzenle: ",
@@ -183,8 +183,19 @@
       "noImages": "Henüz hiç resim yüklenmemiş.",
       "noVideos": "Henüz hiç video yüklenmemiş.",
       "noSurveys": "Henüz hiç anket yüklenmemiş."
+    }
+  },
+  "surveys": {
+    "type": {
+      "title": "Tipo de Encuesta",
+      "types": {
+        "INITIAL": "Başlangıç",
+        "DEFAULT": "Varsayılan"
+      }
     },
-    "surveyModal": {
+    "modal": {
+      "image": "Anket Resmi",
+      "intervention": "Anketin müdahalesi:",
       "firstCard": {
         "title": {
           "edit": "Anket düzenleniyor... ",
@@ -211,17 +222,17 @@
           "answer": {
             "title": "Yanıt",
             "typeLabel": "Soru tipi",
-            "answer": "Yanıt",
-            "textLabel": "Yanıt metni",
-            "addImage": "Yanıta resim ekle",
-            "addAnswer": "Yanıt ekle",
+            "answer": "Seçenek",
+            "textLabel": "Seçenek metni",
+            "addImage": "Seçeneğe resim ekle",
+            "addAnswer": "Seçenek ekle",
             "questionTypes": {
-              "text": "Metin",
-              "singleChoice": "Çoktan tek seçmeli",
-              "multipleChoice": "Çoktan çok seçmeli",
-              "picture": "Resim",
-              "pictureWithTags": "Etiketli resim",
-              "audio": "Ses"
+              "TEXT": "Metin",
+              "SINGLECHOICE": "Çoktan tek seçmeli",
+              "MULTIPLECHOICE": "Çoktan çok seçmeli",
+              "PICTURE": "Resim",
+              "PICTUREWITHTAGS": "Etiketli resim",
+              "AUDIO": "Ses"
             }
           }
         },

@@ -3,11 +3,11 @@
     <v-form lazy-validation>
       <v-card-title>
         <h2 v-if="edit">
-          {{ $t('interventions.surveyModal.firstCard.title.edit') }}
+          {{ $t('surveys.modal.firstCard.title.edit') }}
           <i>{{ surveyInFocus.name }}</i>
         </h2>
         <h2 v-else-if="create">
-          {{ $t('interventions.surveyModal.firstCard.title.create') }}
+          {{ $t('surveys.modal.firstCard.title.create') }}
         </h2>
         <h2 v-else-if="read">{{ surveyInFocus.name }}</h2>
         <v-spacer></v-spacer>
@@ -16,8 +16,8 @@
             $vuetify.breakpoint.name === 'xs'
               ? ''
               : read
-              ? $t('interventions.surveyModal.firstCard.questions')
-              : $t(`interventions.surveyModal.firstCard.next-step`)
+              ? $t('surveys.modal.firstCard.questions')
+              : $t(`surveys.modal.firstCard.next-step`)
           }}
           <v-icon large> mdi-chevron-right </v-icon>
         </v-btn>
@@ -28,7 +28,7 @@
           <v-row>
             <v-col cols="12" sm="6" class="pb-0 px-0 px-md-3">
               <v-card-title class="pt-0 pt-sm-2">
-                {{ $t('interventions.surveyModal.firstCard.form.name') }}
+                {{ $t('surveys.modal.firstCard.form.name') }}
               </v-card-title>
               <h2 v-if="read">
                 {{
@@ -39,7 +39,7 @@
               </h2>
               <LocaleTextBox
                 v-else
-                labelPrefixI18nSelector="interventions.surveyModal.firstCard.form.name"
+                labelPrefixI18nSelector="surveys.modal.firstCard.form.name"
                 @res="nameUpdatedHandler"
               >
                 <template v-slot:text-input="slotProps">
@@ -56,7 +56,7 @@
               </LocaleTextBox>
 
               <v-card-title class="pt-4">
-                {{ $t('interventions.surveyModal.firstCard.form.description') }}
+                {{ $t('surveys.modal.firstCard.form.description') }}
               </v-card-title>
               <div v-if="read" class="d-flex flex-column justify-center" style="min-height: 10rem">
                 <h3>
@@ -69,7 +69,7 @@
               </div>
               <LocaleTextBox
                 v-else
-                labelPrefixI18nSelector="interventions.surveyModal.firstCard.form.description"
+                labelPrefixI18nSelector="surveys.modal.firstCard.form.description"
                 @res="descriptionUpdatedHandler"
               >
                 <template v-slot:text-input="slotProps">
@@ -86,6 +86,49 @@
               </LocaleTextBox>
             </v-col>
             <v-col cols="12" sm="6" class="pt-0 px-0 px-md-3">
+              <v-card-title class="pt-0 pt-sm-2">
+                {{ $t('surveys.type.title') }}:
+                <div v-if="read && surveyInFocus">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-avatar v-bind="attrs" v-on="on">
+                        <v-icon>
+                          {{
+                            surveyInFocus.surveyType === SurveyType.INITIAL
+                              ? 'mdi-lightbulb-question-outline'
+                              : 'mdi-crosshairs-question'
+                          }}
+                        </v-icon>
+                      </v-avatar>
+                    </template>
+                    <span>{{ $t(`surveys.type.types.${surveyInFocus.surveyType}`) }}</span>
+                  </v-tooltip>
+                </div>
+
+                <v-btn-toggle v-else v-model="typeIndex" mandatory class="ml-2">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn v-bind="attrs" v-on="on">
+                        <v-icon>mdi-lightbulb-question-outline</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>{{ $t('surveys.type.types.INITIAL') }}</span>
+                  </v-tooltip>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn v-bind="attrs" v-on="on">
+                        <v-icon>mdi-crosshairs-question</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>{{ $t('surveys.type.types.DEFAULT') }}</span>
+                  </v-tooltip>
+                </v-btn-toggle>
+              </v-card-title>
+
+              <v-card-title class="pt-0 pt-sm-2">
+                {{ $t('surveys.modal.image') }}
+              </v-card-title>
+
               <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" max-height="200px">
                 <div v-if="!read" class="iv-edit-icon">
                   <v-btn fab color="primary" @click="selectImg">
@@ -102,7 +145,7 @@
 
               <div v-if="read">
                 <h2>
-                  {{ $t('interventions.surveyModal.firstCard.form.tags') }}
+                  {{ $t('surveys.modal.firstCard.form.tags') }}
                 </h2>
                 <v-chip v-for="tag in tagsInFocus" :key="tag.tagId">
                   {{ tag }}
@@ -117,11 +160,50 @@
                 deletable-chips
                 chips
                 dense
-                :label="$t('interventions.surveyModal.firstCard.form.tags')"
+                :label="$t('surveys.modal.firstCard.form.tags')"
                 multiple
                 outlined
                 class="mt-8"
               ></v-select>
+
+              <v-card-title class="pt-0 pr-0 d-flex justify-space-between">
+                <span class="mr-2">
+                  {{ $t('surveys.modal.intervention') }}
+                </span>
+                <v-chip v-if="read">
+                  {{
+                    calculateUILocaleString({
+                      languageTexts: INTERVENTIONById({ id: surveyInFocus.interventionSurveysId })
+                        .name.languageTexts,
+                    })
+                  }}
+                </v-chip>
+                <v-select
+                  v-else
+                  v-model="interventionId"
+                  :items="interventions"
+                  item-value="id"
+                  dense
+                  :label="$t('interventions.title')"
+                  outlined
+                  class="mt-6"
+                >
+                  <template v-slot:selection="data">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: data.item.name.languageTexts,
+                      })
+                    }}
+                  </template>
+                  <template v-slot:item="data">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: data.item.name.languageTexts,
+                      })
+                    }}
+                  </template>
+                </v-select>
+              </v-card-title>
             </v-col>
           </v-row>
         </v-container>
@@ -140,7 +222,8 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict } from '../../../store/constants';
 import LocaleTextBox from '../../global/LocaleTextBox.vue';
-import { I18nString } from '../../../models';
+import { Survey, SurveyType } from '../../../models';
+import { emptyI18nString } from '../../../store/classes';
 
 const surveyDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_SURVEY_DESCRIPTION_MAX_CHAR, 10),
@@ -156,15 +239,13 @@ export default {
       rules: {
         maxChar: (value) => value.length <= surveyDescriptionMaxChar || this.maxCharExceededi18n,
       },
-      name: new I18nString({
-        languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
-      }),
-      description: new I18nString({
-        languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(null),
-      }),
+      name: emptyI18nString(),
+      description: emptyI18nString(),
       surveyTags: [],
+      SurveyType,
+      typeIndex: 0,
+      types: [SurveyType.INITIAL, SurveyType.DEFAULT],
+      interventionId: null,
     };
   },
   mounted() {
@@ -181,6 +262,8 @@ export default {
 
       fallbackLocaleIndex: 'fallbackLocaleIndex',
       calculateUILocaleString: 'calculateUILocaleString',
+      INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
+      interventions: 'INTERVENTION_Data/getInterventions',
     }),
     surveyInFocus() {
       return this.SURVEYById({ id: this.dataIdInFocus });
@@ -198,13 +281,15 @@ export default {
       return this.surveyModalMode === modalModesDict.read;
     },
     canAdvance() {
-      console.log(this.name);
-      return this.read || this.name.languageTexts[this.fallbackLocaleIndex] !== '';
+      return this.read || this.name.languageTexts[this.fallbackLocaleIndex];
     },
     maxCharExceededi18n() {
       return this.$t('general.form.maxCharExceeded', {
         maxChar: surveyDescriptionMaxChar,
       });
+    },
+    type() {
+      return this.types[this.typeIndex];
     },
   },
   methods: {
@@ -223,17 +308,22 @@ export default {
       // console.log('TODO: do something with', imgInput);
     },
     nextStepHandler() {
-      this.setSurveyDraft({
-        name: this.name,
-        description: this.description,
-        tags: this.surveyTags,
-      });
+      this.setSurveyDraft(
+        new Survey({
+          name: this.name,
+          description: this.description,
+          tags: this.surveyTags,
+          questions: [],
+          surveyType: this.type,
+          interventionSurveysId: this.interventionId,
+        }),
+      );
       this.incrementCompletionIndex();
     },
     prefillComponentDataFromSurveyDraft() {
-      this.name = this.surveyDraft?.name ?? '';
-      this.description = this.surveyDraft?.description ?? '';
-      this.surveyTags = this.surveyDraft?.tags ?? [];
+      // this.name = this.surveyDraft?.name ?? '';
+      // this.description = this.surveyDraft?.description ?? '';
+      // this.surveyTags = this.surveyDraft?.tags ?? [];
     },
     exitHandler() {
       if (this.read) {

@@ -2,11 +2,15 @@
   <v-card class="px-4 pt-4">
     <v-card-title>
       <h2>
-        {{ surveyName }}
+        {{
+          calculateUILocaleString({
+            languageTexts: surveyDraft.name.languageTexts,
+          })
+        }}
       </h2>
       <v-spacer></v-spacer>
       <v-btn x-large text class="text-none" @click="handlePublishSurvey" :disabled="false">
-        {{ $t('interventions.surveyModal.finalizeCard.publishSurvey') }}
+        {{ $t('surveys.modal.finalizeCard.publishSurvey') }}
         <v-icon large class="ml-2"> mdi-bullhorn-outline </v-icon>
       </v-btn>
     </v-card-title>
@@ -28,34 +32,19 @@ export default {
   },
   computed: {
     ...mapGetters({
-      dataIdInFocus: 'dataModal/getDataIdInFocus',
-      SURVEYById: 'SURVEY_Data/SURVEYById',
-      surveyModalMode: 'dataModal/getMode',
+      surveyDraft: 'dataModal/getDataDraft',
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
-    surveyName() {
-      return this.SURVEYById({ id: this.dataIdInFocus })?.name ?? '';
-    },
-    edit() {
-      return this.surveyModalMode === this.modalModesDict.edit;
-    },
-    create() {
-      return this.surveyModalMode === this.modalModesDict.create;
-    },
-    read() {
-      return this.surveyModalMode === this.modalModesDict.read;
-    },
   },
   methods: {
     ...mapActions({
-      publishSurveyHandler: 'publishSurveyHandler',
-      showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
+      publishSurveyHandler: 'SURVEY_Data/APIpost',
     }),
     ...mapMutations({
       incrementCompletionIndex: 'incrementSurveyModalCompletionIndex',
       decrementCompletionIndex: 'decrementSurveyModalCompletionIndex',
     }),
     handlePublishSurvey() {
-      this.showToBeImplementedFeedback();
       this.publishSurveyHandler();
     },
   },
