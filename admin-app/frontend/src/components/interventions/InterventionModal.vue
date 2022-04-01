@@ -447,7 +447,7 @@ export default {
       showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
     }),
     ...mapMutations({
-      setINTERVENTIONDraft: 'dataModal/setINTERVENTIONDraft',
+      setDraft: 'dataModal/setDraft',
     }),
     deleteHandler() {
       if (this.read) return;
@@ -482,7 +482,7 @@ export default {
       const originalVersion = this.edit
         ? this.INTERVENTIONById({ id: this.dataIdInFocus })._version
         : null;
-      this.setINTERVENTIONDraft(
+      this.setDraft(
         new Intervention({
           name: this.name,
           description: this.description,

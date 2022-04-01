@@ -1,8 +1,10 @@
 import { DataStore } from '@aws-amplify/datastore';
+import { API } from 'aws-amplify';
 import { Level, I18nString } from '../../models';
-import { putLevel, deleteLevel, getAllLevels } from './utils';
+import { deleteLevel, getAllLevels } from './utils';
 import { Entity } from '../entities/utils';
 import { dataTypesDict, modalModesDict } from '../constants';
+import { updateLevel } from '../../graphql/mutations';
 
 const levelsData = {
   namespaced: true,
@@ -32,6 +34,7 @@ const levelsData = {
     },
 
     lowestLevelId: (_, { sortedLevels }) => sortedLevels[sortedLevels.length - 1].id,
+    highestLevelId: (_, { sortedLevels }) => sortedLevels[0].id,
     upperLevelById:
       (_, { getLevels }) => ({ id }) => {
         const currentLevel = getLevels.find((l) => l.id === id);
@@ -94,6 +97,7 @@ const levelsData = {
   },
   actions: {
     APIpost: async ({ commit, dispatch }, levelDraft) => {
+      console.log(levelDraft);
       commit('setLoading', { newValue: true });
       DataStore.save(levelDraft)
         .then((postResponse) => {
@@ -116,19 +120,31 @@ const levelsData = {
     },
     APIput: async ({ commit, dispatch }, levelDraft) => {
       commit('setLoading', { newValue: true });
-      const putResponse = await putLevel(levelDraft);
-      commit('replaceLevel', putResponse);
-      dispatch(
-        'dataModal/readData',
-        {
-          dataId: putResponse.id,
-          dataType: dataTypesDict.level,
+      await API.graphql({
+        query: updateLevel,
+        variables: {
+          input: {
+            id: levelDraft.originalId,
+            name: levelDraft.newData.name,
+            description: levelDraft.newData.description,
+            _version: levelDraft.originalVersion,
+          },
         },
-        {
-          root: true,
-        },
-      );
-      commit('setLoading', { newValue: false });
+      })
+        .then(() => {
+          dispatch(
+            'SYNC_UI/refreshHandler',
+            {
+              routeName: 'OrganizationStructure',
+            },
+            {
+              root: true,
+            },
+          );
+        })
+        .catch(() => {
+          commit('setLoading', { newValue: false });
+        });
     },
     APIdelete: async ({ commit, dispatch }, { id }) => {
       commit('setLoading', { newValue: true });

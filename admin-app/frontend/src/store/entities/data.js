@@ -1,7 +1,9 @@
 import { DataStore } from '@aws-amplify/datastore';
+import { API } from 'aws-amplify';
 import { Entity } from '../../models';
 import { deleteEntityController, getAllEntities } from './utils';
 import { dataTypesDict, modalModesDict } from '../constants';
+import { updateEntity } from '../../graphql/mutations';
 
 const entitiesData = {
   namespaced: true,
@@ -188,30 +190,27 @@ const entitiesData = {
     },
     APIput: async ({ commit, dispatch }, entityDraft) => {
       commit('setLoading', { newValue: true });
-
-      DataStore.save(
-        Entity.copyOf(entityDraft, (item) => {
-          item.name = entityDraft.name;
-          item.description = entityDraft.description;
-          item.appliedInterventions = entityDraft.appliedInterventions;
-          item.customData = entityDraft.customData;
-          item.location = entityDraft.location;
-          item.parentEntityID = entityDraft.parentEntityID;
-        }),
-      )
-        .then((putResponse) => {
-          commit('replaceEntity', putResponse);
+      await API.graphql({
+        query: updateEntity,
+        variables: {
+          input: {
+            id: entityDraft.originalId,
+            name: entityDraft.newData.name,
+            description: entityDraft.newData.description,
+            _version: entityDraft.originalVersion,
+          },
+        },
+      })
+        .then(() => {
           dispatch(
-            'dataModal/readData',
+            'SYNC_UI/refreshHandler',
             {
-              dataId: putResponse.data.updateEntity.id,
-              dataType: dataTypesDict.entity,
+              routeName: 'OrganizationStructure',
             },
             {
               root: true,
             },
           );
-          commit('setLoading', { newValue: false });
         })
         .catch(() => {
           commit('setLoading', { newValue: false });

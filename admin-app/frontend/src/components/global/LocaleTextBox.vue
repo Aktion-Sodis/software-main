@@ -8,6 +8,7 @@
       <slot
         :inputHandler="(e) => inputHandler(e, selectedLocale)"
         name="text-input"
+        :model="res.languageTexts[calculateIndexByLocale({ locale: selectedLocale })]"
         :label="`${$t(labelPrefixI18nSelector)} (${selectedLocale})`"
       ></slot>
       <div class="pb-7" v-if="selectedLocale !== $i18n.fallbackLocale">
@@ -34,7 +35,9 @@
 </template>
 
 <script>
-import { I18nString } from '../../models';
+import { mapGetters } from 'vuex';
+// import { I18nString } from '../../models';
+// import { emptyI18nString } from '../../store/classes';
 
 export default {
   props: {
@@ -42,14 +45,20 @@ export default {
       type: String,
       required: true,
     },
+    initVal: {
+      type: Object,
+    },
   },
   data() {
     return {
       selectedLocales: [this.$i18n.fallbackLocale],
-      res: new I18nString({
+      res: {
+        languageKeys: this.$i18n.availableLocales,
+        languageTexts: this.initVal.languageTexts,
+      } ?? {
         languageKeys: this.$i18n.availableLocales,
         languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
-      }),
+      },
     };
   },
   computed: {
@@ -59,15 +68,19 @@ export default {
     isAddNewLocaleButtonShown() {
       return this.avaliableLocales.length > this.selectedLocales.length;
     },
+
+    ...mapGetters({
+      calculateIndexByLocale: 'calculateIndexByLocale',
+    }),
   },
   methods: {
     removeSelectedLocale(locale) {
       const foundIndex = this.res.languageKeys.findIndex((k) => k === locale);
       const languageTexts = this.res.languageTexts.map((t, i) => (i === foundIndex ? '' : t));
-      this.res = new I18nString({
+      this.res = {
         languageKeys: this.res.languageKeys,
         languageTexts,
-      });
+      };
       this.selectedLocales = this.selectedLocales.filter((l) => l !== locale);
     },
     addNewLocale() {
@@ -79,11 +92,11 @@ export default {
       if (!value && value !== '') return;
       const foundIndex = this.res.languageKeys.findIndex((k) => k === locale);
       const languageTexts = this.res.languageTexts.map((t, i) => (i === foundIndex ? value : t));
-      this.res = new I18nString({
+      this.res.languageTexts[this.calculateIndexByLocale({ locale })] = value;
+      this.res = {
         languageKeys: this.res.languageKeys,
         languageTexts,
-      });
-
+      };
       this.$emit('res', this.res);
     },
   },

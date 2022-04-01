@@ -1,10 +1,8 @@
 import Vue from 'vue';
 import { dataTypesDict, modalModesDict } from '../constants';
-import { Level, Entity } from '../../models';
 
 import { EmptyEntity } from '../entities/utils';
-import { emptyLevel } from '../levels/utils';
-import { emptySurvey, emptyIntervention } from '../classes';
+import { emptySurvey, emptyIntervention, emptyLevel } from '../classes';
 
 const dataModal = {
   namespaced: true,
@@ -39,51 +37,18 @@ const dataModal = {
     },
 
     /* ENTITY DRAFT: SET & RESET */
-    setENTITYDraft: (
-      state,
-      {
-        name, description, entityLevelId, parentEntityID, _version, appliedInterventions,
-      },
-    ) => {
-      state.dataDraft = new Entity({
-        name,
-        description,
-        entityLevelId,
-        parentEntityID,
-        _version,
-        customData: [],
-        appliedInterventions,
-      });
+    setENTITYDraft: (state, draft) => {
+      state.dataDraft = draft;
     },
     resetENTITYDraft: (state) => {
       state.dataDraft = new EmptyEntity();
     },
 
-    /* LEVEL DRAFT: SET & RESET */
-    setLEVELDraft: (
-      state,
-      {
-        name, description, parentLevelID, allowedInterventions, _version,
-      },
-    ) => {
-      const newLevel = new Level({
-        name,
-        description,
-        parentLevelID,
-        allowedInterventions,
-        _version,
-        interventionsAreAllowed: true,
-        customData: [],
-      });
-      state.dataDraft = newLevel;
+    setDraft: (state, draft) => {
+      state.dataDraft = draft;
     },
     resetLEVELDraft: (state) => {
       state.dataDraft = emptyLevel();
-    },
-
-    /* INTERVENTION DRAFT: SET & RESET */
-    setINTERVENTIONDraft: (state, draft) => {
-      state.dataDraft = draft;
     },
     resetINTERVENTIONDraft: (state) => {
       state.dataDraft = emptyIntervention();
@@ -127,7 +92,7 @@ const dataModal = {
       commit('setDataIdInFocus', { newValue: dataId });
       commit('setDataType', { newValue: dataType });
       const data = rootGetters[`${dataType}_Data/${dataType}ById`]({ id: dataId });
-      commit(`set${dataType}Draft`, data);
+      commit('setDraft', data);
       // commit('setIsDisplayed', { newValue: true });
     },
     abortEditData: async ({ commit }, { dataType }) => {

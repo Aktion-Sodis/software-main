@@ -5,7 +5,8 @@
         <v-card-title>
           <h2 v-if="edit && levelInFocus">
             {{ $t('organizationStructure.levelModal.modalTitle.edit') }}
-            <i>{{ calculateUILocaleString({ languageTexts: levelInFocus.name.languageTexts }) }}</i>
+            <i>{{ calculateUILocaleString({ languageTexts: levelInFocus.name.languageTexts }) }}</i
+            >asdf
           </h2>
           <h2 v-else-if="create">
             {{ $t('organizationStructure.levelModal.modalTitle.create') }}
@@ -33,6 +34,7 @@
                 </h2>
                 <LocaleTextBox
                   v-else
+                  :initVal="name"
                   labelPrefixI18nSelector="organizationStructure.levelModal.name"
                   @res="nameUpdatedHandler"
                 >
@@ -67,6 +69,7 @@
                 </div>
                 <LocaleTextBox
                   v-else
+                  :initVal="description"
                   labelPrefixI18nSelector="organizationStructure.levelModal.description"
                   @res="descriptionUpdatedHandler"
                 >
@@ -183,6 +186,8 @@
           </v-btn>
         </v-card-actions>
       </v-form>
+      {{ name }}
+      {{ description }}
     </v-card>
   </v-dialog>
 </template>
@@ -191,7 +196,8 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
-import { I18nString } from '../../models';
+import { I18nString, Level } from '../../models';
+// import { emptyI18nString } from '../../store/classes';
 
 const levelDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_LEVEL_DESCRIPTION_MAX_CHAR, 10),
@@ -204,14 +210,14 @@ export default {
   data() {
     return {
       levelDescriptionMaxChar,
-      name: new I18nString({
+      name: {
         languageKeys: this.$i18n.availableLocales,
         languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
-      }),
-      description: new I18nString({
+      },
+      description: {
         languageKeys: this.$i18n.availableLocales,
         languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
-      }),
+      },
       allowedInterventions: [],
       tagIds: [],
     };
@@ -231,7 +237,7 @@ export default {
       tagById: 'LEVEL_Data/tagById',
       lowestLevelId: 'LEVEL_Data/lowestLevelId',
       LEVELById: 'LEVEL_Data/LEVELById',
-
+      fallbackLocaleIndex: 'fallbackLocaleIndex',
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
 
       calculateUILocaleString: 'calculateUILocaleString',
@@ -246,6 +252,7 @@ export default {
       return this.isModalDisplayed && this.dataType === dataTypesDict.level;
     },
     levelInFocus() {
+      console.log(this.LEVELById({ id: this.dataIdInFocus }).name.languageTexts);
       return this.LEVELById({ id: this.dataIdInFocus });
     },
     requiredi18n() {
@@ -300,7 +307,7 @@ export default {
       showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
     }),
     ...mapMutations({
-      setLevelDraft: 'dataModal/setLEVELDraft',
+      setDraft: 'dataModal/setDraft',
     }),
     deleteHandler() {
       if (this.read) return;
@@ -325,19 +332,29 @@ export default {
       this.closeHandler();
     },
     async submitHandler() {
-      this.setLevelDraft({
-        id: this.dataIdInFocus,
-        name: this.name,
-        description: this.description,
-        parentLevelID: this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID,
-        allowedInterventions: this.allowedInterventions || [],
-        tagIds: this.tagIds || [],
-      });
-      this.saveData({ dataType: 'LEVEL' });
+      this.setDraft(
+        new Level({
+          name: new I18nString(this.name),
+          description: new I18nString(this.description),
+          parentLevelID: this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID,
+          interventionsAreAllowed: this.allowedInterventions.length > 0,
+          allowedInterventions: this.allowedInterventions || [],
+          tagIds: this.tagIds || [],
+          customData: [],
+        }),
+      );
+      const originalVersion = this.levelInFocus != null ? this.levelInFocus._version : 0;
+      this.saveData({ dataType: 'LEVEL', originalVersion });
     },
     prefillComponentDataFromLevelDraft() {
-      this.name = this.levelDraft?.name ?? '';
-      this.description = this.levelDraft?.description ?? '';
+      this.name = {
+        languageKeys: this.$i18n.availableLocales,
+        languageTexts: this.levelDraft?.name.languageTexts,
+      };
+      this.description = {
+        languageKeys: this.$i18n.availableLocales,
+        languageTexts: this.levelDraft?.description.languageTexts,
+      };
       this.tagIds = this.levelDraft?.tagIds ?? [];
       // console.log(this.levelDraft?.allowedInterventions);
       this.allowedInterventions = this.levelDraft?.allowedInterventions ?? [];

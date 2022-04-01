@@ -97,6 +97,9 @@ export default new Vuex.Store({
     // For the localization, you will most probably only need this getter and no other! Please don't consider using the others.
     calculateUILocaleString:
       (_, { uiLocaleIndex, calculateLocalizedString }) => ({ languageTexts }) => languageTexts[uiLocaleIndex] || calculateLocalizedString({ languageTexts }),
+
+    calculateIndexByLocale:
+      () => ({ locale }) => i18n.availableLocales.findIndex((l) => l === locale),
   },
   mutations: {
     setCreatingEntityInLevelId: (state, { id }) => {
