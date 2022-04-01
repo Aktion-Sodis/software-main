@@ -139,12 +139,9 @@
           <v-btn x-large v-if="read" color="primary" text @click="editHandler">
             {{ $t('general.edit') }}
           </v-btn>
-          <v-btn x-large v-if="edit" color="primary" text @click.prevent="updateHandler">
-            {{ $t('general.update') }}
-          </v-btn>
           <v-btn
             x-large
-            v-if="!read && !edit"
+            v-if="!read"
             type="submit"
             color="primary"
             text
@@ -252,7 +249,6 @@ export default {
       abortCreateData: 'dataModal/abortCreateData',
       abortEditData: 'dataModal/abortEditData',
       editData: 'dataModal/editData',
-      updateData: 'dataModal/updateData',
 
       showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
     }),
@@ -280,17 +276,6 @@ export default {
     },
     editHandler() {
       this.editData({ dataId: this.dataIdInFocus, dataType: dataTypesDict.entity });
-    },
-    updateHandler() {
-      this.updateData({
-        data: {
-          id: this.dataIdInFocus,
-          name: this.name,
-          description: this.description,
-          _version: this.entityDraft._version != null ? this.entityDraft._version + 1 : 1,
-        },
-        dataType: dataTypesDict.entity,
-      });
     },
     async submitHandler() {
       await this.setDraft(

@@ -188,38 +188,8 @@ const entitiesData = {
           commit('setLoading', { newValue: false });
         });
     },
-    APIput: async ({ commit }, entityDraft) => {
+    APIput: async ({ commit, dispatch }, entityDraft) => {
       commit('setLoading', { newValue: true });
-<<<<<<< Updated upstream
-      console.log(entityDraft);
-      // DataStore.save(
-      //   Entity.copyOf(entityDraft, (item) => {
-      //     item.name = entityDraft.name;
-      //     item.description = entityDraft.description;
-      //     item.appliedInterventions = entityDraft.appliedInterventions;
-      //     item.customData = entityDraft.customData;
-      //     item.location = entityDraft.location;
-      //     item.parentEntityID = entityDraft.parentEntityID;
-      //   }),
-      // )
-      //   .then((putResponse) => {
-      //     commit('replaceEntity', putResponse);
-      //     dispatch(
-      //       'dataModal/readData',
-      //       {
-      //         dataId: putResponse.data.updateEntity.id,
-      //         dataType: dataTypesDict.entity,
-      //       },
-      //       {
-      //         root: true,
-      //       },
-      //     );
-      //     commit('setLoading', { newValue: false });
-      //   })
-      //   .catch(() => {
-      //     commit('setLoading', { newValue: false });
-      //   });
-=======
       await API.graphql({
         query: updateEntity,
         variables: {
@@ -245,7 +215,6 @@ const entitiesData = {
         .catch(() => {
           commit('setLoading', { newValue: false });
         });
->>>>>>> Stashed changes
     },
     APIdelete: async ({ commit, dispatch }, entityDraft) => {
       commit('setLoading', { newValue: true });
@@ -268,26 +237,7 @@ const entitiesData = {
 
       commit('setLoading', { newValue: false });
     },
-    CreateDummyEntities: async ({ dispatch }) => {
-      const entities = [
-        new Entity({
-          id: '3',
-          name: {
-            languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-            languageTexts: ['Sucre', 'Sucre', 'Sucre'],
-          },
-          description: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-          entityLevelId: '1',
-          parentEntityID: '0',
-        }),
-      ];
-
-      // eslint-disable-next-line
-      for (const entity of entities) {
-        dispatch('APIpost', entity);
-      }
-    },
-    // sync is handled over LEVEL_Data module
+    // sync is handled over in LEVEL_Data module
     APIgetAll: async () => (await getAllEntities()).data.listEntities.items,
   },
 };

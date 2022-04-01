@@ -3,26 +3,27 @@ import VueRouter from 'vue-router';
 import store from '../store';
 import i18n from '../i18n';
 
-import Home from '../views/Home.vue';
+// import Home from '../views/Home.vue';
 import OrganizationStructure from '../views/OrganizationStructure.vue';
-import BaseData from '../views/BaseData.vue';
+// import BaseData from '../views/BaseData.vue';
 import Interventions from '../views/Interventions.vue';
 import Auth from '../views/Auth.vue';
 import { syncStatusDict } from '../store/constants';
 
 Vue.use(VueRouter);
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home,
-    meta: {
-      requiresAuth: true,
-      shouldBeSynced: false,
-      title: i18n.t('general.routes.home'),
-    },
-  },
+export const routes = [
+  // {
+  //   path: '/',
+  //   name: 'Home',
+  //   component: Home,
+  //   meta: {
+  //     requiresAuth: true,
+  //     shouldBeSynced: false,
+  //     title: i18n.t('general.routes.Home'),
+  //     onSideBar: false, // TODO: Will change in the future.
+  //   },
+  // },
   {
     path: '/login',
     name: 'Login',
@@ -30,7 +31,8 @@ const routes = [
     meta: {
       requiresAuth: false,
       shouldBeSynced: false,
-      title: i18n.t('general.routes.login'),
+      title: i18n.t('general.routes.Login'),
+      onSideBar: false,
     },
   },
   {
@@ -40,7 +42,8 @@ const routes = [
     meta: {
       requiresAuth: false,
       shouldBeSynced: false,
-      title: i18n.t('general.routes.completeUserInfo'),
+      title: i18n.t('general.routes.CompleteUserInfo'),
+      onSideBar: false,
     },
   },
   {
@@ -50,7 +53,8 @@ const routes = [
     meta: {
       requiresAuth: false,
       shouldBeSynced: false,
-      title: i18n.t('general.routes.changePassword'),
+      title: i18n.t('general.routes.ChangePassword'),
+      onSideBar: false,
     },
   },
   {
@@ -60,7 +64,8 @@ const routes = [
     meta: {
       requiresAuth: false,
       shouldBeSynced: false,
-      title: i18n.t('general.routes.forgotPassword'),
+      title: i18n.t('general.routes.ForgotPassword'),
+      onSideBar: false,
     },
   },
   {
@@ -70,19 +75,22 @@ const routes = [
     meta: {
       requiresAuth: true,
       shouldBeSynced: true,
-      title: i18n.t('general.routes.organizationStructure'),
+      title: i18n.t('general.routes.OrganizationStructure'),
+      onSideBar: true,
+      icon: 'mdi-clipboard-text-outline',
     },
   },
-  {
-    path: '/base-data',
-    name: 'BaseData',
-    component: BaseData,
-    meta: {
-      requiresAuth: true,
-      shouldBeSynced: true,
-      title: i18n.t('general.routes.baseData'),
-    },
-  },
+  // {
+  //   path: '/base-data',
+  //   name: 'BaseData',
+  //   component: BaseData,
+  //   meta: {
+  //     requiresAuth: true,
+  //     shouldBeSynced: true,
+  //     title: i18n.t('general.routes.BaseData'),
+  //     onSideBar: false,
+  //   },
+  // },
   {
     path: '/interventions',
     name: 'Interventions',
@@ -90,22 +98,25 @@ const routes = [
     meta: {
       requiresAuth: true,
       shouldBeSynced: true,
-      title: i18n.t('general.routes.interventions'),
+      title: i18n.t('general.routes.Interventions'),
+      onSideBar: true,
+      icon: 'mdi-wrench-outline',
     },
   },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-    meta: {
-      requiresAuth: false,
-      shouldBeSynced: false,
-      title: i18n.t('general.routes.about'),
-    },
-  },
+  // {
+  //   path: '/about',
+  //   name: 'About',
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+  //   meta: {
+  //     requiresAuth: false,
+  //     shouldBeSynced: false,
+  //     title: i18n.t('general.routes.about'),
+  //     onSideBar: false, // TODO: Might change in the future.
+  //   },
+  // },
 ];
 
 const router = new VueRouter({

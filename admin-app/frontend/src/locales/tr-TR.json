@@ -3,7 +3,6 @@
     "notYetImplemented": "Bu fonksiyonalite henüz tamamlanmadı. Eğer bug arayışındaysan lütfen görmezden gel! 🐞🔍"
   },
   "general": {
-    "update": "Güncelle",
     "edit": "Düzenle",
     "searchBox": "Her yerde ara",
     "cancel": "İptal",
@@ -14,20 +13,19 @@
       "minCharNotMet": "En az {minChar} uzunluğunda olmalı.",
       "required": "Zorunlu alan.",
       "unsavedChanges": "Kaydedilmemiş değişiklikler var. Çıkmak istediğinizden emin misiniz?",
-      "addInNewLocale": "Başka bir dilde",
-      "fallbackLocaleMustExistError": "When entering a text for any kind of data, it must always be given in the main locale ({fallbackLocale})."
+      "addInNewLocale": "Başka bir dilde"
     },
-    "noTextProvided": "No text was provided.",
+    "noTextProvided": "Buraya bir metin girilmemiş.",
     "routes": {
-      "home": "Ana sayfa",
-      "baseData": "Temel veriler",
-      "organizationStructure": "Organizasyonel yapı",
-      "interventions": "Müdahaleler",
-      "login": "Giriş",
-      "completeUserInfo": "Kullanıcı bilgilerini tamamla",
-      "changePassword": "Şifre Değiştir",
-      "forgotPassword": "Şifremi Unuttum",
-      "about": "Hakkımızda"
+      "Home": "Ana sayfa",
+      "BaseData": "Temel veriler",
+      "OrganizationStructure": "Organizasyonel yapı",
+      "Interventions": "Müdahaleler",
+      "Login": "Giriş",
+      "CompleteUserInfo": "Kullanıcı bilgilerini tamamla",
+      "ChangePassword": "Şifre Değiştir",
+      "ForgotPassword": "Şifremi Unuttum",
+      "About": "Hakkımızda"
     },
     "errorCodes": {
       "InternalErrorException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6001",
@@ -179,7 +177,7 @@
       },
       "name": "Müdahale adı",
       "description": "Müdahale açıklaması",
-      "image": "Intervention Image",
+      "image": "Müdahale resmi",
       "noDocuments": "Henüz hiç döküman yüklenmemiş.",
       "levels": "Levels where this intervention is allowed",
       "noImages": "Henüz hiç resim yüklenmemiş.",

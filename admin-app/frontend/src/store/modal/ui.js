@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { API } from 'aws-amplify';
 import { dataTypesDict, modalModesDict } from '../constants';
 import { Survey } from '../../models';
 
@@ -8,7 +7,6 @@ import { EmptyEntity } from '../entities/utils';
 import { emptyLevel } from '../levels/utils';
 import { EmptySurvey } from '../survey/utils';
 import { emptyIntervention } from '../classes';
-import * as mutations from '../../graphql/mutations';
 
 const dataModal = {
   namespaced: true,
@@ -56,17 +54,10 @@ const dataModal = {
     resetLEVELDraft: (state) => {
       state.dataDraft = emptyLevel();
     },
-<<<<<<< Updated upstream
-
-    /* INTERVENTION DRAFT: SET & RESET */
-    setINTERVENTIONDraft: (state, data) => {
-      state.dataDraft = data;
-    },
-=======
->>>>>>> Stashed changes
     resetINTERVENTIONDraft: (state) => {
       state.dataDraft = emptyIntervention();
     },
+
     /* SURVEY DRAFT: SET & RESET */
     setSURVEYDraft: (
       state,
@@ -123,24 +114,13 @@ const dataModal = {
       commit(`set${dataType}Draft`, data);
       // commit('setIsDisplayed', { newValue: true });
     },
-    updateData: async ({ commit }, { data, dataType }) => {
-      console.log(data);
-      console.log(dataType);
-      commit('setMode', { newValue: modalModesDict.edit });
-      // rootGetters[`${dataType}_Data/APIput`]({ entityDraft: data });
-      const updateEntity = await API.graphql({
-        query: mutations.updateEntity,
-        variables: { input: data },
-      });
-      console.log(updateEntity);
-    },
     abortEditData: async ({ commit }, { dataType }) => {
       commit(`reset${dataType}Draft`);
       await Vue.nextTick();
       commit('setMode', { newValue: modalModesDict.read });
     },
 
-    saveData: async ({ dispatch, getters }, { dataType }) => {
+    saveData: async ({ dispatch, getters }, { dataType, originalVersion }) => {
       if (getters.getMode === modalModesDict.read) return;
       const draft = getters.getDataDraft;
       console.log({ draft });
@@ -149,13 +129,21 @@ const dataModal = {
         return;
       }
       if (getters.getMode === modalModesDict.edit) {
-        await dispatch(`${dataType}_Data/APIput`, draft, { root: true });
+        await dispatch(
+          `${dataType}_Data/APIput`,
+          { newData: draft, originalId: getters.getDataIdInFocus, originalVersion },
+          { root: true },
+        );
       }
     },
     deleteData: async ({ dispatch, getters }, { dataType }) => {
       if (getters.getEntityModalMode === modalModesDict.read) return;
       if (getters.getEntityModalMode === modalModesDict.create) return;
-      await dispatch(`${dataType}_Data/APIdelete`, getters.getDataDraft, { root: true });
+      await dispatch(
+        `${dataType}_Data/APIdelete`,
+        { id: getters.getDataIdInFocus, _version: getters.getDataDraft._version },
+        { root: true },
+      );
     },
   },
 };
