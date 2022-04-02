@@ -215,8 +215,16 @@ export default {
       return this.isModalDisplayed && this.dataType === dataTypesDict.entity;
     },
     allEntitiesOfUpperLevel() {
+      let id;
+      if (this.create) {
+        id = this.getCreatingEntityInLevelId;
+      } else if (this.read) {
+        id = this.entityInFocus?.entityLevelId;
+      } else {
+        id = this.entityDraft?.entityLevelId;
+      }
       const currentLevel = this.LEVELById({
-        id: this.edit ? this.entityInFocus?.entityLevelId : this.getCreatingEntityInLevelId,
+        id,
       });
       if (!currentLevel) return [];
       return this.allEntitiesOfLevel({ entityLevelId: currentLevel.parentLevelID });
