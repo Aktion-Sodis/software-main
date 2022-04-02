@@ -1,4 +1,4 @@
-import { emptyQuestionOption, emptyQuestion, emptyMutableI18nString } from '../classes';
+import { emptyQuestionOption, emptyQuestion, emptyI18nString } from '../classes';
 
 const QUESTION_UI = {
   namespaced: true,
@@ -26,8 +26,8 @@ const QUESTION_UI = {
       ...getQuestionDrafts[getIQuestions],
       optionDrafts: getOptionDrafts[getIQuestions],
     }),
-    questionTextInFocus: (state, { getIQuestions }, rootState, rootGetters) => rootGetters['SURVEY_Data/SURVEYById']({ id: rootGetters['modalData/getDataIdInFocus'] })
-      ?.questions[getIQuestions] ?? emptyMutableI18nString(),
+    questionTextInFocus: (state, { getIQuestions }, rootState, rootGetters) => rootGetters['SURVEY_Data/SURVEYById']({ id: rootGetters['dataModal/getDataIdInFocus'] })
+      ?.questions[getIQuestions].text ?? emptyI18nString(),
   },
   mutations: {
     /* INDEX OPERATIONS */

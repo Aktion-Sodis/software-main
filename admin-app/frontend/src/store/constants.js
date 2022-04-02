@@ -84,7 +84,7 @@ export const questionTypesDict = Object.freeze({
 export const questionTypesIconDict = Object.freeze({
   TEXT: 'mdi-text',
   SINGLECHOICE: 'mdi-radiobox-marked',
-  MULTIPLECHOICE: 'mdi-dots-horizontal',
+  MULTIPLECHOICE: 'mdi-checkbox-blank-outline',
   PICTURE: 'mdi-image',
   PICTUREWITHTAGS: 'mdi-message-image',
   AUDIO: 'mdi-waveform',

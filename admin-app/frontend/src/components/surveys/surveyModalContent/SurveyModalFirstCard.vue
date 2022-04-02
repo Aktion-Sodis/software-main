@@ -4,12 +4,24 @@
       <v-card-title>
         <h2 v-if="edit">
           {{ $t('surveys.modal.firstCard.title.edit') }}
-          <i>{{ surveyInFocus.name }}</i>
+          <i>
+            {{
+              calculateUILocaleString({
+                languageTexts: surveyInFocus.name.languageTexts,
+              })
+            }}
+          </i>
         </h2>
         <h2 v-else-if="create">
           {{ $t('surveys.modal.firstCard.title.create') }}
         </h2>
-        <h2 v-else-if="read">{{ surveyInFocus.name }}</h2>
+        <h2 v-else-if="read">
+          {{
+            calculateUILocaleString({
+              languageTexts: surveyInFocus.name.languageTexts,
+            })
+          }}
+        </h2>
         <v-spacer></v-spacer>
         <v-btn x-large text class="text-none" @click="nextStepHandler" :disabled="!canAdvance">
           {{
@@ -33,7 +45,7 @@
               <h2 v-if="read">
                 {{
                   calculateUILocaleString({
-                    languageTexts: name.languageTexts,
+                    languageTexts: surveyInFocus.name.languageTexts,
                   })
                 }}
               </h2>
@@ -64,7 +76,7 @@
                 <h3>
                   {{
                     calculateUILocaleString({
-                      languageTexts: description.languageTexts,
+                      languageTexts: surveyInFocus.description.languageTexts,
                     })
                   }}
                 </h3>
@@ -147,20 +159,33 @@
                 </div>
               </v-img>
 
-              <div v-if="read">
-                <h2>
-                  {{ $t('surveys.modal.firstCard.form.tags') }}
-                </h2>
-                <v-chip v-for="tag in tagsInFocus" :key="tag.tagId">
-                  {{ tag }}
-                </v-chip>
+              <div v-if="read && surveyInFocus">
+                <v-card-title class="pr-0 d-flex justify-space-between">
+                  <span class="mr-2">
+                    {{ $t('surveys.modal.firstCard.form.tags') }}
+                  </span>
+                </v-card-title>
+                <div v-if="tagIdsBySurveyId({ surveyId: dataIdInFocus }).length === 0">
+                  {{ $t('general.noTags') }}
+                </div>
+                <div v-else>
+                  <v-chip
+                    v-for="tagId in tagIdsBySurveyId({ surveyId: dataIdInFocus })"
+                    :key="tagId"
+                  >
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: tagById({ id: tagId }).text.languageTexts,
+                      })
+                    }}
+                  </v-chip>
+                </div>
               </div>
               <v-select
-                v-else
+                v-else-if="!read"
                 v-model="surveyTags"
                 :items="allSurveyTags"
                 item-value="tagId"
-                item-text="name"
                 deletable-chips
                 chips
                 dense
@@ -168,22 +193,36 @@
                 multiple
                 outlined
                 class="mt-8"
-              ></v-select>
+              >
+                <template v-slot:selection="data">
+                  {{
+                    calculateUILocaleString({
+                      languageTexts: data.item.text.languageTexts,
+                    })
+                  }}
+                </template>
+                <template v-slot:item="data">
+                  {{
+                    calculateUILocaleString({
+                      languageTexts: data.item.text.languageTexts,
+                    })
+                  }}
+                </template>
+              </v-select>
 
-              <v-card-title class="pt-0 pr-0 d-flex justify-space-between">
+              <v-card-title class="pr-0 d-flex">
                 <span class="mr-2">
                   {{ $t('surveys.modal.intervention') }}
                 </span>
-                <v-chip v-if="read">
+                <v-chip v-if="read && surveyInFocus.intervention">
                   {{
                     calculateUILocaleString({
-                      languageTexts: INTERVENTIONById({ id: surveyInFocus.interventionSurveysId })
-                        .name.languageTexts,
+                      languageTexts: surveyInFocus.intervention.name.languageTexts,
                     })
                   }}
                 </v-chip>
                 <v-select
-                  v-else
+                  v-else-if="!read"
                   v-model="interventionId"
                   :items="interventions"
                   item-value="id"
@@ -217,6 +256,10 @@
         <v-btn color="warning" text @click="exitHandler">
           {{ read ? 'Close' : $t('general.cancel') }}
         </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" text @click="editHandler">
+          {{ $t('general.edit') }}
+        </v-btn>
       </v-card-actions>
     </v-form>
   </v-card>
@@ -224,7 +267,7 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { modalModesDict } from '../../../store/constants';
+import { dataTypesDict, modalModesDict } from '../../../store/constants';
 import LocaleTextBox from '../../global/LocaleTextBox.vue';
 import { Survey, SurveyType } from '../../../models';
 import { emptyMutableI18nString, mutableI18nString } from '../../../store/classes';
@@ -255,7 +298,7 @@ export default {
     };
   },
   mounted() {
-    this.prefillComponentDataFromSurveyDraft();
+    if (!this.read) this.prefillComponentDataFromSurveyDraft();
   },
   computed: {
     ...mapGetters({
@@ -265,6 +308,7 @@ export default {
       SURVEYById: 'SURVEY_Data/SURVEYById',
       allSurveyTags: 'SURVEY_Data/getSurveyTags',
       tagById: 'SURVEY_Data/tagById',
+      tagIdsBySurveyId: 'SURVEY_Data/tagIdsBySurveyId',
 
       fallbackLocaleIndex: 'fallbackLocaleIndex',
       calculateUILocaleString: 'calculateUILocaleString',
@@ -273,9 +317,6 @@ export default {
     }),
     surveyInFocus() {
       return this.SURVEYById({ id: this.dataIdInFocus });
-    },
-    tagsInFocus() {
-      return this.surveyInFocus.tagIds.map((t) => this.tagById(t));
     },
     edit() {
       return this.surveyModalMode === modalModesDict.edit;
@@ -303,6 +344,8 @@ export default {
       abortNewSurveyHandler: 'dataModal/abortCreateData',
       abortReadSurveyHandler: 'dataModal/abortReadData',
       abortEditSurveyHandler: 'dataModal/abortEditData',
+
+      editData: 'dataModal/editData',
     }),
     ...mapMutations({
       setSurveyDraft: 'dataModal/setSURVEYDraft',
@@ -349,6 +392,9 @@ export default {
       if (this.create) {
         this.abortNewSurveyHandler({ dataType: 'SURVEY' });
       }
+    },
+    editHandler() {
+      this.editData({ dataId: this.dataIdInFocus, dataType: dataTypesDict.survey });
     },
     nameUpdatedHandler(res) {
       this.name = res;

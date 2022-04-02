@@ -5,6 +5,7 @@
   "general": {
     "edit": "Editar",
     "searchBox": "Búsqueda",
+    "close": "Close",
     "cancel": "Cancelar",
     "save": "Guardar",
     "delete": "Eliminar",
@@ -16,6 +17,7 @@
       "addInNewLocale": "En otra lengua"
     },
     "noTextProvided": "No text was provided.",
+    "noTags": "There are no tags.",
     "routes": {
       "Home": "Inicio",
       "BaseData": "Datos básicos",
@@ -25,7 +27,8 @@
       "CompleteUserInfo": "Complete la información del usuario",
       "ChangePassword": "Cambiar mi contraseña",
       "ForgotPassword": "Olvidé mi contraseña",
-      "About": "Acerca de"
+      "About": "Acerca de",
+      "Surveys": "Encuestas"
     },
     "errorCodes": {
       "InternalErrorException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6001",
@@ -157,7 +160,6 @@
   "interventions": {
     "title": "Intervenciones",
     "newIntervention": "Nueva intervención",
-    "newSurvey": "Nueva encuesta",
     "type": {
       "title": "Tipo de Intervención",
       "types": {
@@ -186,6 +188,8 @@
     }
   },
   "surveys": {
+    "title": "Encuestas",
+    "newSurvey": "Nueva encuesta",
     "type": {
       "title": "Tipo de Encuesta",
       "types": {
