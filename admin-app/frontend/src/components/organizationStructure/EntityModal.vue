@@ -92,7 +92,6 @@
                     }}
                   </h3>
                 </div>
-
                 <v-select
                   v-else-if="allEntitiesOfUpperLevel.length > 0"
                   v-model="parentEntityID"
@@ -284,6 +283,7 @@ export default {
       this.editData({ dataId: this.dataIdInFocus, dataType: dataTypesDict.entity });
     },
     async submitHandler() {
+      if (this.allEntitiesOfUpperLevel.length > 0 && this.parentEntityID == null) return;
       await this.setDraft(
         new Entity({
           name: new I18nString(this.name),

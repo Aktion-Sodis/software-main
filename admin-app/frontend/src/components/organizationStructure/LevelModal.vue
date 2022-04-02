@@ -252,7 +252,6 @@ export default {
       return this.isModalDisplayed && this.dataType === dataTypesDict.level;
     },
     levelInFocus() {
-      console.log(this.LEVELById({ id: this.dataIdInFocus }).name.languageTexts);
       return this.LEVELById({ id: this.dataIdInFocus });
     },
     requiredi18n() {

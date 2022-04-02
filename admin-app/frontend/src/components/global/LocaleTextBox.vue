@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column">
+  <div style="margin-bottom:20px;" class="d-flex flex-column">
     <div
       v-for="selectedLocale in selectedLocales"
       :key="selectedLocale"

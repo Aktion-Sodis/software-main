@@ -2,7 +2,7 @@ import { DataStore } from '@aws-amplify/datastore';
 import { API } from 'aws-amplify';
 import { Entity } from '../../models';
 import { deleteEntityController, getAllEntities } from './utils';
-import { dataTypesDict, modalModesDict } from '../constants';
+import { modalModesDict } from '../constants';
 import { updateEntity } from '../../graphql/mutations';
 
 const entitiesData = {
@@ -173,11 +173,8 @@ const entitiesData = {
         .then((postResponse) => {
           commit('addEntity', postResponse);
           dispatch(
-            'dataModal/readData',
-            {
-              dataId: postResponse.id,
-              dataType: dataTypesDict.entity,
-            },
+            'dataModal/abortReadData',
+            { },
             {
               root: true,
             },
@@ -197,6 +194,7 @@ const entitiesData = {
             id: entityDraft.originalId,
             name: entityDraft.newData.name,
             description: entityDraft.newData.description,
+            parentEntityID: entityDraft.newData.parentEntityID,
             _version: entityDraft.originalVersion,
           },
         },
