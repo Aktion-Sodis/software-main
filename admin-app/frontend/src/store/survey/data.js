@@ -1,7 +1,10 @@
 // import { API, DataStore } from 'aws-amplify';
 // import { createSurvey } from '../../graphql/mutations';
 import { DataStore } from 'aws-amplify';
-import { Question, QuestionOption, Survey } from '../../models';
+import { v4 as uuidv4 } from 'uuid';
+import {
+  I18nString, Question, QuestionOption, Survey,
+} from '../../models';
 import { dataTypesDict } from '../constants';
 
 const surveysData = {
@@ -37,7 +40,7 @@ const surveysData = {
         Array.from(state.surveys).findIndex((i) => i.id === id),
         1,
       );
-      },
+    },
     setLoading: (state, { newValue }) => {
       state.loading = newValue;
     },
@@ -66,11 +69,16 @@ const surveysData = {
       const surveyDraft = rootGetters['dataModal/getDataDraft'];
 
       const survey = new Survey({
-        name: surveyDraft.name,
+        name: new I18nString(surveyDraft.name),
+        description: new I18nString(surveyDraft.description),
         interventionSurveysId: surveyDraft.interventionSurveysId,
-        description: surveyDraft.description,
         questions: questions.map(
-          (q, i) => new Question({ ...q, questionOptions: options[i].map((o) => new QuestionOption(o)) }),
+          (q, i) => new Question({
+            ...q,
+            questionOptions: options[i].map(
+              (o) => new QuestionOption({ ...o, id: uuidv4(), followUpQuestionID: null }),
+            ),
+          }),
         ),
         tags: [],
         surveyType: surveyDraft.surveyType,

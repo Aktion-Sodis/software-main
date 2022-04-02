@@ -40,7 +40,9 @@
               <LocaleTextBox
                 v-else
                 labelPrefixI18nSelector="surveys.modal.firstCard.form.name"
+                :initVal="name"
                 @res="nameUpdatedHandler"
+                :key="nameTextBoxKey"
               >
                 <template v-slot:text-input="slotProps">
                   <v-text-field
@@ -70,7 +72,9 @@
               <LocaleTextBox
                 v-else
                 labelPrefixI18nSelector="surveys.modal.firstCard.form.description"
+                :initVal="description"
                 @res="descriptionUpdatedHandler"
+                :key="descriptionTextBoxKey"
               >
                 <template v-slot:text-input="slotProps">
                   <v-textarea
@@ -223,7 +227,7 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict } from '../../../store/constants';
 import LocaleTextBox from '../../global/LocaleTextBox.vue';
 import { Survey, SurveyType } from '../../../models';
-import { emptyI18nString } from '../../../store/classes';
+import { emptyMutableI18nString, mutableI18nString } from '../../../store/classes';
 
 const surveyDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_SURVEY_DESCRIPTION_MAX_CHAR, 10),
@@ -239,13 +243,15 @@ export default {
       rules: {
         maxChar: (value) => value.length <= surveyDescriptionMaxChar || this.maxCharExceededi18n,
       },
-      name: emptyI18nString(),
-      description: emptyI18nString(),
+      name: emptyMutableI18nString(),
+      description: emptyMutableI18nString(),
       surveyTags: [],
       SurveyType,
       typeIndex: 0,
       types: [SurveyType.INITIAL, SurveyType.DEFAULT],
       interventionId: null,
+      nameTextBoxKey: 0,
+      descriptionTextBoxKey: 1,
     };
   },
   mounted() {
@@ -321,9 +327,15 @@ export default {
       this.incrementCompletionIndex();
     },
     prefillComponentDataFromSurveyDraft() {
-      // this.name = this.surveyDraft?.name ?? '';
-      // this.description = this.surveyDraft?.description ?? '';
-      // this.surveyTags = this.surveyDraft?.tags ?? [];
+      this.name = mutableI18nString({ languageTexts: this.surveyDraft?.name.languageTexts })
+        ?? emptyMutableI18nString();
+      this.description = mutableI18nString({ languageTexts: this.surveyDraft?.description.languageTexts })
+        ?? emptyMutableI18nString();
+      this.surveyTags = this.surveyDraft?.tags ?? [];
+      this.interventionId = this.surveyDraft?.interventionSurveysId ?? null;
+
+      this.descriptionTextBoxKey += 1;
+      this.nameTextBoxKey -= 1;
     },
     exitHandler() {
       if (this.read) {

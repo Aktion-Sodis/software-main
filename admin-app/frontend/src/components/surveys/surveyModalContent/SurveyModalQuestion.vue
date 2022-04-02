@@ -64,7 +64,9 @@
               <LocaleTextBox
                 v-else
                 labelPrefixI18nSelector="surveys.modal.questionCard.form.question.textLabel"
+                :initVal="text"
                 @res="questionUpdatedHandler"
+                :key="questionTextBoxKey"
               >
                 <template v-slot:text-input="slotProps">
                   <v-textarea
@@ -155,7 +157,7 @@
                   </h3>
                   <div class="d-flex justify-space-between">
                     <v-text-field
-                      @input="(e) => optionUpdatedHandler(e, index)"
+                      v-model="options[index].text.languageTexts[fallbackLocaleIndex]"
                       :label="$t('surveys.modal.questionCard.form.answer.textLabel')"
                       outlined
                       dense
@@ -279,10 +281,15 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { v4 as uuidv4 } from 'uuid';
+import { Question, QuestionType } from '../../../models';
 import {
-  I18nString, Question, QuestionOption, QuestionType,
-} from '../../../models';
-import { emptyQuestionOption, emptyI18nString } from '../../../store/classes';
+  // emptyQuestionOption,
+  // emptyI18nString,
+  emptyMutableI18nString,
+  emptyMutableQuestionOption,
+  mutableI18nString,
+  mutableQuestionOption,
+} from '../../../store/classes';
 import { modalModesDict } from '../../../store/constants';
 // eslint-disable-next-line import/named
 import { compareI18nStrings } from '../../../store/utils';
@@ -305,9 +312,10 @@ export default {
       rules: {
         maxChar: (value) => value.length <= questionTextMaxChar || this.maxCharExceededi18n,
       },
-      text: emptyI18nString(),
+      text: emptyMutableI18nString(),
       type: QuestionType.TEXT,
-      options: [emptyQuestionOption()],
+      options: [emptyMutableQuestionOption()],
+      questionTextBoxKey: false,
     };
   },
   beforeRouteLeave(to, from, next) {
@@ -389,7 +397,8 @@ export default {
       if (this.read) return false;
       return (
         (!this.areAnswersNeeded
-          || (this.options.length > 0 && !this.options.find((a) => a.text === '')))
+          || (this.options.length > 0
+            && !this.options.find((a) => a.text[this.fallbackLocaleIndex] === '')))
         && (!(this.questionCurrentDraft.isEmptyQuestion ?? true) || this.areThereChanges)
       );
     },
@@ -444,23 +453,21 @@ export default {
       const q = this.questionCurrentDraft;
       const { optionsCurrentDraft } = this;
 
-      console.log({ optionsCurrentDraft });
-      console.log({ q });
-
-      console.log(q.text);
-
-      this.text = new I18nString(q.text);
+      this.text = mutableI18nString({
+        languageTexts: Array.from(q.text.languageTexts),
+      });
       this.type = q.type;
-      this.options = [emptyQuestionOption()];
-      // if (optionsCurrentDraft[0].isEmptyAnswer) return;
 
+      this.options = [emptyMutableQuestionOption()];
       for (let index = 0; index < optionsCurrentDraft.length; index += 1) {
-        const newOption = new QuestionOption({
+        const newOption = mutableQuestionOption({
           text: optionsCurrentDraft[index].text,
-          followUpQuestionID: null,
         });
         this.options.splice(index, 1, newOption);
       }
+
+      // Remounts the LocaleTextBox component
+      this.questionTextBoxKey = !this.questionTextBoxKey;
     },
     saveQuestion() {
       this.saveQuestionHandler({
@@ -473,10 +480,12 @@ export default {
         }),
         // TODO: See whether reactivity breaks when direct reference is used
         // instead of generating a new array instance as follows
-        newOptions: this.options,
+        newOptions: [QuestionType.SINGLECHOICE, QuestionType.MULTIPLECHOICE].includes(this.type)
+          ? this.options
+          : [],
       });
       this.type = QuestionType.TEXT;
-      this.text = emptyI18nString();
+      this.text = emptyMutableI18nString();
     },
     clickOnAddImage() {
       const imgInput = this.$refs['question-img-upload'];
@@ -493,7 +502,7 @@ export default {
       // console.log('TODO: do something with', audioInput);
     },
     clickOnAddOption() {
-      this.options.push(emptyQuestionOption());
+      this.options.push(emptyMutableQuestionOption());
     },
     clickOnAddImgToOption() {
       const imgInput = this.$refs['option-img-upload'];
@@ -514,7 +523,9 @@ export default {
           isFollowUpQuestion: false,
           questionOptions: [],
         }),
-        newOptions: this.options,
+        newOptions: [QuestionType.SINGLECHOICE, QuestionType.MULTIPLECHOICE].includes(this.type)
+          ? this.options
+          : [],
       });
     },
     priorQuestion() {
@@ -526,20 +537,13 @@ export default {
           isFollowUpQuestion: false,
           questionOptions: [],
         }),
-        newOptions: this.options,
+        newOptions: [QuestionType.SINGLECHOICE, QuestionType.MULTIPLECHOICE].includes(this.type)
+          ? this.options
+          : [],
       });
     },
     questionUpdatedHandler(res) {
       this.text = res;
-    },
-    optionUpdatedHandler(value, index) {
-      const languageTexts = Array(this.$i18n.availableLocales.length).fill('');
-      languageTexts[this.fallbackLocaleIndex] = value;
-      this.options[index] = new QuestionOption({
-        id: uuidv4(),
-        text: new I18nString({ languageKeys: this.$i18n.availableLocales, languageTexts }),
-        followUpQuestionID: null,
-      });
     },
   },
 };
