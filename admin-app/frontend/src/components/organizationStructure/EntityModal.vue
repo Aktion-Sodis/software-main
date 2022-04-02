@@ -164,7 +164,7 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
 import { Entity, I18nString } from '../../models';
-import { emptyI18nString } from '../../store/classes';
+import { emptyMutableI18nString, mutableI18nString } from '../../store/classes';
 
 const entityDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_ENTITY_DESCRIPTION_MAX_CHAR, 10),
@@ -182,8 +182,8 @@ export default {
       rules: {
         maxChar: (value) => value.length <= entityDescriptionMaxChar || this.maxCharExceededi18n,
       },
-      name: emptyI18nString(),
-      description: emptyI18nString(),
+      name: emptyMutableI18nString(),
+      description: emptyMutableI18nString(),
       parentEntityID: null,
     };
   },
@@ -312,8 +312,10 @@ export default {
       });
     },
     prefillComponentDataFromEntityDraft() {
-      this.name = this.entityDraft?.name ?? '';
-      this.description = this.entityDraft?.description ?? '';
+      this.name = mutableI18nString({ languageTexts: this.entityDraft?.name.languageTexts });
+      this.description = mutableI18nString({
+        languageTexts: this.entityDraft?.description.languageTexts,
+      });
       this.parentEntityID = this.entityDraft?.parentEntityID ?? null;
       this.contents = this.entityDraft?.contents ?? [];
     },
