@@ -49,6 +49,7 @@
                 <LocaleTextBox
                   v-else
                   labelPrefixI18nSelector="interventions.modal.name"
+                  :initVal="name"
                   @res="nameUpdatedHandler"
                 >
                   <template v-slot:text-input="slotProps">
@@ -84,6 +85,7 @@
                 <LocaleTextBox
                   v-else
                   labelPrefixI18nSelector="interventions.modal.description"
+                  :initVal="description"
                   @res="descriptionUpdatedHandler"
                 >
                   <template v-slot:text-input="slotProps">
@@ -349,7 +351,7 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
 import { Intervention, InterventionType } from '../../models';
-import { emptyI18nString } from '../../store/classes';
+import { emptyMutableI18nString, mutableI18nString } from '../../store/classes';
 
 const interventionDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_INTERVENTION_DESCRIPTION_MAX_CHAR, 10),
@@ -367,10 +369,10 @@ export default {
         maxChar: (value) => value.length <= interventionDescriptionMaxChar || this.maxCharExceededi18n,
       },
       id: null,
-      name: emptyI18nString(),
+      name: emptyMutableI18nString(),
       typeIndex: 0,
       types: [InterventionType.TECHNOLOGY, InterventionType.EDUCATION],
-      description: emptyI18nString(),
+      description: emptyMutableI18nString(),
       tagIds: [],
       levelIds: [],
       contents: [],
@@ -453,12 +455,6 @@ export default {
       if (this.read) return;
       this.deleteInterventionHandler({ dataType: dataTypesDict.intervention });
     },
-    nameUpdatedHandler(res) {
-      this.name = res;
-    },
-    descriptionUpdatedHandler(res) {
-      this.description = res;
-    },
     closeHandler() {
       if (this.read) this.abortReadInterventionHandler();
       else if (this.create) this.abortNewInterventionHandler({ dataType: dataTypesDict.intervention });
@@ -503,10 +499,18 @@ export default {
       // console.log('TODO: do something with', imgInput);
     },
     prefillComponentDataFromInterventionDraft() {
-      this.name = this.interventionDraft?.name ?? '';
-      this.description = this.interventionDraft?.description ?? '';
+      this.name = mutableI18nString({ languageTexts: this.interventionDraft?.name.languageTexts });
+      this.description = mutableI18nString({
+        languageTexts: this.interventionDraft?.description.languageTexts,
+      });
       this.tagIds = this.interventionDraft?.tagIds ?? [];
       this.contents = this.interventionDraft?.contents ?? [];
+    },
+    nameUpdatedHandler(res) {
+      this.name = res;
+    },
+    descriptionUpdatedHandler(res) {
+      this.description = res;
     },
   },
 };

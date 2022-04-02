@@ -28,6 +28,8 @@ const SYNC_UI = {
         await dispatch('INTERVENTION_Data/sync', null, { root: true });
       } else if (routeName === 'OrganizationStructure') {
         await dispatch('LEVEL_Data/sync', null, { root: true });
+      } else if (routeName === 'Surveys') {
+        await dispatch('SURVEY_Data/sync', null, { root: true });
       }
       commit('setStatus', { newStatus: syncStatusDict.synched });
       commit('setIsStatusLocked', { newValue: true });

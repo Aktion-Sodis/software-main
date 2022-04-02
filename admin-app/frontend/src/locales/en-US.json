@@ -5,6 +5,7 @@
   "general": {
     "edit": "Edit",
     "searchBox": "Search anything",
+    "close": "Close",
     "cancel": "Cancel",
     "save": "Save",
     "delete": "Delete",
@@ -16,6 +17,7 @@
       "addInNewLocale": "In another language"
     },
     "noTextProvided": "No text was provided.",
+    "noTags": "There are no tags.",
     "routes": {
       "Home": "Home",
       "BaseData": "Base data",
@@ -25,7 +27,8 @@
       "CompleteUserInfo": "Complete user information",
       "ChangePassword": "Change password",
       "ForgotPassword": "Forgot password",
-      "About": "About"
+      "About": "About",
+      "Surveys": "Surveys"
     },
     "errorCodes": {
       "InternalErrorException": "An internal error has occurred. Please try again later. Error Code: 6001",
@@ -157,7 +160,6 @@
   "interventions": {
     "title": "Interventions",
     "newIntervention": "New intervention",
-    "newSurvey": "New survey",
     "type": {
       "title": "Intervention Type",
       "types": {
@@ -186,6 +188,8 @@
     }
   },
   "surveys": {
+    "title": "Surveys",
+    "newSurvey": "New survey",
     "type": {
       "title": "Survey Type",
       "types": {

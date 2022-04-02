@@ -47,6 +47,7 @@ export default {
     },
     initVal: {
       type: Object,
+      required: true,
     },
   },
   data() {

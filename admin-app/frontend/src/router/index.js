@@ -6,6 +6,7 @@ import i18n from '../i18n';
 // import Home from '../views/Home.vue';
 import OrganizationStructure from '../views/OrganizationStructure.vue';
 // import BaseData from '../views/BaseData.vue';
+import Surveys from '../views/Surveys.vue';
 import Interventions from '../views/Interventions.vue';
 import Auth from '../views/Auth.vue';
 import { syncStatusDict } from '../store/constants';
@@ -78,6 +79,18 @@ export const routes = [
       title: i18n.t('general.routes.OrganizationStructure'),
       onSideBar: true,
       icon: 'mdi-clipboard-text-outline',
+    },
+  },
+  {
+    path: '/surveys',
+    name: 'Surveys',
+    component: Surveys,
+    meta: {
+      requiresAuth: true,
+      shouldBeSynced: true,
+      title: i18n.t('general.routes.Surveys'),
+      onSideBar: true,
+      icon: 'mdi-crosshairs-question',
     },
   },
   // {

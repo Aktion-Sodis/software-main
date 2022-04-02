@@ -5,6 +5,7 @@
   "general": {
     "edit": "Düzenle",
     "searchBox": "Her yerde ara",
+    "close": "Kapat",
     "cancel": "İptal",
     "save": "Kaydet",
     "delete": "Sil",
@@ -16,6 +17,7 @@
       "addInNewLocale": "Başka bir dilde"
     },
     "noTextProvided": "Buraya bir metin girilmemiş.",
+    "noTags": "There are no tags.",
     "routes": {
       "Home": "Ana sayfa",
       "BaseData": "Temel veriler",
@@ -25,7 +27,8 @@
       "CompleteUserInfo": "Kullanıcı bilgilerini tamamla",
       "ChangePassword": "Şifre Değiştir",
       "ForgotPassword": "Şifremi Unuttum",
-      "About": "Hakkımızda"
+      "About": "Hakkımızda",
+      "Surveys": "Anketler"
     },
     "errorCodes": {
       "InternalErrorException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6001",
@@ -157,7 +160,6 @@
   "interventions": {
     "title": "Müdahaleler",
     "newIntervention": "Yeni müdahale",
-    "newSurvey": "Yeni anket",
     "type": {
       "title": "Müdahale türü",
       "types": {
@@ -186,8 +188,10 @@
     }
   },
   "surveys": {
+    "title": "Anketler",
+    "newSurvey": "Yeni anket",
     "type": {
-      "title": "Tipo de Encuesta",
+      "title": "Anket türü",
       "types": {
         "INITIAL": "Başlangıç",
         "DEFAULT": "Varsayılan"

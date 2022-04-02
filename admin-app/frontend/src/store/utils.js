@@ -14,7 +14,6 @@ const deriveFilePath = (wantedDerivative, paramsObj) => {
 };
 
 export const compareI18nStrings = (a, b) => {
-  console.log({ a });
   if (a.languageKeys.length !== b.languageKeys.length) return false;
   for (let i = 0; i < a.languageKeys.length; i += 1) {
     if (a.languageKeys[i] !== b.languageKeys[i]) return false;
