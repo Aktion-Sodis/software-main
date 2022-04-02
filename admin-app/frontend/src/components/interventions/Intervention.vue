@@ -5,7 +5,7 @@
       {{ calculateUILocaleString({ languageTexts: interventionName.languageTexts }) }}
       <v-spacer></v-spacer>
       <v-chip v-for="tagId in interventionTagIds" :key="tagId" class="ml-2"
-        >{{ tagById({ tagId: tagId }).name }}
+        >{{ tagById({ id: tagId }).text }}
       </v-chip>
     </v-card-title>
     <v-card-subtitle class="mt-0">
