@@ -49,40 +49,17 @@ const levelsData = {
       (_, { getLevelTags }) => ({ tagId }) => getLevelTags.find((t) => t.tagId === tagId),
   },
   mutations: {
-    addLevel: (state, {
-      id, name, description, parentLevelID, allowedInterventions, tagIds,
-    }) => {
-      state.levels.push(
-        new Level({
-          id,
-          name,
-          description,
-          parentLevelID,
-          allowedInterventions,
-          tagIds,
-        }),
-      );
+    addLevel: (state, level) => {
+      state.levels.push(level);
     },
-    replaceLevel: (
-      state,
-      {
-        id, name, parentLevelID, tagIds, allowedInterventions, description,
-      },
-    ) => {
+    replaceLevel: (state, level) => {
       state.levels.splice(
-        state.levels.findIndex((i) => i.id === id),
+        state.levels.findIndex((i) => i.id === level.id),
         1,
-        new Level({
-          id,
-          name,
-          description,
-          parentLevelID,
-          allowedInterventions,
-          tagIds,
-        }),
+        level,
       );
     },
-    deleteLevel: (state, { id }) => {
+    deleteIntervention: (state, { id }) => {
       state.levels.splice(
         Array.from(state.levels).findIndex((i) => i.id === id),
         1,
@@ -98,10 +75,16 @@ const levelsData = {
   actions: {
     APIpost: async ({ commit, dispatch }, levelDraft) => {
       console.log(levelDraft);
+      const level = new Level({
+        ...levelDraft,
+        name: new I18nString(levelDraft.name),
+        description: new I18nString(levelDraft.description),
+      });
       commit('setLoading', { newValue: true });
-      DataStore.save(levelDraft)
+      DataStore.save(level)
         .then((postResponse) => {
           commit('addLevel', postResponse);
+          console.log({ postResponse });
           dispatch(
             'dataModal/readData',
             {
