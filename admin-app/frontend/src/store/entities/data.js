@@ -116,37 +116,14 @@ const entitiesData = {
       },
   },
   mutations: {
-    addEntity: (state, {
-      id, name, description, entityLevelId, parentEntityID,
-    }) => {
-      state.entities.push(
-        new Entity({
-          id,
-          name,
-          description,
-          entityLevelId,
-          parentEntityID,
-        }),
-      );
+    addEntity: (state, entity) => {
+      state.entities.push(entity);
     },
-    replaceEntity: (
-      state,
-      {
-        id, name, description, entityLevelId, parentEntityID, _version, appliedInterventions,
-      },
-    ) => {
+    replaceEntity: (state, entity) => {
       state.entities.splice(
-        state.entities.findIndex((i) => i.id === id),
+        state.entities.findIndex((i) => i.id === entity.id),
         1,
-        new Entity({
-          id,
-          name,
-          description,
-          entityLevelId,
-          parentEntityID,
-          _version,
-          appliedInterventions,
-        }),
+        entity,
       );
     },
     deleteEntity: (state, { id }) => {
