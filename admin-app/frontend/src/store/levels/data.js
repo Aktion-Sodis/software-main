@@ -59,7 +59,7 @@ const levelsData = {
         level,
       );
     },
-    deleteIntervention: (state, { id }) => {
+    deleteLevel: (state, { id }) => {
       state.levels.splice(
         Array.from(state.levels).findIndex((i) => i.id === id),
         1,
