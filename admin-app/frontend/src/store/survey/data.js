@@ -22,46 +22,31 @@ const surveysData = {
       (_, { getSurveyTags }) => ({ tagId }) => getSurveyTags.find((t) => t.tagId === tagId),
   },
   mutations: {
-    addSurvey: (state, {
-      id, name, description, type, questions, creationDate, lastEditDate,
-    }) => {
-      state.surveys.push(
-        new Survey({
-          id,
-          name,
-          description,
-          type,
-          questions,
-          creationDate,
-          lastEditDate,
-        }),
+    addSurvey: (state, survey) => {
+      state.surveys.push(survey);
+    },
+    replaceSurvey: (state, survey) => {
+      state.surveys.splice(
+        state.surveys.findIndex((i) => i.id === survey.id),
+        1,
+        survey,
       );
     },
-    replaceSurvey: (
-      state,
-      {
-        id, name, description, type, questions, creationDate, lastEditDate,
+    deleteSurvey: (state, { id }) => {
+      state.surveys.splice(
+        Array.from(state.surveys).findIndex((i) => i.id === id),
+        1,
+      );
       },
-    ) => {
-      state.surveys = state.surveys.map((s) => (s.id === id
-        ? {
-          ...s,
-          id,
-          name,
-          description,
-          type,
-          questions,
-          creationDate,
-          lastEditDate,
-        }
-        : s));
-    },
-    deleteSurvey: (state, id) => {
-      state.surveys = state.surveys.filter((s) => s.id !== id);
-    },
-
     setLoading: (state, { newValue }) => {
       state.loading = newValue;
+    },
+    setSurveys: (state, { newValue }) => {
+      state.surveys = newValue;
+    },
+
+    setSurveyTags: (state, { newValue }) => {
+      state.surveyTags = newValue;
     },
   },
   actions: {
