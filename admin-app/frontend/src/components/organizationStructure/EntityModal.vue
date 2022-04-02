@@ -163,7 +163,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
-import { Entity, I18nString } from '../../models';
+import { Entity } from '../../models';
 import { emptyMutableI18nString, mutableI18nString } from '../../store/classes';
 
 const entityDescriptionMaxChar = Math.max(
@@ -294,8 +294,8 @@ export default {
       if (this.allEntitiesOfUpperLevel.length > 0 && this.parentEntityID == null) return;
       await this.setDraft(
         new Entity({
-          name: new I18nString(this.name),
-          description: new I18nString(this.description),
+          name: this.name,
+          description: this.description,
           entityLevelId: this.edit
             ? this.entityInFocus.entityLevelId
             : this.getCreatingEntityInLevelId,

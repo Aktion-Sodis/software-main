@@ -1,8 +1,9 @@
 import { DataStore } from '@aws-amplify/datastore';
 import { API } from 'aws-amplify';
-import { deleteEntityController, getAllEntities } from './utils';
+import { deleteEntityController, Entity, getAllEntities } from './utils';
 import { dataTypesDict, modalModesDict } from '../constants';
 import { updateEntity } from '../../graphql/mutations';
+import { I18nString } from '../../models';
 
 const entitiesData = {
   namespaced: true,
@@ -145,7 +146,12 @@ const entitiesData = {
   actions: {
     APIpost: async ({ commit, dispatch }, entityDraft) => {
       commit('setLoading', { newValue: true });
-      DataStore.save(entityDraft)
+      const entity = new Entity({
+        ...entityDraft,
+        name: new I18nString(entityDraft.name),
+        description: new I18nString(entityDraft.description),
+      });
+      DataStore.save(entity)
         .then((postResponse) => {
           commit('addEntity', postResponse);
           dispatch(
