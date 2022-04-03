@@ -111,3 +111,5 @@ export const syncStatusDict = Object.freeze({
   synched: 'synched',
   synchronizing: 'synchronizing',
 });
+
+export const allowedFileUploadTypes = Object.freeze(['image/png', 'audio/mpeg', 'application/pdf']);
