@@ -1,7 +1,7 @@
 import { databaseOntologies } from './constants';
 
 /* eslint-disable-next-line no-unused-vars */
-const deriveFilePath = (wantedDerivative, paramsObj) => {
+export const deriveFilePath = (wantedDerivative, paramsObj) => {
   const derivative = databaseOntologies[wantedDerivative];
   if (Object.keys(paramsObj).length !== derivative.toBeReplaced.length) return -1;
   let res = derivative.path;
