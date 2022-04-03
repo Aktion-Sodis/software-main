@@ -141,6 +141,8 @@ const surveysData = {
       commit('setLoading', { newValue: true });
       const original = await DataStore.query(Survey, originalId);
 
+      console.log(newData.interventionSurveysId);
+
       try {
         const res = await DataStore.save(
           Survey.copyOf(original, (updated) => {
@@ -148,7 +150,7 @@ const surveysData = {
             updated.description = newData.description;
             updated.questions = newData.questions;
             updated.surveyType = newData.surveyType;
-            updated.interventionSurveysId = newData.interventionSurveysId;
+            updated.intervention = newData.intervention;
           }),
         );
 
