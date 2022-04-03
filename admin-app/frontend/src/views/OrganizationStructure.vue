@@ -17,7 +17,7 @@
       </div>
       <div class="column-wrapper dotted-left-border d-flex align-center justify-center">
         <LevelModal v-if="showLevelModal" />
-        <EntityModal v-if="showEntityModal" />
+        <EntityModal v-else-if="showEntityModal" />
         <v-btn :disabled="getLoading" rounded x-large color="primary" @click="clickOnAddNewLevel">
           <v-icon class="mr-2">mdi-plus</v-icon>
           <v-skeleton-loader
@@ -62,15 +62,14 @@ export default {
     ...mapGetters({
       getLoading: 'LEVEL_Data/getLoading',
       levels: 'LEVEL_Data/sortedLevels',
-      isLevelModalDisplayed: 'dataModal/getIsDisplayed',
-      entityModalIsDisplayed: 'dataModal/getIsDisplayed',
+      isModalDisplayed: 'dataModal/getIsDisplayed',
+      dataType: 'dataModal/getDataType',
 
       calculateUILocaleString: 'calculateUILocaleString',
     }),
   },
   watch: {
-    isLevelModalDisplayed: 'destroyLevelModalAfterDelay',
-    entityModalIsDisplayed: 'destroyEntityModalAfterDelay',
+    isModalDisplayed: 'destroyModalAfterDelay',
   },
   methods: {
     ...mapActions({
@@ -79,23 +78,24 @@ export default {
     clickOnAddNewLevel() {
       this.newLevelHandler({ dataType: dataTypesDict.level });
     },
-    async destroyLevelModalAfterDelay(newValue) {
+    async destroyModalAfterDelay(newValue) {
       // If closed, wait for 500, if still closed, destroy component instance
       if (newValue) {
-        this.showLevelModal = true;
+        if (this.dataType === dataTypesDict.level) {
+          this.showLevelModal = true;
+        } else if (this.dataType === dataTypesDict.entity) {
+          this.showEntityModal = true;
+        }
         return;
       }
       await new Promise((resolve) => setTimeout(resolve, 500));
-      if (!this.isLevelModalDisplayed) this.showLevelModal = false;
-    },
-    async destroyEntityModalAfterDelay(newValue) {
-      // If closed, wait for 500, if still closed, destroy component instance
-      if (newValue) {
-        this.showEntityModal = true;
-        return;
+      if (!this.isModalDisplayed) {
+        if (this.dataType === dataTypesDict.level) {
+          this.showLevelModal = false;
+        } else if (this.dataType === dataTypesDict.entity) {
+          this.showEntityModal = false;
+        }
       }
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      if (!this.isLevelModalDisplayed) this.showLevelModal = false;
     },
   },
 };
