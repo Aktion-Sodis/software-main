@@ -63,7 +63,7 @@ export default {
   computed: {
     ...mapGetters({
       surveys: 'SURVEY_Data/getSurveys',
-      loading: 'INTERVENTION_Data/getLoading',
+      loading: 'SURVEY_Data/getLoading',
       isSurveyModalDisplayed: 'dataModal/getIsDisplayed',
     }),
     currentLocale() {

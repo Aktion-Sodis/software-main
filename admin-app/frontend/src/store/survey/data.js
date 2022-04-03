@@ -27,6 +27,7 @@ const surveysData = {
     getSurveys: ({ surveys }) => surveys.filter((i) => !i._deleted).sort((a, b) => a.id - b.id),
     getSurveyTags: ({ surveyTags }) => surveyTags,
     getRelationSurveysAndTags: ({ relationSurveysAndTags }) => relationSurveysAndTags,
+    getLoading: ({ loading }) => loading,
 
     SURVEYById:
       (_, { getSurveys }) => ({ id }) => getSurveys.find((s) => s.id === id),
