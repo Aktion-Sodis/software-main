@@ -18,6 +18,43 @@
           "s3Key": "amplify-builds/AdminQueries3df1db39-6762337046583568706b-build.zip"
         }
       },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "ddi8cmvwmf668",
+          "type": "manual"
+        }
+      },
+      "auth": {
+        "userPoolGroups": {},
+        "sodisusers": {}
+      }
+    }
+  },
+  "apptest": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-monitoring-apptest-202959-authRole",
+      "UnauthRoleArn": "arn:aws:iam::404541487485:role/amplify-monitoring-apptest-202959-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::404541487485:role/amplify-monitoring-apptest-202959-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-monitoring-apptest-202959-deployment",
+      "UnauthRoleName": "amplify-monitoring-apptest-202959-unauthRole",
+      "StackName": "amplify-monitoring-apptest-202959",
+      "StackId": "arn:aws:cloudformation:eu-central-1:404541487485:stack/amplify-monitoring-apptest-202959/14dc6ef0-b37c-11ec-9e9b-020f5948deac",
+      "AmplifyAppId": "ddi8cmvwmf668"
+    },
+    "categories": {
+      "function": {
+        "AdminQueries3df1db39": {
+          "deploymentBucketName": "amplify-monitoring-apptest-202959-deployment",
+          "s3Key": "amplify-builds/AdminQueries3df1db39-4c4e556e466d63776b6c-build.zip"
+        }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "ddi8cmvwmf668",
+          "type": "manual"
+        }
+      },
       "auth": {
         "userPoolGroups": {},
         "sodisusers": {}
