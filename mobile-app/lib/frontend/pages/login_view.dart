@@ -45,7 +45,7 @@ class LoginView extends StatelessWidget {
 
   Widget _logo(BuildContext context) {
     return Expanded(
-        flex: 1,
+        flex: 2,
         child: Container(
             margin: EdgeInsets.all(width(context) * .1),
             constraints: BoxConstraints(maxHeight: height(context) * .07),
@@ -58,8 +58,9 @@ class LoginView extends StatelessWidget {
 
   Widget _pic(BuildContext context) {
     return Expanded(
-        flex: 3,
+        flex: 5,
         child: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
             margin: EdgeInsets.symmetric(horizontal: width(context) * .1),
             child: ClipRRect(
                 child: Image.asset("assets/test/demo_pic.jpg"),

@@ -41,7 +41,14 @@ class UserDataViewState extends State<UserDataView> {
   late TextEditingController textEditingControllerLastName;
   final _formKey = GlobalKey<FormState>();
   SyncedFile? userPicSynced;
-  File? userPicFile;
+  File? _userPicFile;
+
+  File? get userPicFile => _userPicFile;
+
+  set userPicFile(File? file) {
+    _userPicFile = file;
+    userPicKey = ValueKey(DateTime.now());
+  }
 
   @override
   void initState() {
@@ -51,24 +58,43 @@ class UserDataViewState extends State<UserDataView> {
       textEdigtingControllerFirstName.text =
           widget.userBloc.state.user!.firstName;
       textEditingControllerLastName.text = widget.userBloc.state.user!.lastName;
+      userPicSynced =
+          UserRepository.getUserPicFile(widget.userBloc.state.user!);
+      userPicSynced!.file().then((value) {
+        try {
+          setState(() {
+            userPicFile = value;
+          });
+        } catch (e) {
+          userPicFile = value;
+        }
+      });
+    } else {
+      userPicSynced =
+          UserRepository.getUserPicFileByUserID(widget.userBloc.userID);
+      userPicSynced!.file().then((value) {
+        try {
+          setState(() {
+            userPicFile = value;
+          });
+        } catch (e) {
+          userPicFile = value;
+        }
+      });
     }
-    widget.userBloc.userRepository
-        .getUserById(widget.userBloc.userID)
-        .then((user) async {
-      if (user != null) {
-        userPicSynced = UserRepository.getUserPicFile(user);
-        userPicFile = await userPicSynced?.file();
-      }
-    });
     super.initState();
   }
+
+  Key userPicKey = ValueKey(DateTime.now());
 
   void updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
     if (r != null) {
       await userPicSynced?.updateAsPic(r);
       userPicFile = await userPicSynced?.file();
-      setState(() {});
+      setState(() {
+        userPicFile = userPicFile;
+      });
     }
   }
 
@@ -174,6 +200,7 @@ class UserDataViewState extends State<UserDataView> {
                                       Align(
                                           alignment: Alignment.center,
                                           child: Container(
+                                              key: userPicKey,
                                               width: width(context) * .45,
                                               height: width(context) * .45,
                                               decoration: userPicFile != null
