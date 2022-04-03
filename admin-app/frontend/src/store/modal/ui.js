@@ -12,6 +12,7 @@ const dataModal = {
     isDisplayed: false,
     dataIdInFocus: null,
     dataDraft: null,
+    imageFile: null,
   }),
   getters: {
     /* READ */
@@ -20,6 +21,7 @@ const dataModal = {
     getIsDisplayed: ({ isDisplayed }) => isDisplayed,
     getDataIdInFocus: ({ dataIdInFocus }) => dataIdInFocus,
     getDataDraft: ({ dataDraft }) => dataDraft,
+    getImageFile: ({ imageFile }) => imageFile,
   },
   mutations: {
     /* UPDATE, DELETE */
@@ -34,6 +36,9 @@ const dataModal = {
     },
     setDataType: (state, { newValue }) => {
       state.dataType = newValue;
+    },
+    setImageFile: (state, { newValue }) => {
+      state.imageFile = newValue;
     },
 
     /* ENTITY DRAFT: SET & RESET */
@@ -68,6 +73,7 @@ const dataModal = {
       commit('setMode', { newValue: modalModesDict.read });
       commit('setDataIdInFocus', { newValue: dataId });
       commit('setIsDisplayed', { newValue: true });
+      commit('setImageFile', { newValue: null });
     },
     abortReadData: async ({ commit }) => {
       commit('setIsDisplayed', { newValue: false });
