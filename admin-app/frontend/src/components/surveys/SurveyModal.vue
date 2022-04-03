@@ -5,7 +5,7 @@
     max-width="1200px"
     persistent
   >
-    <SurveyModalStepper v-if="!read" />
+    <SurveyModalStepper v-if="create" />
 
     <SurveyModalFirstCard v-if="completionIndex === 1" />
 

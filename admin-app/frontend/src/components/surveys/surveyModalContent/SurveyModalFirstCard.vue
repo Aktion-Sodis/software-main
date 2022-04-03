@@ -2,7 +2,7 @@
   <v-card class="px-0 pt-0 px-md-4 pt-md-4">
     <v-form lazy-validation>
       <v-card-title>
-        <h2 v-if="edit">
+        <h2 v-if="edit && surveyInFocus">
           {{ $t('surveys.modal.firstCard.title.edit') }}
           <i>
             {{
@@ -15,7 +15,7 @@
         <h2 v-else-if="create">
           {{ $t('surveys.modal.firstCard.title.create') }}
         </h2>
-        <h2 v-else-if="read">
+        <h2 v-else-if="read && surveyInFocus">
           {{
             calculateUILocaleString({
               languageTexts: surveyInFocus.name.languageTexts,
@@ -23,7 +23,14 @@
           }}
         </h2>
         <v-spacer></v-spacer>
-        <v-btn x-large text class="text-none" @click="nextStepHandler" :disabled="!canAdvance">
+        <v-btn
+          v-if="!edit"
+          x-large
+          text
+          class="text-none"
+          @click="nextStepHandler"
+          :disabled="!canAdvance"
+        >
           {{
             $vuetify.breakpoint.name === 'xs'
               ? ''
@@ -42,7 +49,7 @@
               <v-card-title class="pt-0 pt-sm-2">
                 {{ $t('surveys.modal.firstCard.form.name') }}
               </v-card-title>
-              <h2 v-if="read">
+              <h2 v-if="read && surveyInFocus">
                 {{
                   calculateUILocaleString({
                     languageTexts: surveyInFocus.name.languageTexts,
@@ -50,7 +57,7 @@
                 }}
               </h2>
               <LocaleTextBox
-                v-else
+                v-else-if="!read"
                 labelPrefixI18nSelector="surveys.modal.firstCard.form.name"
                 :initVal="name"
                 @res="nameUpdatedHandler"
@@ -72,7 +79,11 @@
               <v-card-title class="pt-4">
                 {{ $t('surveys.modal.firstCard.form.description') }}
               </v-card-title>
-              <div v-if="read" class="d-flex flex-column justify-center" style="min-height: 10rem">
+              <div
+                v-if="read && surveyInFocus"
+                class="d-flex flex-column justify-center"
+                style="min-height: 10rem"
+              >
                 <h3>
                   {{
                     calculateUILocaleString({
@@ -82,7 +93,7 @@
                 </h3>
               </div>
               <LocaleTextBox
-                v-else
+                v-else-if="!read"
                 labelPrefixI18nSelector="surveys.modal.firstCard.form.description"
                 :initVal="description"
                 @res="descriptionUpdatedHandler"
@@ -159,7 +170,7 @@
                 </div>
               </v-img>
 
-              <div v-if="read && surveyInFocus">
+              <div v-if="read">
                 <v-card-title class="pr-0 d-flex justify-space-between">
                   <span class="mr-2">
                     {{ $t('surveys.modal.firstCard.form.tags') }}
@@ -252,13 +263,38 @@
         </v-container>
       </v-card-text>
 
-      <v-card-actions>
+      <!-- <v-card-actions>
         <v-btn color="warning" text @click="exitHandler">
           {{ read ? 'Close' : $t('general.cancel') }}
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="primary" text @click="editHandler">
+        <v-btn color="primary" text @click="editHandler" v-if="read">
           {{ $t('general.edit') }}
+        </v-btn>
+      </v-card-actions> -->
+
+      <v-card-actions>
+        <v-btn x-large v-if="edit" @click="deleteHandler" color="warning" text>
+          {{ $t('general.delete') }}
+          <v-icon large> mdi-delete </v-icon>
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn x-large color="secondary" text @click="exitHandler">
+          {{ read ? 'Close' : $t('general.cancel') }}
+        </v-btn>
+        <v-btn x-large v-if="read" color="primary" text @click="editHandler">
+          {{ $t('general.edit') }}
+        </v-btn>
+        <v-btn
+          x-large
+          v-if="!read"
+          type="submit"
+          color="primary"
+          text
+          @click.prevent="submitHandler"
+          :disabled="!interventionFormIsInvalid"
+        >
+          {{ $t('general.save') }}
         </v-btn>
       </v-card-actions>
     </v-form>
@@ -297,8 +333,9 @@ export default {
       descriptionTextBoxKey: 1,
     };
   },
+  watch: { surveyDraft: 'prefillComponentDataFromSurveyDraft' },
   mounted() {
-    if (!this.read) this.prefillComponentDataFromSurveyDraft();
+    if (this.edit) this.prefillComponentDataFromSurveyDraft();
   },
   computed: {
     ...mapGetters({
@@ -328,7 +365,9 @@ export default {
       return this.surveyModalMode === modalModesDict.read;
     },
     canAdvance() {
-      return this.read || this.name.languageTexts[this.fallbackLocaleIndex];
+      return (
+        this.read || (this.name.languageTexts[this.fallbackLocaleIndex] && this.interventionId)
+      );
     },
     maxCharExceededi18n() {
       return this.$t('general.form.maxCharExceeded', {
@@ -344,6 +383,7 @@ export default {
       abortNewSurveyHandler: 'dataModal/abortCreateData',
       abortReadSurveyHandler: 'dataModal/abortReadData',
       abortEditSurveyHandler: 'dataModal/abortEditData',
+      deleteSurveyHandler: 'dataModal/deleteData',
 
       editData: 'dataModal/editData',
     }),
@@ -351,6 +391,10 @@ export default {
       setSurveyDraft: 'dataModal/setSURVEYDraft',
       incrementCompletionIndex: 'incrementSurveyModalCompletionIndex',
     }),
+    deleteHandler() {
+      if (this.read) return;
+      this.deleteSurveyHandler({ dataType: dataTypesDict.survey });
+    },
     selectImg() {
       const imgInput = this.$refs['img-upload'];
       imgInput.click();
@@ -364,6 +408,7 @@ export default {
           tags: this.surveyTags,
           questions: [],
           surveyType: this.type,
+          intervention: this.INTERVENTIONById({ id: this.interventionId }),
           interventionSurveysId: this.interventionId,
         }),
       );
@@ -374,8 +419,8 @@ export default {
         ?? emptyMutableI18nString();
       this.description = mutableI18nString({ languageTexts: this.surveyDraft?.description.languageTexts })
         ?? emptyMutableI18nString();
-      this.surveyTags = this.surveyDraft?.tags ?? [];
-      this.interventionId = this.surveyDraft?.interventionSurveysId ?? null;
+      this.surveyTags = this.tagIdsBySurveyId({ surveyId: this.dataIdInFocus }) ?? [];
+      this.interventionId = this.surveyDraft?.intervention.id ?? null;
 
       this.descriptionTextBoxKey += 1;
       this.nameTextBoxKey -= 1;

@@ -1,15 +1,21 @@
 import { DataStore } from '@aws-amplify/datastore';
-import { API, graphqlOperation } from 'aws-amplify';
+import { API } from 'aws-amplify';
 import { dataTypesDict, modalModesDict } from '../constants';
 import { deleteIntervention, updateIntervention } from '../../graphql/mutations';
-import { listInterventions, listInterventionTags } from '../../graphql/queries';
-import { I18nString, Intervention, InterventionInterventionTagRelation } from '../../models';
+// import { listInterventions, listInterventionTags } from '../../graphql/queries';
+import {
+  I18nString,
+  Intervention,
+  InterventionInterventionTagRelation,
+  InterventionTag,
+} from '../../models';
 
 const interventionsData = {
   namespaced: true,
   state: () => ({
     interventions: [],
     interventionTags: [],
+    relationInterventionsAndTags: [],
     loading: false,
   }),
   getters: {
@@ -49,6 +55,10 @@ const interventionsData = {
 
     setInterventionTags: (state, { newValue }) => {
       state.interventionTags = newValue;
+    },
+
+    setRelationInterventionsAndTags: (state, { newValue }) => {
+      state.relationInterventionsAndTags = newValue;
     },
   },
   actions: {
@@ -147,6 +157,7 @@ const interventionsData = {
           commit('setLoading', { newValue: false });
         })
         .catch((err) => {
+          commit('setLoading', { newValue: false });
           // TODO: Handle error
           console.log({ err });
         });
@@ -154,17 +165,24 @@ const interventionsData = {
     sync: async ({ commit, dispatch }) => {
       commit('setLoading', { newValue: true });
 
-      const { apiInterventions, apiInterventionTags } = await dispatch('APIgetAll');
+      const { apiInterventions, apiInterventionTags, apiRelationInterventionsAndTags } = await dispatch('APIgetAll');
 
-      commit('setInterventions', { newValue: apiInterventions.map((i) => ({ ...i, levels: [] })) });
+      console.log({ apiInterventions, apiInterventionTags });
+
+      commit('setInterventions', { newValue: apiInterventions });
       commit('setInterventionTags', { newValue: apiInterventionTags });
+      commit('setRelationInterventionsAndTags', {
+        newValue: apiRelationInterventionsAndTags.map((r) => ({
+          interventionId: r.intervention.id,
+          interventionTagId: r.interventionTag.id,
+        })),
+      });
       commit('setLoading', { newValue: false });
     },
     APIgetAll: async () => ({
-      apiInterventions: (await API.graphql(graphqlOperation(listInterventions))).data
-        .listInterventions.items,
-      apiInterventionTags: (await API.graphql(graphqlOperation(listInterventionTags))).data
-        .listInterventionTags.items,
+      apiInterventions: await DataStore.query(Intervention),
+      apiInterventionTags: await DataStore.query(InterventionTag),
+      apiRelationInterventionsAndTags: await DataStore.query(InterventionInterventionTagRelation),
     }),
   },
 };

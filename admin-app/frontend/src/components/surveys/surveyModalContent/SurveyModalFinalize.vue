@@ -26,7 +26,6 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
 
 export default {
   name: 'Finalize',
-  watch: {},
   data() {
     return {};
   },

@@ -113,6 +113,8 @@ const surveysData = {
             },
           );
           commit('setLoading', { newValue: false });
+          dispatch('dataModal/abortCreateData', { dataType: dataTypesDict.survey }, { root: true });
+          commit('setSurveyModalCompletionIndex', { newValue: 1 }, { root: true });
         })
         .catch((err) => {
           console.log({ err });
