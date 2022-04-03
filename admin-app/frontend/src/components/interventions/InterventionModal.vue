@@ -147,18 +147,28 @@
                   {{ $t('interventions.modal.image') }}
                 </v-card-title>
 
-                <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" max-height="200px">
-                  <v-btn v-if="!read" fab class="iv-edit-icon" color="primary" @click="selectImg">
-                    <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
-                  </v-btn>
-                  <input
-                    v-if="!read"
-                    type="file"
-                    accept="image/png, image/jpeg"
-                    ref="img-upload"
-                    style="display: none"
-                  />
-                </v-img>
+                <ImgFromS3 :assumedSrc="read ? deriveImgPath : null">
+                  <template v-slot:v-img="slotProps">
+                    <v-img max-height="200px" :src="slotProps.src">
+                      <v-btn
+                        v-if="!read"
+                        fab
+                        class="iv-edit-icon"
+                        color="primary"
+                        @click="selectImg"
+                      >
+                        <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
+                      </v-btn>
+
+                      <FileInput
+                        v-if="!read"
+                        ref="img-upload"
+                        style="display: none"
+                        :acceptedType="'image/png'"
+                      />
+                    </v-img>
+                  </template>
+                </ImgFromS3>
 
                 <v-card-title>
                   {{ $t('baseData.tags') }}
@@ -354,6 +364,9 @@ import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
 import { Intervention, InterventionType } from '../../models';
 import { emptyMutableI18nString, mutableI18nString } from '../../store/classes';
+import FileInput from '../commons/FileInput.vue';
+import ImgFromS3 from '../commons/ImgFromS3.vue';
+import { deriveFilePath } from '../../store/utils';
 
 const interventionDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_INTERVENTION_DESCRIPTION_MAX_CHAR, 10),
@@ -362,7 +375,7 @@ const interventionDescriptionMaxChar = Math.max(
 
 export default {
   name: 'InterventionModal',
-  components: { LocaleTextBox },
+  components: { LocaleTextBox, FileInput, ImgFromS3 },
   data() {
     return {
       interventionDescriptionMaxChar,
@@ -407,6 +420,10 @@ export default {
       return this.$t('general.form.maxCharExceeded', {
         maxChar: interventionDescriptionMaxChar,
       });
+    },
+    deriveImgPath() {
+      if (this.create) return null;
+      return deriveFilePath('interventionPicPath', { interventionID: this.dataIdInFocus });
     },
     interventionInFocus() {
       return this.INTERVENTIONById({ id: this.dataIdInFocus });
@@ -495,10 +512,8 @@ export default {
       this.saveInterventionHandler({ dataType: dataTypesDict.intervention, originalVersion });
     },
     selectImg() {
-      this.showToBeImplementedFeedback();
       const imgInput = this.$refs['img-upload'];
-      imgInput.click();
-      // console.log('TODO: do something with', imgInput);
+      imgInput.$el.click();
     },
     prefillComponentDataFromInterventionDraft() {
       this.name = mutableI18nString({ languageTexts: this.interventionDraft?.name.languageTexts });
