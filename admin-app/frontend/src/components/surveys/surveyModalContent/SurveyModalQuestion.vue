@@ -479,6 +479,9 @@ export default {
       return this.options.length >= maxNOptions;
     },
   },
+  mounted() {
+    if (this.read) this.setIQuestions({ payload: 0 });
+  },
   methods: {
     ...mapActions({
       nextQuestionHandler: 'QUESTION_UI/nextQuestionHandler',
@@ -492,6 +495,7 @@ export default {
     ...mapMutations({
       incrementCompletionIndex: 'incrementSurveyModalCompletionIndex',
       decrementCompletionIndex: 'decrementSurveyModalCompletionIndex',
+      setIQuestions: 'QUESTION_UI/setIQuestions',
     }),
     confirmLeave() {
       // eslint-disable-next-line

@@ -148,7 +148,7 @@ const surveysData = {
           Survey.copyOf(original, (updated) => {
             updated.name = newData.name;
             updated.description = newData.description;
-            updated.questions = newData.questions;
+            // updated.questions = newData.questions;
             updated.surveyType = newData.surveyType;
             updated.intervention = newData.intervention;
           }),
