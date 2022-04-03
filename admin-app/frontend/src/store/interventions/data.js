@@ -1,6 +1,7 @@
 import { DataStore } from '@aws-amplify/datastore';
-import { API } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
 import { dataTypesDict, modalModesDict } from '../constants';
+import { deriveFilePath } from '../utils';
 import { deleteIntervention, updateIntervention } from '../../graphql/mutations';
 // import { listInterventions, listInterventionTags } from '../../graphql/queries';
 import {
@@ -62,7 +63,9 @@ const interventionsData = {
     },
   },
   actions: {
-    APIpost: async ({ commit, dispatch, getters }, interventionDraft) => {
+    APIpost: async ({
+      commit, dispatch, getters, rootGetters,
+    }, interventionDraft) => {
       commit('setLoading', { newValue: true });
       const intervention = new Intervention({
         ...interventionDraft,
@@ -72,12 +75,9 @@ const interventionsData = {
       DataStore.save(intervention)
         .then(async (postResponse) => {
           const tagIds = interventionDraft.tags;
-
           // eslint-disable-next-line no-restricted-syntax
           for (const tagId of tagIds) {
             const localTag = getters.tagById({ id: tagId });
-            console.log(localTag);
-
             // eslint-disable-next-line no-await-in-loop
             await DataStore.save(
               new InterventionInterventionTagRelation({
@@ -86,6 +86,11 @@ const interventionsData = {
               }),
             );
           }
+
+          await Storage.put(
+            deriveFilePath('interventionPicPath', { interventionID: postResponse.id }),
+            rootGetters['dataModal/getImageFile'],
+          );
 
           commit('addIntervention', postResponse);
           dispatch(
@@ -162,28 +167,30 @@ const interventionsData = {
           console.log({ err });
         });
     },
-    sync: async ({ commit, dispatch }) => {
+    sync: async ({ commit }) => {
       commit('setLoading', { newValue: true });
+      try {
+        const apiInterventions = await DataStore.query(Intervention);
+        commit('setInterventions', { newValue: apiInterventions });
 
-      const { apiInterventions, apiInterventionTags, apiRelationInterventionsAndTags } = await dispatch('APIgetAll');
+        const apiInterventionTags = await DataStore.query(InterventionTag);
+        commit('setInterventionTags', { newValue: apiInterventionTags });
 
-      console.log({ apiInterventions, apiInterventionTags });
+        const apiRelationInterventionsAndTags = await DataStore.query(
+          InterventionInterventionTagRelation,
+        );
+        commit('setRelationInterventionsAndTags', {
+          newValue: apiRelationInterventionsAndTags.map((r) => ({
+            interventionId: r.intervention.id,
+            interventionTagId: r.interventionTag.id,
+          })),
+        });
 
-      commit('setInterventions', { newValue: apiInterventions });
-      commit('setInterventionTags', { newValue: apiInterventionTags });
-      commit('setRelationInterventionsAndTags', {
-        newValue: apiRelationInterventionsAndTags.map((r) => ({
-          interventionId: r.intervention.id,
-          interventionTagId: r.interventionTag.id,
-        })),
-      });
-      commit('setLoading', { newValue: false });
+        commit('setLoading', { newValue: false });
+      } catch (error) {
+        commit('setLoading', { newValue: false });
+      }
     },
-    APIgetAll: async () => ({
-      apiInterventions: await DataStore.query(Intervention),
-      apiInterventionTags: await DataStore.query(InterventionTag),
-      apiRelationInterventionsAndTags: await DataStore.query(InterventionInterventionTagRelation),
-    }),
   },
 };
 

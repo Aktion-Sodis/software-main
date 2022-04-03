@@ -177,29 +177,27 @@ const surveysData = {
           console.log({ err });
         });
     },
-    APIgetAll: async () => ({
-      apiSurveys: await DataStore.query(Survey),
-      apiSurveyTags: await DataStore.query(SurveyTag),
-      apiRelationSurveysAndTags: await DataStore.query(SurveySurveyTagRelation),
-    }),
-    sync: async ({ commit, dispatch }) => {
+    sync: async ({ commit }) => {
       commit('setLoading', { newValue: true });
+      try {
+        const apiSurveys = await DataStore.query(Survey);
+        commit('setSurveys', { newValue: apiSurveys });
 
-      // const apiSurveys = await DataStore.query(Survey);
+        const apiSurveyTags = await DataStore.query(SurveyTag);
+        commit('setSurveyTags', { newValue: apiSurveyTags });
 
-      // const apiSurveyTags = await DataStore.query(SurveyTag);
+        const apiRelationSurveysAndTags = await DataStore.query(SurveySurveyTagRelation);
+        commit('setRelationSurveysAndTags', {
+          newValue: apiRelationSurveysAndTags.map((r) => ({
+            surveyId: r.survey.id,
+            surveyTagId: r.surveyTag.id,
+          })),
+        });
 
-      const { apiSurveys, apiSurveyTags, apiRelationSurveysAndTags } = await dispatch('APIgetAll');
-
-      commit('setSurveys', { newValue: apiSurveys });
-      commit('setSurveyTags', { newValue: apiSurveyTags });
-      commit('setRelationSurveysAndTags', {
-        newValue: apiRelationSurveysAndTags.map((r) => ({
-          surveyId: r.survey.id,
-          surveyTagId: r.surveyTag.id,
-        })),
-      });
-      commit('setLoading', { newValue: false });
+        commit('setLoading', { newValue: false });
+      } catch (error) {
+        commit('setLoading', { newValue: false });
+      }
     },
   },
 };
