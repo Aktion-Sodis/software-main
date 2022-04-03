@@ -4,6 +4,7 @@ import 'package:mobile_app/backend/Blocs/auth/auth_repository.dart';
 import 'package:mobile_app/backend/Blocs/request_permissions/request_permissions_cubit.dart';
 import 'package:mobile_app/backend/Blocs/session/session_cubit.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
+import 'package:mobile_app/backend/repositories/SettingsRepository.dart';
 import 'package:mobile_app/backend/repositories/UserRepository.dart';
 import 'package:mobile_app/frontend/components/hive_db_initializer.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
@@ -63,6 +64,7 @@ class MyAppState extends State<MyApp> {
                 providers: [
                   RepositoryProvider(create: (context) => AuthRepository()),
                   RepositoryProvider(create: (context) => UserRepository()),
+                  RepositoryProvider(create: (context) => SettingsRepository())
                 ],
                 child: MultiBlocProvider(
                   providers: [
