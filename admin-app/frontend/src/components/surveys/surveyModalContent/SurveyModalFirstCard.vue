@@ -291,7 +291,7 @@
           type="submit"
           color="primary"
           text
-          @click.prevent="submitHandler"
+          @click.prevent="saveHandler"
           :disabled="!canAdvance"
         >
           {{ $t('general.save') }}
@@ -386,11 +386,30 @@ export default {
       deleteSurveyHandler: 'dataModal/deleteData',
 
       editData: 'dataModal/editData',
+      saveData: 'dataModal/saveData',
     }),
     ...mapMutations({
       setSurveyDraft: 'dataModal/setSURVEYDraft',
       incrementCompletionIndex: 'incrementSurveyModalCompletionIndex',
     }),
+    async saveHandler() {
+      const originalVersion = this.edit
+        ? this.SURVEYById({ id: this.dataIdInFocus })._version
+        : null;
+      this.setSurveyDraft(
+        new Survey({
+          name: this.name,
+          description: this.description,
+          tags: this.surveyTags,
+          questions: [],
+          surveyType: this.type,
+          intervention: this.INTERVENTIONById({ id: this.interventionId }),
+          interventionSurveysId: this.interventionId,
+        }),
+      );
+      await this.$nextTick();
+      this.saveData({ dataType: dataTypesDict.survey, originalVersion });
+    },
     deleteHandler() {
       if (this.read) return;
       this.deleteSurveyHandler({ dataType: dataTypesDict.survey });

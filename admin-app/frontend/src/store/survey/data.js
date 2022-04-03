@@ -2,7 +2,7 @@
 // import { createSurvey } from '../../graphql/mutations';
 import { API, DataStore } from 'aws-amplify';
 import { v4 as uuidv4 } from 'uuid';
-import { deleteSurvey, updateSurvey } from '../../graphql/mutations';
+import { deleteSurvey } from '../../graphql/mutations';
 // import { listSurveys, listSurveyTags } from '../../graphql/queries';
 import {
   I18nString,
@@ -68,7 +68,9 @@ const surveysData = {
     },
   },
   actions: {
-    APIpost: async ({ commit, dispatch, rootGetters }) => {
+    APIpost: async ({
+      commit, dispatch, getters, rootGetters,
+    }) => {
       commit('setLoading', { newValue: true });
 
       const questionsWithUnnecessaryLastOne = rootGetters['QUESTION_UI/getQuestionDrafts'];
@@ -100,7 +102,20 @@ const surveysData = {
       });
 
       DataStore.save(survey)
-        .then((postResponse) => {
+        .then(async (postResponse) => {
+          const tagIds = surveyDraft.tags;
+          // eslint-disable-next-line no-restricted-syntax
+          for (const tagId of tagIds) {
+            const localTag = getters.tagById({ id: tagId });
+            // eslint-disable-next-line no-await-in-loop
+            await DataStore.save(
+              new SurveySurveyTagRelation({
+                survey: postResponse,
+                surveyTag: localTag,
+              }),
+            );
+          }
+
           commit('addSurvey', postResponse);
           dispatch(
             'dataModal/readData',
@@ -122,37 +137,38 @@ const surveysData = {
         });
     },
     APIput: async ({ commit, dispatch }, { newData, originalId, originalVersion }) => {
+      console.log({ originalVersion });
       commit('setLoading', { newValue: true });
-      API.graphql({
-        query: updateSurvey,
-        variables: {
-          input: {
-            id: originalId,
-            _version: originalVersion,
-            name: newData.name,
-            description: newData.description,
-            surveyType: newData.surveyType,
+      const original = await DataStore.query(Survey, originalId);
+
+      try {
+        const res = await DataStore.save(
+          Survey.copyOf(original, (updated) => {
+            updated.name = newData.name;
+            updated.description = newData.description;
+            updated.questions = newData.questions;
+            updated.surveyType = newData.surveyType;
+            updated.interventionSurveysId = newData.interventionSurveysId;
+          }),
+        );
+
+        console.log({ res });
+
+        dispatch(
+          'dataModal/readData',
+          {
+            dataId: originalId,
+            dataType: dataTypesDict.survey,
           },
-        },
-      })
-        .then((putResponse) => {
-          dispatch(
-            'dataModal/readData',
-            {
-              dataId: putResponse.data.updateSurvey.id,
-              dataType: dataTypesDict.survey,
-            },
-            {
-              root: true,
-            },
-          );
-          commit('replaceSurvey', putResponse.data.updateSurvey);
-          commit('setLoading', { newValue: false });
-        })
-        .catch((err) => {
-          console.log({ err });
-          commit('setLoading', { newValue: false });
-        });
+          {
+            root: true,
+          },
+        );
+        dispatch('sync');
+      } catch (error) {
+        console.log({ error });
+      }
+      commit('setLoading', { newValue: false });
     },
     APIdelete: async ({ commit, dispatch }, { id, _version }) => {
       commit('setLoading', { newValue: true });
@@ -205,7 +221,7 @@ const surveysData = {
         console.log({ error });
       }
 
-        commit('setLoading', { newValue: false });
+      commit('setLoading', { newValue: false });
     },
   },
 };
