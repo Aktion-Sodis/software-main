@@ -78,7 +78,8 @@ Map<String, dynamic> stringMap = {
     "profile": "Profile",
     "user_update": "Save changes",
     "abort_survey": "Abort survey?",
-    "abort_survey_warn": "You wont be able to proceed later and will have to start again",
+    "abort_survey_warn":
+        "You wont be able to proceed later and will have to start again",
     "confirm_abort": "Abort",
     "do_not_abort": "Continue",
     "your shot": "Your shot:",
@@ -90,7 +91,7 @@ Map<String, dynamic> stringMap = {
     "open_settings": "Open settings",
     "abbrechen": "Abbrechen",
     "restricted_permissions_warning":
-        "Some of the permissions can be accepted only in the settings. Please, open the settings and accept all the permissions."
+        "Some of the permissions can be accepted only in the settings. Please, open the settings and accept all the permissions.",
     "task_dialog_what_task": "What need's to be done?",
     "task_dialog_title": "Short summary",
     "task_dialog_description": "Further description",
@@ -119,7 +120,8 @@ Map<String, dynamic> stringMap = {
     "email": "Correo electrónico",
     "phonenumber": "Número de teléfono",
     "password": "Contraseña",
-    "malformedemailmessage": "Por favor indique una dirección de correo electrónico valida.",
+    "malformedemailmessage":
+        "Por favor indique una dirección de correo electrónico valida.",
     "malformedphonenumber":
         "Por favor indique un número de telefóno que corresponde al formato +123456879",
     "noaccountmessage":
@@ -170,7 +172,8 @@ Map<String, dynamic> stringMap = {
     "organization_view_entity_save_changes": "Guardar cambios",
     "organization_view_info_button": "Información",
     "organization_view_entity_enter_name": "Por favor ingrese un nombre",
-    "organization_view_entity_enter_description": "Por favor ingrese una descripción",
+    "organization_view_entity_enter_description":
+        "Por favor ingrese una descripción",
     "organization_view_dialog_add_appliedintervention": "Agregar intervención",
     "organization_view_dialog_update_appliedintervention":
         "Actualizar intervención",
@@ -181,11 +184,13 @@ Map<String, dynamic> stringMap = {
     "remaining": "Quedan",
     "day": "día",
     "days": "días",
-    "tasks_more_behind": "más atrás", // unable to find context in source code, translation may be incorrect
+    "tasks_more_behind":
+        "más atrás", // unable to find context in source code, translation may be incorrect
     "profile": "Perfil",
     "user_update": "Guardar cambios",
     "abort_survey": "¿Abortar entrevista?",
-    "abort_survey_warn": "No va poder resumir más tarde. Tiene que reiniciar la entrevista.",
+    "abort_survey_warn":
+        "No va poder resumir más tarde. Tiene que reiniciar la entrevista.",
     "confirm_abort": "Abortar",
     "do_not_abort": "Continuar",
     "your shot": "Te toca:",
@@ -411,9 +416,9 @@ String get summary => stringMap[currentLanguage]["summary"];
 String get endSurvey => stringMap[currentLanguage]["end_survey"];
 String get savedSurvey => stringMap[currentLanguage]["saved_survey"];
 
-String get abortSurvey  => stringMap[currentLanguage]["abort_survey"];
-String get abortSurveyText  => stringMap[currentLanguage]["abort_survey_warn"];
-String get confirmAbort  => stringMap[currentLanguage]["confirm_abort"];
-String get doNotAbort  => stringMap[currentLanguage]["do_not_abort"];
+String get abortSurvey => stringMap[currentLanguage]["abort_survey"];
+String get abortSurveyText => stringMap[currentLanguage]["abort_survey_warn"];
+String get confirmAbort => stringMap[currentLanguage]["confirm_abort"];
+String get doNotAbort => stringMap[currentLanguage]["do_not_abort"];
 
 String get yourShot => stringMap[currentLanguage]["your shot"];

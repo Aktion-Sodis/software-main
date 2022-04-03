@@ -9,6 +9,7 @@ import 'package:mobile_app/backend/Blocs/in_app/in_app_state.dart';
 import 'package:mobile_app/backend/Blocs/organization_view/organization_view_state.dart';
 import 'package:mobile_app/backend/Blocs/session/session_cubit.dart';
 import 'package:mobile_app/backend/Blocs/session/session_state.dart';
+import 'package:mobile_app/backend/Blocs/sync/sync_bloc.dart';
 import 'package:mobile_app/backend/Blocs/task/task_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_state.dart';
@@ -89,53 +90,72 @@ class AppNavigator extends StatelessWidget {
                               ],
                                   child: Builder(
                                       builder: (context) => MultiBlocProvider(
-                                              providers: [
-                                                BlocProvider<InAppBloc>(
-                                                    create: (context) =>
-                                                        InAppBloc()),
-                                                BlocProvider<ContentBloc>(
-                                                    create: (context) =>
-                                                        ContentBloc(context.read<
-                                                            ContentRepository>())),
-                                                BlocProvider(
-                                                    create: (context) =>
-                                                        TaskBloc(TaskRepository(
-                                                            state.user!))),
-                                                BlocProvider(create: (context) => OrganizationViewBloc(
-                                                    context.read<
-                                                        EntityRepository>(),
-                                                    context.read<
-                                                        AppliedInterventionRepository>(),
-                                                    context.read<
-                                                        InAppBloc>()
-                                                )),
-                                              ],
-                                              child: BlocBuilder<OrganizationViewBloc, OrganizationViewState>(
-                                                builder: (context, orgState) => BlocBuilder<InAppBloc,
-                                                        InAppState>(
-                                                    builder:
-                                                        (context, inAppState) {
-
-                                                      if (inAppState
-                                                      is MainInAppState) {
-                                                    return const MainMenu();
-                                                  } else if (inAppState
-                                                      is UserPageInAppState) {
-                                                    return UserDataView(
-                                                        userBloc: context
-                                                            .read<UserBloc>(),
-                                                        inApp: true);
-                                                  } else if (inAppState
-                                                      is SurveyInAppState) {
-                                                    return SurveyWidget(
-                                                        survey:
-                                                            inAppState.survey);
-                                                  } else {
-                                                    return Scaffold(
-                                                        body: Container());
-                                                  }
-                                                }),
-                                              )))))
+                                            providers: [
+                                              BlocProvider<InAppBloc>(
+                                                  create: (context) =>
+                                                      InAppBloc()),
+                                              BlocProvider<ContentBloc>(
+                                                  create: (context) =>
+                                                      ContentBloc(context.read<
+                                                          ContentRepository>())),
+                                              BlocProvider(
+                                                  create: (context) => TaskBloc(
+                                                      TaskRepository(
+                                                          state.user!))),
+                                              BlocProvider(
+                                                  create: (context) =>
+                                                      OrganizationViewBloc(
+                                                          context.read<
+                                                              EntityRepository>(),
+                                                          context.read<
+                                                              AppliedInterventionRepository>(),
+                                                          context.read<
+                                                              InAppBloc>())),
+                                            ],
+                                            child: Builder(
+                                                builder: (context) =>
+                                                    BlocProvider(
+                                                        create: (context) => SyncBloc(
+                                                            taskBloc:
+                                                                context.read<
+                                                                    TaskBloc>(),
+                                                            userBloc:
+                                                                context.read<
+                                                                    UserBloc>()),
+                                                        child: BlocBuilder<
+                                                            OrganizationViewBloc,
+                                                            OrganizationViewState>(
+                                                          builder: (context,
+                                                                  orgState) =>
+                                                              BlocBuilder<
+                                                                      InAppBloc,
+                                                                      InAppState>(
+                                                                  builder: (context,
+                                                                      inAppState) {
+                                                            if (inAppState
+                                                                is MainInAppState) {
+                                                              return const MainMenu();
+                                                            } else if (inAppState
+                                                                is UserPageInAppState) {
+                                                              return UserDataView(
+                                                                  userBloc:
+                                                                      context.read<
+                                                                          UserBloc>(),
+                                                                  inApp: true);
+                                                            } else if (inAppState
+                                                                is SurveyInAppState) {
+                                                              return SurveyWidget(
+                                                                  survey:
+                                                                      inAppState
+                                                                          .survey);
+                                                            } else {
+                                                              return Scaffold(
+                                                                  body:
+                                                                      Container());
+                                                            }
+                                                          }),
+                                                        ))),
+                                          ))))
 
                         ///hier beginnt der beef/App-Inhalt
                       ],

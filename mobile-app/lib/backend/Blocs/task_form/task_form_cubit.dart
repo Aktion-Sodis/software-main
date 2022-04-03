@@ -36,6 +36,7 @@ void openTaskForm<T extends TaskFormCubit>(
     required UserBloc userBloc,
     List<Attachment>? attachment}) {
   showDialog(
+      barrierColor: Theme.of(context).colorScheme.background,
       context: context,
       builder: (context) => TaskForm<T>(
           title: strings.main_menu_tasks,

@@ -74,12 +74,15 @@ class SurveyWidgetState extends State<SurveyWidget> {
   late final String preliminaryExecutedSurveyId;
 
   void addTask() async {
-    return openTaskForm(context: context, taskBloc: context.read<TaskBloc>(), organizationViewBloc: context.read<OrganizationViewBloc>(), userBloc: context.read<UserBloc>(),
-    appliedIntervention: (context.read<InAppBloc>().state as SurveyInAppState)
-        .appliedIntervention,
+    return openTaskForm(
+      context: context,
+      taskBloc: context.read<TaskBloc>(),
+      organizationViewBloc: context.read<OrganizationViewBloc>(),
+      userBloc: context.read<UserBloc>(),
+      appliedIntervention: (context.read<InAppBloc>().state as SurveyInAppState)
+          .appliedIntervention,
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +165,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
     _pageController.addListener(() {
       setState(() {});
     });
-    syncedSurveyImageFile = SyncedFile(SurveyRepository.getImageFilePath(widget.survey));
+    syncedSurveyImageFile =
+        SyncedFile(SurveyRepository.getImageFilePath(widget.survey));
     super.initState();
   }
 
@@ -340,7 +344,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
                         SizedBox(
                           width: defaultPadding(context),
                         ),
-                        Flexible(child: Text(question.questionOptions![index].text,  style: Theme.of(context).textTheme.bodyText1)),
+                        Flexible(
+                            child: Text(question.questionOptions![index].text,
+                                style: Theme.of(context).textTheme.bodyText1)),
                       ],
                     ),
                   ),
@@ -398,7 +404,11 @@ class SurveyWidgetState extends State<SurveyWidget> {
                         SizedBox(
                           width: defaultPadding(context),
                         ),
-                        Flexible(child: Text(question.questionOptions![index].text, style: Theme.of(context).textTheme.bodyText1,)),
+                        Flexible(
+                            child: Text(
+                          question.questionOptions![index].text,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        )),
                       ],
                     ),
                   ),
@@ -493,7 +503,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Text(question.text, style: Theme.of(context).textTheme.bodyText1),
+                child: Text(question.text,
+                    style: Theme.of(context).textTheme.bodyText1),
               ),
               getReadOutWidget(question: question),
             ],
@@ -559,54 +570,63 @@ class SurveyWidgetState extends State<SurveyWidget> {
     ));
   }
 
-  void _dismissSurvey() async{
-    bool confirmation = await showDialog(context: context, builder: (context) => AlertDialog(
-        title: Text(abortSurvey, style: Theme.of(context).textTheme.headline2),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                  abortSurveyText,
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ),
-            SizedBox(
-              height: defaultPadding(context),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  void _dismissSurvey() async {
+    bool confirmation = await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+            title:
+                Text(abortSurvey, style: Theme.of(context).textTheme.headline2),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                MaterialButton(
-                    child: Padding(
-                      padding: EdgeInsets.all(defaultPadding(context)),
-                      child: Text(confirmAbort, style: Theme.of(context).textTheme.bodyText1,),
-                    ),
-                    onPressed: (){
-                      Navigator.of(context).pop(true);
-                    }),
-                MaterialButton(
-
-                    child: Padding(
-                      padding: EdgeInsets.all(defaultPadding(context)),
-                      child: Text(doNotAbort, style: Theme.of(context).textTheme.bodyText1,),
-                    ),
-                    onPressed: (){
-                      Navigator.of(context).pop(false);
-                    }),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    abortSurveyText,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ),
+                SizedBox(
+                  height: defaultPadding(context),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MaterialButton(
+                        child: Padding(
+                          padding: EdgeInsets.all(defaultPadding(context)),
+                          child: Text(
+                            confirmAbort,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                        }),
+                    MaterialButton(
+                        child: Padding(
+                          padding: EdgeInsets.all(defaultPadding(context)),
+                          child: Text(
+                            doNotAbort,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        }),
+                  ],
+                ),
               ],
-            ),
-          ],
-        )
-    ));
-    if(confirmation){
+            )));
+    if (confirmation) {
       BlocProvider.of<InAppBloc>(context).add(MainViewEvent());
     }
   }
+
   void _leaveSurveyRegular() {
     BlocProvider.of<InAppBloc>(context).add(MainViewEvent());
   }
+
   void _goToInSurveyPage(Question targetQuestion) async {
     if (!questions.contains(targetQuestion)) {
       throw 'Question does not exist';
@@ -666,38 +686,43 @@ class SurveyWidgetState extends State<SurveyWidget> {
             surveyTitle,
             style: Theme.of(context).textTheme.headline2,
           ),
-          MaterialButton(onPressed: (){
-            addTask();
-          },
+          MaterialButton(
+              onPressed: () {
+                addTask();
+              },
               padding: EdgeInsets.zero,
-          child: Container(
-            height: 50,
-            width: 50,
-            child: Stack(
-              fit: StackFit.passthrough,
-              children: [
-                const Align(alignment: Alignment.bottomLeft,
-                child: Icon(MdiIcons.checkboxMarkedOutline, size:45,),
-                ),
-                Align(alignment: Alignment.topRight,
-                  child: Container(
-                    width: 25,
-                    height: 25,
-                    decoration: const BoxDecoration(
-                      color: Colors.green,
-                      shape: BoxShape.circle,
+              child: Container(
+                height: 50,
+                width: 50,
+                child: Stack(
+                  fit: StackFit.passthrough,
+                  children: [
+                    const Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Icon(
+                        MdiIcons.checkboxMarkedOutline,
+                        size: 45,
+                      ),
                     ),
-                    child: const Icon(
-                      MdiIcons.plus,
-                      color: Colors.white,
-                      size: 20,
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        width: 25,
+                        height: 25,
+                        decoration: const BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          MdiIcons.plus,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          )
-          ),
+              )),
         ],
       ),
     );
@@ -762,10 +787,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
   static Widget getEditQuestionWidget(
       {required BuildContext context, required onEdit}) {
-
-    return CustomIconButton((){
+    return CustomIconButton(() {
       onEdit();
-    }, MdiIcons.pencil,const Size(50,50), true);
+    }, MdiIcons.pencil, const Size(50, 50), true);
   }
 
   static Widget getReadOutWidget({required Question question}) {
@@ -778,7 +802,6 @@ class SurveyWidgetState extends State<SurveyWidget> {
       required String executedSurveyId,
       required VoidCallback callback,
       required BuildContext context}) {
-
     return RecorderWidget(
         restingViewBuilder: (a) => Container(
               child: Icon(
@@ -812,7 +835,6 @@ class SurveyWidgetState extends State<SurveyWidget> {
       required AppliedIntervention appliedIntervention,
       required VoidCallback callback,
       required BuildContext context}) {
-
     //return CustomIconButton(onPressed, iconData, size, true)
     return CustomIconButton(() async {
       XFile? r = await CameraFunctionality.takePicture(context: context);
@@ -822,7 +844,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
         await syncedFile.updateAsPic(r);
       }
       callback.call();
-    }, MdiIcons.camera, const Size(50,50), true);
+    }, MdiIcons.camera, const Size(50, 50), true);
   }
 
   static Widget imageForQuestion({required SyncedFile syncedFile}) {
@@ -849,7 +871,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
     if (questionAnswer != null) {
       switch (question.type) {
         case QuestionType.SINGLECHOICE:
-          answerWidget = Text(questionAnswer.questionOptions!.first.text, style: Theme.of(context).textTheme.bodyText1);
+          answerWidget = Text(questionAnswer.questionOptions!.first.text,
+              style: Theme.of(context).textTheme.bodyText1);
           break;
         case QuestionType.MULTIPLECHOICE:
           String answers = '';
@@ -860,15 +883,20 @@ class SurveyWidgetState extends State<SurveyWidget> {
           if (answers.length > 2) {
             answers = answers.substring(0, answers.length - 2);
           }
-          answerWidget = Text(answers,  style: Theme.of(context).textTheme.bodyText1);
+          answerWidget =
+              Text(answers, style: Theme.of(context).textTheme.bodyText1);
           break;
         case QuestionType.PICTURE:
           answerWidget = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: defaultPadding(context),),
+              SizedBox(
+                height: defaultPadding(context),
+              ),
               Text(yourShot, style: Theme.of(context).textTheme.bodyText1),
-              SizedBox(height: defaultPadding(context),),
+              SizedBox(
+                height: defaultPadding(context),
+              ),
               imageForQuestion(
                   syncedFile: ExecutedSurveyRepository.getQuestionAnswerPic(
                       appliedIntervention, executedSurveyId, question)),
@@ -876,7 +904,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
           );
           break;
         case QuestionType.TEXT:
-          answerWidget = Text(questionAnswer.text ?? '',  style: Theme.of(context).textTheme.bodyText1);
+          answerWidget = Text(questionAnswer.text ?? '',
+              style: Theme.of(context).textTheme.bodyText1);
           break;
         default:
           answerWidget = Container();
@@ -894,7 +923,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
                 child: Padding(
               padding: EdgeInsets.only(bottom: defaultPadding(context)) * 1,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
+                padding:
+                    EdgeInsets.symmetric(horizontal: defaultPadding(context)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -902,11 +932,14 @@ class SurveyWidgetState extends State<SurveyWidget> {
                       question.text,
                       style: Theme.of(context).textTheme.headline2,
                     ),
-                    if(questionAnswer!=null&&(
-                        (questionAnswer.type == QuestionType.MULTIPLECHOICE && questionAnswer.questionOptions!.isNotEmpty)||
-                        questionAnswer.type == QuestionType.SINGLECHOICE||
-                          questionAnswer.type == QuestionType.TEXT
-                    )) SizedBox(height: defaultPadding(context),),
+                    if (questionAnswer != null &&
+                        ((questionAnswer.type == QuestionType.MULTIPLECHOICE &&
+                                questionAnswer.questionOptions!.isNotEmpty) ||
+                            questionAnswer.type == QuestionType.SINGLECHOICE ||
+                            questionAnswer.type == QuestionType.TEXT))
+                      SizedBox(
+                        height: defaultPadding(context),
+                      ),
                     answerWidget,
                   ],
                 ),
@@ -920,7 +953,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
                     0,
                     defaultPadding(context),
                   ),
-                  child: getEditQuestionWidget(context: context, onEdit: onEdit))
+                  child:
+                      getEditQuestionWidget(context: context, onEdit: onEdit))
           ],
         ),
         CommonWidgets.separator(context: context),
@@ -946,9 +980,14 @@ class SurveyWidgetState extends State<SurveyWidget> {
                   question.text,
                   style: Theme.of(context).textTheme.headline2,
                 ),
-                SizedBox(height: defaultPadding(context),),
-                Text(resolveQuestionTypeDescriptionFromQuestion(
-                    question: question), style: Theme.of(context).textTheme.bodyText1,),
+                SizedBox(
+                  height: defaultPadding(context),
+                ),
+                Text(
+                  resolveQuestionTypeDescriptionFromQuestion(
+                      question: question),
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
               ],
             ),
           ),
@@ -1040,9 +1079,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
       required Map<Question, QuestionAnswer> answers,
       required AppliedIntervention appliedIntervention,
       required String executedSurveyId,
-        QuestionEditor? onEditGenerator,
-        onDismiss,
-       onProceed}) {
+      QuestionEditor? onEditGenerator,
+      onDismiss,
+      onProceed}) {
     return Column(
       children: [
         SizedBox(
@@ -1095,21 +1134,23 @@ class SurveyWidgetState extends State<SurveyWidget> {
             ],
           )),
         ),
-        if(!(onProceed==null&&onDismiss==null)) Padding(
-          padding: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CommonWidgets.defaultDismissButton(
-                  context: context, dismiss: onDismiss),
-              CommonWidgets.defaultForwardButton(
-                  context: context, proceed: onProceed),
-            ],
+        if (!(onProceed == null && onDismiss == null))
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CommonWidgets.defaultDismissButton(
+                    context: context, dismiss: onDismiss),
+                CommonWidgets.defaultForwardButton(
+                    context: context, proceed: onProceed),
+              ],
+            ),
           ),
-        ),
-        if(!(onProceed==null&&onDismiss==null)) SizedBox(
-          height: defaultPadding(context),
-        ),
+        if (!(onProceed == null && onDismiss == null))
+          SizedBox(
+            height: defaultPadding(context),
+          ),
       ],
     );
   }
@@ -1149,10 +1190,10 @@ class SurveyWidgetState extends State<SurveyWidget> {
             ],
           ),
         ),
-          CommonWidgets.separator(context: context),
-          SizedBox(
-            height: defaultPadding(context),
-          ),
+        CommonWidgets.separator(context: context),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
         ImageFromSyncedFile(
           syncedFile: imageFile,
         ),

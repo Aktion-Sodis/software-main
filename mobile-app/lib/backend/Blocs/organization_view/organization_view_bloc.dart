@@ -192,7 +192,7 @@ class OrganizationViewBloc
         int allIndex = newAllEntities
             .indexWhere((element) => element.id == event.entity.id);
         newAllEntities[allIndex].appliedInterventions.add(toAdd);
-        List<Entity> newCurrentEntities = loadedState.currentListEntities;
+        /*List<Entity> newCurrentEntities = loadedState.currentListEntities;
         int currentIndex = newCurrentEntities
             .indexWhere((element) => element.id == event.entity.id);
         if (currentIndex > -1) {
@@ -201,11 +201,11 @@ class OrganizationViewBloc
         Entity? newCurrentEntity = loadedState.currentDetailEntity;
         if (newCurrentEntity?.id == event.entity.id) {
           newCurrentEntity!.appliedInterventions.add(toAdd);
-        }
+        }*/
         emit(loadedState.copyWith(
             allEntities: newAllEntities,
-            currentListEntities: newCurrentEntities,
-            currentDetailEntity: newCurrentEntity));
+            currentListEntities: loadedState.currentListEntities,
+            currentDetailEntity: loadedState.currentDetailEntity));
       } else if (event is UpdateAppliedIntervention) {
         AppliedInterventionRepository.updateAppliedIntervention(
             event.appliedIntervention, event.entity);

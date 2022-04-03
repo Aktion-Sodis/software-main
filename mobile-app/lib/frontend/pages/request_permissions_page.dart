@@ -32,6 +32,7 @@ class RequestPermissionsPage extends StatelessWidget {
         listener: (context, state) {
           if (state is RequestingPermissionsWithDialog) {
             showDialog(
+                barrierColor: Theme.of(context).colorScheme.background,
                 context: context,
                 builder: (context) => Center(
                         child: Padding(
