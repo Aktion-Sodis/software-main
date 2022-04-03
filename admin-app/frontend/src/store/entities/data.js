@@ -1,9 +1,9 @@
 import { DataStore } from '@aws-amplify/datastore';
 import { API } from 'aws-amplify';
-import { Entity } from '../../models';
-import { deleteEntityController, getAllEntities } from './utils';
+import { deleteEntityController, Entity, getAllEntities } from './utils';
 import { dataTypesDict, modalModesDict } from '../constants';
 import { updateEntity } from '../../graphql/mutations';
+import { I18nString } from '../../models';
 
 const entitiesData = {
   namespaced: true,
@@ -116,37 +116,14 @@ const entitiesData = {
       },
   },
   mutations: {
-    addEntity: (state, {
-      id, name, description, entityLevelId, parentEntityID,
-    }) => {
-      state.entities.push(
-        new Entity({
-          id,
-          name,
-          description,
-          entityLevelId,
-          parentEntityID,
-        }),
-      );
+    addEntity: (state, entity) => {
+      state.entities.push(entity);
     },
-    replaceEntity: (
-      state,
-      {
-        id, name, description, entityLevelId, parentEntityID, _version, appliedInterventions,
-      },
-    ) => {
+    replaceEntity: (state, entity) => {
       state.entities.splice(
-        state.entities.findIndex((i) => i.id === id),
+        state.entities.findIndex((i) => i.id === entity.id),
         1,
-        new Entity({
-          id,
-          name,
-          description,
-          entityLevelId,
-          parentEntityID,
-          _version,
-          appliedInterventions,
-        }),
+        entity,
       );
     },
     deleteEntity: (state, { id }) => {
@@ -169,7 +146,12 @@ const entitiesData = {
   actions: {
     APIpost: async ({ commit, dispatch }, entityDraft) => {
       commit('setLoading', { newValue: true });
-      DataStore.save(entityDraft)
+      const entity = new Entity({
+        ...entityDraft,
+        name: new I18nString(entityDraft.name),
+        description: new I18nString(entityDraft.description),
+      });
+      DataStore.save(entity)
         .then((postResponse) => {
           commit('addEntity', postResponse);
           dispatch(
@@ -197,6 +179,7 @@ const entitiesData = {
             id: entityDraft.originalId,
             name: entityDraft.newData.name,
             description: entityDraft.newData.description,
+            parentEntityID: entityDraft.newData.parentEntityID,
             _version: entityDraft.originalVersion,
           },
         },

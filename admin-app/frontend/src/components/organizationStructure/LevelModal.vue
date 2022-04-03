@@ -5,8 +5,7 @@
         <v-card-title>
           <h2 v-if="edit && levelInFocus">
             {{ $t('organizationStructure.levelModal.modalTitle.edit') }}
-            <i>{{ calculateUILocaleString({ languageTexts: levelInFocus.name.languageTexts }) }}</i
-            >asdf
+            <i>{{ calculateUILocaleString({ languageTexts: levelInFocus.name.languageTexts }) }}</i>
           </h2>
           <h2 v-else-if="create">
             {{ $t('organizationStructure.levelModal.modalTitle.create') }}
@@ -196,7 +195,8 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
-import { I18nString, Level } from '../../models';
+import { Level } from '../../models';
+import { emptyMutableI18nString, mutableI18nString } from '../../store/classes';
 // import { emptyI18nString } from '../../store/classes';
 
 const levelDescriptionMaxChar = Math.max(
@@ -210,14 +210,8 @@ export default {
   data() {
     return {
       levelDescriptionMaxChar,
-      name: {
-        languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
-      },
-      description: {
-        languageKeys: this.$i18n.availableLocales,
-        languageTexts: Array(this.$i18n.availableLocales.length).fill(''),
-      },
+      name: emptyMutableI18nString(),
+      description: emptyMutableI18nString(),
       allowedInterventions: [],
       tagIds: [],
     };
@@ -252,7 +246,6 @@ export default {
       return this.isModalDisplayed && this.dataType === dataTypesDict.level;
     },
     levelInFocus() {
-      console.log(this.LEVELById({ id: this.dataIdInFocus }).name.languageTexts);
       return this.LEVELById({ id: this.dataIdInFocus });
     },
     requiredi18n() {
@@ -334,8 +327,8 @@ export default {
     async submitHandler() {
       this.setDraft(
         new Level({
-          name: new I18nString(this.name),
-          description: new I18nString(this.description),
+          name: this.name,
+          description: this.description,
           parentLevelID: this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID,
           interventionsAreAllowed: this.allowedInterventions.length > 0,
           allowedInterventions: this.allowedInterventions || [],
@@ -347,14 +340,10 @@ export default {
       this.saveData({ dataType: 'LEVEL', originalVersion });
     },
     prefillComponentDataFromLevelDraft() {
-      this.name = {
-        languageKeys: this.$i18n.availableLocales,
-        languageTexts: this.levelDraft?.name.languageTexts,
-      };
-      this.description = {
-        languageKeys: this.$i18n.availableLocales,
+      this.name = mutableI18nString({ languageTexts: this.levelDraft?.name.languageTexts });
+      this.description = mutableI18nString({
         languageTexts: this.levelDraft?.description.languageTexts,
-      };
+      });
       this.tagIds = this.levelDraft?.tagIds ?? [];
       // console.log(this.levelDraft?.allowedInterventions);
       this.allowedInterventions = this.levelDraft?.allowedInterventions ?? [];

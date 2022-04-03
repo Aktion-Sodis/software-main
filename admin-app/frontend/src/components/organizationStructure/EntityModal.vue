@@ -92,7 +92,6 @@
                     }}
                   </h3>
                 </div>
-
                 <v-select
                   v-else-if="allEntitiesOfUpperLevel.length > 0"
                   v-model="parentEntityID"
@@ -164,8 +163,8 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
-import { Entity, I18nString } from '../../models';
-import { emptyI18nString } from '../../store/classes';
+import { Entity } from '../../models';
+import { emptyMutableI18nString, mutableI18nString } from '../../store/classes';
 
 const entityDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_ENTITY_DESCRIPTION_MAX_CHAR, 10),
@@ -183,8 +182,8 @@ export default {
       rules: {
         maxChar: (value) => value.length <= entityDescriptionMaxChar || this.maxCharExceededi18n,
       },
-      name: emptyI18nString(),
-      description: emptyI18nString(),
+      name: emptyMutableI18nString(),
+      description: emptyMutableI18nString(),
       parentEntityID: null,
     };
   },
@@ -216,8 +215,16 @@ export default {
       return this.isModalDisplayed && this.dataType === dataTypesDict.entity;
     },
     allEntitiesOfUpperLevel() {
+      let id;
+      if (this.create) {
+        id = this.getCreatingEntityInLevelId;
+      } else if (this.read) {
+        id = this.entityInFocus?.entityLevelId;
+      } else {
+        id = this.entityDraft?.entityLevelId;
+      }
       const currentLevel = this.LEVELById({
-        id: this.edit ? this.entityInFocus?.entityLevelId : this.getCreatingEntityInLevelId,
+        id,
       });
       if (!currentLevel) return [];
       return this.allEntitiesOfLevel({ entityLevelId: currentLevel.parentLevelID });
@@ -284,10 +291,11 @@ export default {
       this.editData({ dataId: this.dataIdInFocus, dataType: dataTypesDict.entity });
     },
     async submitHandler() {
+      if (this.allEntitiesOfUpperLevel.length > 0 && this.parentEntityID == null) return;
       await this.setDraft(
         new Entity({
-          name: new I18nString(this.name),
-          description: new I18nString(this.description),
+          name: this.name,
+          description: this.description,
           entityLevelId: this.edit
             ? this.entityInFocus.entityLevelId
             : this.getCreatingEntityInLevelId,
@@ -304,8 +312,10 @@ export default {
       });
     },
     prefillComponentDataFromEntityDraft() {
-      this.name = this.entityDraft?.name ?? '';
-      this.description = this.entityDraft?.description ?? '';
+      this.name = mutableI18nString({ languageTexts: this.entityDraft?.name.languageTexts });
+      this.description = mutableI18nString({
+        languageTexts: this.entityDraft?.description.languageTexts,
+      });
       this.parentEntityID = this.entityDraft?.parentEntityID ?? null;
       this.contents = this.entityDraft?.contents ?? [];
     },
