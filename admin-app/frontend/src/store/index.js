@@ -111,6 +111,9 @@ export default new Vuex.Store({
     decrementSurveyModalCompletionIndex: (state) => {
       state.surveyModalCompletionIndex -= 1;
     },
+    setSurveyModalCompletionIndex: (state, { newValue }) => {
+      state.surveyModalCompletionIndex = newValue;
+    },
   },
   actions: {
     publishSurveyHandler: () => {},
