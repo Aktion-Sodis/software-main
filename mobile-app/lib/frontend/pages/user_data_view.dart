@@ -13,6 +13,7 @@ import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/Blocs/user/user_events.dart';
 import 'package:mobile_app/backend/Blocs/user/user_state.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
+import 'package:mobile_app/backend/repositories/SettingsRepository.dart';
 import 'package:mobile_app/backend/repositories/UserRepository.dart';
 import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/frontend/common_widgets.dart';
@@ -39,6 +40,7 @@ class UserDataView extends StatefulWidget {
 class UserDataViewState extends State<UserDataView> {
   late TextEditingController textEdigtingControllerFirstName;
   late TextEditingController textEditingControllerLastName;
+  late String currentLocale;
   final _formKey = GlobalKey<FormState>();
   SyncedFile? userPicSynced;
   File? userPicFile;
@@ -47,13 +49,16 @@ class UserDataViewState extends State<UserDataView> {
   void initState() {
     textEdigtingControllerFirstName = TextEditingController();
     textEditingControllerLastName = TextEditingController();
+    currentLocale = strings.currentLanguage;
     if (widget.userBloc.state.user != null) {
       textEdigtingControllerFirstName.text =
           widget.userBloc.state.user!.firstName;
       textEditingControllerLastName.text = widget.userBloc.state.user!.lastName;
     }
-    widget.userBloc.userRepository.getUserById(widget.userBloc.userID).then((user)async{
-      if(user!=null){
+    widget.userBloc.userRepository
+        .getUserById(widget.userBloc.userID)
+        .then((user) async {
+      if (user != null) {
         userPicSynced = UserRepository.getUserPicFile(user);
         userPicFile = await userPicSynced?.file();
       }
@@ -63,12 +68,10 @@ class UserDataViewState extends State<UserDataView> {
 
   void updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
-    if(r!=null){
-    await userPicSynced?.updateAsPic(r);
-    userPicFile = await userPicSynced?.file();
-    setState(() {
-
-    });
+    if (r != null) {
+      await userPicSynced?.updateAsPic(r);
+      userPicFile = await userPicSynced?.file();
+      setState(() {});
     }
   }
 
@@ -88,63 +91,64 @@ class UserDataViewState extends State<UserDataView> {
                             top: MediaQuery.of(context).padding.top),
                         width: width(context),
                         color: Theme.of(context).colorScheme.background,
-                        child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Flexible(
+                        child:
+                            Column(mainAxisSize: MainAxisSize.min, children: [
+                          Flexible(
                             child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                              Container(
-                                  alignment: Alignment.center,
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: defaultPadding(context)),
-                                  child: CommonWidgets.defaultBackwardButton(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              defaultPadding(context)),
-                                      context: context,
-                                      goBack: () => context
-                                          .read<InAppBloc>()
-                                          .add(MainViewEvent()))),
-                              Expanded(
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                        left: defaultPadding(context)),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                            child: Container(
-                                                child:
-                                                    Text(strings.profile))),
-                                        Container(
-                                            margin: EdgeInsets.symmetric(
-                                                vertical:
-                                                    defaultPadding(context)),
-                                            child: CommonWidgets
-                                                .defaultIconButton(
-                                                    onPressed: () async {
-                                                      context
-                                                          .read<
-                                                              SessionCubit>()
-                                                          .signOut();
-                                                    },
-                                                    context: context,
-                                                    iconData: MdiIcons.logout,
-                                                    buttonSizes:
-                                                        ButtonSizes.small,
-                                                    fillColor:
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .error)),
-                                      ],
-                                    )),
-                              )
-                            ]),
+                                  Container(
+                                      alignment: Alignment.center,
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: defaultPadding(context)),
+                                      child:
+                                          CommonWidgets.defaultBackwardButton(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal:
+                                                      defaultPadding(context)),
+                                              context: context,
+                                              goBack: () => context
+                                                  .read<InAppBloc>()
+                                                  .add(MainViewEvent()))),
+                                  Expanded(
+                                    child: Container(
+                                        margin: EdgeInsets.only(
+                                            left: defaultPadding(context)),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                                child: Container(
+                                                    child:
+                                                        Text(strings.profile))),
+                                            Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: defaultPadding(
+                                                        context)),
+                                                child: CommonWidgets
+                                                    .defaultIconButton(
+                                                        onPressed: () async {
+                                                          context
+                                                              .read<
+                                                                  SessionCubit>()
+                                                              .signOut();
+                                                        },
+                                                        context: context,
+                                                        iconData:
+                                                            MdiIcons.logout,
+                                                        buttonSizes:
+                                                            ButtonSizes.small,
+                                                        fillColor:
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .error)),
+                                          ],
+                                        )),
+                                  )
+                                ]),
                           ),
                           Container(
                               width: width(context),
@@ -173,7 +177,8 @@ class UserDataViewState extends State<UserDataView> {
                                               ? BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   image: DecorationImage(
-                                                      image: FileImage(userPicFile!),
+                                                      image: FileImage(
+                                                          userPicFile!),
                                                       fit: BoxFit.fitWidth))
                                               : const BoxDecoration(
                                                   shape: BoxShape.circle,
@@ -240,6 +245,10 @@ class UserDataViewState extends State<UserDataView> {
                                     ? null
                                     : strings.user_please_enter_surename,
                               )),
+                          Container(
+                              margin:
+                                  EdgeInsets.only(top: defaultPadding(context)),
+                              child: _localeChoice(context)),
                           Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -267,6 +276,10 @@ class UserDataViewState extends State<UserDataView> {
                                         onPressed: () {
                                           if (_formKey.currentState!
                                               .validate()) {
+                                            RepositoryProvider.of<
+                                                    SettingsRepository>(context)
+                                                .locale = currentLocale;
+
                                             if (widget.inApp) {
                                               User user = context
                                                   .read<UserBloc>()
@@ -312,5 +325,25 @@ class UserDataViewState extends State<UserDataView> {
                 ],
               );
             }))));
+  }
+
+  Widget _localeChoice(BuildContext context) {
+    var options = strings.availableLocals.keys
+        .map(
+          (e) => DropdownMenuItem<String>(
+            child: Text(strings.availableLocals[e]!),
+            value: e,
+          ),
+        )
+        .toList();
+
+    return DropdownButtonFormField<String>(
+      items: options,
+      value: currentLocale,
+      onChanged: (value) {
+        currentLocale = value!;
+        if (mounted) setState(() {});
+      },
+    );
   }
 }
