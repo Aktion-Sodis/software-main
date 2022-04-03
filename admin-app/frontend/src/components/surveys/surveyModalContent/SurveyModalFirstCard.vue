@@ -287,12 +287,12 @@
         </v-btn>
         <v-btn
           x-large
-          v-if="!read"
+          v-if="edit"
           type="submit"
           color="primary"
           text
           @click.prevent="submitHandler"
-          :disabled="!interventionFormIsInvalid"
+          :disabled="!canAdvance"
         >
           {{ $t('general.save') }}
         </v-btn>
