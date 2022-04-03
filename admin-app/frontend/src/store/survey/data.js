@@ -182,10 +182,18 @@ const surveysData = {
       try {
         const apiSurveys = await DataStore.query(Survey);
         commit('setSurveys', { newValue: apiSurveys });
+      } catch (error) {
+        console.log({ error });
+      }
 
+      try {
         const apiSurveyTags = await DataStore.query(SurveyTag);
         commit('setSurveyTags', { newValue: apiSurveyTags });
+      } catch (error) {
+        console.log({ error });
+      }
 
+      try {
         const apiRelationSurveysAndTags = await DataStore.query(SurveySurveyTagRelation);
         commit('setRelationSurveysAndTags', {
           newValue: apiRelationSurveysAndTags.map((r) => ({
@@ -193,11 +201,11 @@ const surveysData = {
             surveyTagId: r.surveyTag.id,
           })),
         });
+      } catch (error) {
+        console.log({ error });
+      }
 
         commit('setLoading', { newValue: false });
-      } catch (error) {
-        commit('setLoading', { newValue: false });
-      }
     },
   },
 };

@@ -172,10 +172,18 @@ const interventionsData = {
       try {
         const apiInterventions = await DataStore.query(Intervention);
         commit('setInterventions', { newValue: apiInterventions });
+      } catch (error) {
+        console.log({ error });
+      }
 
+      try {
         const apiInterventionTags = await DataStore.query(InterventionTag);
         commit('setInterventionTags', { newValue: apiInterventionTags });
+      } catch (error) {
+        console.log({ error });
+      }
 
+      try {
         const apiRelationInterventionsAndTags = await DataStore.query(
           InterventionInterventionTagRelation,
         );
@@ -185,11 +193,11 @@ const interventionsData = {
             interventionTagId: r.interventionTag.id,
           })),
         });
-
-        commit('setLoading', { newValue: false });
       } catch (error) {
-        commit('setLoading', { newValue: false });
+        console.log({ error });
       }
+
+      commit('setLoading', { newValue: false });
     },
   },
 };
