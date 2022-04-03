@@ -74,33 +74,37 @@ class SyncedFile {
   }
 
   Future<bool> sync(SyncBloc syncBloc) async {
-    syncBloc.add(StartLoadingFileEvent());
-    File localCacheFile = await getCachePath();
-    bool cached = await localCacheFile.exists();
-    if (!cached) {
-      await StorageRepository.downloadFile(localCacheFile, path);
-    } else {
-      ListResult listResult = await Amplify.Storage.list(path: path);
-      if (listResult.items.isEmpty) {
-        StorageRepository.uploadFile(await getCachePath(), path);
+    try {
+      syncBloc.add(StartLoadingFileEvent());
+      File localCacheFile = await getCachePath();
+      bool cached = await localCacheFile.exists();
+      if (!cached) {
+        await StorageRepository.downloadFile(localCacheFile, path);
       } else {
-        DateTime? lastModifiedLocal;
-        try {
-          lastModifiedLocal = await localCacheFile.lastModified();
-        } catch (e) {}
-        DateTime? lastModifiedOnline = listResult.items.first.lastModified;
-        if (lastModifiedOnline == null) {
-          await StorageRepository.uploadFile(localCacheFile, path);
-        } else if (lastModifiedLocal == null) {
-          await StorageRepository.downloadFile(localCacheFile, path);
-        } else if (lastModifiedLocal.isAfter(lastModifiedOnline)) {
-          await StorageRepository.uploadFile(localCacheFile, path);
-        } else if (lastModifiedLocal.isBefore(lastModifiedOnline)) {
-          await StorageRepository.downloadFile(localCacheFile, path);
+        ListResult listResult = await Amplify.Storage.list(path: path);
+        if (listResult.items.isEmpty) {
+          StorageRepository.uploadFile(await getCachePath(), path);
+        } else {
+          DateTime? lastModifiedLocal;
+          try {
+            lastModifiedLocal = await localCacheFile.lastModified();
+          } catch (e) {}
+          DateTime? lastModifiedOnline = listResult.items.first.lastModified;
+          if (lastModifiedOnline == null) {
+            await StorageRepository.uploadFile(localCacheFile, path);
+          } else if (lastModifiedLocal == null) {
+            await StorageRepository.downloadFile(localCacheFile, path);
+          } else if (lastModifiedLocal.isAfter(lastModifiedOnline)) {
+            await StorageRepository.uploadFile(localCacheFile, path);
+          } else if (lastModifiedLocal.isBefore(lastModifiedOnline)) {
+            await StorageRepository.downloadFile(localCacheFile, path);
+          }
         }
       }
+      syncBloc.add(LoadedFileEvent());
+      return true;
+    } catch (e) {
+      return false;
     }
-    syncBloc.add(LoadedFileEvent());
-    return true;
   }
 }
