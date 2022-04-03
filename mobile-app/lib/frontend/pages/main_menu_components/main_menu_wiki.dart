@@ -111,21 +111,28 @@ class PDFViewWidgetState extends State<PDFViewWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-            child: Column(children: [
-      MainMenuAppBar(context, () {}, widget.content.name, showBackButton: true),
-      Expanded(
-          child: FutureBuilder<PDFDocument?>(
-              future: pdfFuture,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return PDFViewer(
-                      document: snapshot.data!,
-                      showNavigation: true,
-                      showPicker: false);
-                } else {
-                  return Center(child: loadingSign(context));
-                }
-              }))
-    ])));
+            child: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom <
+                            defaultPadding(context)
+                        ? defaultPadding(context)
+                        : MediaQuery.of(context).padding.bottom),
+                child: Column(children: [
+                  MainMenuAppBar(context, () {}, widget.content.name,
+                      showBackButton: true),
+                  Expanded(
+                      child: FutureBuilder<PDFDocument?>(
+                          future: pdfFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return PDFViewer(
+                                  document: snapshot.data!,
+                                  showNavigation: true,
+                                  showPicker: false);
+                            } else {
+                              return Center(child: loadingSign(context));
+                            }
+                          }))
+                ]))));
   }
 }

@@ -24,15 +24,21 @@ class LoginView extends StatelessWidget {
           authRepo: context.read<AuthRepository>(),
           authCubit: context.read<AuthCubit>(),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _logo(context),
-            _pic(context),
-            _loginForm(),
-          ],
-        ),
+        child: Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom <
+                        defaultPadding(context)
+                    ? defaultPadding(context)
+                    : MediaQuery.of(context).padding.bottom),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _logo(context),
+                _pic(context),
+                _loginForm(),
+              ],
+            )),
       )),
     );
   }

@@ -56,7 +56,9 @@ class SyncedFile {
   }
 
   Future<File?> updateAsPic(XFile xfile) async {
-    await update(await xfile.readAsString());
+    var bytes = await xfile.readAsBytes();
+    File localCacheFile = await getCachePath();
+    await localCacheFile.writeAsBytes(bytes);
     return await getCachePath();
   }
 

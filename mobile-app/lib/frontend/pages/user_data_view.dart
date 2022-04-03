@@ -52,8 +52,10 @@ class UserDataViewState extends State<UserDataView> {
           widget.userBloc.state.user!.firstName;
       textEditingControllerLastName.text = widget.userBloc.state.user!.lastName;
     }
-    widget.userBloc.userRepository.getUserById(widget.userBloc.userID).then((user)async{
-      if(user!=null){
+    widget.userBloc.userRepository
+        .getUserById(widget.userBloc.userID)
+        .then((user) async {
+      if (user != null) {
         userPicSynced = UserRepository.getUserPicFile(user);
         userPicFile = await userPicSynced?.file();
       }
@@ -63,12 +65,10 @@ class UserDataViewState extends State<UserDataView> {
 
   void updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
-    if(r!=null){
-    await userPicSynced?.updateAsPic(r);
-    userPicFile = await userPicSynced?.file();
-    setState(() {
-
-    });
+    if (r != null) {
+      await userPicSynced?.updateAsPic(r);
+      userPicFile = await userPicSynced?.file();
+      setState(() {});
     }
   }
 
@@ -88,63 +88,64 @@ class UserDataViewState extends State<UserDataView> {
                             top: MediaQuery.of(context).padding.top),
                         width: width(context),
                         color: Theme.of(context).colorScheme.background,
-                        child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Flexible(
+                        child:
+                            Column(mainAxisSize: MainAxisSize.min, children: [
+                          Flexible(
                             child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                              Container(
-                                  alignment: Alignment.center,
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: defaultPadding(context)),
-                                  child: CommonWidgets.defaultBackwardButton(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              defaultPadding(context)),
-                                      context: context,
-                                      goBack: () => context
-                                          .read<InAppBloc>()
-                                          .add(MainViewEvent()))),
-                              Expanded(
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                        left: defaultPadding(context)),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                            child: Container(
-                                                child:
-                                                    Text(strings.profile))),
-                                        Container(
-                                            margin: EdgeInsets.symmetric(
-                                                vertical:
-                                                    defaultPadding(context)),
-                                            child: CommonWidgets
-                                                .defaultIconButton(
-                                                    onPressed: () async {
-                                                      context
-                                                          .read<
-                                                              SessionCubit>()
-                                                          .signOut();
-                                                    },
-                                                    context: context,
-                                                    iconData: MdiIcons.logout,
-                                                    buttonSizes:
-                                                        ButtonSizes.small,
-                                                    fillColor:
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .error)),
-                                      ],
-                                    )),
-                              )
-                            ]),
+                                  Container(
+                                      alignment: Alignment.center,
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: defaultPadding(context)),
+                                      child:
+                                          CommonWidgets.defaultBackwardButton(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal:
+                                                      defaultPadding(context)),
+                                              context: context,
+                                              goBack: () => context
+                                                  .read<InAppBloc>()
+                                                  .add(MainViewEvent()))),
+                                  Expanded(
+                                    child: Container(
+                                        margin: EdgeInsets.only(
+                                            left: defaultPadding(context)),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                                child: Container(
+                                                    child:
+                                                        Text(strings.profile))),
+                                            Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: defaultPadding(
+                                                        context)),
+                                                child: CommonWidgets
+                                                    .defaultIconButton(
+                                                        onPressed: () async {
+                                                          context
+                                                              .read<
+                                                                  SessionCubit>()
+                                                              .signOut();
+                                                        },
+                                                        context: context,
+                                                        iconData:
+                                                            MdiIcons.logout,
+                                                        buttonSizes:
+                                                            ButtonSizes.small,
+                                                        fillColor:
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .error)),
+                                          ],
+                                        )),
+                                  )
+                                ]),
                           ),
                           Container(
                               width: width(context),
@@ -154,163 +155,175 @@ class UserDataViewState extends State<UserDataView> {
                 : null,
             body: SafeArea(child: BlocBuilder<UserBloc, UserState>(
                 builder: (buildContext, state) {
-              return Column(
-                children: [
-                  Expanded(
-                      child: Center(
-                          child: Container(
-                              width: width(context) * .5,
-                              height: width(context) * .5,
-                              child: Stack(
-                                fit: StackFit.expand,
-                                children: [
-                                  Align(
-                                      alignment: Alignment.center,
-                                      child: Container(
-                                          width: width(context) * .45,
-                                          height: width(context) * .45,
-                                          decoration: userPicFile != null
-                                              ? BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  image: DecorationImage(
-                                                      image: FileImage(userPicFile!),
-                                                      fit: BoxFit.fitWidth))
-                                              : const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.grey))),
-                                  Positioned(
-                                    right: 0,
-                                    bottom: 0,
-                                    child: CustomIconButton(
-                                        updatePic,
-                                        FontAwesomeIcons.camera,
-                                        Size(width(context) * .15,
-                                            width(context) * .15),
-                                        true,
-                                        padding: EdgeInsets.all(
-                                            width(context) * .04)),
-                                  )
-                                ],
-                              )))),
-                  if (!widget.inApp)
-                    Container(
-                        margin: EdgeInsets.only(
-                            left: width(context) * .1,
-                            right: width(context) * .1,
-                            top: width(context) * .1),
-                        child: Text(
-                          strings.user_create_info,
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ))
-                  else
-                    Container(height: height(context) * .1),
-                  Container(
-                    margin: EdgeInsets.all(width(context) * .1),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                              child: TextFormField(
-                            controller: textEdigtingControllerFirstName,
-                            decoration: InputDecoration(
-                                prefixIcon: const Icon(FontAwesomeIcons.user),
-                                labelText: strings.user_forename),
-                            textInputAction: TextInputAction.next,
-                            enableSuggestions: true,
-                            validator: (value) => (value ?? "").isNotEmpty
-                                ? null
-                                : strings.user_please_enter_forename,
-                          )),
-                          Container(
-                              margin:
-                                  EdgeInsets.only(top: defaultPadding(context)),
-                              child: TextFormField(
-                                controller: textEditingControllerLastName,
+              return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom <
+                              defaultPadding(context)
+                          ? defaultPadding(context)
+                          : MediaQuery.of(context).padding.bottom),
+                  child: Column(
+                    children: [
+                      Expanded(
+                          child: Center(
+                              child: Container(
+                                  width: width(context) * .5,
+                                  height: width(context) * .5,
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      Align(
+                                          alignment: Alignment.center,
+                                          child: Container(
+                                              width: width(context) * .45,
+                                              height: width(context) * .45,
+                                              decoration: userPicFile != null
+                                                  ? BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      image: DecorationImage(
+                                                          image: FileImage(
+                                                              userPicFile!),
+                                                          fit: BoxFit.fitWidth))
+                                                  : const BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Colors.grey))),
+                                      Positioned(
+                                        right: 0,
+                                        bottom: 0,
+                                        child: CustomIconButton(
+                                            updatePic,
+                                            FontAwesomeIcons.camera,
+                                            Size(width(context) * .15,
+                                                width(context) * .15),
+                                            true,
+                                            padding: EdgeInsets.all(
+                                                width(context) * .04)),
+                                      )
+                                    ],
+                                  )))),
+                      if (!widget.inApp)
+                        Container(
+                            margin: EdgeInsets.only(
+                                left: width(context) * .1,
+                                right: width(context) * .1,
+                                top: width(context) * .1),
+                            child: Text(
+                              strings.user_create_info,
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ))
+                      else
+                        Container(height: height(context) * .1),
+                      Container(
+                        margin: EdgeInsets.all(width(context) * .1),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  child: TextFormField(
+                                controller: textEdigtingControllerFirstName,
                                 decoration: InputDecoration(
                                     prefixIcon:
                                         const Icon(FontAwesomeIcons.user),
-                                    labelText: strings.user_surname),
+                                    labelText: strings.user_forename),
                                 textInputAction: TextInputAction.next,
                                 enableSuggestions: true,
                                 validator: (value) => (value ?? "").isNotEmpty
                                     ? null
-                                    : strings.user_please_enter_surename,
+                                    : strings.user_please_enter_forename,
                               )),
-                          Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                    margin: EdgeInsets.only(
-                                        top: defaultPadding(context)),
-                                    child: ElevatedButton(
-                                        style: ButtonStyle(
-                                          textStyle: MaterialStateProperty.all(
-                                              TextStyle(fontSize: 18)),
-                                          shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8))),
-                                          minimumSize:
-                                              MaterialStateProperty.all(Size(
-                                                  width(context) * .8,
-                                                  width(context) * .12)),
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.green), //todo: change
-                                        ),
-                                        onPressed: () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            if (widget.inApp) {
-                                              User user = context
-                                                  .read<UserBloc>()
-                                                  .state
-                                                  .user!;
-                                              user.firstName =
-                                                  textEdigtingControllerFirstName
-                                                      .text
-                                                      .trim();
-                                              user.lastName =
-                                                  textEditingControllerLastName
-                                                      .text
-                                                      .trim();
-                                              context
-                                                  .read<UserBloc>()
-                                                  .add(UpdateUserEvent(user));
-                                              context
-                                                  .read<InAppBloc>()
-                                                  .add(MainViewEvent());
-                                            } else {
-                                              context.read<UserBloc>().add(
-                                                  CreateUserEvent(User(
-                                                      firstName:
-                                                          textEdigtingControllerFirstName
-                                                              .text,
-                                                      lastName:
-                                                          textEditingControllerLastName
-                                                              .text,
-                                                      id: widget
-                                                          .userBloc.userID,
-                                                      permissions: [])));
-                                            }
-                                          }
-                                        },
-                                        child: Text(widget.inApp
-                                            ? strings.user_update
-                                            : strings.user_create_save)))
-                              ])
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              );
+                              Container(
+                                  margin: EdgeInsets.only(
+                                      top: defaultPadding(context)),
+                                  child: TextFormField(
+                                    controller: textEditingControllerLastName,
+                                    decoration: InputDecoration(
+                                        prefixIcon:
+                                            const Icon(FontAwesomeIcons.user),
+                                        labelText: strings.user_surname),
+                                    textInputAction: TextInputAction.next,
+                                    enableSuggestions: true,
+                                    validator: (value) => (value ?? "")
+                                            .isNotEmpty
+                                        ? null
+                                        : strings.user_please_enter_surename,
+                                  )),
+                              Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                        margin: EdgeInsets.only(
+                                            top: defaultPadding(context)),
+                                        child: ElevatedButton(
+                                            style: ButtonStyle(
+                                              textStyle:
+                                                  MaterialStateProperty.all(
+                                                      TextStyle(fontSize: 18)),
+                                              shape: MaterialStateProperty.all(
+                                                  RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8))),
+                                              minimumSize:
+                                                  MaterialStateProperty.all(
+                                                      Size(
+                                                          width(context) * .8,
+                                                          width(context) *
+                                                              .12)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors
+                                                          .green), //todo: change
+                                            ),
+                                            onPressed: () {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                if (widget.inApp) {
+                                                  User user = context
+                                                      .read<UserBloc>()
+                                                      .state
+                                                      .user!;
+                                                  user.firstName =
+                                                      textEdigtingControllerFirstName
+                                                          .text
+                                                          .trim();
+                                                  user.lastName =
+                                                      textEditingControllerLastName
+                                                          .text
+                                                          .trim();
+                                                  context.read<UserBloc>().add(
+                                                      UpdateUserEvent(user));
+                                                  context
+                                                      .read<InAppBloc>()
+                                                      .add(MainViewEvent());
+                                                } else {
+                                                  context.read<UserBloc>().add(
+                                                      CreateUserEvent(User(
+                                                          firstName:
+                                                              textEdigtingControllerFirstName
+                                                                  .text,
+                                                          lastName:
+                                                              textEditingControllerLastName
+                                                                  .text,
+                                                          id: widget
+                                                              .userBloc.userID,
+                                                          permissions: [])));
+                                                }
+                                              }
+                                            },
+                                            child: Text(widget.inApp
+                                                ? strings.user_update
+                                                : strings.user_create_save)))
+                                  ])
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ));
             }))));
   }
 }

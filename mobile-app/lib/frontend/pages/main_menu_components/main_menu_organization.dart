@@ -490,86 +490,97 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
         top: false,
         child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
-            body: Container(
-              child: Column(
-                children: [
-                  Container(
-                      height: height(context) * .1,
-                      width: width(context),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                                alignment: Alignment.center,
-                                margin: EdgeInsets.symmetric(
-                                    vertical: defaultPadding(context)),
-                                child: CommonWidgets.defaultBackwardButton(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: defaultPadding(context)),
-                                    context: context,
-                                    goBack: () => Navigator.of(context).pop())),
-                            Expanded(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                      child: Container(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                              strings
-                                                  .organization_view_dialog_add_entity,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline2))),
-                                ],
-                              ),
-                            )
-                          ])),
-                  Expanded(
-                      child: Form(
-                          key: _formKey,
-                          child: Container(
-                              child: Scrollbar(
-                                  child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: columnChildren(),
-                            ),
-                          ))))),
-                  Container(
-                      margin: EdgeInsets.all(defaultPadding(context)),
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                            textStyle: MaterialStateProperty.all(
-                                TextStyle(fontSize: 18)),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8))),
-                            minimumSize: MaterialStateProperty.all(Size(
-                                width(context) * .92, width(context) * .12)),
-                            backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context)
-                                    .colorScheme
-                                    .secondary), //todo: change
-                          ),
-                          onPressed: save,
-                          child: Center(
+            body: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom <
+                            defaultPadding(context)
+                        ? defaultPadding(context)
+                        : MediaQuery.of(context).padding.bottom),
+                child: Container(
+                  child: Column(
+                    children: [
+                      Container(
+                          height: height(context) * .1,
+                          width: width(context),
+                          child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: defaultPadding(context)),
+                                    child: CommonWidgets.defaultBackwardButton(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                defaultPadding(context)),
+                                        context: context,
+                                        goBack: () =>
+                                            Navigator.of(context).pop())),
+                                Expanded(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                          child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  strings
+                                                      .organization_view_dialog_add_entity,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline2))),
+                                    ],
+                                  ),
+                                )
+                              ])),
+                      Expanded(
+                          child: Form(
+                              key: _formKey,
                               child: Container(
-                                  child: Text(
-                                      create
-                                          ? strings
-                                              .organization_view_entity_save_entity
-                                          : strings
-                                              .organization_view_entity_save_changes,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSecondary))))))
-                ],
-              ),
-            )));
+                                  child: Scrollbar(
+                                      child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: columnChildren(),
+                                ),
+                              ))))),
+                      Container(
+                          margin: EdgeInsets.all(defaultPadding(context)),
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                textStyle: MaterialStateProperty.all(
+                                    TextStyle(fontSize: 18)),
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8))),
+                                minimumSize: MaterialStateProperty.all(Size(
+                                    width(context) * .92,
+                                    width(context) * .12)),
+                                backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context)
+                                        .colorScheme
+                                        .secondary), //todo: change
+                              ),
+                              onPressed: save,
+                              child: Center(
+                                  child: Container(
+                                      child: Text(
+                                          create
+                                              ? strings
+                                                  .organization_view_entity_save_entity
+                                              : strings
+                                                  .organization_view_entity_save_changes,
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondary))))))
+                    ],
+                  ),
+                ))));
   }
 }
 
@@ -1334,96 +1345,106 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
         top: false,
         child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
-            body: Column(children: [
-              Flexible(
-                child: Container(
-                    height: height(context) * .1,
-                    width: width(context),
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                              alignment: Alignment.center,
-                              margin: EdgeInsets.symmetric(
-                                  vertical: defaultPadding(context)),
-                              child: CommonWidgets.defaultBackwardButton(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: defaultPadding(context)),
-                                  context: context,
-                                  goBack: () => Navigator.of(context)
-                                      .pop(appliedIntervention))),
-                          Expanded(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
+            body: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom <
+                            defaultPadding(context)
+                        ? defaultPadding(context)
+                        : MediaQuery.of(context).padding.bottom),
+                child: Column(children: [
+                  Flexible(
+                    child: Container(
+                        height: height(context) * .1,
+                        width: width(context),
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: defaultPadding(context)),
+                                  child: CommonWidgets.defaultBackwardButton(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: defaultPadding(context)),
+                                      context: context,
+                                      goBack: () => Navigator.of(context)
+                                          .pop(appliedIntervention))),
+                              Expanded(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                        child: Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                                widget.appliedIntervention ==
+                                                        null
+                                                    ? strings
+                                                        .organization_view_dialog_add_appliedintervention
+                                                    : strings
+                                                        .organization_view_dialog_update_appliedintervention,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline2))),
+                                  ],
+                                ),
+                              )
+                            ])),
+                  ),
+                  !loaded
+                      ? Center(child: loadingSign(context))
+                      : appliedIntervention == null
+                          ? Container(
+                              child: Scrollbar(
+                                  child: ListView.builder(
+                                      itemBuilder: interventionItem,
+                                      itemCount: interventions!.length,
+                                      shrinkWrap: true)))
+                          : Container(
+                              child: Column(
                               children: [
-                                Expanded(
-                                    child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                            widget.appliedIntervention == null
-                                                ? strings
-                                                    .organization_view_dialog_add_appliedintervention
-                                                : strings
-                                                    .organization_view_dialog_update_appliedintervention,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline2))),
+                                Card(
+                                  margin:
+                                      EdgeInsets.all(defaultPadding(context)),
+                                  child: Container(
+                                      height: height(context) * .3,
+                                      width: width(context) * .92,
+                                      child: Stack(
+                                        fit: StackFit.expand,
+                                        children: [
+                                          ImageWidget(
+                                            width: width(context) * .92,
+                                            height: height(context) * .3,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            imageFile: syncedFile,
+                                          ),
+                                          Positioned(
+                                              right: defaultPadding(context),
+                                              bottom: defaultPadding(context),
+                                              child: CustomIconButton(
+                                                  updatePic,
+                                                  MdiIcons.camera,
+                                                  Size(width(context) * .15,
+                                                      width(context) * .15),
+                                                  true))
+                                        ],
+                                      )),
+                                ),
+                                Container(
+                                    margin:
+                                        EdgeInsets.all(defaultPadding(context)),
+                                    child: defaultGreenButton(
+                                        context,
+                                        () => Navigator.of(context)
+                                            .pop(appliedIntervention),
+                                        text: strings
+                                            .organization_view_entity_save_entity,
+                                        minWidth: width(context) * .92))
                               ],
-                            ),
-                          )
-                        ])),
-              ),
-              !loaded
-                  ? Center(child: loadingSign(context))
-                  : appliedIntervention == null
-                      ? Container(
-                          child: Scrollbar(
-                              child: ListView.builder(
-                                  itemBuilder: interventionItem,
-                                  itemCount: interventions!.length,
-                                  shrinkWrap: true)))
-                      : Container(
-                          child: Column(
-                          children: [
-                            Card(
-                              margin: EdgeInsets.all(defaultPadding(context)),
-                              child: Container(
-                                  height: height(context) * .3,
-                                  width: width(context) * .92,
-                                  child: Stack(
-                                    fit: StackFit.expand,
-                                    children: [
-                                      ImageWidget(
-                                        width: width(context) * .92,
-                                        height: height(context) * .3,
-                                        borderRadius: BorderRadius.circular(8),
-                                        imageFile: syncedFile,
-                                      ),
-                                      Positioned(
-                                          right: defaultPadding(context),
-                                          bottom: defaultPadding(context),
-                                          child: CustomIconButton(
-                                              updatePic,
-                                              MdiIcons.camera,
-                                              Size(width(context) * .15,
-                                                  width(context) * .15),
-                                              true))
-                                    ],
-                                  )),
-                            ),
-                            Container(
-                                margin: EdgeInsets.all(defaultPadding(context)),
-                                child: defaultGreenButton(
-                                    context,
-                                    () => Navigator.of(context)
-                                        .pop(appliedIntervention),
-                                    text: strings
-                                        .organization_view_entity_save_entity,
-                                    minWidth: width(context) * .92))
-                          ],
-                        ))
-            ])));
+                            ))
+                ]))));
   }
 }
 
