@@ -1,0 +1,27 @@
+{
+  "resourceName": "s3e48a1903",
+  "policyUUID": "e48a1903",
+  "bucketName": "monitoring458d35c4cce0449db22ae25ed77dd515",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {
+    "admin": [
+      "CREATE_AND_UPDATE",
+      "READ",
+      "DELETE"
+    ],
+    "appusers": [
+      "CREATE_AND_UPDATE",
+      "READ"
+    ],
+    "statisticusers": [
+      "READ"
+    ]
+  }
+}
