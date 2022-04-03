@@ -1,9 +1,8 @@
 import { DataStore } from '@aws-amplify/datastore';
 import { API } from 'aws-amplify';
-import { deleteEntityController, Entity, getAllEntities } from './utils';
 import { dataTypesDict, modalModesDict } from '../constants';
-import { updateEntity } from '../../graphql/mutations';
-import { I18nString } from '../../models';
+import { deleteEntity, updateEntity } from '../../graphql/mutations';
+import { Entity, I18nString } from '../../models';
 
 const entitiesData = {
   namespaced: true,
@@ -145,6 +144,7 @@ const entitiesData = {
   },
   actions: {
     APIpost: async ({ commit, dispatch }, entityDraft) => {
+      console.log({ entityDraft });
       commit('setLoading', { newValue: true });
       const entity = new Entity({
         ...entityDraft,
@@ -194,34 +194,54 @@ const entitiesData = {
               root: true,
             },
           );
+          dispatch(
+            'dataModal/readData',
+            {
+              dataId: entityDraft.originalId,
+              dataType: dataTypesDict.entity,
+            },
+            {
+              root: true,
+            },
+          );
         })
         .catch(() => {
           commit('setLoading', { newValue: false });
         });
     },
-    APIdelete: async ({ commit, dispatch }, entityDraft) => {
+    APIdelete: async ({ commit, dispatch }, { id, _version }) => {
       commit('setLoading', { newValue: true });
-      const deleteResponse = await deleteEntityController(entityDraft);
-      if (deleteResponse?.errors?.length > 0) {
-        commit('setLoading', { newValue: false });
-      }
-      commit('deleteEntity', {
-        id: entityDraft.id,
-      });
-      commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
-      commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
-      dispatch(
-        'dataModal/abortReadData',
-        {},
-        {
-          root: true,
-        },
-      );
-
-      commit('setLoading', { newValue: false });
+      API.graphql({ query: deleteEntity, variables: { input: { id, _version } } })
+        .then(() => {
+          commit('deleteEntity', {
+            id,
+          });
+          commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
+          commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
+          dispatch(
+            'dataModal/abortReadData',
+            {},
+            {
+              root: true,
+            },
+          );
+          commit('setLoading', { newValue: false });
+        })
+        .catch((err) => {
+          commit('setLoading', { newValue: false });
+          // TODO: Handle error
+          console.log({ err });
+        });
     },
     // sync is handled over in LEVEL_Data module
-    APIgetAll: async () => (await getAllEntities()).data.listEntities.items,
+    APIgetAll: async () => {
+      try {
+        return await DataStore.query(Entity);
+      } catch (error) {
+        console.log({ error });
+        return [];
+      }
+    },
   },
 };
 

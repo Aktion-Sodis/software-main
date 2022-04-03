@@ -1,10 +1,9 @@
 import { DataStore } from '@aws-amplify/datastore';
-import { API } from 'aws-amplify';
-import { Level, I18nString } from '../../models';
-import { deleteLevel, getAllLevels } from './utils';
-import { Entity } from '../entities/utils';
+import { API, graphqlOperation } from 'aws-amplify';
+import { Level, I18nString, Entity } from '../../models';
 import { dataTypesDict, modalModesDict } from '../constants';
-import { updateLevel } from '../../graphql/mutations';
+import { deleteLevel, updateLevel } from '../../graphql/mutations';
+import { listLevels } from '../../graphql/queries';
 
 const levelsData = {
   namespaced: true,
@@ -124,32 +123,44 @@ const levelsData = {
               root: true,
             },
           );
+          dispatch(
+            'dataModal/readData',
+            {
+              dataId: levelDraft.originalId,
+              dataType: dataTypesDict.level,
+            },
+            {
+              root: true,
+            },
+          );
         })
         .catch(() => {
           commit('setLoading', { newValue: false });
         });
     },
-    APIdelete: async ({ commit, dispatch }, { id }) => {
+    APIdelete: async ({ commit, dispatch }, { id, _version }) => {
       commit('setLoading', { newValue: true });
-      const deleteResponse = await deleteLevel();
-      if (deleteResponse.errors.length > 0) {
-        commit('setLoading', { newValue: false });
-      }
-      commit('deleteLevel', {
-        id,
-      });
-      commit('ENTITY_Data/deleteEntitiesByLevelId', { entityLevelId: id }, { root: true });
-      commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
-      commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
-      dispatch(
-        'dataModal/abortReadData',
-        {},
-        {
-          root: true,
-        },
-      );
-
-      commit('setLoading', { newValue: false });
+      API.graphql({ query: deleteLevel, variables: { input: { id, _version } } })
+        .then(() => {
+          commit('deleteLevel', {
+            id,
+          });
+          commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
+          commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
+          dispatch(
+            'dataModal/abortReadData',
+            {},
+            {
+              root: true,
+            },
+          );
+          commit('setLoading', { newValue: false });
+        })
+        .catch((err) => {
+          commit('setLoading', { newValue: false });
+          // TODO: Handle error
+          console.log({ err });
+        });
     },
     sync: async ({ commit, dispatch }) => {
       commit('setLoading', { newValue: true });
@@ -291,7 +302,14 @@ const levelsData = {
       );
       commit('setLoading', { newValue: false });
     },
-    APIgetAll: async () => (await getAllLevels()).data.listLevels.items,
+    APIgetAll: async () => {
+      try {
+        return (await API.graphql(graphqlOperation(listLevels))).data.listLevels.items;
+      } catch (error) {
+        console.log({ error });
+        return [];
+      }
+    },
   },
 };
 

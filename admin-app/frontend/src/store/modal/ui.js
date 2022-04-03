@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import { dataTypesDict, modalModesDict } from '../constants';
 
-import { EmptyEntity } from '../entities/utils';
-import { emptySurvey, emptyIntervention, emptyLevel } from '../classes';
+import {
+  emptySurvey, emptyIntervention, emptyLevel, emptyEntity,
+} from '../classes';
 
 const dataModal = {
   namespaced: true,
@@ -46,7 +47,7 @@ const dataModal = {
       state.dataDraft = draft;
     },
     resetENTITYDraft: (state) => {
-      state.dataDraft = new EmptyEntity();
+      state.dataDraft = emptyEntity();
     },
 
     setDraft: (state, draft) => {

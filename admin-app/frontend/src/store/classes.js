@@ -9,6 +9,7 @@ import {
   QuestionType,
   Survey,
   SurveyType,
+  Entity,
 } from '../models';
 import i18n from '../i18n';
 
@@ -59,6 +60,15 @@ const emptyLevel = () => {
   return level;
 };
 
+const emptyEntity = () => new Entity({
+  name: emptyI18nString(),
+  description: emptyI18nString(),
+  parentEntityID: null,
+  customData: [],
+  appliedInterventions: [],
+  entityLevelId: null,
+});
+
 const mutableI18nString = ({ languageTexts }) => ({
   languageKeys: i18n.availableLocales,
   languageTexts: Array.from(languageTexts),
@@ -78,6 +88,7 @@ export {
   emptyQuestion,
   emptyQuestionOption,
   emptyLevel,
+  emptyEntity,
   mutableI18nString,
   mutableQuestionOption,
   emptyMutableQuestionOption,
