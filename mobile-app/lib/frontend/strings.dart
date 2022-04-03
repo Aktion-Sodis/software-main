@@ -77,9 +77,193 @@ Map<String, dynamic> stringMap = {
     "tasks_more_behind": "More behind",
     "profile": "Profile",
     "user_update": "Save changes",
+    "abort_survey": "Abort survey?",
+    "abort_survey_warn": "You wont be able to proceed later and will have to start again",
+    "confirm_abort": "Abort",
+    "do_not_abort": "Continue",
     "your shot": "Your shot:",
+    "accepted": "Accepted",
+    "restricted": "Restricted",
+    "required": "Required",
+    "accept_permissions": "Accept permissions",
+    "accept_all_permissions": "Accept all permissions",
+    "open_settings": "Open settings",
+    "abbrechen": "Abbrechen",
+    "restricted_permissions_warning":
+        "Some of the permissions can be accepted only in the settings. Please, open the settings and accept all the permissions."
+    "task_dialog_what_task": "What need's to be done?",
+    "task_dialog_title": "Short summary",
+    "task_dialog_description": "Further description",
+    "task_dialog_record_audio": "Record audio",
+    "task_dialog_take_foto": "Take a foto",
+    "task_dialog_entity_choose": "For whom is the task?",
+    "task_dialog_entity_search": "Enter a name",
+    "task_dialog_entity_search_no_result": "No results found",
+    "task_dialog_entity_search_hint": "Select entity",
+    "task_dialog_when": "When will you do it?",
+    "task_today": "Today",
+    "task_tomorrow": "Tomorrow",
+    "task_next_week": "Next week",
+    "task_next_month": "Next month",
+    "task_or": "Or",
+    "task_deadline": "Due",
+    "task_set_date": "Set a date",
+    "task_save_task": "Save Task",
+    "task_update_task": "Update Task",
+    "task_create_title": "Create Task",
+    "task_update_title": "Update Task",
+    "task_later_in_future": "Later"
+  },
+  "es-BO": {
+    "emailorphonenumber": "correo electrónico/número de teléfono",
+    "email": "Correo electrónico",
+    "phonenumber": "Número de teléfono",
+    "password": "Contraseña",
+    "malformedemailmessage": "Por favor indique una dirección de correo electrónico valida.",
+    "malformedphonenumber":
+        "Por favor indique un número de telefóno que corresponde al formato +123456879",
+    "noaccountmessage":
+        "Desafortunadamente no existe una cuenta correspondiente. Si la información ingresada fue correcta, contacte su administrador/a de cuentas.",
+    "enterpassword": "Ingrese contraseña",
+    "login": "Iniciar sesión",
+    "or": "O",
+    "google_sign_in": "Autentifcar con Google",
+    "invalid_password":
+        "Por favor ingrese la contraseña válida (al menos 6 caracteres; al menos un caracter minúscolo y mayúsculo; al menos un número).",
+    "not_same_password": "Las contraseñas ingresadas no son iguales.",
+    "save_password": "Guardar",
+    "change_password_text":
+        "¡Por motivos de seguridad, por favor ingrese su contraseña personal!",
+    "new_password": "Nueva contraseña",
+    "new_password_validation": "Nueva contraseña (validación)",
+    "test_list": "Ensayos",
+    "user_forename": "Nombre",
+    "user_surname": "Surname",
+    "user_please_enter_forename": "Por favor ingrese su nombre",
+    "user_please_enter_surename": "Por favor ingrese su apellido",
+    "user_create_save": "De acuerdo",
+    "user_create_info":
+        "Por favor ingrese su nombre e apellido para finalizar la creación de su cuenta. ¡Si quiere, puede tomar su foto de perfil!",
+    "logout": "Cerrar la sesión",
+    "main_menu_home": "Inicio",
+    "main_menu_organization": "Organización",
+    "main_menu_tasks": "Tarreas",
+    "main_menu_wiki": "Conocimientos",
+    "question_type_descriptions": {
+      "sc": "Solamente una respuesta",
+      "mc": "Multiples respuestas posibles",
+      "text_field": "Escriba su respuesta",
+    },
+    "summary": "Resumen",
+    "end_survey": "¿Seguro que quiere terminar la entrevista?",
+    "saved_survey": "Gracias por realizar la entrevista",
+    "organization_view_taks": "Tarrea",
+    "organization_view_surveys": "Entrevistas",
+    "organization_view_applied_interventions": "Intervenciones",
+    "organization_view_info": "Información",
+    "organization_view_history": "Historía",
+    "organization_view_dialog_add_entity": "Agregar entidad",
+    "organization_view_dialog_edit_entity": "Editar entidad",
+    "organization_view_entity_name": "Nombre",
+    "organization_view_entity_description": "Descripción",
+    "organization_view_entity_save_entity": "Guardar entidad",
+    "organization_view_entity_save_changes": "Guardar cambios",
+    "organization_view_info_button": "Información",
+    "organization_view_entity_enter_name": "Por favor ingrese un nombre",
+    "organization_view_entity_enter_description": "Por favor ingrese una descripción",
+    "organization_view_dialog_add_appliedintervention": "Agregar intervención",
+    "organization_view_dialog_update_appliedintervention":
+        "Actualizar intervención",
+    "organization_view_appliedintervention_detail_techonology_working":
+        "¿La tecnologia aún funciona?",
+    "yes": "Sí",
+    "no": "No",
+    "remaining": "Quedan",
+    "day": "día",
+    "days": "días",
+    "tasks_more_behind": "más atrás", // unable to find context in source code, translation may be incorrect
+    "profile": "Perfil",
+    "user_update": "Guardar cambios",
+    "abort_survey": "¿Abortar entrevista?",
+    "abort_survey_warn": "No va poder resumir más tarde. Tiene que reiniciar la entrevista.",
+    "confirm_abort": "Abortar",
+    "do_not_abort": "Continuar",
+    "your shot": "Te toca:",
+    "task_dialog_what_task": "Qué se tiene que hacer?",
+    "task_dialog_title": "Resumen corto",
+    "task_dialog_description": "Más descripción",
+    "task_dialog_record_audio": "Recordar audio",
+    "task_dialog_take_foto": "Tomar un foto",
+    "task_dialog_entity_choose": "¿Para quién es la tarrea?",
+    "task_dialog_entity_search": "Ingresar un nombre",
+    "task_dialog_entity_search_no_result": "No se ha encontrado resultados",
+    "task_dialog_entity_search_hint": "Seleccionar entidad",
+    "task_dialog_when": "¿Cuándo lo va a hacer?",
+    "task_today": "Hoy",
+    "task_tomorrow": "Mañana",
+    "task_next_week": "Próxima semana",
+    "task_next_month": "Próximo mes",
+    "task_or": "O",
+    "task_deadline": "se debe hasta",
+    "task_set_date": "Ingresar una fecha",
+    "task_save_task": "Guardar tarrea",
+    "task_update_task": "Actualizar tarrea",
+    "task_create_title": "Crear tarrea",
+    "task_update_title": "Actualizar tarrea",
+    "task_later_in_future": "Más tarde"
   }
 };
+
+String get task_later_in_future =>
+    stringMap[currentLanguage]["task_later_in_future"];
+String get task_dialog_what_task =>
+    stringMap[currentLanguage]["task_dialog_what_task"];
+String get task_dialog_title => stringMap[currentLanguage]["task_dialog_title"];
+String get task_dialog_description =>
+    stringMap[currentLanguage]["task_dialog_description"];
+String get task_dialog_record_audio =>
+    stringMap[currentLanguage]["task_dialog_record_audio"];
+String get task_dialog_take_foto =>
+    stringMap[currentLanguage]["task_dialog_take_foto"];
+String get task_dialog_entity_choose =>
+    stringMap[currentLanguage]["task_dialog_entity_choose"];
+String get task_dialog_entity_search =>
+    stringMap[currentLanguage]["task_dialog_entity_search"];
+String get task_dialog_entity_search_no_result =>
+    stringMap[currentLanguage]["task_dialog_entity_search_no_result"];
+String get task_dialog_entity_search_hint =>
+    stringMap[currentLanguage]["task_dialog_entity_search_hint"];
+String get task_dialog_when => stringMap[currentLanguage]["task_dialog_when"];
+String get task_today => stringMap[currentLanguage]["task_today"];
+String get task_tomorrow => stringMap[currentLanguage]["task_tomorrow"];
+String get task_next_week => stringMap[currentLanguage]["task_next_week"];
+String get task_next_month => stringMap[currentLanguage]["task_next_month"];
+String get task_or => stringMap[currentLanguage]["task_or"];
+String get task_deadline => stringMap[currentLanguage]["task_deadline"];
+String get task_set_date => stringMap[currentLanguage]["task_set_date"];
+String get task_save_task => stringMap[currentLanguage]["task_save_task"];
+String get task_update_task => stringMap[currentLanguage]["task_update_task"];
+String get task_create_title => stringMap[currentLanguage]["task_create_title"];
+String get task_update_title => stringMap[currentLanguage]["task_update_title"];
+
+String get accepted => stringMap[currentLanguage]["accepted"];
+
+String get abbrechen => stringMap[currentLanguage]["abbrechen"];
+
+String get restricted => stringMap[currentLanguage]["restricted"];
+
+String get required => stringMap[currentLanguage]["required"];
+
+String get accept_permissions =>
+    stringMap[currentLanguage]["accept_permissions"];
+
+String get accept_all_permissions =>
+    stringMap[currentLanguage]["accept_all_permissions"];
+
+String get open_settings => stringMap[currentLanguage]["open_settings"];
+
+String get restricted_permissions_warning =>
+    stringMap[currentLanguage]["restricted_permissions_warning"];
 
 String get user_update => stringMap[currentLanguage]["user_update"];
 
@@ -226,4 +410,10 @@ String get textFieldTypeDescription =>
 String get summary => stringMap[currentLanguage]["summary"];
 String get endSurvey => stringMap[currentLanguage]["end_survey"];
 String get savedSurvey => stringMap[currentLanguage]["saved_survey"];
+
+String get abortSurvey  => stringMap[currentLanguage]["abort_survey"];
+String get abortSurveyText  => stringMap[currentLanguage]["abort_survey_warn"];
+String get confirmAbort  => stringMap[currentLanguage]["confirm_abort"];
+String get doNotAbort  => stringMap[currentLanguage]["do_not_abort"];
+
 String get yourShot => stringMap[currentLanguage]["your shot"];

@@ -1,18 +1,27 @@
+import 'dart:io';
+
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mobile_app/backend/Blocs/organization_view/organization_view_bloc.dart';
 import 'package:mobile_app/backend/Blocs/task/task_bloc.dart';
 import 'package:mobile_app/backend/Blocs/task/task_events.dart';
 import 'package:mobile_app/backend/Blocs/task/task_state.dart';
+import 'package:mobile_app/backend/Blocs/task_form/task_form_cubit.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/callableModels/Entity.dart';
+import 'package:mobile_app/backend/callableModels/localModels/attachment.dart';
+import 'package:mobile_app/backend/callableModels/localModels/audio_attachment.dart';
+import 'package:mobile_app/backend/callableModels/localModels/image_attachment.dart';
+import 'package:mobile_app/backend/repositories/TaskRepository.dart';
 import 'package:mobile_app/frontend/common_widgets.dart';
 import 'package:mobile_app/frontend/components/loadingsign.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
 import 'package:mobile_app/frontend/pages/main_menu_components/main_menu_app_bar.dart';
 import 'package:mobile_app/frontend/pages/main_menu_components/main_menu_commonwidgets.dart';
+import 'package:mobile_app/frontend/pages/task_form/small_button.dart';
 import 'package:provider/src/provider.dart';
 import 'package:mobile_app/frontend/strings.dart' as strings;
 
@@ -45,7 +54,9 @@ class TaskWidget extends StatelessWidget {
     }
   }
 
-  void pressed(Task task, BuildContext blocContext) async {}
+  void pressed(Task task, BuildContext blocContext) async {
+    updateTask(blocContext, task);
+  }
 
   Widget todayWidget(BuildContext context) {
     //todo: change widget according to arthur
@@ -62,11 +73,12 @@ class TaskWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(todayTasks.length + 1, (index) {
             if (index == 0) {
-              return Container(
-                  padding: EdgeInsets.all(defaultPadding(context)),
-                  margin: EdgeInsets.all(defaultPadding(context)),
-                  color: Colors.red,
-                  child: Text("Today", style: TextStyle(color: Colors.white)));
+              return SmallButton(
+                onPressed: () {},
+                iconData: MdiIcons.skipNextOutline,
+                text: strings.task_today,
+                selected: true,
+              );
             }
             return taskRow(context, todayTasks[index - 1],
                 checkChangePossible: true, onCheckChanged: (task) {
@@ -95,12 +107,12 @@ class TaskWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(todayTasks.length + 1, (index) {
             if (index == 0) {
-              return Container(
-                  padding: EdgeInsets.all(defaultPadding(context)),
-                  margin: EdgeInsets.all(defaultPadding(context)),
-                  color: Colors.yellow,
-                  child: Text("Tomorrow",
-                      style: TextStyle(color: Colors.black87)));
+              return SmallButton(
+                onPressed: () {},
+                iconData: MdiIcons.skipNextOutline,
+                text: strings.task_tomorrow,
+                selected: false,
+              );
             }
             return taskRow(context, todayTasks[index - 1],
                 checkChangePossible: true, onCheckChanged: (task) {
@@ -130,12 +142,12 @@ class TaskWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(todayTasks.length + 1, (index) {
             if (index == 0) {
-              return Container(
-                  padding: EdgeInsets.all(defaultPadding(context)),
-                  margin: EdgeInsets.all(defaultPadding(context)),
-                  color: Colors.grey,
-                  child: Text(strings.tasks_more_behind,
-                      style: TextStyle(color: Colors.black87)));
+              return SmallButton(
+                onPressed: () {},
+                iconData: MdiIcons.skipForwardOutline,
+                text: strings.task_later_in_future,
+                selected: false,
+              );
             }
             return taskRow(context, todayTasks[index - 1],
                 checkChangePossible: true, onCheckChanged: (task) {
@@ -164,14 +176,15 @@ class TaskWidget extends StatelessWidget {
             child: Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                  child: Column(
+              child: Scrollbar(
+                  child: SingleChildScrollView(
+                      child: Column(
                 children: [
                   todayWidget(context),
                   tomorrowWidget(context),
                   restWidget(context)
                 ],
-              )),
+              ))),
             ),
             Container(
                 margin: EdgeInsets.all(defaultPadding(context)),
@@ -190,25 +203,45 @@ class TaskWidget extends StatelessWidget {
   }
 }
 
-Future<Task> addTask(BuildContext buildContext,
-    {Entity? entity,
-    AppliedIntervention? appliedIntervention,
-    ExecutedSurvey? executedSurvey}) async {
+Future addTask(
+  BuildContext buildContext, {
+  Entity? entity,
+  AppliedIntervention? appliedIntervention,
+  ExecutedSurvey? executedSurvey,
+}) async {
   //todo: connect with arthur
-  Task toCreate = Task(
-      title: "Test Title",
-      user: buildContext.read<UserBloc>().state.user!,
-      id: UUID.getUUID(),
+  openTaskForm(
+      context: buildContext,
       entity: entity,
-      dueDate: DateTime.now(),
-      audioList: [],
-      picList: [0]);
-  buildContext.read<TaskBloc>().add(CreateTask(toCreate));
-  return toCreate;
+      appliedIntervention: appliedIntervention,
+      executedSurvey: executedSurvey,
+      taskBloc: buildContext.read<TaskBloc>(),
+      userBloc: buildContext.read<UserBloc>(),
+      organizationViewBloc: buildContext.read<OrganizationViewBloc>());
 }
 
-Future<Task> updateTask(BuildContext buildContext, Task task) async {
-  //todo: connect with arthur
-  buildContext.read<TaskBloc>().add(UpdateTask(task));
-  return task;
+Future updateTask(BuildContext buildContext, Task task) async {
+  List<Attachment> toPass = [];
+  if (task.picList.isNotEmpty) {
+    for (int picID in task.picList) {
+      File file = await TaskRepository.getTaskPic(task, picID).getCachePath();
+      toPass.add(ImageAttachment(file.uri.toString()));
+    }
+  }
+
+  if (task.audioList.isNotEmpty) {
+    for (int audioID in task.audioList) {
+      File file =
+          await TaskRepository.getTaskAudio(task, audioID).getCachePath();
+      toPass.add(AudioAttachment(file.uri.toString()));
+    }
+  }
+
+  openTaskForm(
+      context: buildContext,
+      task: task,
+      taskBloc: buildContext.read<TaskBloc>(),
+      userBloc: buildContext.read<UserBloc>(),
+      organizationViewBloc: buildContext.read<OrganizationViewBloc>(),
+      attachment: toPass);
 }
