@@ -8,7 +8,7 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-console': ['error', { 'allow': ['warn', 'error'] }],
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'max-classes-per-file': 'off',
     'max-len': 'off',
