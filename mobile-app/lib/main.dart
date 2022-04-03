@@ -17,7 +17,7 @@ import 'package:mobile_app/services/photo_capturing.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown])
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) => runApp(const MyApp()));
 }
 
