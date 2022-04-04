@@ -1,10 +1,42 @@
+import 'dart:io';
+
+import 'package:mobile_app/backend/repositories/SettingsRepository.dart';
+import 'package:string_similarity/string_similarity.dart';
+
 ///hier die String jeweils in englisch hinterlegen und in allen anderen  angelegten Sprachen zumindest anlegen
 ///bei neuen strings am ende übersetzung anfordern
 ///
 
 //todo: in klasse machen
 
-String currentLanguage = "en-US";
+Map<String, String> availableLocals = const {
+  "en-US": "English (US)",
+  "es-BO": "Español (Bolivia)"
+};
+
+String get currentLanguage {
+  String? savedLocale = SettingsRepository.instance.locale;
+
+  if (savedLocale != null) {
+    return savedLocale;
+  } else {
+    List<String> toSort = stringMap.keys.toList();
+    toSort.sort((a, b) {
+      double aEqualness =
+          StringSimilarity.compareTwoStrings(a, Platform.localeName);
+      double bEqualness =
+          StringSimilarity.compareTwoStrings(b, Platform.localeName);
+      if (aEqualness == bEqualness) {
+        return 0;
+      } else if (aEqualness > bEqualness) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+    return toSort.first;
+  }
+}
 
 Map<String, dynamic> stringMap = {
   "en-US": {

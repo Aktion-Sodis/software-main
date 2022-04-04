@@ -5,7 +5,9 @@ import 'package:mobile_app/backend/Blocs/auth/auth_repository.dart';
 import 'package:mobile_app/backend/Blocs/request_permissions/request_permissions_cubit.dart';
 import 'package:mobile_app/backend/Blocs/session/session_cubit.dart';
 import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
+import 'package:mobile_app/backend/repositories/SettingsRepository.dart';
 import 'package:mobile_app/backend/repositories/UserRepository.dart';
+import 'package:mobile_app/frontend/components/hive_db_initializer.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
 import 'package:mobile_app/frontend/pages/permissions_checker.dart';
 import 'package:mobile_app/frontend/pages/survey.dart';
@@ -13,13 +15,17 @@ import 'package:mobile_app/frontend/theme.dart';
 
 import 'package:mobile_app/services/amplify.dart';
 import 'package:mobile_app/app_navigator.dart';
+import 'package:mobile_app/services/hive_db_helper.dart';
 import 'package:mobile_app/services/photo_capturing.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  await HiveDBHelper.instance.init();
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp])
       .then((_) => runApp(const MyApp()));
+
 }
 
 class MyApp extends StatefulWidget {
@@ -58,10 +64,12 @@ class MyAppState extends State<MyApp> {
         theme: themeData ?? ThemeData.light(),
         home: themeData == null
             ? const Center(child: CircularProgressIndicator())
-            : MultiRepositoryProvider(
+            : HiveDBInitializer(
+                child: MultiRepositoryProvider(
                 providers: [
                   RepositoryProvider(create: (context) => AuthRepository()),
                   RepositoryProvider(create: (context) => UserRepository()),
+                  RepositoryProvider(create: (context) => SettingsRepository())
                 ],
                 child: MultiBlocProvider(
                   providers: [
@@ -75,6 +83,6 @@ class MyAppState extends State<MyApp> {
                   ],
                   child: PermissionsChecker(child: const AppNavigator()),
                 ),
-              ));
+              )));
   }
 }

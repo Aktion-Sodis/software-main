@@ -44,6 +44,7 @@ dependencies:
   flutter_datetime_picker: ^1.5.1
   dropdown_search: ^2.0.1
   permission_handler: ^9.2.0
+  hive: ^2.1.0
 
 
 dev_dependencies:
