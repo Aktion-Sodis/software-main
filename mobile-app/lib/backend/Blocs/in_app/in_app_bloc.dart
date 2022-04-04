@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_events.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_state.dart';
+import 'package:mobile_app/backend/Blocs/organization_view/organization_view_events.dart';
 import 'package:mobile_app/backend/callableModels/ExecutedSurvey.dart';
 import 'package:mobile_app/backend/repositories/ExecutedSurveyRepository.dart';
 
@@ -17,7 +18,8 @@ class InAppBloc extends Bloc<InAppEvent, InAppState> {
     if (event is PerformSurveyEvent) {
       emit(SurveyInAppState(
           survey: event.survey,
-          appliedIntervention: event.appliedIntervention));
+          appliedIntervention: event.appliedIntervention,
+          entity: event.entity));
     } else if (event is MainViewEvent) {
       emit(MainInAppState());
     } else if (event is GoToUserPageEvent) {
@@ -26,6 +28,9 @@ class InAppBloc extends Bloc<InAppEvent, InAppState> {
       ExecutedSurvey toSave = event.executedSurvey;
       toSave.appliedIntervention = event.appliedIntervention;
       await ExecutedSurveyRepository.saveExecutedSurvey(toSave);
+      print("executed survey saved");
+      event.organizationViewBloc.add(AddExecutedSurvey(
+          event.entity, event.appliedIntervention, event.executedSurvey));
       emit(MainInAppState());
     }
   }

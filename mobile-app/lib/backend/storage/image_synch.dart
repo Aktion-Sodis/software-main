@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_app/backend/Blocs/sync/sync_bloc.dart';
 import 'package:mobile_app/backend/Blocs/sync/sync_events.dart';
@@ -10,9 +11,13 @@ import 'dataStorePaths.dart';
 import 'storage_repository.dart';
 
 class SyncedFile {
-  SyncedFile(this.path);
+  SyncedFile(this.path) {
+    key = ValueKey(DateTime.now().toIso8601String());
+  }
 
   String path;
+
+  late Key key;
 
   Future<File?> file() async {
     File localCacheFile = await getCachePath();
@@ -29,7 +34,8 @@ class SyncedFile {
     if (!cached) {
       return null;
     }
-
+    key = ValueKey(DateTime.now().toIso8601String());
+    print("returning file: $key");
     return localCacheFile;
   }
 
@@ -46,26 +52,32 @@ class SyncedFile {
     }
     await Directory(appDocDir.path + "/" + toCreateDir).create(recursive: true);
     File localCacheFile = File('${appDocDir.path}/$path');
+    key = ValueKey(DateTime.now().toIso8601String());
+    print("returning cache path: $key");
     return localCacheFile;
   }
 
   Future<void> update(String utf8String) async {
     File localCacheFile = await getCachePath();
-    await localCacheFile.writeAsString(utf8String);
+    await localCacheFile.writeAsString(utf8String, flush: true);
     await StorageRepository.uploadFile(localCacheFile, path);
+    key = ValueKey(DateTime.now().toIso8601String());
   }
 
   Future<File?> updateAsPic(XFile xfile) async {
     var bytes = await xfile.readAsBytes();
     File localCacheFile = await getCachePath();
-    await localCacheFile.writeAsBytes(bytes);
+    await localCacheFile.writeAsBytes(bytes, flush: true);
+    key = ValueKey(DateTime.now().toIso8601String());
+    print("pic update finished: $key");
     return await getCachePath();
   }
 
   Future<File?> updateAsAudio(File file) async {
     File localCacheFile = await getCachePath();
-    await localCacheFile.writeAsBytes(file.readAsBytesSync());
+    await localCacheFile.writeAsBytes(file.readAsBytesSync(), flush: true);
     await StorageRepository.uploadFile(localCacheFile, path);
+    key = ValueKey(DateTime.now().toIso8601String());
     return await getCachePath();
   }
 
@@ -73,6 +85,7 @@ class SyncedFile {
     File localCacheFile = await getCachePath();
     await localCacheFile.delete();
     await StorageRepository.removeFile(path);
+    key = ValueKey(DateTime.now().toIso8601String());
   }
 
   Future<bool> sync(SyncBloc syncBloc) async {
