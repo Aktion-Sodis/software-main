@@ -75,6 +75,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
   void addTask() async {
     return openTaskForm(
+      entity: (context.read<InAppBloc>().state as SurveyInAppState).entity,
       context: context,
       taskBloc: context.read<TaskBloc>(),
       organizationViewBloc: context.read<OrganizationViewBloc>(),
