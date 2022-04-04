@@ -42,7 +42,7 @@ class MainMenuHomeState extends State<MainMenuHome> {
               //todo: add back button
               Container(
                   margin: EdgeInsets.only(left: width(context) * .1),
-                  child: Image.asset("assets/test/logo.png",
+                  child: Image.asset("assets/specificAssets/logo.png",
                       height: width(context) * .1)),
               SizedBox(width: width(context) * .1),
               BlocBuilder<SyncBloc, SyncState>(builder: (context, state) {

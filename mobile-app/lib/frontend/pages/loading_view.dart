@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/frontend/components/loadingsign.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
 
 class LoadingView extends StatelessWidget {
@@ -8,8 +9,15 @@ class LoadingView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-            child: Container(
-                width: width(context) * .6,
-                child: Image.asset("assets/test/logo.png"))));
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+          Container(
+              width: width(context) * .7,
+              child: Image.asset("assets/fixAssets/nisaba_logo.png")),
+          SizedBox(height: height(context) * .15),
+          loadingSign(context)
+        ])));
   }
 }
