@@ -18,4 +18,16 @@ samples, guidance on mobile development, and a full API reference.
 Update App Logo (specify path in pubspec):
 flutter pub run flutter_launcher_icons:main
 
-Update Name (specify in pubspec):
+Update Name Android:
+
+android/app/src/main/AndroidManifest.xml
+<application
+        android:name="io.flutter.app.FlutterApplication"
+        android:label="your_app_name"
+        android:icon="@mipmap/ic_launcher">
+
+Update Name iOS:
+
+ios/Runner/Info.plist
+<key>CFBundleName</key>
+<string>your_app_name</string>
