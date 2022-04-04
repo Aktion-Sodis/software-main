@@ -18,14 +18,12 @@ import 'package:mobile_app/app_navigator.dart';
 import 'package:mobile_app/services/hive_db_helper.dart';
 import 'package:mobile_app/services/photo_capturing.dart';
 
-
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveDBHelper.instance.init();
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp])
       .then((_) => runApp(const MyApp()));
-
 }
 
 class MyApp extends StatefulWidget {

@@ -106,7 +106,7 @@ class UpdatePasswordViewState extends State<UpdatePasswordView> {
                                       tag: 'Logo_Hero',
                                       child: ClipRRect(
                                           child: Image.asset(
-                                              "assets/test/logo.png"),
+                                              "assets/specificAssets/logo.png"),
                                           borderRadius:
                                               BorderRadius.circular(8)))))),
                       Container(

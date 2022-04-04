@@ -60,8 +60,18 @@ class SyncedFile {
   Future<void> update(String utf8String) async {
     File localCacheFile = await getCachePath();
     await localCacheFile.writeAsString(utf8String, flush: true);
-    await StorageRepository.uploadFile(localCacheFile, path);
+    StorageRepository.uploadFile(localCacheFile, path);
     key = ValueKey(DateTime.now().toIso8601String());
+  }
+
+  Future<File?> updateAsBytes(File file) async {
+    var bytes = await file.readAsBytes();
+    File localCacheFile = await getCachePath();
+    await localCacheFile.writeAsBytes(bytes, flush: true);
+    key = ValueKey(DateTime.now().toIso8601String());
+    StorageRepository.uploadFile(localCacheFile, path);
+    print("pic update finished: $key");
+    return await getCachePath();
   }
 
   Future<File?> updateAsPic(XFile xfile) async {
@@ -70,6 +80,7 @@ class SyncedFile {
     await localCacheFile.writeAsBytes(bytes, flush: true);
     key = ValueKey(DateTime.now().toIso8601String());
     print("pic update finished: $key");
+    StorageRepository.uploadFile(localCacheFile, path);
     return await getCachePath();
   }
 

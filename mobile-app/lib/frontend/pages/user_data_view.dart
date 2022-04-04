@@ -100,7 +100,6 @@ class UserDataViewState extends State<UserDataView> {
       setState(() {
         userPicFile = userPicFile;
       });
-
     }
   }
 
@@ -187,7 +186,6 @@ class UserDataViewState extends State<UserDataView> {
                 : null,
             body: SafeArea(child: BlocBuilder<UserBloc, UserState>(
                 builder: (buildContext, state) {
-
               return Column(
                 children: [
                   Expanded(
@@ -265,7 +263,6 @@ class UserDataViewState extends State<UserDataView> {
                                   EdgeInsets.only(top: defaultPadding(context)),
                               child: TextFormField(
                                 controller: textEditingControllerLastName,
-
                                 decoration: InputDecoration(
                                     prefixIcon:
                                         const Icon(FontAwesomeIcons.user),
@@ -276,7 +273,6 @@ class UserDataViewState extends State<UserDataView> {
                                     ? null
                                     : strings.user_please_enter_forename,
                               )),
-
                           Container(
                               margin:
                                   EdgeInsets.only(top: defaultPadding(context)),
@@ -356,10 +352,6 @@ class UserDataViewState extends State<UserDataView> {
                   )
                 ],
               );
-
-                              
-                              
-                           
             }))));
   }
 
