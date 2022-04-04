@@ -27,13 +27,15 @@ class CustomPicButton extends StatefulWidget {
   bool selected;
 
   CustomPicButton(
-      {this.onPressed,
+      {Key? key,
+      this.onPressed,
       required this.syncedFile,
       required this.size,
       required this.pressable,
       this.padding,
       this.defaultIconData,
-      this.selected = false});
+      this.selected = false})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -285,8 +287,8 @@ Widget executedSurveyRow(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CustomPicButton(
-                    syncedFile: SyncedFile(SurveyRepository.getIconFilePath(
-                        executedSurvey.survey)),
+                    syncedFile:
+                        SurveyRepository.getSurveyPic(executedSurvey.survey),
                     onPressed: () {},
                     size: Size(width(context) * .1, width(context) * .1),
                     pressable: false),
@@ -429,8 +431,8 @@ class InterventionFilterWidgetState extends State<InterventionFilterWidget> {
   }
 
   Widget mapWidget(int index) {
-    String filePath =
-        InterventionRepository.getInterventionIconPath(allInterventions[index]);
+    SyncedFile syncedFile =
+        InterventionRepository.getInterventionPic(allInterventions[index]);
 
     return CustomPicButton(
         onPressed: () {
@@ -438,7 +440,7 @@ class InterventionFilterWidgetState extends State<InterventionFilterWidget> {
             selectionChange(index);
           }
         },
-        syncedFile: SyncedFile(filePath),
+        syncedFile: syncedFile,
         size: widget.selectable
             ? Size(width(context) * .15, width(context) * .15)
             : Size(width(context) * .1, width(context) * .1),

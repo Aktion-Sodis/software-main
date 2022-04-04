@@ -165,8 +165,25 @@ class SurveyWidgetState extends State<SurveyWidget> {
     _pageController.addListener(() {
       setState(() {});
     });
-    syncedSurveyImageFile =
-        SyncedFile(SurveyRepository.getImageFilePath(widget.survey));
+    syncedSurveyImageFile = SurveyRepository.getSurveyPic(widget.survey);
+    picAndAudioAnswerFiles = {};
+    widget.survey.questions.forEach((element) {
+      if (element.type == QuestionType.PICTURE) {
+        picAndAudioAnswerFiles[element.id!] =
+            ExecutedSurveyRepository.getQuestionAnswerPic(
+                (context.read<InAppBloc>().state as SurveyInAppState)
+                    .appliedIntervention,
+                preliminaryExecutedSurveyId,
+                element);
+      } else if (element.type == QuestionType.AUDIO) {
+        picAndAudioAnswerFiles[element.id!] =
+            ExecutedSurveyRepository.getQuestionAnswerAudio(
+                (context.read<InAppBloc>().state as SurveyInAppState)
+                    .appliedIntervention,
+                preliminaryExecutedSurveyId,
+                element);
+      }
+    });
     super.initState();
   }
 
@@ -280,6 +297,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
       ],
     );
   }
+
+  late Map<String, SyncedFile> picAndAudioAnswerFiles;
 
   Widget mcQuestionWidget(
       {required BuildContext context,
@@ -463,23 +482,27 @@ class SurveyWidgetState extends State<SurveyWidget> {
           height: defaultPadding(context) * 2,
         ),
         AudioPlayerWidgetFromSyncFile(
-          syncedFile: ExecutedSurveyRepository.getQuestionAnswerAudio(
-              (context.read<InAppBloc>().state as SurveyInAppState)
-                  .appliedIntervention,
-              preliminaryExecutedSurveyId,
-              question),
+          key: picAndAudioAnswerFiles[question.id!]!.key,
+          syncedFile: picAndAudioAnswerFiles[question.id!],
         ),
         SizedBox(
           height: defaultPadding(context),
         ),
         getTakeAudioWidget(
-            question: question,
-            callback: () {},
-            context: context,
-            appliedIntervention:
-                (context.read<InAppBloc>().state as SurveyInAppState)
-                    .appliedIntervention,
-            executedSurveyId: preliminaryExecutedSurveyId),
+          syncedFile: picAndAudioAnswerFiles[question.id!]!,
+          callback: (sF) async {
+            setState(() {
+              picAndAudioAnswerFiles[question.id!] = sF;
+            });
+            if (answers[question] == null) {
+              answers[question] = QuestionAnswer(
+                  questionID: question.id!,
+                  date: DateTime.now(),
+                  type: question.type);
+            }
+          },
+          context: context,
+        )
       ],
     ));
   }
@@ -513,25 +536,27 @@ class SurveyWidgetState extends State<SurveyWidget> {
         SizedBox(
           height: defaultPadding(context) * 2,
         ),
-        imageForQuestion(
-            syncedFile: ExecutedSurveyRepository.getQuestionAnswerPic(
-                (context.read<InAppBloc>().state as SurveyInAppState)
-                    .appliedIntervention,
-                preliminaryExecutedSurveyId,
-                question)),
+        ImageFromSyncedFile(
+            key: picAndAudioAnswerFiles[question.id]!.key,
+            syncedFile: picAndAudioAnswerFiles[question.id]!),
         SizedBox(
           height: defaultPadding(context),
         ),
         getTakePhotoWidget(
-            question: question,
-            callback: () {
-              setState(() {});
-            },
-            context: context,
-            appliedIntervention:
-                (context.read<InAppBloc>().state as SurveyInAppState)
-                    .appliedIntervention,
-            executedSurveyID: preliminaryExecutedSurveyId),
+          syncedFile: picAndAudioAnswerFiles[question.id!]!,
+          callback: (sF) async {
+            setState(() {
+              picAndAudioAnswerFiles[question.id!] = sF;
+            });
+            if (answers[question] == null) {
+              answers[question] = QuestionAnswer(
+                  questionID: question.id!,
+                  date: DateTime.now(),
+                  type: question.type);
+            }
+          },
+          context: context,
+        ),
       ],
     ));
   }
@@ -657,6 +682,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
             : 0,
         survey: widget.survey,
         executedSurveyId: preliminaryExecutedSurveyId,
+        picAndAudioAnswerFiles: picAndAudioAnswerFiles,
         appliedIntervention:
             (context.read<InAppBloc>().state as SurveyInAppState)
                 .appliedIntervention,
@@ -797,10 +823,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
   }
 
   static Widget getTakeAudioWidget(
-      {required Question question,
-      required AppliedIntervention appliedIntervention,
-      required String executedSurveyId,
-      required VoidCallback callback,
+      {required SyncedFile syncedFile,
+      required ValueChanged<SyncedFile> callback,
       required BuildContext context}) {
     return RecorderWidget(
         restingViewBuilder: (a) => Container(
@@ -811,11 +835,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
         recordingViewBuilder: (a) => Container(
               child: Icon(MdiIcons.pause),
             ),
-        onAudioRecorded: (path) {
-          SyncedFile syncedFile =
-              ExecutedSurveyRepository.getQuestionAnswerAudio(
-                  appliedIntervention, executedSurveyId, question);
-          syncedFile.updateAsAudio(File(path));
+        onAudioRecorded: (path) async {
+          await syncedFile.updateAsAudio(File(path));
+          callback(syncedFile);
         },
         loadingViewBuilder: () => Container());
     return MaterialButton(
@@ -830,32 +852,28 @@ class SurveyWidgetState extends State<SurveyWidget> {
   }
 
   static Widget getTakePhotoWidget(
-      {required Question question,
-      required executedSurveyID,
-      required AppliedIntervention appliedIntervention,
-      required VoidCallback callback,
+      {required SyncedFile syncedFile,
+      required ValueChanged<SyncedFile> callback,
       required BuildContext context}) {
     //return CustomIconButton(onPressed, iconData, size, true)
     return CustomIconButton(() async {
       XFile? r = await CameraFunctionality.takePicture(context: context);
       if (r != null) {
-        SyncedFile syncedFile = ExecutedSurveyRepository.getQuestionAnswerPic(
-            appliedIntervention, executedSurveyID, question);
         await syncedFile.updateAsPic(r);
+        callback.call(syncedFile);
       }
-      callback.call();
     }, MdiIcons.camera, const Size(50, 50), true);
   }
 
-  static Widget imageForQuestion({required SyncedFile syncedFile}) {
-    return ImageFromSyncedFile(
-      syncedFile: syncedFile,
-    );
+  static ImageFromSyncedFile imageForQuestion(
+      {required SyncedFile syncedFile}) {
+    return ImageFromSyncedFile(syncedFile: syncedFile, key: ValueKey(0));
   }
 
   static Widget questionSummary(
       {Function? onEdit,
       required Question question,
+      SyncedFile? syncedFile,
       QuestionAnswer? questionAnswer,
       required AppliedIntervention appliedIntervention,
       required String executedSurveyId,
@@ -897,15 +915,29 @@ class SurveyWidgetState extends State<SurveyWidget> {
               SizedBox(
                 height: defaultPadding(context),
               ),
-              imageForQuestion(
-                  syncedFile: ExecutedSurveyRepository.getQuestionAnswerPic(
-                      appliedIntervention, executedSurveyId, question)),
+              ImageFromSyncedFile(syncedFile: syncedFile, key: syncedFile?.key),
             ],
           );
           break;
         case QuestionType.TEXT:
           answerWidget = Text(questionAnswer.text ?? '',
               style: Theme.of(context).textTheme.bodyText1);
+          break;
+        case QuestionType.AUDIO:
+          answerWidget = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: defaultPadding(context),
+              ),
+              Text(yourShot, style: Theme.of(context).textTheme.bodyText1),
+              SizedBox(
+                height: defaultPadding(context),
+              ),
+              AudioPlayerWidgetFromSyncFile(
+                  key: syncedFile?.key, syncedFile: syncedFile)
+            ],
+          );
           break;
         default:
           answerWidget = Container();
@@ -915,54 +947,60 @@ class SurveyWidgetState extends State<SurveyWidget> {
       answerWidget = Container();
     }
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
+    if (questionAnswer != null) {
+      return Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                  child: Padding(
+                padding: EdgeInsets.only(bottom: defaultPadding(context)) * 1,
                 child: Padding(
-              padding: EdgeInsets.only(bottom: defaultPadding(context)) * 1,
-              child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: defaultPadding(context)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      question.text,
-                      style: Theme.of(context).textTheme.headline2,
-                    ),
-                    if (questionAnswer != null &&
-                        ((questionAnswer.type == QuestionType.MULTIPLECHOICE &&
-                                questionAnswer.questionOptions!.isNotEmpty) ||
-                            questionAnswer.type == QuestionType.SINGLECHOICE ||
-                            questionAnswer.type == QuestionType.TEXT))
-                      SizedBox(
-                        height: defaultPadding(context),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: defaultPadding(context)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        question.text,
+                        style: Theme.of(context).textTheme.headline2,
                       ),
-                    answerWidget,
-                  ],
-                ),
-              ),
-            )),
-            if (onEdit != null)
-              Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    defaultPadding(context) * 2,
-                    defaultPadding(context),
-                    0,
-                    defaultPadding(context),
+                      if (questionAnswer != null &&
+                          ((questionAnswer.type ==
+                                      QuestionType.MULTIPLECHOICE &&
+                                  questionAnswer.questionOptions!.isNotEmpty) ||
+                              questionAnswer.type ==
+                                  QuestionType.SINGLECHOICE ||
+                              questionAnswer.type == QuestionType.TEXT))
+                        SizedBox(
+                          height: defaultPadding(context),
+                        ),
+                      answerWidget,
+                    ],
                   ),
-                  child:
-                      getEditQuestionWidget(context: context, onEdit: onEdit))
-          ],
-        ),
-        CommonWidgets.separator(context: context),
-        SizedBox(
-          height: defaultPadding(context),
-        ),
-      ],
-    );
+                ),
+              )),
+              if (onEdit != null)
+                Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      defaultPadding(context) * 2,
+                      defaultPadding(context),
+                      0,
+                      defaultPadding(context),
+                    ),
+                    child:
+                        getEditQuestionWidget(context: context, onEdit: onEdit))
+            ],
+          ),
+          CommonWidgets.separator(context: context),
+          SizedBox(
+            height: defaultPadding(context),
+          ),
+        ],
+      );
+    } else {
+      return Container();
+    }
   }
 
   static Widget questionTitleWidget(
@@ -1016,12 +1054,21 @@ class SurveyWidgetState extends State<SurveyWidget> {
       required Map<Question, QuestionAnswer> answers,
       required BuildContext context,
       String? preliminaryId}) async {
-    List<QuestionAnswer> surveyAnswersAsList = List.generate(
+    List<QuestionAnswer> surveyAnswersAsList = [];
+    for (Question question in survey.questions) {
+      if (answers.keys.any((element) => element.id == question.id)) {
+        surveyAnswersAsList.add(QuestionAnswer(
+            questionID: question.id!,
+            date: DateTime.now(),
+            type: question.type));
+      }
+    }
+    /*List.generate(
         survey.questions.length,
         (index) => QuestionAnswer(
             questionID: survey.questions[index].id!,
             date: DateTime.now(),
-            type: survey.questions[index].type));
+            type: survey.questions[index].type));*/
     for (MapEntry<Question, QuestionAnswer> pair in answers.entries) {
       int toReplace = surveyAnswersAsList
           .indexWhere((element) => element.questionID == pair.key.id);
@@ -1041,7 +1088,10 @@ class SurveyWidgetState extends State<SurveyWidget> {
         date: DateTime.now(),
         answers: surveyAnswersAsList);
     context.read<InAppBloc>().add(FinishAndSaveExecutedSurvey(
-        executedSurvey, surveyState.appliedIntervention));
+        executedSurvey,
+        surveyState.appliedIntervention,
+        (context.read<InAppBloc>().state as SurveyInAppState).entity,
+        context.read<OrganizationViewBloc>()));
   }
 
   static Widget successFullyEndedSurvey(
@@ -1077,6 +1127,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
       double? progress,
       required Survey survey,
       required Map<Question, QuestionAnswer> answers,
+      required Map<String, SyncedFile> picAndAudioAnswerFiles,
       required AppliedIntervention appliedIntervention,
       required String executedSurveyId,
       QuestionEditor? onEditGenerator,
@@ -1127,6 +1178,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
                       executedSurveyId: executedSurveyId,
                       question: survey.questions[index],
                       questionAnswer: answers[survey.questions[index]],
+                      syncedFile:
+                          picAndAudioAnswerFiles[survey.questions[index].id],
                       context: context,
                       onEdit: onEditGenerator != null
                           ? onEditGenerator(survey.questions[index])
@@ -1262,14 +1315,13 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar>
       ..addListener(() {
         setState(() {});
       });
+
     super.initState();
   }
 }
 
 class _AudioPlayerWidgetFromSyncFileState
     extends State<AudioPlayerWidgetFromSyncFile> {
-  File? audioFile;
-
   @override
   Widget build(BuildContext context) {
     return audioFile == null
@@ -1281,17 +1333,23 @@ class _AudioPlayerWidgetFromSyncFileState
             playingViewBuilder: (a) => const Icon(MdiIcons.pause));
   }
 
+  bool loading = true;
+  File? audioFile;
+
   @override
   void initState() {
-    widget.syncedFile?.file().then((value) {
-      try {
+    print("reinitializing image widget");
+    widget.syncedFile?.file().then((value) async {
+      audioFile = value;
+      if (mounted) {
         setState(() {
-          audioFile = value;
+          audioFile = audioFile;
+          loading = false;
         });
-      } on Exception catch (e) {
-        audioFile = value;
+      } else {
+        audioFile = audioFile;
+        loading = false;
       }
     });
-    super.initState();
   }
 }

@@ -90,8 +90,6 @@ class AppliedInterventionRepository {
 
   //todo: implement pic logic
 
-  static String getFotoPath(AppliedIntervention appliedIntervention) => "";
-
   static SyncedFile appliedInterventionPic(
       AppliedIntervention appliedIntervention) {
     String path = dataStorePath(

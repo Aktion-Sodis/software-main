@@ -38,10 +38,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         );
         emit(state.copyWith(formStatus: SubmissionSuccess()));
         print("now launching session");
-
-        if (userId == "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD") {
-          //todo: ask for password update
-        }
+        //todo: hier bezüglich offline login arbeiten
 
         authCubit.launchSession(AuthCredentials(
           userName: state.emailOrPhoneNumber,

@@ -26,12 +26,6 @@ class SurveyRepository {
     return _populateList(results);
   }
 
-  //todo: implement pic
-  static String getIconFilePath(Survey survey) => "";
-
-  //todo: implement pic
-  static String getImageFilePath(Survey survey) => "";
-
   static Future<amp.Survey> _populate(amp.Survey survey,
       {amp.Intervention? passedIntervention}) async {
     amp.Survey toReturn = survey;

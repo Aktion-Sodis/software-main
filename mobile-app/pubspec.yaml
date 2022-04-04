@@ -28,7 +28,7 @@ dependencies:
   amplify_storage_s3: ^0.4.0-rc.1
 
   
-  advance_pdf_viewer: ^2.0.1
+  advance_pdf_viewer_fork: ^2.0.0
 
   
 

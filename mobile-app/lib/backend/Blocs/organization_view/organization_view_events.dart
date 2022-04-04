@@ -16,6 +16,14 @@ class NavigateToEntityOverview extends OrganizationViewEvent {
   NavigateToEntityOverview(this.entity);
 }
 
+class AddExecutedSurvey extends OrganizationViewEvent {
+  Entity entity;
+  AppliedIntervention appliedIntervention;
+  ExecutedSurvey executedSurvey;
+
+  AddExecutedSurvey(this.entity, this.appliedIntervention, this.executedSurvey);
+}
+
 class NavigateToEntityTasks extends OrganizationViewEvent {
   Entity entity;
   NavigateToEntityTasks(this.entity);
@@ -54,12 +62,14 @@ class NavigateToEntityAppliedInterventionDetail extends OrganizationViewEvent {
 class StartSurvey extends OrganizationViewEvent {
   Survey survey;
   AppliedIntervention appliedIntervention;
-  StartSurvey(this.survey, this.appliedIntervention);
+  Entity entity;
+  StartSurvey(this.survey, this.appliedIntervention, this.entity);
 }
 
 class AddEntity extends OrganizationViewEvent {
   Entity entity;
-  AddEntity(this.entity);
+  bool isDaughter;
+  AddEntity(this.entity, {this.isDaughter = false});
 }
 
 class UpdateEntity extends OrganizationViewEvent {
@@ -80,3 +90,5 @@ class UpdateAppliedIntervention extends OrganizationViewEvent {
 
   UpdateAppliedIntervention(this.entity, this.appliedIntervention);
 }
+
+class UpdatePic extends OrganizationViewEvent {}
