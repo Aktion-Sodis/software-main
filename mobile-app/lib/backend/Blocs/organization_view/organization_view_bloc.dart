@@ -6,6 +6,7 @@ import 'package:mobile_app/backend/Blocs/organization_view/organization_view_sta
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/repositories/AppliedInterventionRepository.dart';
 import 'package:mobile_app/backend/repositories/EntityRepository.dart';
+import 'package:mobile_app/frontend/pages/task_form/task_form.dart';
 import 'package:mobile_app/frontend/strings.dart' as strings;
 
 class OrganizationViewBloc
@@ -152,7 +153,35 @@ class OrganizationViewBloc
       } else if (event is StartSurvey) {
         inAppBloc.add(PerformSurveyEvent(
             survey: event.survey,
-            appliedIntervention: event.appliedIntervention));
+            appliedIntervention: event.appliedIntervention,
+            entity: event.entity));
+      } else if (event is AddExecutedSurvey) {
+        int entityIndex = loadedState.allEntities
+            .indexWhere((element) => element.id == event.entity.id);
+        int currentListEntitiesIndex = loadedState.currentListEntities
+            .indexWhere((element) => element.id == event.entity.id);
+        bool isCurrentDetailEntity =
+            loadedState.currentDetailEntity?.id == event.entity.id;
+        Entity toEdit = loadedState.allEntities[entityIndex];
+        int aIIndex = toEdit.appliedInterventions.indexWhere(
+            (element) => element.id == event.appliedIntervention.id);
+        toEdit.appliedInterventions[aIIndex].executedSurveys
+            .add(event.executedSurvey);
+        List<Entity> allEntitiests = List.from(loadedState.allEntities);
+        List<Entity> currentListEntitiests =
+            List.from(loadedState.currentListEntities);
+        Entity? cDE = loadedState.currentDetailEntity;
+        allEntitiests[entityIndex] = toEdit;
+        if (currentListEntitiesIndex >= 0) {
+          currentListEntitiests[currentListEntitiesIndex] = toEdit;
+        }
+        if (isCurrentDetailEntity) {
+          cDE = toEdit;
+        }
+        emit(loadedState.copyWith(
+            allEntities: allEntitiests,
+            currentListEntities: currentListEntitiests,
+            currentDetailEntity: cDE));
       } else if (event is AddEntity) {
         Entity newEntity = event.entity;
         String id = await EntityRepository.createEntity(newEntity);
@@ -160,7 +189,10 @@ class OrganizationViewBloc
         List<Entity> newAllEntities = loadedState.allEntities;
         newAllEntities.add(newEntity);
         List<Entity> newCurrentEntities = loadedState.currentListEntities;
-        newCurrentEntities.add(newEntity);
+        if (!event.isDaughter) {
+          newCurrentEntities.add(newEntity);
+        }
+
         emit(loadedState.copyWith(
             allEntities: newAllEntities,
             currentListEntities: newCurrentEntities));
@@ -180,6 +212,7 @@ class OrganizationViewBloc
         emit(loadedState.copyWith(
             allEntities: newAllEntities,
             currentListEntities: newCurrentEntities,
+            appBarString: event.entity.name,
             currentDetailEntity: event.entity));
       } else if (event is AddAppliedIntervention) {
         String id =
@@ -245,13 +278,24 @@ class OrganizationViewBloc
             currentDetailAppliedIntervention: event.appliedIntervention));
       } else if (event is NavigateToExecutedSurvey) {
         emit(loadedState.copyWith(
-          appBarString: event.executedSurvey.date.toString() +
+          appBarString: TaskForm.formatDate(event.executedSurvey.date) +
               ": " +
               event.executedSurvey.survey.name,
           executedSurveyToDisplay: event.executedSurvey,
           currentDetailEntity: loadedState.currentDetailEntity,
           organizationViewType: OrganizationViewType.EXECUTEDSURVEY,
         ));
+      } else if (event is UpdatePic) {
+        emit(loadedState.copyWith(
+            allEntities: loadedState.allEntities,
+            organizationViewType: loadedState.organizationViewType,
+            currentDetailEntity: loadedState.currentDetailEntity,
+            currentListEntities: loadedState.currentListEntities,
+            appBarString: loadedState.appBarString,
+            addEntityPossible: loadedState.addEntityPossible,
+            currentDetailAppliedIntervention:
+                loadedState.currentDetailAppliedIntervention,
+            executedSurveyToDisplay: loadedState.executedSurveyToDisplay));
       }
     }
   }

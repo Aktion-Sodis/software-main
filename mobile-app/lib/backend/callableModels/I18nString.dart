@@ -48,6 +48,16 @@ class I18nString {
     languageTexts = I18nString.languageTexts;
   }
 
-  amp.I18nString toAmplifyModel() =>
-      amp.I18nString(languageKeys: languageKeys, languageTexts: languageTexts);
+  amp.I18nString toAmplifyModel() {
+    List<String> sortedkeys =
+        List.generate(languageKeys.length, (index) => languageKeys[index]);
+    sortedkeys.sort();
+    List<String> sortedLanguageTextes = [];
+    for (String key in sortedkeys) {
+      int index = languageKeys.indexOf(key);
+      sortedLanguageTextes.add(languageTexts[index]);
+    }
+    return amp.I18nString(
+        languageKeys: sortedkeys, languageTexts: sortedLanguageTextes);
+  }
 }

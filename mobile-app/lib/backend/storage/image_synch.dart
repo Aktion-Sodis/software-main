@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_app/backend/Blocs/sync/sync_bloc.dart';
 import 'package:mobile_app/backend/Blocs/sync/sync_events.dart';
@@ -10,9 +11,13 @@ import 'dataStorePaths.dart';
 import 'storage_repository.dart';
 
 class SyncedFile {
-  SyncedFile(this.path);
+  SyncedFile(this.path) {
+    key = ValueKey(DateTime.now().toIso8601String());
+  }
 
   String path;
+
+  late Key key;
 
   Future<File?> file() async {
     File localCacheFile = await getCachePath();
@@ -29,7 +34,8 @@ class SyncedFile {
     if (!cached) {
       return null;
     }
-
+    key = ValueKey(DateTime.now().toIso8601String());
+    print("returning file: $key");
     return localCacheFile;
   }
 
@@ -46,24 +52,32 @@ class SyncedFile {
     }
     await Directory(appDocDir.path + "/" + toCreateDir).create(recursive: true);
     File localCacheFile = File('${appDocDir.path}/$path');
+    key = ValueKey(DateTime.now().toIso8601String());
+    print("returning cache path: $key");
     return localCacheFile;
   }
 
   Future<void> update(String utf8String) async {
     File localCacheFile = await getCachePath();
-    await localCacheFile.writeAsString(utf8String);
+    await localCacheFile.writeAsString(utf8String, flush: true);
     await StorageRepository.uploadFile(localCacheFile, path);
+    key = ValueKey(DateTime.now().toIso8601String());
   }
 
   Future<File?> updateAsPic(XFile xfile) async {
-    await update(await xfile.readAsString());
+    var bytes = await xfile.readAsBytes();
+    File localCacheFile = await getCachePath();
+    await localCacheFile.writeAsBytes(bytes, flush: true);
+    key = ValueKey(DateTime.now().toIso8601String());
+    print("pic update finished: $key");
     return await getCachePath();
   }
 
   Future<File?> updateAsAudio(File file) async {
     File localCacheFile = await getCachePath();
-    await localCacheFile.writeAsBytes(file.readAsBytesSync());
+    await localCacheFile.writeAsBytes(file.readAsBytesSync(), flush: true);
     await StorageRepository.uploadFile(localCacheFile, path);
+    key = ValueKey(DateTime.now().toIso8601String());
     return await getCachePath();
   }
 
@@ -71,36 +85,41 @@ class SyncedFile {
     File localCacheFile = await getCachePath();
     await localCacheFile.delete();
     await StorageRepository.removeFile(path);
+    key = ValueKey(DateTime.now().toIso8601String());
   }
 
   Future<bool> sync(SyncBloc syncBloc) async {
-    syncBloc.add(StartLoadingFileEvent());
-    File localCacheFile = await getCachePath();
-    bool cached = await localCacheFile.exists();
-    if (!cached) {
-      await StorageRepository.downloadFile(localCacheFile, path);
-    } else {
-      ListResult listResult = await Amplify.Storage.list(path: path);
-      if (listResult.items.isEmpty) {
-        StorageRepository.uploadFile(await getCachePath(), path);
+    try {
+      syncBloc.add(StartLoadingFileEvent());
+      File localCacheFile = await getCachePath();
+      bool cached = await localCacheFile.exists();
+      if (!cached) {
+        await StorageRepository.downloadFile(localCacheFile, path);
       } else {
-        DateTime? lastModifiedLocal;
-        try {
-          lastModifiedLocal = await localCacheFile.lastModified();
-        } catch (e) {}
-        DateTime? lastModifiedOnline = listResult.items.first.lastModified;
-        if (lastModifiedOnline == null) {
-          await StorageRepository.uploadFile(localCacheFile, path);
-        } else if (lastModifiedLocal == null) {
-          await StorageRepository.downloadFile(localCacheFile, path);
-        } else if (lastModifiedLocal.isAfter(lastModifiedOnline)) {
-          await StorageRepository.uploadFile(localCacheFile, path);
-        } else if (lastModifiedLocal.isBefore(lastModifiedOnline)) {
-          await StorageRepository.downloadFile(localCacheFile, path);
+        ListResult listResult = await Amplify.Storage.list(path: path);
+        if (listResult.items.isEmpty) {
+          StorageRepository.uploadFile(await getCachePath(), path);
+        } else {
+          DateTime? lastModifiedLocal;
+          try {
+            lastModifiedLocal = await localCacheFile.lastModified();
+          } catch (e) {}
+          DateTime? lastModifiedOnline = listResult.items.first.lastModified;
+          if (lastModifiedOnline == null) {
+            await StorageRepository.uploadFile(localCacheFile, path);
+          } else if (lastModifiedLocal == null) {
+            await StorageRepository.downloadFile(localCacheFile, path);
+          } else if (lastModifiedLocal.isAfter(lastModifiedOnline)) {
+            await StorageRepository.uploadFile(localCacheFile, path);
+          } else if (lastModifiedLocal.isBefore(lastModifiedOnline)) {
+            await StorageRepository.downloadFile(localCacheFile, path);
+          }
         }
       }
+      syncBloc.add(LoadedFileEvent());
+      return true;
+    } catch (e) {
+      return false;
     }
-    syncBloc.add(LoadedFileEvent());
-    return true;
   }
 }

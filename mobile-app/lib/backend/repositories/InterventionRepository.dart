@@ -37,10 +37,6 @@ class InterventionRepository {
         (index) => Intervention.fromAmplifyModel(populated[index]));
   }
 
-  //todo: implement pic
-  static String getInterventionIconPath(Intervention intervention) => "";
-  static String getInterventionImagePath(Intervention intervention) => "";
-
   static Future<amp.Intervention?> getAmplifyInterventionBySurvey(
       amp.Survey survey) async {
     /*var interventions = await Amplify.DataStore.query(

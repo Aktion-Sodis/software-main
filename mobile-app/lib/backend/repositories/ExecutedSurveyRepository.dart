@@ -63,6 +63,7 @@ class ExecutedSurveyRepository {
   static Future<ExecutedSurvey> saveExecutedSurvey(
       ExecutedSurvey executedSurvey) async {
     executedSurvey.id = executedSurvey.id ?? UUID.getUUID();
+    print("now chaning executed survey to amp model");
     amp.ExecutedSurvey toSave = executedSurvey.toAmplifyModel();
     //todo: testen ob applied intervention auch gespeichert werden muss
     Amplify.DataStore.save(toSave);

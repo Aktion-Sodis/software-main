@@ -16,6 +16,7 @@ import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/repositories/AppliedInterventionRepository.dart';
 import 'package:mobile_app/backend/repositories/EntityRepository.dart';
+import 'package:mobile_app/backend/repositories/ExecutedSurveyRepository.dart';
 import 'package:mobile_app/backend/repositories/InterventionRepository.dart';
 import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
 import 'package:mobile_app/backend/storage/image_synch.dart';
@@ -146,6 +147,8 @@ class MainMenuOrganization extends StatelessWidget {
       switch (organizationViewState.organizationViewType) {
         case OrganizationViewType.LIST:
           return Container(
+              key:
+                  ValueKey(organizationViewState.keyDateTime.toIso8601String()),
               child: ListWidget(
                   key:
                       ValueKey(organizationViewState.currentListEntities.first),
@@ -168,7 +171,13 @@ class MainMenuOrganization extends StatelessWidget {
           break;
         case OrganizationViewType.OVERVIEW:
           return Container(
+              key: ValueKey(
+                  organizationViewState.keyDateTime.toIso8601String() +
+                      "overview-container"),
               child: OverviewWidget(
+                  key: ValueKey(
+                      organizationViewState.keyDateTime.toIso8601String() +
+                          "Overview"),
                   entity: organizationViewState.currentDetailEntity!,
                   onTasksTapped: (entity) {
                     context
@@ -193,36 +202,52 @@ class MainMenuOrganization extends StatelessWidget {
                         context
                             .read<OrganizationViewBloc>()
                             .add(UpdateEntity(value));
+                      } else {
+                        context.read<OrganizationViewBloc>().add(UpdatePic());
                       }
                     });
                   }));
         case OrganizationViewType.APPLIEDINTERVENTIONS:
           return Container(
+              key:
+                  ValueKey(organizationViewState.keyDateTime.toIso8601String()),
               child: AppliedInterventionOverviewPage(
                   key: ValueKey(organizationViewState.currentDetailEntity)));
         case OrganizationViewType.APPLIEDINTERVENTIONDETAIL:
           return Container(
+              key:
+                  ValueKey(organizationViewState.keyDateTime.toIso8601String()),
               child: AppliedInterventionPage(
                   key: ValueKey(
                       organizationViewState.currentDetailAppliedIntervention)));
         case OrganizationViewType.SURVEYS:
           return Container(
+              key:
+                  ValueKey(organizationViewState.keyDateTime.toIso8601String()),
               child: SurveyWidget(
                   key: ValueKey(organizationViewState.currentDetailEntity)));
           break;
         case OrganizationViewType.TASKS:
           return Container(
+              key:
+                  ValueKey(organizationViewState.keyDateTime.toIso8601String()),
               child: TaskWidget(
                   entity: organizationViewState.currentDetailEntity,
                   key: ValueKey(organizationViewState.currentDetailEntity)));
           break;
         case OrganizationViewType.HISTORY:
-          return ExecutedSurveyHistory(
-              entity: organizationViewState.currentDetailEntity!);
+          return Container(
+              key:
+                  ValueKey(organizationViewState.keyDateTime.toIso8601String()),
+              child: ExecutedSurveyHistory(
+                  entity: organizationViewState.currentDetailEntity!));
         case OrganizationViewType.EXECUTEDSURVEY:
-          return ExecutedSurveyWidget(
-            organizationViewState.executedSurveyToDisplay!,
-          );
+          return Container(
+              key:
+                  ValueKey(organizationViewState.keyDateTime.toIso8601String()),
+              child: ExecutedSurveyWidget(
+                organizationViewState.executedSurveyToDisplay!,
+              ));
 
         default:
           return Container();
@@ -338,7 +363,10 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
             ? (cd.intValue.toString())
             : (cd.stringValue ?? "");
       });
+    } else {
+      preliminaryEntityId = UUID.getUUID();
     }
+    syncedFile = EntityRepository.getEntityPicByID(preliminaryEntityId!);
     super.initState();
   }
 
@@ -382,37 +410,27 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
       } else {
         I18nString nameToSet = widget.entity!.name_ml;
         nameToSet.text = nameEditingController.text;
-        I18nString description = widget.entity!.name_ml;
+        I18nString description = widget.entity!.description_ml;
         description.text = descriptionEditingController.text;
         Entity toSave = widget.entity!;
         toSave.name_ml = nameToSet;
         toSave.description_ml = description;
         toSave.customData = appliedCustomDatas;
+
         Navigator.of(context).pop(toSave);
       }
     }
   }
 
+  late SyncedFile syncedFile;
+
   void updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
     if (r != null) {
-      if (entity == null && preliminaryEntityId == null) {
-        preliminaryEntityId = UUID.getUUID();
-      }
-      SyncedFile syncedFile = getEntityPic()!;
+      print("updating entity image: ${syncedFile.key.toString()}");
       await syncedFile.updateAsPic(r);
       setStateIfMounted(() {});
     }
-  }
-
-  SyncedFile? getEntityPic() {
-    if (entity != null) {
-      return EntityRepository.getEntityPic(entity!);
-    }
-    if (preliminaryEntityId != null) {
-      return EntityRepository.getEntityPicByID(preliminaryEntityId!);
-    }
-    return null;
   }
 
   void setStateIfMounted(Function function) {
@@ -435,10 +453,11 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
             fit: StackFit.expand,
             children: [
               ImageWidget(
+                key: syncedFile.key,
                 width: width(context) * .92,
                 height: height(context) * .2,
                 borderRadius: BorderRadius.circular(8),
-                imageFile: getEntityPic(),
+                imageFile: syncedFile,
               ),
               Positioned(
                   right: defaultPadding(context),
@@ -490,86 +509,97 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
         top: false,
         child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
-            body: Container(
-              child: Column(
-                children: [
-                  Container(
-                      height: height(context) * .1,
-                      width: width(context),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                                alignment: Alignment.center,
-                                margin: EdgeInsets.symmetric(
-                                    vertical: defaultPadding(context)),
-                                child: CommonWidgets.defaultBackwardButton(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: defaultPadding(context)),
-                                    context: context,
-                                    goBack: () => Navigator.of(context).pop())),
-                            Expanded(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                      child: Container(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                              strings
-                                                  .organization_view_dialog_add_entity,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline2))),
-                                ],
-                              ),
-                            )
-                          ])),
-                  Expanded(
-                      child: Form(
-                          key: _formKey,
-                          child: Container(
-                              child: Scrollbar(
-                                  child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: columnChildren(),
-                            ),
-                          ))))),
-                  Container(
-                      margin: EdgeInsets.all(defaultPadding(context)),
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                            textStyle: MaterialStateProperty.all(
-                                TextStyle(fontSize: 18)),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8))),
-                            minimumSize: MaterialStateProperty.all(Size(
-                                width(context) * .92, width(context) * .12)),
-                            backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context)
-                                    .colorScheme
-                                    .secondary), //todo: change
-                          ),
-                          onPressed: save,
-                          child: Center(
+            body: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom <
+                            defaultPadding(context)
+                        ? defaultPadding(context)
+                        : MediaQuery.of(context).padding.bottom),
+                child: Container(
+                  child: Column(
+                    children: [
+                      Container(
+                          height: height(context) * .1,
+                          width: width(context),
+                          child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: defaultPadding(context)),
+                                    child: CommonWidgets.defaultBackwardButton(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                defaultPadding(context)),
+                                        context: context,
+                                        goBack: () =>
+                                            Navigator.of(context).pop())),
+                                Expanded(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                          child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  strings
+                                                      .organization_view_dialog_add_entity,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline2))),
+                                    ],
+                                  ),
+                                )
+                              ])),
+                      Expanded(
+                          child: Form(
+                              key: _formKey,
                               child: Container(
-                                  child: Text(
-                                      create
-                                          ? strings
-                                              .organization_view_entity_save_entity
-                                          : strings
-                                              .organization_view_entity_save_changes,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSecondary))))))
-                ],
-              ),
-            )));
+                                  child: Scrollbar(
+                                      child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: columnChildren(),
+                                ),
+                              ))))),
+                      Container(
+                          margin: EdgeInsets.all(defaultPadding(context)),
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                textStyle: MaterialStateProperty.all(
+                                    TextStyle(fontSize: 18)),
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8))),
+                                minimumSize: MaterialStateProperty.all(Size(
+                                    width(context) * .92,
+                                    width(context) * .12)),
+                                backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context)
+                                        .colorScheme
+                                        .secondary), //todo: change
+                              ),
+                              onPressed: save,
+                              child: Center(
+                                  child: Container(
+                                      child: Text(
+                                          create
+                                              ? strings
+                                                  .organization_view_entity_save_entity
+                                              : strings
+                                                  .organization_view_entity_save_changes,
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondary))))))
+                    ],
+                  ),
+                ))));
   }
 }
 
@@ -589,154 +619,161 @@ class ListWidget extends StatelessWidget {
       required Key key})
       : super(key: key);
 
-  Widget listItem(BuildContext buildContext, int index) => Card(
-      margin: EdgeInsets.symmetric(
-          horizontal: defaultPadding(buildContext),
-          vertical: defaultPadding(buildContext) / 2),
-      child: Container(
-          child: Stack(
-        fit: StackFit.passthrough,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ImageWidget(
-                imageFile: EntityRepository.getEntityPic(entities[index]),
-                width: width(buildContext) - defaultPadding(buildContext) * 2,
-                height: height(buildContext) * .2,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-              ),
-              Container(
-                padding: EdgeInsets.only(
-                    left: defaultPadding(buildContext),
-                    right: defaultPadding(buildContext),
-                    top: defaultPadding(buildContext),
-                    bottom: parentEntityName == ""
-                        ? defaultPadding(buildContext)
-                        : 0),
-                child: Text(entities[index].name,
-                    style: Theme.of(buildContext).textTheme.headline2),
-              ),
-              if (parentEntityName != "")
+  Widget listItem(BuildContext buildContext, int index) {
+    SyncedFile imageFile = EntityRepository.getEntityPic(entities[index]);
+    return Card(
+        margin: EdgeInsets.symmetric(
+            horizontal: defaultPadding(buildContext),
+            vertical: defaultPadding(buildContext) / 2),
+        child: Container(
+            child: Stack(
+          fit: StackFit.passthrough,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ImageWidget(
+                  imageFile: imageFile,
+                  key: imageFile.key,
+                  width: width(buildContext) - defaultPadding(buildContext) * 2,
+                  height: height(buildContext) * .2,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                ),
                 Container(
                   padding: EdgeInsets.only(
                       left: defaultPadding(buildContext),
                       right: defaultPadding(buildContext),
                       top: defaultPadding(buildContext),
-                      bottom: defaultPadding(buildContext)),
-                  child: Text(parentEntityName,
-                      style: Theme.of(buildContext).textTheme.subtitle2),
+                      bottom: parentEntityName == ""
+                          ? defaultPadding(buildContext)
+                          : 0),
+                  child: Text(entities[index].name,
+                      style: Theme.of(buildContext).textTheme.headline2),
                 ),
-              if (organizatiOnViewState.hasChildren(entities[index].id!))
-                Container(
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                        textStyle:
-                            MaterialStateProperty.all(TextStyle(fontSize: 18)),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8))),
-                        minimumSize: MaterialStateProperty.all(Size(
-                            width(buildContext) * .84,
-                            width(buildContext) * .12)),
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(buildContext)
-                                .colorScheme
-                                .secondary), //todo: change
-                      ),
-                      onPressed: () {
-                        onChildTapped(entities[index]);
-                      },
-                      child: Center(
-                          child: Icon(FontAwesomeIcons.arrowRight,
-                              color: Theme.of(buildContext)
+                if (parentEntityName != "")
+                  Container(
+                    padding: EdgeInsets.only(
+                        left: defaultPadding(buildContext),
+                        right: defaultPadding(buildContext),
+                        top: defaultPadding(buildContext),
+                        bottom: defaultPadding(buildContext)),
+                    child: Text(parentEntityName,
+                        style: Theme.of(buildContext).textTheme.subtitle2),
+                  ),
+                if (organizatiOnViewState.hasChildren(entities[index].id!))
+                  Container(
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                          textStyle: MaterialStateProperty.all(
+                              TextStyle(fontSize: 18)),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8))),
+                          minimumSize: MaterialStateProperty.all(Size(
+                              width(buildContext) * .84,
+                              width(buildContext) * .12)),
+                          backgroundColor: MaterialStateProperty.all(
+                              Theme.of(buildContext)
                                   .colorScheme
-                                  .onSecondary))),
-                  padding: EdgeInsets.only(
-                      left: defaultPadding(buildContext),
-                      right: defaultPadding(buildContext),
-                      bottom: defaultPadding(buildContext)),
-                )
-              else if (organizatiOnViewState.addChildPossible(entities[index]))
-                Container(
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                        textStyle:
-                            MaterialStateProperty.all(TextStyle(fontSize: 18)),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8))),
-                        minimumSize: MaterialStateProperty.all(Size(
-                            width(buildContext) * .84,
-                            width(buildContext) * .12)),
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(buildContext)
-                                .colorScheme
-                                .secondary), //todo: change
-                      ),
-                      onPressed: () async {
-                        Entity? toAdd = await showEntityDialog(
-                            buildContext,
-                            null,
-                            organizatiOnViewState
-                                .getDaughterLevel(entities[index].level)!,
-                            entities[index].id);
-                        if (toAdd != null) {
-                          buildContext
-                              .read<OrganizationViewBloc>()
-                              .add(AddEntity(toAdd));
-                        }
-                      },
-                      child: Center(
-                          child: Icon(FontAwesomeIcons.plus,
-                              color: Theme.of(buildContext)
+                                  .secondary), //todo: change
+                        ),
+                        onPressed: () {
+                          onChildTapped(entities[index]);
+                        },
+                        child: Center(
+                            child: Icon(FontAwesomeIcons.arrowRight,
+                                color: Theme.of(buildContext)
+                                    .colorScheme
+                                    .onSecondary))),
+                    padding: EdgeInsets.only(
+                        left: defaultPadding(buildContext),
+                        right: defaultPadding(buildContext),
+                        bottom: defaultPadding(buildContext)),
+                  )
+                else if (organizatiOnViewState
+                    .addChildPossible(entities[index]))
+                  Container(
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                          textStyle: MaterialStateProperty.all(
+                              TextStyle(fontSize: 18)),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8))),
+                          minimumSize: MaterialStateProperty.all(Size(
+                              width(buildContext) * .84,
+                              width(buildContext) * .12)),
+                          backgroundColor: MaterialStateProperty.all(
+                              Theme.of(buildContext)
                                   .colorScheme
-                                  .onSecondary))),
-                  padding: EdgeInsets.only(
-                      left: defaultPadding(buildContext),
-                      right: defaultPadding(buildContext),
-                      bottom: defaultPadding(buildContext)),
-                )
-            ],
-          ),
-          Positioned(
-              right: defaultPadding(buildContext),
-              top: height(buildContext) * .2 - width(buildContext) * .06,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8))),
-                  minimumSize: MaterialStateProperty.all(Size(
-                      width(buildContext) * .2, width(buildContext) * .12)),
-                  backgroundColor: MaterialStateProperty.all(
-                      Theme.of(buildContext)
-                          .colorScheme
-                          .primary), //todo: change
-                ),
-                onPressed: () {
-                  onInfoTapped(entities[index]);
-                },
-                child: Center(
-                    child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                      Icon(MdiIcons.fileDocument,
-                          color:
-                              Theme.of(buildContext).colorScheme.onSecondary),
-                      SizedBox(
-                        width: defaultPadding(buildContext),
-                      ),
-                      Container(
-                          child: Text(strings.organization_view_info_button,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Theme.of(buildContext)
-                                      .colorScheme
-                                      .onPrimary)))
-                    ])),
-              ))
-        ],
-      )));
+                                  .secondary), //todo: change
+                        ),
+                        onPressed: () async {
+                          Entity? toAdd = await showEntityDialog(
+                              buildContext,
+                              null,
+                              organizatiOnViewState
+                                  .getDaughterLevel(entities[index].level)!,
+                              entities[index].id);
+                          if (toAdd != null) {
+                            buildContext
+                                .read<OrganizationViewBloc>()
+                                .add(AddEntity(toAdd, isDaughter: true));
+                          }
+                        },
+                        child: Center(
+                            child: Icon(FontAwesomeIcons.plus,
+                                color: Theme.of(buildContext)
+                                    .colorScheme
+                                    .onSecondary))),
+                    padding: EdgeInsets.only(
+                        left: defaultPadding(buildContext),
+                        right: defaultPadding(buildContext),
+                        bottom: defaultPadding(buildContext)),
+                  )
+              ],
+            ),
+            Positioned(
+                right: defaultPadding(buildContext),
+                top: height(buildContext) * .2 - width(buildContext) * .06,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8))),
+                    minimumSize: MaterialStateProperty.all(Size(
+                        width(buildContext) * .2, width(buildContext) * .12)),
+                    backgroundColor: MaterialStateProperty.all(
+                        Theme.of(buildContext)
+                            .colorScheme
+                            .primary), //todo: change
+                  ),
+                  onPressed: () {
+                    onInfoTapped(entities[index]);
+                  },
+                  child: Center(
+                      child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                        Icon(MdiIcons.fileDocument,
+                            color:
+                                Theme.of(buildContext).colorScheme.onSecondary),
+                        SizedBox(
+                          width: defaultPadding(buildContext),
+                        ),
+                        Container(
+                            child: Text(strings.organization_view_info_button,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Theme.of(buildContext)
+                                        .colorScheme
+                                        .onPrimary)))
+                      ])),
+                ))
+          ],
+        )));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -763,19 +800,16 @@ class OverviewWidget extends StatelessWidget {
   ValueChanged<Entity> onUpdateEntityTapped;
   Entity entity;
 
-  String getSurveyIconPath(Survey survey) =>
-      SurveyRepository.getIconFilePath(survey);
-
-  String getInterventionIconPath(Intervention intervention) =>
-      InterventionRepository.getInterventionIconPath(intervention);
-
   Widget generalCardContent(BuildContext context) {
+    print("general card content rebuild");
+    SyncedFile syncedFile = EntityRepository.getEntityPic(entity);
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           ImageWidget(
-            imageFile: EntityRepository.getEntityPic(entity),
+            imageFile: syncedFile,
+            key: syncedFile.key,
             width: width(context) * .92,
             height: height(context) * .2,
             borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
@@ -904,8 +938,8 @@ class OverviewWidget extends StatelessWidget {
               children: List.generate(
                   firstThreeSurveys.length,
                   (index) => surveyRow(context, firstThreeSurveys[index],
-                      image: SyncedFile(SurveyRepository.getIconFilePath(
-                          firstThreeSurveys[index])),
+                      image: SurveyRepository.getSurveyPic(
+                          firstThreeSurveys[index]),
                       separator: index != firstThreeSurveys.length - 1)),
             ),
           Container(
@@ -951,6 +985,8 @@ class OverviewWidget extends StatelessWidget {
                     context
                         .read<OrganizationViewBloc>()
                         .add(AddAppliedIntervention(entity, aI));
+                  } else {
+                    context.read<OrganizationViewBloc>().add(UpdatePic());
                   }
                 } else {
                   onAppliedInterventionsTapped(entity);
@@ -965,6 +1001,7 @@ class OverviewWidget extends StatelessWidget {
 
   Widget childWidget(BuildContext context, int index) {
     return Card(
+        key: ValueKey(key.toString() + index.toString()),
         margin: EdgeInsets.symmetric(
             horizontal: defaultPadding(context),
             vertical: defaultPadding(context) / 2),
@@ -979,8 +1016,17 @@ class OverviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("building overview widget");
+    print("overview widget key: $key");
     return Scrollbar(
-        child: ListView.builder(itemBuilder: childWidget, itemCount: 4));
+        key: key,
+        child: ListView.builder(
+            key: key,
+            itemBuilder: childWidget,
+            itemCount: entity.level.interventionsAreAllowed
+                ? (entity.level.allowedInterventions!.isNotEmpty ? 4 : 2)
+                : 2,
+            addAutomaticKeepAlives: false));
   }
 }
 
@@ -995,8 +1041,7 @@ class AppliedInterventionOverviewPage extends StatelessWidget {
         .appliedInterventions;
     Intervention intervention = interventions[index].intervention;
     return interventionRow(buildContext, intervention,
-        image: SyncedFile(
-            InterventionRepository.getInterventionIconPath(intervention)),
+        image: InterventionRepository.getInterventionPic(intervention),
         separator: interventions.length - 1 != index,
         pressable: true, onPressed: () async {
       buildContext
@@ -1040,6 +1085,8 @@ class AppliedInterventionOverviewPage extends StatelessWidget {
                   context
                       .read<OrganizationViewBloc>()
                       .add(AddAppliedIntervention(entity, appliedIntervention));
+                } else {
+                  context.read<OrganizationViewBloc>().add(UpdatePic());
                 }
               }),
         )
@@ -1062,17 +1109,12 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
   late Entity entity;
 
   late SyncedFile imageFileSynced;
-  File? imageFile;
 
   updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
     if (r != null) {
       await imageFileSynced.updateAsPic(r);
-      imageFileSynced.file().then((value) {
-        setState(() {
-          imageFile = value;
-        });
-      });
+      setState(() {});
     }
   }
 
@@ -1093,12 +1135,12 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
     entity = (context.read<OrganizationViewBloc>().state
             as EntitiesLoadedOrganizationViewState)
         .currentDetailEntity!;
-    imageFileSynced = SyncedFile(
-        AppliedInterventionRepository.getFotoPath(appliedIntervention));
+    imageFileSynced = AppliedInterventionRepository.appliedInterventionPic(
+        appliedIntervention);
     imageFileSynced.file().then((value) {
-      setState(() {
-        imageFile = value;
-      });
+      try {
+        setState(() {});
+      } catch (e) {}
     });
     super.initState();
   }
@@ -1119,6 +1161,7 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
                 children: [
                   ImageWidget(
                       imageFile: imageFileSynced,
+                      key: imageFileSynced.key,
                       width: width(context) * .92,
                       height: height(context) * .3,
                       borderRadius: BorderRadius.circular(8)),
@@ -1183,17 +1226,22 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
                                   context,
                                   appliedIntervention
                                       .intervention.surveys[index - 1],
-                                  image: SyncedFile(
-                                      SurveyRepository.getIconFilePath(
-                                          appliedIntervention.intervention
-                                              .surveys[index - 1])),
+                                  image: SurveyRepository.getSurveyPic(
+                                      appliedIntervention
+                                          .intervention.surveys[index - 1]),
                                   pressable: true,
                                   onPressed: () {
                                     context.read<OrganizationViewBloc>().add(
                                         StartSurvey(
                                             appliedIntervention.intervention
                                                 .surveys[index - 1],
-                                            appliedIntervention));
+                                            appliedIntervention,
+                                            (context
+                                                        .read<
+                                                            OrganizationViewBloc>()
+                                                        .state
+                                                    as EntitiesLoadedOrganizationViewState)
+                                                .currentDetailEntity!));
                                   },
                                 )))))
       ],
@@ -1239,8 +1287,6 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
   Intervention? intervention;
 
   SyncedFile? syncedFile;
-  File?
-      imageFile; //datei erst verfügbar wenn appliedIntervention ungleich null (zweites view, weil dann id vorliegt)
 
   List<Intervention>? interventions;
 
@@ -1250,26 +1296,17 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
 
   set appliedIntervention(AppliedIntervention? appliedIntervention) {
     _appliedIntervention = appliedIntervention;
-    syncedFile = SyncedFile(
-        AppliedInterventionRepository.getFotoPath(appliedIntervention!));
-    syncedFile!.file().then((value) {
-      setStateIfMounted(() {
-        imageFile = value;
-      });
-    });
+    syncedFile = AppliedInterventionRepository.appliedInterventionPic(
+        appliedIntervention!);
   }
 
   updatePic() async {
     XFile? r = await CameraFunctionality.takePicture(context: context);
     if (r != null && appliedIntervention != null) {
-      syncedFile ??= SyncedFile(
-          AppliedInterventionRepository.getFotoPath(appliedIntervention!));
+      syncedFile ??= AppliedInterventionRepository.appliedInterventionPic(
+          appliedIntervention!);
       await syncedFile!.updateAsPic(r);
-      syncedFile?.file().then((value) {
-        setStateIfMounted(() {
-          imageFile = value;
-        });
-      });
+      setState(() {});
     }
   }
 
@@ -1288,14 +1325,8 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
     if (widget.appliedIntervention != null) {
       create = false;
       appliedIntervention = widget.appliedIntervention;
-      syncedFile = SyncedFile(
-          AppliedInterventionRepository.getFotoPath(appliedIntervention!));
-      syncedFile!.file().then((value) {
-        setStateIfMounted(() {
-          imageFile = value;
-          loaded = true;
-        });
-      });
+      syncedFile = AppliedInterventionRepository.appliedInterventionPic(
+          appliedIntervention!);
     }
     super.initState();
     if (widget.appliedIntervention == null) {
@@ -1312,8 +1343,7 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
     //todo: implement localization
     return interventionRow(context, interventions![index],
         separator: (index != interventions!.length - 1),
-        image: SyncedFile(InterventionRepository.getInterventionIconPath(
-            interventions![index])),
+        image: InterventionRepository.getInterventionPic(interventions![index]),
         pressable: true, onPressed: () {
       AppliedIntervention toCreate = AppliedIntervention(
           id: UUID.getUUID(),
@@ -1334,96 +1364,106 @@ class AppliedInterventionDialogState extends State<AppliedInterventionDialog> {
         top: false,
         child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
-            body: Column(children: [
-              Flexible(
-                child: Container(
-                    height: height(context) * .1,
-                    width: width(context),
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                              alignment: Alignment.center,
-                              margin: EdgeInsets.symmetric(
-                                  vertical: defaultPadding(context)),
-                              child: CommonWidgets.defaultBackwardButton(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: defaultPadding(context)),
-                                  context: context,
-                                  goBack: () => Navigator.of(context)
-                                      .pop(appliedIntervention))),
-                          Expanded(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
+            body: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom <
+                            defaultPadding(context)
+                        ? defaultPadding(context)
+                        : MediaQuery.of(context).padding.bottom),
+                child: Column(children: [
+                  Flexible(
+                    child: Container(
+                        height: height(context) * .1,
+                        width: width(context),
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: defaultPadding(context)),
+                                  child: CommonWidgets.defaultBackwardButton(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: defaultPadding(context)),
+                                      context: context,
+                                      goBack: () => Navigator.of(context)
+                                          .pop(appliedIntervention))),
+                              Expanded(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                        child: Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                                widget.appliedIntervention ==
+                                                        null
+                                                    ? strings
+                                                        .organization_view_dialog_add_appliedintervention
+                                                    : strings
+                                                        .organization_view_dialog_update_appliedintervention,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline2))),
+                                  ],
+                                ),
+                              )
+                            ])),
+                  ),
+                  !loaded
+                      ? Center(child: loadingSign(context))
+                      : appliedIntervention == null
+                          ? Container(
+                              child: Scrollbar(
+                                  child: ListView.builder(
+                                      itemBuilder: interventionItem,
+                                      itemCount: interventions!.length,
+                                      shrinkWrap: true)))
+                          : Container(
+                              child: Column(
                               children: [
-                                Expanded(
-                                    child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                            widget.appliedIntervention == null
-                                                ? strings
-                                                    .organization_view_dialog_add_appliedintervention
-                                                : strings
-                                                    .organization_view_dialog_update_appliedintervention,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline2))),
+                                Card(
+                                  margin:
+                                      EdgeInsets.all(defaultPadding(context)),
+                                  child: Container(
+                                      height: height(context) * .3,
+                                      width: width(context) * .92,
+                                      child: Stack(
+                                        fit: StackFit.expand,
+                                        children: [
+                                          ImageWidget(
+                                              width: width(context) * .92,
+                                              height: height(context) * .3,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              imageFile: syncedFile,
+                                              key: syncedFile!.key),
+                                          Positioned(
+                                              right: defaultPadding(context),
+                                              bottom: defaultPadding(context),
+                                              child: CustomIconButton(
+                                                  updatePic,
+                                                  MdiIcons.camera,
+                                                  Size(width(context) * .15,
+                                                      width(context) * .15),
+                                                  true))
+                                        ],
+                                      )),
+                                ),
+                                Container(
+                                    margin:
+                                        EdgeInsets.all(defaultPadding(context)),
+                                    child: defaultGreenButton(
+                                        context,
+                                        () => Navigator.of(context)
+                                            .pop(appliedIntervention),
+                                        text: strings
+                                            .organization_view_entity_save_entity,
+                                        minWidth: width(context) * .92))
                               ],
-                            ),
-                          )
-                        ])),
-              ),
-              !loaded
-                  ? Center(child: loadingSign(context))
-                  : appliedIntervention == null
-                      ? Container(
-                          child: Scrollbar(
-                              child: ListView.builder(
-                                  itemBuilder: interventionItem,
-                                  itemCount: interventions!.length,
-                                  shrinkWrap: true)))
-                      : Container(
-                          child: Column(
-                          children: [
-                            Card(
-                              margin: EdgeInsets.all(defaultPadding(context)),
-                              child: Container(
-                                  height: height(context) * .3,
-                                  width: width(context) * .92,
-                                  child: Stack(
-                                    fit: StackFit.expand,
-                                    children: [
-                                      ImageWidget(
-                                        width: width(context) * .92,
-                                        height: height(context) * .3,
-                                        borderRadius: BorderRadius.circular(8),
-                                        imageFile: syncedFile,
-                                      ),
-                                      Positioned(
-                                          right: defaultPadding(context),
-                                          bottom: defaultPadding(context),
-                                          child: CustomIconButton(
-                                              updatePic,
-                                              MdiIcons.camera,
-                                              Size(width(context) * .15,
-                                                  width(context) * .15),
-                                              true))
-                                    ],
-                                  )),
-                            ),
-                            Container(
-                                margin: EdgeInsets.all(defaultPadding(context)),
-                                child: defaultGreenButton(
-                                    context,
-                                    () => Navigator.of(context)
-                                        .pop(appliedIntervention),
-                                    text: strings
-                                        .organization_view_entity_save_entity,
-                                    minWidth: width(context) * .92))
-                          ],
-                        ))
-            ])));
+                            ))
+                ]))));
   }
 }
 
@@ -1485,12 +1525,15 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
   Widget listItem(BuildContext buildContext, int i) {
     return surveyRow(context, currentlyDisplayedSurveys[i]["survey"],
-        image: SyncedFile(SurveyRepository.getIconFilePath(
-            currentlyDisplayedSurveys[i]["survey"])),
+        image: SurveyRepository.getSurveyPic(
+            currentlyDisplayedSurveys[i]["survey"]),
         pressable: true, onPressed: () {
       buildContext.read<OrganizationViewBloc>().add(StartSurvey(
           currentlyDisplayedSurveys[i]["survey"],
-          currentlyDisplayedSurveys[i]["appliedIntervention"]));
+          currentlyDisplayedSurveys[i]["appliedIntervention"],
+          (buildContext.read<OrganizationViewBloc>().state
+                  as EntitiesLoadedOrganizationViewState)
+              .currentDetailEntity!));
     });
   }
 
@@ -1545,6 +1588,7 @@ class ExecutedSurveyWidget extends StatelessWidget {
   final ExecutedSurvey executedSurvey;
 
   Map<Question, QuestionAnswer> mappedAnswers = {};
+  Map<String, SyncedFile> syncedFileMap = {};
 
   ExecutedSurveyWidget(this.executedSurvey) {
     for (Question question in executedSurvey.survey.questions) {
@@ -1554,6 +1598,19 @@ class ExecutedSurveyWidget extends StatelessWidget {
       if (answer != null) {
         mappedAnswers[question] = answer;
       }
+      if (question.type == QuestionType.AUDIO) {
+        syncedFileMap[question.id!] =
+            ExecutedSurveyRepository.getQuestionAnswerAudio(
+                executedSurvey.appliedIntervention,
+                executedSurvey.id!,
+                question);
+      } else if (question.type == QuestionType.PICTURE) {
+        syncedFileMap[question.id!] =
+            ExecutedSurveyRepository.getQuestionAnswerPic(
+                executedSurvey.appliedIntervention,
+                executedSurvey.id!,
+                question);
+      }
     }
   }
 
@@ -1561,6 +1618,7 @@ class ExecutedSurveyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return surveyarea.SurveyWidgetState.summaryWidget(
       survey: executedSurvey.survey,
+      picAndAudioAnswerFiles: syncedFileMap,
       appliedIntervention: executedSurvey.appliedIntervention,
       executedSurveyId: executedSurvey.id!,
       answers: mappedAnswers,
