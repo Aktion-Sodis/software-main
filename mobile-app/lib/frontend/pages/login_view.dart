@@ -63,7 +63,7 @@ class LoginView extends StatelessWidget {
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
             margin: EdgeInsets.symmetric(horizontal: width(context) * .1),
             child: ClipRRect(
-                child: Image.asset("assets/fixAssets/action_pic.jpg"),
+                child: Image.asset("assets/specificAssets/action_pic.jpg"),
                 borderRadius: BorderRadius.circular(8))));
   }
 
