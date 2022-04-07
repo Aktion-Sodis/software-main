@@ -262,6 +262,7 @@ export default {
       fallbackLocaleIndex: 'fallbackLocaleIndex',
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
       interventionsOfLevelById: 'LEVEL_Data/interventionsOfLevelById',
+      nLevels: 'LEVEL_Data/nLevels',
 
       calculateUILocaleString: 'calculateUILocaleString',
     }),
@@ -354,11 +355,16 @@ export default {
       this.closeHandler();
     },
     async submitHandler() {
+      let parentLevelID;
+      if (this.nLevels === 0) parentLevelID = null;
+      else {
+        parentLevelID = this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID;
+      }
       this.setDraft(
         new Level({
           name: this.name,
           description: this.description,
-          parentLevelID: this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID,
+          parentLevelID,
           interventionsAreAllowed: this.areInterventionsAllowed,
           allowedInterventions: this.allowedInterventions || [],
           // tagIds: this.tagIds || [],

@@ -51,6 +51,8 @@ const levelsData = {
 
     LEVELById:
       (_, { getLevels }) => ({ id }) => getLevels.find((i) => i.id === id),
+
+    nLevels: (_, { getLevels }) => getLevels.length,
     // tagById:
     // (_, { getLevelTags }) => ({ tagId }) => getLevelTags.find((t) => t.tagId === tagId),
   },
@@ -306,7 +308,7 @@ const levelsData = {
         commit('setRelationLevelIntervention', { newValue: apiLevelInterventionRelation });
         const apiLevels = await dispatch('APIgetAll');
         commit('setLevels', {
-          newValue: apiLevels.filter((l) => !l._deleted),
+          newValue: apiLevels,
         });
       } catch (error) {
         console.log({ error });
