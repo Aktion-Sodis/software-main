@@ -133,6 +133,8 @@
         "create": "This is the description of this beautiful create dialog."
       },
       "interventions": "Interventions",
+      "areInterventionsAllowed": "are allowed.",
+      "allowInterventionsFirst": "Allow interventions first.",
       "name": "Level Name",
       "description": "Level Description",
       "manageAllowedInterventions": "Manage allowed interventions",

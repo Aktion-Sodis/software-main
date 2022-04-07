@@ -133,6 +133,8 @@
         "create": "Bu güzel seviye yaratma diyaloğunun çok güzel açıklaması."
       },
       "interventions": "Müdahaleler",
+      "areInterventionsAllowed": "uygulanabilir.",
+      "allowInterventionsFirst": "Lütfen önce müdahale yapılmasına izin verin.",
       "name": "Seviye adı",
       "description": "Seviye açıklaması",
       "manageAllowedInterventions": "İzin verilen müdahaleleri yönet",

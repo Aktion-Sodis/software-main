@@ -101,7 +101,15 @@
 
               <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
                 <v-card-title class="pt-0 pt-sm-2">
-                  {{ $t('organizationStructure.levelModal.interventions') }}
+                  <span>
+                    {{ $t('organizationStructure.levelModal.interventions') }}
+                  </span>
+                  <div v-if="!read" class="ml-2">
+                    <v-checkbox
+                      v-model="areInterventionsAllowed"
+                      :label="$t('organizationStructure.levelModal.areInterventionsAllowed')"
+                    ></v-checkbox>
+                  </div>
                 </v-card-title>
                 <div v-if="read && levelInFocus">
                   <div v-for="id in levelInFocus.allowedInterventions" :key="id">
@@ -117,18 +125,27 @@
                     </span>
                   </div>
                 </div>
-                <v-select
-                  v-else
-                  v-model="allowedInterventions"
-                  :items="localizeInterventions"
-                  :label="$t('organizationStructure.levelModal.manageAllowedInterventions')"
-                  multiple
-                  dense
-                  outlined
-                  persistent-hint
-                  item-value="id"
-                  item-text="name"
-                ></v-select>
+                <v-tooltip bottom v-if="!read" :disabled="areInterventionsAllowed">
+                  <template v-slot:activator="{ on, attrs }">
+                    <div v-bind="attrs" v-on="on">
+                      <v-select
+                        v-model="allowedInterventions"
+                        :items="localizeInterventions"
+                        :label="$t('organizationStructure.levelModal.manageAllowedInterventions')"
+                        multiple
+                        dense
+                        outlined
+                        persistent-hint
+                        item-value="id"
+                        item-text="name"
+                        :disabled="!areInterventionsAllowed"
+                      ></v-select>
+                    </div>
+                  </template>
+                  <span>
+                    {{ $t('organizationStructure.levelModal.allowInterventionsFirst') }}
+                  </span>
+                </v-tooltip>
 
                 <!-- <v-card-title>
                   {{ $t('baseData.tags') }}
@@ -185,8 +202,6 @@
           </v-btn>
         </v-card-actions>
       </v-form>
-      {{ name }}
-      {{ description }}
     </v-card>
   </v-dialog>
 </template>
@@ -213,6 +228,7 @@ export default {
       name: emptyMutableI18nString(),
       description: emptyMutableI18nString(),
       allowedInterventions: [],
+      areInterventionsAllowed: true,
       // tagIds: [],
     };
   },
@@ -330,7 +346,7 @@ export default {
           name: this.name,
           description: this.description,
           parentLevelID: this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID,
-          interventionsAreAllowed: this.allowedInterventions.length > 0,
+          interventionsAreAllowed: this.areInterventionsAllowed,
           allowedInterventions: this.allowedInterventions || [],
           // tagIds: this.tagIds || [],
           tagIds: [],

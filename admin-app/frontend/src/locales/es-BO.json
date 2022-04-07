@@ -133,6 +133,8 @@
         "create": "Esta es la descripción de este diálogo de creación."
       },
       "interventions": "Intervenciones",
+      "areInterventionsAllowed": "estan permitidas.",
+      "allowInterventionsFirst": "Permita las intervenciones primero.",
       "name": "Nombre del nivel",
       "description": "Descripción del nivel",
       "manageAllowedInterventions": "Gestionar las intervenciones permitidas",
