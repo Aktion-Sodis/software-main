@@ -26,6 +26,7 @@
             :surveyTagIds="survey.tags"
             :surveyContent="survey.content"
             :interventionName="survey.intervention ? survey.intervention.name : null"
+            :interventionId="survey.intervention ? survey.intervention.id : null"
           />
         </v-col>
         <v-col v-for="index in ['s1', 's2', 's3']" :key="index" cols="12" sm="6" md="4" xl="3">

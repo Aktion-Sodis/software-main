@@ -1,6 +1,6 @@
 <template>
   <v-card style="height: 100%" class="pa-2" outlined tile @click="clickHandler">
-    <ImgFromS3 :assumedSrc="deriveImgPath">
+    <ImgFromS3 :assumedSrc="deriveImgPath" dataType="intervention">
       <template v-slot:v-img="slotProps">
         <v-img height="200px" :src="slotProps.src"> </v-img>
       </template>

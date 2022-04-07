@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative">
-    <slot name="v-img" :src="fetchedSrc" :lazy-src="fallbackSrc" v-if="fetchedSrc"></slot>
-    <slot name="v-img" v-else :src="fallbackSrc"> </slot>
+    <slot name="v-img" :src="fetchedSrc" :lazy-src="dataType" v-if="fetchedSrc"></slot>
+    <slot name="v-img" v-else :src="requireImg(dataType)"> </slot>
     <v-progress-circular
       class="loading-circle"
       v-if="loading"
@@ -21,9 +21,9 @@ export default {
       required: true,
       validator: (value) => typeof value === 'string' || value === null,
     },
-    fallbackSrc: {
+    dataType: {
       type: String,
-      default: 'https://semantic-ui.com/images/wireframe/image.png',
+      default: 'default',
     },
   },
   data: () => ({
@@ -54,6 +54,17 @@ export default {
           this.fetchedSrc = null;
           this.loading = false;
         });
+    },
+    requireImg(dataType) {
+      let res;
+      try {
+        // eslint-disable-next-line
+        res = require(`../../static/defaultImages/${dataType}Card.png`);
+      } catch (error) {
+        // eslint-disable-next-line
+        res = require('../../static/defaultImages/defaultCard.png');
+      }
+      return res;
     },
   },
 };
