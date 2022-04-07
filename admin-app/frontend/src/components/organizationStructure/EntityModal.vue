@@ -292,7 +292,7 @@ export default {
     },
     async submitHandler() {
       if (this.allEntitiesOfUpperLevel.length > 0 && this.parentEntityID == null) return;
-      await this.setDraft(
+      this.setDraft(
         new Entity({
           name: this.name,
           description: this.description,
