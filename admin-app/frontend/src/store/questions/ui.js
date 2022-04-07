@@ -6,12 +6,14 @@ const QUESTION_UI = {
     iQuestions: 0,
     questionDrafts: [emptyQuestion()],
     optionDrafts: [[emptyQuestionOption()]],
+    questionImages: [],
   }),
   getters: {
     /* READ */
     getIQuestions: ({ iQuestions }) => iQuestions ?? 0,
     getQuestionDrafts: ({ questionDrafts }) => questionDrafts || [emptyQuestion()],
     getOptionDrafts: ({ optionDrafts }) => optionDrafts || [[emptyQuestionOption()]],
+    getQuestionImages: ({ questionImages }) => questionImages,
 
     questionWithOptionDrafts: (_, { getQuestionDrafts, getOptionDrafts }) => getQuestionDrafts.map((q, i) => ({
       ...q,
@@ -70,6 +72,18 @@ const QUESTION_UI = {
     deleteOptionAtIndex: (state, { index }) => {
       state.optionDrafts.splice(index, 1);
     },
+
+    /* QUESTION IMAGE CREATE, UPDATE, DELETE */
+    addQuestionImageAtIndex: (state, { newQuestionImage, index }) => {
+      state.questionImages.splice(index, 0, newQuestionImage);
+    },
+    replaceQuestionImageAtIndex: (state, { newQuestionImage, index }) => {
+      state.questionImages.splice(index, 1, newQuestionImage);
+    },
+    deleteQuestionImageAtIndex: (state, { index }) => {
+      state.questionImages.splice(index, 1);
+    },
+    pushNullToQuestionImages: (state) => state.questionImages.push(null),
   },
   actions: {
     nextQuestionHandler: ({ commit, getters }, { newQuestion, newOptions }) => {
@@ -140,6 +154,16 @@ const QUESTION_UI = {
         });
         commit('incrementIQuestions');
       }
+    },
+    addImageToQuestion: ({ commit, getters }, { newQuestionImage }) => {
+      console.log({ newQuestionImage });
+      const currentIndex = getters.getIQuestions;
+      if (getters.getQuestionImages[currentIndex] === undefined) {
+        while (getters.getQuestionImages.length <= currentIndex) {
+          commit('pushNullToQuestionImages');
+        }
+      }
+      commit('replaceQuestionImageAtIndex', { newQuestionImage, index: currentIndex });
     },
   },
 };

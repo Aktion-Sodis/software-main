@@ -123,6 +123,19 @@ const surveysData = {
             rootGetters['dataModal/getImageFile'],
           );
 
+          rootGetters['QUESTION_UI/getQuestionImages'].forEach(async (questionImg, index) => {
+            if (questionImg) {
+              await Storage.put(
+                deriveFilePath('questionPicPath', {
+                  interventionID: survey.interventionSurveysId,
+                  surveyId: postResponse.id,
+                  questionId: survey.questions[index].id,
+                }),
+                questionImg,
+              );
+            }
+          });
+
           commit('addSurvey', postResponse);
           dispatch(
             'dataModal/readData',

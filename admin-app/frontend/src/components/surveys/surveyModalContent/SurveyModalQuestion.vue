@@ -95,7 +95,7 @@
                   color="primary"
                   rounded
                   x-large
-                  @click="clickOnAddImage"
+                  @click="selectQuestionImg"
                   class="mt-4"
                 >
                   <v-icon class="mr-2"> mdi-image </v-icon>
@@ -103,12 +103,12 @@
                     {{ $t('surveys.modal.questionCard.form.question.addImage') }}
                   </span>
                 </v-btn>
-                <input
-                  v-if="edit || create"
-                  type="file"
-                  accept="image/png, image/jpeg"
+                <FileInput
+                  v-if="!read"
                   ref="question-img-upload"
                   style="display: none"
+                  :acceptedType="'image/png'"
+                  :isForQuestions="true"
                 />
               </div>
 
@@ -354,6 +354,7 @@ import { modalModesDict, questionTypesIconDict } from '../../../store/constants'
 import { compareI18nStrings } from '../../../store/utils';
 
 import LocaleTextBox from '../../global/LocaleTextBox.vue';
+import FileInput from '../../commons/FileInput.vue';
 
 const questionTextMaxChar = Math.max(parseInt(process.env.VUE_APP_QUESTION_TEXT_MAX_CHAR, 10), 0);
 const maxNOptions = Math.min(Number(process.env.VUE_APP_MAX_N_QUESTION_OPTIONS), 0);
@@ -362,6 +363,7 @@ export default {
   name: 'SurveyModalQuestion',
   components: {
     LocaleTextBox,
+    FileInput,
   },
   watch: {
     questionCurrentDraft: 'updateComponentData',
@@ -558,12 +560,9 @@ export default {
       this.type = QuestionType.TEXT;
       this.text = emptyMutableI18nString();
     },
-    clickOnAddImage() {
+    selectQuestionImg() {
       const imgInput = this.$refs['question-img-upload'];
-      if (Array.isArray(imgInput)) imgInput[0].click();
-      else imgInput.click();
-      this.showToBeImplementedFeedback();
-      // console.log('TODO: do something with', imgInput);
+      imgInput.$el.click();
     },
     clickOnAddAudio() {
       const audioInput = this.$refs['question-audio-upload'];
