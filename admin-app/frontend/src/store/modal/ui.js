@@ -93,6 +93,7 @@ const dataModal = {
       await Vue.nextTick();
       commit(`reset${dataType}Draft`);
       commit('setMode', { newValue: modalModesDict.read });
+      commit('setImageFile', { newValue: null });
     },
     editData: ({ commit, rootGetters }, { dataId, dataType }) => {
       commit('setMode', { newValue: modalModesDict.edit });
@@ -100,12 +101,12 @@ const dataModal = {
       commit('setDataType', { newValue: dataType });
       const data = rootGetters[`${dataType}_Data/${dataType}ById`]({ id: dataId });
       commit('setDraft', data);
-      // commit('setIsDisplayed', { newValue: true });
     },
     abortEditData: async ({ commit }, { dataType }) => {
       commit(`reset${dataType}Draft`);
       await Vue.nextTick();
       commit('setMode', { newValue: modalModesDict.read });
+      commit('setImageFile', { newValue: null });
     },
 
     saveData: async ({ dispatch, getters }, { dataType, originalVersion }) => {
