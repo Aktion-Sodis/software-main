@@ -108,7 +108,7 @@ const interventionsData = {
           commit('setLoading', { newValue: false });
         });
     },
-    APIput: async ({ commit, dispatch }, { newData, originalId, originalVersion }) => {
+    APIput: async ({ commit, dispatch, rootGetters }, { newData, originalId, originalVersion }) => {
       commit('setLoading', { newValue: true });
       API.graphql({
         query: updateIntervention,
@@ -123,6 +123,11 @@ const interventionsData = {
         },
       })
         .then((putResponse) => {
+          Storage.put(
+            deriveFilePath('interventionPicPath', { interventionID: putResponse.id }),
+            rootGetters['dataModal/getImageFile'],
+          );
+
           dispatch(
             'dataModal/readData',
             {
@@ -141,10 +146,15 @@ const interventionsData = {
           commit('setLoading', { newValue: false });
         });
     },
-    APIdelete: async ({ commit, dispatch }, { id, _version }) => {
+    APIdelete: async ({ commit, dispatch, getters }, { id, _version }) => {
       commit('setLoading', { newValue: true });
       API.graphql({ query: deleteIntervention, variables: { input: { id, _version } } })
         .then(() => {
+          const intervention = getters.INTERVENTIONById({ id });
+          Storage.remove(
+            deriveFilePath('interventionPicPath', { interventionID: intervention.id }),
+          );
+
           commit('deleteIntervention', {
             id,
           });

@@ -162,12 +162,10 @@ const surveysData = {
           commit('setLoading', { newValue: false });
         });
     },
-    APIput: async ({ commit, dispatch }, { newData, originalId, originalVersion }) => {
+    APIput: async ({ commit, dispatch, rootGetters }, { newData, originalId, originalVersion }) => {
       console.log({ originalVersion });
       commit('setLoading', { newValue: true });
       const original = await DataStore.query(Survey, originalId);
-
-      console.log(newData.interventionSurveysId);
 
       try {
         const res = await DataStore.save(
@@ -180,7 +178,15 @@ const surveysData = {
           }),
         );
 
-        console.log({ res });
+        if (rootGetters['dataModal/getImageFile']) {
+          await Storage.put(
+            deriveFilePath('interventionSurveyPicPath', {
+              interventionID: res.intervention.id,
+              surveyId: res.id,
+            }),
+            rootGetters['dataModal/getImageFile'],
+          );
+        }
 
         dispatch(
           'dataModal/readData',
@@ -198,13 +204,22 @@ const surveysData = {
       }
       commit('setLoading', { newValue: false });
     },
-    APIdelete: async ({ commit, dispatch }, { id, _version }) => {
+    APIdelete: async ({ commit, dispatch, getters }, { id, _version }) => {
       commit('setLoading', { newValue: true });
       API.graphql({ query: deleteSurvey, variables: { input: { id, _version } } })
         .then(() => {
+          const survey = getters.SURVEYById({ id });
           commit('deleteSurvey', {
             id,
           });
+
+          Storage.remove(
+            deriveFilePath('interventionSurveyPicPath', {
+              interventionID: survey.intervention.id,
+              surveyId: survey.id,
+            }),
+          );
+
           commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
           commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
           dispatch(
