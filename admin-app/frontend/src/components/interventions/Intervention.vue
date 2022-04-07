@@ -1,6 +1,10 @@
 <template>
   <v-card style="height: 100%" class="pa-2" outlined tile @click="clickHandler">
-    <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px"> </v-img>
+    <ImgFromS3 :assumedSrc="deriveImgPath">
+      <template v-slot:v-img="slotProps">
+        <v-img height="200px" :src="slotProps.src"> </v-img>
+      </template>
+    </ImgFromS3>
     <v-card-title>
       {{ calculateUILocaleString({ languageTexts: interventionName.languageTexts }) }}
       <v-spacer></v-spacer>
@@ -18,8 +22,11 @@
 // import { validate as uuidValidate } from 'uuid';
 import { mapGetters, mapActions } from 'vuex';
 import { dataTypesDict } from '../../store/constants';
+import { deriveFilePath } from '../../store/utils';
+import ImgFromS3 from '../commons/ImgFromS3.vue';
 
 export default {
+  components: { ImgFromS3 },
   name: 'Intervention',
   props: {
     id: {
@@ -48,6 +55,9 @@ export default {
       tagById: 'INTERVENTION_Data/tagById',
       calculateUILocaleString: 'calculateUILocaleString',
     }),
+    deriveImgPath() {
+      return deriveFilePath('interventionPicPath', { interventionID: this.id });
+    },
   },
   methods: {
     clickHandler() {
