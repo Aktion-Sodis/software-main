@@ -152,10 +152,6 @@
                 </v-btn-toggle>
               </v-card-title>
 
-              <v-card-title class="pt-0 pt-sm-2">
-                {{ $t('surveys.modal.image') }}
-              </v-card-title>
-
               <!-- <div v-if="read">
                 <v-card-title class="pr-0 d-flex justify-space-between">
                   <span class="mr-2">
@@ -246,7 +242,7 @@
               </v-card-title>
 
               <v-card-title class="pt-0 pt-sm-2">
-                {{ $t('interventions.modal.image') }}
+                {{ $t('surveys.modal.image') }}
               </v-card-title>
 
               <ImgFromS3 :assumedSrc="read ? deriveImgPath : null" dataType="survey">
