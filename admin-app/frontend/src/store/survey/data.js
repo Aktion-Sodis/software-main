@@ -12,6 +12,7 @@ import {
   // SurveyTag,
   // SurveySurveyTagRelation,
 } from '../../models';
+import { emptyQuestion, emptyQuestionOption } from '../classes';
 import { dataTypesDict, modalModesDict } from '../constants';
 import { deriveFilePath } from '../utils';
 
@@ -115,13 +116,15 @@ const surveysData = {
           //   );
           // }
 
-          await Storage.put(
-            deriveFilePath('interventionSurveyPicPath', {
-              interventionID: survey.interventionSurveysId,
-              surveyId: postResponse.id,
-            }),
-            rootGetters['dataModal/getImageFile'],
-          );
+          if (rootGetters['dataModal/getImageFile']) {
+            await Storage.put(
+              deriveFilePath('interventionSurveyPicPath', {
+                interventionID: survey.interventionSurveysId,
+                surveyId: postResponse.id,
+              }),
+              rootGetters['dataModal/getImageFile'],
+            );
+          }
 
           rootGetters['QUESTION_UI/getQuestionImages'].forEach(async (questionImg, index) => {
             if (questionImg) {
@@ -150,6 +153,9 @@ const surveysData = {
           commit('setLoading', { newValue: false });
           dispatch('dataModal/abortCreateData', { dataType: dataTypesDict.survey }, { root: true });
           commit('setSurveyModalCompletionIndex', { newValue: 1 }, { root: true });
+          commit('QUESTION_UI/setQuestions', [emptyQuestion()], { root: true });
+          commit('QUESTION_UI/setOptions', [emptyQuestionOption()], { root: true });
+          commit('QUESTION_UI/setQuestionImages', [], { root: true });
         })
         .catch((err) => {
           console.log({ err });

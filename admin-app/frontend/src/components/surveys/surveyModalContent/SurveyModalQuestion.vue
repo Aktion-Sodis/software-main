@@ -89,7 +89,14 @@
               <h3 class="mt-4">
                 {{ $t('surveys.modal.questionCard.form.question.imageTitle') }}
               </h3>
-              <div class="d-flex justify-center">
+              <div v-if="read">
+                <ImgFromS3 :assumedSrc="deriveImgPath" dataType="survey">
+                  <template v-slot:v-img="slotProps">
+                    <v-img max-height="200px" :src="slotProps.src"> </v-img>
+                  </template>
+                </ImgFromS3>
+              </div>
+              <div v-else class="d-flex justify-center">
                 <v-btn
                   v-if="edit || create"
                   color="primary"
@@ -351,10 +358,11 @@ import {
 } from '../../../store/classes';
 import { modalModesDict, questionTypesIconDict } from '../../../store/constants';
 // eslint-disable-next-line import/named
-import { compareI18nStrings } from '../../../store/utils';
+import { compareI18nStrings, deriveFilePath } from '../../../store/utils';
 
 import LocaleTextBox from '../../global/LocaleTextBox.vue';
 import FileInput from '../../commons/FileInput.vue';
+import ImgFromS3 from '../../commons/ImgFromS3.vue';
 
 const questionTextMaxChar = Math.max(parseInt(process.env.VUE_APP_QUESTION_TEXT_MAX_CHAR, 10), 0);
 const maxNOptions = Math.min(Number(process.env.VUE_APP_MAX_N_QUESTION_OPTIONS), 0);
@@ -364,6 +372,7 @@ export default {
   components: {
     LocaleTextBox,
     FileInput,
+    ImgFromS3,
   },
   watch: {
     questionCurrentDraft: 'updateComponentData',
@@ -479,6 +488,13 @@ export default {
     },
     maxNOptionsAchieved() {
       return this.options.length >= maxNOptions;
+    },
+    deriveImgPath() {
+      return deriveFilePath('questionPicPath', {
+        interventionID: this.surveyInFocus.intervention.id,
+        surveyID: this.dataIdInFocus,
+        questionID: this.surveyInFocus.questions[this.iQuestions].id,
+      });
     },
   },
   mounted() {

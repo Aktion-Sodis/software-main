@@ -312,6 +312,7 @@ import ImgFromS3 from '../../commons/ImgFromS3.vue';
 import { Survey, SurveyType } from '../../../models';
 import { emptyMutableI18nString, mutableI18nString } from '../../../store/classes';
 import FileInput from '../../commons/FileInput.vue';
+import { deriveFilePath } from '../../../store/utils';
 
 const surveyDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_SURVEY_DESCRIPTION_MAX_CHAR, 10),
@@ -381,6 +382,12 @@ export default {
     },
     type() {
       return this.types[this.typeIndex];
+    },
+    deriveImgPath() {
+      return deriveFilePath('interventionSurveyPicPath', {
+        interventionID: this.surveyInFocus.intervention.id,
+        surveyID: this.dataIdInFocus,
+      });
     },
   },
   methods: {

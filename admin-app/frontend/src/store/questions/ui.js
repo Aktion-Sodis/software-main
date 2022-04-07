@@ -43,12 +43,15 @@ const QUESTION_UI = {
       state.iQuestions -= 1;
     },
 
-    /* QUESTION & OPTION BULK UPDATE */
+    /* BULK UPDATE */
     setQuestions: (state, { payload }) => {
       state.questionDrafts = payload;
     },
     setOptions: (state, { payload }) => {
       state.optionDrafts = payload;
+    },
+    setQuestionImages: (state, { payload }) => {
+      state.questionImages = payload;
     },
 
     /* QUESTION CREATE, UPDATE, DELETE */
