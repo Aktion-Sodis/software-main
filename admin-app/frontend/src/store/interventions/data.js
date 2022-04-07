@@ -7,28 +7,28 @@ import { deleteIntervention, updateIntervention } from '../../graphql/mutations'
 import {
   I18nString,
   Intervention,
-  InterventionInterventionTagRelation,
-  InterventionTag,
+  // InterventionInterventionTagRelation,
+  // InterventionTag,
 } from '../../models';
 
 const interventionsData = {
   namespaced: true,
   state: () => ({
     interventions: [],
-    interventionTags: [],
-    relationInterventionsAndTags: [],
+    // interventionTags: [],
+    // relationInterventionsAndTags: [],
     loading: false,
   }),
   getters: {
     /* READ */
     getInterventions: ({ interventions }) => interventions.filter((i) => !i._deleted).sort((a, b) => a.id - b.id),
-    getInterventionTags: ({ interventionTags }) => interventionTags,
+    // getInterventionTags: ({ interventionTags }) => interventionTags,
     getLoading: ({ loading }) => loading,
 
     INTERVENTIONById:
       (_, { getInterventions }) => ({ id }) => getInterventions.find((i) => i.id === id) ?? null,
-    tagById:
-      (_, { getInterventionTags }) => ({ tagId }) => getInterventionTags.find((t) => t.tagId === tagId),
+    // tagById:
+    // (_, { getInterventionTags }) => ({ tagId }) => getInterventionTags.find((t) => t.tagId === tagId),
   },
   mutations: {
     addIntervention: (state, intervention) => {
@@ -54,18 +54,16 @@ const interventionsData = {
       state.interventions = newValue;
     },
 
-    setInterventionTags: (state, { newValue }) => {
-      state.interventionTags = newValue;
-    },
+    // setInterventionTags: (state, { newValue }) => {
+    //   state.interventionTags = newValue;
+    // },
 
-    setRelationInterventionsAndTags: (state, { newValue }) => {
-      state.relationInterventionsAndTags = newValue;
-    },
+    // setRelationInterventionsAndTags: (state, { newValue }) => {
+    //   state.relationInterventionsAndTags = newValue;
+    // },
   },
   actions: {
-    APIpost: async ({
-      commit, dispatch, getters, rootGetters,
-    }, interventionDraft) => {
+    APIpost: async ({ commit, dispatch, rootGetters }, interventionDraft) => {
       commit('setLoading', { newValue: true });
       const intervention = new Intervention({
         ...interventionDraft,
@@ -74,18 +72,18 @@ const interventionsData = {
       });
       DataStore.save(intervention)
         .then(async (postResponse) => {
-          const tagIds = interventionDraft.tags;
-          // eslint-disable-next-line no-restricted-syntax
-          for (const tagId of tagIds) {
-            const localTag = getters.tagById({ id: tagId });
-            // eslint-disable-next-line no-await-in-loop
-            await DataStore.save(
-              new InterventionInterventionTagRelation({
-                intervention: postResponse,
-                interventionTag: localTag,
-              }),
-            );
-          }
+          // const tagIds = interventionDraft.tags;
+          // // eslint-disable-next-line no-restricted-syntax
+          // for (const tagId of tagIds) {
+          //   const localTag = getters.tagById({ id: tagId });
+          //   // eslint-disable-next-line no-await-in-loop
+          //   await DataStore.save(
+          //     new InterventionInterventionTagRelation({
+          //       intervention: postResponse,
+          //       interventionTag: localTag,
+          //     }),
+          //   );
+          // }
 
           await Storage.put(
             deriveFilePath('interventionPicPath', { interventionID: postResponse.id }),
@@ -176,26 +174,26 @@ const interventionsData = {
         console.log({ error });
       }
 
-      try {
-        const apiInterventionTags = await DataStore.query(InterventionTag);
-        commit('setInterventionTags', { newValue: apiInterventionTags });
-      } catch (error) {
-        console.log({ error });
-      }
+      // try {
+      //   const apiInterventionTags = await DataStore.query(InterventionTag);
+      //   commit('setInterventionTags', { newValue: apiInterventionTags });
+      // } catch (error) {
+      //   console.log({ error });
+      // }
 
-      try {
-        const apiRelationInterventionsAndTags = await DataStore.query(
-          InterventionInterventionTagRelation,
-        );
-        commit('setRelationInterventionsAndTags', {
-          newValue: apiRelationInterventionsAndTags.map((r) => ({
-            interventionId: r.intervention.id,
-            interventionTagId: r.interventionTag.id,
-          })),
-        });
-      } catch (error) {
-        console.log({ error });
-      }
+      // try {
+      //   const apiRelationInterventionsAndTags = await DataStore.query(
+      //     InterventionInterventionTagRelation,
+      //   );
+      //   commit('setRelationInterventionsAndTags', {
+      //     newValue: apiRelationInterventionsAndTags.map((r) => ({
+      //       interventionId: r.intervention.id,
+      //       interventionTagId: r.interventionTag.id,
+      //     })),
+      //   });
+      // } catch (error) {
+      //   console.log({ error });
+      // }
 
       commit('setLoading', { newValue: false });
     },
