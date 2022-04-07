@@ -9,7 +9,7 @@
         <div
           class="d-flex justify-space-around"
           style="width: 100%"
-          v-if="allowedInterventions.length > 0"
+          v-if="interventionsOfLevelById.length > 0"
         >
           <div v-if="getLoading">
             <div class="row mt-3">
@@ -18,13 +18,18 @@
               <v-skeleton-loader type="avatar"></v-skeleton-loader>
             </div>
           </div>
-          <v-tooltip v-else top v-for="id in allowedInterventions" :key="id">
+          <v-tooltip
+            v-else
+            top
+            v-for="intervention in interventionsOfLevelById({ levelId: id })"
+            :key="intervention.id"
+          >
             <template v-slot:activator="{ on, attrs }">
               <v-avatar v-bind="attrs" v-on="on">
                 <v-icon>mdi-hammer-wrench</v-icon>
               </v-avatar>
             </template>
-            <span>{{ INTERVENTIONById({ id }).name }}</span>
+            <span>{{ intervention.name }}</span>
           </v-tooltip>
         </div>
         <div v-else style="height: 48px; overflow: hidden">
@@ -44,9 +49,6 @@ import { dataTypesDict } from '../../store/constants';
 export default {
   name: 'LevelColumnHeader',
   props: {
-    allowedInterventions: {
-      required: true,
-    },
     name: {
       type: String,
       required: true,
@@ -61,6 +63,7 @@ export default {
     ...mapGetters({
       getLoading: 'LEVEL_Data/getLoading',
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
+      interventionsOfLevelById: 'LEVEL_Data/interventionsOfLevelById',
     }),
   },
   methods: {
