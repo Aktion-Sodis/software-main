@@ -74,7 +74,6 @@
                 >
                   <template v-slot:text-input="slotProps">
                     <v-textarea
-                      :counter="description.length > levelDescriptionMaxChar - 20"
                       autofocus
                       required
                       outlined
@@ -111,19 +110,31 @@
                     ></v-checkbox>
                   </div>
                 </v-card-title>
-                <div v-if="read && levelInFocus">
-                  <div v-for="id in levelInFocus.allowedInterventions" :key="id">
-                    <v-avatar>
-                      <v-icon> mdi-hammer-wrench </v-icon>
-                    </v-avatar>
-                    <span v-if="INTERVENTIONById({ id })">
-                      {{
-                        calculateUILocaleString({
-                          languageTexts: INTERVENTIONById({ id }).name.languageTexts,
-                        })
-                      }}
-                    </span>
+                <div v-if="read && dataIdInFocus">
+                  <div v-if="interventionsOfLevelById({ levelId: dataIdInFocus }).length > 0">
+                    <div
+                      v-for="intervention in interventionsOfLevelById({ levelId: dataIdInFocus })"
+                      :key="intervention.id"
+                    >
+                      <v-avatar>
+                        <v-icon>
+                          {{
+                            intervention.interventionType === InterventionType.TECHNOLOGY
+                              ? 'mdi-hammer-wrench'
+                              : 'mdi-school'
+                          }}
+                        </v-icon>
+                      </v-avatar>
+                      <span>
+                        {{
+                          calculateUILocaleString({
+                            languageTexts: intervention.name.languageTexts,
+                          })
+                        }}
+                      </span>
+                    </div>
                   </div>
+                  <div v-else>{{ $t('organizationStructure.hasNoInterventions') }}</div>
                 </div>
                 <v-tooltip bottom v-if="!read" :disabled="areInterventionsAllowed">
                   <template v-slot:activator="{ on, attrs }">
@@ -210,7 +221,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
-import { Level } from '../../models';
+import { Level, InterventionType } from '../../models';
 import { emptyMutableI18nString, mutableI18nString } from '../../store/classes';
 // import { emptyI18nString } from '../../store/classes';
 
@@ -229,6 +240,7 @@ export default {
       description: emptyMutableI18nString(),
       allowedInterventions: [],
       areInterventionsAllowed: true,
+      InterventionType,
       // tagIds: [],
     };
   },
@@ -249,6 +261,7 @@ export default {
       LEVELById: 'LEVEL_Data/LEVELById',
       fallbackLocaleIndex: 'fallbackLocaleIndex',
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
+      interventionsOfLevelById: 'LEVEL_Data/interventionsOfLevelById',
 
       calculateUILocaleString: 'calculateUILocaleString',
     }),
