@@ -1,6 +1,5 @@
 <template>
   <v-tabs background-color="grey lighten-3" show-arrows centered center-active v-model="iQ">
-    <!-- <v-tabs-slider color="primary"></v-tabs-slider> -->
     <draggable
       v-model="questions"
       @start="drag = true"
