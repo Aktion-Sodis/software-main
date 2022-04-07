@@ -156,20 +156,6 @@
                 {{ $t('surveys.modal.image') }}
               </v-card-title>
 
-              <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" max-height="200px">
-                <div v-if="!read" class="iv-edit-icon">
-                  <v-btn fab color="primary" @click="selectImg">
-                    <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
-                  </v-btn>
-                  <input
-                    type="file"
-                    accept="image/png, image/jpeg"
-                    ref="img-upload"
-                    style="display: none"
-                  />
-                </div>
-              </v-img>
-
               <!-- <div v-if="read">
                 <v-card-title class="pr-0 d-flex justify-space-between">
                   <span class="mr-2">
@@ -258,6 +244,27 @@
                   </template>
                 </v-select>
               </v-card-title>
+
+              <v-card-title class="pt-0 pt-sm-2">
+                {{ $t('interventions.modal.image') }}
+              </v-card-title>
+
+              <ImgFromS3 :assumedSrc="read ? deriveImgPath : null" dataType="survey">
+                <template v-slot:v-img="slotProps">
+                  <v-img max-height="200px" :src="slotProps.src">
+                    <v-btn v-if="!read" fab class="iv-edit-icon" color="primary" @click="selectImg">
+                      <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
+                    </v-btn>
+
+                    <FileInput
+                      v-if="!read"
+                      ref="img-upload"
+                      style="display: none"
+                      :acceptedType="'image/png'"
+                    />
+                  </v-img>
+                </template>
+              </ImgFromS3>
             </v-col>
           </v-row>
         </v-container>
@@ -305,8 +312,10 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { dataTypesDict, modalModesDict } from '../../../store/constants';
 import LocaleTextBox from '../../global/LocaleTextBox.vue';
+import ImgFromS3 from '../../commons/ImgFromS3.vue';
 import { Survey, SurveyType } from '../../../models';
 import { emptyMutableI18nString, mutableI18nString } from '../../../store/classes';
+import FileInput from '../../commons/FileInput.vue';
 
 const surveyDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_SURVEY_DESCRIPTION_MAX_CHAR, 10),
@@ -315,7 +324,7 @@ const surveyDescriptionMaxChar = Math.max(
 
 export default {
   name: 'SurveyModalFirstCard',
-  components: { LocaleTextBox },
+  components: { LocaleTextBox, ImgFromS3, FileInput },
   data() {
     return {
       surveyDescriptionMaxChar,
@@ -417,8 +426,7 @@ export default {
     },
     selectImg() {
       const imgInput = this.$refs['img-upload'];
-      imgInput.click();
-      // console.log('TODO: do something with', imgInput);
+      imgInput.$el.click();
     },
     nextStepHandler() {
       this.setSurveyDraft(

@@ -1,6 +1,6 @@
 // import { API, DataStore } from 'aws-amplify';
 // import { createSurvey } from '../../graphql/mutations';
-import { API, DataStore } from 'aws-amplify';
+import { API, DataStore, Storage } from 'aws-amplify';
 import { v4 as uuidv4 } from 'uuid';
 import { deleteSurvey } from '../../graphql/mutations';
 // import { listSurveys, listSurveyTags } from '../../graphql/queries';
@@ -13,6 +13,7 @@ import {
   // SurveySurveyTagRelation,
 } from '../../models';
 import { dataTypesDict, modalModesDict } from '../constants';
+import { deriveFilePath } from '../utils';
 
 const surveysData = {
   namespaced: true,
@@ -113,6 +114,14 @@ const surveysData = {
           //     }),
           //   );
           // }
+
+          await Storage.put(
+            deriveFilePath('interventionSurveyPicPath', {
+              interventionID: survey.interventionSurveysId,
+              surveyId: postResponse.id,
+            }),
+            rootGetters['dataModal/getImageFile'],
+          );
 
           commit('addSurvey', postResponse);
           dispatch(
