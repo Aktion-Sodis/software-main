@@ -110,11 +110,13 @@
                     <v-tooltip top>
                       <template v-slot:activator="{ on, attrs }">
                         <v-avatar v-bind="attrs" v-on="on">
-                          <v-icon>{{
-                            interventionInFocus.interventionType === InterventionType.TECHNOLOGY
-                              ? 'mdi-hammer-wrench'
-                              : 'mdi-school'
-                          }}</v-icon>
+                          <v-icon>
+                            {{
+                              interventionInFocus.interventionType === InterventionType.TECHNOLOGY
+                                ? 'mdi-hammer-wrench'
+                                : 'mdi-school'
+                            }}
+                          </v-icon>
                         </v-avatar>
                       </template>
                       <span>{{
