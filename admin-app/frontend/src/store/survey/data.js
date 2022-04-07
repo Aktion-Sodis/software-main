@@ -9,8 +9,8 @@ import {
   Question,
   QuestionOption,
   Survey,
-  SurveyTag,
-  SurveySurveyTagRelation,
+  // SurveyTag,
+  // SurveySurveyTagRelation,
 } from '../../models';
 import { dataTypesDict, modalModesDict } from '../constants';
 
@@ -18,24 +18,24 @@ const surveysData = {
   namespaced: true,
   state: () => ({
     surveys: [],
-    surveyTags: [],
-    relationSurveysAndTags: [],
+    // surveyTags: [],
+    // relationSurveysAndTags: [],
     loading: false,
   }),
   getters: {
     /* READ */
     getSurveys: ({ surveys }) => surveys.filter((i) => !i._deleted).sort((a, b) => a.id - b.id),
-    getSurveyTags: ({ surveyTags }) => surveyTags,
-    getRelationSurveysAndTags: ({ relationSurveysAndTags }) => relationSurveysAndTags,
+    // getSurveyTags: ({ surveyTags }) => surveyTags,
+    // getRelationSurveysAndTags: ({ relationSurveysAndTags }) => relationSurveysAndTags,
     getLoading: ({ loading }) => loading,
 
     SURVEYById:
       (_, { getSurveys }) => ({ id }) => getSurveys.find((s) => s.id === id),
-    tagById:
-      (_, { getSurveyTags }) => ({ tagId }) => getSurveyTags.find((t) => t.tagId === tagId),
+    // tagById:
+    // (_, { getSurveyTags }) => ({ tagId }) => getSurveyTags.find((t) => t.tagId === tagId),
 
-    tagIdsBySurveyId:
-      (_, { getRelationSurveysAndTags }) => ({ surveyId }) => getRelationSurveysAndTags.filter((r) => r.surveyId === surveyId).map((r) => r.surveyTagId),
+    // tagIdsBySurveyId:
+    // (_, { getRelationSurveysAndTags }) => ({ surveyId }) => getRelationSurveysAndTags.filter((r) => r.surveyId === surveyId).map((r) => r.surveyTagId),
   },
   mutations: {
     addSurvey: (state, survey) => {
@@ -60,17 +60,15 @@ const surveysData = {
     setSurveys: (state, { newValue }) => {
       state.surveys = newValue;
     },
-    setRelationSurveysAndTags: (state, { newValue }) => {
-      state.relationSurveysAndTags = newValue;
-    },
-    setSurveyTags: (state, { newValue }) => {
-      state.surveyTags = newValue;
-    },
+    // setRelationSurveysAndTags: (state, { newValue }) => {
+    //   state.relationSurveysAndTags = newValue;
+    // },
+    // setSurveyTags: (state, { newValue }) => {
+    //   state.surveyTags = newValue;
+    // },
   },
   actions: {
-    APIpost: async ({
-      commit, dispatch, getters, rootGetters,
-    }) => {
+    APIpost: async ({ commit, dispatch, rootGetters }) => {
       commit('setLoading', { newValue: true });
 
       const questionsWithUnnecessaryLastOne = rootGetters['QUESTION_UI/getQuestionDrafts'];
@@ -103,18 +101,18 @@ const surveysData = {
 
       DataStore.save(survey)
         .then(async (postResponse) => {
-          const tagIds = surveyDraft.tags;
-          // eslint-disable-next-line no-restricted-syntax
-          for (const tagId of tagIds) {
-            const localTag = getters.tagById({ id: tagId });
-            // eslint-disable-next-line no-await-in-loop
-            await DataStore.save(
-              new SurveySurveyTagRelation({
-                survey: postResponse,
-                surveyTag: localTag,
-              }),
-            );
-          }
+          // const tagIds = surveyDraft.tags;
+          // // eslint-disable-next-line no-restricted-syntax
+          // for (const tagId of tagIds) {
+          //   const localTag = getters.tagById({ id: tagId });
+          //   // eslint-disable-next-line no-await-in-loop
+          //   await DataStore.save(
+          //     new SurveySurveyTagRelation({
+          //       survey: postResponse,
+          //       surveyTag: localTag,
+          //     }),
+          //   );
+          // }
 
           commit('addSurvey', postResponse);
           dispatch(
@@ -204,24 +202,24 @@ const surveysData = {
         console.log({ error });
       }
 
-      try {
-        const apiSurveyTags = await DataStore.query(SurveyTag);
-        commit('setSurveyTags', { newValue: apiSurveyTags });
-      } catch (error) {
-        console.log({ error });
-      }
+      // try {
+      //   const apiSurveyTags = await DataStore.query(SurveyTag);
+      //   commit('setSurveyTags', { newValue: apiSurveyTags });
+      // } catch (error) {
+      //   console.log({ error });
+      // }
 
-      try {
-        const apiRelationSurveysAndTags = await DataStore.query(SurveySurveyTagRelation);
-        commit('setRelationSurveysAndTags', {
-          newValue: apiRelationSurveysAndTags.map((r) => ({
-            surveyId: r.survey.id,
-            surveyTagId: r.surveyTag.id,
-          })),
-        });
-      } catch (error) {
-        console.log({ error });
-      }
+      // try {
+      //   const apiRelationSurveysAndTags = await DataStore.query(SurveySurveyTagRelation);
+      //   commit('setRelationSurveysAndTags', {
+      //     newValue: apiRelationSurveysAndTags.map((r) => ({
+      //       surveyId: r.survey.id,
+      //       surveyTagId: r.surveyTag.id,
+      //     })),
+      //   });
+      // } catch (error) {
+      //   console.log({ error });
+      // }
 
       commit('setLoading', { newValue: false });
     },

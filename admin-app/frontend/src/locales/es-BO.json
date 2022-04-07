@@ -122,6 +122,7 @@
     "addNewLevel": "Añadir un nuevo nivel",
     "hasNoInterventions": "No existen intervenciones para este nivel.",
     "hasNoEntities": "No hay entidades para este nivel.",
+    "thereAreMoreInterventions": "Hay {count} intervenciones más para este nivel.",
     "levelModal": {
       "modalTitle": {
         "edit": "Editar nivel ",
@@ -133,6 +134,8 @@
         "create": "Esta es la descripción de este diálogo de creación."
       },
       "interventions": "Intervenciones",
+      "areInterventionsAllowed": "estan permitidas.",
+      "allowInterventionsFirst": "Permita las intervenciones primero.",
       "name": "Nombre del nivel",
       "description": "Descripción del nivel",
       "manageAllowedInterventions": "Gestionar las intervenciones permitidas",

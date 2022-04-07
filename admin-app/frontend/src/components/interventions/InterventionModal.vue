@@ -170,7 +170,7 @@
                   </template>
                 </ImgFromS3>
 
-                <v-card-title>
+                <!-- <v-card-title>
                   {{ $t('baseData.tags') }}
                 </v-card-title>
 
@@ -209,7 +209,7 @@
                       })
                     }}
                   </template>
-                </v-select>
+                </v-select> -->
 
                 <v-card-title>
                   {{ $t('baseData.documents') }}
@@ -388,7 +388,7 @@ export default {
       typeIndex: 0,
       types: [InterventionType.TECHNOLOGY, InterventionType.EDUCATION],
       description: emptyMutableI18nString(),
-      tagIds: [],
+      // tagIds: [],
       levelIds: [],
       contents: [],
     };
@@ -407,8 +407,8 @@ export default {
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
       LEVELById: 'LEVEL_Data/LEVELById',
 
-      allInterventionTags: 'INTERVENTION_Data/getInterventionTags',
-      tagById: 'INTERVENTION_Data/tagById',
+      // allInterventionTags: 'INTERVENTION_Data/getInterventionTags',
+      // tagById: 'INTERVENTION_Data/tagById',
       interventionContentTagById: 'INTERVENTION_Data/interventionContentTagById',
 
       calculateUILocaleString: 'calculateUILocaleString',
@@ -502,7 +502,7 @@ export default {
           name: this.name,
           description: this.description,
           interventionType: this.type,
-          tags: this.tagIds,
+          tags: [],
           surveys: [], // TODO
           levels: [],
           contents: this.contents, // TODO
@@ -520,7 +520,7 @@ export default {
       this.description = mutableI18nString({
         languageTexts: this.interventionDraft?.description.languageTexts,
       });
-      this.tagIds = this.interventionDraft?.tagIds ?? [];
+      // this.tagIds = this.interventionDraft?.tagIds ?? [];
       this.contents = this.interventionDraft?.contents ?? [];
     },
     nameUpdatedHandler(res) {

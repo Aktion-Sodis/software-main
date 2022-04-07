@@ -101,7 +101,15 @@
 
               <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
                 <v-card-title class="pt-0 pt-sm-2">
-                  {{ $t('organizationStructure.levelModal.interventions') }}
+                  <span>
+                    {{ $t('organizationStructure.levelModal.interventions') }}
+                  </span>
+                  <div v-if="!read" class="ml-2">
+                    <v-checkbox
+                      v-model="areInterventionsAllowed"
+                      :label="$t('organizationStructure.levelModal.areInterventionsAllowed')"
+                    ></v-checkbox>
+                  </div>
                 </v-card-title>
                 <div v-if="read && levelInFocus">
                   <div v-for="id in levelInFocus.allowedInterventions" :key="id">
@@ -117,20 +125,29 @@
                     </span>
                   </div>
                 </div>
-                <v-select
-                  v-else
-                  v-model="allowedInterventions"
-                  :items="localizeInterventions"
-                  :label="$t('organizationStructure.levelModal.manageAllowedInterventions')"
-                  multiple
-                  dense
-                  outlined
-                  persistent-hint
-                  item-value="id"
-                  item-text="name"
-                ></v-select>
+                <v-tooltip bottom v-if="!read" :disabled="areInterventionsAllowed">
+                  <template v-slot:activator="{ on, attrs }">
+                    <div v-bind="attrs" v-on="on">
+                      <v-select
+                        v-model="allowedInterventions"
+                        :items="localizeInterventions"
+                        :label="$t('organizationStructure.levelModal.manageAllowedInterventions')"
+                        multiple
+                        dense
+                        outlined
+                        persistent-hint
+                        item-value="id"
+                        item-text="name"
+                        :disabled="!areInterventionsAllowed"
+                      ></v-select>
+                    </div>
+                  </template>
+                  <span>
+                    {{ $t('organizationStructure.levelModal.allowInterventionsFirst') }}
+                  </span>
+                </v-tooltip>
 
-                <v-card-title>
+                <!-- <v-card-title>
                   {{ $t('baseData.tags') }}
                 </v-card-title>
                 <div v-if="read && levelInFocus">
@@ -154,7 +171,7 @@
                   :label="$t('baseData.tags')"
                   multiple
                   outlined
-                ></v-select>
+                ></v-select> -->
               </v-col>
             </v-row>
           </v-container>
@@ -185,8 +202,6 @@
           </v-btn>
         </v-card-actions>
       </v-form>
-      {{ name }}
-      {{ description }}
     </v-card>
   </v-dialog>
 </template>
@@ -213,7 +228,8 @@ export default {
       name: emptyMutableI18nString(),
       description: emptyMutableI18nString(),
       allowedInterventions: [],
-      tagIds: [],
+      areInterventionsAllowed: true,
+      // tagIds: [],
     };
   },
   watch: { levelDraft: 'prefillComponentDataFromLevelDraft' },
@@ -227,8 +243,8 @@ export default {
       dataIdInFocus: 'dataModal/getDataIdInFocus',
       levelDraft: 'dataModal/getDataDraft',
 
-      allLevelTags: 'LEVEL_Data/getLevelTags',
-      tagById: 'LEVEL_Data/tagById',
+      // allLevelTags: 'LEVEL_Data/getLevelTags',
+      // tagById: 'LEVEL_Data/tagById',
       lowestLevelId: 'LEVEL_Data/lowestLevelId',
       LEVELById: 'LEVEL_Data/LEVELById',
       fallbackLocaleIndex: 'fallbackLocaleIndex',
@@ -269,18 +285,18 @@ export default {
       return this.modalMode === modalModesDict.read;
     },
     areThereChanges() {
-      const tagIdsInComponent = new Set(this.tagIds);
-      const tagIdsInDraft = new Set(this.levelDraft.tagIds);
+      // const tagIdsInComponent = new Set(this.tagIds);
+      // const tagIdsInDraft = new Set(this.levelDraft.tagIds);
 
       const allowedInterventionsInComponent = new Set(this.allowedInterventions);
       const allowedInterventionsInDraft = new Set(this.levelDraft.allowedInterventions);
       return (
         this.name !== this.levelDraft.name
         || this.description !== this.levelDraft.description
-        || !(
-          tagIdsInComponent.size === tagIdsInDraft.size
-          && [...tagIdsInComponent].every((value) => tagIdsInDraft.has(value))
-        )
+        // || !(
+        // tagIdsInComponent.size === tagIdsInDraft.size
+        // && [...tagIdsInComponent].every((value) => tagIdsInDraft.has(value))
+        // )
         || !(
           allowedInterventionsInComponent.size === allowedInterventionsInDraft.size
           && [...allowedInterventionsInComponent].every((value) => allowedInterventionsInDraft.has(value))
@@ -330,9 +346,10 @@ export default {
           name: this.name,
           description: this.description,
           parentLevelID: this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID,
-          interventionsAreAllowed: this.allowedInterventions.length > 0,
+          interventionsAreAllowed: this.areInterventionsAllowed,
           allowedInterventions: this.allowedInterventions || [],
-          tagIds: this.tagIds || [],
+          // tagIds: this.tagIds || [],
+          tagIds: [],
           customData: [],
         }),
       );
@@ -344,7 +361,7 @@ export default {
       this.description = mutableI18nString({
         languageTexts: this.levelDraft?.description.languageTexts,
       });
-      this.tagIds = this.levelDraft?.tagIds ?? [];
+      // this.tagIds = this.levelDraft?.tagIds ?? [];
       // console.log(this.levelDraft?.allowedInterventions);
       this.allowedInterventions = this.levelDraft?.allowedInterventions ?? [];
     },

@@ -10,7 +10,6 @@
       >
         <LevelColumnHeader
           :id="level.id"
-          :allowedInterventions="level.allowedInterventions"
           :name="calculateUILocaleString({ languageTexts: level.name.languageTexts })"
         />
         <EntitiesColumn :entityLevelId="level.id" :index="index" />

@@ -1,27 +1,34 @@
 import { DataStore } from '@aws-amplify/datastore';
-import { API, graphqlOperation } from 'aws-amplify';
-import { Level, I18nString, Entity } from '../../models';
+import { API } from 'aws-amplify';
+import {
+  Level, I18nString, Entity, LevelInterventionRelation,
+} from '../../models';
 import { dataTypesDict, modalModesDict } from '../constants';
 import { deleteLevel, updateLevel } from '../../graphql/mutations';
-import { listLevels } from '../../graphql/queries';
+// import { listLevels } from '../../graphql/queries';
 
 const levelsData = {
   namespaced: true,
   state: () => ({
     levels: [],
-    levelTags: [
-      { tagId: '468084f3-6ec4-42ea-bdb2-40900816b64f', name: 'Tag 1' },
-      { tagId: 'e5ebc38b-abed-498d-9052-6c8767cc341e', name: 'Tag 2' },
-    ],
+    // levelTags: [
+    //   { tagId: '468084f3-6ec4-42ea-bdb2-40900816b64f', name: 'Tag 1' },
+    //   { tagId: 'e5ebc38b-abed-498d-9052-6c8767cc341e', name: 'Tag 2' },
+    // ],
     loading: false,
+    relationLevelIntervention: [],
   }),
   getters: {
     /* READ */
-    getLevels: ({ levels }) => levels
-      .filter((l) => !l._deleted)
-      .map((l) => ({ ...l, allowedInterventions: l.allowedInterventions.items ?? [] })),
-    getLevelTags: ({ levelTags }) => levelTags,
+    getLevels: ({ levels }) => levels.filter((l) => !l._deleted),
+    // getLevelTags: ({ levelTags }) => levelTags,
     getLoading: ({ loading }) => loading,
+    getRelationLevelIntervention: ({ relationLevelIntervention }) => relationLevelIntervention,
+
+    interventionsOfLevelById:
+      (_, { getRelationLevelIntervention }) => ({ levelId }) => getRelationLevelIntervention
+        .filter((rel) => rel.level.id === levelId)
+        .map((rel) => rel.intervention),
 
     sortedLevels: (_, getters) => getters.getLevels.sort((a, b) => getters.hierarchySort(a, b)),
     // used in the getter "sortedLevels". Don't use directly outside of Vuex environment.
@@ -44,8 +51,8 @@ const levelsData = {
 
     LEVELById:
       (_, { getLevels }) => ({ id }) => getLevels.find((i) => i.id === id),
-    tagById:
-      (_, { getLevelTags }) => ({ tagId }) => getLevelTags.find((t) => t.tagId === tagId),
+    // tagById:
+    // (_, { getLevelTags }) => ({ tagId }) => getLevelTags.find((t) => t.tagId === tagId),
   },
   mutations: {
     addLevel: (state, level) => {
@@ -69,6 +76,9 @@ const levelsData = {
     },
     setLevels: (state, { newValue }) => {
       state.levels = newValue;
+    },
+    setRelationLevelIntervention: (state, { newValue }) => {
+      state.relationLevelIntervention = newValue;
     },
   },
   actions: {
@@ -290,26 +300,32 @@ const levelsData = {
         },
         { root: true },
       );
-      const apiLevels = await dispatch('APIgetAll');
-      const apiEntities = await dispatch('ENTITY_Data/APIgetAll', null, { root: true });
-      commit('setLevels', {
-        newValue: apiLevels.filter((l) => !l._deleted),
-      });
-      commit(
-        'ENTITY_Data/setEntities',
-        { newValue: apiEntities.filter((e) => !e._deleted) },
-        { root: true },
-      );
-      commit('setLoading', { newValue: false });
-    },
-    APIgetAll: async () => {
       try {
-        return (await API.graphql(graphqlOperation(listLevels))).data.listLevels.items;
+        const apiLevelInterventionRelation = await DataStore.query(LevelInterventionRelation);
+        console.log({ apiLevelInterventionRelation });
+        commit('setRelationLevelIntervention', { newValue: apiLevelInterventionRelation });
+        const apiLevels = await dispatch('APIgetAll');
+        commit('setLevels', {
+          newValue: apiLevels.filter((l) => !l._deleted),
+        });
       } catch (error) {
         console.log({ error });
-        return [];
       }
+
+      try {
+        const apiEntities = await dispatch('ENTITY_Data/APIgetAll', null, { root: true });
+        commit(
+          'ENTITY_Data/setEntities',
+          { newValue: apiEntities.filter((e) => !e._deleted) },
+          { root: true },
+        );
+      } catch (error) {
+        console.log({ error });
+      }
+
+      commit('setLoading', { newValue: false });
     },
+    APIgetAll: async () => DataStore.query(Level),
   },
 };
 
