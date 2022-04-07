@@ -66,7 +66,7 @@ const emptyEntity = () => new Entity({
   parentEntityID: null,
   customData: [],
   appliedInterventions: [],
-  entityLevelId: null,
+  entityLevelId: '',
 });
 
 const mutableI18nString = ({ languageTexts }) => ({

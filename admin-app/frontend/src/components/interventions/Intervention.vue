@@ -8,9 +8,9 @@
     <v-card-title>
       {{ calculateUILocaleString({ languageTexts: interventionName.languageTexts }) }}
       <v-spacer></v-spacer>
-      <v-chip v-for="tagId in interventionTagIds" :key="tagId" class="ml-2"
+      <!-- <v-chip v-for="tagId in interventionTagIds" :key="tagId" class="ml-2"
         >{{ tagById({ id: tagId }).text }}
-      </v-chip>
+      </v-chip> -->
     </v-card-title>
     <v-card-subtitle class="mt-0">
       {{ calculateUILocaleString({ languageTexts: interventionDescription.languageTexts }) }}
@@ -41,10 +41,10 @@ export default {
       type: Object,
       required: true,
     },
-    interventionTagIds: {
-      type: Array,
-      // validator: (a) => a.every((e) => uuidValidate(e)),
-    },
+    // interventionTagIds: {
+    //   type: Array,
+    //   // validator: (a) => a.every((e) => uuidValidate(e)),
+    // },
     interventionContent: {
       type: Array,
       // validator: (a) => a.every((e) => uuidValidate(e.id)),
@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      tagById: 'INTERVENTION_Data/tagById',
+      // tagById: 'INTERVENTION_Data/tagById',
       calculateUILocaleString: 'calculateUILocaleString',
     }),
     deriveImgPath() {

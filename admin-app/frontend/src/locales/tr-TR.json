@@ -122,6 +122,7 @@
     "addNewLevel": "Yeni seviye ekle",
     "hasNoInterventions": "Bu seviyede henüz hiç müdahale yok.",
     "hasNoEntities": "Bu seviyede henüz hiç oluşum yok.",
+    "thereAreMoreInterventions": "Bu seviye için {count} müdahale daha var.",
     "levelModal": {
       "modalTitle": {
         "edit": "Seviyeyi düzenle: ",
@@ -133,6 +134,8 @@
         "create": "Bu güzel seviye yaratma diyaloğunun çok güzel açıklaması."
       },
       "interventions": "Müdahaleler",
+      "areInterventionsAllowed": "uygulanabilir.",
+      "allowInterventionsFirst": "Lütfen önce müdahale yapılmasına izin verin.",
       "name": "Seviye adı",
       "description": "Seviye açıklaması",
       "manageAllowedInterventions": "İzin verilen müdahaleleri yönet",

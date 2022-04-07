@@ -77,7 +77,7 @@ export const questionTypesDict = Object.freeze({
   singleChoice: 'SINGLECHOICE',
   multipleChoice: 'MULTIPLECHOICE',
   picture: 'PICTURE',
-  pictureWithTags: 'PICTUREWITHTAGS',
+  // pictureWithTags: 'PICTUREWITHTAGS',
   audio: 'AUDIO',
 });
 
@@ -86,7 +86,7 @@ export const questionTypesIconDict = Object.freeze({
   SINGLECHOICE: 'mdi-radiobox-marked',
   MULTIPLECHOICE: 'mdi-checkbox-blank-outline',
   PICTURE: 'mdi-image',
-  PICTUREWITHTAGS: 'mdi-message-image',
+  // PICTUREWITHTAGS: 'mdi-message-image',
   AUDIO: 'mdi-waveform',
 });
 
