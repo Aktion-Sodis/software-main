@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative">
-    <slot name="v-img" :src="fetchedSrc" :lazy-src="dataType" v-if="fetchedSrc"></slot>
+    <slot name="v-img" :src="fetchedSrc" :lazy-src="requireImg(dataType)" v-if="fetchedSrc"></slot>
     <slot name="v-img" v-else :src="requireImg(dataType)"> </slot>
     <v-progress-circular
       class="loading-circle"
