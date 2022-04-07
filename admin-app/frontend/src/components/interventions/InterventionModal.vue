@@ -147,7 +147,7 @@
                   {{ $t('interventions.modal.image') }}
                 </v-card-title>
 
-                <ImgFromS3 :assumedSrc="read ? deriveImgPath : null">
+                <ImgFromS3 :assumedSrc="read ? deriveImgPath : null" dataType="intervention">
                   <template v-slot:v-img="slotProps">
                     <v-img max-height="200px" :src="slotProps.src">
                       <v-btn
