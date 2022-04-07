@@ -107,7 +107,9 @@ class UserDataViewState extends State<UserDataView> {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-          context.read<InAppBloc>().add(MainViewEvent());
+          if (widget.inApp) {
+            context.read<InAppBloc>().add(MainViewEvent());
+          }
           return false;
         },
         child: Scaffold(
@@ -266,12 +268,12 @@ class UserDataViewState extends State<UserDataView> {
                                 decoration: InputDecoration(
                                     prefixIcon:
                                         const Icon(FontAwesomeIcons.user),
-                                    labelText: strings.user_forename),
+                                    labelText: strings.user_surname),
                                 textInputAction: TextInputAction.next,
                                 enableSuggestions: true,
                                 validator: (value) => (value ?? "").isNotEmpty
                                     ? null
-                                    : strings.user_please_enter_forename,
+                                    : strings.user_please_enter_surename,
                               )),
                           Container(
                               margin:

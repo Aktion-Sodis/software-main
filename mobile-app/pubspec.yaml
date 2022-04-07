@@ -45,6 +45,7 @@ dependencies:
   dropdown_search: ^2.0.1
   permission_handler: ^9.2.0
   hive: ^2.1.0
+  connectivity_plus: ^2.2.1
 
 
 dev_dependencies:

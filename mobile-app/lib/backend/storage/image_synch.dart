@@ -105,11 +105,13 @@ class SyncedFile {
       File localCacheFile = await getCachePath();
       bool cached = await localCacheFile.exists();
       if (!cached) {
-        await StorageRepository.downloadFile(localCacheFile, path);
+        await StorageRepository.downloadFile(localCacheFile, path,
+            checkConnection: false);
       } else {
         ListResult listResult = await Amplify.Storage.list(path: path);
         if (listResult.items.isEmpty) {
-          StorageRepository.uploadFile(await getCachePath(), path);
+          StorageRepository.uploadFile(await getCachePath(), path,
+              checkConnection: false);
         } else {
           DateTime? lastModifiedLocal;
           try {
@@ -117,13 +119,17 @@ class SyncedFile {
           } catch (e) {}
           DateTime? lastModifiedOnline = listResult.items.first.lastModified;
           if (lastModifiedOnline == null) {
-            await StorageRepository.uploadFile(localCacheFile, path);
+            await StorageRepository.uploadFile(localCacheFile, path,
+                checkConnection: false);
           } else if (lastModifiedLocal == null) {
-            await StorageRepository.downloadFile(localCacheFile, path);
+            await StorageRepository.downloadFile(localCacheFile, path,
+                checkConnection: false);
           } else if (lastModifiedLocal.isAfter(lastModifiedOnline)) {
-            await StorageRepository.uploadFile(localCacheFile, path);
+            await StorageRepository.uploadFile(localCacheFile, path,
+                checkConnection: false);
           } else if (lastModifiedLocal.isBefore(lastModifiedOnline)) {
-            await StorageRepository.downloadFile(localCacheFile, path);
+            await StorageRepository.downloadFile(localCacheFile, path,
+                checkConnection: false);
           }
         }
       }
