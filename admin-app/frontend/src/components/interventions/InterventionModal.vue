@@ -493,7 +493,7 @@ export default {
       });
     },
     escHandler() {
-      this.closeInterventionModal();
+      this.closeHandler();
     },
     async submitHandler() {
       const originalVersion = this.edit
