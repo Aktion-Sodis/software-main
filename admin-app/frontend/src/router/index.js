@@ -37,6 +37,16 @@ export const routes = [
     },
   },
   {
+    path: '/',
+    redirect: { name: 'OrganizationStructure' },
+    meta: {
+      requiresAuth: true,
+      shouldBeSynced: false,
+      title: 'redirecting...',
+      onSideBar: false, // TODO: Will change in the future.
+    },
+  },
+  {
     path: '/complete-user-info',
     name: 'CompleteUserInfo',
     component: Auth,
