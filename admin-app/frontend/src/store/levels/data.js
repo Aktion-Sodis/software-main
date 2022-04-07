@@ -9,10 +9,10 @@ const levelsData = {
   namespaced: true,
   state: () => ({
     levels: [],
-    levelTags: [
-      { tagId: '468084f3-6ec4-42ea-bdb2-40900816b64f', name: 'Tag 1' },
-      { tagId: 'e5ebc38b-abed-498d-9052-6c8767cc341e', name: 'Tag 2' },
-    ],
+    // levelTags: [
+    //   { tagId: '468084f3-6ec4-42ea-bdb2-40900816b64f', name: 'Tag 1' },
+    //   { tagId: 'e5ebc38b-abed-498d-9052-6c8767cc341e', name: 'Tag 2' },
+    // ],
     loading: false,
   }),
   getters: {
@@ -20,7 +20,7 @@ const levelsData = {
     getLevels: ({ levels }) => levels
       .filter((l) => !l._deleted)
       .map((l) => ({ ...l, allowedInterventions: l.allowedInterventions.items ?? [] })),
-    getLevelTags: ({ levelTags }) => levelTags,
+    // getLevelTags: ({ levelTags }) => levelTags,
     getLoading: ({ loading }) => loading,
 
     sortedLevels: (_, getters) => getters.getLevels.sort((a, b) => getters.hierarchySort(a, b)),
@@ -44,8 +44,8 @@ const levelsData = {
 
     LEVELById:
       (_, { getLevels }) => ({ id }) => getLevels.find((i) => i.id === id),
-    tagById:
-      (_, { getLevelTags }) => ({ tagId }) => getLevelTags.find((t) => t.tagId === tagId),
+    // tagById:
+    // (_, { getLevelTags }) => ({ tagId }) => getLevelTags.find((t) => t.tagId === tagId),
   },
   mutations: {
     addLevel: (state, level) => {

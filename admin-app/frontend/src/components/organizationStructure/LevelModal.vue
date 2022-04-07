@@ -130,7 +130,7 @@
                   item-text="name"
                 ></v-select>
 
-                <v-card-title>
+                <!-- <v-card-title>
                   {{ $t('baseData.tags') }}
                 </v-card-title>
                 <div v-if="read && levelInFocus">
@@ -154,7 +154,7 @@
                   :label="$t('baseData.tags')"
                   multiple
                   outlined
-                ></v-select>
+                ></v-select> -->
               </v-col>
             </v-row>
           </v-container>
@@ -213,7 +213,7 @@ export default {
       name: emptyMutableI18nString(),
       description: emptyMutableI18nString(),
       allowedInterventions: [],
-      tagIds: [],
+      // tagIds: [],
     };
   },
   watch: { levelDraft: 'prefillComponentDataFromLevelDraft' },
@@ -227,8 +227,8 @@ export default {
       dataIdInFocus: 'dataModal/getDataIdInFocus',
       levelDraft: 'dataModal/getDataDraft',
 
-      allLevelTags: 'LEVEL_Data/getLevelTags',
-      tagById: 'LEVEL_Data/tagById',
+      // allLevelTags: 'LEVEL_Data/getLevelTags',
+      // tagById: 'LEVEL_Data/tagById',
       lowestLevelId: 'LEVEL_Data/lowestLevelId',
       LEVELById: 'LEVEL_Data/LEVELById',
       fallbackLocaleIndex: 'fallbackLocaleIndex',
@@ -269,18 +269,18 @@ export default {
       return this.modalMode === modalModesDict.read;
     },
     areThereChanges() {
-      const tagIdsInComponent = new Set(this.tagIds);
-      const tagIdsInDraft = new Set(this.levelDraft.tagIds);
+      // const tagIdsInComponent = new Set(this.tagIds);
+      // const tagIdsInDraft = new Set(this.levelDraft.tagIds);
 
       const allowedInterventionsInComponent = new Set(this.allowedInterventions);
       const allowedInterventionsInDraft = new Set(this.levelDraft.allowedInterventions);
       return (
         this.name !== this.levelDraft.name
         || this.description !== this.levelDraft.description
-        || !(
-          tagIdsInComponent.size === tagIdsInDraft.size
-          && [...tagIdsInComponent].every((value) => tagIdsInDraft.has(value))
-        )
+        // || !(
+        // tagIdsInComponent.size === tagIdsInDraft.size
+        // && [...tagIdsInComponent].every((value) => tagIdsInDraft.has(value))
+        // )
         || !(
           allowedInterventionsInComponent.size === allowedInterventionsInDraft.size
           && [...allowedInterventionsInComponent].every((value) => allowedInterventionsInDraft.has(value))
@@ -332,7 +332,8 @@ export default {
           parentLevelID: this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID,
           interventionsAreAllowed: this.allowedInterventions.length > 0,
           allowedInterventions: this.allowedInterventions || [],
-          tagIds: this.tagIds || [],
+          // tagIds: this.tagIds || [],
+          tagIds: [],
           customData: [],
         }),
       );
@@ -344,7 +345,7 @@ export default {
       this.description = mutableI18nString({
         languageTexts: this.levelDraft?.description.languageTexts,
       });
-      this.tagIds = this.levelDraft?.tagIds ?? [];
+      // this.tagIds = this.levelDraft?.tagIds ?? [];
       // console.log(this.levelDraft?.allowedInterventions);
       this.allowedInterventions = this.levelDraft?.allowedInterventions ?? [];
     },
