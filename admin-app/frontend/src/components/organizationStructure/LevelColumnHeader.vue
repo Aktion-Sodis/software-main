@@ -7,9 +7,9 @@
       </v-btn>
       <div style="width: 100%">
         <div
-          class="d-flex justify-space-around"
           style="width: 100%"
-          v-if="interventionsOfLevelById.length > 0"
+          v-if="interventionsOfLevel.length > 0"
+          class="d-flex justify-space-around"
         >
           <div v-if="getLoading">
             <div class="row mt-3">
@@ -21,15 +21,27 @@
           <v-tooltip
             v-else
             top
-            v-for="intervention in interventionsOfLevelById({ levelId: id })"
+            v-for="(intervention, index) in interventionsOfLevel"
             :key="intervention.id"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-avatar v-bind="attrs" v-on="on">
+              <v-avatar v-if="index < 4" v-bind="attrs" v-on="on">
                 <v-icon>mdi-hammer-wrench</v-icon>
               </v-avatar>
+              <v-avatar v-if="index === 5" v-bind="attrs" v-on="on">
+                <v-icon>mdi-dots-horizontal</v-icon>
+              </v-avatar>
             </template>
-            <span>{{ intervention.name }}</span>
+            <span v-if="index < 4">
+              {{ calculateUILocaleString({ languageTexts: intervention.name.languageTexts }) }}
+            </span>
+            <span v-if="index === 5">
+              {{
+                $t('organizationStructure.thereAreMoreInterventions', {
+                  count: interventionsOfLevel.length - 4,
+                })
+              }}
+            </span>
           </v-tooltip>
         </div>
         <div v-else style="height: 48px; overflow: hidden">
@@ -64,7 +76,11 @@ export default {
       getLoading: 'LEVEL_Data/getLoading',
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
       interventionsOfLevelById: 'LEVEL_Data/interventionsOfLevelById',
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
+    interventionsOfLevel() {
+      return this.interventionsOfLevelById({ levelId: this.id });
+    },
   },
   methods: {
     ...mapActions({
