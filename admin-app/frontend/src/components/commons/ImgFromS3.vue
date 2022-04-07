@@ -36,7 +36,10 @@ export default {
   },
   methods: {
     fetchSrc() {
-      if (!this.assumedSrc) return;
+      if (!this.assumedSrc) {
+        this.loading = false;
+        return;
+      }
       Storage.get(this.assumedSrc, {
         contentType: 'image/png',
         download: true,
