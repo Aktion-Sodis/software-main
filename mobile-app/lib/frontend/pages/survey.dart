@@ -87,46 +87,48 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-        color: Theme.of(context).canvasColor,
-        child: SafeArea(
-            child: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: _pageController,
-          children: [
-            surveyTitleWidget(
-                context: context,
-                surveyTitle: widget.survey.name,
-                entityName: widget.survey.intervention?.name ?? '',
-                imageFile: syncedSurveyImageFile,
-                goBack: _leaveSurveyRegular,
-                proceed: () {
-                  _pageController.nextPage(
-                      duration: _pageSlideDuration, curve: _pageSlideCurve);
-                }),
-            inSurveyWidget(),
-            _summaryWidget(),
-            endSurveyWidget(
-                context: context,
-                survey: widget.survey,
-                answers: answers,
-                onGoBack: () {
-                  _pageController.previousPage(
-                      duration: _pageSlideDuration, curve: _pageSlideCurve);
-                },
-                onProceed: () async {
-                  await saveSurvey(
-                      context: context,
-                      answers: answers,
-                      preliminaryId: preliminaryExecutedSurveyId,
-                      survey: widget.survey);
-                  _pageController.nextPage(
-                      duration: _pageSlideDuration, curve: _pageSlideCurve);
-                }),
-            successFullyEndedSurvey(
-                context: context, onProceed: _leaveSurveyRegular),
-          ],
-        )));
+    return WillPopScope(
+        onWillPop: () => Future.value(false),
+        child: Material(
+            color: Theme.of(context).canvasColor,
+            child: SafeArea(
+                child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: _pageController,
+              children: [
+                surveyTitleWidget(
+                    context: context,
+                    surveyTitle: widget.survey.name,
+                    entityName: widget.survey.intervention?.name ?? '',
+                    imageFile: syncedSurveyImageFile,
+                    goBack: _leaveSurveyRegular,
+                    proceed: () {
+                      _pageController.nextPage(
+                          duration: _pageSlideDuration, curve: _pageSlideCurve);
+                    }),
+                inSurveyWidget(),
+                _summaryWidget(),
+                endSurveyWidget(
+                    context: context,
+                    survey: widget.survey,
+                    answers: answers,
+                    onGoBack: () {
+                      _pageController.previousPage(
+                          duration: _pageSlideDuration, curve: _pageSlideCurve);
+                    },
+                    onProceed: () async {
+                      await saveSurvey(
+                          context: context,
+                          answers: answers,
+                          preliminaryId: preliminaryExecutedSurveyId,
+                          survey: widget.survey);
+                      _pageController.nextPage(
+                          duration: _pageSlideDuration, curve: _pageSlideCurve);
+                    }),
+                successFullyEndedSurvey(
+                    context: context, onProceed: _leaveSurveyRegular),
+              ],
+            ))));
   }
 
   List<Widget> convertSurveyQuestionsToWidgetList(

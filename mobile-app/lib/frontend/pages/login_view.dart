@@ -17,30 +17,32 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: BlocProvider(
-        create: (context) => LoginBloc(
-          authRepo: context.read<AuthRepository>(),
-          authCubit: context.read<AuthCubit>(),
-        ),
-        child: Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom <
-                        defaultPadding(context)
-                    ? defaultPadding(context)
-                    : MediaQuery.of(context).padding.bottom),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _logo(context),
-                _pic(context),
-                _loginForm(),
-              ],
-            )),
-      )),
-    );
+    return WillPopScope(
+        onWillPop: () => Future.value(false),
+        child: Scaffold(
+          body: SafeArea(
+              child: BlocProvider(
+            create: (context) => LoginBloc(
+              authRepo: context.read<AuthRepository>(),
+              authCubit: context.read<AuthCubit>(),
+            ),
+            child: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom <
+                            defaultPadding(context)
+                        ? defaultPadding(context)
+                        : MediaQuery.of(context).padding.bottom),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _logo(context),
+                    _pic(context),
+                    _loginForm(),
+                  ],
+                )),
+          )),
+        ));
   }
 
   Widget _logo(BuildContext context) {
@@ -63,7 +65,7 @@ class LoginView extends StatelessWidget {
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
             margin: EdgeInsets.symmetric(horizontal: width(context) * .1),
             child: ClipRRect(
-                child: Image.asset("assets/fixAssets/action_pic.jpg"),
+                child: Image.asset("assets/specificAssets/action_pic.jpg"),
                 borderRadius: BorderRadius.circular(8))));
   }
 

@@ -19,6 +19,7 @@ import 'package:mobile_app/backend/repositories/SurveyRepository.dart';
 import 'package:mobile_app/backend/repositories/TaskRepository.dart';
 import 'package:mobile_app/backend/repositories/UserRepository.dart';
 import 'package:mobile_app/backend/storage/image_synch.dart';
+import 'package:mobile_app/backend/storage/storage_repository.dart';
 import 'package:mobile_app/models/InterventionContentRelation.dart';
 
 class SyncBloc extends Bloc<SyncEvent, SyncState> {
@@ -62,14 +63,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
   void fulfillSync() async {
-    try {
-      final result = await InternetAddress.lookup('example.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-      } else {
-        add(CancelSyncEvent());
-        return;
-      }
-    } on SocketException catch (_) {
+    InternetConnectionType internetConnectionType =
+        await StorageRepository.currentInternetConnectionType();
+    if (internetConnectionType != InternetConnectionType.WIFI) {
       add(CancelSyncEvent());
       return;
     }
