@@ -170,7 +170,7 @@
                 </div>
               </v-img>
 
-              <div v-if="read">
+              <!-- <div v-if="read">
                 <v-card-title class="pr-0 d-flex justify-space-between">
                   <span class="mr-2">
                     {{ $t('surveys.modal.firstCard.form.tags') }}
@@ -219,7 +219,7 @@
                     })
                   }}
                 </template>
-              </v-select>
+              </v-select> -->
 
               <v-card-title class="pr-0 d-flex">
                 <span class="mr-2">
@@ -324,7 +324,7 @@ export default {
       },
       name: emptyMutableI18nString(),
       description: emptyMutableI18nString(),
-      surveyTags: [],
+      // surveyTags: [],
       SurveyType,
       typeIndex: 0,
       types: [SurveyType.INITIAL, SurveyType.DEFAULT],
@@ -343,9 +343,9 @@ export default {
       dataIdInFocus: 'dataModal/getDataIdInFocus',
       surveyDraft: 'dataModal/getDataDraft',
       SURVEYById: 'SURVEY_Data/SURVEYById',
-      allSurveyTags: 'SURVEY_Data/getSurveyTags',
-      tagById: 'SURVEY_Data/tagById',
-      tagIdsBySurveyId: 'SURVEY_Data/tagIdsBySurveyId',
+      // allSurveyTags: 'SURVEY_Data/getSurveyTags',
+      // tagById: 'SURVEY_Data/tagById',
+      // tagIdsBySurveyId: 'SURVEY_Data/tagIdsBySurveyId',
 
       fallbackLocaleIndex: 'fallbackLocaleIndex',
       calculateUILocaleString: 'calculateUILocaleString',
@@ -400,7 +400,8 @@ export default {
         new Survey({
           name: this.name,
           description: this.description,
-          tags: this.surveyTags,
+          // tags: this.surveyTags,
+          tags: [],
           questions: [],
           surveyType: this.type,
           intervention: this.INTERVENTIONById({ id: this.interventionId }),
@@ -424,7 +425,8 @@ export default {
         new Survey({
           name: this.name,
           description: this.description,
-          tags: this.surveyTags,
+          // tags: this.surveyTags,
+          tags: [],
           questions: [],
           surveyType: this.type,
           intervention: this.INTERVENTIONById({ id: this.interventionId }),
@@ -438,7 +440,7 @@ export default {
         ?? emptyMutableI18nString();
       this.description = mutableI18nString({ languageTexts: this.surveyDraft?.description.languageTexts })
         ?? emptyMutableI18nString();
-      this.surveyTags = this.tagIdsBySurveyId({ surveyId: this.dataIdInFocus }) ?? [];
+      // this.surveyTags = this.tagIdsBySurveyId({ surveyId: this.dataIdInFocus }) ?? [];
       this.interventionId = this.surveyDraft?.intervention.id ?? null;
 
       this.descriptionTextBoxKey += 1;
