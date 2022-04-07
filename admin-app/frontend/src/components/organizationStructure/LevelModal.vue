@@ -355,16 +355,16 @@ export default {
       this.closeHandler();
     },
     async submitHandler() {
-      let parentLevelID;
-      if (this.nLevels === 0) parentLevelID = null;
+      let parentLevelIDToSet;
+      if (this.nLevels === 0) {parentLevelIDToSet = null;}
       else {
-        parentLevelID = this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID;
+        parentLevelIDToSet = this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID;
       }
       this.setDraft(
         new Level({
           name: this.name,
           description: this.description,
-          parentLevelID,
+          parentLevelID: parentLevelIDToSet,
           interventionsAreAllowed: this.areInterventionsAllowed,
           allowedInterventions: this.allowedInterventions || [],
           // tagIds: this.tagIds || [],
