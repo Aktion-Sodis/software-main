@@ -340,6 +340,11 @@ const levelsData = {
         const apiLevelInterventionRelation = await DataStore.query(LevelInterventionRelation);
         console.log({ apiLevelInterventionRelation });
         commit('setRelationLevelIntervention', { newValue: apiLevelInterventionRelation });
+      } catch (error) {
+        console.log({ error });
+      }
+
+      try {
         const apiLevels = await dispatch('APIgetAll');
         commit('setLevels', {
           newValue: apiLevels,
