@@ -4,7 +4,7 @@ import {
   Level, I18nString, Entity, LevelInterventionRelation,
 } from '../../models';
 import { dataTypesDict, modalModesDict } from '../constants';
-import { deleteLevel, updateLevel } from '../../graphql/mutations';
+import { deleteLevel /* , updateLevel */ } from '../../graphql/mutations';
 // import { listLevels } from '../../graphql/queries';
 
 const levelsData = {
@@ -85,12 +85,47 @@ const levelsData = {
   },
   actions: {
     APIpost: async ({ commit, dispatch }, levelDraft) => {
+      try {
+        console.log('update level called');
+        console.log(levelDraft);
+        const level = new Level({
+          ...levelDraft,
+          name: new I18nString(levelDraft.name),
+          description: new I18nString(levelDraft.description),
+        });
+        console.log('saving level');
+        console.log(level);
+        commit('setLoading', { newValue: true });
+        const savedLevel = await DataStore.save(level);
+        if (level.allowedInterventions !== null) {
+          level.allowedInterventions.forEach((obj) => DataStore.save(obj));
+        }
+        commit('addLevel', savedLevel);
+        console.log({ savedLevel });
+        dispatch(
+          'dataModal/readData',
+          {
+            dataId: savedLevel.id,
+            dataType: dataTypesDict.level,
+          },
+          {
+            root: true,
+          },
+        );
+        commit('setLoading', { newValue: false });
+      } catch (e) {
+        console.log('error in updating level');
+        console.log(e);
+      }
+    },
+    APIput: async ({ commit, dispatch }, levelDraft) => {
+      console.log('in api put');
       console.log(levelDraft);
-      const level = new Level({
-        ...levelDraft,
-        name: new I18nString(levelDraft.name),
-        description: new I18nString(levelDraft.description),
-      });
+      const level = levelDraft.newData;
+      console.log('now copy of level');
+      const copyLevel = Level.copyOf(level, (updated) => { updated.id = levelDraft.originalId; updated._version = levelDraft.originalVersion; });
+      console.log('saving level');
+      console.log(copyLevel);
       commit('setLoading', { newValue: true });
       DataStore.save(level)
         .then((postResponse) => {
@@ -111,9 +146,8 @@ const levelsData = {
         .catch(() => {
           commit('setLoading', { newValue: false });
         });
-    },
-    APIput: async ({ commit, dispatch }, levelDraft) => {
-      commit('setLoading', { newValue: true });
+      /* commit('setLoading', { newValue: true });
+
       await API.graphql({
         query: updateLevel,
         variables: {
@@ -148,7 +182,7 @@ const levelsData = {
         })
         .catch(() => {
           commit('setLoading', { newValue: false });
-        });
+        }); */
     },
     APIdelete: async ({ commit, dispatch }, { id, _version }) => {
       commit('setLoading', { newValue: true });

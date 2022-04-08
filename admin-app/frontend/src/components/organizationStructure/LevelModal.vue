@@ -356,23 +356,33 @@ export default {
     },
     async submitHandler() {
       let parentLevelIDToSet;
-      if (this.nLevels === 0) {parentLevelIDToSet = null;}
-      else {
+      if (this.nLevels === 0) {
+        parentLevelIDToSet = null;
+      } else {
         parentLevelIDToSet = this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID;
       }
+      // problem dürfte hier liegen: es werden immer die this werte genommen
+      console.log('setting draft');
+      console.log(this.allowedInterventions);
+      const draftToSet = new Level({
+        name: this.name,
+        description: this.description,
+        parentLevelID: parentLevelIDToSet,
+        interventionsAreAllowed: this.areInterventionsAllowed,
+        allowedInterventions: this.allowedInterventions || [],
+        // tagIds: this.tagIds || [],
+        tagIds: [],
+        customData: [],
+      });
+      // todo: hier liegt der beef
+      console.log('new level created and is now getting set as draft');
+      console.log(draftToSet);
       this.setDraft(
-        new Level({
-          name: this.name,
-          description: this.description,
-          parentLevelID: parentLevelIDToSet,
-          interventionsAreAllowed: this.areInterventionsAllowed,
-          allowedInterventions: this.allowedInterventions || [],
-          // tagIds: this.tagIds || [],
-          tagIds: [],
-          customData: [],
-        }),
+        draftToSet,
       );
+      console.log('draft setted');
       const originalVersion = this.levelInFocus != null ? this.levelInFocus._version : 0;
+      console.log('now saving data');
       this.saveData({ dataType: 'LEVEL', originalVersion });
     },
     prefillComponentDataFromLevelDraft() {
