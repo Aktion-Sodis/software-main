@@ -13,7 +13,7 @@ const entitiesData = {
   }),
   getters: {
     /* READ */
-    getEntities: ({ entities }) => entities,
+    getEntities: ({ entities }) => entities.filter((e) => !e._deleted),
     getLoading: ({ loading }) => loading,
 
     // sort by id for consistency
@@ -153,6 +153,7 @@ const entitiesData = {
       });
       DataStore.save(entity)
         .then((postResponse) => {
+          console.log(postResponse);
           commit('addEntity', postResponse);
           dispatch(
             'dataModal/readData',
@@ -166,7 +167,8 @@ const entitiesData = {
           );
           commit('setLoading', { newValue: false });
         })
-        .catch(() => {
+        .catch((error) => {
+          console.log({ error });
           commit('setLoading', { newValue: false });
         });
     },
