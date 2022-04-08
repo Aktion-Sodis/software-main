@@ -291,7 +291,7 @@ export default {
       this.editData({ dataId: this.dataIdInFocus, dataType: dataTypesDict.entity });
     },
     async submitHandler() {
-      if (this.allEntitiesOfUpperLevel.length > 0 && this.parentEntityID == null) return;
+      if (this.allEntitiesOfUpperLevel.length > 0 && this.parentEntityID === null) return;
       this.setDraft(
         new Entity({
           name: this.name,
