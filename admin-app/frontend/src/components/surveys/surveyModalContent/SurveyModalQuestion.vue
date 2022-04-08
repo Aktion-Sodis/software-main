@@ -426,10 +426,12 @@ export default {
       return this.SURVEYById({ id: this.dataIdInFocus });
     },
     questionTypesItemValue() {
-      return Object.keys(QuestionType).map((key) => ({
-        text: this.$t(`surveys.modal.questionCard.form.answer.questionTypes.${key}`),
-        value: key,
-      }));
+      return Object.keys(QuestionType)
+        .map((key) => ({
+          text: this.$t(`surveys.modal.questionCard.form.answer.questionTypes.${key}`),
+          value: key,
+        }))
+        .filter((t) => t.value !== QuestionType.PICTUREWITHTAGS);
     },
     maxCharExceededi18n() {
       return this.$t('general.form.maxCharExceeded', {
