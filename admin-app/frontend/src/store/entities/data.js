@@ -233,7 +233,6 @@ const entitiesData = {
           console.log({ err });
         });
     },
-    // sync is handled over in LEVEL_Data module
     APIgetAll: async () => {
       try {
         return await DataStore.query(Entity);

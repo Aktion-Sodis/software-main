@@ -175,37 +175,13 @@ const interventionsData = {
           console.log({ err });
         });
     },
-    sync: async ({ commit }) => {
-      commit('setLoading', { newValue: true });
+    APIgetAll: async () => {
       try {
-        const apiInterventions = await DataStore.query(Intervention);
-        commit('setInterventions', { newValue: apiInterventions });
+        return await DataStore.query(Intervention);
       } catch (error) {
         console.log({ error });
+        return [];
       }
-
-      // try {
-      //   const apiInterventionTags = await DataStore.query(InterventionTag);
-      //   commit('setInterventionTags', { newValue: apiInterventionTags });
-      // } catch (error) {
-      //   console.log({ error });
-      // }
-
-      // try {
-      //   const apiRelationInterventionsAndTags = await DataStore.query(
-      //     InterventionInterventionTagRelation,
-      //   );
-      //   commit('setRelationInterventionsAndTags', {
-      //     newValue: apiRelationInterventionsAndTags.map((r) => ({
-      //       interventionId: r.intervention.id,
-      //       interventionTagId: r.interventionTag.id,
-      //     })),
-      //   });
-      // } catch (error) {
-      //   console.log({ error });
-      // }
-
-      commit('setLoading', { newValue: false });
     },
   },
 };

@@ -82,60 +82,90 @@ const levelsData = {
     },
   },
   actions: {
-    APIpost: async ({ commit, dispatch }, levelDraft) => {
+    APIpost: async ({ commit, dispatch, rootGetters }, levelDraft) => {
       try {
-        console.log('update level called');
-        console.log(levelDraft);
+        commit('setLoading', { newValue: true });
         const level = new Level({
           ...levelDraft,
           name: new I18nString(levelDraft.name),
           description: new I18nString(levelDraft.description),
         });
-        console.log('saving level');
-        console.log(level);
-        commit('setLoading', { newValue: true });
-        const savedLevel = await DataStore.save(level);
-        if (level.allowedInterventions !== null) {
-          level.allowedInterventions.forEach((obj) => DataStore.save(obj));
-        }
-        commit('addLevel', savedLevel);
-        console.log({ savedLevel });
-        dispatch(
-          'dataModal/readData',
-          {
-            dataId: savedLevel.id,
-            dataType: dataTypesDict.level,
-          },
-          {
-            root: true,
-          },
-        );
-        commit('setLoading', { newValue: false });
+        DataStore.save(level).then(async (postResponse) => {
+          console.log({ postResponse });
+          // eslint-disable-next-line no-restricted-syntax
+          for (const interventionId of levelDraft.allowedInterventions) {
+            // eslint-disable-next-line no-await-in-loop
+            await DataStore.save(
+              new LevelInterventionRelation({
+                level: postResponse,
+                intervention: rootGetters['INTERVENTION_Data/INTERVENTIONById']({
+                  id: interventionId,
+                }),
+              }),
+            );
+          }
+          commit('addLevel', postResponse);
+
+          dispatch(
+            'dataModal/readData',
+            {
+              dataId: postResponse.id,
+              dataType: dataTypesDict.level,
+            },
+            {
+              root: true,
+            },
+          );
+          commit('setLoading', { newValue: false });
+        });
       } catch (e) {
         console.log('error in updating level');
         console.log(e);
       }
     },
-    APIput: async ({ commit, dispatch }, levelDraft) => {
-      console.log('in api put');
-      console.log(levelDraft);
-      const level = levelDraft.newData;
-      console.log('now copy of level');
-      const copyLevel = Level.copyOf(level, (updated) => {
-        updated.id = levelDraft.originalId;
-        updated._version = levelDraft.originalVersion;
-      });
-      console.log('saving level');
-      console.log(copyLevel);
+    APIput: async (
+      {
+        commit, dispatch, getters, rootGetters,
+      },
+      { newData, originalId, originalVersion },
+    ) => {
+      console.debug(originalVersion);
       commit('setLoading', { newValue: true });
-      DataStore.save(level)
-        .then((postResponse) => {
-          commit('addLevel', postResponse);
-          console.log({ postResponse });
+
+      const original = getters.LEVELById({ id: originalId });
+
+      DataStore.save(
+        Level.copyOf(original, (updated) => {
+          updated.name = newData.name;
+          updated.description = newData.description;
+          updated.parentLevelID = newData.parentLevelID;
+          updated.interventionsAreAllowed = newData.interventionsAreAllowed;
+          updated.tags = [];
+          updated.customData = []; // TODO
+        }),
+      )
+        .then(async (putResponse) => {
+          commit('replaceLevel', putResponse);
+
+          // eslint-disable-next-line no-restricted-syntax
+          for (const interventionId of newData.allowedInterventions) {
+            // eslint-disable-next-line no-await-in-loop
+            await DataStore.save(
+              new LevelInterventionRelation({
+                level: putResponse,
+                intervention: rootGetters['INTERVENTION_Data/INTERVENTIONById']({
+                  id: interventionId,
+                }),
+              }),
+            );
+          }
+
+          console.log('hey');
+
           dispatch(
             'dataModal/readData',
             {
-              dataId: postResponse.id,
+              dataId: putResponse.id,
               dataType: dataTypesDict.level,
             },
             {
@@ -209,166 +239,21 @@ const levelsData = {
           console.log({ err });
         });
     },
-    sync: async ({ commit, dispatch }) => {
-      commit('setLoading', { newValue: true });
-      // The following dummy skeleton won't work because DataStore classes don't let setting the id manually.
-      // commit('setLevels', {
-      //   newValue: [
-      //     new Level({
-      //       id: 'dummyLevel0',
-      //       name: new I18nString({
-      //         languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-      //         languageTexts: ['Name', 'Isimo', 'İsim'],
-      //       }),
-      //       description: new I18nString({
-      //         languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-      //         languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
-      //       }),
-      //       parentLevelID: null,
-      //       interventionsAreAllowed: true,
-      //       allowedInterventions: [],
-      //       customData: [],
-      //       schemeVersion: 420,
-      //     }),
-      //     new Level({
-      //       id: 'dummyLevel1',
-      //       name: new I18nString({
-      //         languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-      //         languageTexts: ['Name', 'Isimo', 'İsim'],
-      //       }),
-      //       description: new I18nString({
-      //         languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-      //         languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
-      //       }),
-      //       parentLevelID: null,
-      //       interventionsAreAllowed: true,
-      //       allowedInterventions: [],
-      //       customData: [],
-      //       schemeVersion: 420,
-      //     }),
-      //     new Level({
-      //       id: 'dummyLevel2',
-      //       name: new I18nString({
-      //         languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-      //         languageTexts: ['Name', 'Isimo', 'İsim'],
-      //       }),
-      //       description: new I18nString({
-      //         languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-      //         languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
-      //       }),
-      //       parentLevelID: null,
-      //       interventionsAreAllowed: true,
-      //       allowedInterventions: [],
-      //       customData: [],
-      //       schemeVersion: 420,
-      //     }),
-      //   ],
-      // });
-      // commit(
-      //   'ENTITY_Data/setEntities',
-      //   {
-      //     newValue: [
-      //       new Entity({
-      //         id: 'dummyEntity0',
-      //         name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-      //         description: {
-      //           languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-      //           languageTexts: ['', '', ''],
-      //         },
-      //         entityLevelId: 'dummyLevel0',
-      //         parentEntityID: null,
-      //         _version: 1,
-      //       }),
-      //       new Entity({
-      //         id: 'dummyEntity1',
-      //         name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-      //         description: {
-      //           languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-      //           languageTexts: ['', '', ''],
-      //         },
-      //         entityLevelId: 'dummyLevel0',
-      //         parentEntityID: null,
-      //         _version: 1,
-      //       }),
-      //       new Entity({
-      //         id: 'dummyEntity2',
-      //         name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-      //         description: {
-      //           languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-      //           languageTexts: ['', '', ''],
-      //         },
-      //         entityLevelId: 'dummyLevel1',
-      //         parentEntityID: 'dummyEntity0',
-      //         _version: 1,
-      //       }),
-      //       new Entity({
-      //         id: 'dummyEntity3',
-      //         name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-      //         description: {
-      //           languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-      //           languageTexts: ['', '', ''],
-      //         },
-      //         entityLevelId: 'dummyLevel2',
-      //         parentEntityID: 'dummyEntity2',
-      //         _version: 1,
-      //       }),
-      //       new Entity({
-      //         id: 'dummyEntity4',
-      //         name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-      //         description: {
-      //           languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-      //           languageTexts: ['', '', ''],
-      //         },
-      //         entityLevelId: 'dummyLevel2',
-      //         parentEntityID: 'dummyEntity3',
-      //         _version: 1,
-      //       }),
-      //       new Entity({
-      //         id: 'dummyEntity5',
-      //         name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-      //         description: {
-      //           languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-      //           languageTexts: ['', '', ''],
-      //         },
-      //         entityLevelId: 'dummyLevel2',
-      //         parentEntityID: 'dummyEntity3',
-      //         _version: 1,
-      //       }),
-      //     ],
-      //   },
-      //   { root: true },
-      // );
+    APIgetAll: async () => {
+      let apiLevelInterventionRelations = [];
+      let apiLevels = [];
       try {
-        const apiLevelInterventionRelation = await DataStore.query(LevelInterventionRelation);
-        console.log({ apiLevelInterventionRelation });
-        commit('setRelationLevelIntervention', { newValue: apiLevelInterventionRelation });
+        apiLevels = await DataStore.query(Level);
       } catch (error) {
         console.log({ error });
       }
-
       try {
-        const apiLevels = await dispatch('APIgetAll');
-        commit('setLevels', {
-          newValue: apiLevels,
-        });
+        apiLevelInterventionRelations = await DataStore.query(LevelInterventionRelation);
       } catch (error) {
         console.log({ error });
       }
-
-      try {
-        const apiEntities = await dispatch('ENTITY_Data/APIgetAll', null, { root: true });
-        commit(
-          'ENTITY_Data/setEntities',
-          { newValue: apiEntities.filter((e) => !e._deleted) },
-          { root: true },
-        );
-      } catch (error) {
-        console.log({ error });
-      }
-
-      commit('setLoading', { newValue: false });
+      return { apiLevelInterventionRelations, apiLevels };
     },
-    APIgetAll: async () => DataStore.query(Level),
   },
 };
 

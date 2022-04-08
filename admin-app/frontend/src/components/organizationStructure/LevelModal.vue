@@ -140,7 +140,7 @@
                   <template v-slot:activator="{ on, attrs }">
                     <div v-bind="attrs" v-on="on">
                       <v-select
-                        v-model="allowedInterventions"
+                        v-model="allowedInterventionIds"
                         :items="localizeInterventions"
                         :label="$t('organizationStructure.levelModal.manageAllowedInterventions')"
                         multiple
@@ -238,13 +238,18 @@ export default {
       levelDescriptionMaxChar,
       name: emptyMutableI18nString(),
       description: emptyMutableI18nString(),
-      allowedInterventions: [],
+      allowedInterventionIds: [],
       areInterventionsAllowed: true,
       InterventionType,
       // tagIds: [],
     };
   },
-  watch: { levelDraft: 'prefillComponentDataFromLevelDraft' },
+  watch: {
+    levelDraft: 'prefillComponentDataFromLevelDraft',
+    // getMode(newValue) {
+    //   if (newValue === modalModesDict.edit) this.prefillComponentDataFromLevelDraft();
+    // },
+  },
   computed: {
     ...mapGetters({
       interventions: 'INTERVENTION_Data/getInterventions',
@@ -302,8 +307,8 @@ export default {
       // const tagIdsInComponent = new Set(this.tagIds);
       // const tagIdsInDraft = new Set(this.levelDraft.tagIds);
 
-      const allowedInterventionsInComponent = new Set(this.allowedInterventions);
-      const allowedInterventionsInDraft = new Set(this.levelDraft.allowedInterventions);
+      const allowedInterventionsInComponent = new Set(this.allowedInterventionIds);
+      const allowedInterventionsInDraft = new Set(this.levelDraft.allowedInterventionIds);
       return (
         this.name !== this.levelDraft.name
         || this.description !== this.levelDraft.description
@@ -355,44 +360,35 @@ export default {
       this.closeHandler();
     },
     async submitHandler() {
-      let parentLevelIDToSet;
-      if (this.nLevels === 0) {
-        parentLevelIDToSet = null;
-      } else {
-        parentLevelIDToSet = this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID;
-      }
-      // problem dürfte hier liegen: es werden immer die this werte genommen
-      console.log('setting draft');
-      console.log(this.allowedInterventions);
-      const draftToSet = new Level({
-        name: this.name,
-        description: this.description,
-        parentLevelID: parentLevelIDToSet,
-        interventionsAreAllowed: this.areInterventionsAllowed,
-        allowedInterventions: this.allowedInterventions || [],
-        // tagIds: this.tagIds || [],
-        tagIds: [],
-        customData: [],
-      });
-      // todo: hier liegt der beef
-      console.log('new level created and is now getting set as draft');
-      console.log(draftToSet);
+      let parentLevelID;
+      if (this.nLevels === 0) parentLevelID = null;
+      else parentLevelID = this.create ? this.lowestLevelId : this.levelInFocus.parentLevelID;
+
       this.setDraft(
-        draftToSet,
+        new Level({
+          name: this.name,
+          description: this.description,
+          parentLevelID,
+          interventionsAreAllowed: this.areInterventionsAllowed,
+          allowedInterventions: this.allowedInterventionIds || [],
+          // tagIds: this.tagIds || [],
+          tagIds: [],
+          customData: [],
+        }),
       );
-      console.log('draft setted');
-      const originalVersion = this.levelInFocus != null ? this.levelInFocus._version : 0;
-      console.log('now saving data');
+      await this.$nextTick();
+      const originalVersion = this.levelInFocus ? this.levelInFocus._version : 0;
       this.saveData({ dataType: 'LEVEL', originalVersion });
     },
     prefillComponentDataFromLevelDraft() {
+      console.log('hey');
       this.name = mutableI18nString({ languageTexts: this.levelDraft?.name.languageTexts });
       this.description = mutableI18nString({
         languageTexts: this.levelDraft?.description.languageTexts,
       });
+      console.log(this.interventionsOfLevelById({ levelId: this.dataIdInFocus }));
       // this.tagIds = this.levelDraft?.tagIds ?? [];
-      // console.log(this.levelDraft?.allowedInterventions);
-      this.allowedInterventions = this.levelDraft?.allowedInterventions ?? [];
+      this.allowedInterventionIds = this.interventionsOfLevelById({ levelId: this.dataIdInFocus }).map((i) => i.id) ?? [];
     },
     nameUpdatedHandler(res) {
       this.name = res;
