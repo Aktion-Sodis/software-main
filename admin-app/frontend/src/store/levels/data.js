@@ -1,8 +1,6 @@
 import { DataStore } from '@aws-amplify/datastore';
 import { API } from 'aws-amplify';
-import {
-  Level, I18nString, Entity, LevelInterventionRelation,
-} from '../../models';
+import { Level, I18nString, LevelInterventionRelation } from '../../models';
 import { dataTypesDict, modalModesDict } from '../constants';
 import { deleteLevel /* , updateLevel */ } from '../../graphql/mutations';
 // import { listLevels } from '../../graphql/queries';
@@ -123,7 +121,10 @@ const levelsData = {
       console.log(levelDraft);
       const level = levelDraft.newData;
       console.log('now copy of level');
-      const copyLevel = Level.copyOf(level, (updated) => { updated.id = levelDraft.originalId; updated._version = levelDraft.originalVersion; });
+      const copyLevel = Level.copyOf(level, (updated) => {
+        updated.id = levelDraft.originalId;
+        updated._version = levelDraft.originalVersion;
+      });
       console.log('saving level');
       console.log(copyLevel);
       commit('setLoading', { newValue: true });
@@ -210,132 +211,133 @@ const levelsData = {
     },
     sync: async ({ commit, dispatch }) => {
       commit('setLoading', { newValue: true });
-      commit('setLevels', {
-        newValue: [
-          new Level({
-            id: 'dummyLevel0',
-            name: new I18nString({
-              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-              languageTexts: ['Name', 'Isimo', 'İsim'],
-            }),
-            description: new I18nString({
-              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-              languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
-            }),
-            parentLevelID: null,
-            interventionsAreAllowed: true,
-            allowedInterventions: [],
-            customData: [],
-            schemeVersion: 1020,
-          }),
-          new Level({
-            id: 'dummyLevel1',
-            name: new I18nString({
-              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-              languageTexts: ['Name', 'Isimo', 'İsim'],
-            }),
-            description: new I18nString({
-              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-              languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
-            }),
-            parentLevelID: null,
-            interventionsAreAllowed: true,
-            allowedInterventions: [],
-            customData: [],
-            schemeVersion: 1020,
-          }),
-          new Level({
-            id: 'dummyLevel2',
-            name: new I18nString({
-              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-              languageTexts: ['Name', 'Isimo', 'İsim'],
-            }),
-            description: new I18nString({
-              languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-              languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
-            }),
-            parentLevelID: null,
-            interventionsAreAllowed: true,
-            allowedInterventions: [],
-            customData: [],
-            schemeVersion: 1020,
-          }),
-        ],
-      });
-      commit(
-        'ENTITY_Data/setEntities',
-        {
-          newValue: [
-            new Entity({
-              id: 'dummyEntity0',
-              name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-              description: {
-                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-                languageTexts: ['', '', ''],
-              },
-              entityLevelId: 'dummyLevel0',
-              parentEntityID: null,
-              _version: 1,
-            }),
-            new Entity({
-              id: 'dummyEntity1',
-              name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-              description: {
-                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-                languageTexts: ['', '', ''],
-              },
-              entityLevelId: 'dummyLevel0',
-              parentEntityID: null,
-              _version: 1,
-            }),
-            new Entity({
-              id: 'dummyEntity2',
-              name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-              description: {
-                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-                languageTexts: ['', '', ''],
-              },
-              entityLevelId: 'dummyLevel1',
-              parentEntityID: 'dummyEntity0',
-              _version: 1,
-            }),
-            new Entity({
-              id: 'dummyEntity3',
-              name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-              description: {
-                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-                languageTexts: ['', '', ''],
-              },
-              entityLevelId: 'dummyLevel2',
-              parentEntityID: 'dummyEntity2',
-              _version: 1,
-            }),
-            new Entity({
-              id: 'dummyEntity4',
-              name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-              description: {
-                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-                languageTexts: ['', '', ''],
-              },
-              entityLevelId: 'dummyLevel2',
-              parentEntityID: 'dummyEntity3',
-              _version: 1,
-            }),
-            new Entity({
-              id: 'dummyEntity5',
-              name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
-              description: {
-                languageKeys: ['en-US', 'es-BO', 'tr-TR'],
-                languageTexts: ['', '', ''],
-              },
-              entityLevelId: 'dummyLevel2',
-              parentEntityID: 'dummyEntity3',
-              _version: 1,
-            }),
-          ],
-        },
-        { root: true },
-      );
+      // The following dummy skeleton won't work because DataStore classes don't let setting the id manually.
+      // commit('setLevels', {
+      //   newValue: [
+      //     new Level({
+      //       id: 'dummyLevel0',
+      //       name: new I18nString({
+      //         languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+      //         languageTexts: ['Name', 'Isimo', 'İsim'],
+      //       }),
+      //       description: new I18nString({
+      //         languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+      //         languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
+      //       }),
+      //       parentLevelID: null,
+      //       interventionsAreAllowed: true,
+      //       allowedInterventions: [],
+      //       customData: [],
+      //       schemeVersion: 420,
+      //     }),
+      //     new Level({
+      //       id: 'dummyLevel1',
+      //       name: new I18nString({
+      //         languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+      //         languageTexts: ['Name', 'Isimo', 'İsim'],
+      //       }),
+      //       description: new I18nString({
+      //         languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+      //         languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
+      //       }),
+      //       parentLevelID: null,
+      //       interventionsAreAllowed: true,
+      //       allowedInterventions: [],
+      //       customData: [],
+      //       schemeVersion: 420,
+      //     }),
+      //     new Level({
+      //       id: 'dummyLevel2',
+      //       name: new I18nString({
+      //         languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+      //         languageTexts: ['Name', 'Isimo', 'İsim'],
+      //       }),
+      //       description: new I18nString({
+      //         languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+      //         languageTexts: ['Description', 'Desaciklamo', 'Açıklama'],
+      //       }),
+      //       parentLevelID: null,
+      //       interventionsAreAllowed: true,
+      //       allowedInterventions: [],
+      //       customData: [],
+      //       schemeVersion: 420,
+      //     }),
+      //   ],
+      // });
+      // commit(
+      //   'ENTITY_Data/setEntities',
+      //   {
+      //     newValue: [
+      //       new Entity({
+      //         id: 'dummyEntity0',
+      //         name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+      //         description: {
+      //           languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+      //           languageTexts: ['', '', ''],
+      //         },
+      //         entityLevelId: 'dummyLevel0',
+      //         parentEntityID: null,
+      //         _version: 1,
+      //       }),
+      //       new Entity({
+      //         id: 'dummyEntity1',
+      //         name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+      //         description: {
+      //           languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+      //           languageTexts: ['', '', ''],
+      //         },
+      //         entityLevelId: 'dummyLevel0',
+      //         parentEntityID: null,
+      //         _version: 1,
+      //       }),
+      //       new Entity({
+      //         id: 'dummyEntity2',
+      //         name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+      //         description: {
+      //           languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+      //           languageTexts: ['', '', ''],
+      //         },
+      //         entityLevelId: 'dummyLevel1',
+      //         parentEntityID: 'dummyEntity0',
+      //         _version: 1,
+      //       }),
+      //       new Entity({
+      //         id: 'dummyEntity3',
+      //         name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+      //         description: {
+      //           languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+      //           languageTexts: ['', '', ''],
+      //         },
+      //         entityLevelId: 'dummyLevel2',
+      //         parentEntityID: 'dummyEntity2',
+      //         _version: 1,
+      //       }),
+      //       new Entity({
+      //         id: 'dummyEntity4',
+      //         name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+      //         description: {
+      //           languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+      //           languageTexts: ['', '', ''],
+      //         },
+      //         entityLevelId: 'dummyLevel2',
+      //         parentEntityID: 'dummyEntity3',
+      //         _version: 1,
+      //       }),
+      //       new Entity({
+      //         id: 'dummyEntity5',
+      //         name: { languageKeys: ['en-US', 'es-BO', 'tr-TR'], languageTexts: ['', '', ''] },
+      //         description: {
+      //           languageKeys: ['en-US', 'es-BO', 'tr-TR'],
+      //           languageTexts: ['', '', ''],
+      //         },
+      //         entityLevelId: 'dummyLevel2',
+      //         parentEntityID: 'dummyEntity3',
+      //         _version: 1,
+      //       }),
+      //     ],
+      //   },
+      //   { root: true },
+      // );
       try {
         const apiLevelInterventionRelation = await DataStore.query(LevelInterventionRelation);
         console.log({ apiLevelInterventionRelation });
