@@ -120,7 +120,11 @@ const dataModal = {
       if (getters.getMode === modalModesDict.edit) {
         await dispatch(
           `${dataType}_Data/APIput`,
-          { newData: draft, originalId: getters.getDataIdInFocus, originalVersion },
+          {
+            newData: draft,
+            originalId: getters.getDataIdInFocus,
+            originalVersion,
+          },
           { root: true },
         );
       }
