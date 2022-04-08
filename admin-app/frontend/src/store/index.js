@@ -17,7 +17,7 @@ import SYNC_UI from './sync/ui';
 // persist
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
-  modules: ['auth', 'INTERVENTION_Data'],
+  modules: ['auth'],
 });
 
 Vue.use(Vuex);
