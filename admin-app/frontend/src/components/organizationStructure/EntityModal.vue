@@ -153,8 +153,6 @@
             {{ $t('general.save') }}
           </v-btn>
         </v-card-actions>
-        {{ name }}
-        {{ description }}
       </v-form>
     </v-card>
   </v-dialog>
