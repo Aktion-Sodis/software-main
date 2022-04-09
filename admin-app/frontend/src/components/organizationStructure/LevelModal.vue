@@ -245,7 +245,11 @@
                 </div>
                 <div v-else>
                   <div v-if="levelInFocus.customData.length > 0">
-                    <div v-for="customDatum in levelInFocus.customData" :key="customDatum.id">
+                    <div
+                      v-for="customDatum in levelInFocus.customData"
+                      :key="customDatum.id"
+                      class="mb-2"
+                    >
                       <div
                         class="rounded-lg pa-4 d-flex justify-space-between"
                         style="border: 1px solid; border-color: #736b5e; position: relative"
