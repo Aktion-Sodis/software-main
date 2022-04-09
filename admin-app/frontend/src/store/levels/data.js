@@ -21,7 +21,7 @@ const levelsData = {
     getLevels: ({ levels }) => levels.filter((l) => !l._deleted),
     // getLevelTags: ({ levelTags }) => levelTags,
     getLoading: ({ loading }) => loading,
-    getRelationLevelIntervention: ({ relationLevelIntervention }) => relationLevelIntervention,
+    getRelationLevelIntervention: ({ relationLevelIntervention }) => relationLevelIntervention.filter((r) => r?.level),
 
     interventionsOfLevelById:
       (_, { getRelationLevelIntervention }) => ({ levelId }) => getRelationLevelIntervention
@@ -83,17 +83,20 @@ const levelsData = {
   },
   actions: {
     APIpost: async ({ commit, dispatch, rootGetters }, levelDraft) => {
+      let success = true;
+      commit('setLoading', { newValue: true });
+      const level = new Level({
+        ...levelDraft,
+        name: new I18nString(levelDraft.name),
+        description: new I18nString(levelDraft.description),
+      });
+
       try {
-        commit('setLoading', { newValue: true });
-        const level = new Level({
-          ...levelDraft,
-          name: new I18nString(levelDraft.name),
-          description: new I18nString(levelDraft.description),
-        });
-        DataStore.save(level).then(async (postResponse) => {
-          console.log({ postResponse });
-          // eslint-disable-next-line no-restricted-syntax
-          for (const interventionId of levelDraft.allowedInterventions) {
+        const postResponse = await DataStore.save(level);
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const interventionId of levelDraft.allowedInterventions) {
+          try {
             // eslint-disable-next-line no-await-in-loop
             await DataStore.save(
               new LevelInterventionRelation({
@@ -103,139 +106,146 @@ const levelsData = {
                 }),
               }),
             );
+          } catch (error) {
+            success = false;
+            console.log(error);
           }
-          commit('addLevel', postResponse);
+        }
+        commit('addLevel', postResponse);
 
-          dispatch(
-            'dataModal/readData',
-            {
-              dataId: postResponse.id,
-              dataType: dataTypesDict.level,
-            },
-            {
-              root: true,
-            },
-          );
-          commit('setLoading', { newValue: false });
-        });
-      } catch (e) {
-        console.log('error in updating level');
-        console.log(e);
+        dispatch(
+          'dataModal/readData',
+          {
+            dataId: postResponse.id,
+            dataType: dataTypesDict.level,
+          },
+          {
+            root: true,
+          },
+        );
+      } catch (error) {
+        success = false;
+        console.log(error);
       }
+      commit('setLoading', { newValue: false });
+      return success;
     },
-    APIput: async (
-      {
-        commit, dispatch, getters, rootGetters,
-      },
-      { newData, originalId, originalVersion },
-    ) => {
-      console.debug(originalVersion);
+    APIput: async ({
+      commit, dispatch, getters, rootGetters,
+    }, { newData, originalId }) => {
       commit('setLoading', { newValue: true });
+      let success = true;
 
       const original = getters.LEVELById({ id: originalId });
-      const interventionsOfOriginal = getters.interventionsOfLevelById({ levelId: original.id });
       const relationsOfOriginal = getters.getRelationLevelIntervention.filter(
         (rel) => rel.level.id === original.id,
       );
-      console.log({ interventionsOfOriginal });
 
-      DataStore.save(
-        Level.copyOf(original, (updated) => {
-          updated.name = newData.name;
-          updated.description = newData.description;
-          updated.parentLevelID = newData.parentLevelID;
-          updated.interventionsAreAllowed = newData.interventionsAreAllowed;
-          updated.tags = [];
-          updated.customData = []; // TODO
-        }),
-      )
-        .then(async (putResponse) => {
-          commit('replaceLevel', putResponse);
+      try {
+        const putResponse = await DataStore.save(
+          Level.copyOf(original, (updated) => {
+            updated.name = newData.name;
+            updated.description = newData.description;
+            updated.parentLevelID = newData.parentLevelID;
+            updated.interventionsAreAllowed = newData.interventionsAreAllowed;
+            updated.tags = [];
+            updated.customData = []; // TODO
+          }),
+        );
 
-          // FIRST DELETE ALL INTERVENTION RELATIONS OF THE LEVEL
+        commit('replaceLevel', putResponse);
 
-          // eslint-disable-next-line no-restricted-syntax
-          for (const relation of relationsOfOriginal) {
-            try {
-              // eslint-disable-next-line no-await-in-loop
-              await DataStore.delete(relation);
-            } catch (error) {
-              console.log(error);
-            }
+        // FIRST DELETE ALL INTERVENTION RELATIONS OF THE LEVEL
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const relation of relationsOfOriginal) {
+          try {
+            // eslint-disable-next-line no-await-in-loop
+            await DataStore.delete(relation);
+          } catch (error) {
+            success = false;
+            console.log(error);
           }
+        }
 
-          // THEN RECREATE THEM AS WHAT IS GIVEN IN THE MODAL
+        // THEN RECREATE THEM AS WHAT IS GIVEN IN THE MODAL
 
-          // eslint-disable-next-line no-restricted-syntax
-          for (const interventionId of newData.allowedInterventions) {
-            try {
-              // eslint-disable-next-line no-await-in-loop
-              await DataStore.save(
-                new LevelInterventionRelation({
-                  level: putResponse,
-                  intervention: rootGetters['INTERVENTION_Data/INTERVENTIONById']({
-                    id: interventionId,
-                  }),
+        // eslint-disable-next-line no-restricted-syntax
+        for (const interventionId of newData.allowedInterventions) {
+          try {
+            // eslint-disable-next-line no-await-in-loop
+            await DataStore.save(
+              new LevelInterventionRelation({
+                level: putResponse,
+                intervention: rootGetters['INTERVENTION_Data/INTERVENTIONById']({
+                  id: interventionId,
                 }),
-              );
-            } catch (error) {
-              console.log(error);
-            }
+              }),
+            );
+          } catch (error) {
+            success = false;
+            console.log(error);
           }
+        }
 
-          dispatch(
-            'dataModal/readData',
-            {
-              dataId: putResponse.id,
-              dataType: dataTypesDict.level,
-            },
-            {
-              root: true,
-            },
-          );
-          commit('setLoading', { newValue: false });
-        })
-        .catch(() => {
-          commit('setLoading', { newValue: false });
-        });
+        dispatch(
+          'dataModal/readData',
+          {
+            dataId: putResponse.id,
+            dataType: dataTypesDict.level,
+          },
+          {
+            root: true,
+          },
+        );
+      } catch (error) {
+        success = false;
+        console.log(error);
+      }
+      commit('setLoading', { newValue: false });
+      console.log({ success });
+      return success;
     },
     APIdelete: async ({ commit, dispatch, getters }, { id, _version }) => {
+      let success = true;
       commit('setLoading', { newValue: true });
-      API.graphql({ query: deleteLevel, variables: { input: { id, _version } } })
-        .then(async () => {
-          const relationsOfOriginal = getters.getRelationLevelIntervention.filter(
-            (rel) => rel.level.id === id,
-          );
 
-          // eslint-disable-next-line no-restricted-syntax
-          for (const relation of relationsOfOriginal) {
-            try {
-              // eslint-disable-next-line no-await-in-loop
-              await DataStore.delete(relation);
-            } catch (error) {
-              console.log(error);
-            }
-          }
+      try {
+        await API.graphql({ query: deleteLevel, variables: { input: { id, _version } } });
+      } catch (error) {
+        success = false;
+        console.log(error);
+      }
 
-          commit('deleteLevel', {
-            id,
-          });
-          commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
-          commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
-          dispatch(
-            'dataModal/abortReadData',
-            {},
-            {
-              root: true,
-            },
-          );
-          commit('setLoading', { newValue: false });
-        })
-        .catch((err) => {
-          commit('setLoading', { newValue: false });
-          // TODO: Handle error
-          console.log({ err });
-        });
+      const relationsOfOriginal = getters.getRelationLevelIntervention.filter(
+        (rel) => rel.level.id === id,
+      );
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const relation of relationsOfOriginal) {
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          await DataStore.delete(relation);
+        } catch (error) {
+          success = false;
+          console.log(error);
+        }
+      }
+
+      commit('deleteLevel', {
+        id,
+      });
+      commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
+      commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
+      dispatch(
+        'dataModal/abortReadData',
+        {},
+        {
+          root: true,
+        },
+      );
+      commit('setLoading', { newValue: false });
+      return success;
     },
     APIgetAll: async () => {
       let apiLevelInterventionRelations = [];
