@@ -119,10 +119,11 @@
                 </v-select>
               </v-col>
               <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
-                <v-card-title class="pt-0 pt-sm-2">
-                  {{ $t('organizationStructure.entityModal.moreStuffTitle') }}
-                </v-card-title>
-                <p>{{ $t('organizationStructure.entityModal.moreStuffDescription') }}</p>
+                <ImgFromS3 v-if="read" :assumedSrc="deriveImgPath" dataType="entity">
+                  <template v-slot:v-img="slotProps">
+                    <v-img max-height="200px" :src="slotProps.src"> </v-img>
+                  </template>
+                </ImgFromS3>
               </v-col>
             </v-row>
           </v-container>
@@ -165,6 +166,8 @@ import { modalModesDict, dataTypesDict } from '../../store/constants';
 import LocaleTextBox from '../global/LocaleTextBox.vue';
 import { Entity } from '../../models';
 import { emptyMutableI18nString, mutableI18nString } from '../../store/classes';
+import { deriveFilePath } from '../../store/utils';
+import ImgFromS3 from '../commons/ImgFromS3.vue';
 
 const entityDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_ENTITY_DESCRIPTION_MAX_CHAR, 10),
@@ -175,6 +178,7 @@ export default {
   name: 'EntityModal',
   components: {
     LocaleTextBox,
+    ImgFromS3,
   },
   data() {
     return {
@@ -252,6 +256,9 @@ export default {
         || this.description !== this.entityDraft.description
         || this.parentEntityID !== this.entityDraft.parentEntityID
       );
+    },
+    deriveImgPath() {
+      return deriveFilePath('entityPicPath', { entityID: this.dataIdInFocus });
     },
   },
   methods: {
