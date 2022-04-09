@@ -381,12 +381,10 @@ export default {
       this.saveData({ dataType: 'LEVEL', originalVersion });
     },
     prefillComponentDataFromLevelDraft() {
-      console.log('hey');
       this.name = mutableI18nString({ languageTexts: this.levelDraft?.name.languageTexts });
       this.description = mutableI18nString({
         languageTexts: this.levelDraft?.description.languageTexts,
       });
-      console.log(this.interventionsOfLevelById({ levelId: this.dataIdInFocus }));
       // this.tagIds = this.levelDraft?.tagIds ?? [];
       this.allowedInterventionIds = this.interventionsOfLevelById({ levelId: this.dataIdInFocus }).map((i) => i.id) ?? [];
     },
