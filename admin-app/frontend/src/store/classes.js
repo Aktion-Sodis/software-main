@@ -10,6 +10,7 @@ import {
   Survey,
   SurveyType,
   Entity,
+  Type,
 } from '../models';
 import i18n from '../i18n';
 
@@ -78,6 +79,12 @@ const mutableQuestionOption = ({ text }) => ({
   text: mutableI18nString({ languageTexts: text.languageTexts }),
 });
 
+const emptyMutableCustomData = () => ({
+  id: uuidv4(),
+  name: emptyMutableI18nString(),
+  type: Type.INT,
+});
+
 const emptyMutableQuestionOption = () => mutableQuestionOption({ text: emptyMutableI18nString() });
 
 export {
@@ -92,4 +99,5 @@ export {
   mutableI18nString,
   mutableQuestionOption,
   emptyMutableQuestionOption,
+  emptyMutableCustomData,
 };

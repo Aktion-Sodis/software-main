@@ -140,6 +140,7 @@
     "addNewLevel": "Yeni seviye ekle",
     "hasNoInterventions": "Bu seviyede henüz hiç müdahale yok.",
     "hasNoEntities": "Bu seviyede henüz hiç oluşum yok.",
+    "hasNoCustomData": "Henüz bu seviyeye özgü hiçbir veri yok.",
     "thereAreMoreInterventions": "Bu seviye için {count} müdahale daha var.",
     "levelModal": {
       "modalTitle": {
@@ -152,6 +153,15 @@
         "create": "Bu güzel seviye yaratma diyaloğunun çok güzel açıklaması."
       },
       "interventions": "Müdahaleler",
+      "customData": {
+        "title": "Özel veriler",
+        "name": "Ad",
+        "type": "Tür",
+        "types": {
+          "INT": "Sayı",
+          "STRING": "Metin"
+        }
+      },
       "areInterventionsAllowed": "uygulanabilir.",
       "allowInterventionsFirst": "Lütfen önce müdahale yapılmasına izin verin.",
       "name": "Seviye adı",

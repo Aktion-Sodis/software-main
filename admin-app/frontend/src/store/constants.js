@@ -3,6 +3,8 @@ If cannot be resolved, use default values for images, and show an error message 
 The dollar signs are put so that it is more legible for the development. They are thought be replaced with the empty string
 before replacing the other substrings. */
 
+import { QuestionType, Type } from '../models';
+
 export const databaseOntologies = Object.freeze({
   userPicPath: { path: 'userFiles/userID/pic.png', toBeReplaced: ['userID'] },
   levelPicPath: {
@@ -70,22 +72,18 @@ export const modalModesDict = Object.freeze({
   create: 'CREATE',
 });
 
-export const questionTypesDict = Object.freeze({
-  text: 'TEXT',
-  singleChoice: 'SINGLECHOICE',
-  multipleChoice: 'MULTIPLECHOICE',
-  picture: 'PICTURE',
-  // pictureWithTags: 'PICTUREWITHTAGS',
-  audio: 'AUDIO',
+export const questionTypesIconDict = Object.freeze({
+  [QuestionType.TEXT]: 'mdi-text',
+  [QuestionType.SINGLECHOICE]: 'mdi-radiobox-marked',
+  [QuestionType.MULTIPLECHOICE]: 'mdi-checkbox-blank-outline',
+  [QuestionType.PICTURE]: 'mdi-image',
+  // [QuestionType.PICTUREWITHTAGS]: 'mdi-message-image',
+  [QuestionType.AUDIO]: 'mdi-waveform',
 });
 
-export const questionTypesIconDict = Object.freeze({
-  TEXT: 'mdi-text',
-  SINGLECHOICE: 'mdi-radiobox-marked',
-  MULTIPLECHOICE: 'mdi-checkbox-blank-outline',
-  PICTURE: 'mdi-image',
-  // PICTUREWITHTAGS: 'mdi-message-image',
-  AUDIO: 'mdi-waveform',
+export const customDataTypesIconDict = Object.freeze({
+  [Type.INT]: 'mdi-numeric',
+  [Type.STRING]: 'mdi-format-text',
 });
 
 export const dataTypesDict = Object.freeze({
@@ -97,11 +95,11 @@ export const dataTypesDict = Object.freeze({
 });
 
 export const dataModulesDict = Object.freeze({
-  entity: `${dataTypesDict.entity}Data`,
-  survey: `${dataTypesDict.survey}Data`,
-  question: `${dataTypesDict.question}Data`,
-  level: `${dataTypesDict.level}Data`,
-  intervention: `${dataTypesDict.intervention}Data`,
+  entity: `${dataTypesDict.entity}_Data`,
+  survey: `${dataTypesDict.survey}_Data`,
+  question: `${dataTypesDict.question}_Data`,
+  level: `${dataTypesDict.level}_Data`,
+  intervention: `${dataTypesDict.intervention}_Data`,
 });
 
 export const syncStatusDict = Object.freeze({

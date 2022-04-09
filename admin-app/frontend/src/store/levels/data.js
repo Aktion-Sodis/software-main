@@ -1,6 +1,8 @@
 import { DataStore } from '@aws-amplify/datastore';
 import { API } from 'aws-amplify';
-import { Level, I18nString, LevelInterventionRelation } from '../../models';
+import {
+  Level, I18nString, LevelInterventionRelation, CustomData,
+} from '../../models';
 import { dataTypesDict, modalModesDict } from '../constants';
 import { deleteLevel /* , updateLevel */ } from '../../graphql/mutations';
 // import { listLevels } from '../../graphql/queries';
@@ -89,6 +91,7 @@ const levelsData = {
         ...levelDraft,
         name: new I18nString(levelDraft.name),
         description: new I18nString(levelDraft.description),
+        customData: levelDraft.customData.map((cd) => new CustomData(cd)),
       });
 
       try {
@@ -149,7 +152,7 @@ const levelsData = {
             updated.parentLevelID = newData.parentLevelID;
             updated.interventionsAreAllowed = newData.interventionsAreAllowed;
             updated.tags = [];
-            updated.customData = []; // TODO
+            updated.customData = newData.customData.map((cd) => new CustomData(cd));
           }),
         );
 

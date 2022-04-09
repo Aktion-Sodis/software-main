@@ -140,6 +140,7 @@
     "addNewLevel": "Add new level",
     "hasNoInterventions": "There are no interventions for this level.",
     "hasNoEntities": "There are no entities for this level.",
+    "hasNoCustomData": "There are no custom data for this level.",
     "thereAreMoreInterventions": "There are {count} more interventions for this level.",
     "levelModal": {
       "modalTitle": {
@@ -152,6 +153,15 @@
         "create": "This is the description of this beautiful create dialog."
       },
       "interventions": "Interventions",
+      "customData": {
+        "title": "Custom Data",
+        "name": "Name",
+        "type": "Type",
+        "types": {
+          "INT": "Number",
+          "STRING": "Text"
+        }
+      },
       "areInterventionsAllowed": "are allowed.",
       "allowInterventionsFirst": "Allow interventions first.",
       "name": "Level Name",
