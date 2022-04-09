@@ -471,7 +471,6 @@ export default {
       return this.types[this.typeIndex];
     },
     assumedSrc() {
-      console.log(this.imageFile && !this.read);
       if (this.imageFile && !this.read) return this.imageFile;
       return this.deriveImgPath;
     },
