@@ -29,6 +29,7 @@ const SYNC_UI = {
       commit('setIsStatusLocked', { newValue: false });
       commit('setStatus', { newStatus: syncStatusDict.inSync });
     },
+    /* Don't call this directly. Call the refreshHandler. */
     syncAll: async ({ commit, dispatch }) => {
       const { apiLevelInterventionRelations, apiLevels } = await dispatch(
         'LEVEL_Data/APIgetAll',
