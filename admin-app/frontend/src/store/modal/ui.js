@@ -128,6 +128,14 @@ const dataModal = {
           { root: true },
         );
       }
+      // TODO: Too costly. Find a leaner way of updating the data.
+      dispatch(
+        'SYNC_UI/refreshHandler',
+        {},
+        {
+          root: true,
+        },
+      );
     },
     deleteData: async ({ dispatch, getters }, { dataType }) => {
       if (getters.getEntityModalMode === modalModesDict.read) return;
@@ -136,6 +144,14 @@ const dataModal = {
         `${dataType}_Data/APIdelete`,
         { id: getters.getDataIdInFocus, _version: getters.getDataDraft._version },
         { root: true },
+      );
+      // TODO: Too costly. Find a leaner way of updating the data.
+      dispatch(
+        'SYNC_UI/refreshHandler',
+        {},
+        {
+          root: true,
+        },
       );
     },
   },

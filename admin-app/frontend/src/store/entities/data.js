@@ -188,15 +188,6 @@ const entitiesData = {
       })
         .then(() => {
           dispatch(
-            'SYNC_UI/refreshHandler',
-            {
-              routeName: 'OrganizationStructure',
-            },
-            {
-              root: true,
-            },
-          );
-          dispatch(
             'dataModal/readData',
             {
               dataId: entityDraft.originalId,
