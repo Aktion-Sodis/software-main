@@ -132,7 +132,7 @@ const dataModal = {
         {
           type: success ? 'success' : 'error',
           text: i18n.t(
-            `general.operationFeedback.${success ? 'success' : 'error'}.${
+            `general.operationFeedback.data.${success ? 'success' : 'error'}.${
               getters.getMode === modalModesDict.create ? 'create' : 'update'
             }`,
           ),
@@ -162,7 +162,7 @@ const dataModal = {
         'FEEDBACK_UI/showFeedbackForDuration',
         {
           type: success ? 'success' : 'error',
-          text: i18n.t(`general.operationFeedback.${success ? 'success' : 'error'}.delete`),
+          text: i18n.t(`general.operationFeedback.data.${success ? 'success' : 'error'}.delete`),
         },
         {
           root: true,
