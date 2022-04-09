@@ -1,5 +1,24 @@
 <template>
-  <v-navigation-drawer permanent expand-on-hover class="primary-dark" width="17rem" fixed>
+  <v-bottom-navigation
+    v-if="$vuetify.breakpoint.name === 'xs'"
+    fixed
+    app
+    background-color="primary-dark"
+    class="align-center"
+    height="44"
+  >
+    <v-btn
+      v-for="route in routes"
+      :key="route.name"
+      :to="{ name: route.name }"
+      large
+      class="primary-dark"
+      active-class="primary darken-2"
+    >
+      <v-icon color="white">{{ route.icon }}</v-icon>
+    </v-btn>
+  </v-bottom-navigation>
+  <v-navigation-drawer v-else permanent expand-on-hover class="primary-dark" width="17rem" fixed>
     <div class="side-bar-inner-wrapper overflow-hidden">
       <v-list>
         <v-list-item class="px-2">
@@ -38,7 +57,10 @@
         </v-list-item>
         <v-list-item class="px-2">
           <v-list-item-avatar>
-            <v-img src="https://randomuser.me/api/portraits/women/75.jpg"></v-img>
+            <v-img
+              alt="a randomized profile of a lego toy."
+              :src="`https://randomuser.me/api/portraits/lego/${Math.floor(Math.random() * 8)}.jpg`"
+            ></v-img>
           </v-list-item-avatar>
           <div class="next-to-avatar">
             <v-list-item-content>
@@ -68,7 +90,7 @@ const societyName = process.env.VUE_APP_SOCIETY_VERBOSE_NAME;
 
 export default {
   components: { SyncAction },
-  name: 'SideBar',
+  name: 'NavBar',
   data: () => ({
     societyName,
     routes: routes

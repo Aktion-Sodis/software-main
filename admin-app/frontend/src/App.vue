@@ -16,29 +16,23 @@
 
     <Feedback />
 
-    <SideBar
-      v-if="isAuthenticated && $vuetify.breakpoint.name !== 'xs'"
-      class="d-none d-md-block"
-    />
-    <BottomNav v-if="isAuthenticated && $vuetify.breakpoint.name === 'xs'" />
+    <NavBar v-if="isAuthenticated" />
   </v-app>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import BottomNav from './components/commons/BottomNav.vue';
 import DevPhaseSnackbar from './components/commons/DevPhaseSnackbar.vue';
 import Feedback from './components/commons/Feedback.vue';
 import LangSelect from './components/commons/LangSelect.vue';
 // import SearchBox from './components/commons/SearchBox.vue';
-import SideBar from './components/commons/SideBar.vue';
+import NavBar from './components/commons/NavBar.vue';
 
 export default {
   name: 'App',
   components: {
-    SideBar,
+    NavBar,
     Feedback,
-    BottomNav,
     LangSelect,
     // SearchBox,
     DevPhaseSnackbar,
