@@ -203,7 +203,6 @@ const levelsData = {
         console.log(error);
       }
       commit('setLoading', { newValue: false });
-      console.log({ success });
       return success;
     },
     APIdelete: async ({ commit, dispatch, getters }, { id, _version }) => {
