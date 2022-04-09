@@ -59,6 +59,18 @@
       "inSync": "Yenile",
       "synched": "Senkronize",
       "synchronizing": "senkronize ediliyor..."
+    },
+    "operationFeedback": {
+      "success": {
+        "create": "Successfully created.",
+        "update": "Successfully updated.",
+        "delete": "Successfully deleted."
+      },
+      "error": {
+        "create": "Something went wrong.",
+        "update": "Something went wrong.",
+        "delete": "Something went wrong."
+      }
     }
   },
   "login": {

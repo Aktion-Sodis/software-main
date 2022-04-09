@@ -4,6 +4,7 @@ import { dataTypesDict, modalModesDict } from '../constants';
 import {
   emptySurvey, emptyIntervention, emptyLevel, emptyEntity,
 } from '../classes';
+import i18n from '../../i18n';
 
 const dataModal = {
   namespaced: true,
@@ -112,13 +113,11 @@ const dataModal = {
     saveData: async ({ dispatch, getters }, { dataType, originalVersion }) => {
       if (getters.getMode === modalModesDict.read) return;
       const draft = getters.getDataDraft;
-      console.log({ draft });
+      let success = false;
       if (getters.getMode === modalModesDict.create) {
-        await dispatch(`${dataType}_Data/APIpost`, draft, { root: true });
-        return;
-      }
-      if (getters.getMode === modalModesDict.edit) {
-        await dispatch(
+        success = await dispatch(`${dataType}_Data/APIpost`, draft, { root: true });
+      } else if (getters.getMode === modalModesDict.edit) {
+        success = await dispatch(
           `${dataType}_Data/APIput`,
           {
             newData: draft,
@@ -128,6 +127,20 @@ const dataModal = {
           { root: true },
         );
       }
+      dispatch(
+        'FEEDBACK_UI/showFeedbackForDuration',
+        {
+          type: success ? 'success' : 'error',
+          text: i18n.t(
+            `general.operationFeedback.${success ? 'success' : 'error'}.${
+              getters.getMode === modalModesDict.create ? 'create' : 'update'
+            }`,
+          ),
+        },
+        {
+          root: true,
+        },
+      );
       // TODO: Too costly. Find a leaner way of updating the data.
       dispatch(
         'SYNC_UI/refreshHandler',
@@ -140,11 +153,22 @@ const dataModal = {
     deleteData: async ({ dispatch, getters }, { dataType }) => {
       if (getters.getEntityModalMode === modalModesDict.read) return;
       if (getters.getEntityModalMode === modalModesDict.create) return;
-      await dispatch(
+      const success = await dispatch(
         `${dataType}_Data/APIdelete`,
         { id: getters.getDataIdInFocus, _version: getters.getDataDraft._version },
         { root: true },
       );
+      dispatch(
+        'FEEDBACK_UI/showFeedbackForDuration',
+        {
+          type: success ? 'success' : 'error',
+          text: i18n.t(`general.operationFeedback.${success ? 'success' : 'error'}.delete`),
+        },
+        {
+          root: true,
+        },
+      );
+
       // TODO: Too costly. Find a leaner way of updating the data.
       dispatch(
         'SYNC_UI/refreshHandler',
