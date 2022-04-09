@@ -95,6 +95,7 @@ const dataModal = {
       commit(`reset${dataType}Draft`);
       commit('setMode', { newValue: modalModesDict.read });
       commit('setImageFile', { newValue: null });
+      if (dataType === dataTypesDict.entity) commit('setCreatingEntityInLevelId', { id: null }, { root: true });
     },
     editData: ({ commit, rootGetters }, { dataId, dataType }) => {
       commit('setMode', { newValue: modalModesDict.edit });
