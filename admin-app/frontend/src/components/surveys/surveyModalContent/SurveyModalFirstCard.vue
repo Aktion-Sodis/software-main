@@ -245,7 +245,7 @@
                 {{ $t('surveys.modal.image') }}
               </v-card-title>
 
-              <ImgFromS3 :assumedSrc="read ? deriveImgPath : null" dataType="survey">
+              <ImgFromS3 :assumedSrc="assumedSrc" :key="rerenderImgFromS3" dataType="survey">
                 <template v-slot:v-img="slotProps">
                   <v-img max-height="200px" :src="slotProps.src">
                     <v-btn v-if="!read" fab class="iv-edit-icon" color="primary" @click="selectImg">
@@ -337,9 +337,15 @@ export default {
       interventionId: null,
       nameTextBoxKey: 0,
       descriptionTextBoxKey: 1,
+      rerenderImgFromS3: false,
     };
   },
-  watch: { surveyDraft: 'prefillComponentDataFromSurveyDraft' },
+  watch: {
+    surveyDraft: 'prefillComponentDataFromSurveyDraft',
+    imageFile() {
+      this.rerenderImgFromS3 = !this.rerenderImgFromS3;
+    },
+  },
   mounted() {
     if (this.edit) this.prefillComponentDataFromSurveyDraft();
   },
@@ -352,6 +358,8 @@ export default {
       // allSurveyTags: 'SURVEY_Data/getSurveyTags',
       // tagById: 'SURVEY_Data/tagById',
       // tagIdsBySurveyId: 'SURVEY_Data/tagIdsBySurveyId',
+
+      imageFile: 'dataModal/getImageFile',
 
       fallbackLocaleIndex: 'fallbackLocaleIndex',
       calculateUILocaleString: 'calculateUILocaleString',
@@ -384,10 +392,15 @@ export default {
       return this.types[this.typeIndex];
     },
     deriveImgPath() {
+      if (this.create) return null;
       return deriveFilePath('interventionSurveyPicPath', {
         interventionID: this.surveyInFocus.intervention.id,
         surveyID: this.dataIdInFocus,
       });
+    },
+    assumedSrc() {
+      if (this.imageFile && !this.read) return this.imageFile;
+      return this.deriveImgPath;
     },
   },
   methods: {
