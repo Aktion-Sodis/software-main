@@ -159,7 +159,6 @@ const QUESTION_UI = {
       }
     },
     addImageToQuestion: ({ commit, getters }, { newQuestionImage }) => {
-      console.log({ newQuestionImage });
       const currentIndex = getters.getIQuestions;
       if (getters.getQuestionImages[currentIndex] === undefined) {
         while (getters.getQuestionImages.length <= currentIndex) {
