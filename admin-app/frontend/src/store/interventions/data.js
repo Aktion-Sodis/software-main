@@ -64,49 +64,56 @@ const interventionsData = {
   },
   actions: {
     APIpost: async ({ commit, dispatch, rootGetters }, interventionDraft) => {
+      let success = true;
       commit('setLoading', { newValue: true });
       const intervention = new Intervention({
         ...interventionDraft,
         name: new I18nString(interventionDraft.name),
         description: new I18nString(interventionDraft.description),
       });
-      DataStore.save(intervention)
-        .then(async (postResponse) => {
-          // const tagIds = interventionDraft.tags;
-          // // eslint-disable-next-line no-restricted-syntax
-          // for (const tagId of tagIds) {
-          //   const localTag = getters.tagById({ id: tagId });
-          //   // eslint-disable-next-line no-await-in-loop
-          //   await DataStore.save(
-          //     new InterventionInterventionTagRelation({
-          //       intervention: postResponse,
-          //       interventionTag: localTag,
-          //     }),
-          //   );
-          // }
 
-          await Storage.put(
-            deriveFilePath('interventionPicPath', { interventionID: postResponse.id }),
-            rootGetters['dataModal/getImageFile'],
-          );
+      try {
+        const postResponse = await DataStore.save(intervention);
+        // const tagIds = interventionDraft.tags;
+        // // eslint-disable-next-line no-restricted-syntax
+        // for (const tagId of tagIds) {
+        //   const localTag = getters.tagById({ id: tagId });
+        //   // eslint-disable-next-line no-await-in-loop
+        //   await DataStore.save(
+        //     new InterventionInterventionTagRelation({
+        //       intervention: postResponse,
+        //       interventionTag: localTag,
+        //     }),
+        //   );
+        // }
 
-          commit('addIntervention', postResponse);
-          dispatch(
-            'dataModal/readData',
-            {
-              dataId: postResponse.id,
-              dataType: dataTypesDict.intervention,
-            },
-            {
-              root: true,
-            },
-          );
-          commit('setLoading', { newValue: false });
-        })
-        .catch((err) => {
-          console.log({ err });
-          commit('setLoading', { newValue: false });
-        });
+        if (rootGetters['dataModal/getImageFile'] instanceof File) {
+          try {
+            await Storage.put(
+              deriveFilePath('interventionPicPath', { interventionID: postResponse.id }),
+              rootGetters['dataModal/getImageFile'],
+            );
+          } catch {
+            success = false;
+          }
+        }
+        commit('addIntervention', postResponse);
+
+        dispatch(
+          'dataModal/readData',
+          {
+            dataId: postResponse.id,
+            dataType: dataTypesDict.intervention,
+          },
+          {
+            root: true,
+          },
+        );
+      } catch {
+        success = false;
+      }
+      commit('setLoading', { newValue: false });
+      return success;
     },
     APIput: async ({ commit, dispatch, rootGetters }, { newData, originalId, originalVersion }) => {
       commit('setLoading', { newValue: true });
