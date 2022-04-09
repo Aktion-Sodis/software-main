@@ -227,7 +227,7 @@ export default {
         id,
       });
       if (!currentLevel) return [];
-      return this.allEntitiesOfLevel({ entityLevelId: currentLevel.parentLevelID });
+      return this.allEntitiesOfLevel({ levelId: currentLevel.parentLevelID });
     },
     edit() {
       return this.modalMode === modalModesDict.edit;
