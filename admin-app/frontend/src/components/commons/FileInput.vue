@@ -28,19 +28,25 @@ export default {
     }),
     ...mapActions({
       addImageToQuestion: 'QUESTION_UI/addImageToQuestion',
+      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
     }),
     filesChange(files) {
-      if (files.length !== 1) return;
+      let success = true;
+      if (files.length !== 1) success = false;
       const file = files[0];
-      if (file.size > 16000000) return;
-      if (!allowedFileUploadTypes.includes(file.type)) return;
+      if (file.size > 16000000 || !allowedFileUploadTypes.includes(file.type)) success = false;
 
       if (this.isForQuestions) {
         this.addImageToQuestion({ newQuestionImage: file });
-        return;
+      } else {
+        this.setImageFile({ newValue: file });
       }
 
-      this.setImageFile({ newValue: file });
+      this.showFeedbackForDuration({
+        type: success ? 'success' : 'error',
+        text: this.$t(`general.operationFeedback.upload.${success ? 'success' : 'error'}`),
+        duration: 2000,
+      });
     },
   },
 };
