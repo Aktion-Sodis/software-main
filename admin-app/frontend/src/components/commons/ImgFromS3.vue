@@ -19,7 +19,7 @@ export default {
   props: {
     assumedSrc: {
       required: true,
-      validator: (value) => typeof value === 'string' || value === null,
+      validator: (value) => typeof value === 'string' || value === null || value instanceof File,
     },
     dataType: {
       type: String,
@@ -30,30 +30,33 @@ export default {
     fetchedSrc: null,
     loading: true,
   }),
-  computed: {},
   mounted() {
     this.fetchSrc();
   },
   methods: {
-    fetchSrc() {
+    async fetchSrc() {
       if (!this.assumedSrc) {
         this.loading = false;
         return;
       }
-      Storage.get(this.assumedSrc, {
-        contentType: 'image/png',
-        download: true,
-      })
-        .then(async () => {
-          this.fetchedSrc = await Storage.get(this.assumedSrc, {
-            contentType: 'image/png',
-          });
-          this.loading = false;
-        })
-        .catch(() => {
-          this.fetchedSrc = null;
-          this.loading = false;
+
+      if (this.assumedSrc instanceof File) {
+        this.fetchedSrc = URL.createObjectURL(this.assumedSrc);
+        this.loading = false;
+        return;
+      }
+      try {
+        await Storage.get(this.assumedSrc, {
+          contentType: 'image/png',
+          download: true,
         });
+        this.fetchedSrc = await Storage.get(this.assumedSrc, {
+          contentType: 'image/png',
+        });
+      } catch {
+        this.fetchedSrc = null;
+      }
+      this.loading = false;
     },
     requireImg(dataType) {
       let res;

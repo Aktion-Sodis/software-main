@@ -149,7 +149,11 @@
                   {{ $t('interventions.modal.image') }}
                 </v-card-title>
 
-                <ImgFromS3 :assumedSrc="read ? deriveImgPath : null" dataType="intervention">
+                <ImgFromS3
+                  :assumedSrc="assumedSrc"
+                  :key="rerenderImgFromS3"
+                  dataType="intervention"
+                >
                   <template v-slot:v-img="slotProps">
                     <v-img max-height="200px" :src="slotProps.src">
                       <v-btn
@@ -393,9 +397,15 @@ export default {
       // tagIds: [],
       levelIds: [],
       contents: [],
+      rerenderImgFromS3: false,
     };
   },
-  watch: { interventionDraft: 'prefillComponentDataFromInterventionDraft' },
+  watch: {
+    interventionDraft: 'prefillComponentDataFromInterventionDraft',
+    imageFile() {
+      this.rerenderImgFromS3 = !this.rerenderImgFromS3;
+    },
+  },
   mounted() {
     if (!this.read) this.prefillComponentDataFromInterventionDraft();
   },
@@ -408,6 +418,8 @@ export default {
       interventionDraft: 'dataModal/getDataDraft',
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
       LEVELById: 'LEVEL_Data/LEVELById',
+
+      imageFile: 'dataModal/getImageFile',
 
       // allInterventionTags: 'INTERVENTION_Data/getInterventionTags',
       // tagById: 'INTERVENTION_Data/tagById',
@@ -457,6 +469,11 @@ export default {
     },
     type() {
       return this.types[this.typeIndex];
+    },
+    assumedSrc() {
+      console.log(this.imageFile && !this.read);
+      if (this.imageFile && !this.read) return this.imageFile;
+      return this.deriveImgPath;
     },
   },
   methods: {
