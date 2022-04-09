@@ -56,6 +56,9 @@ const SYNC_UI = {
 
       const apiInterventions = await dispatch('INTERVENTION_Data/APIgetAll', {}, { root: true });
       commit('INTERVENTION_Data/setInterventions', { newValue: apiInterventions }, { root: true });
+
+      const apiSurveys = await dispatch('SURVEY_Data/APIgetAll', {}, { root: true });
+      commit('SURVEY_Data/setSurveys', { newValue: apiSurveys }, { root: true });
     },
   },
 };
