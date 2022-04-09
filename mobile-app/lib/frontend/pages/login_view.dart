@@ -17,76 +17,82 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: BlocProvider(
-        create: (context) => LoginBloc(
-          authRepo: context.read<AuthRepository>(),
-          authCubit: context.read<AuthCubit>(),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _logo(context),
-            _pic(context),
-            _loginForm(),
-          ],
-        ),
-      )),
-    );
+    return WillPopScope(
+        onWillPop: () => Future.value(false),
+        child: Scaffold(
+          body: SafeArea(
+              child: BlocProvider(
+            create: (context) => LoginBloc(
+              authRepo: context.read<AuthRepository>(),
+              authCubit: context.read<AuthCubit>(),
+            ),
+            child: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom <
+                            defaultPadding(context)
+                        ? defaultPadding(context)
+                        : MediaQuery.of(context).padding.bottom),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _logo(context),
+                    _pic(context),
+                    _loginForm(),
+                  ],
+                )),
+          )),
+        ));
   }
 
   Widget _logo(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.all(width(context) * .1),
-        constraints: BoxConstraints(maxHeight: height(context) * .07),
-        child: Hero(
-            tag: 'Logo_Hero',
-            child: ClipRRect(
-                child: Image.asset("assets/test/logo.png"),
-                borderRadius: BorderRadius.circular(8))));
+    return Expanded(
+        flex: 2,
+        child: Container(
+            margin: EdgeInsets.all(width(context) * .1),
+            constraints: BoxConstraints(maxHeight: height(context) * .07),
+            child: Hero(
+                tag: 'Logo_Hero',
+                child: ClipRRect(
+                    child: Image.asset("assets/specificAssets/logo.png"),
+                    borderRadius: BorderRadius.circular(8)))));
   }
 
   Widget _pic(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.symmetric(horizontal: width(context) * .1),
-        child: ClipRRect(
-            child: Image.asset("assets/test/demo_pic.jpg"),
-            borderRadius: BorderRadius.circular(8)));
+    return Expanded(
+        flex: 5,
+        child: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+            margin: EdgeInsets.symmetric(horizontal: width(context) * .1),
+            child: ClipRRect(
+                child: Image.asset("assets/specificAssets/action_pic.jpg"),
+                borderRadius: BorderRadius.circular(8))));
   }
 
   Widget _loginForm() {
-    return BlocListener<LoginBloc, LoginState>(
-        listener: (context, state) {
-          final formStatus = state.formStatus;
-          if (formStatus is SubmissionFailed) {
-            _showSnackBar(context, formStatus.exception.toString());
-          }
-        },
-        child: BlocBuilder<LoginBloc, LoginState>(
-            builder: (context, state) => Form(
-                  key: _formKey,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: width(context) * .1,
-                        right: width(context) * .1,
-                        top: width(context) * .1),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _loginText(),
-                        _emailOrPhoneNumberField(),
-                        _passwordField(),
-                        _loginButton(),
-                        //_loadingSign(),
-                        _googleLogin()
-                      ],
-                    ),
-                  ),
-                )));
+    return BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) => Form(
+              key: _formKey,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: width(context) * .1,
+                    right: width(context) * .1,
+                    top: width(context) * .1),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _loginText(),
+                    _emailOrPhoneNumberField(),
+                    _passwordField(),
+                    _loginButton(state),
+                    //_loadingSign(),
+                    //_googleLogin()
+                  ],
+                ),
+              ),
+            ));
   }
 
   Widget _loginText() => Container(
@@ -110,6 +116,7 @@ class LoginView extends StatelessWidget {
       return Container(
           margin: EdgeInsets.only(top: defaultPadding(context)),
           child: TextFormField(
+            textCapitalization: TextCapitalization.none,
             decoration: InputDecoration(
               prefixIcon: const Icon(FontAwesomeIcons.user),
               hintText: strings.emailorphonenumber,
@@ -134,6 +141,7 @@ class LoginView extends StatelessWidget {
       return Container(
           margin: EdgeInsets.only(top: defaultPadding(context)),
           child: TextFormField(
+            textCapitalization: TextCapitalization.none,
             textInputAction: TextInputAction.go,
             autocorrect: false,
             enableSuggestions: false,
@@ -151,36 +159,50 @@ class LoginView extends StatelessWidget {
     });
   }
 
-  Widget _loginButton() {
+  Widget _loginButton(LoginState loginState) {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-      return Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-                margin: EdgeInsets.only(top: defaultPadding(context)),
-                child: state.formStatus is FormSubmitting
-                    ? const CircularProgressIndicator(color: Colors.green)
-                    : ElevatedButton(
-                        style: ButtonStyle(
-                          textStyle: MaterialStateProperty.all(
-                              TextStyle(fontSize: 18)),
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8))),
-                          minimumSize: MaterialStateProperty.all(
-                              Size(width(context) * .8, width(context) * .12)),
-                          backgroundColor: MaterialStateProperty.all(
-                              Colors.green), //todo: change
-                        ),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            context.read<LoginBloc>().add(LoginSubmitted());
-                          }
-                        },
-                        child: Text(strings.login),
-                      ))
-          ]);
+      return Column(children: [
+        if (state.formStatus is SubmissionFailed)
+          Container(
+            margin: EdgeInsets.only(top: defaultPadding(context)),
+            child: Text(
+                "Invalid login data. Please try again or talk to your admin!",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Theme.of(context).colorScheme.error),
+                textAlign: TextAlign.center),
+            alignment: Alignment.center,
+          ),
+        Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  margin: EdgeInsets.only(top: defaultPadding(context)),
+                  child: state.formStatus is FormSubmitting
+                      ? const CircularProgressIndicator(color: Colors.green)
+                      : ElevatedButton(
+                          style: ButtonStyle(
+                            textStyle: MaterialStateProperty.all(
+                                TextStyle(fontSize: 18)),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8))),
+                            minimumSize: MaterialStateProperty.all(Size(
+                                width(context) * .8, width(context) * .12)),
+                            backgroundColor: MaterialStateProperty.all(
+                                Colors.green), //todo: change
+                          ),
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<LoginBloc>().add(LoginSubmitted());
+                            }
+                          },
+                          child: Text(strings.login),
+                        ))
+            ])
+      ]);
     });
   }
 

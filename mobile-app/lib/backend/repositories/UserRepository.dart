@@ -47,4 +47,9 @@ class UserRepository {
     String path = dataStorePath(DataStorePaths.userPicPath, [user.id!]);
     return SyncedFile(path);
   }
+
+  static SyncedFile getUserPicFileByUserID(String id) {
+    String path = dataStorePath(DataStorePaths.userPicPath, [id]);
+    return SyncedFile(path);
+  }
 }

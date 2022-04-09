@@ -12,6 +12,7 @@ class EntitiesLoadedOrganizationViewState extends OrganizationViewState {
   final bool addEntityPossible;
   final AppliedIntervention? currentDetailAppliedIntervention;
   final ExecutedSurvey? executedSurveyToDisplay;
+  late final DateTime keyDateTime;
 
   Entity entityByID(String id) => allEntities.firstWhere((e) => e.id == id);
 
@@ -82,7 +83,10 @@ class EntitiesLoadedOrganizationViewState extends OrganizationViewState {
       required this.appBarString,
       required this.addEntityPossible,
       this.currentDetailAppliedIntervention,
-      this.executedSurveyToDisplay});
+      this.executedSurveyToDisplay}) {
+    this.keyDateTime = DateTime.now();
+    print("loaded state newly created");
+  }
 
   EntitiesLoadedOrganizationViewState copyWith(
       {List<Entity>? allEntities,

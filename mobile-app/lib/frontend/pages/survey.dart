@@ -74,55 +74,61 @@ class SurveyWidgetState extends State<SurveyWidget> {
   late final String preliminaryExecutedSurveyId;
 
   void addTask() async {
-    return openTaskForm(context: context, taskBloc: context.read<TaskBloc>(), organizationViewBloc: context.read<OrganizationViewBloc>(), userBloc: context.read<UserBloc>(),
-    appliedIntervention: (context.read<InAppBloc>().state as SurveyInAppState)
-        .appliedIntervention,
+    return openTaskForm(
+      entity: (context.read<InAppBloc>().state as SurveyInAppState).entity,
+      context: context,
+      taskBloc: context.read<TaskBloc>(),
+      organizationViewBloc: context.read<OrganizationViewBloc>(),
+      userBloc: context.read<UserBloc>(),
+      appliedIntervention: (context.read<InAppBloc>().state as SurveyInAppState)
+          .appliedIntervention,
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Material(
-        color: Theme.of(context).canvasColor,
-        child: SafeArea(
-            child: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: _pageController,
-          children: [
-            surveyTitleWidget(
-                context: context,
-                surveyTitle: widget.survey.name,
-                entityName: widget.survey.intervention?.name ?? '',
-                imageFile: syncedSurveyImageFile,
-                goBack: _leaveSurveyRegular,
-                proceed: () {
-                  _pageController.nextPage(
-                      duration: _pageSlideDuration, curve: _pageSlideCurve);
-                }),
-            inSurveyWidget(),
-            _summaryWidget(),
-            endSurveyWidget(
-                context: context,
-                survey: widget.survey,
-                answers: answers,
-                onGoBack: () {
-                  _pageController.previousPage(
-                      duration: _pageSlideDuration, curve: _pageSlideCurve);
-                },
-                onProceed: () async {
-                  await saveSurvey(
-                      context: context,
-                      answers: answers,
-                      preliminaryId: preliminaryExecutedSurveyId,
-                      survey: widget.survey);
-                  _pageController.nextPage(
-                      duration: _pageSlideDuration, curve: _pageSlideCurve);
-                }),
-            successFullyEndedSurvey(
-                context: context, onProceed: _leaveSurveyRegular),
-          ],
-        )));
+    return WillPopScope(
+        onWillPop: () => Future.value(false),
+        child: Material(
+            color: Theme.of(context).canvasColor,
+            child: SafeArea(
+                child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: _pageController,
+              children: [
+                surveyTitleWidget(
+                    context: context,
+                    surveyTitle: widget.survey.name,
+                    entityName: widget.survey.intervention?.name ?? '',
+                    imageFile: syncedSurveyImageFile,
+                    goBack: _leaveSurveyRegular,
+                    proceed: () {
+                      _pageController.nextPage(
+                          duration: _pageSlideDuration, curve: _pageSlideCurve);
+                    }),
+                inSurveyWidget(),
+                _summaryWidget(),
+                endSurveyWidget(
+                    context: context,
+                    survey: widget.survey,
+                    answers: answers,
+                    onGoBack: () {
+                      _pageController.previousPage(
+                          duration: _pageSlideDuration, curve: _pageSlideCurve);
+                    },
+                    onProceed: () async {
+                      await saveSurvey(
+                          context: context,
+                          answers: answers,
+                          preliminaryId: preliminaryExecutedSurveyId,
+                          survey: widget.survey);
+                      _pageController.nextPage(
+                          duration: _pageSlideDuration, curve: _pageSlideCurve);
+                    }),
+                successFullyEndedSurvey(
+                    context: context, onProceed: _leaveSurveyRegular),
+              ],
+            ))));
   }
 
   List<Widget> convertSurveyQuestionsToWidgetList(
@@ -162,7 +168,25 @@ class SurveyWidgetState extends State<SurveyWidget> {
     _pageController.addListener(() {
       setState(() {});
     });
-    syncedSurveyImageFile = SyncedFile(SurveyRepository.getImageFilePath(widget.survey));
+    syncedSurveyImageFile = SurveyRepository.getSurveyPic(widget.survey);
+    picAndAudioAnswerFiles = {};
+    widget.survey.questions.forEach((element) {
+      if (element.type == QuestionType.PICTURE) {
+        picAndAudioAnswerFiles[element.id!] =
+            ExecutedSurveyRepository.getQuestionAnswerPic(
+                (context.read<InAppBloc>().state as SurveyInAppState)
+                    .appliedIntervention,
+                preliminaryExecutedSurveyId,
+                element);
+      } else if (element.type == QuestionType.AUDIO) {
+        picAndAudioAnswerFiles[element.id!] =
+            ExecutedSurveyRepository.getQuestionAnswerAudio(
+                (context.read<InAppBloc>().state as SurveyInAppState)
+                    .appliedIntervention,
+                preliminaryExecutedSurveyId,
+                element);
+      }
+    });
     super.initState();
   }
 
@@ -277,6 +301,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
     );
   }
 
+  late Map<String, SyncedFile> picAndAudioAnswerFiles;
+
   Widget mcQuestionWidget(
       {required BuildContext context,
       required Question question,
@@ -340,7 +366,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
                         SizedBox(
                           width: defaultPadding(context),
                         ),
-                        Flexible(child: Text(question.questionOptions![index].text,  style: Theme.of(context).textTheme.bodyText1)),
+                        Flexible(
+                            child: Text(question.questionOptions![index].text,
+                                style: Theme.of(context).textTheme.bodyText1)),
                       ],
                     ),
                   ),
@@ -398,7 +426,11 @@ class SurveyWidgetState extends State<SurveyWidget> {
                         SizedBox(
                           width: defaultPadding(context),
                         ),
-                        Flexible(child: Text(question.questionOptions![index].text, style: Theme.of(context).textTheme.bodyText1,)),
+                        Flexible(
+                            child: Text(
+                          question.questionOptions![index].text,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        )),
                       ],
                     ),
                   ),
@@ -453,23 +485,27 @@ class SurveyWidgetState extends State<SurveyWidget> {
           height: defaultPadding(context) * 2,
         ),
         AudioPlayerWidgetFromSyncFile(
-          syncedFile: ExecutedSurveyRepository.getQuestionAnswerAudio(
-              (context.read<InAppBloc>().state as SurveyInAppState)
-                  .appliedIntervention,
-              preliminaryExecutedSurveyId,
-              question),
+          key: picAndAudioAnswerFiles[question.id!]!.key,
+          syncedFile: picAndAudioAnswerFiles[question.id!],
         ),
         SizedBox(
           height: defaultPadding(context),
         ),
         getTakeAudioWidget(
-            question: question,
-            callback: () {},
-            context: context,
-            appliedIntervention:
-                (context.read<InAppBloc>().state as SurveyInAppState)
-                    .appliedIntervention,
-            executedSurveyId: preliminaryExecutedSurveyId),
+          syncedFile: picAndAudioAnswerFiles[question.id!]!,
+          callback: (sF) async {
+            setState(() {
+              picAndAudioAnswerFiles[question.id!] = sF;
+            });
+            if (answers[question] == null) {
+              answers[question] = QuestionAnswer(
+                  questionID: question.id!,
+                  date: DateTime.now(),
+                  type: question.type);
+            }
+          },
+          context: context,
+        )
       ],
     ));
   }
@@ -493,7 +529,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Text(question.text, style: Theme.of(context).textTheme.bodyText1),
+                child: Text(question.text,
+                    style: Theme.of(context).textTheme.bodyText1),
               ),
               getReadOutWidget(question: question),
             ],
@@ -502,25 +539,27 @@ class SurveyWidgetState extends State<SurveyWidget> {
         SizedBox(
           height: defaultPadding(context) * 2,
         ),
-        imageForQuestion(
-            syncedFile: ExecutedSurveyRepository.getQuestionAnswerPic(
-                (context.read<InAppBloc>().state as SurveyInAppState)
-                    .appliedIntervention,
-                preliminaryExecutedSurveyId,
-                question)),
+        ImageFromSyncedFile(
+            key: picAndAudioAnswerFiles[question.id]!.key,
+            syncedFile: picAndAudioAnswerFiles[question.id]!),
         SizedBox(
           height: defaultPadding(context),
         ),
         getTakePhotoWidget(
-            question: question,
-            callback: () {
-              setState(() {});
-            },
-            context: context,
-            appliedIntervention:
-                (context.read<InAppBloc>().state as SurveyInAppState)
-                    .appliedIntervention,
-            executedSurveyID: preliminaryExecutedSurveyId),
+          syncedFile: picAndAudioAnswerFiles[question.id!]!,
+          callback: (sF) async {
+            setState(() {
+              picAndAudioAnswerFiles[question.id!] = sF;
+            });
+            if (answers[question] == null) {
+              answers[question] = QuestionAnswer(
+                  questionID: question.id!,
+                  date: DateTime.now(),
+                  type: question.type);
+            }
+          },
+          context: context,
+        ),
       ],
     ));
   }
@@ -559,54 +598,63 @@ class SurveyWidgetState extends State<SurveyWidget> {
     ));
   }
 
-  void _dismissSurvey() async{
-    bool confirmation = await showDialog(context: context, builder: (context) => AlertDialog(
-        title: Text(abortSurvey, style: Theme.of(context).textTheme.headline2),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                  abortSurveyText,
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ),
-            SizedBox(
-              height: defaultPadding(context),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  void _dismissSurvey() async {
+    bool confirmation = await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+            title:
+                Text(abortSurvey, style: Theme.of(context).textTheme.headline2),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                MaterialButton(
-                    child: Padding(
-                      padding: EdgeInsets.all(defaultPadding(context)),
-                      child: Text(confirmAbort, style: Theme.of(context).textTheme.bodyText1,),
-                    ),
-                    onPressed: (){
-                      Navigator.of(context).pop(true);
-                    }),
-                MaterialButton(
-
-                    child: Padding(
-                      padding: EdgeInsets.all(defaultPadding(context)),
-                      child: Text(doNotAbort, style: Theme.of(context).textTheme.bodyText1,),
-                    ),
-                    onPressed: (){
-                      Navigator.of(context).pop(false);
-                    }),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    abortSurveyText,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ),
+                SizedBox(
+                  height: defaultPadding(context),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MaterialButton(
+                        child: Padding(
+                          padding: EdgeInsets.all(defaultPadding(context)),
+                          child: Text(
+                            confirmAbort,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                        }),
+                    MaterialButton(
+                        child: Padding(
+                          padding: EdgeInsets.all(defaultPadding(context)),
+                          child: Text(
+                            doNotAbort,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        }),
+                  ],
+                ),
               ],
-            ),
-          ],
-        )
-    ));
-    if(confirmation){
+            )));
+    if (confirmation) {
       BlocProvider.of<InAppBloc>(context).add(MainViewEvent());
     }
   }
+
   void _leaveSurveyRegular() {
     BlocProvider.of<InAppBloc>(context).add(MainViewEvent());
   }
+
   void _goToInSurveyPage(Question targetQuestion) async {
     if (!questions.contains(targetQuestion)) {
       throw 'Question does not exist';
@@ -637,6 +685,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
             : 0,
         survey: widget.survey,
         executedSurveyId: preliminaryExecutedSurveyId,
+        picAndAudioAnswerFiles: picAndAudioAnswerFiles,
         appliedIntervention:
             (context.read<InAppBloc>().state as SurveyInAppState)
                 .appliedIntervention,
@@ -666,38 +715,43 @@ class SurveyWidgetState extends State<SurveyWidget> {
             surveyTitle,
             style: Theme.of(context).textTheme.headline2,
           ),
-          MaterialButton(onPressed: (){
-            addTask();
-          },
+          MaterialButton(
+              onPressed: () {
+                addTask();
+              },
               padding: EdgeInsets.zero,
-          child: Container(
-            height: 50,
-            width: 50,
-            child: Stack(
-              fit: StackFit.passthrough,
-              children: [
-                const Align(alignment: Alignment.bottomLeft,
-                child: Icon(MdiIcons.checkboxMarkedOutline, size:45,),
-                ),
-                Align(alignment: Alignment.topRight,
-                  child: Container(
-                    width: 25,
-                    height: 25,
-                    decoration: const BoxDecoration(
-                      color: Colors.green,
-                      shape: BoxShape.circle,
+              child: Container(
+                height: 50,
+                width: 50,
+                child: Stack(
+                  fit: StackFit.passthrough,
+                  children: [
+                    const Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Icon(
+                        MdiIcons.checkboxMarkedOutline,
+                        size: 45,
+                      ),
                     ),
-                    child: const Icon(
-                      MdiIcons.plus,
-                      color: Colors.white,
-                      size: 20,
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        width: 25,
+                        height: 25,
+                        decoration: const BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          MdiIcons.plus,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          )
-          ),
+              )),
         ],
       ),
     );
@@ -762,10 +816,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
   static Widget getEditQuestionWidget(
       {required BuildContext context, required onEdit}) {
-
-    return CustomIconButton((){
+    return CustomIconButton(() {
       onEdit();
-    }, MdiIcons.pencil,const Size(50,50), true);
+    }, MdiIcons.pencil, const Size(50, 50), true);
   }
 
   static Widget getReadOutWidget({required Question question}) {
@@ -773,12 +826,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
   }
 
   static Widget getTakeAudioWidget(
-      {required Question question,
-      required AppliedIntervention appliedIntervention,
-      required String executedSurveyId,
-      required VoidCallback callback,
+      {required SyncedFile syncedFile,
+      required ValueChanged<SyncedFile> callback,
       required BuildContext context}) {
-
     return RecorderWidget(
         restingViewBuilder: (a) => Container(
               child: Icon(
@@ -788,11 +838,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
         recordingViewBuilder: (a) => Container(
               child: Icon(MdiIcons.pause),
             ),
-        onAudioRecorded: (path) {
-          SyncedFile syncedFile =
-              ExecutedSurveyRepository.getQuestionAnswerAudio(
-                  appliedIntervention, executedSurveyId, question);
-          syncedFile.updateAsAudio(File(path));
+        onAudioRecorded: (path) async {
+          await syncedFile.updateAsAudio(File(path));
+          callback(syncedFile);
         },
         loadingViewBuilder: () => Container());
     return MaterialButton(
@@ -807,33 +855,28 @@ class SurveyWidgetState extends State<SurveyWidget> {
   }
 
   static Widget getTakePhotoWidget(
-      {required Question question,
-      required executedSurveyID,
-      required AppliedIntervention appliedIntervention,
-      required VoidCallback callback,
+      {required SyncedFile syncedFile,
+      required ValueChanged<SyncedFile> callback,
       required BuildContext context}) {
-
     //return CustomIconButton(onPressed, iconData, size, true)
     return CustomIconButton(() async {
       XFile? r = await CameraFunctionality.takePicture(context: context);
       if (r != null) {
-        SyncedFile syncedFile = ExecutedSurveyRepository.getQuestionAnswerPic(
-            appliedIntervention, executedSurveyID, question);
         await syncedFile.updateAsPic(r);
+        callback.call(syncedFile);
       }
-      callback.call();
-    }, MdiIcons.camera, const Size(50,50), true);
+    }, MdiIcons.camera, const Size(50, 50), true);
   }
 
-  static Widget imageForQuestion({required SyncedFile syncedFile}) {
-    return ImageFromSyncedFile(
-      syncedFile: syncedFile,
-    );
+  static ImageFromSyncedFile imageForQuestion(
+      {required SyncedFile syncedFile}) {
+    return ImageFromSyncedFile(syncedFile: syncedFile, key: ValueKey(0));
   }
 
   static Widget questionSummary(
       {Function? onEdit,
       required Question question,
+      SyncedFile? syncedFile,
       QuestionAnswer? questionAnswer,
       required AppliedIntervention appliedIntervention,
       required String executedSurveyId,
@@ -849,7 +892,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
     if (questionAnswer != null) {
       switch (question.type) {
         case QuestionType.SINGLECHOICE:
-          answerWidget = Text(questionAnswer.questionOptions!.first.text, style: Theme.of(context).textTheme.bodyText1);
+          answerWidget = Text(questionAnswer.questionOptions!.first.text,
+              style: Theme.of(context).textTheme.bodyText1);
           break;
         case QuestionType.MULTIPLECHOICE:
           String answers = '';
@@ -860,23 +904,43 @@ class SurveyWidgetState extends State<SurveyWidget> {
           if (answers.length > 2) {
             answers = answers.substring(0, answers.length - 2);
           }
-          answerWidget = Text(answers,  style: Theme.of(context).textTheme.bodyText1);
+          answerWidget =
+              Text(answers, style: Theme.of(context).textTheme.bodyText1);
           break;
         case QuestionType.PICTURE:
           answerWidget = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: defaultPadding(context),),
+              SizedBox(
+                height: defaultPadding(context),
+              ),
               Text(yourShot, style: Theme.of(context).textTheme.bodyText1),
-              SizedBox(height: defaultPadding(context),),
-              imageForQuestion(
-                  syncedFile: ExecutedSurveyRepository.getQuestionAnswerPic(
-                      appliedIntervention, executedSurveyId, question)),
+              SizedBox(
+                height: defaultPadding(context),
+              ),
+              ImageFromSyncedFile(syncedFile: syncedFile, key: syncedFile?.key),
             ],
           );
           break;
         case QuestionType.TEXT:
-          answerWidget = Text(questionAnswer.text ?? '',  style: Theme.of(context).textTheme.bodyText1);
+          answerWidget = Text(questionAnswer.text ?? '',
+              style: Theme.of(context).textTheme.bodyText1);
+          break;
+        case QuestionType.AUDIO:
+          answerWidget = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: defaultPadding(context),
+              ),
+              Text(yourShot, style: Theme.of(context).textTheme.bodyText1),
+              SizedBox(
+                height: defaultPadding(context),
+              ),
+              AudioPlayerWidgetFromSyncFile(
+                  key: syncedFile?.key, syncedFile: syncedFile)
+            ],
+          );
           break;
         default:
           answerWidget = Container();
@@ -886,49 +950,60 @@ class SurveyWidgetState extends State<SurveyWidget> {
       answerWidget = Container();
     }
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
+    if (questionAnswer != null) {
+      return Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                  child: Padding(
+                padding: EdgeInsets.only(bottom: defaultPadding(context)) * 1,
                 child: Padding(
-              padding: EdgeInsets.only(bottom: defaultPadding(context)) * 1,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      question.text,
-                      style: Theme.of(context).textTheme.headline2,
-                    ),
-                    if(questionAnswer!=null&&(
-                        (questionAnswer.type == QuestionType.MULTIPLECHOICE && questionAnswer.questionOptions!.isNotEmpty)||
-                        questionAnswer.type == QuestionType.SINGLECHOICE||
-                          questionAnswer.type == QuestionType.TEXT
-                    )) SizedBox(height: defaultPadding(context),),
-                    answerWidget,
-                  ],
-                ),
-              ),
-            )),
-            if (onEdit != null)
-              Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    defaultPadding(context) * 2,
-                    defaultPadding(context),
-                    0,
-                    defaultPadding(context),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: defaultPadding(context)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        question.text,
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
+                      if (questionAnswer != null &&
+                          ((questionAnswer.type ==
+                                      QuestionType.MULTIPLECHOICE &&
+                                  questionAnswer.questionOptions!.isNotEmpty) ||
+                              questionAnswer.type ==
+                                  QuestionType.SINGLECHOICE ||
+                              questionAnswer.type == QuestionType.TEXT))
+                        SizedBox(
+                          height: defaultPadding(context),
+                        ),
+                      answerWidget,
+                    ],
                   ),
-                  child: getEditQuestionWidget(context: context, onEdit: onEdit))
-          ],
-        ),
-        CommonWidgets.separator(context: context),
-        SizedBox(
-          height: defaultPadding(context),
-        ),
-      ],
-    );
+                ),
+              )),
+              if (onEdit != null)
+                Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      defaultPadding(context) * 2,
+                      defaultPadding(context),
+                      0,
+                      defaultPadding(context),
+                    ),
+                    child:
+                        getEditQuestionWidget(context: context, onEdit: onEdit))
+            ],
+          ),
+          CommonWidgets.separator(context: context),
+          SizedBox(
+            height: defaultPadding(context),
+          ),
+        ],
+      );
+    } else {
+      return Container();
+    }
   }
 
   static Widget questionTitleWidget(
@@ -946,9 +1021,14 @@ class SurveyWidgetState extends State<SurveyWidget> {
                   question.text,
                   style: Theme.of(context).textTheme.headline2,
                 ),
-                SizedBox(height: defaultPadding(context),),
-                Text(resolveQuestionTypeDescriptionFromQuestion(
-                    question: question), style: Theme.of(context).textTheme.bodyText1,),
+                SizedBox(
+                  height: defaultPadding(context),
+                ),
+                Text(
+                  resolveQuestionTypeDescriptionFromQuestion(
+                      question: question),
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
               ],
             ),
           ),
@@ -977,12 +1057,21 @@ class SurveyWidgetState extends State<SurveyWidget> {
       required Map<Question, QuestionAnswer> answers,
       required BuildContext context,
       String? preliminaryId}) async {
-    List<QuestionAnswer> surveyAnswersAsList = List.generate(
+    List<QuestionAnswer> surveyAnswersAsList = [];
+    for (Question question in survey.questions) {
+      if (answers.keys.any((element) => element.id == question.id)) {
+        surveyAnswersAsList.add(QuestionAnswer(
+            questionID: question.id!,
+            date: DateTime.now(),
+            type: question.type));
+      }
+    }
+    /*List.generate(
         survey.questions.length,
         (index) => QuestionAnswer(
             questionID: survey.questions[index].id!,
             date: DateTime.now(),
-            type: survey.questions[index].type));
+            type: survey.questions[index].type));*/
     for (MapEntry<Question, QuestionAnswer> pair in answers.entries) {
       int toReplace = surveyAnswersAsList
           .indexWhere((element) => element.questionID == pair.key.id);
@@ -1002,7 +1091,10 @@ class SurveyWidgetState extends State<SurveyWidget> {
         date: DateTime.now(),
         answers: surveyAnswersAsList);
     context.read<InAppBloc>().add(FinishAndSaveExecutedSurvey(
-        executedSurvey, surveyState.appliedIntervention));
+        executedSurvey,
+        surveyState.appliedIntervention,
+        (context.read<InAppBloc>().state as SurveyInAppState).entity,
+        context.read<OrganizationViewBloc>()));
   }
 
   static Widget successFullyEndedSurvey(
@@ -1038,11 +1130,12 @@ class SurveyWidgetState extends State<SurveyWidget> {
       double? progress,
       required Survey survey,
       required Map<Question, QuestionAnswer> answers,
+      required Map<String, SyncedFile> picAndAudioAnswerFiles,
       required AppliedIntervention appliedIntervention,
       required String executedSurveyId,
-        QuestionEditor? onEditGenerator,
-        onDismiss,
-       onProceed}) {
+      QuestionEditor? onEditGenerator,
+      onDismiss,
+      onProceed}) {
     return Column(
       children: [
         SizedBox(
@@ -1088,6 +1181,8 @@ class SurveyWidgetState extends State<SurveyWidget> {
                       executedSurveyId: executedSurveyId,
                       question: survey.questions[index],
                       questionAnswer: answers[survey.questions[index]],
+                      syncedFile:
+                          picAndAudioAnswerFiles[survey.questions[index].id],
                       context: context,
                       onEdit: onEditGenerator != null
                           ? onEditGenerator(survey.questions[index])
@@ -1095,21 +1190,23 @@ class SurveyWidgetState extends State<SurveyWidget> {
             ],
           )),
         ),
-        if(!(onProceed==null&&onDismiss==null)) Padding(
-          padding: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CommonWidgets.defaultDismissButton(
-                  context: context, dismiss: onDismiss),
-              CommonWidgets.defaultForwardButton(
-                  context: context, proceed: onProceed),
-            ],
+        if (!(onProceed == null && onDismiss == null))
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: defaultPadding(context)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CommonWidgets.defaultDismissButton(
+                    context: context, dismiss: onDismiss),
+                CommonWidgets.defaultForwardButton(
+                    context: context, proceed: onProceed),
+              ],
+            ),
           ),
-        ),
-        if(!(onProceed==null&&onDismiss==null)) SizedBox(
-          height: defaultPadding(context),
-        ),
+        if (!(onProceed == null && onDismiss == null))
+          SizedBox(
+            height: defaultPadding(context),
+          ),
       ],
     );
   }
@@ -1149,10 +1246,10 @@ class SurveyWidgetState extends State<SurveyWidget> {
             ],
           ),
         ),
-          CommonWidgets.separator(context: context),
-          SizedBox(
-            height: defaultPadding(context),
-          ),
+        CommonWidgets.separator(context: context),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
         ImageFromSyncedFile(
           syncedFile: imageFile,
         ),
@@ -1221,14 +1318,13 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar>
       ..addListener(() {
         setState(() {});
       });
+
     super.initState();
   }
 }
 
 class _AudioPlayerWidgetFromSyncFileState
     extends State<AudioPlayerWidgetFromSyncFile> {
-  File? audioFile;
-
   @override
   Widget build(BuildContext context) {
     return audioFile == null
@@ -1240,17 +1336,23 @@ class _AudioPlayerWidgetFromSyncFileState
             playingViewBuilder: (a) => const Icon(MdiIcons.pause));
   }
 
+  bool loading = true;
+  File? audioFile;
+
   @override
   void initState() {
-    widget.syncedFile?.file().then((value) {
-      try {
+    print("reinitializing image widget");
+    widget.syncedFile?.file().then((value) async {
+      audioFile = value;
+      if (mounted) {
         setState(() {
-          audioFile = value;
+          audioFile = audioFile;
+          loading = false;
         });
-      } on Exception catch (e) {
-        audioFile = value;
+      } else {
+        audioFile = audioFile;
+        loading = false;
       }
     });
-    super.initState();
   }
 }

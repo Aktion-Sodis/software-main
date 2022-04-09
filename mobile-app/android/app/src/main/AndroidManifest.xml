@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
    <application
-        android:label="mobile_app"
+        android:label="Nisaba by Aktion Sodis"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

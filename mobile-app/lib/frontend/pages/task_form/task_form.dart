@@ -9,6 +9,7 @@ import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/callableModels/localModels/attachment.dart';
 import 'package:mobile_app/backend/callableModels/localModels/audio_attachment.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/frontend/components/audio/recorder_widget.dart';
 import 'package:mobile_app/frontend/components/buttons.dart';
 import 'package:mobile_app/frontend/components/keyboard_dismisser.dart';
@@ -79,7 +80,7 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
     return DateTime(date.year, date.month, date.day);
   }
 
-  String _formatDate(DateTime deadline) {
+  static String formatDate(DateTime deadline) {
     return deadline.day.toString() +
         "." +
         deadline.month.toString() +
@@ -403,7 +404,7 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
                                     _customDateSelected(state.deadline!)
                                 ? strings.task_deadline +
                                     ": " +
-                                    _formatDate(state.deadline!)
+                                    formatDate(state.deadline!)
                                 : strings.task_set_date,
                             outlinedWhenSelected: true,
                             keepClickable: true,

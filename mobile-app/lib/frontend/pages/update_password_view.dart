@@ -87,111 +87,140 @@ class UpdatePasswordViewState extends State<UpdatePasswordView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-          Expanded(
-              child: Center(
-                  child: Container(
-                      margin: EdgeInsets.all(width(context) * .1),
-                      child: Hero(
-                          tag: 'Logo_Hero',
-                          child: ClipRRect(
-                              child: Image.asset("assets/test/logo.png"),
-                              borderRadius: BorderRadius.circular(8)))))),
-          Container(
-            margin: EdgeInsets.only(
-              left: width(context) * .1,
-              right: width(context) * .1,
-            ),
-            child: Text(
-              strings.change_password_text,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Form(
-            key: _formKey,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  left: width(context) * .1,
-                  right: width(context) * .1,
-                  top: width(context) * .1,
-                  bottom: width(context) * .1),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                      child: TextFormField(
-                    controller: textEditingControllerOne,
-                    textInputAction: TextInputAction.next,
-                    autocorrect: false,
-                    enableSuggestions: false,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                        prefixIcon: const Icon(FontAwesomeIcons.key),
-                        labelText: strings.new_password),
-                    validator: (value) => passwordOneEmpty()
-                        ? strings.enterpassword
-                        : !passwordIsValid()
-                            ? strings.invalid_password
-                            : !passwordsEqual()
-                                ? strings.not_same_password
-                                : null,
-                  )),
-                  Container(
-                      margin: EdgeInsets.only(top: defaultPadding(context)),
-                      child: TextFormField(
-                        controller: textEditingControllerTwo,
-                        textInputAction: TextInputAction.go,
-                        onFieldSubmitted: (_) => changePassword(),
-                        autocorrect: false,
-                        enableSuggestions: false,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            prefixIcon: const Icon(FontAwesomeIcons.key),
-                            labelText: strings.new_password_validation),
-                        validator: (value) => passwordTwoEmpty()
-                            ? strings.enterpassword
-                            : !passwordIsValid()
-                                ? strings.invalid_password
-                                : !passwordsEqual()
-                                    ? strings.not_same_password
-                                    : null,
-                      )),
-                  Container(
-                      margin: EdgeInsets.only(top: defaultPadding(context)),
-                      child: loading
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                  CircularProgressIndicator(color: Colors.green)
-                                ])
-                          : ElevatedButton(
-                              style: ButtonStyle(
-                                textStyle: MaterialStateProperty.all(
-                                    TextStyle(fontSize: 18)),
-                                shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8))),
-                                minimumSize: MaterialStateProperty.all(Size(
-                                    width(context) * .8, width(context) * .12)),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.green), //todo: change
+    return WillPopScope(
+        onWillPop: () => Future.value(false),
+        child: Scaffold(
+            body: SafeArea(
+                child: Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).padding.bottom <
+                                defaultPadding(context)
+                            ? defaultPadding(context)
+                            : MediaQuery.of(context).padding.bottom),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                              child: Center(
+                                  child: Container(
+                                      margin:
+                                          EdgeInsets.all(width(context) * .1),
+                                      child: Hero(
+                                          tag: 'Logo_Hero',
+                                          child: ClipRRect(
+                                              child: Image.asset(
+                                                  "assets/specificAssets/logo.png"),
+                                              borderRadius:
+                                                  BorderRadius.circular(8)))))),
+                          Container(
+                            margin: EdgeInsets.only(
+                              left: width(context) * .1,
+                              right: width(context) * .1,
+                            ),
+                            child: Text(
+                              strings.change_password_text,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Form(
+                            key: _formKey,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: width(context) * .1,
+                                  right: width(context) * .1,
+                                  top: width(context) * .1,
+                                  bottom: width(context) * .1),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                      child: TextFormField(
+                                    controller: textEditingControllerOne,
+                                    textInputAction: TextInputAction.next,
+                                    autocorrect: false,
+                                    enableSuggestions: false,
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+                                        prefixIcon:
+                                            const Icon(FontAwesomeIcons.key),
+                                        labelText: strings.new_password),
+                                    validator: (value) => passwordOneEmpty()
+                                        ? strings.enterpassword
+                                        : !passwordIsValid()
+                                            ? strings.invalid_password
+                                            : !passwordsEqual()
+                                                ? strings.not_same_password
+                                                : null,
+                                  )),
+                                  Container(
+                                      margin: EdgeInsets.only(
+                                          top: defaultPadding(context)),
+                                      child: TextFormField(
+                                        controller: textEditingControllerTwo,
+                                        textInputAction: TextInputAction.go,
+                                        onFieldSubmitted: (_) =>
+                                            changePassword(),
+                                        autocorrect: false,
+                                        enableSuggestions: false,
+                                        obscureText: true,
+                                        decoration: InputDecoration(
+                                            prefixIcon: const Icon(
+                                                FontAwesomeIcons.key),
+                                            labelText: strings
+                                                .new_password_validation),
+                                        validator: (value) => passwordTwoEmpty()
+                                            ? strings.enterpassword
+                                            : !passwordIsValid()
+                                                ? strings.invalid_password
+                                                : !passwordsEqual()
+                                                    ? strings.not_same_password
+                                                    : null,
+                                      )),
+                                  Container(
+                                      margin: EdgeInsets.only(
+                                          top: defaultPadding(context)),
+                                      child: loading
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                  CircularProgressIndicator(
+                                                      color: Colors.green)
+                                                ])
+                                          : ElevatedButton(
+                                              style: ButtonStyle(
+                                                textStyle:
+                                                    MaterialStateProperty.all(
+                                                        TextStyle(
+                                                            fontSize: 18)),
+                                                shape: MaterialStateProperty
+                                                    .all(RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8))),
+                                                minimumSize:
+                                                    MaterialStateProperty.all(
+                                                        Size(
+                                                            width(context) * .8,
+                                                            width(context) *
+                                                                .12)),
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors
+                                                            .green), //todo: change
+                                              ),
+                                              onPressed: () {
+                                                changePassword();
+                                              },
+                                              child:
+                                                  Text(strings.save_password),
+                                            ))
+                                ],
                               ),
-                              onPressed: () {
-                                changePassword();
-                              },
-                              child: Text(strings.save_password),
-                            ))
-                ],
-              ),
-            ),
-          )
-        ])));
+                            ),
+                          )
+                        ])))));
   }
 }

@@ -13,7 +13,7 @@ import 'package:mobile_app/frontend/dependentsizes.dart';
 import 'package:mobile_app/frontend/pages/main_menu_components/main_menu_app_bar.dart';
 import 'package:mobile_app/frontend/pages/main_menu_components/main_menu_commonwidgets.dart';
 import 'package:mobile_app/frontend/strings.dart' as strings;
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'package:advance_pdf_viewer_fork/advance_pdf_viewer_fork.dart';
 
 class MainMenuWiki extends StatelessWidget {
   @override
@@ -111,21 +111,28 @@ class PDFViewWidgetState extends State<PDFViewWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-            child: Column(children: [
-      MainMenuAppBar(context, () {}, widget.content.name, showBackButton: true),
-      Expanded(
-          child: FutureBuilder<PDFDocument?>(
-              future: pdfFuture,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return PDFViewer(
-                      document: snapshot.data!,
-                      showNavigation: true,
-                      showPicker: false);
-                } else {
-                  return Center(child: loadingSign(context));
-                }
-              }))
-    ])));
+            child: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom <
+                            defaultPadding(context)
+                        ? defaultPadding(context)
+                        : MediaQuery.of(context).padding.bottom),
+                child: Column(children: [
+                  MainMenuAppBar(context, () {}, widget.content.name,
+                      showBackButton: true),
+                  Expanded(
+                      child: FutureBuilder<PDFDocument?>(
+                          future: pdfFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return PDFViewer(
+                                  document: snapshot.data!,
+                                  showNavigation: true,
+                                  showPicker: false);
+                            } else {
+                              return Center(child: loadingSign(context));
+                            }
+                          }))
+                ]))));
   }
 }

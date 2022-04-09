@@ -36,6 +36,7 @@ void openTaskForm<T extends TaskFormCubit>(
     required UserBloc userBloc,
     List<Attachment>? attachment}) {
   showDialog(
+      barrierColor: Theme.of(context).colorScheme.background,
       context: context,
       builder: (context) => TaskForm<T>(
           title: strings.main_menu_tasks,
@@ -247,7 +248,7 @@ class TaskFormCubit extends Cubit<TaskFormState> {
     List<int> audioList = [];
     List<int> picList = [];
     for (var element in attachments) {
-      if (element.isPic) {
+      if (element is ImageAttachment) {
         int toSetInt;
         if (picList.isEmpty) {
           toSetInt = 0;
@@ -298,10 +299,10 @@ class TaskFormCubit extends Cubit<TaskFormState> {
       taskBloc.add(CreateTask(toSave));
     }
     for (Attachment attachment in attachments) {
-      if (attachment.isPic) {
+      if (attachment is ImageAttachment) {
         SyncedFile syncedFile =
             TaskRepository.getTaskPic(toSave, attachment.number!);
-        syncedFile.update(attachment.toFile().readAsStringSync());
+        syncedFile.updateAsBytes(attachment.toFile());
       } else {
         SyncedFile syncedFile =
             TaskRepository.getTaskAudio(toSave, attachment.number!);

@@ -42,7 +42,10 @@ class SessionCubit extends Cubit<SessionState> {
         emit(RequiresPasswordChangeSessionState(authCredentials: credentials));
       } else {
         print("popping fully quthenticated state");
-        emit(FullyAuthenticatedSessionState(userID: credentials.userId!));
+        //todo: hier liegt fehler bezüglich user laden
+        User? user = await userRepo.getUserById(credentials.userId!);
+        emit(FullyAuthenticatedSessionState(
+            userID: credentials.userId!, user: user));
       }
     } catch (e) {
       print("error in showing Session");

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/frontend/components/loadingsign.dart';
+import 'package:mobile_app/frontend/dependentsizes.dart';
 
 class ImageWidget extends StatefulWidget {
   final SyncedFile? imageFile;
@@ -12,12 +13,14 @@ class ImageWidget extends StatefulWidget {
   final double? height;
   final BorderRadius? borderRadius;
 
-  const ImageWidget(
-      {required this.imageFile,
+  ImageWidget(
+      {Key? key,
+      required this.imageFile,
       this.boxConstraints,
       this.width,
       this.height,
-      this.borderRadius});
+      this.borderRadius})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -28,17 +31,22 @@ class ImageWidget extends StatefulWidget {
 class ImageWidgetState extends State<ImageWidget> {
   bool loading = true;
   File? imageFile;
+  FileImage? fileImage;
 
   @override
   void initState() {
-    widget.imageFile?.file().then((value) {
+    print("reinitializing image widget");
+    widget.imageFile?.file().then((value) async {
+      imageFile = value;
+      fileImage = FileImage(imageFile!);
+      await fileImage!.evict();
       if (mounted) {
         setState(() {
-          imageFile = value;
+          fileImage = fileImage;
           loading = false;
         });
       } else {
-        imageFile = value;
+        fileImage = fileImage;
         loading = false;
       }
     });
@@ -56,7 +64,7 @@ class ImageWidgetState extends State<ImageWidget> {
                 ? null
                 : imageFile != null
                     ? DecorationImage(
-                        image: FileImage(imageFile!),
+                        image: fileImage!,
                         fit: (widget.width != null || widget.height != null)
                             ? BoxFit.fitWidth
                             : BoxFit.contain)
@@ -77,23 +85,35 @@ class ImageFromSyncedFile extends StatefulWidget {
 }
 
 class _ImageFromSyncedFileState extends State<ImageFromSyncedFile> {
+  bool loading = true;
   File? imageFile;
+  FileImage? fileImage;
 
   @override
   void initState() {
-    widget.syncedFile?.file().then((value) {
+    print("reinitializing image widget");
+    widget.syncedFile?.file().then((value) async {
+      imageFile = value;
+      fileImage = FileImage(imageFile!);
+      await fileImage!.evict();
       if (mounted) {
         setState(() {
-          imageFile = value;
+          fileImage = fileImage;
+          loading = false;
         });
       } else {
-        imageFile = value;
+        fileImage = fileImage;
+        loading = false;
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return imageFile == null ? Container() : Image.file(imageFile!);
+    return imageFile == null
+        ? Container()
+        : Container(
+            constraints: BoxConstraints(maxHeight: height(context) * .25),
+            child: Image.file(imageFile!));
   }
 }

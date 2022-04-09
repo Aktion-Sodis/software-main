@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_bloc.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_events.dart';
+import 'package:mobile_app/backend/Blocs/sync/sync_bloc.dart';
+import 'package:mobile_app/backend/Blocs/sync/sync_state.dart';
 import 'package:mobile_app/backend/Blocs/task/task_bloc.dart';
 import 'package:mobile_app/backend/Blocs/task/task_state.dart';
 import 'package:mobile_app/backend/callableModels/Task.dart';
@@ -40,8 +42,22 @@ class MainMenuHomeState extends State<MainMenuHome> {
               //todo: add back button
               Container(
                   margin: EdgeInsets.only(left: width(context) * .1),
-                  child: Image.asset("assets/test/logo.png",
+                  child: Image.asset("assets/specificAssets/logo.png",
                       height: width(context) * .1)),
+              SizedBox(width: width(context) * .1),
+              BlocBuilder<SyncBloc, SyncState>(builder: (context, state) {
+                if (state is FullySyncedState) {
+                  return Icon(MdiIcons.cloudCheckOutline,
+                      color: Colors.green, size: width(context) * .08);
+                } else if (state is CannotSyncState) {
+                  return Icon(MdiIcons.cloudOffOutline,
+                      color: Colors.red, size: width(context) * .08);
+                } else {
+                  return Icon(MdiIcons.cloudSyncOutline,
+                      color: Theme.of(context).colorScheme.onBackground,
+                      size: width(context) * .08);
+                }
+              }),
               Expanded(child: Container()),
               /*Expanded(
                 child: Container(
