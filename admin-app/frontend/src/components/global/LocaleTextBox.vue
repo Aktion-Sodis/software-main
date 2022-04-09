@@ -1,28 +1,30 @@
 <template>
-  <div style="margin-bottom:20px;" class="d-flex flex-column">
-    <div
-      v-for="selectedLocale in selectedLocales"
-      :key="selectedLocale"
-      class="d-flex align-center"
-    >
-      <slot
-        :inputHandler="(e) => inputHandler(e, selectedLocale)"
-        name="text-input"
-        :model="res.languageTexts[calculateIndexByLocale({ locale: selectedLocale })]"
-        :label="`${$t(labelPrefixI18nSelector)} (${selectedLocale})`"
-      ></slot>
-      <div class="pb-7" v-if="selectedLocale !== $i18n.fallbackLocale">
-        <v-btn
-          color="primary"
-          outlined
-          icon
-          class="ml-2"
-          @click="removeSelectedLocale(selectedLocale)"
-        >
-          <v-icon> mdi-minus </v-icon>
-        </v-btn>
+  <div style="margin-bottom: 20px" class="d-flex flex-column">
+    <transition-group name="fade" tag="div">
+      <div
+        v-for="selectedLocale in selectedLocales"
+        :key="selectedLocale"
+        class="d-flex align-center"
+      >
+        <slot
+          :inputHandler="(e) => inputHandler(e, selectedLocale)"
+          name="text-input"
+          :model="res.languageTexts[calculateIndexByLocale({ locale: selectedLocale })]"
+          :label="`${$t(labelPrefixI18nSelector)} (${selectedLocale})`"
+        ></slot>
+        <div class="pb-7" v-if="selectedLocale !== $i18n.fallbackLocale">
+          <v-btn
+            color="primary"
+            outlined
+            icon
+            class="ml-2"
+            @click="removeSelectedLocale(selectedLocale)"
+          >
+            <v-icon> mdi-minus </v-icon>
+          </v-btn>
+        </div>
       </div>
-    </div>
+    </transition-group>
     <div class="d-flex justify-center" v-if="isAddNewLocaleButtonShown">
       <v-btn color="primary" rounded x-large @click="addNewLocale">
         <v-icon class="mr-2"> mdi-plus </v-icon>
@@ -36,6 +38,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { mutableI18nString } from '../../store/classes';
 // import { I18nString } from '../../models';
 // import { emptyI18nString } from '../../store/classes';
 
@@ -94,12 +97,20 @@ export default {
       const foundIndex = this.res.languageKeys.findIndex((k) => k === locale);
       const languageTexts = this.res.languageTexts.map((t, i) => (i === foundIndex ? value : t));
       this.res.languageTexts[this.calculateIndexByLocale({ locale })] = value;
-      this.res = {
-        languageKeys: this.res.languageKeys,
-        languageTexts,
-      };
+      this.res = mutableI18nString({ languageTexts });
       this.$emit('res', this.res);
     },
   },
 };
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
