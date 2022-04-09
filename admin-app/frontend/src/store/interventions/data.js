@@ -2,7 +2,7 @@ import { DataStore } from '@aws-amplify/datastore';
 import { API, Storage } from 'aws-amplify';
 import { dataTypesDict, modalModesDict } from '../constants';
 import { deriveFilePath } from '../utils';
-import { deleteIntervention, updateIntervention } from '../../graphql/mutations';
+import { deleteIntervention } from '../../graphql/mutations';
 // import { listInterventions, listInterventionTags } from '../../graphql/queries';
 import {
   I18nString,
@@ -115,43 +115,50 @@ const interventionsData = {
       commit('setLoading', { newValue: false });
       return success;
     },
-    APIput: async ({ commit, dispatch, rootGetters }, { newData, originalId, originalVersion }) => {
+    APIput: async ({
+      commit, dispatch, getters, rootGetters,
+    }, { newData, originalId }) => {
       commit('setLoading', { newValue: true });
-      API.graphql({
-        query: updateIntervention,
-        variables: {
-          input: {
-            id: originalId,
-            _version: originalVersion,
-            name: newData.name,
-            description: newData.description,
-            interventionType: newData.interventionType,
-          },
-        },
-      })
-        .then((putResponse) => {
-          Storage.put(
-            deriveFilePath('interventionPicPath', { interventionID: putResponse.id }),
-            rootGetters['dataModal/getImageFile'],
-          );
+      let success = true;
 
-          dispatch(
-            'dataModal/readData',
-            {
-              dataId: putResponse.data.updateIntervention.id,
-              dataType: dataTypesDict.intervention,
-            },
-            {
-              root: true,
-            },
-          );
-          commit('replaceIntervention', putResponse.data.updateIntervention);
-          commit('setLoading', { newValue: false });
-        })
-        .catch((err) => {
-          console.log({ err });
-          commit('setLoading', { newValue: false });
-        });
+      const original = getters.INTERVENTIONById({ id: originalId });
+
+      try {
+        const putResponse = await DataStore.save(
+          Intervention.copyOf(original, (updated) => {
+            updated.name = newData.name;
+            updated.description = newData.description;
+            updated.interventionType = newData.interventionType;
+          }),
+        );
+
+        if (rootGetters['dataModal/getImageFile'] instanceof File) {
+          try {
+            await Storage.put(
+              deriveFilePath('interventionPicPath', { interventionID: putResponse.id }),
+              rootGetters['dataModal/getImageFile'],
+            );
+          } catch {
+            success = false;
+          }
+        }
+
+        dispatch(
+          'dataModal/readData',
+          {
+            dataId: putResponse.id,
+            dataType: dataTypesDict.intervention,
+          },
+          {
+            root: true,
+          },
+        );
+        commit('replaceIntervention', putResponse);
+      } catch {
+        success = false;
+      }
+      commit('setLoading', { newValue: false });
+      return success;
     },
     APIdelete: async ({ commit, dispatch, getters }, { id, _version }) => {
       commit('setLoading', { newValue: true });
