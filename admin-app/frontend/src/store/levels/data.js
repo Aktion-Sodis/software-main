@@ -133,6 +133,11 @@ const levelsData = {
       commit('setLoading', { newValue: true });
 
       const original = getters.LEVELById({ id: originalId });
+      const interventionsOfOriginal = getters.interventionsOfLevelById({ levelId: original.id });
+      const relationsOfOriginal = getters.getRelationLevelIntervention.filter(
+        (rel) => rel.level.id === original.id,
+      );
+      console.log({ interventionsOfOriginal });
 
       DataStore.save(
         Level.copyOf(original, (updated) => {
@@ -147,20 +152,36 @@ const levelsData = {
         .then(async (putResponse) => {
           commit('replaceLevel', putResponse);
 
+          // FIRST DELETE ALL INTERVENTION RELATIONS OF THE LEVEL
+
           // eslint-disable-next-line no-restricted-syntax
-          for (const interventionId of newData.allowedInterventions) {
-            // eslint-disable-next-line no-await-in-loop
-            await DataStore.save(
-              new LevelInterventionRelation({
-                level: putResponse,
-                intervention: rootGetters['INTERVENTION_Data/INTERVENTIONById']({
-                  id: interventionId,
-                }),
-              }),
-            );
+          for (const relation of relationsOfOriginal) {
+            try {
+              // eslint-disable-next-line no-await-in-loop
+              await DataStore.delete(relation);
+            } catch (error) {
+              console.log(error);
+            }
           }
 
-          console.log('hey');
+          // THEN RECREATE THEM AS WHAT IS GIVEN IN THE MODAL
+
+          // eslint-disable-next-line no-restricted-syntax
+          for (const interventionId of newData.allowedInterventions) {
+            try {
+              // eslint-disable-next-line no-await-in-loop
+              await DataStore.save(
+                new LevelInterventionRelation({
+                  level: putResponse,
+                  intervention: rootGetters['INTERVENTION_Data/INTERVENTIONById']({
+                    id: interventionId,
+                  }),
+                }),
+              );
+            } catch (error) {
+              console.log(error);
+            }
+          }
 
           dispatch(
             'dataModal/readData',
@@ -177,48 +198,25 @@ const levelsData = {
         .catch(() => {
           commit('setLoading', { newValue: false });
         });
-      /* commit('setLoading', { newValue: true });
-
-      await API.graphql({
-        query: updateLevel,
-        variables: {
-          input: {
-            id: levelDraft.originalId,
-            name: levelDraft.newData.name,
-            description: levelDraft.newData.description,
-            _version: levelDraft.originalVersion,
-          },
-        },
-      })
-        .then(() => {
-          dispatch(
-            'SYNC_UI/refreshHandler',
-            {
-              routeName: 'OrganizationStructure',
-            },
-            {
-              root: true,
-            },
-          );
-          dispatch(
-            'dataModal/readData',
-            {
-              dataId: levelDraft.originalId,
-              dataType: dataTypesDict.level,
-            },
-            {
-              root: true,
-            },
-          );
-        })
-        .catch(() => {
-          commit('setLoading', { newValue: false });
-        }); */
     },
-    APIdelete: async ({ commit, dispatch }, { id, _version }) => {
+    APIdelete: async ({ commit, dispatch, getters }, { id, _version }) => {
       commit('setLoading', { newValue: true });
       API.graphql({ query: deleteLevel, variables: { input: { id, _version } } })
-        .then(() => {
+        .then(async () => {
+          const relationsOfOriginal = getters.getRelationLevelIntervention.filter(
+            (rel) => rel.level.id === id,
+          );
+
+          // eslint-disable-next-line no-restricted-syntax
+          for (const relation of relationsOfOriginal) {
+            try {
+              // eslint-disable-next-line no-await-in-loop
+              await DataStore.delete(relation);
+            } catch (error) {
+              console.log(error);
+            }
+          }
+
           commit('deleteLevel', {
             id,
           });
