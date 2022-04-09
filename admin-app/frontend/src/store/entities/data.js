@@ -1,7 +1,7 @@
 import { DataStore } from '@aws-amplify/datastore';
 import { API } from 'aws-amplify';
 import { dataTypesDict, modalModesDict } from '../constants';
-import { deleteEntity, updateEntity } from '../../graphql/mutations';
+import { deleteEntity } from '../../graphql/mutations';
 import { Entity, I18nString } from '../../models';
 
 const entitiesData = {
@@ -144,87 +144,97 @@ const entitiesData = {
   },
   actions: {
     APIpost: async ({ commit, dispatch }, entityDraft) => {
-      console.log({ entityDraft });
+      let success = true;
       commit('setLoading', { newValue: true });
+
       const entity = new Entity({
         ...entityDraft,
         name: new I18nString(entityDraft.name),
         description: new I18nString(entityDraft.description),
       });
-      DataStore.save(entity)
-        .then((postResponse) => {
-          console.log(postResponse);
-          commit('addEntity', postResponse);
-          dispatch(
-            'dataModal/readData',
-            {
-              dataId: postResponse.id,
-              dataType: dataTypesDict.entity,
-            },
-            {
-              root: true,
-            },
-          );
-          commit('setLoading', { newValue: false });
-        })
-        .catch((error) => {
-          console.log({ error });
-          commit('setLoading', { newValue: false });
-        });
-    },
-    APIput: async ({ commit, dispatch }, entityDraft) => {
-      commit('setLoading', { newValue: true });
-      await API.graphql({
-        query: updateEntity,
-        variables: {
-          input: {
-            id: entityDraft.originalId,
-            name: entityDraft.newData.name,
-            description: entityDraft.newData.description,
-            parentEntityID: entityDraft.newData.parentEntityID,
-            _version: entityDraft.originalVersion,
+
+      try {
+        const postResponse = await DataStore.save(entity);
+        commit('addEntity', postResponse);
+        dispatch(
+          'dataModal/readData',
+          {
+            dataId: postResponse.id,
+            dataType: dataTypesDict.entity,
           },
-        },
-      })
-        .then(() => {
-          dispatch(
-            'dataModal/readData',
-            {
-              dataId: entityDraft.originalId,
-              dataType: dataTypesDict.entity,
-            },
-            {
-              root: true,
-            },
-          );
-        })
-        .catch(() => {
-          commit('setLoading', { newValue: false });
-        });
+          {
+            root: true,
+          },
+        );
+      } catch (error) {
+        success = false;
+        console.log(error);
+      }
+
+      commit('setLoading', { newValue: false });
+      return success;
+    },
+    APIput: async ({ commit, dispatch, getters }, { newData, originalId }) => {
+      commit('setLoading', { newValue: true });
+      let success = true;
+
+      const original = getters.ENTITYById({ id: originalId });
+
+      try {
+        const putResponse = await DataStore.save(
+          Entity.copyOf(original, (updated) => {
+            updated.name = newData.name;
+            updated.description = newData.description;
+            updated.parentEntityID = newData.parentEntityID;
+          }),
+        );
+
+        commit('replaceEntity', putResponse);
+
+        dispatch(
+          'dataModal/readData',
+          {
+            dataId: putResponse.id,
+            dataType: dataTypesDict.entity,
+          },
+          {
+            root: true,
+          },
+        );
+      } catch (error) {
+        console.log('hey', error);
+        success = false;
+      }
+
+      commit('setLoading', { newValue: false });
+      return success;
     },
     APIdelete: async ({ commit, dispatch }, { id, _version }) => {
+      let success = true;
       commit('setLoading', { newValue: true });
-      API.graphql({ query: deleteEntity, variables: { input: { id, _version } } })
-        .then(() => {
-          commit('deleteEntity', {
-            id,
-          });
-          commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
-          commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
-          dispatch(
-            'dataModal/abortReadData',
-            {},
-            {
-              root: true,
-            },
-          );
-          commit('setLoading', { newValue: false });
-        })
-        .catch((err) => {
-          commit('setLoading', { newValue: false });
-          // TODO: Handle error
-          console.log({ err });
-        });
+
+      try {
+        await API.graphql({ query: deleteEntity, variables: { input: { id, _version } } });
+      } catch (error) {
+        console.log(error);
+        success = false;
+      }
+
+      commit('deleteEntity', {
+        id,
+      });
+      commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
+      commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
+      dispatch(
+        'dataModal/abortReadData',
+        {},
+        {
+          root: true,
+        },
+      );
+
+      commit('setLoading', { newValue: false });
+      return success;
     },
     APIgetAll: async () => {
       try {
