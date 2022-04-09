@@ -71,6 +71,7 @@ const surveysData = {
   },
   actions: {
     APIpost: async ({ commit, dispatch, rootGetters }) => {
+      let success = true;
       commit('setLoading', { newValue: true });
 
       const questionsWithUnnecessaryLastOne = rootGetters['QUESTION_UI/getQuestionDrafts'];
@@ -100,72 +101,73 @@ const surveysData = {
         tags: [],
         surveyType: surveyDraft.surveyType,
       });
+      try {
+        const postResponse = await DataStore.save(survey);
+        // const tagIds = surveyDraft.tags;
+        // // eslint-disable-next-line no-restricted-syntax
+        // for (const tagId of tagIds) {
+        //   const localTag = getters.tagById({ id: tagId });
+        //   // eslint-disable-next-line no-await-in-loop
+        //   await DataStore.save(
+        //     new SurveySurveyTagRelation({
+        //       survey: postResponse,
+        //       surveyTag: localTag,
+        //     }),
+        //   );
+        // }
 
-      DataStore.save(survey)
-        .then(async (postResponse) => {
-          // const tagIds = surveyDraft.tags;
-          // // eslint-disable-next-line no-restricted-syntax
-          // for (const tagId of tagIds) {
-          //   const localTag = getters.tagById({ id: tagId });
-          //   // eslint-disable-next-line no-await-in-loop
-          //   await DataStore.save(
-          //     new SurveySurveyTagRelation({
-          //       survey: postResponse,
-          //       surveyTag: localTag,
-          //     }),
-          //   );
-          // }
+        if (rootGetters['dataModal/getImageFile']) {
+          await Storage.put(
+            deriveFilePath('interventionSurveyPicPath', {
+              interventionID: survey.interventionSurveysId,
+              surveyId: postResponse.id,
+            }),
+            rootGetters['dataModal/getImageFile'],
+          );
+        }
 
-          if (rootGetters['dataModal/getImageFile']) {
+        rootGetters['QUESTION_UI/getQuestionImages'].forEach(async (questionImg, index) => {
+          if (questionImg) {
             await Storage.put(
-              deriveFilePath('interventionSurveyPicPath', {
+              deriveFilePath('questionPicPath', {
                 interventionID: survey.interventionSurveysId,
                 surveyId: postResponse.id,
+                questionId: survey.questions[index].id,
               }),
-              rootGetters['dataModal/getImageFile'],
+              questionImg,
             );
           }
-
-          rootGetters['QUESTION_UI/getQuestionImages'].forEach(async (questionImg, index) => {
-            if (questionImg) {
-              await Storage.put(
-                deriveFilePath('questionPicPath', {
-                  interventionID: survey.interventionSurveysId,
-                  surveyId: postResponse.id,
-                  questionId: survey.questions[index].id,
-                }),
-                questionImg,
-              );
-            }
-          });
-
-          commit('addSurvey', postResponse);
-          dispatch(
-            'dataModal/readData',
-            {
-              dataId: postResponse.id,
-              dataType: dataTypesDict.survey,
-            },
-            {
-              root: true,
-            },
-          );
-          commit('setLoading', { newValue: false });
-          dispatch('dataModal/abortCreateData', { dataType: dataTypesDict.survey }, { root: true });
-          commit('setSurveyModalCompletionIndex', { newValue: 1 }, { root: true });
-          commit('QUESTION_UI/setQuestions', [emptyQuestion()], { root: true });
-          commit('QUESTION_UI/setOptions', [emptyQuestionOption()], { root: true });
-          commit('QUESTION_UI/setQuestionImages', [], { root: true });
-        })
-        .catch((err) => {
-          console.log({ err });
-          commit('setLoading', { newValue: false });
         });
+
+        commit('addSurvey', postResponse);
+        dispatch(
+          'dataModal/readData',
+          {
+            dataId: postResponse.id,
+            dataType: dataTypesDict.survey,
+          },
+          {
+            root: true,
+          },
+        );
+      } catch {
+        success = false;
+      }
+
+      commit('setLoading', { newValue: false });
+      dispatch('dataModal/abortCreateData', { dataType: dataTypesDict.survey }, { root: true });
+      commit('setSurveyModalCompletionIndex', { newValue: 1 }, { root: true });
+      commit('QUESTION_UI/setQuestions', { payload: [emptyQuestion()] }, { root: true });
+      commit('QUESTION_UI/setOptions', { payload: [emptyQuestionOption()] }, { root: true });
+      commit('QUESTION_UI/setQuestionImages', [], { root: true });
+      return success;
     },
-    APIput: async ({ commit, dispatch, rootGetters }, { newData, originalId, originalVersion }) => {
-      console.log({ originalVersion });
+    APIput: async ({
+      commit, dispatch, getters, rootGetters,
+    }, { newData, originalId }) => {
+      let success = true;
       commit('setLoading', { newValue: true });
-      const original = await DataStore.query(Survey, originalId);
+      const original = getters.SURVEYById({ id: originalId });
 
       try {
         const res = await DataStore.save(
@@ -198,73 +200,55 @@ const surveysData = {
             root: true,
           },
         );
-        dispatch('sync');
-      } catch (error) {
-        console.log({ error });
+      } catch {
+        success = false;
       }
       commit('setLoading', { newValue: false });
+      return success;
     },
     APIdelete: async ({ commit, dispatch, getters }, { id, _version }) => {
+      let success = true;
       commit('setLoading', { newValue: true });
-      API.graphql({ query: deleteSurvey, variables: { input: { id, _version } } })
-        .then(() => {
-          const survey = getters.SURVEYById({ id });
-          commit('deleteSurvey', {
-            id,
-          });
 
-          Storage.remove(
-            deriveFilePath('interventionSurveyPicPath', {
-              interventionID: survey.intervention.id,
-              surveyId: survey.id,
-            }),
-          );
-
-          commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
-          commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
-          dispatch(
-            'dataModal/abortReadData',
-            {},
-            {
-              root: true,
-            },
-          );
-          commit('setLoading', { newValue: false });
-        })
-        .catch((err) => {
-          // TODO: Handle error
-          console.log({ err });
-        });
-    },
-    sync: async ({ commit }) => {
-      commit('setLoading', { newValue: true });
       try {
-        const apiSurveys = await DataStore.query(Survey);
-        commit('setSurveys', { newValue: apiSurveys });
-      } catch (error) {
-        console.log({ error });
+        await API.graphql({ query: deleteSurvey, variables: { input: { id, _version } } });
+      } catch {
+        success = false;
       }
 
-      // try {
-      //   const apiSurveyTags = await DataStore.query(SurveyTag);
-      //   commit('setSurveyTags', { newValue: apiSurveyTags });
-      // } catch (error) {
-      //   console.log({ error });
-      // }
+      if (success) {
+        const survey = getters.SURVEYById({ id });
+        commit('deleteSurvey', {
+          id,
+        });
 
-      // try {
-      //   const apiRelationSurveysAndTags = await DataStore.query(SurveySurveyTagRelation);
-      //   commit('setRelationSurveysAndTags', {
-      //     newValue: apiRelationSurveysAndTags.map((r) => ({
-      //       surveyId: r.survey.id,
-      //       surveyTagId: r.surveyTag.id,
-      //     })),
-      //   });
-      // } catch (error) {
-      //   console.log({ error });
-      // }
+        Storage.remove(
+          deriveFilePath('interventionSurveyPicPath', {
+            interventionID: survey.intervention.id,
+            surveyId: survey.id,
+          }),
+        );
+
+        commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
+        commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
+        dispatch(
+          'dataModal/abortReadData',
+          {},
+          {
+            root: true,
+          },
+        );
+      }
 
       commit('setLoading', { newValue: false });
+      return success;
+    },
+    APIgetAll: async () => {
+      try {
+        return await DataStore.query(Survey);
+      } catch {
+        return [];
+      }
     },
   },
 };
