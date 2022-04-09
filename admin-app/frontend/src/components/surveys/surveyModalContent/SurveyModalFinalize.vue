@@ -23,6 +23,7 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
+import { dataTypesDict } from '../../../store/constants';
 
 export default {
   name: 'Finalize',
@@ -33,18 +34,23 @@ export default {
     ...mapGetters({
       surveyDraft: 'dataModal/getDataDraft',
       calculateUILocaleString: 'calculateUILocaleString',
+      dataIdInFocus: 'dataModal/getDataIdInFocus',
+      SURVEYById: 'SURVEY_Data/SURVEYById',
     }),
   },
   methods: {
     ...mapActions({
-      publishSurveyHandler: 'SURVEY_Data/APIpost',
+      saveData: 'dataModal/saveData',
     }),
     ...mapMutations({
       incrementCompletionIndex: 'incrementSurveyModalCompletionIndex',
       decrementCompletionIndex: 'decrementSurveyModalCompletionIndex',
     }),
     handlePublishSurvey() {
-      this.publishSurveyHandler();
+      this.saveData({
+        dataType: dataTypesDict.survey,
+        originalVersion: this.edit ? this.SURVEYById({ id: this.dataIdInFocus })._version : null,
+      });
     },
   },
 };
