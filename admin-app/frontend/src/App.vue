@@ -37,13 +37,6 @@ export default {
     // SearchBox,
     DevPhaseSnackbar,
   },
-  data: () => ({
-    langs: [
-      { name: 'English US', abbr: 'en-US' },
-      { name: 'Español Bolivia', abbr: 'es-BO' },
-      { name: 'Türkçe Türkiye', abbr: 'tr-TR' },
-    ],
-  }),
   computed: {
     ...mapGetters({
       isAuthenticated: 'auth/getIsAuthenticated',

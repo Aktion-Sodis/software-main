@@ -2,6 +2,9 @@
   "development": {
     "notYetImplemented": "Esta función aún no se ha implementado. ¡Por favor, ignora si estás en búsqueda de errores! 🐞🔍"
   },
+  "reflectiveData": {
+    "localeVerboseName": "Español Bolivia"
+  },
   "general": {
     "edit": "Editar",
     "searchBox": "Búsqueda",

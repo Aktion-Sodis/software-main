@@ -17,11 +17,10 @@ export default {
   name: 'LangSelect',
   data() {
     return {
-      langs: [
-        { name: 'English US', abbr: 'en-US' },
-        { name: 'Español España', abbr: 'es-BO' },
-        { name: 'Türkçe Türkiye', abbr: 'tr-TR' },
-      ],
+      langs: this.$i18n.availableLocales.map((l) => ({
+        name: this.$t('reflectiveData.localeVerboseName', l),
+        abbr: l,
+      })),
     };
   },
 };
