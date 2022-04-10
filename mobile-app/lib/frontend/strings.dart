@@ -15,7 +15,10 @@ Map<String, String> availableLocals = const {
 };
 
 String get currentLanguage {
-  String? savedLocale = SettingsRepository.instance.locale;
+  String? savedLocale;
+  try {
+    savedLocale = SettingsRepository.instance.locale;
+  } catch (e) {}
 
   if (savedLocale != null) {
     return savedLocale;
@@ -34,6 +37,7 @@ String get currentLanguage {
         return 1;
       }
     });
+    //todo: set locale in db
     return toSort.first;
   }
 }

@@ -64,23 +64,27 @@ class MyAppState extends State<MyApp> {
             ? const Center(child: CircularProgressIndicator())
             : HiveDBInitializer(
                 child: MultiRepositoryProvider(
-                providers: [
-                  RepositoryProvider(create: (context) => AuthRepository()),
-                  RepositoryProvider(create: (context) => UserRepository()),
-                  RepositoryProvider(create: (context) => SettingsRepository())
-                ],
-                child: MultiBlocProvider(
                   providers: [
-                    BlocProvider<SessionCubit>(
-                        create: (context) => SessionCubit(
-                              authRepo: context.read<AuthRepository>(),
-                              userRepo: context.read<UserRepository>(),
-                            )),
-                    BlocProvider<RequestPermissionsCubit>(
-                        create: (context) => RequestPermissionsCubit.instance),
+                    RepositoryProvider(create: (context) => AuthRepository()),
+                    RepositoryProvider(create: (context) => UserRepository()),
+                    RepositoryProvider(
+                        create: (context) => SettingsRepository())
                   ],
-                  child: PermissionsChecker(child: const AppNavigator()),
+                  child: BlocProvider<RequestPermissionsCubit>(
+                    create: (context) => RequestPermissionsCubit.instance,
+                    child: Builder(
+                        builder: (context) => PermissionsChecker(
+                              child: BlocProvider<SessionCubit>(
+                                create: (context) => SessionCubit(
+                                  authRepo: context.read<AuthRepository>(),
+                                  userRepo: context.read<UserRepository>(),
+                                ),
+                                child: Builder(
+                                    builder: (context) => AppNavigator()),
+                              ),
+                            )),
+                  ),
                 ),
-              )));
+              ));
   }
 }
