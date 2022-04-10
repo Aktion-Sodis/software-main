@@ -4,11 +4,10 @@
       class="version-wrapper white--text"
       :outlined="!isInAuthView"
       color="primary"
-      icon="🚧"
       border="left"
       style="z-index: 3"
     >
-      The Admin-App v0.1, development phase 🔗
+      The Admin-App v1.0 🔗
     </v-alert>
   </a>
 </template>

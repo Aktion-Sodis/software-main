@@ -19,7 +19,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import DevPhaseSnackbar from './components/commons/DevPhaseSnackbar.vue';
+import DevPhaseSnackbar from './components/commons/VersionSnackbar.vue';
 import Feedback from './components/commons/Feedback.vue';
 import LangSelect from './components/commons/LangSelect.vue';
 // import SearchBox from './components/commons/SearchBox.vue';
