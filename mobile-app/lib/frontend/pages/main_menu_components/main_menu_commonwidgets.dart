@@ -75,14 +75,17 @@ class CustomPicButtonState extends State<CustomPicButton> {
                   ? Theme.of(context).colorScheme.secondary
                   : Colors.white,
               border: Border.all(color: Colors.black45, width: 1)),
-          child: (!loading && imageFile != null)
-              ? Image.file(imageFile!,
+          child: ((!loading && imageFile != null) &&
+                  (imageFile?.existsSync() ?? false))
+              ? Image.file(
+                  imageFile!,
                   width: min(widget.size.width, widget.size.height) * .6,
                   height: min(widget.size.width, widget.size.height) * .6,
                   fit: BoxFit.contain,
-                  color: widget.selected
+                  /*color: widget.selected
                       ? Theme.of(context).colorScheme.onSecondary
-                      : Colors.black87)
+                      : Colors.black87*/
+                )
               : Icon(widget.defaultIconData ?? MdiIcons.toolbox,
                   color: widget.selected
                       ? Theme.of(context).colorScheme.onSecondary
