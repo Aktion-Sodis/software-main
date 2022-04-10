@@ -109,3 +109,10 @@ export const syncStatusDict = Object.freeze({
 });
 
 export const allowedFileUploadTypes = Object.freeze(['image/png', 'audio/mpeg', 'application/pdf']);
+
+export const typesDictionary = Object.freeze({
+  success: 'success',
+  info: 'info',
+  warning: 'warning',
+  error: 'error',
+});
