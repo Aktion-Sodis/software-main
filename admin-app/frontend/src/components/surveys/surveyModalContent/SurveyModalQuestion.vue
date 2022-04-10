@@ -392,7 +392,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     // If the form is dirty and the user did not confirm leave,
     // prevent losing unsaved changes by canceling navigation
-    if (this.confirmStayInDirtyForm()) {
+    if (this.confirmStayInDirtyForm() || (!this.read && this.nQuestions > 1)) {
       next(false);
     } else {
       // Navigate to next view
@@ -525,7 +525,7 @@ export default {
       return this.areThereChanges && !this.confirmLeave();
     },
     beforeWindowUnload(e) {
-      if (this.confirmStayInDirtyForm()) {
+      if (this.confirmStayInDirtyForm() || (!this.read && this.nQuestions > 1)) {
         // Cancel the event
         e.preventDefault();
         // Chrome requires returnValue to be set
