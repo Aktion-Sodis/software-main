@@ -115,9 +115,6 @@ export default new Vuex.Store({
       state.surveyModalCompletionIndex = newValue;
     },
   },
-  actions: {
-    publishSurveyHandler: () => {},
-  },
   modules: {
     auth: authModule,
     dataModal,
