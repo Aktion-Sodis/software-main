@@ -57,26 +57,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .top-right-fixed {
   position: fixed;
   top: 24px;
   right: 24px;
   z-index: 2;
   display: flex;
-}
-
-.bottom-right-fixed {
-  position: fixed;
-  bottom: 68px;
-  right: 24px;
-  z-index: 2;
-  display: flex;
-}
-
-/* fix the white stripe at the right of the screen bug */
-html {
-  overflow-x: visible;
-  overflow-y: visible;
 }
 </style>
