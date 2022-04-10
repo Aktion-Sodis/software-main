@@ -2,7 +2,7 @@
   <a href="https://github.com/Aktion-Sodis/software-main" class="d-none d-md-block" target="_blank">
     <v-alert
       class="version-wrapper white--text"
-      :outlined="!isInAuthView"
+      :outlined="!isInAuthView()"
       color="primary"
       border="left"
       style="z-index: 3"
@@ -15,11 +15,7 @@
 <script>
 export default {
   name: 'DevPhaseSnackbar',
-  computed: {
-    isInAuthView() {
-      return this.$route.name === 'Login' || this.$route.name === 'CompleteUserInfo';
-    },
-  },
+  inject: ['isInAuthView'],
 };
 </script>
 

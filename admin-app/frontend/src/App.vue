@@ -34,6 +34,11 @@ export default {
     // SearchBox,
     DevPhaseSnackbar,
   },
+  provide() {
+    return {
+      isInAuthView: () => this.isInAuthView,
+    };
+  },
   computed: {
     ...mapGetters({
       isAuthenticated: 'auth/getIsAuthenticated',
