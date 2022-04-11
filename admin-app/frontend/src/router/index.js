@@ -152,6 +152,10 @@ router.beforeEach(async (to, from, next) => {
   store.commit('auth/updateRouteActivity', { root: true });
   await Vue.nextTick();
   if (
+    store.getters['auth/getIsAuthenticated']
+    && (to.name === 'Login' || to.name === 'CompleteUserInfo')
+  ) next({ name: from?.name ?? 'OrganizationStructure' });
+  if (
     (!from.name || from.meta.requiresAuth)
     && store.getters['auth/lastRouteActivityDiffTooLarge']
     && store.getters['auth/getIsAuthenticated']
