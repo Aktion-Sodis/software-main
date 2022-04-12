@@ -32,34 +32,34 @@
           class="entitiySkeleton"
           type="list-item-two-line"
         ></v-skeleton-loader>
-        <div v-else>{{ localizedName }}</div>
+        <div v-else>{{ entityName }}</div>
       </v-sheet>
     </v-hover>
   </div>
 </template>
 
 <script>
-import { validate as uuidValidate } from 'uuid';
+// import { validate as uuidValidate } from 'uuid';
 
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  entityName: 'Entity',
+  name: 'Entity',
   props: {
     id: {
       required: true,
-      validator: (v) => uuidValidate(v) || v === null || v.slice(0, 11) === 'dummyEntity',
+      // validator: (v) => uuidValidate(v) || v === null || v.slice(0, 11) === 'dummyEntity',
     },
     entityLevelId: {
       required: true,
-      validator: (v) => uuidValidate(v) || v === null || v.slice(0, 10) === 'dummyLevel',
+      // validator: (v) => uuidValidate(v) || v === null || v.slice(0, 10) === 'dummyLevel',
     },
     parentEntityID: {
       required: true,
-      validator: (v) => uuidValidate(v) || v === null || v.slice(0, 11) === 'dummyEntity',
+      // validator: (v) => uuidValidate(v) || v === null || v.slice(0, 11) === 'dummyEntity',
     },
-    entityName: { type: Object, required: true },
-    entityDescription: { type: Object, required: true },
+    entityName: { type: String, required: true },
+    entityDescription: { type: String, required: true },
     index: { type: Number, required: true },
   },
   computed: {
@@ -75,13 +75,6 @@ export default {
     },
     rightLineOfEntity() {
       return this.lineByEntityId({ id: this.id });
-    },
-    localizedName() {
-      return (
-        this.entityName.languageTexts[
-          this.entityName.languageKeys.findIndex((key) => key === this.$i18n.locale)
-        ] ?? ''
-      );
     },
   },
   methods: {

@@ -1,67 +1,19 @@
-import {
-  Entity,
-  postEntityController,
-  putEntityController,
-  deleteEntityController,
-  getAllEntities,
-} from './utils';
+import { DataStore } from '@aws-amplify/datastore';
+import { API } from 'aws-amplify';
 import { dataTypesDict, modalModesDict } from '../constants';
+import { deleteEntity } from '../../graphql/mutations';
+import { Entity, I18nString } from '../../models';
 
 const entitiesData = {
   namespaced: true,
   state: () => ({
-    // entities: [
-    //   {
-    //     id: 'f77a7d3f-fb7f-434e-8be3-32b74269083c',
-    //     name: 'Aachen',
-    //     description: 'Some description',
-    //     entityLevelId: '5a93459f-f23d-44e6-a112-c41e90473a2d',
-    //     parentEntityID: null,
-    //   },
-    //   {
-    //     id: 'afd8874d-ac52-4508-8351-f35f8f7e28a0',
-    //     name: 'Sinop',
-    //     description: 'Some description',
-    //     entityLevelId: '5a93459f-f23d-44e6-a112-c41e90473a2d',
-    //     parentEntityID: null,
-    //   },
-    //   {
-    //     id: '0b38df2a-84f5-4066-9c0c-f447b93e8278',
-    //     name: 'Nizzaallee',
-    //     description: 'Some description',
-    //     entityLevelId: 'e7a03934-90b9-405b-807b-3f748b15ae69',
-    //     parentEntityID: 'f77a7d3f-fb7f-434e-8be3-32b74269083c',
-    //   },
-    //   {
-    //     id: '3d29c7aa-f422-41bc-99ae-35480a1f415e',
-    //     name: 'Mies van der Rohe Straße',
-    //     description: 'Some description',
-    //     entityLevelId: 'e7a03934-90b9-405b-807b-3f748b15ae69',
-    //     parentEntityID: 'f77a7d3f-fb7f-434e-8be3-32b74269083c',
-    //   },
-    //   {
-    //     id: '327ac9b8-ab56-47e0-a1c5-bd4c978645a0',
-    //     name: 'Atatürk Caddesi',
-    //     description: 'Some description',
-    //     entityLevelId: 'e7a03934-90b9-405b-807b-3f748b15ae69',
-    //     parentEntityID: 'afd8874d-ac52-4508-8351-f35f8f7e28a0',
-    //   },
-    //   {
-    //     id: 'b046cde7-4f18-4fc9-9b13-eb49c98f226c',
-    //     name: 'Eine 4er WG',
-    //     description: 'Some description',
-    //     entityLevelId: 'd1faef12-cf15-4b5e-9637-b4ffbd156954',
-    //     parentEntityID: '0b38df2a-84f5-4066-9c0c-f447b93e8278',
-    //   },
-    // ],
-
     entities: [],
 
     loading: false,
   }),
   getters: {
     /* READ */
-    getEntities: ({ entities }) => entities,
+    getEntities: ({ entities }) => entities.filter((e) => !e._deleted),
     getLoading: ({ loading }) => loading,
 
     // sort by id for consistency
@@ -163,33 +115,14 @@ const entitiesData = {
       },
   },
   mutations: {
-    addEntity: (state, {
-      id, name, description, entityLevelId, parentEntityID,
-    }) => {
-      state.entities.push(
-        new Entity({
-          id,
-          name,
-          description,
-          entityLevelId,
-          parentEntityID,
-        }),
-      );
+    addEntity: (state, entity) => {
+      state.entities.push(entity);
     },
-    replaceEntity: (state, {
-      id, name, description, entityLevelId, parentEntityID, _version,
-    }) => {
+    replaceEntity: (state, entity) => {
       state.entities.splice(
-        state.entities.findIndex((i) => i.id === id),
+        state.entities.findIndex((i) => i.id === entity.id),
         1,
-        new Entity({
-          id,
-          name,
-          description,
-          entityLevelId,
-          parentEntityID,
-          _version,
-        }),
+        entity,
       );
     },
     deleteEntity: (state, { id }) => {
@@ -211,56 +144,84 @@ const entitiesData = {
   },
   actions: {
     APIpost: async ({ commit, dispatch }, entityDraft) => {
+      let success = true;
       commit('setLoading', { newValue: true });
-      const postResponse = await postEntityController(entityDraft);
-      if (postResponse?.errors?.length > 0) {
-        commit('setLoading', { newValue: false });
-        // error in API request
-        return;
+
+      const entity = new Entity({
+        ...entityDraft,
+        name: new I18nString(entityDraft.name),
+        description: new I18nString(entityDraft.description),
+      });
+
+      try {
+        const postResponse = await DataStore.save(entity);
+        commit('addEntity', postResponse);
+        dispatch(
+          'dataModal/readData',
+          {
+            dataId: postResponse.id,
+            dataType: dataTypesDict.entity,
+          },
+          {
+            root: true,
+          },
+        );
+      } catch (error) {
+        success = false;
+        console.log(error);
       }
-      commit('addEntity', postResponse.data.createEntity);
-      dispatch(
-        'dataModal/readData',
-        {
-          dataId: postResponse.data.createEntity.id,
-          dataType: dataTypesDict.entity,
-        },
-        {
-          root: true,
-        },
-      );
 
       commit('setLoading', { newValue: false });
+      return success;
     },
-    APIput: async ({ commit, dispatch }, entityDraft) => {
+    APIput: async ({ commit, dispatch, getters }, { newData, originalId }) => {
       commit('setLoading', { newValue: true });
-      const putResponse = await putEntityController(entityDraft);
-      if (putResponse?.errors?.length > 0) {
-        commit('setLoading', { newValue: false });
-        // error in API request
-        return;
+      let success = true;
+
+      const original = getters.ENTITYById({ id: originalId });
+
+      try {
+        const putResponse = await DataStore.save(
+          Entity.copyOf(original, (updated) => {
+            updated.name = newData.name;
+            updated.description = newData.description;
+            updated.parentEntityID = newData.parentEntityID;
+          }),
+        );
+
+        commit('replaceEntity', putResponse);
+
+        dispatch(
+          'dataModal/readData',
+          {
+            dataId: putResponse.id,
+            dataType: dataTypesDict.entity,
+          },
+          {
+            root: true,
+          },
+        );
+      } catch (error) {
+        console.log('hey', error);
+        success = false;
       }
-      commit('replaceEntity', putResponse.data.updateEntity);
-      dispatch(
-        'dataModal/readData',
-        {
-          dataId: putResponse.data.updateEntity.id,
-          dataType: dataTypesDict.entity,
-        },
-        {
-          root: true,
-        },
-      );
+
       commit('setLoading', { newValue: false });
+      return success;
     },
-    APIdelete: async ({ commit, dispatch }, entityDraft) => {
+    APIdelete: async ({ commit, dispatch }, { id, _version }) => {
+      let success = true;
       commit('setLoading', { newValue: true });
-      const deleteResponse = await deleteEntityController(entityDraft);
-      if (deleteResponse?.errors?.length > 0) {
-        commit('setLoading', { newValue: false });
+
+      try {
+        await API.graphql({ query: deleteEntity, variables: { input: { id, _version } } });
+      } catch (error) {
+        console.log(error);
+        success = false;
       }
+
       commit('deleteEntity', {
-        id: entityDraft.id,
+        id,
       });
       commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
       commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
@@ -273,48 +234,16 @@ const entitiesData = {
       );
 
       commit('setLoading', { newValue: false });
+      return success;
     },
-    CreateDummyEntities: async ({ dispatch }) => {
-      const entities = [
-        new Entity({
-          id: '3',
-          name: {
-            languageKeys: ['en-US', 'es-ES', 'tr-TR'],
-            languageTexts: ['Sucre', 'Sucre', 'Sucre'],
-          },
-          description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
-          entityLevelId: '1',
-          parentEntityID: '0',
-        }),
-        // new Entity({
-        //   id: '1',
-        //   name: {
-        //     languageKeys: ['en-US', 'es-ES', 'tr-TR'],
-        //     languageTexts: ['La Paz', 'La Paz', 'La Paz'],
-        //   },
-        //   description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
-        //   entityLevelId: '1',
-        //   parentEntityID: '0',
-        // }),
-        // new Entity({
-        //   id: '2',
-        //   name: {
-        //     languageKeys: ['en-US', 'es-ES', 'tr-TR'],
-        //     languageTexts: ['El Alto', 'El Alto', 'El Alto'],
-        //   },
-        //   description: { languageKeys: ['en-US', 'es-ES', 'tr-TR'], languageTexts: ['', '', ''] },
-        //   entityLevelId: '2',
-        //   parentEntityID: '1',
-        // }),
-      ];
-
-      // eslint-disable-next-line
-      for (const entity of entities) {
-        dispatch('APIpost', entity);
+    APIgetAll: async () => {
+      try {
+        return await DataStore.query(Entity);
+      } catch (error) {
+        console.log({ error });
+        return [];
       }
     },
-    // sync is handled over LEVEL_Data module
-    APIgetAll: async () => (await getAllEntities()).data.listEntities.items,
   },
 };
 

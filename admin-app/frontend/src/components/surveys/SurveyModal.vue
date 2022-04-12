@@ -5,7 +5,7 @@
     max-width="1200px"
     persistent
   >
-    <SurveyModalStepper />
+    <SurveyModalStepper v-if="create" />
 
     <SurveyModalFirstCard v-if="completionIndex === 1" />
 
@@ -64,8 +64,8 @@ export default {
     }),
     escHandler() {
       if (this.read) this.abortReadSurveyHandler();
-      else if (this.edit) this.abortEditSurveyHandler({ dataId: this.dataIdInFocus, dataType: 'SURVEY' });
-      else if (this.create) this.abortNewSurveyHandler({ dataType: 'SURVEY' });
+      else if (this.edit) this.abortEditSurveyHandler({ dataId: this.dataIdInFocus, dataType: dataTypesDict.survey });
+      else if (this.create) this.abortNewSurveyHandler({ dataType: dataTypesDict.survey });
     },
   },
 };

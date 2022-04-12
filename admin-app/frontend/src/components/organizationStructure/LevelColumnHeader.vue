@@ -3,13 +3,13 @@
     <div style="width: 100%" class="d-flex flex-column align-center">
       <v-skeleton-loader v-if="getLoading" type="button"></v-skeleton-loader>
       <v-btn v-else plain rounded class="text-none black--text" @click="clickOnLevelHandler">
-        <span class="text-h5">{{ localizedName }}</span>
+        <span class="text-h5">{{ name }}</span>
       </v-btn>
       <div style="width: 100%">
         <div
-          class="d-flex justify-space-around"
           style="width: 100%"
-          v-if="allowedInterventions.length > 0"
+          v-if="interventionsOfLevel.length > 0"
+          class="d-flex justify-space-around"
         >
           <div v-if="getLoading">
             <div class="row mt-3">
@@ -18,13 +18,30 @@
               <v-skeleton-loader type="avatar"></v-skeleton-loader>
             </div>
           </div>
-          <v-tooltip v-else top v-for="id in allowedInterventions" :key="id">
+          <v-tooltip
+            v-else
+            top
+            v-for="(intervention, index) in interventionsOfLevel"
+            :key="intervention.id"
+          >
             <template v-slot:activator="{ on, attrs }">
-              <v-avatar v-bind="attrs" v-on="on">
+              <v-avatar v-if="index < 4" v-bind="attrs" v-on="on">
                 <v-icon>mdi-hammer-wrench</v-icon>
               </v-avatar>
+              <v-avatar v-if="index === 5" v-bind="attrs" v-on="on">
+                <v-icon>mdi-dots-horizontal</v-icon>
+              </v-avatar>
             </template>
-            <span>{{ INTERVENTIONById({ id }).name }}</span>
+            <span v-if="index < 4">
+              {{ calculateUILocaleString({ languageTexts: intervention.name.languageTexts }) }}
+            </span>
+            <span v-if="index === 5">
+              {{
+                $t('organizationStructure.thereAreMoreInterventions', {
+                  count: interventionsOfLevel.length - 4,
+                })
+              }}
+            </span>
           </v-tooltip>
         </div>
         <div v-else style="height: 48px; overflow: hidden">
@@ -37,37 +54,32 @@
 </template>
 
 <script>
-import { validate as uuidValidate } from 'uuid';
+// import { validate as uuidValidate } from 'uuid';
 import { mapActions, mapGetters } from 'vuex';
 import { dataTypesDict } from '../../store/constants';
 
 export default {
   name: 'LevelColumnHeader',
   props: {
-    allowedInterventions: {
-      required: true,
-    },
     name: {
-      type: Object,
+      type: String,
       required: true,
     },
     id: {
       type: String,
       required: true,
-      validator: (v) => uuidValidate(v) || v.slice(0, 10) === 'dummyLevel',
+      // validator: (v) => uuidValidate(v) || v.slice(0, 10) === 'dummyLevel',
     },
   },
   computed: {
     ...mapGetters({
       getLoading: 'LEVEL_Data/getLoading',
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
+      interventionsOfLevelById: 'LEVEL_Data/interventionsOfLevelById',
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
-    localizedName() {
-      return (
-        this.name.languageTexts[
-          this.name.languageKeys.findIndex((key) => key === this.$i18n.locale)
-        ] ?? ''
-      );
+    interventionsOfLevel() {
+      return this.interventionsOfLevelById({ levelId: this.id });
     },
   },
   methods: {

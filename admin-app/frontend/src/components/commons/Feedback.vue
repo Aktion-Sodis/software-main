@@ -1,6 +1,6 @@
 <template>
   <v-snackbar v-model="isFeedbackShown" :color="type" :timeout="duration" class="feedback-snackbar">
-    <v-alert border="left" :type="type" class="feedback-alert" prominent>
+    <v-alert @click="clickHandler" border="left" :type="type" class="feedback-alert" prominent>
       {{ text }}
     </v-alert>
   </v-snackbar>
@@ -23,10 +23,13 @@ export default {
     ...mapMutations({
       setIsDisplayed: 'FEEDBACK_UI/setIsDisplayed',
     }),
+    clickHandler() {
+      this.setIsDisplayed({ newValue: false });
+    },
   },
   watch: {
     isDisplayed(newValue) {
-      if (newValue) this.isFeedbackShown = true;
+      this.isFeedbackShown = newValue;
     },
     isFeedbackShown(newValue) {
       if (!newValue) this.setIsDisplayed({ newValue: false });
@@ -47,5 +50,9 @@ export default {
 
 .feedback-snackbar > .v-snack__wrapper > .v-snack__content {
   padding: 0 0 !important;
+}
+
+.feedback-snackbar {
+  cursor: pointer;
 }
 </style>

@@ -1,33 +1,35 @@
-import { EmptyQuestion, EmptyAnswer } from './utils';
+import { emptyQuestionOption, emptyQuestion, emptyI18nString } from '../classes';
 
 const QUESTION_UI = {
   namespaced: true,
   state: () => ({
     iQuestions: 0,
-    questionDrafts: [new EmptyQuestion()],
-    answerDrafts: [[new EmptyAnswer()]],
+    questionDrafts: [emptyQuestion()],
+    optionDrafts: [[emptyQuestionOption()]],
+    questionImages: [],
   }),
   getters: {
     /* READ */
     getIQuestions: ({ iQuestions }) => iQuestions ?? 0,
-    getQuestionDrafts: ({ questionDrafts }) => questionDrafts || [new EmptyQuestion()],
-    getAnswerDrafts: ({ answerDrafts }) => answerDrafts || [[new EmptyAnswer()]],
+    getQuestionDrafts: ({ questionDrafts }) => questionDrafts || [emptyQuestion()],
+    getOptionDrafts: ({ optionDrafts }) => optionDrafts || [[emptyQuestionOption()]],
+    getQuestionImages: ({ questionImages }) => questionImages,
 
-    questionWithAnswersDrafts: (_, { getQuestionDrafts, getAnswerDrafts }) => getQuestionDrafts.map((q, i) => ({
+    questionWithOptionDrafts: (_, { getQuestionDrafts, getOptionDrafts }) => getQuestionDrafts.map((q, i) => ({
       ...q,
-      answerDrafts: getAnswerDrafts[i],
+      optionDrafts: getOptionDrafts[i],
     })),
     nQuestions: (_, { getQuestionDrafts }) => getQuestionDrafts.length ?? 1,
     isAtFirstQuestion: (_, { getIQuestions }) => getIQuestions === 0,
     isAtLastQuestion: (_, { getIQuestions, nQuestions }) => getIQuestions === nQuestions - 1,
     questionCurrentDraft: (_, { getQuestionDrafts, getIQuestions }) => getQuestionDrafts[getIQuestions],
-    answersCurrentDraft: (_, { getAnswerDrafts, getIQuestions }) => getAnswerDrafts[getIQuestions],
-    currentQuestionWithAnswers: (_, { getAnswerDrafts, getQuestionDrafts, getIQuestions }) => ({
+    optionsCurrentDraft: (_, { getOptionDrafts, getIQuestions }) => getOptionDrafts[getIQuestions],
+    currentQuestionWithOptions: (_, { getOptionDrafts, getQuestionDrafts, getIQuestions }) => ({
       ...getQuestionDrafts[getIQuestions],
-      answerDrafts: getAnswerDrafts[getIQuestions],
+      optionDrafts: getOptionDrafts[getIQuestions],
     }),
-    questionTextInFocus: (state, { getIQuestions }, rootState, rootGetters) => rootGetters['SURVEY_Data/SURVEYById']({ id: rootGetters['modalData/getDataIdInFocus'] })
-      ?.questions[getIQuestions] ?? '',
+    questionTextInFocus: (state, { getIQuestions }, rootState, rootGetters) => rootGetters['SURVEY_Data/SURVEYById']({ id: rootGetters['dataModal/getDataIdInFocus'] })
+      ?.questions[getIQuestions].text ?? emptyI18nString(),
   },
   mutations: {
     /* INDEX OPERATIONS */
@@ -41,12 +43,15 @@ const QUESTION_UI = {
       state.iQuestions -= 1;
     },
 
-    /* QUESTION & ANSWER BULK UPDATE */
+    /* BULK UPDATE */
     setQuestions: (state, { payload }) => {
       state.questionDrafts = payload;
     },
-    setAnswers: (state, { payload }) => {
-      state.answerDrafts = payload;
+    setOptions: (state, { payload }) => {
+      state.optionDrafts = payload;
+    },
+    setQuestionImages: (state, { payload }) => {
+      state.questionImages = payload;
     },
 
     /* QUESTION CREATE, UPDATE, DELETE */
@@ -60,47 +65,59 @@ const QUESTION_UI = {
       state.questionDrafts.splice(index, 1);
     },
 
-    /* ANSWER CREATE, UPDATE, DELETE */
-    addAnswerAtIndex: (state, { newAnswers, index }) => {
-      state.answerDrafts.splice(index, 0, newAnswers);
+    /* OPTION CREATE, UPDATE, DELETE */
+    addOptionAtIndex: (state, { newOptions, index }) => {
+      state.optionDrafts.splice(index, 0, newOptions);
     },
-    replaceAnswerAtIndex: (state, { newAnswers, index }) => {
-      state.answerDrafts.splice(index, 1, newAnswers);
+    replaceOptionAtIndex: (state, { newOptions, index }) => {
+      state.optionDrafts.splice(index, 1, newOptions);
     },
-    deleteAnswerAtIndex: (state, { index }) => {
-      state.answerDrafts.splice(index, 1);
+    deleteOptionAtIndex: (state, { index }) => {
+      state.optionDrafts.splice(index, 1);
     },
+
+    /* QUESTION IMAGE CREATE, UPDATE, DELETE */
+    addQuestionImageAtIndex: (state, { newQuestionImage, index }) => {
+      state.questionImages.splice(index, 0, newQuestionImage);
+    },
+    replaceQuestionImageAtIndex: (state, { newQuestionImage, index }) => {
+      state.questionImages.splice(index, 1, newQuestionImage);
+    },
+    deleteQuestionImageAtIndex: (state, { index }) => {
+      state.questionImages.splice(index, 1);
+    },
+    pushNullToQuestionImages: (state) => state.questionImages.push(null),
   },
   actions: {
-    nextQuestionHandler: ({ commit, getters }, { newQuestion, newAnswers }) => {
+    nextQuestionHandler: ({ commit, getters }, { newQuestion, newOptions }) => {
       commit('replaceQuestionAtIndex', {
         newQuestion,
         index: getters.getIQuestions,
       });
-      commit('replaceAnswerAtIndex', {
-        newAnswers,
-        index: getters.getIAnswers,
+      commit('replaceOptionAtIndex', {
+        newOptions,
+        index: getters.getIQuestions,
       });
       if (getters.isAtLastQuestion) {
         commit('addQuestionAtIndex', {
-          newQuestion: new EmptyQuestion(),
+          newQuestion: emptyQuestion(),
           index: getters.getIQuestions + 1,
         });
-        commit('addAnswerAtIndex', {
-          newAnswers: [new EmptyAnswer()],
+        commit('addOptionAtIndex', {
+          newOptions: [emptyQuestionOption()],
           index: getters.getIQuestions + 1,
         });
       }
       commit('incrementIQuestions');
     },
-    priorQuestionHandler: ({ commit, getters }, { newQuestion, newAnswers }) => {
+    priorQuestionHandler: ({ commit, getters }, { newQuestion, newOptions }) => {
       if (getters.isAtFirstQuestion) return;
       commit('replaceQuestionAtIndex', {
         newQuestion,
         index: getters.getIQuestions,
       });
-      commit('replaceAnswerAtIndex', {
-        newAnswers,
+      commit('replaceOptionAtIndex', {
+        newOptions,
         index: getters.getIQuestions,
       });
       commit('decrementIQuestions');
@@ -108,38 +125,47 @@ const QUESTION_UI = {
     discardQuestionHandler: ({ commit, getters }) => {
       if (getters.isAtLastQuestion) {
         commit('replaceQuestionAtIndex', {
-          newQuestion: new EmptyQuestion(),
+          newQuestion: emptyQuestion(),
           index: getters.getIQuestions,
         });
-        commit('replaceAnswerAtIndex', {
-          newAnswers: [new EmptyAnswer()],
+        commit('replaceOptionAtIndex', {
+          newOptions: [emptyQuestionOption()],
           index: getters.getIQuestions,
         });
         return;
       }
       commit('deleteQuestionAtIndex', { index: getters.getIQuestions });
-      commit('deleteAnswerAtIndex', { index: getters.getIQuestions });
+      commit('deleteOptionAtIndex', { index: getters.getIQuestions });
     },
-    saveQuestionHandler: ({ commit, getters }, { newQuestion, newAnswers }) => {
+    saveQuestionHandler: ({ commit, getters }, { newQuestion, newOptions }) => {
       commit('replaceQuestionAtIndex', {
         newQuestion,
         index: getters.getIQuestions,
       });
-      commit('replaceAnswerAtIndex', {
-        newAnswers,
+      commit('replaceOptionAtIndex', {
+        newOptions,
         index: getters.getIQuestions,
       });
       if (getters.isAtLastQuestion) {
         commit('addQuestionAtIndex', {
-          newQuestion: new EmptyQuestion(),
+          newQuestion: emptyQuestion(),
           index: getters.getIQuestions + 1,
         });
-        commit('addAnswerAtIndex', {
-          newAnswers: [new EmptyAnswer()],
+        commit('addOptionAtIndex', {
+          newOptions: [emptyQuestionOption()],
           index: getters.getIQuestions + 1,
         });
         commit('incrementIQuestions');
       }
+    },
+    addImageToQuestion: ({ commit, getters }, { newQuestionImage }) => {
+      const currentIndex = getters.getIQuestions;
+      if (getters.getQuestionImages[currentIndex] === undefined) {
+        while (getters.getQuestionImages.length <= currentIndex) {
+          commit('pushNullToQuestionImages');
+        }
+      }
+      commit('replaceQuestionImageAtIndex', { newQuestionImage, index: currentIndex });
     },
   },
 };

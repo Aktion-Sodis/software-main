@@ -31,9 +31,10 @@
 </template>
 
 <script>
-import { validate as uuidValidate } from 'uuid';
+// import { validate as uuidValidate } from 'uuid';
 
 import { mapGetters, mapActions, mapMutations } from 'vuex';
+import { dataTypesDict } from '../../store/constants';
 
 export default {
   name: 'AddEntityButton',
@@ -41,7 +42,7 @@ export default {
   props: {
     entityLevelId: {
       required: true,
-      validator: (v) => uuidValidate(v) || v === null || v.slice(0, 10) === 'dummyLevel',
+      // validator: (v) => uuidValidate(v) || v === null || v.slice(0, 10) === 'dummyLevel',
     },
   },
   computed: {
@@ -54,14 +55,14 @@ export default {
       this.isHovered = payload;
     },
     ...mapActions({
-      newEntityHandler: 'dataModal/createData',
+      createData: 'dataModal/createData',
     }),
     ...mapMutations({
       setCreatingEntityInLevelId: 'setCreatingEntityInLevelId',
     }),
     clickHandler() {
       this.setCreatingEntityInLevelId({ id: this.entityLevelId });
-      this.newEntityHandler({ dataType: 'ENTITY' });
+      this.createData({ dataType: dataTypesDict.entity });
     },
   },
 };

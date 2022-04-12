@@ -2,9 +2,13 @@
   "development": {
     "notYetImplemented": "This feature is yet to be implemented. Please ignore if you are on bug hunting! 🐞🔍"
   },
+  "reflectiveData": {
+    "localeVerboseName": "English US"
+  },
   "general": {
     "edit": "Edit",
     "searchBox": "Search anything",
+    "close": "Close",
     "cancel": "Cancel",
     "save": "Save",
     "delete": "Delete",
@@ -12,18 +16,22 @@
       "maxCharExceeded": "Maximum {maxChar} characters.",
       "minCharNotMet": "Minimum {minChar} characters.",
       "required": "Required.",
-      "unsavedChanges": "There are unsaved changes. Are you sure you want to leave?"
+      "unsavedChanges": "There are unsaved changes. Are you sure you want to leave?",
+      "addInNewLocale": "In another language"
     },
+    "noTextProvided": "No text was provided.",
+    "noTags": "There are no tags.",
     "routes": {
-      "home": "Home",
-      "baseData": "Base data",
-      "organizationStructure": "Organization structure",
-      "interventions": "Interventions",
-      "login": "Login",
-      "completeUserInfo": "Complete user information",
-      "changePassword": "Change password",
-      "forgotPassword": "Forgot Password",
-      "about": "About"
+      "Home": "Home",
+      "BaseData": "Base data",
+      "OrganizationStructure": "Organization structure",
+      "Interventions": "Interventions",
+      "Login": "Login",
+      "CompleteUserInfo": "Complete user information",
+      "ChangePassword": "Change password",
+      "ForgotPassword": "Forgot password",
+      "About": "About",
+      "Surveys": "Surveys"
     },
     "errorCodes": {
       "InternalErrorException": "An internal error has occurred. Please try again later. Error Code: 6001",
@@ -54,6 +62,24 @@
       "inSync": "Refresh",
       "synched": "In sync",
       "synchronizing": "synchronizing..."
+    },
+    "operationFeedback": {
+      "data": {
+        "success": {
+          "create": "Successfully created.",
+          "update": "Successfully updated.",
+          "delete": "Successfully deleted."
+        },
+        "error": {
+          "create": "Something went wrong.",
+          "update": "Something went wrong.",
+          "delete": "Something went wrong."
+        }
+      },
+      "upload": {
+        "success": "Successfully uploaded.",
+        "error": "Could not upload the file."
+      }
     }
   },
   "login": {
@@ -117,6 +143,8 @@
     "addNewLevel": "Add new level",
     "hasNoInterventions": "There are no interventions for this level.",
     "hasNoEntities": "There are no entities for this level.",
+    "hasNoCustomData": "There are no custom data for this level.",
+    "thereAreMoreInterventions": "There are {count} more interventions for this level.",
     "levelModal": {
       "modalTitle": {
         "edit": "Edit level ",
@@ -128,6 +156,17 @@
         "create": "This is the description of this beautiful create dialog."
       },
       "interventions": "Interventions",
+      "customData": {
+        "title": "Custom Data",
+        "name": "Name",
+        "type": "Type",
+        "types": {
+          "INT": "Number",
+          "STRING": "Text"
+        }
+      },
+      "areInterventionsAllowed": "are allowed.",
+      "allowInterventionsFirst": "Allow interventions first.",
       "name": "Level Name",
       "description": "Level Description",
       "manageAllowedInterventions": "Manage allowed interventions",
@@ -155,8 +194,14 @@
   "interventions": {
     "title": "Interventions",
     "newIntervention": "New intervention",
-    "newSurvey": "New survey",
-    "interventionModal": {
+    "type": {
+      "title": "Intervention Type",
+      "types": {
+        "TECHNOLOGY": "Technology",
+        "EDUCATION": "Education"
+      }
+    },
+    "modal": {
       "modalTitle": {
         "read": "Viewing intervention",
         "edit": "Edit intervention ",
@@ -168,12 +213,27 @@
       },
       "name": "Intervention Name",
       "description": "Intervention Description",
+      "image": "Intervention Image",
+      "levels": "Levels where this intervention is allowed",
       "noDocuments": "No documents uploaded.",
       "noImages": "No images uploaded.",
       "noVideos": "No videos uploaded.",
       "noSurveys": "No surveys uploaded."
+    }
+  },
+  "surveys": {
+    "title": "Surveys",
+    "newSurvey": "New survey",
+    "type": {
+      "title": "Survey Type",
+      "types": {
+        "INITIAL": "Initial",
+        "DEFAULT": "Default"
+      }
     },
-    "surveyModal": {
+    "modal": {
+      "image": "Survey Image",
+      "intervention": "Survey belongs to:",
       "firstCard": {
         "title": {
           "edit": "Editing survey ",
@@ -200,17 +260,17 @@
           "answer": {
             "title": "Answer",
             "typeLabel": "Question type",
-            "answer": "Answer",
-            "textLabel": "Answer text",
-            "addImage": "Add image to answer",
-            "addAnswer": "Add answer",
+            "answer": "Option",
+            "textLabel": "Option text",
+            "addImage": "Add image to option",
+            "addAnswer": "Add option",
             "questionTypes": {
-              "text": "Text",
-              "singleChoice": "Single choice",
-              "multipleChoice": "Multiple choice",
-              "picture": "Picture",
-              "pictureWithTags": "Picture with tags",
-              "audio": "Audio"
+              "TEXT": "Text",
+              "SINGLECHOICE": "Single choice",
+              "MULTIPLECHOICE": "Multiple choice",
+              "PICTURE": "Picture",
+              "PICTUREWITHTAGS": "Picture with tags",
+              "AUDIO": "Audio"
             }
           }
         },

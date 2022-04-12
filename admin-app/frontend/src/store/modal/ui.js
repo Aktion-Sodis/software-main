@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import { dataTypesDict, modalModesDict } from '../constants';
-import { EmptyEntity, Entity } from '../entities/utils';
-import { EmptyIntervention, Intervention } from '../interventions/utils';
-import { EmptyLevel, Level } from '../levels/utils';
-import { EmptySurvey, Survey } from '../survey/utils';
+
+import {
+  emptySurvey, emptyIntervention, emptyLevel, emptyEntity,
+} from '../classes';
+import i18n from '../../i18n';
 
 const dataModal = {
   namespaced: true,
@@ -12,7 +13,8 @@ const dataModal = {
     mode: modalModesDict.read,
     isDisplayed: false,
     dataIdInFocus: null,
-    dataDraft: new EmptyEntity(),
+    dataDraft: null,
+    imageFile: null,
   }),
   getters: {
     /* READ */
@@ -21,6 +23,7 @@ const dataModal = {
     getIsDisplayed: ({ isDisplayed }) => isDisplayed,
     getDataIdInFocus: ({ dataIdInFocus }) => dataIdInFocus,
     getDataDraft: ({ dataDraft }) => dataDraft,
+    getImageFile: ({ imageFile }) => imageFile,
   },
   mutations: {
     /* UPDATE, DELETE */
@@ -36,82 +39,34 @@ const dataModal = {
     setDataType: (state, { newValue }) => {
       state.dataType = newValue;
     },
+    setImageFile: (state, { newValue }) => {
+      state.imageFile = newValue;
+    },
 
     /* ENTITY DRAFT: SET & RESET */
-    setENTITYDraft: (state, {
-      id, name, description, entityLevelId, parentEntityID, _version,
-    }) => {
-      state.dataDraft = new Entity({
-        id,
-        name,
-        description,
-        entityLevelId,
-        parentEntityID,
-        _version,
-      });
+    setENTITYDraft: (state, draft) => {
+      state.dataDraft = draft;
     },
     resetENTITYDraft: (state) => {
-      state.dataDraft = new EmptyEntity();
+      state.dataDraft = emptyEntity();
     },
 
-    /* LEVEL DRAFT: SET & RESET */
-    setLEVELDraft: (
-      state,
-      {
-        id, name, description, parentLevelID, allowedInterventions, _version,
-      },
-    ) => {
-      state.dataDraft = new Level({
-        id,
-        name,
-        description,
-        parentLevelID,
-        allowedInterventions,
-        _version,
-      });
+    setDraft: (state, draft) => {
+      state.dataDraft = draft;
     },
     resetLEVELDraft: (state) => {
-      state.dataDraft = new EmptyLevel();
-    },
-
-    /* INTERVENTION DRAFT: SET & RESET */
-    setINTERVENTIONDraft: (state, {
-      id, name, description, tagIds, contents, _version,
-    }) => {
-      state.dataDraft = new Intervention({
-        id,
-        name,
-        description,
-        tagIds,
-        contents,
-        _version,
-      });
+      state.dataDraft = emptyLevel();
     },
     resetINTERVENTIONDraft: (state) => {
-      state.dataDraft = new EmptyIntervention();
+      state.dataDraft = emptyIntervention();
     },
 
     /* SURVEY DRAFT: SET & RESET */
-    setSURVEYDraft: (
-      state,
-      {
-        id, name, description, tags, type, questionIds, creationDate, lastEditDate, _version,
-      },
-    ) => {
-      state.dataDraft = new Survey({
-        id,
-        name,
-        description,
-        tags,
-        type,
-        questionIds,
-        creationDate,
-        lastEditDate,
-        _version,
-      });
+    setSURVEYDraft: (state, draft) => {
+      state.dataDraft = draft;
     },
     resetSURVEYDraft: (state) => {
-      state.dataDraft = new EmptySurvey();
+      state.dataDraft = emptySurvey();
     },
   },
   actions: {
@@ -120,6 +75,7 @@ const dataModal = {
       commit('setMode', { newValue: modalModesDict.read });
       commit('setDataIdInFocus', { newValue: dataId });
       commit('setIsDisplayed', { newValue: true });
+      commit('setImageFile', { newValue: null });
     },
     abortReadData: async ({ commit }) => {
       commit('setIsDisplayed', { newValue: false });
@@ -138,36 +94,90 @@ const dataModal = {
       await Vue.nextTick();
       commit(`reset${dataType}Draft`);
       commit('setMode', { newValue: modalModesDict.read });
+      commit('setImageFile', { newValue: null });
+      if (dataType === dataTypesDict.entity) commit('setCreatingEntityInLevelId', { id: null }, { root: true });
     },
     editData: ({ commit, rootGetters }, { dataId, dataType }) => {
       commit('setMode', { newValue: modalModesDict.edit });
       commit('setDataIdInFocus', { newValue: dataId });
       commit('setDataType', { newValue: dataType });
       const data = rootGetters[`${dataType}_Data/${dataType}ById`]({ id: dataId });
-      commit(`set${dataType}Draft`, data);
-      // commit('setIsDisplayed', { newValue: true });
+      commit('setDraft', data);
     },
     abortEditData: async ({ commit }, { dataType }) => {
       commit(`reset${dataType}Draft`);
       await Vue.nextTick();
       commit('setMode', { newValue: modalModesDict.read });
+      commit('setImageFile', { newValue: null });
     },
 
-    saveData: async ({ dispatch, getters }, { dataType }) => {
+    saveData: async ({ dispatch, getters }, { dataType, originalVersion }) => {
       if (getters.getMode === modalModesDict.read) return;
       const draft = getters.getDataDraft;
+      let success = false;
       if (getters.getMode === modalModesDict.create) {
-        await dispatch(`${dataType}_Data/APIpost`, draft, { root: true });
-        return;
+        success = await dispatch(`${dataType}_Data/APIpost`, draft, { root: true });
+      } else if (getters.getMode === modalModesDict.edit) {
+        success = await dispatch(
+          `${dataType}_Data/APIput`,
+          {
+            newData: draft,
+            originalId: getters.getDataIdInFocus,
+            originalVersion,
+          },
+          { root: true },
+        );
       }
-      if (getters.getMode === modalModesDict.edit) {
-        await dispatch(`${dataType}_Data/APIput`, draft, { root: true });
-      }
+      dispatch(
+        'FEEDBACK_UI/showFeedbackForDuration',
+        {
+          type: success ? 'success' : 'error',
+          text: i18n.t(
+            `general.operationFeedback.data.${success ? 'success' : 'error'}.${
+              getters.getMode === modalModesDict.create ? 'create' : 'update'
+            }`,
+          ),
+        },
+        {
+          root: true,
+        },
+      );
+      // TODO: Too costly. Find a leaner way of updating the data.
+      dispatch(
+        'SYNC_UI/refreshHandler',
+        {},
+        {
+          root: true,
+        },
+      );
     },
     deleteData: async ({ dispatch, getters }, { dataType }) => {
       if (getters.getEntityModalMode === modalModesDict.read) return;
       if (getters.getEntityModalMode === modalModesDict.create) return;
-      await dispatch(`${dataType}_Data/APIdelete`, getters.getDataDraft, { root: true });
+      const success = await dispatch(
+        `${dataType}_Data/APIdelete`,
+        { id: getters.getDataIdInFocus, _version: getters.getDataDraft._version },
+        { root: true },
+      );
+      dispatch(
+        'FEEDBACK_UI/showFeedbackForDuration',
+        {
+          type: success ? 'success' : 'error',
+          text: i18n.t(`general.operationFeedback.data.${success ? 'success' : 'error'}.delete`),
+        },
+        {
+          root: true,
+        },
+      );
+
+      // TODO: Too costly. Find a leaner way of updating the data.
+      dispatch(
+        'SYNC_UI/refreshHandler',
+        {},
+        {
+          root: true,
+        },
+      );
     },
   },
 };

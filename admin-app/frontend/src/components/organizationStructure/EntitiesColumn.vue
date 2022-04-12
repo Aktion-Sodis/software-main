@@ -10,8 +10,10 @@
       :id="entity.id"
       :parentEntityID="entity.parentEntityID"
       :entityLevelId="entityLevelId"
-      :entityName="entity.name"
-      :entityDescription="entity.description"
+      :entityName="calculateUILocaleString({ languageTexts: entity.name.languageTexts })"
+      :entityDescription="
+        calculateUILocaleString({ languageTexts: entity.description.languageTexts })
+      "
       :index="index"
       class="d-flex flex-column align-center my-4"
       style="position: relative; height: 128px"
@@ -38,7 +40,7 @@
 </template>
 
 <script>
-import { validate as uuidValidate } from 'uuid';
+// import { validate as uuidValidate } from 'uuid';
 import { mapGetters } from 'vuex';
 
 import AddEntityButton from './AddEntityButton.vue';
@@ -50,7 +52,7 @@ export default {
   props: {
     entityLevelId: {
       required: true,
-      validator: (v) => uuidValidate(v) || v.slice(0, 10) === 'dummyLevel' || v === null,
+      // validator: (v) => uuidValidate(v) || v.slice(0, 10) === 'dummyLevel' || v === null,
     },
     index: { type: Number, required: true },
   },
@@ -60,6 +62,7 @@ export default {
       getLoading: 'LEVEL_Data/getLoading',
       lineColors: 'getLineColors',
       calculatedLinesByLevelId: 'ENTITY_Data/calculatedLinesByLevelId',
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
   },
 };

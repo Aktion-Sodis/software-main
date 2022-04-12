@@ -1,6 +1,5 @@
 <template>
   <v-tabs background-color="grey lighten-3" show-arrows centered center-active v-model="iQ">
-    <!-- <v-tabs-slider color="primary"></v-tabs-slider> -->
     <draggable
       v-model="questions"
       @start="drag = true"
@@ -9,21 +8,21 @@
       :move="handleDrag"
     >
       <v-tab v-for="(q, i) in questions" :key="i" :value="i">
-        <v-icon v-if="i === nQuestions - 1" large> mdi-plus </v-icon>
+        <v-icon v-if="i === nQuestions - 1 && !read" large> mdi-plus </v-icon>
         <v-badge v-else color="grey lighten-2" :content="i + 1" bottom overlap>
           <div>
-            <div v-if="q.questionType === 'multipleChoice'">
+            <div v-if="q.type === QuestionType.MULTIPLECHOICE">
               <v-icon> mdi-checkbox-outline </v-icon>
               <v-icon> mdi-checkbox-outline </v-icon>
               <v-icon> mdi-checkbox-blank-outline </v-icon>
             </div>
-            <div v-else-if="q.questionType === 'singleChoice'">
+            <div v-else-if="q.type === QuestionType.SINGLECHOICE">
               <v-icon> mdi-radiobox-marked </v-icon>
               <v-icon> mdi-radiobox-blank </v-icon>
               <v-icon> mdi-radiobox-blank </v-icon>
             </div>
             <v-icon v-else large>
-              {{ questionTypesIconDict[q.questionType] }}
+              {{ questionTypesIconDict[q.type] }}
             </v-icon>
           </div>
         </v-badge>
@@ -35,7 +34,8 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import draggable from 'vuedraggable';
-import { questionTypesIconDict } from '../../../store/constants';
+import { modalModesDict, questionTypesIconDict } from '../../../store/constants';
+import { QuestionType } from '../../../models';
 
 export default {
   name: 'QuestionTabs',
@@ -45,10 +45,11 @@ export default {
       iQ: 0,
       questionTypesIconDict,
       drag: [],
+      QuestionType,
     };
   },
   mounted() {
-    this.iQ = Math.max(this.nQuestions - 1, 0);
+    this.iQ = this.read ? 0 : Math.max(this.nQuestions - 1, 0);
   },
   watch: {
     iQ(newVal) {
@@ -61,17 +62,30 @@ export default {
   },
   computed: {
     ...mapGetters({
-      questions: 'QUESTION_UI/questionWithAnswersDrafts',
+      questions: 'QUESTION_UI/questionWithOptionDrafts',
       iQuestions: 'QUESTION_UI/getIQuestions',
       nQuestions: 'QUESTION_UI/nQuestions',
+
+      surveyModalMode: 'dataModal/getMode',
+      dataIdInFocus: 'dataModal/getDataIdInFocus',
+
+      SURVEYById: 'SURVEY_Data/SURVEYById',
     }),
     questions: {
       get() {
-        return this.$store.getters['QUESTION_UI/questionWithAnswersDrafts'];
+        return this.read
+          ? this.surveyInFocus.questions
+          : this.$store.getters['QUESTION_UI/questionWithOptionDrafts'];
       },
       set(value) {
         this.$store.commit('QUESTION_UI/setQuestions', { payload: value }, { root: true });
       },
+    },
+    read() {
+      return this.surveyModalMode === modalModesDict.read;
+    },
+    surveyInFocus() {
+      return this.SURVEYById({ id: this.dataIdInFocus });
     },
   },
   methods: {

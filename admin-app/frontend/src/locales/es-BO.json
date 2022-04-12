@@ -2,9 +2,13 @@
   "development": {
     "notYetImplemented": "Esta función aún no se ha implementado. ¡Por favor, ignora si estás en búsqueda de errores! 🐞🔍"
   },
+  "reflectiveData": {
+    "localeVerboseName": "Español Bolivia"
+  },
   "general": {
     "edit": "Editar",
     "searchBox": "Búsqueda",
+    "close": "Close",
     "cancel": "Cancelar",
     "save": "Guardar",
     "delete": "Eliminar",
@@ -12,18 +16,22 @@
       "maxCharExceeded": "Máximo {maxChar} caracteres.",
       "minCharNotMet": "Al menos {minChar} carácteres.",
       "required": "Necesario.",
-      "unsavedChanges": "Hay cambios sin guardar. ¿Estás seguro de que quieres salir?"
+      "unsavedChanges": "Hay cambios sin guardar. ¿Estás seguro de que quieres salir?",
+      "addInNewLocale": "En otra lengua"
     },
+    "noTextProvided": "No text was provided.",
+    "noTags": "There are no tags.",
     "routes": {
-      "home": "Inicio",
-      "baseData": "Datos básicos",
-      "organizationStructure": "Estructura organizativa",
-      "interventions": "Intervenciones",
-      "login": "Iniciar sesión",
-      "completeUserInfo": "Complete la información del usuario",
-      "changePassword": "Cambiar mi contraseña",
-      "forgotPassword": "Olvidé mi contraseña",
-      "about": "Acerca de"
+      "Home": "Inicio",
+      "BaseData": "Datos básicos",
+      "OrganizationStructure": "Estructura organizativa",
+      "Interventions": "Intervenciones",
+      "Login": "Iniciar sesión",
+      "CompleteUserInfo": "Complete la información del usuario",
+      "ChangePassword": "Cambiar mi contraseña",
+      "ForgotPassword": "Olvidé mi contraseña",
+      "About": "Acerca de",
+      "Surveys": "Encuestas"
     },
     "errorCodes": {
       "InternalErrorException": "Ha ocurrido un error interno. Vuelva a intentarlo más tarde. Código de error: 6001",
@@ -46,7 +54,6 @@
       "CodeMismatchException": "Código no coincidente. Código de error: 6017",
       "ExpiredCodeException": "El código ha caducado. Código de error: 6018",
       "TooManyFailedAttemptsException": "Demasiados intentos fallidos. Código de error: 6019"
-
     },
     "warningCodes": {
       "sessionExpired": "Su sesión ha caducado. Inicie sesión de nuevo."
@@ -55,6 +62,24 @@
       "inSync": "Refrescar",
       "synched": "En sintonía",
       "synchronizing": "sincronizando..."
+    },
+    "operationFeedback": {
+      "data": {
+        "success": {
+          "create": "Successfully created.",
+          "update": "Successfully updated.",
+          "delete": "Successfully deleted."
+        },
+        "error": {
+          "create": "Something went wrong.",
+          "update": "Something went wrong.",
+          "delete": "Something went wrong."
+        }
+      },
+      "upload": {
+        "success": "Successfully uploaded.",
+        "error": "Could not upload the file."
+      }
     }
   },
   "login": {
@@ -118,6 +143,8 @@
     "addNewLevel": "Añadir un nuevo nivel",
     "hasNoInterventions": "No existen intervenciones para este nivel.",
     "hasNoEntities": "No hay entidades para este nivel.",
+    "hasNoCustomData": "There are no custom data for this level.",
+    "thereAreMoreInterventions": "Hay {count} intervenciones más para este nivel.",
     "levelModal": {
       "modalTitle": {
         "edit": "Editar nivel ",
@@ -129,6 +156,17 @@
         "create": "Esta es la descripción de este diálogo de creación."
       },
       "interventions": "Intervenciones",
+      "customData": {
+        "title": "Custom Data",
+        "name": "Name",
+        "type": "Type",
+        "types": {
+          "INT": "Number",
+          "STRING": "Text"
+        }
+      },
+      "areInterventionsAllowed": "estan permitidas.",
+      "allowInterventionsFirst": "Permita las intervenciones primero.",
       "name": "Nombre del nivel",
       "description": "Descripción del nivel",
       "manageAllowedInterventions": "Gestionar las intervenciones permitidas",
@@ -156,8 +194,14 @@
   "interventions": {
     "title": "Intervenciones",
     "newIntervention": "Nueva intervención",
-    "newSurvey": "Nueva encuesta",
-    "interventionModal": {
+    "type": {
+      "title": "Tipo de Intervención",
+      "types": {
+        "TECHNOLOGY": "Tecnología",
+        "EDUCATION": "Educación"
+      }
+    },
+    "modal": {
       "modalTitle": {
         "read": "Observando intervención",
         "edit": "Editar intervención ",
@@ -169,12 +213,27 @@
       },
       "name": "Nombre de la intervención",
       "description": "Descripción de la intervención",
+      "image": "Intervention Image",
+      "levels": "Levels where this intervention is allowed",
       "noDocuments": "No se han subido documentos.",
       "noImages": "No se han subido imágenes.",
       "noVideos": "No se han subido vídeos.",
       "noSurveys": "No se han subido encuestas."
+    }
+  },
+  "surveys": {
+    "title": "Encuestas",
+    "newSurvey": "Nueva encuesta",
+    "type": {
+      "title": "Tipo de Encuesta",
+      "types": {
+        "INITIAL": "Inicial",
+        "DEFAULT": "Por defecto"
+      }
     },
-    "surveyModal": {
+    "modal": {
+      "image": "Imagen di Encuesta",
+      "intervention": "Encuesta pertenece a:",
       "firstCard": {
         "title": {
           "edit": "Editar encuesta ",
@@ -201,17 +260,17 @@
           "answer": {
             "title": "Pregunta",
             "typeLabel": "Tipo de pregunta",
-            "answer": "Respuesta",
-            "textLabel": "Texto respuesta",
-            "addImage": "Añadir imágen a la respuresta",
-            "addAnswer": "Añadir respuesta",
+            "answer": "Opción",
+            "textLabel": "Texto Opción",
+            "addImage": "Añadir imágen a la opción",
+            "addAnswer": "Añadir Opción",
             "questionTypes": {
-              "text": "Texto",
-              "singleChoice": "Elección única",
-              "multipleChoice": "Elección múltiple",
-              "picture": "Imágen",
-              "pictureWithTags": "Imágen con etiquetas",
-              "audio": "Audio"
+              "TEXT": "Texto",
+              "SINGLECHOICE": "Elección única",
+              "MULTIPLECHOICE": "Elección múltiple",
+              "PICTURE": "Imágen",
+              "PICTUREWITHTAGS": "Imágen con etiquetas",
+              "AUDIO": "Audio"
             }
           }
         },

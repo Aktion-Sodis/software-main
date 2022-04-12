@@ -1,37 +1,32 @@
 <template>
   <div>
-    <InterventionModal v-if="showInterventionModal" />
+    <SurveyModal v-if="showSurveyModal" />
     <h1 class="ml-8">
-      {{ $t('interventions.title') }}
+      {{ $t('surveys.title') }}
     </h1>
     <v-container class="mt-8">
       <v-row>
         <v-col cols="12" sm="6" md="4" xl="3">
           <DataCreationButtonCard
-            :dataType="dataTypesDict.intervention"
-            subtitleI18nSelector="interventions.newIntervention"
+            :dataType="dataTypesDict.survey"
+            subtitleI18nSelector="surveys.newSurvey"
           >
             <template v-slot:creation-button="slotProps">
               <v-btn fab x-large color="primary" @click="slotProps.clickHandler">
-                <v-icon dark> mdi-wrench </v-icon>
+                <v-icon dark> mdi-crosshairs-question </v-icon>
               </v-btn>
             </template>
           </DataCreationButtonCard>
         </v-col>
-        <v-col
-          v-for="intervention in interventions"
-          :key="intervention.id"
-          cols="12"
-          sm="6"
-          md="4"
-          xl="3"
-        >
-          <Intervention
-            :id="intervention.id"
-            :interventionName="intervention.name"
-            :interventionDescription="intervention.description"
-            :interventionTagIds="intervention.tagIds"
-            :interventionContent="intervention.content"
+        <v-col v-for="survey in surveys" :key="survey.id" cols="12" sm="6" md="4" xl="3">
+          <Survey
+            :id="survey.id"
+            :surveyName="survey.name"
+            :surveyDescription="survey.description"
+            :surveyTagIds="survey.tags"
+            :surveyContent="survey.content"
+            :interventionName="survey.intervention ? survey.intervention.name : null"
+            :interventionId="survey.intervention ? survey.intervention.id : null"
           />
         </v-col>
         <v-col v-for="index in ['s1', 's2', 's3']" :key="index" cols="12" sm="6" md="4" xl="3">
@@ -47,30 +42,30 @@ import { mapGetters } from 'vuex';
 import { waitForMilliseconds } from '../lib/utils';
 import { dataTypesDict } from '../store/constants';
 
-import Intervention from '../components/interventions/Intervention.vue';
-import InterventionModal from '../components/interventions/InterventionModal.vue';
+import SurveyModal from '../components/surveys/SurveyModal.vue';
 import InterventionSkeleton from '../components/interventions/InterventionSkeleton.vue';
 import DataCreationButtonCard from '../components/commons/DataCreationButtonCard.vue';
+import Survey from '../components/surveys/Survey.vue';
 
 export default {
   name: 'Interventions',
   components: {
-    Intervention,
-    InterventionModal,
+    SurveyModal,
     DataCreationButtonCard,
     InterventionSkeleton,
+    Survey,
   },
   data() {
     return {
-      showInterventionModal: false,
+      showSurveyModal: false,
       dataTypesDict,
     };
   },
   computed: {
     ...mapGetters({
-      interventions: 'INTERVENTION_Data/getInterventions',
-      loading: 'INTERVENTION_Data/getLoading',
-      isInterventionModalDisplayed: 'dataModal/getIsDisplayed',
+      surveys: 'SURVEY_Data/getSurveys',
+      loading: 'SURVEY_Data/getLoading',
+      isSurveyModalDisplayed: 'dataModal/getIsDisplayed',
     }),
     currentLocale() {
       return this.$i18n.locale;
@@ -78,16 +73,17 @@ export default {
   },
   watch: {
     isInterventionModalDisplayed: 'destroyInterventionModalAfterDelay',
+    isSurveyModalDisplayed: 'destroySurveyModalAfterDelay',
   },
   methods: {
     // If closed, wait for 500, if still closed, destroy component instance
-    async destroyInterventionModalAfterDelay(newValue) {
+    async destroySurveyModalAfterDelay(newValue) {
       if (newValue) {
-        this.showInterventionModal = true;
+        this.showSurveyModal = true;
         return;
       }
       await waitForMilliseconds(500);
-      if (!this.isInterventionModalDisplayed) this.showInterventionModal = false;
+      if (!this.isInterventionModalDisplayed) this.showSurveyModal = false;
     },
   },
 };

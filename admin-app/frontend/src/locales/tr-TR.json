@@ -2,9 +2,13 @@
   "development": {
     "notYetImplemented": "Bu fonksiyonalite henüz tamamlanmadı. Eğer bug arayışındaysan lütfen görmezden gel! 🐞🔍"
   },
+  "reflectiveData": {
+    "localeVerboseName": "Türkçe Türkiye"
+  },
   "general": {
     "edit": "Düzenle",
     "searchBox": "Her yerde ara",
+    "close": "Kapat",
     "cancel": "İptal",
     "save": "Kaydet",
     "delete": "Sil",
@@ -12,18 +16,22 @@
       "maxCharExceeded": "Maksimum {maxChar} karakter.",
       "minCharNotMet": "En az {minChar} uzunluğunda olmalı.",
       "required": "Zorunlu alan.",
-      "unsavedChanges": "Kaydedilmemiş değişiklikler var. Çıkmak istediğinizden emin misiniz?"
+      "unsavedChanges": "Kaydedilmemiş değişiklikler var. Çıkmak istediğinizden emin misiniz?",
+      "addInNewLocale": "Başka bir dilde"
     },
+    "noTextProvided": "Buraya bir metin girilmemiş.",
+    "noTags": "There are no tags.",
     "routes": {
-      "home": "Ana sayfa",
-      "baseData": "Temel veriler",
-      "organizationStructure": "Organizasyonel yapı",
-      "interventions": "Müdahaleler",
-      "login": "Giriş",
-      "completeUserInfo": "Kullanıcı bilgilerini tamamla",
-      "changePassword": "Şifre Değiştir",
-      "forgotPassword": "Şifremi Unuttum",
-      "about": "Hakkımızda"
+      "Home": "Ana sayfa",
+      "BaseData": "Temel veriler",
+      "OrganizationStructure": "Organizasyonel yapı",
+      "Interventions": "Müdahaleler",
+      "Login": "Giriş",
+      "CompleteUserInfo": "Kullanıcı bilgilerini tamamla",
+      "ChangePassword": "Şifre Değiştir",
+      "ForgotPassword": "Şifremi Unuttum",
+      "About": "Hakkımızda",
+      "Surveys": "Anketler"
     },
     "errorCodes": {
       "InternalErrorException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6001",
@@ -54,6 +62,24 @@
       "inSync": "Yenile",
       "synched": "Senkronize",
       "synchronizing": "senkronize ediliyor..."
+    },
+    "operationFeedback": {
+      "data": {
+        "success": {
+          "create": "Successfully created.",
+          "update": "Successfully updated.",
+          "delete": "Successfully deleted."
+        },
+        "error": {
+          "create": "Something went wrong.",
+          "update": "Something went wrong.",
+          "delete": "Something went wrong."
+        }
+      },
+      "upload": {
+        "success": "Successfully uploaded.",
+        "error": "Could not upload the file."
+      }
     }
   },
   "login": {
@@ -117,6 +143,8 @@
     "addNewLevel": "Yeni seviye ekle",
     "hasNoInterventions": "Bu seviyede henüz hiç müdahale yok.",
     "hasNoEntities": "Bu seviyede henüz hiç oluşum yok.",
+    "hasNoCustomData": "Henüz bu seviyeye özgü hiçbir veri yok.",
+    "thereAreMoreInterventions": "Bu seviye için {count} müdahale daha var.",
     "levelModal": {
       "modalTitle": {
         "edit": "Seviyeyi düzenle: ",
@@ -128,6 +156,17 @@
         "create": "Bu güzel seviye yaratma diyaloğunun çok güzel açıklaması."
       },
       "interventions": "Müdahaleler",
+      "customData": {
+        "title": "Özel veriler",
+        "name": "Ad",
+        "type": "Tür",
+        "types": {
+          "INT": "Sayı",
+          "STRING": "Metin"
+        }
+      },
+      "areInterventionsAllowed": "uygulanabilir.",
+      "allowInterventionsFirst": "Lütfen önce müdahale yapılmasına izin verin.",
       "name": "Seviye adı",
       "description": "Seviye açıklaması",
       "manageAllowedInterventions": "İzin verilen müdahaleleri yönet",
@@ -155,8 +194,14 @@
   "interventions": {
     "title": "Müdahaleler",
     "newIntervention": "Yeni müdahale",
-    "newSurvey": "Yeni anket",
-    "interventionModal": {
+    "type": {
+      "title": "Müdahale türü",
+      "types": {
+        "TECHNOLOGY": "Teknoloji",
+        "EDUCATION": "Eğitim"
+      }
+    },
+    "modal": {
       "modalTitle": {
         "read": "Müdahale",
         "edit": "Müdahaleyi düzenle: ",
@@ -168,12 +213,27 @@
       },
       "name": "Müdahale adı",
       "description": "Müdahale açıklaması",
+      "image": "Müdahale resmi",
       "noDocuments": "Henüz hiç döküman yüklenmemiş.",
+      "levels": "Levels where this intervention is allowed",
       "noImages": "Henüz hiç resim yüklenmemiş.",
       "noVideos": "Henüz hiç video yüklenmemiş.",
       "noSurveys": "Henüz hiç anket yüklenmemiş."
+    }
+  },
+  "surveys": {
+    "title": "Anketler",
+    "newSurvey": "Yeni anket",
+    "type": {
+      "title": "Anket türü",
+      "types": {
+        "INITIAL": "Başlangıç",
+        "DEFAULT": "Varsayılan"
+      }
     },
-    "surveyModal": {
+    "modal": {
+      "image": "Anket Resmi",
+      "intervention": "Anketin müdahalesi:",
       "firstCard": {
         "title": {
           "edit": "Anket düzenleniyor... ",
@@ -200,17 +260,17 @@
           "answer": {
             "title": "Yanıt",
             "typeLabel": "Soru tipi",
-            "answer": "Yanıt",
-            "textLabel": "Yanıt metni",
-            "addImage": "Yanıta resim ekle",
-            "addAnswer": "Yanıt ekle",
+            "answer": "Seçenek",
+            "textLabel": "Seçenek metni",
+            "addImage": "Seçeneğe resim ekle",
+            "addAnswer": "Seçenek ekle",
             "questionTypes": {
-              "text": "Metin",
-              "singleChoice": "Çoktan tek seçmeli",
-              "multipleChoice": "Çoktan çok seçmeli",
-              "picture": "Resim",
-              "pictureWithTags": "Etiketli resim",
-              "audio": "Ses"
+              "TEXT": "Metin",
+              "SINGLECHOICE": "Çoktan tek seçmeli",
+              "MULTIPLECHOICE": "Çoktan çok seçmeli",
+              "PICTURE": "Resim",
+              "PICTUREWITHTAGS": "Etiketli resim",
+              "AUDIO": "Ses"
             }
           }
         },

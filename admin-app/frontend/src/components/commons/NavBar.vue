@@ -1,5 +1,24 @@
 <template>
-  <v-navigation-drawer permanent expand-on-hover class="primary-dark" width="17rem" fixed>
+  <v-bottom-navigation
+    v-if="$vuetify.breakpoint.name === 'xs'"
+    fixed
+    app
+    background-color="primary-dark"
+    class="align-center"
+    height="44"
+  >
+    <v-btn
+      v-for="route in routes"
+      :key="route.name"
+      :to="{ name: route.name }"
+      large
+      class="primary-dark"
+      active-class="primary darken-2"
+    >
+      <v-icon color="white">{{ route.icon }}</v-icon>
+    </v-btn>
+  </v-bottom-navigation>
+  <v-navigation-drawer v-else permanent expand-on-hover class="primary-dark" width="17rem" fixed>
     <div class="side-bar-inner-wrapper overflow-hidden">
       <v-list>
         <v-list-item class="px-2">
@@ -11,56 +30,21 @@
           </v-list-item-title>
         </v-list-item>
         <SyncAction />
-        <!-- <v-btn @click="CreateDummyLevels">Create dummy levels</v-btn> -->
-        <!-- <v-btn @click="CreateDummyEntities">Create dummy entities</v-btn> -->
       </v-list>
 
       <v-list nav dense class="mt-12">
         <v-list-item
-          :to="{ name: 'Home' }"
+          v-for="route in routes"
+          :to="{ name: route.name }"
           exact
-          :class="currentRouteName === 'Home' ? 'primary darken-4' : ''"
-          @click="showToBeImplementedFeedback"
+          :class="currentRouteName === route.name ? 'primary darken-4' : ''"
+          :key="route.name"
         >
           <v-list-item-icon>
-            <v-icon color="white">mdi-home-outline</v-icon>
+            <v-icon color="white"> {{ route.icon }} </v-icon>
           </v-list-item-icon>
           <v-list-item-title class="white--text text-body-1">
-            {{ $t('general.routes.home') }}
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item
-          :to="{ name: 'BaseData' }"
-          :class="currentRouteName === 'BaseData' ? 'primary darken-4' : ''"
-          @click="showToBeImplementedFeedback"
-        >
-          <v-list-item-icon>
-            <v-icon color="white">mdi-domain</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title class="white--text text-body-1">
-            {{ $t('general.routes.baseData') }}
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item
-          :to="{ name: 'OrganizationStructure' }"
-          :class="currentRouteName === 'OrganizationStructure' ? 'primary darken-4' : ''"
-        >
-          <v-list-item-icon>
-            <v-icon color="white">mdi-clipboard-text-outline</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title class="white--text text-body-1">
-            {{ $t('general.routes.organizationStructure') }}
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item
-          :to="{ name: 'Interventions' }"
-          :class="currentRouteName === 'Interventions' ? 'primary darken-4' : ''"
-        >
-          <v-list-item-icon>
-            <v-icon color="white">mdi-wrench-outline</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title class="white--text text-body-1">
-            {{ $t('general.routes.interventions') }}
+            {{ $t(`general.routes.${route.name}`) }}
           </v-list-item-title>
         </v-list-item>
       </v-list>
@@ -73,7 +57,10 @@
         </v-list-item>
         <v-list-item class="px-2">
           <v-list-item-avatar>
-            <v-img src="https://randomuser.me/api/portraits/women/75.jpg"></v-img>
+            <v-img
+              alt="a randomized profile of a lego toy."
+              :src="`https://randomuser.me/api/portraits/lego/${Math.floor(Math.random() * 8)}.jpg`"
+            ></v-img>
           </v-list-item-avatar>
           <div class="next-to-avatar">
             <v-list-item-content>
@@ -97,13 +84,24 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import SyncAction from './SyncAction.vue';
+import { routes } from '../../router';
 
 const societyName = process.env.VUE_APP_SOCIETY_VERBOSE_NAME;
 
 export default {
   components: { SyncAction },
-  name: 'SideBar',
-  data: () => ({ societyName }),
+  name: 'NavBar',
+  data: () => ({
+    societyName,
+    routes: routes
+      .filter((r) => r.meta.onSideBar)
+      .map((r) => ({
+        name: r.name,
+        onSideBar: r.meta.onSideBar,
+        title: r.meta.title,
+        icon: r.meta.icon,
+      })),
+  }),
   computed: {
     ...mapGetters({
       isAuthenticated: 'auth/getIsAuthenticated',
@@ -117,8 +115,6 @@ export default {
     ...mapActions({
       deleteSession: 'auth/deleteSession',
       showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
-      CreateDummyLevels: 'LEVEL_Data/CreateDummyLevels',
-      CreateDummyEntities: 'ENTITY_Data/CreateDummyEntities',
     }),
     logout() {
       this.deleteSession();

@@ -1,25 +1,34 @@
 <template>
   <v-card style="height: 100%" class="pa-2" outlined tile @click="clickHandler">
-    <ImgFromS3 :assumedSrc="deriveImgPath" dataType="intervention">
+    <ImgFromS3 :assumedSrc="deriveImgPath" dataType="survey">
       <template v-slot:v-img="slotProps">
         <v-img height="200px" :src="slotProps.src"> </v-img>
       </template>
     </ImgFromS3>
     <v-card-title>
-      {{ calculateUILocaleString({ languageTexts: interventionName.languageTexts }) }}
+      {{ calculateUILocaleString({ languageTexts: surveyName.languageTexts }) }}
       <v-spacer></v-spacer>
-      <!-- <v-chip v-for="tagId in interventionTagIds" :key="tagId" class="ml-2"
+      <v-chip v-for="tagId in surveyTagIds" :key="tagId" class="ml-2"
         >{{ tagById({ id: tagId }).text }}
-      </v-chip> -->
+      </v-chip>
+      <v-tooltip bottom v-if="interventionName">
+        <template v-slot:activator="{ on, attrs }">
+          <v-avatar v-bind="attrs" v-on="on">
+            <v-icon>mdi-wrench-outline</v-icon>
+          </v-avatar>
+        </template>
+        <span>
+          {{ calculateUILocaleString({ languageTexts: interventionName.languageTexts }) }}
+        </span>
+      </v-tooltip>
     </v-card-title>
     <v-card-subtitle class="mt-0">
-      {{ calculateUILocaleString({ languageTexts: interventionDescription.languageTexts }) }}
+      {{ calculateUILocaleString({ languageTexts: surveyDescription.languageTexts }) }}
     </v-card-subtitle>
   </v-card>
 </template>
 
 <script>
-// import { validate as uuidValidate } from 'uuid';
 import { mapGetters, mapActions } from 'vuex';
 import { dataTypesDict } from '../../store/constants';
 import { deriveFilePath } from '../../store/utils';
@@ -27,41 +36,48 @@ import ImgFromS3 from '../commons/ImgFromS3.vue';
 
 export default {
   components: { ImgFromS3 },
-  name: 'Intervention',
+  name: 'Survey',
   props: {
     id: {
+      type: String,
       required: true,
-      // validator: (e) => uuidValidate(e) || e === null,
+    },
+    surveyName: {
+      type: Object,
+      required: true,
+    },
+    surveyDescription: {
+      type: Object,
+      required: true,
+    },
+    surveyTagIds: {
+      type: Array,
+    },
+    surveyContent: {
+      type: Array,
     },
     interventionName: {
-      type: Object,
       required: true,
     },
-    interventionDescription: {
-      type: Object,
+    interventionId: {
       required: true,
-    },
-    // interventionTagIds: {
-    //   type: Array,
-    //   // validator: (a) => a.every((e) => uuidValidate(e)),
-    // },
-    interventionContent: {
-      type: Array,
-      // validator: (a) => a.every((e) => uuidValidate(e.id)),
     },
   },
   computed: {
     ...mapGetters({
-      // tagById: 'INTERVENTION_Data/tagById',
+      tagById: 'SURVEY_Data/tagById',
       calculateUILocaleString: 'calculateUILocaleString',
     }),
     deriveImgPath() {
-      return deriveFilePath('interventionPicPath', { interventionID: this.id });
+      return deriveFilePath('interventionSurveyPicPath', {
+        interventionID: this.interventionId,
+        surveyId: this.id,
+      });
     },
   },
   methods: {
     clickHandler() {
-      this.readData({ dataId: this.id, dataType: dataTypesDict.intervention });
+      this.readData({ dataId: this.id, dataType: dataTypesDict.survey });
     },
     ...mapActions({
       readData: 'dataModal/readData',

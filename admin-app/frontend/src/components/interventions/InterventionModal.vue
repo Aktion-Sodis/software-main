@@ -9,87 +9,213 @@
       <v-form lazy-validation>
         <v-card-title>
           <h2 v-if="edit">
-            {{ $t('interventions.interventionModal.modalTitle.edit') }}
-            <i>{{ interventionInFocus.name.languageTexts[0] }}</i>
+            {{ $t('interventions.modal.modalTitle.edit') }}
+            <i>
+              {{
+                calculateUILocaleString({
+                  languageTexts: interventionInFocus.name.languageTexts,
+                })
+              }}
+            </i>
           </h2>
           <h2 v-else-if="create">
-            {{ $t('interventions.interventionModal.modalTitle.create') }}
+            {{ $t('interventions.modal.modalTitle.create') }}
           </h2>
           <h2 v-else>
-            {{ $t('interventions.interventionModal.modalTitle.read') }}
+            {{ $t('interventions.modal.modalTitle.read') }}
           </h2>
         </v-card-title>
         <v-card-subtitle v-if="edit">
-          {{ $t('interventions.interventionModal.modalDescription.edit') }}
+          {{ $t('interventions.modal.modalDescription.edit') }}
         </v-card-subtitle>
         <v-card-subtitle v-else-if="create">
-          {{ $t('interventions.interventionModal.modalDescription.create') }}
+          {{ $t('interventions.modal.modalDescription.create') }}
         </v-card-subtitle>
 
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" class="pb-0 px-0 px-sm-3">
+                <v-card-title class="pt-0 pt-sm-2">
+                  {{ $t('interventions.modal.name') }}
+                </v-card-title>
                 <h2 v-if="read && interventionInFocus">
-                  {{ interventionInFocus.name.languageTexts[0] }}
+                  {{
+                    calculateUILocaleString({
+                      languageTexts: interventionInFocus.name.languageTexts,
+                    })
+                  }}
                 </h2>
-                <v-text-field
+                <LocaleTextBox
                   v-else
-                  v-model="name"
-                  :label="$t('interventions.interventionModal.name')"
-                  required
-                  outlined
-                  dense
-                ></v-text-field>
+                  labelPrefixI18nSelector="interventions.modal.name"
+                  :initVal="name"
+                  @res="nameUpdatedHandler"
+                >
+                  <template v-slot:text-input="slotProps">
+                    <v-text-field
+                      :label="slotProps.label"
+                      v-model="slotProps.model"
+                      autofocus
+                      required
+                      outlined
+                      dense
+                      @input="slotProps.inputHandler"
+                    ></v-text-field>
+                  </template>
+                </LocaleTextBox>
 
-                <h3 v-if="read && interventionInFocus" class="py-12">
-                  {{ interventionInFocus.description.languageTexts[0] }}
-                </h3>
-                <v-textarea
+                <v-card-title class="pt-4">
+                  {{ $t('interventions.modal.description') }}
+                </v-card-title>
+                <div
+                  v-if="read && interventionInFocus"
+                  class="d-flex flex-column justify-center"
+                  style="min-height: 10rem"
+                >
+                  <h3>
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: interventionInFocus.description.languageTexts,
+                      })
+                    }}
+                  </h3>
+                </div>
+
+                <LocaleTextBox
                   v-else
-                  v-model="description"
-                  :counter="description.length > interventionDescriptionMaxChar - 20"
-                  :rules="[rules.maxChar]"
-                  :label="$t('interventions.interventionModal.description')"
-                  required
-                  outlined
-                  dense
-                ></v-textarea>
-                <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" max-height="200px">
-                  <v-btn v-if="!read" fab class="iv-edit-icon" color="primary" @click="selectImg">
-                    <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
-                  </v-btn>
-                  <input
-                    v-if="!read"
-                    type="file"
-                    accept="image/png, image/jpeg"
-                    ref="img-upload"
-                    style="display: none"
-                  />
-                </v-img>
+                  labelPrefixI18nSelector="interventions.modal.description"
+                  :initVal="description"
+                  @res="descriptionUpdatedHandler"
+                >
+                  <template v-slot:text-input="slotProps">
+                    <v-textarea
+                      autofocus
+                      required
+                      outlined
+                      dense
+                      :label="slotProps.label"
+                      v-model="slotProps.model"
+                      @input="slotProps.inputHandler"
+                    ></v-textarea>
+                  </template>
+                </LocaleTextBox>
               </v-col>
+
               <v-col cols="12" sm="6" class="pt-6 pt-sm-3 px-0 px-sm-3">
+                <v-card-title class="pt-0 pt-sm-2">
+                  {{ $t('interventions.type.title') }}:
+
+                  <div v-if="read && interventionInFocus">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-avatar v-bind="attrs" v-on="on">
+                          <v-icon>
+                            {{
+                              interventionInFocus.interventionType === InterventionType.TECHNOLOGY
+                                ? 'mdi-hammer-wrench'
+                                : 'mdi-school'
+                            }}
+                          </v-icon>
+                        </v-avatar>
+                      </template>
+                      <span>{{
+                        $t(`interventions.type.types.${interventionInFocus.interventionType}`)
+                      }}</span>
+                    </v-tooltip>
+                  </div>
+
+                  <v-btn-toggle v-else v-model="typeIndex" mandatory class="ml-2">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn v-bind="attrs" v-on="on">
+                          <v-icon>mdi-hammer-wrench</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ $t('interventions.type.types.TECHNOLOGY') }}</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn v-bind="attrs" v-on="on">
+                          <v-icon>mdi-school</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ $t('interventions.type.types.EDUCATION') }}</span>
+                    </v-tooltip>
+                  </v-btn-toggle>
+                </v-card-title>
+
+                <v-card-title class="pt-0 pt-sm-2">
+                  {{ $t('interventions.modal.image') }}
+                </v-card-title>
+
+                <ImgFromS3
+                  :assumedSrc="assumedSrc"
+                  :key="rerenderImgFromS3"
+                  dataType="intervention"
+                >
+                  <template v-slot:v-img="slotProps">
+                    <v-img max-height="200px" :src="slotProps.src">
+                      <v-btn
+                        v-if="!read"
+                        fab
+                        class="iv-edit-icon"
+                        color="primary"
+                        @click="selectImg"
+                      >
+                        <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
+                      </v-btn>
+
+                      <FileInput
+                        v-if="!read"
+                        ref="img-upload"
+                        style="display: none"
+                        :acceptedType="'image/png'"
+                      />
+                    </v-img>
+                  </template>
+                </ImgFromS3>
+
+                <!-- <v-card-title>
+                  {{ $t('baseData.tags') }}
+                </v-card-title>
+
                 <div v-if="read && interventionInFocus">
-                  <v-card-title class="pt-0">
-                    {{ $t('baseData.tags') }}
-                  </v-card-title>
-                  <v-chip v-for="tagId in interventionInFocus.tagIds" :key="tagId">
-                    {{ tagById({ tagId }).name }}
+                  <v-chip v-for="tagId in interventionInFocus.tags" :key="tagId">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: tagById({ id: tagId }).text.languageTexts,
+                      })
+                    }}
                   </v-chip>
                 </div>
                 <v-select
                   v-else
                   v-model="tagIds"
                   :items="allInterventionTags"
-                  item-value="tagId"
-                  item-text="name"
+                  item-value="id"
                   deletable-chips
                   chips
                   dense
                   :label="$t('baseData.tags')"
                   multiple
                   outlined
-                ></v-select>
+                >
+                  <template v-slot:selection="data">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: data.item.text.languageTexts,
+                      })
+                    }}
+                  </template>
+                  <template v-slot:item="data">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: data.item.text.languageTexts,
+                      })
+                    }}
+                  </template>
+                </v-select> -->
 
                 <v-card-title>
                   {{ $t('baseData.documents') }}
@@ -127,7 +253,7 @@
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
-                <p v-else-if="read">{{ $t('interventions.interventionModal.noDocuments') }}</p>
+                <p v-else-if="read">{{ $t('interventions.modal.noDocuments') }}</p>
 
                 <v-card-title>
                   {{ $t('baseData.images') }}
@@ -167,7 +293,7 @@
                     </v-col>
                   </v-row>
                 </div>
-                <p v-else-if="read">{{ $t('interventions.interventionModal.noImages') }}</p>
+                <p v-else-if="read">{{ $t('interventions.modal.noImages') }}</p>
 
                 <v-card-title>
                   {{ $t('baseData.videos') }}
@@ -187,7 +313,7 @@
                     <video width="50"></video>
                   </div>
                 </div>
-                <p v-else-if="read">{{ $t('interventions.interventionModal.noVideos') }}</p>
+                <p v-else-if="read">{{ $t('interventions.modal.noVideos') }}</p>
 
                 <v-card-title>
                   {{ $t('baseData.surveys') }}
@@ -203,7 +329,7 @@
                   </v-btn>
                 </v-card-title>
                 <p v-if="read">
-                  {{ $t('interventions.interventionModal.noSurveys') }}
+                  {{ $t('interventions.modal.noSurveys') }}
                 </p>
               </v-col>
             </v-row>
@@ -218,7 +344,9 @@
           <v-btn x-large color="secondary" text @click="closeHandler">
             {{ read ? 'Close' : $t('general.cancel') }}
           </v-btn>
-          <v-btn x-large v-if="read" color="primary" text @click="editHandler"> Edit </v-btn>
+          <v-btn x-large v-if="read" color="primary" text @click="editHandler">
+            {{ $t('general.edit') }}
+          </v-btn>
           <v-btn
             x-large
             v-if="!read"
@@ -239,6 +367,12 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict, dataTypesDict } from '../../store/constants';
+import LocaleTextBox from '../global/LocaleTextBox.vue';
+import { Intervention, InterventionType } from '../../models';
+import { emptyMutableI18nString, mutableI18nString } from '../../store/classes';
+import FileInput from '../commons/FileInput.vue';
+import ImgFromS3 from '../commons/ImgFromS3.vue';
+import { deriveFilePath } from '../../store/utils';
 
 const interventionDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_INTERVENTION_DESCRIPTION_MAX_CHAR, 10),
@@ -247,22 +381,33 @@ const interventionDescriptionMaxChar = Math.max(
 
 export default {
   name: 'InterventionModal',
+  components: { LocaleTextBox, FileInput, ImgFromS3 },
   data() {
     return {
       interventionDescriptionMaxChar,
+      InterventionType,
       rules: {
         maxChar: (value) => value.length <= interventionDescriptionMaxChar || this.maxCharExceededi18n,
       },
       id: null,
-      name: '',
-      description: '',
-      tagIds: [],
+      name: emptyMutableI18nString(),
+      typeIndex: 0,
+      types: [InterventionType.TECHNOLOGY, InterventionType.EDUCATION],
+      description: emptyMutableI18nString(),
+      // tagIds: [],
+      levelIds: [],
       contents: [],
+      rerenderImgFromS3: false,
     };
   },
-  watch: { interventionDraft: 'prefillComponentDataFromInterventionDraft' },
+  watch: {
+    interventionDraft: 'prefillComponentDataFromInterventionDraft',
+    imageFile() {
+      this.rerenderImgFromS3 = !this.rerenderImgFromS3;
+    },
+  },
   mounted() {
-    this.prefillComponentDataFromInterventionDraft();
+    if (!this.read) this.prefillComponentDataFromInterventionDraft();
   },
   computed: {
     ...mapGetters({
@@ -272,10 +417,15 @@ export default {
       dataIdInFocus: 'dataModal/getDataIdInFocus',
       interventionDraft: 'dataModal/getDataDraft',
       INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
+      LEVELById: 'LEVEL_Data/LEVELById',
 
-      allInterventionTags: 'INTERVENTION_Data/getInterventionTags',
-      tagById: 'INTERVENTION_Data/tagById',
+      imageFile: 'dataModal/getImageFile',
+
+      // allInterventionTags: 'INTERVENTION_Data/getInterventionTags',
+      // tagById: 'INTERVENTION_Data/tagById',
       interventionContentTagById: 'INTERVENTION_Data/interventionContentTagById',
+
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
     isInterventionModalDisplayed() {
       return this.isDataModalDisplayed && this.dataType === dataTypesDict.intervention;
@@ -284,6 +434,10 @@ export default {
       return this.$t('general.form.maxCharExceeded', {
         maxChar: interventionDescriptionMaxChar,
       });
+    },
+    deriveImgPath() {
+      if (this.create) return null;
+      return deriveFilePath('interventionPicPath', { interventionID: this.dataIdInFocus });
     },
     interventionInFocus() {
       return this.INTERVENTIONById({ id: this.dataIdInFocus });
@@ -313,6 +467,13 @@ export default {
     read() {
       return this.dataModalMode === modalModesDict.read;
     },
+    type() {
+      return this.types[this.typeIndex];
+    },
+    assumedSrc() {
+      if (this.imageFile && !this.read) return this.imageFile;
+      return this.deriveImgPath;
+    },
   },
   methods: {
     ...mapActions({
@@ -325,7 +486,7 @@ export default {
       showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
     }),
     ...mapMutations({
-      setINTERVENTIONDraft: 'dataModal/setINTERVENTIONDraft',
+      setDraft: 'dataModal/setDraft',
     }),
     deleteHandler() {
       if (this.read) return;
@@ -348,30 +509,43 @@ export default {
       });
     },
     escHandler() {
-      this.closeInterventionModal();
+      this.closeHandler();
     },
     async submitHandler() {
-      this.setINTERVENTIONDraft({
-        id: this.dataIdInFocus,
-        name: this.name,
-        description: this.description,
-        tagIds: this.tagIds,
-        contents: this.contents,
-      });
+      const originalVersion = this.edit
+        ? this.INTERVENTIONById({ id: this.dataIdInFocus })._version
+        : null;
+      this.setDraft(
+        new Intervention({
+          name: this.name,
+          description: this.description,
+          interventionType: this.type,
+          tags: [],
+          surveys: [], // TODO
+          levels: [],
+          contents: this.contents, // TODO
+        }),
+      );
       await this.$nextTick();
-      this.saveInterventionHandler({ dataType: dataTypesDict.intervention });
+      this.saveInterventionHandler({ dataType: dataTypesDict.intervention, originalVersion });
     },
     selectImg() {
-      this.showToBeImplementedFeedback();
       const imgInput = this.$refs['img-upload'];
-      imgInput.click();
-      // console.log('TODO: do something with', imgInput);
+      imgInput.$el.click();
     },
     prefillComponentDataFromInterventionDraft() {
-      this.name = this.interventionDraft?.name ?? '';
-      this.description = this.interventionDraft?.description ?? '';
-      this.tagIds = this.interventionDraft?.tagIds ?? [];
+      this.name = mutableI18nString({ languageTexts: this.interventionDraft?.name.languageTexts });
+      this.description = mutableI18nString({
+        languageTexts: this.interventionDraft?.description.languageTexts,
+      });
+      // this.tagIds = this.interventionDraft?.tagIds ?? [];
       this.contents = this.interventionDraft?.contents ?? [];
+    },
+    nameUpdatedHandler(res) {
+      this.name = res;
+    },
+    descriptionUpdatedHandler(res) {
+      this.description = res;
     },
   },
 };

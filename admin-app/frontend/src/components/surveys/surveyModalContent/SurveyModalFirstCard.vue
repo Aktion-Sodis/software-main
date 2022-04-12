@@ -2,22 +2,41 @@
   <v-card class="px-0 pt-0 px-md-4 pt-md-4">
     <v-form lazy-validation>
       <v-card-title>
-        <h2 v-if="edit">
-          {{ $t('interventions.surveyModal.firstCard.title.edit') }}
-          <i>{{ surveyInFocus.name }}</i>
+        <h2 v-if="edit && surveyInFocus">
+          {{ $t('surveys.modal.firstCard.title.edit') }}
+          <i>
+            {{
+              calculateUILocaleString({
+                languageTexts: surveyInFocus.name.languageTexts,
+              })
+            }}
+          </i>
         </h2>
         <h2 v-else-if="create">
-          {{ $t('interventions.surveyModal.firstCard.title.create') }}
+          {{ $t('surveys.modal.firstCard.title.create') }}
         </h2>
-        <h2 v-else-if="read">{{ surveyInFocus.name }}</h2>
+        <h2 v-else-if="read && surveyInFocus">
+          {{
+            calculateUILocaleString({
+              languageTexts: surveyInFocus.name.languageTexts,
+            })
+          }}
+        </h2>
         <v-spacer></v-spacer>
-        <v-btn x-large text class="text-none" @click="nextStepHandler" :disabled="!canAdvance">
+        <v-btn
+          v-if="!edit"
+          x-large
+          text
+          class="text-none"
+          @click="nextStepHandler"
+          :disabled="!canAdvance"
+        >
           {{
             $vuetify.breakpoint.name === 'xs'
               ? ''
               : read
-              ? $t('interventions.surveyModal.firstCard.questions')
-              : $t(`interventions.surveyModal.firstCard.next-step`)
+              ? $t('surveys.modal.firstCard.questions')
+              : $t(`surveys.modal.firstCard.next-step`)
           }}
           <v-icon large> mdi-chevron-right </v-icon>
         </v-btn>
@@ -27,77 +46,258 @@
         <v-container>
           <v-row>
             <v-col cols="12" sm="6" class="pb-0 px-0 px-md-3">
-              <h2 v-if="read">
-                {{ surveyName }}
+              <v-card-title class="pt-0 pt-sm-2">
+                {{ $t('surveys.modal.firstCard.form.name') }}
+              </v-card-title>
+              <h2 v-if="read && surveyInFocus">
+                {{
+                  calculateUILocaleString({
+                    languageTexts: surveyInFocus.name.languageTexts,
+                  })
+                }}
               </h2>
-              <v-text-field
-                v-else
-                autofocus
-                v-model="surveyName"
-                :label="$t('interventions.surveyModal.firstCard.form.name')"
-                outlined
-                dense
-              ></v-text-field>
+              <LocaleTextBox
+                v-else-if="!read"
+                labelPrefixI18nSelector="surveys.modal.firstCard.form.name"
+                :initVal="name"
+                @res="nameUpdatedHandler"
+                :key="nameTextBoxKey"
+              >
+                <template v-slot:text-input="slotProps">
+                  <v-text-field
+                    :label="slotProps.label"
+                    v-model="slotProps.model"
+                    autofocus
+                    required
+                    outlined
+                    dense
+                    @input="slotProps.inputHandler"
+                  ></v-text-field>
+                </template>
+              </LocaleTextBox>
 
-              <h3 v-if="read" class="py-12">
-                {{ surveyDescription }}
-              </h3>
-              <v-textarea
-                v-else
-                v-model="surveyDescription"
-                :counter="surveyDescription.length > surveyDescriptionMaxChar - 20"
-                :rules="[rules.maxChar]"
-                :label="$t('interventions.surveyModal.firstCard.form.description')"
-                outlined
-                dense
-                class="mt-4"
-              ></v-textarea>
+              <v-card-title class="pt-4">
+                {{ $t('surveys.modal.firstCard.form.description') }}
+              </v-card-title>
+              <div
+                v-if="read && surveyInFocus"
+                class="d-flex flex-column justify-center"
+                style="min-height: 10rem"
+              >
+                <h3>
+                  {{
+                    calculateUILocaleString({
+                      languageTexts: surveyInFocus.description.languageTexts,
+                    })
+                  }}
+                </h3>
+              </div>
+              <LocaleTextBox
+                v-else-if="!read"
+                labelPrefixI18nSelector="surveys.modal.firstCard.form.description"
+                :initVal="description"
+                @res="descriptionUpdatedHandler"
+                :key="descriptionTextBoxKey"
+              >
+                <template v-slot:text-input="slotProps">
+                  <v-textarea
+                    autofocus
+                    required
+                    outlined
+                    dense
+                    :label="slotProps.label"
+                    v-model="slotProps.model"
+                    @input="slotProps.inputHandler"
+                  ></v-textarea>
+                </template>
+              </LocaleTextBox>
             </v-col>
             <v-col cols="12" sm="6" class="pt-0 px-0 px-md-3">
-              <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" max-height="200px">
-                <div v-if="!read" class="iv-edit-icon">
-                  <v-btn fab color="primary" @click="selectImg">
-                    <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
-                  </v-btn>
-                  <input
-                    type="file"
-                    accept="image/png, image/jpeg"
-                    ref="img-upload"
-                    style="display: none"
-                  />
+              <v-card-title class="pt-0 pt-sm-2">
+                {{ $t('surveys.type.title') }}:
+                <div v-if="read && surveyInFocus">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-avatar v-bind="attrs" v-on="on">
+                        <v-icon>
+                          {{
+                            surveyInFocus.surveyType === SurveyType.INITIAL
+                              ? 'mdi-lightbulb-question-outline'
+                              : 'mdi-crosshairs-question'
+                          }}
+                        </v-icon>
+                      </v-avatar>
+                    </template>
+                    <span>{{ $t(`surveys.type.types.${surveyInFocus.surveyType}`) }}</span>
+                  </v-tooltip>
                 </div>
-              </v-img>
 
-              <div v-if="read">
-                <h2>
-                  {{ $t('interventions.surveyModal.firstCard.form.tags') }}
-                </h2>
-                <v-chip v-for="tag in tagsInFocus" :key="tag.tagId">
-                  {{ tag }}
-                </v-chip>
+                <v-btn-toggle v-else v-model="typeIndex" mandatory class="ml-2">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn v-bind="attrs" v-on="on">
+                        <v-icon>mdi-lightbulb-question-outline</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>{{ $t('surveys.type.types.INITIAL') }}</span>
+                  </v-tooltip>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn v-bind="attrs" v-on="on">
+                        <v-icon>mdi-crosshairs-question</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>{{ $t('surveys.type.types.DEFAULT') }}</span>
+                  </v-tooltip>
+                </v-btn-toggle>
+              </v-card-title>
+
+              <!-- <div v-if="read">
+                <v-card-title class="pr-0 d-flex justify-space-between">
+                  <span class="mr-2">
+                    {{ $t('surveys.modal.firstCard.form.tags') }}
+                  </span>
+                </v-card-title>
+                <div v-if="tagIdsBySurveyId({ surveyId: dataIdInFocus }).length === 0">
+                  {{ $t('general.noTags') }}
+                </div>
+                <div v-else>
+                  <v-chip
+                    v-for="tagId in tagIdsBySurveyId({ surveyId: dataIdInFocus })"
+                    :key="tagId"
+                  >
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: tagById({ id: tagId }).text.languageTexts,
+                      })
+                    }}
+                  </v-chip>
+                </div>
               </div>
               <v-select
-                v-else
+                v-else-if="!read"
                 v-model="surveyTags"
                 :items="allSurveyTags"
                 item-value="tagId"
-                item-text="name"
                 deletable-chips
                 chips
                 dense
-                :label="$t('interventions.surveyModal.firstCard.form.tags')"
+                :label="$t('surveys.modal.firstCard.form.tags')"
                 multiple
                 outlined
                 class="mt-8"
-              ></v-select>
+              >
+                <template v-slot:selection="data">
+                  {{
+                    calculateUILocaleString({
+                      languageTexts: data.item.text.languageTexts,
+                    })
+                  }}
+                </template>
+                <template v-slot:item="data">
+                  {{
+                    calculateUILocaleString({
+                      languageTexts: data.item.text.languageTexts,
+                    })
+                  }}
+                </template>
+              </v-select> -->
+
+              <v-card-title class="pr-0 d-flex">
+                <span class="mr-2">
+                  {{ $t('surveys.modal.intervention') }}
+                </span>
+                <v-chip v-if="read && surveyInFocus.intervention">
+                  {{
+                    calculateUILocaleString({
+                      languageTexts: surveyInFocus.intervention.name.languageTexts,
+                    })
+                  }}
+                </v-chip>
+                <v-select
+                  v-else-if="!read"
+                  v-model="interventionId"
+                  :items="interventions"
+                  item-value="id"
+                  dense
+                  :label="$t('interventions.title')"
+                  outlined
+                  class="mt-6"
+                >
+                  <template v-slot:selection="data">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: data.item.name.languageTexts,
+                      })
+                    }}
+                  </template>
+                  <template v-slot:item="data">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: data.item.name.languageTexts,
+                      })
+                    }}
+                  </template>
+                </v-select>
+              </v-card-title>
+
+              <v-card-title class="pt-0 pt-sm-2">
+                {{ $t('surveys.modal.image') }}
+              </v-card-title>
+
+              <ImgFromS3 :assumedSrc="assumedSrc" :key="rerenderImgFromS3" dataType="survey">
+                <template v-slot:v-img="slotProps">
+                  <v-img max-height="200px" :src="slotProps.src">
+                    <v-btn v-if="!read" fab class="iv-edit-icon" color="primary" @click="selectImg">
+                      <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
+                    </v-btn>
+
+                    <FileInput
+                      v-if="!read"
+                      ref="img-upload"
+                      style="display: none"
+                      :acceptedType="'image/png'"
+                    />
+                  </v-img>
+                </template>
+              </ImgFromS3>
             </v-col>
           </v-row>
         </v-container>
       </v-card-text>
 
-      <v-card-actions>
+      <!-- <v-card-actions>
         <v-btn color="warning" text @click="exitHandler">
           {{ read ? 'Close' : $t('general.cancel') }}
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" text @click="editHandler" v-if="read">
+          {{ $t('general.edit') }}
+        </v-btn>
+      </v-card-actions> -->
+
+      <v-card-actions>
+        <v-btn x-large v-if="edit" @click="deleteHandler" color="warning" text>
+          {{ $t('general.delete') }}
+          <v-icon large> mdi-delete </v-icon>
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn x-large color="secondary" text @click="exitHandler">
+          {{ read ? 'Close' : $t('general.cancel') }}
+        </v-btn>
+        <v-btn x-large v-if="read" color="primary" text @click="editHandler">
+          {{ $t('general.edit') }}
+        </v-btn>
+        <v-btn
+          x-large
+          v-if="edit"
+          type="submit"
+          color="primary"
+          text
+          @click.prevent="saveHandler"
+          :disabled="!canAdvance"
+        >
+          {{ $t('general.save') }}
         </v-btn>
       </v-card-actions>
     </v-form>
@@ -106,7 +306,13 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { modalModesDict } from '../../../store/constants';
+import { dataTypesDict, modalModesDict } from '../../../store/constants';
+import LocaleTextBox from '../../global/LocaleTextBox.vue';
+import ImgFromS3 from '../../commons/ImgFromS3.vue';
+import { Survey, SurveyType } from '../../../models';
+import { emptyMutableI18nString, mutableI18nString } from '../../../store/classes';
+import FileInput from '../../commons/FileInput.vue';
+import { deriveFilePath } from '../../../store/utils';
 
 const surveyDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_SURVEY_DESCRIPTION_MAX_CHAR, 10),
@@ -115,19 +321,33 @@ const surveyDescriptionMaxChar = Math.max(
 
 export default {
   name: 'SurveyModalFirstCard',
+  components: { LocaleTextBox, ImgFromS3, FileInput },
   data() {
     return {
       surveyDescriptionMaxChar,
       rules: {
         maxChar: (value) => value.length <= surveyDescriptionMaxChar || this.maxCharExceededi18n,
       },
-      surveyName: '',
-      surveyDescription: '',
-      surveyTags: [],
+      name: emptyMutableI18nString(),
+      description: emptyMutableI18nString(),
+      // surveyTags: [],
+      SurveyType,
+      typeIndex: 0,
+      types: [SurveyType.INITIAL, SurveyType.DEFAULT],
+      interventionId: null,
+      nameTextBoxKey: 0,
+      descriptionTextBoxKey: 1,
+      rerenderImgFromS3: false,
     };
   },
+  watch: {
+    surveyDraft: 'prefillComponentDataFromSurveyDraft',
+    imageFile() {
+      this.rerenderImgFromS3 = !this.rerenderImgFromS3;
+    },
+  },
   mounted() {
-    this.prefillComponentDataFromSurveyDraft();
+    if (this.edit) this.prefillComponentDataFromSurveyDraft();
   },
   computed: {
     ...mapGetters({
@@ -135,14 +355,19 @@ export default {
       dataIdInFocus: 'dataModal/getDataIdInFocus',
       surveyDraft: 'dataModal/getDataDraft',
       SURVEYById: 'SURVEY_Data/SURVEYById',
-      allSurveyTags: 'SURVEY_Data/getSurveyTags',
-      tagById: 'SURVEY_Data/tagById',
+      // allSurveyTags: 'SURVEY_Data/getSurveyTags',
+      // tagById: 'SURVEY_Data/tagById',
+      // tagIdsBySurveyId: 'SURVEY_Data/tagIdsBySurveyId',
+
+      imageFile: 'dataModal/getImageFile',
+
+      fallbackLocaleIndex: 'fallbackLocaleIndex',
+      calculateUILocaleString: 'calculateUILocaleString',
+      INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
+      interventions: 'INTERVENTION_Data/getInterventions',
     }),
     surveyInFocus() {
       return this.SURVEYById({ id: this.dataIdInFocus });
-    },
-    tagsInFocus() {
-      return this.surveyInFocus.tagIds.map((t) => this.tagById(t));
     },
     edit() {
       return this.surveyModalMode === modalModesDict.edit;
@@ -154,12 +379,28 @@ export default {
       return this.surveyModalMode === modalModesDict.read;
     },
     canAdvance() {
-      return this.read || this.surveyName !== '';
+      return (
+        this.read || (this.name.languageTexts[this.fallbackLocaleIndex] && this.interventionId)
+      );
     },
     maxCharExceededi18n() {
       return this.$t('general.form.maxCharExceeded', {
         maxChar: surveyDescriptionMaxChar,
       });
+    },
+    type() {
+      return this.types[this.typeIndex];
+    },
+    deriveImgPath() {
+      if (this.create) return null;
+      return deriveFilePath('interventionSurveyPicPath', {
+        interventionID: this.surveyInFocus.intervention.id,
+        surveyID: this.dataIdInFocus,
+      });
+    },
+    assumedSrc() {
+      if (this.imageFile && !this.read) return this.imageFile;
+      return this.deriveImgPath;
     },
   },
   methods: {
@@ -167,28 +408,67 @@ export default {
       abortNewSurveyHandler: 'dataModal/abortCreateData',
       abortReadSurveyHandler: 'dataModal/abortReadData',
       abortEditSurveyHandler: 'dataModal/abortEditData',
+      deleteSurveyHandler: 'dataModal/deleteData',
+
+      editData: 'dataModal/editData',
+      saveData: 'dataModal/saveData',
     }),
     ...mapMutations({
       setSurveyDraft: 'dataModal/setSURVEYDraft',
       incrementCompletionIndex: 'incrementSurveyModalCompletionIndex',
     }),
+    async saveHandler() {
+      const originalVersion = this.edit
+        ? this.SURVEYById({ id: this.dataIdInFocus })._version
+        : null;
+      this.setSurveyDraft(
+        new Survey({
+          name: this.name,
+          description: this.description,
+          // tags: this.surveyTags,
+          tags: [],
+          questions: [],
+          surveyType: this.type,
+          intervention: this.INTERVENTIONById({ id: this.interventionId }),
+          interventionSurveysId: this.interventionId,
+        }),
+      );
+      await this.$nextTick();
+      this.saveData({ dataType: dataTypesDict.survey, originalVersion });
+    },
+    deleteHandler() {
+      if (this.read) return;
+      this.deleteSurveyHandler({ dataType: dataTypesDict.survey });
+    },
     selectImg() {
       const imgInput = this.$refs['img-upload'];
-      imgInput.click();
-      // console.log('TODO: do something with', imgInput);
+      imgInput.$el.click();
     },
     nextStepHandler() {
-      this.setSurveyDraft({
-        name: this.surveyName,
-        description: this.surveyDescription,
-        tags: this.surveyTags,
-      });
+      this.setSurveyDraft(
+        new Survey({
+          name: this.name,
+          description: this.description,
+          // tags: this.surveyTags,
+          tags: [],
+          questions: [],
+          surveyType: this.type,
+          intervention: this.INTERVENTIONById({ id: this.interventionId }),
+          interventionSurveysId: this.interventionId,
+        }),
+      );
       this.incrementCompletionIndex();
     },
     prefillComponentDataFromSurveyDraft() {
-      this.surveyName = this.surveyDraft?.name ?? '';
-      this.surveyDescription = this.surveyDraft?.description ?? '';
-      this.surveyTags = this.surveyDraft?.tags ?? [];
+      this.name = mutableI18nString({ languageTexts: this.surveyDraft?.name.languageTexts })
+        ?? emptyMutableI18nString();
+      this.description = mutableI18nString({ languageTexts: this.surveyDraft?.description.languageTexts })
+        ?? emptyMutableI18nString();
+      // this.surveyTags = this.tagIdsBySurveyId({ surveyId: this.dataIdInFocus }) ?? [];
+      this.interventionId = this.surveyDraft?.intervention.id ?? null;
+
+      this.descriptionTextBoxKey += 1;
+      this.nameTextBoxKey -= 1;
     },
     exitHandler() {
       if (this.read) {
@@ -202,6 +482,15 @@ export default {
       if (this.create) {
         this.abortNewSurveyHandler({ dataType: 'SURVEY' });
       }
+    },
+    editHandler() {
+      this.editData({ dataId: this.dataIdInFocus, dataType: dataTypesDict.survey });
+    },
+    nameUpdatedHandler(res) {
+      this.name = res;
+    },
+    descriptionUpdatedHandler(res) {
+      this.description = res;
     },
   },
 };

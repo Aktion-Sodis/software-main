@@ -1,11 +1,8 @@
 <template>
   <v-app>
     <div class="top-right-fixed">
-      <LangSelect
-        v-if="$vuetify.breakpoint.name !== 'xs'"
-        :style="isInAuthView ? '' : 'margin-right: 1rem;'"
-      />
-      <SearchBox v-if="!isInAuthView" />
+      <LangSelect :style="isInAuthView ? '' : 'margin-right: 1rem;'" />
+      <!-- <SearchBox v-if="!isInAuthView" /> -->
     </div>
 
     <v-main :class="vMainClass">
@@ -16,40 +13,32 @@
 
     <Feedback />
 
-    <SideBar
-      v-if="isAuthenticated && $vuetify.breakpoint.name !== 'xs'"
-      class="d-none d-md-block"
-    />
-    <BottomNav v-if="isAuthenticated && $vuetify.breakpoint.name === 'xs'" />
+    <NavBar v-if="isAuthenticated" />
   </v-app>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import BottomNav from './components/commons/BottomNav.vue';
-import DevPhaseSnackbar from './components/commons/DevPhaseSnackbar.vue';
+import DevPhaseSnackbar from './components/commons/VersionSnackbar.vue';
 import Feedback from './components/commons/Feedback.vue';
 import LangSelect from './components/commons/LangSelect.vue';
-import SearchBox from './components/commons/SearchBox.vue';
-import SideBar from './components/commons/SideBar.vue';
+// import SearchBox from './components/commons/SearchBox.vue';
+import NavBar from './components/commons/NavBar.vue';
 
 export default {
   name: 'App',
   components: {
-    SideBar,
+    NavBar,
     Feedback,
-    BottomNav,
     LangSelect,
-    SearchBox,
+    // SearchBox,
     DevPhaseSnackbar,
   },
-  data: () => ({
-    langs: [
-      { name: 'English US', abbr: 'en-US' },
-      { name: 'Español España', abbr: 'es-ES' },
-      { name: 'Türkçe Türkiye', abbr: 'tr-TR' },
-    ],
-  }),
+  provide() {
+    return {
+      isInAuthView: () => this.isInAuthView,
+    };
+  },
   computed: {
     ...mapGetters({
       isAuthenticated: 'auth/getIsAuthenticated',
@@ -70,26 +59,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .top-right-fixed {
   position: fixed;
   top: 24px;
   right: 24px;
   z-index: 2;
   display: flex;
-}
-
-.bottom-right-fixed {
-  position: fixed;
-  bottom: 68px;
-  right: 24px;
-  z-index: 2;
-  display: flex;
-}
-
-/* fix the white stripe at the right of the screen bug */
-html {
-  overflow-x: visible;
-  overflow-y: visible;
 }
 </style>
