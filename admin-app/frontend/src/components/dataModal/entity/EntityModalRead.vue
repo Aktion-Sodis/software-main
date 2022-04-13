@@ -70,7 +70,7 @@ import { deriveFilePath } from '../../../lib/utils';
 import ImgFromS3 from '../../commons/ImgFromS3.vue';
 
 export default {
-  name: 'InterventionModalRead',
+  name: 'EntityModalRead',
   components: { ImgFromS3 },
   computed: {
     ...mapGetters({
