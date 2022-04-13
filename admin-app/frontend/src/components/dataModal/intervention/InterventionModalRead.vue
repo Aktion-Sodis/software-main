@@ -96,11 +96,6 @@ import ImgFromS3 from '../../commons/ImgFromS3.vue';
 export default {
   name: 'InterventionModalRead',
   components: { ImgFromS3 },
-  // data() {
-  //   return {
-  //     rerenderImgFromS3: false,
-  //   };
-  // },
   computed: {
     ...mapGetters({
       dataIdInFocus: 'dataModal/getDataIdInFocus',
