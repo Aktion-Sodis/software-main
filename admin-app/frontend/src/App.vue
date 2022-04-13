@@ -14,6 +14,8 @@
     <Feedback />
 
     <NavBar v-if="isAuthenticated" />
+
+    <DataModal />
   </v-app>
 </template>
 
@@ -24,6 +26,7 @@ import Feedback from './components/commons/Feedback.vue';
 import LangSelect from './components/commons/LangSelect.vue';
 // import SearchBox from './components/commons/SearchBox.vue';
 import NavBar from './components/commons/NavBar.vue';
+import DataModal from './components/dataModal/DataModal.vue';
 
 export default {
   name: 'App',
@@ -33,6 +36,7 @@ export default {
     LangSelect,
     // SearchBox,
     DevPhaseSnackbar,
+    DataModal,
   },
   provide() {
     return {
