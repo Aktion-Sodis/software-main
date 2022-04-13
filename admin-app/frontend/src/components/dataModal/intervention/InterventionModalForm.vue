@@ -128,7 +128,7 @@
         color="primary"
         text
         @click.prevent="submitHandler"
-        :disabled="!isSubmitDisabled"
+        :disabled="isSubmitDisabled"
       >
         {{ $t('general.save') }}
       </v-btn>
@@ -203,7 +203,7 @@ export default {
     isSubmitDisabled() {
       return (
         this.calculateLocalizedString({ languageTexts: this.name.languageTexts })
-        !== this.$t('general.noTextProvided')
+        === this.$t('general.noTextProvided')
       );
     },
   },
