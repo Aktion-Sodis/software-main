@@ -170,7 +170,7 @@ export default {
     },
   },
   mounted() {
-    this.prefillComponentDataFromDataDraft();
+    if (this.edit) this.prefillComponentDataFromDataDraft();
   },
   computed: {
     ...mapGetters({
