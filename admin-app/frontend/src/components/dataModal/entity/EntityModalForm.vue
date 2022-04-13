@@ -149,7 +149,7 @@ export default {
     };
   },
   watch: {
-    dataDraft: 'prefillComponentDataFromDataDraft',
+    // dataDraft: 'prefillComponentDataFromDataDraft',
     imageFile() {
       this.rerenderImgFromS3 = !this.rerenderImgFromS3;
     },
