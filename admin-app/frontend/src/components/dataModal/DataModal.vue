@@ -19,14 +19,20 @@
 <script>
 import { mapGetters } from 'vuex';
 import { dataTypesDict, modalModesDict } from '../../lib/constants';
+
 import InterventionModalForm from './intervention/InterventionModalForm.vue';
 import InterventionModalRead from './intervention/InterventionModalRead.vue';
+
+import EntityModalForm from './entity/EntityModalForm.vue';
+import EntityModalRead from './entity/EntityModalRead.vue';
 
 export default {
   name: 'DataModal',
   components: {
     InterventionModalForm,
     InterventionModalRead,
+    EntityModalForm,
+    EntityModalRead,
   },
   computed: {
     ...mapGetters({

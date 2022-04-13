@@ -3,6 +3,7 @@ import { API } from 'aws-amplify';
 import { dataTypesDict, modalModesDict } from '../../lib/constants';
 import { deleteEntity } from '../../graphql/mutations';
 import { Entity, I18nString } from '../../models';
+import { deriveFilePath } from '../../lib/utils';
 
 const entitiesData = {
   namespaced: true,
@@ -143,7 +144,7 @@ const entitiesData = {
     },
   },
   actions: {
-    APIpost: async ({ commit, dispatch }, entityDraft) => {
+    APIpost: async ({ commit, dispatch, rootGetters }, entityDraft) => {
       let success = true;
       commit('setLoading', { newValue: true });
 
@@ -155,6 +156,18 @@ const entitiesData = {
 
       try {
         const postResponse = await DataStore.save(entity);
+
+        if (rootGetters['dataModal/getImageFile'] instanceof File) {
+          try {
+            await Storage.put(
+              deriveFilePath('entityPicPath', { entityID: postResponse.id }),
+              rootGetters['dataModal/getImageFile'],
+            );
+          } catch {
+            success = false;
+          }
+        }
+
         commit('addEntity', postResponse);
         dispatch(
           'dataModal/readData',
@@ -174,7 +187,9 @@ const entitiesData = {
       commit('setLoading', { newValue: false });
       return success;
     },
-    APIput: async ({ commit, dispatch, getters }, { newData, originalId }) => {
+    APIput: async ({
+      commit, dispatch, getters, rootGetters,
+    }, { newData, originalId }) => {
       commit('setLoading', { newValue: true });
       let success = true;
 
@@ -188,6 +203,18 @@ const entitiesData = {
             updated.parentEntityID = newData.parentEntityID;
           }),
         );
+
+        if (rootGetters['dataModal/getImageFile'] instanceof File) {
+          try {
+            console.log(deriveFilePath('entityPicPath', { entityID: putResponse.id }));
+            await Storage.put(
+              deriveFilePath('entityPicPath', { entityID: putResponse.id }),
+              rootGetters['dataModal/getImageFile'],
+            );
+          } catch {
+            success = false;
+          }
+        }
 
         commit('replaceEntity', putResponse);
 
