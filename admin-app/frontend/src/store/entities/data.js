@@ -1,5 +1,5 @@
 import { DataStore } from '@aws-amplify/datastore';
-import { API } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
 import { dataTypesDict, modalModesDict } from '../../lib/constants';
 import { deleteEntity } from '../../graphql/mutations';
 import { Entity, I18nString } from '../../models';
