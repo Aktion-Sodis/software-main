@@ -89,7 +89,8 @@ const dataModal = {
       commit(`reset${dataType}Draft`);
       commit('setIsDisplayed', { newValue: true });
     },
-    abortCreateData: async ({ commit }, { dataType }) => {
+    abortCreateData: async ({ commit, getters }) => {
+      const dataType = getters.getDataType;
       commit('setIsDisplayed', { newValue: false });
       await Vue.nextTick();
       commit(`reset${dataType}Draft`);
@@ -97,21 +98,26 @@ const dataModal = {
       commit('setImageFile', { newValue: null });
       if (dataType === dataTypesDict.entity) commit('setCreatingEntityInLevelId', { id: null }, { root: true });
     },
-    editData: ({ commit, rootGetters }, { dataId, dataType }) => {
+    editData: ({ commit, getters, rootGetters }) => {
+      const dataId = getters.getDataIdInFocus;
+      const dataType = getters.getDataType;
       commit('setMode', { newValue: modalModesDict.edit });
       commit('setDataIdInFocus', { newValue: dataId });
       commit('setDataType', { newValue: dataType });
       const data = rootGetters[`${dataType}_Data/${dataType}ById`]({ id: dataId });
+      console.log({ data });
       commit('setDraft', data);
     },
-    abortEditData: async ({ commit }, { dataType }) => {
+    abortEditData: async ({ commit, getters }) => {
+      const dataType = getters.getDataType;
       commit(`reset${dataType}Draft`);
       await Vue.nextTick();
       commit('setMode', { newValue: modalModesDict.read });
       commit('setImageFile', { newValue: null });
     },
 
-    saveData: async ({ dispatch, getters }, { dataType, originalVersion }) => {
+    saveData: async ({ dispatch, getters }) => {
+      const dataType = getters.getDataType;
       if (getters.getMode === modalModesDict.read) return;
       const draft = getters.getDataDraft;
       let success = false;
@@ -123,7 +129,6 @@ const dataModal = {
           {
             newData: draft,
             originalId: getters.getDataIdInFocus,
-            originalVersion,
           },
           { root: true },
         );
@@ -151,7 +156,8 @@ const dataModal = {
         },
       );
     },
-    deleteData: async ({ dispatch, getters }, { dataType }) => {
+    deleteData: async ({ dispatch, getters }) => {
+      const dataType = getters.getDataType;
       if (getters.getEntityModalMode === modalModesDict.read) return;
       if (getters.getEntityModalMode === modalModesDict.create) return;
       const success = await dispatch(
