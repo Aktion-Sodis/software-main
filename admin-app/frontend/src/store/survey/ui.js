@@ -1,5 +1,5 @@
 import { EmptySurvey, Survey } from './utils';
-import { modalModesDict } from '../constants';
+import { modalModesDict } from '../../lib/constants';
 
 const surveysUI = {
   namespaced: true,

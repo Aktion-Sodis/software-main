@@ -366,13 +366,13 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { modalModesDict, dataTypesDict } from '../../store/constants';
-import LocaleTextBox from '../global/LocaleTextBox.vue';
+import { modalModesDict, dataTypesDict } from '../../lib/constants';
+import LocaleTextBox from '../commons/LocaleTextBox.vue';
 import { Intervention, InterventionType } from '../../models';
-import { emptyMutableI18nString, mutableI18nString } from '../../store/classes';
+import { emptyMutableI18nString, mutableI18nString } from '../../lib/classes';
 import FileInput from '../commons/FileInput.vue';
 import ImgFromS3 from '../commons/ImgFromS3.vue';
-import { deriveFilePath } from '../../store/utils';
+import { deriveFilePath } from '../../lib/utils';
 
 const interventionDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_INTERVENTION_DESCRIPTION_MAX_CHAR, 10),

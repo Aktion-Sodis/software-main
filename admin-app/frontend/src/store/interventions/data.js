@@ -1,7 +1,7 @@
 import { DataStore } from '@aws-amplify/datastore';
 import { API, Storage } from 'aws-amplify';
-import { dataTypesDict, modalModesDict } from '../constants';
-import { deriveFilePath } from '../utils';
+import { dataTypesDict, modalModesDict } from '../../lib/constants';
+import { deriveFilePath } from '../../lib/utils';
 import { deleteIntervention } from '../../graphql/mutations';
 // import { listInterventions, listInterventionTags } from '../../graphql/queries';
 import {

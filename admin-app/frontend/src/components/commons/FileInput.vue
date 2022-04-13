@@ -4,7 +4,7 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex';
-import { allowedFileUploadTypes } from '../../store/constants';
+import { allowedFileUploadTypes } from '../../lib/constants';
 
 export default {
   name: 'FileInput',

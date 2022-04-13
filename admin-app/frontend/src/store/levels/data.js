@@ -3,7 +3,7 @@ import { API } from 'aws-amplify';
 import {
   Level, I18nString, LevelInterventionRelation, CustomData,
 } from '../../models';
-import { dataTypesDict, modalModesDict } from '../constants';
+import { dataTypesDict, modalModesDict } from '../../lib/constants';
 import { deleteLevel /* , updateLevel */ } from '../../graphql/mutations';
 // import { listLevels } from '../../graphql/queries';
 

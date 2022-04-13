@@ -12,9 +12,9 @@ import {
   // SurveyTag,
   // SurveySurveyTagRelation,
 } from '../../models';
-import { emptyQuestion, emptyQuestionOption } from '../classes';
-import { dataTypesDict, modalModesDict } from '../constants';
-import { deriveFilePath } from '../utils';
+import { emptyQuestion, emptyQuestionOption } from '../../lib/classes';
+import { dataTypesDict, modalModesDict } from '../../lib/constants';
+import { deriveFilePath } from '../../lib/utils';
 
 const surveysData = {
   namespaced: true,

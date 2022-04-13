@@ -74,10 +74,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import ChangePasswordForm from '../components/commons/ChangePasswordForm.vue';
-import ForgotPasswordForm from '../components/commons/ForgotPasswordForm.vue';
-import LoginForm from '../components/commons/LoginForm.vue';
-import UpdateUserForm from '../components/commons/UpdateUserForm.vue';
+import ChangePasswordForm from '../components/auth/ChangePasswordForm.vue';
+import ForgotPasswordForm from '../components/auth/ForgotPasswordForm.vue';
+import LoginForm from '../components/auth/LoginForm.vue';
+import UpdateUserForm from '../components/auth/UpdateUserForm.vue';
 
 export default {
   components: {

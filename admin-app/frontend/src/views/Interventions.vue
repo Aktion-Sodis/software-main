@@ -45,7 +45,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { waitForMilliseconds } from '../lib/utils';
-import { dataTypesDict } from '../store/constants';
+import { dataTypesDict } from '../lib/constants';
 
 import Intervention from '../components/interventions/Intervention.vue';
 import InterventionModal from '../components/interventions/InterventionModal.vue';

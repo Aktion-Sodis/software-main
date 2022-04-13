@@ -349,15 +349,15 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { modalModesDict, dataTypesDict, customDataTypesIconDict } from '../../store/constants';
-import LocaleTextBox from '../global/LocaleTextBox.vue';
+import { modalModesDict, dataTypesDict, customDataTypesIconDict } from '../../lib/constants';
+import LocaleTextBox from '../commons/LocaleTextBox.vue';
 import { Level, InterventionType, Type } from '../../models';
 import {
   emptyMutableCustomData,
   emptyMutableI18nString,
   mutableI18nString,
-} from '../../store/classes';
-// import { emptyI18nString } from '../../store/classes';
+} from '../../lib/classes';
+// import { emptyI18nString } from '../../lib/classes';
 
 const levelDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_LEVEL_DESCRIPTION_MAX_CHAR, 10),

@@ -56,7 +56,7 @@
 <script>
 // import { validate as uuidValidate } from 'uuid';
 import { mapActions, mapGetters } from 'vuex';
-import { dataTypesDict } from '../../store/constants';
+import { dataTypesDict } from '../../lib/constants';
 
 export default {
   name: 'LevelColumnHeader',

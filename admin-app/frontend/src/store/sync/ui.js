@@ -1,4 +1,4 @@
-import { syncStatusDict } from '../constants';
+import { syncStatusDict } from '../../lib/constants';
 import { waitForMilliseconds } from '../../lib/utils';
 
 const SYNC_UI = {

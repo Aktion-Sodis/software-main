@@ -40,7 +40,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { waitForMilliseconds } from '../lib/utils';
-import { dataTypesDict } from '../store/constants';
+import { dataTypesDict } from '../lib/constants';
 
 import SurveyModal from '../components/surveys/SurveyModal.vue';
 import InterventionSkeleton from '../components/interventions/InterventionSkeleton.vue';

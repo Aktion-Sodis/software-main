@@ -9,7 +9,7 @@ import OrganizationStructure from '../views/OrganizationStructure.vue';
 import Surveys from '../views/Surveys.vue';
 import Interventions from '../views/Interventions.vue';
 import Auth from '../views/Auth.vue';
-import { syncStatusDict } from '../store/constants';
+import { syncStatusDict } from '../lib/constants';
 
 Vue.use(VueRouter);
 

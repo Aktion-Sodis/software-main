@@ -34,7 +34,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import draggable from 'vuedraggable';
-import { modalModesDict, questionTypesIconDict } from '../../../store/constants';
+import { modalModesDict, questionTypesIconDict } from '../../../lib/constants';
 import { QuestionType } from '../../../models';
 
 export default {
