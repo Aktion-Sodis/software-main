@@ -17,7 +17,22 @@
     >
       <v-icon color="white">{{ route.icon }}</v-icon>
     </v-btn>
+
+    <v-menu top close-on-click>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn v-bind="attrs" v-on="on">
+          <v-icon color="white"> mdi-cog-outline </v-icon>
+        </v-btn>
+      </template>
+
+      <v-list>
+        <v-list-item v-for="item in [0, 1, 2, 3, 4]" :key="item">
+          <v-list-item-title>{{ item }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
   </v-bottom-navigation>
+
   <v-navigation-drawer v-else permanent expand-on-hover class="primary-dark" width="17rem" fixed>
     <div class="side-bar-inner-wrapper overflow-hidden">
       <v-list>
