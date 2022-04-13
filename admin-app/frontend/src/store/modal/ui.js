@@ -105,7 +105,6 @@ const dataModal = {
       commit('setDataIdInFocus', { newValue: dataId });
       commit('setDataType', { newValue: dataType });
       const data = rootGetters[`${dataType}_Data/${dataType}ById`]({ id: dataId });
-      console.log({ data });
       commit('setDraft', data);
     },
     abortEditData: async ({ commit, getters }) => {
