@@ -15,7 +15,6 @@
         <EntitiesColumn :entityLevelId="level.id" :index="index" />
       </div>
       <div class="column-wrapper dotted-left-border d-flex align-center justify-center">
-        <LevelModal v-if="showLevelModal" />
         <v-btn :disabled="getLoading" rounded x-large color="primary" @click="clickOnAddNewLevel">
           <v-icon class="mr-2">mdi-plus</v-icon>
           <v-skeleton-loader
@@ -36,7 +35,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
-import LevelModal from '../components/organizationStructure/LevelModal.vue';
 import EntitiesColumn from '../components/organizationStructure/EntitiesColumn.vue';
 import LevelColumnHeader from '../components/organizationStructure/LevelColumnHeader.vue';
 import { dataTypesDict } from '../lib/constants';
@@ -44,30 +42,22 @@ import { dataTypesDict } from '../lib/constants';
 export default {
   name: 'OrganizationStructure',
   components: {
-    LevelModal,
     EntitiesColumn,
     LevelColumnHeader,
-  },
-  data() {
-    return {
-      showLevelModal: false,
-    };
   },
   computed: {
     ...mapGetters({
       getLoading: 'LEVEL_Data/getLoading',
       levels: 'LEVEL_Data/sortedLevels',
-      dataType: 'dataModal/getDataType',
-
       calculateUILocaleString: 'calculateUILocaleString',
     }),
   },
   methods: {
     ...mapActions({
-      newLevelHandler: 'dataModal/createData',
+      createData: 'dataModal/createData',
     }),
     clickOnAddNewLevel() {
-      this.newLevelHandler({ dataType: dataTypesDict.level });
+      this.createData({ dataType: dataTypesDict.level });
     },
   },
 };
