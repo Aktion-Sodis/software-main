@@ -241,24 +241,29 @@ const entitiesData = {
       commit('setLoading', { newValue: true });
 
       try {
-        await API.graphql({ query: deleteEntity, variables: { input: { id, _version } } });
-      } catch (error) {
-        console.log(error);
+        await API.graphql({
+          query: deleteEntity,
+          variables: { input: { id, _version } },
+        });
+      } catch {
         success = false;
       }
 
-      commit('deleteEntity', {
-        id,
-      });
-      commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
-      commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
-      dispatch(
-        'dataModal/abortReadData',
-        {},
-        {
-          root: true,
-        },
-      );
+      if (success) {
+        Storage.remove(deriveFilePath('entityPicPath', { entityID: id }));
+        commit('deleteEntity', {
+          id,
+        });
+        commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
+        commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
+        dispatch(
+          'dataModal/abortReadData',
+          {},
+          {
+            root: true,
+          },
+        );
+      }
 
       commit('setLoading', { newValue: false });
       return success;
@@ -266,8 +271,7 @@ const entitiesData = {
     APIgetAll: async () => {
       try {
         return await DataStore.query(Entity);
-      } catch (error) {
-        console.log({ error });
+      } catch {
         return [];
       }
     },

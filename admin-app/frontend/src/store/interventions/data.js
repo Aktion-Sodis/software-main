@@ -160,34 +160,36 @@ const interventionsData = {
       commit('setLoading', { newValue: false });
       return success;
     },
-    APIdelete: async ({ commit, dispatch, getters }, { id, _version }) => {
+    APIdelete: async ({ commit, dispatch }, { id, _version }) => {
+      let success = true;
       commit('setLoading', { newValue: true });
-      API.graphql({ query: deleteIntervention, variables: { input: { id, _version } } })
-        .then(() => {
-          const intervention = getters.INTERVENTIONById({ id });
-          Storage.remove(
-            deriveFilePath('interventionPicPath', { interventionID: intervention.id }),
-          );
-
-          commit('deleteIntervention', {
-            id,
-          });
-          commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
-          commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
-          dispatch(
-            'dataModal/abortReadData',
-            {},
-            {
-              root: true,
-            },
-          );
-          commit('setLoading', { newValue: false });
-        })
-        .catch((err) => {
-          commit('setLoading', { newValue: false });
-          // TODO: Handle error
-          console.log({ err });
+      try {
+        await API.graphql({
+          query: deleteIntervention,
+          variables: { input: { id, _version } },
         });
+      } catch {
+        success = false;
+      }
+
+      if (success) {
+        Storage.remove(deriveFilePath('interventionPicPath', { interventionID: id }));
+        commit('deleteIntervention', {
+          id,
+        });
+        commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
+        commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
+        dispatch(
+          'dataModal/abortReadData',
+          {},
+          {
+            root: true,
+          },
+        );
+      }
+
+      commit('setLoading', { newValue: false });
+      return success;
     },
     APIgetAll: async () => {
       try {
