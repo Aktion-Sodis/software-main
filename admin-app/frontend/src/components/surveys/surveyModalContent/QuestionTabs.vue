@@ -49,7 +49,7 @@ export default {
     };
   },
   mounted() {
-    this.iQ = this.read ? 0 : Math.max(this.nQuestions - 1, 0);
+    this.iQ = this.iQuestions;
   },
   watch: {
     iQ(newVal) {

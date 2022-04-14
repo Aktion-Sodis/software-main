@@ -68,8 +68,12 @@ const dataModal = {
       commit('setIsDisplayed', { newValue: true });
       commit('setImageFile', { newValue: null });
     },
-    abortReadData: async ({ commit }) => {
+    abortReadData: async ({ commit, getters }) => {
       commit('setIsDisplayed', { newValue: false });
+      if (getters.getDataType === dataTypesDict.survey) {
+        commit('setSurveyModalCompletionIndex', { newValue: 1 }, { root: true });
+        commit('QUESTION_UI/setIQuestions', { payload: 0 }, { root: true });
+      }
       await Vue.nextTick();
       commit('setDataIdInFocus', { newValue: null });
     },

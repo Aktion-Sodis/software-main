@@ -17,6 +17,7 @@
 
       <SurveyModalStepper v-else-if="isSurvey && isCreate" />
       <SurveyModal v-if="isSurvey" />
+      <QuestionTabs v-if="isSurvey && completionIndex === 2" />
     </v-card>
   </v-dialog>
 </template>
@@ -36,6 +37,7 @@ import LevelModalRead from './level/LevelModalRead.vue';
 
 import SurveyModalStepper from './survey/SurveyModalStepper.vue';
 import SurveyModal from './survey/SurveyModal.vue';
+import QuestionTabs from '../surveys/surveyModalContent/QuestionTabs.vue';
 
 export default {
   name: 'DataModal',
@@ -48,6 +50,7 @@ export default {
     LevelModalRead,
     SurveyModalStepper,
     SurveyModal,
+    QuestionTabs,
   },
   computed: {
     ...mapGetters({
@@ -55,6 +58,7 @@ export default {
       isDisplayed: 'dataModal/getIsDisplayed',
       dataType: 'dataModal/getDataType',
       dataIdInFocus: 'dataModal/getDataIdInFocus',
+      completionIndex: 'getSurveyModalCompletionIndex',
     }),
     isRead() {
       return this.mode === modalModesDict.read;
