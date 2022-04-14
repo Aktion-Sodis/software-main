@@ -43,27 +43,18 @@ const dataModal = {
       state.imageFile = newValue;
     },
 
-    /* ENTITY DRAFT: SET & RESET */
-    setENTITYDraft: (state, draft) => {
-      state.dataDraft = draft;
-    },
-    resetENTITYDraft: (state) => {
-      state.dataDraft = emptyEntity();
-    },
-
     setDraft: (state, draft) => {
       state.dataDraft = draft;
+    },
+
+    resetENTITYDraft: (state) => {
+      state.dataDraft = emptyEntity();
     },
     resetLEVELDraft: (state) => {
       state.dataDraft = emptyLevel();
     },
     resetINTERVENTIONDraft: (state) => {
       state.dataDraft = emptyIntervention();
-    },
-
-    /* SURVEY DRAFT: SET & RESET */
-    setSURVEYDraft: (state, draft) => {
-      state.dataDraft = draft;
     },
     resetSURVEYDraft: (state) => {
       state.dataDraft = emptySurvey();
