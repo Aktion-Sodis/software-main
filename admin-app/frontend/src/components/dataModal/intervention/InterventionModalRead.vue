@@ -65,7 +65,7 @@
               {{ $t('interventions.modal.image') }}
             </v-card-title>
 
-            <ImgFromS3 :assumedSrc="deriveImgPath" dataType="intervention">
+            <ImgFromS3 :assumedSrc="deriveImgPath" dataType="intervention" :key="rerenderImgFromS3">
               <template v-slot:v-img="slotProps">
                 <v-img max-height="200px" :src="slotProps.src"> </v-img>
               </template>
@@ -96,6 +96,16 @@ import ImgFromS3 from '../../commons/ImgFromS3.vue';
 export default {
   name: 'InterventionModalRead',
   components: { ImgFromS3 },
+  data() {
+    return {
+      rerenderImgFromS3: false,
+    };
+  },
+  watch: {
+    deriveImgPath() {
+      this.rerenderImgFromS3 = !this.rerenderImgFromS3;
+    },
+  },
   computed: {
     ...mapGetters({
       dataIdInFocus: 'dataModal/getDataIdInFocus',
