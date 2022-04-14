@@ -116,8 +116,8 @@ export default {
       deleteSession: 'auth/deleteSession',
       showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
     }),
-    logout() {
-      this.deleteSession();
+    async logout() {
+      await this.deleteSession();
       this.$router.push({ name: 'Login' });
     },
   },
