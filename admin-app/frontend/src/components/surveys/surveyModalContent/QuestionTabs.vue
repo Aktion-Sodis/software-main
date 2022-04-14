@@ -79,6 +79,11 @@ export default {
       },
       set(value) {
         this.$store.commit('QUESTION_UI/setQuestions', { payload: value }, { root: true });
+        this.$store.commit(
+          'QUESTION_UI/setOptions',
+          { payload: value.map((q) => q.optionDrafts) },
+          { root: true },
+        );
       },
     },
     read() {
