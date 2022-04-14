@@ -101,7 +101,7 @@ export default {
 
 <style scoped>
 .centered-bg-img {
-  background-image: url('../static/colleagues.jpeg');
+  background-image: url('../static/colleagues.jpg');
   background-size: cover;
   background-position: center;
 }
