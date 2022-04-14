@@ -5,7 +5,7 @@
     :persistent="!isRead"
     @keydown.esc="escHandler"
   >
-    <v-card class="px-0 pt-0 px-md-4 pt-md-4">
+    <v-card class="pa-0">
       <InterventionModalRead v-if="isRead && isIntervention" />
       <InterventionModalForm v-else-if="!isRead && isIntervention" />
 
