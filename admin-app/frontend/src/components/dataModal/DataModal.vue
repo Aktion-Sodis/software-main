@@ -15,8 +15,8 @@
       <LevelModalRead v-else-if="isRead && isLevel" />
       <LevelModalForm v-else-if="!isRead && isLevel" />
 
-      <SurveyModalRead v-else-if="isRead && isSurvey" />
-      <SurveyModalForm v-else-if="!isRead && isSurvey" />
+      <SurveyModalStepper v-else-if="isSurvey && isCreate" />
+      <SurveyModal v-if="isSurvey" />
     </v-card>
   </v-dialog>
 </template>
@@ -34,6 +34,9 @@ import EntityModalRead from './entity/EntityModalRead.vue';
 import LevelModalForm from './level/LevelModalForm.vue';
 import LevelModalRead from './level/LevelModalRead.vue';
 
+import SurveyModalStepper from './survey/SurveyModalStepper.vue';
+import SurveyModal from './survey/SurveyModal.vue';
+
 export default {
   name: 'DataModal',
   components: {
@@ -43,6 +46,8 @@ export default {
     EntityModalRead,
     LevelModalForm,
     LevelModalRead,
+    SurveyModalStepper,
+    SurveyModal,
   },
   computed: {
     ...mapGetters({
@@ -53,6 +58,9 @@ export default {
     }),
     isRead() {
       return this.mode === modalModesDict.read;
+    },
+    isCreate() {
+      return this.mode === modalModesDict.create;
     },
     isIntervention() {
       return this.dataType === dataTypesDict.intervention;

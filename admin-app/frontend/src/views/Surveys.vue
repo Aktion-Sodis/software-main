@@ -1,6 +1,5 @@
 <template>
   <div>
-    <SurveyModal v-if="showSurveyModal" />
     <h1 class="ml-8">
       {{ $t('surveys.title') }}
     </h1>
@@ -8,7 +7,7 @@
       <v-row>
         <v-col cols="12" sm="6" md="4" xl="3">
           <DataCreationButtonCard
-            :dataType="dataTypesDict.survey"
+            :dataType="surveyDataType"
             subtitleI18nSelector="surveys.newSurvey"
           >
             <template v-slot:creation-button="slotProps">
@@ -39,10 +38,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { waitForMilliseconds } from '../lib/utils';
 import { dataTypesDict } from '../lib/constants';
 
-import SurveyModal from '../components/surveys/SurveyModal.vue';
 import InterventionSkeleton from '../components/interventions/InterventionSkeleton.vue';
 import DataCreationButtonCard from '../components/commons/DataCreationButtonCard.vue';
 import Survey from '../components/surveys/Survey.vue';
@@ -50,43 +47,18 @@ import Survey from '../components/surveys/Survey.vue';
 export default {
   name: 'Interventions',
   components: {
-    SurveyModal,
     DataCreationButtonCard,
     InterventionSkeleton,
     Survey,
-  },
-  data() {
-    return {
-      showSurveyModal: false,
-      dataTypesDict,
-    };
   },
   computed: {
     ...mapGetters({
       surveys: 'SURVEY_Data/getSurveys',
       loading: 'SURVEY_Data/getLoading',
-      isSurveyModalDisplayed: 'dataModal/getIsDisplayed',
     }),
-    currentLocale() {
-      return this.$i18n.locale;
-    },
-  },
-  watch: {
-    isInterventionModalDisplayed: 'destroyInterventionModalAfterDelay',
-    isSurveyModalDisplayed: 'destroySurveyModalAfterDelay',
-  },
-  methods: {
-    // If closed, wait for 500, if still closed, destroy component instance
-    async destroySurveyModalAfterDelay(newValue) {
-      if (newValue) {
-        this.showSurveyModal = true;
-        return;
-      }
-      await waitForMilliseconds(500);
-      if (!this.isInterventionModalDisplayed) this.showSurveyModal = false;
+    surveyDataType() {
+      return dataTypesDict.survey;
     },
   },
 };
 </script>
-
-<style scoped></style>
