@@ -5,6 +5,7 @@
   <SurveyModalQuestionRead v-else-if="completionIndex === 2 && read" />
   <SurveyModalQuestionForm v-else-if="completionIndex === 2 && !read" />
 
+  <!-- This step is available only in create mode -->
   <SurveyModalFinalize v-else-if="completionIndex === 3" />
 </template>
 

@@ -186,7 +186,7 @@ import FileInput from '../../../commons/FileInput.vue';
 import { deriveFilePath } from '../../../../lib/utils';
 
 export default {
-  name: 'SurveyModalFirstCard',
+  name: 'SurveyModalFirstCardForm',
   components: { LocaleTextBox, ImgFromS3, FileInput },
   data() {
     return {
@@ -207,13 +207,13 @@ export default {
     },
   },
   mounted() {
-    if (this.edit) this.prefillComponentDataFromDataDraft();
+    this.prefillComponentDataFromDataDraft();
   },
   computed: {
     ...mapGetters({
       modalMode: 'dataModal/getMode',
       dataIdInFocus: 'dataModal/getDataIdInFocus',
-      surveyDraft: 'dataModal/getDataDraft',
+      dataDraft: 'dataModal/getDataDraft',
       imageFile: 'dataModal/getImageFile',
 
       SURVEYById: 'SURVEY_Data/SURVEYById',
@@ -286,12 +286,12 @@ export default {
       this.incrementCompletionIndex();
     },
     prefillComponentDataFromDataDraft() {
-      this.name = mutableI18nString({ languageTexts: this.surveyDraft?.name.languageTexts })
+      this.name = mutableI18nString({ languageTexts: this.dataDraft?.name.languageTexts })
         ?? emptyMutableI18nString();
-      this.description = mutableI18nString({ languageTexts: this.surveyDraft?.description.languageTexts })
+      this.description = mutableI18nString({ languageTexts: this.dataDraft?.description.languageTexts })
         ?? emptyMutableI18nString();
       // this.surveyTags = this.tagIdsBySurveyId({ surveyId: this.dataIdInFocus }) ?? [];
-      this.interventionId = this.surveyDraft?.intervention.id ?? null;
+      this.interventionId = this.dataDraft?.intervention?.id ?? null;
 
       this.rerenderDescriptionLocaleTextBox += 1;
       this.rerenderNameLocaleTextBox -= 1;
