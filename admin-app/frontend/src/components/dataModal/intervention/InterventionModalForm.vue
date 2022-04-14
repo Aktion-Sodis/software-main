@@ -222,12 +222,6 @@ export default {
       if (this.edit) this.abortEditData();
       else this.abortCreateData();
     },
-    editHandler() {
-      this.editData();
-    },
-    escHandler() {
-      this.closeHandler();
-    },
     async submitHandler() {
       this.setDraft(
         new Intervention({
