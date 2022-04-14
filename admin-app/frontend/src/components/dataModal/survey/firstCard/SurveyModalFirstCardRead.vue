@@ -85,7 +85,12 @@
               {{ $t('surveys.modal.image') }}
             </v-card-title>
 
-            <ImgFromS3 v-if="surveyInFocus" :assumedSrc="deriveImgPath" dataType="survey">
+            <ImgFromS3
+              v-if="surveyInFocus"
+              :assumedSrc="deriveImgPath"
+              dataType="survey"
+              :key="rerenderImgFromS3"
+            >
               <template v-slot:v-img="slotProps">
                 <v-img max-height="200px" :src="slotProps.src"> </v-img>
               </template>
@@ -116,6 +121,16 @@ import { SurveyType } from '../../../../models';
 export default {
   name: 'SurveyModalFirstCardRead',
   components: { ImgFromS3 },
+  data() {
+    return {
+      rerenderImgFromS3: false,
+    };
+  },
+  watch: {
+    deriveImgPath() {
+      this.rerenderImgFromS3 = !this.rerenderImgFromS3;
+    },
+  },
   computed: {
     ...mapGetters({
       dataIdInFocus: 'dataModal/getDataIdInFocus',

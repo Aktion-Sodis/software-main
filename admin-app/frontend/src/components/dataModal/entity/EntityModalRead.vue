@@ -41,7 +41,7 @@
             </div>
           </v-col>
           <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
-            <ImgFromS3 :assumedSrc="deriveImgPath" dataType="entity">
+            <ImgFromS3 :assumedSrc="deriveImgPath" dataType="entity" :key="rerenderImgFromS3">
               <template v-slot:v-img="slotProps">
                 <v-img max-height="200px" :src="slotProps.src"> </v-img>
               </template>
@@ -72,6 +72,16 @@ import ImgFromS3 from '../../commons/ImgFromS3.vue';
 export default {
   name: 'EntityModalRead',
   components: { ImgFromS3 },
+  data() {
+    return {
+      rerenderImgFromS3: false,
+    };
+  },
+  watch: {
+    deriveImgPath() {
+      this.rerenderImgFromS3 = !this.rerenderImgFromS3;
+    },
+  },
   computed: {
     ...mapGetters({
       dataIdInFocus: 'dataModal/getDataIdInFocus',
