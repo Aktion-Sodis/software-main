@@ -232,7 +232,7 @@ import FileInput from '../../commons/FileInput.vue';
 import ImgFromS3 from '../../commons/ImgFromS3.vue';
 
 export default {
-  name: 'LevelModalForm',
+  name: 'LevelModalAsForm',
   components: { LocaleTextBox, FileInput, ImgFromS3 },
   data() {
     return {

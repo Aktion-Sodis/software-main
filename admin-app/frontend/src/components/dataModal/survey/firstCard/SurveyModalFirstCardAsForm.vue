@@ -186,7 +186,7 @@ import FileInput from '../../../commons/FileInput.vue';
 import { deriveFilePath } from '../../../../lib/utils';
 
 export default {
-  name: 'SurveyModalFirstCardForm',
+  name: 'SurveyModalFirstCardAsForm',
   components: { LocaleTextBox, ImgFromS3, FileInput },
   data() {
     return {

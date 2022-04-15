@@ -7,13 +7,13 @@
   >
     <v-card class="pa-0">
       <InterventionModalRead v-if="isRead && isIntervention" />
-      <InterventionModalForm v-else-if="!isRead && isIntervention" />
+      <InterventionModalAsForm v-else-if="!isRead && isIntervention" />
 
       <EntityModalRead v-else-if="isRead && isEntity" />
-      <EntityModalForm v-else-if="!isRead && isEntity" />
+      <EntityModalAsForm v-else-if="!isRead && isEntity" />
 
       <LevelModalRead v-else-if="isRead && isLevel" />
-      <LevelModalForm v-else-if="!isRead && isLevel" />
+      <LevelModalAsForm v-else-if="!isRead && isLevel" />
 
       <SurveyModalStepper v-else-if="isSurvey && isCreate" />
       <SurveyModal v-if="isSurvey" />
@@ -26,13 +26,13 @@
 import { mapActions, mapGetters } from 'vuex';
 import { dataTypesDict, modalModesDict } from '../../lib/constants';
 
-import InterventionModalForm from './intervention/InterventionModalForm.vue';
+import InterventionModalAsForm from './intervention/InterventionModalAsForm.vue';
 import InterventionModalRead from './intervention/InterventionModalRead.vue';
 
-import EntityModalForm from './entity/EntityModalForm.vue';
+import EntityModalAsForm from './entity/EntityModalAsForm.vue';
 import EntityModalRead from './entity/EntityModalRead.vue';
 
-import LevelModalForm from './level/LevelModalForm.vue';
+import LevelModalAsForm from './level/LevelModalAsForm.vue';
 import LevelModalRead from './level/LevelModalRead.vue';
 
 import SurveyModalStepper from './survey/SurveyModalStepper.vue';
@@ -42,11 +42,11 @@ import SurveyModalQuestionTabs from './survey/question/SurveyModalQuestionTabs.v
 export default {
   name: 'DataModal',
   components: {
-    InterventionModalForm,
+    InterventionModalAsForm,
     InterventionModalRead,
-    EntityModalForm,
+    EntityModalAsForm,
     EntityModalRead,
-    LevelModalForm,
+    LevelModalAsForm,
     LevelModalRead,
     SurveyModalStepper,
     SurveyModal,

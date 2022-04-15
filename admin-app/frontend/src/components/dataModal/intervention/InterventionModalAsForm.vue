@@ -1,34 +1,64 @@
 <template>
   <v-form lazy-validation>
     <v-card-title>
-      <h2 v-if="edit && entityInFocus">
-        {{ $t('organizationStructure.entityModal.modalTitle.edit') }}
+      <h2 v-if="edit">
+        {{ $t('interventions.modal.modalTitle.edit') }}
         <i>
-          {{ calculateUILocaleString({ languageTexts: entityInFocus.name.languageTexts }) }}
+          {{
+            calculateUILocaleString({
+              languageTexts: interventionInFocus.name.languageTexts,
+            })
+          }}
         </i>
       </h2>
       <h2 v-else>
-        {{ $t('organizationStructure.entityModal.modalTitle.create') }}
+        {{ $t('interventions.modal.modalTitle.create') }}
       </h2>
     </v-card-title>
     <v-card-subtitle v-if="edit">
-      {{ $t('organizationStructure.entityModal.modalDescription.edit') }}
+      {{ $t('interventions.modal.modalDescription.edit') }}
     </v-card-subtitle>
     <v-card-subtitle v-else>
-      {{ $t('organizationStructure.entityModal.modalDescription.create') }}
+      {{ $t('interventions.modal.modalDescription.create') }}
     </v-card-subtitle>
+
     <v-card-text>
       <v-container>
         <v-row>
-          <v-col cols="12" sm="6" class="pb-0 px-0 mb-3 px-sm-3">
+          <v-col cols="12" sm="6" class="pb-0 px-0 px-sm-3">
+            <v-card-title class="pt-0 pt-sm-2">
+              {{ $t('interventions.modal.name') }}
+            </v-card-title>
             <LocaleTextBox
-              labelPrefixI18nSelector="organizationStructure.entityModal.name"
+              labelPrefixI18nSelector="interventions.modal.name"
               :initVal="name"
               @res="nameUpdatedHandler"
               :key="rerenderNameLocaleTextBox"
             >
               <template v-slot:text-input="slotProps">
                 <v-text-field
+                  :label="slotProps.label"
+                  v-model="slotProps.model"
+                  autofocus
+                  required
+                  outlined
+                  dense
+                  @input="slotProps.inputHandler"
+                ></v-text-field>
+              </template>
+            </LocaleTextBox>
+
+            <v-card-title class="pt-4">
+              {{ $t('interventions.modal.description') }}
+            </v-card-title>
+            <LocaleTextBox
+              labelPrefixI18nSelector="interventions.modal.description"
+              :initVal="description"
+              @res="descriptionUpdatedHandler"
+              :key="rerenderDescriptionLocaleTextBox"
+            >
+              <template v-slot:text-input="slotProps">
+                <v-textarea
                   autofocus
                   required
                   outlined
@@ -36,56 +66,39 @@
                   :label="slotProps.label"
                   v-model="slotProps.model"
                   @input="slotProps.inputHandler"
-                ></v-text-field>
-              </template>
-            </LocaleTextBox>
-
-            <LocaleTextBox
-              labelPrefixI18nSelector="organizationStructure.entityModal.description"
-              :initVal="description"
-              @res="descriptionUpdatedHandler"
-              :key="rerenderDescriptionLocaleTextBox"
-            >
-              <template v-slot:text-input="slotProps">
-                <v-textarea
-                  :label="slotProps.label"
-                  v-model="slotProps.model"
-                  @input="slotProps.inputHandler"
-                  required
-                  outlined
-                  dense
                 ></v-textarea>
               </template>
             </LocaleTextBox>
-
-            <v-select
-              v-if="allEntitiesOfUpperLevel.length > 0"
-              v-model="parentEntityID"
-              :items="allEntitiesOfUpperLevel"
-              item-value="id"
-              :label="$t('organizationStructure.entityModal.upperEntityLabel')"
-              dense
-              outlined
-              persistent-hint
-            >
-              <template v-slot:item="data">
-                {{
-                  calculateUILocaleString({
-                    languageTexts: data.item.name.languageTexts,
-                  })
-                }}
-              </template>
-              <template v-slot:selection="data">
-                {{
-                  calculateUILocaleString({
-                    languageTexts: data.item.name.languageTexts,
-                  })
-                }}
-              </template>
-            </v-select>
           </v-col>
-          <v-col cols="12" sm="6" class="pb-0 px-0 mb-3 px-sm-3">
-            <ImgFromS3 :assumedSrc="assumedSrc" :key="rerenderImgFromS3" dataType="entity">
+
+          <v-col cols="12" sm="6" class="pt-6 pt-sm-3 px-0 px-sm-3">
+            <v-card-title class="pt-0 pt-sm-2">
+              {{ $t('interventions.type.title') }}:
+              <v-btn-toggle v-model="typeIndex" mandatory class="ml-2">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn v-bind="attrs" v-on="on">
+                      <v-icon>mdi-hammer-wrench</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>{{ $t('interventions.type.types.TECHNOLOGY') }}</span>
+                </v-tooltip>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn v-bind="attrs" v-on="on">
+                      <v-icon>mdi-school</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>{{ $t('interventions.type.types.EDUCATION') }}</span>
+                </v-tooltip>
+              </v-btn-toggle>
+            </v-card-title>
+
+            <v-card-title class="pt-0 pt-sm-2">
+              {{ $t('interventions.modal.image') }}
+            </v-card-title>
+
+            <ImgFromS3 :assumedSrc="assumedSrc" :key="rerenderImgFromS3" dataType="intervention">
               <template v-slot:v-img="slotProps">
                 <v-img max-height="200px" :src="slotProps.src">
                   <v-btn fab class="iv-edit-icon" color="primary" @click="selectImg">
@@ -100,7 +113,6 @@
         </v-row>
       </v-container>
     </v-card-text>
-
     <v-card-actions>
       <v-btn x-large v-if="edit" @click="deleteData" color="warning" text>
         {{ $t('general.delete') }}
@@ -129,23 +141,26 @@ import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { emptyMutableI18nString, mutableI18nString } from '../../../lib/classes';
 import { modalModesDict } from '../../../lib/constants';
 import { deriveFilePath } from '../../../lib/utils';
-import { Entity } from '../../../models';
+import { Intervention, InterventionType } from '../../../models';
 
 import LocaleTextBox from '../../commons/LocaleTextBox.vue';
 import FileInput from '../../commons/FileInput.vue';
 import ImgFromS3 from '../../commons/ImgFromS3.vue';
 
 export default {
-  name: 'EntityModalForm',
+  name: 'InterventionModalAsForm',
   components: { LocaleTextBox, FileInput, ImgFromS3 },
   data() {
     return {
+      id: null,
       name: emptyMutableI18nString(),
+      typeIndex: 0,
+      types: [InterventionType.TECHNOLOGY, InterventionType.EDUCATION],
       description: emptyMutableI18nString(),
-      parentEntityID: null,
+      levelIds: [],
       rerenderImgFromS3: false,
-      rerenderNameLocaleTextBox: 0,
-      rerenderDescriptionLocaleTextBox: -1,
+      rerenderNameLocaleTextBox: 0, // increment this
+      rerenderDescriptionLocaleTextBox: -1, // decrement this
     };
   },
   watch: {
@@ -163,45 +178,33 @@ export default {
       dataIdInFocus: 'dataModal/getDataIdInFocus',
       dataDraft: 'dataModal/getDataDraft',
       imageFile: 'dataModal/getImageFile',
-      ENTITYById: 'ENTITY_Data/ENTITYById',
-      allEntitiesOfLevel: 'ENTITY_Data/allEntitiesByLevelId',
-      LEVELById: 'LEVEL_Data/LEVELById',
+      INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
       calculateLocalizedString: 'calculateLocalizedString',
       calculateUILocaleString: 'calculateUILocaleString',
-      getCreatingEntityInLevelId: 'getCreatingEntityInLevelId',
     }),
-    entityInFocus() {
-      return this.ENTITYById({ id: this.dataIdInFocus });
+    interventionInFocus() {
+      return this.INTERVENTIONById({ id: this.dataIdInFocus });
     },
     // if not edit, it is definitely the create mode.
     edit() {
       return this.dataModalMode === modalModesDict.edit;
     },
     deriveImgPath() {
-      return this.edit ? deriveFilePath('entityPicPath', { entityID: this.dataIdInFocus }) : null;
+      return this.edit
+        ? deriveFilePath('interventionPicPath', { interventionID: this.dataIdInFocus })
+        : null;
     },
     assumedSrc() {
       return this.imageFile ?? this.deriveImgPath;
     },
+    type() {
+      return this.types[this.typeIndex];
+    },
     isSubmitDisabled() {
       return (
         this.calculateLocalizedString({ languageTexts: this.name.languageTexts })
-          === this.$t('general.noTextProvided')
-        || (this.allEntitiesOfUpperLevel.length > 0 && !this.parentEntityID)
+        === this.$t('general.noTextProvided')
       );
-    },
-    allEntitiesOfUpperLevel() {
-      let id;
-      if (this.edit) {
-        id = this.dataDraft?.entityLevelId;
-      } else {
-        id = this.getCreatingEntityInLevelId;
-      }
-      const currentLevel = this.LEVELById({
-        id,
-      });
-      if (!currentLevel) return [];
-      return this.allEntitiesOfLevel({ entityLevelId: currentLevel.parentLevelID });
     },
   },
   methods: {
@@ -219,25 +222,16 @@ export default {
       if (this.edit) this.abortEditData();
       else this.abortCreateData();
     },
-    editHandler() {
-      this.editData();
-    },
-    escHandler() {
-      this.closeHandler();
-    },
     async submitHandler() {
-      // show error feedback here
-      if (this.allEntitiesOfUpperLevel.length > 0 && this.parentEntityID === null) return;
       this.setDraft(
-        new Entity({
+        new Intervention({
           name: this.name,
           description: this.description,
-          entityLevelId: this.edit
-            ? this.entityInFocus.entityLevelId
-            : this.getCreatingEntityInLevelId,
-          parentEntityID: this.parentEntityID ?? null,
-          appliedInterventions: [],
-          customData: [], // TODO
+          interventionType: this.type,
+          tags: [], // TODO
+          surveys: [], // TODO
+          levels: [],
+          contents: this.contents, // TODO
         }),
       );
       await this.$nextTick();
@@ -255,7 +249,6 @@ export default {
         languageTexts: this.dataDraft?.description.languageTexts,
       });
       this.contents = this.dataDraft?.contents ?? [];
-      this.parentEntityID = this.dataDraft?.parentEntityID;
 
       // changing the keys so that the initVal prop retriggers.
       this.rerenderNameLocaleTextBox += 1;
