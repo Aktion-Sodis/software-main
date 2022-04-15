@@ -9,7 +9,7 @@
     >
       <v-tab v-for="(q, i) in questions" :key="i" :value="i">
         <v-icon v-if="i === nQuestions - 1 && !read" large> mdi-plus </v-icon>
-        <v-badge v-else color="grey lighten-2" :content="i + 1" bottom overlap>
+        <v-badge v-else :content="i + 1" bottom overlap>
           <div>
             <div v-if="q.type === QuestionType.MULTIPLECHOICE">
               <v-icon> mdi-checkbox-outline </v-icon>
