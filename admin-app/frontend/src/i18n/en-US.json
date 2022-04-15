@@ -17,7 +17,8 @@
       "minCharNotMet": "Minimum {minChar} characters.",
       "required": "Required.",
       "unsavedChanges": "There are unsaved changes. Are you sure you want to leave?",
-      "addInNewLocale": "In another language"
+      "addInNewLocale": "In another language",
+      "invalidNumber": "This is an invalid number."
     },
     "noTextProvided": "No text was provided.",
     "noTags": "There are no tags.",
