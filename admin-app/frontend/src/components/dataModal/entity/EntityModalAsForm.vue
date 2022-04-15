@@ -102,28 +102,33 @@
               </template>
             </ImgFromS3>
 
-            <v-divider></v-divider>
-            <v-card-title class="pt-0 pt-sm-2">
-              <span>
-                {{ $t('organizationStructure.levelModal.customData.title') }}
-              </span>
-            </v-card-title>
+            <div v-if="level.customData.length > 0">
+              <v-divider></v-divider>
+              <v-card-title class="pt-0 pt-sm-2">
+                <span>
+                  {{ $t('organizationStructure.levelModal.customData.title') }}
+                </span>
+              </v-card-title>
 
-            <div v-for="customDatum in customData" :key="customDatum.customDataID">
-              <v-text-field
-                :label="calculateUILocaleString({ languageTexts: customDatum.name.languageTexts })"
-                outlined
-                v-model="customDatum.value"
-                @keypress="
-                  if (customDatum.type === Type.INT) {
-                    isNumber($event);
-                    $refs.form.validate();
-                  }
-                "
-                :rules="customDatum.type === Type.INT ? rules.correctNumber : []"
-              ></v-text-field>
+              <div v-for="customDatum in customData" :key="customDatum.customDataID">
+                {{ customDatum.value }}
+                <v-text-field
+                  :label="
+                    calculateUILocaleString({ languageTexts: customDatum.name.languageTexts })
+                  "
+                  outlined
+                  v-model="customDatum.value"
+                  @keypress="
+                    if (customDatum.type === Type.INT) {
+                      isNumber($event);
+                      $refs.form.validate();
+                    }
+                  "
+                  :rules="customDatum.type === Type.INT ? rules.correctNumber : []"
+                ></v-text-field>
+              </div>
+              <v-divider></v-divider>
             </div>
-            <v-divider></v-divider>
           </v-col>
         </v-row>
       </v-container>
@@ -212,6 +217,11 @@ export default {
     edit() {
       return this.dataModalMode === modalModesDict.edit;
     },
+    level() {
+      return this.LEVELById({
+        id: this.edit ? this.entityInFocus.entityLevelId : this.getCreatingEntityInLevelId,
+      });
+    },
     deriveImgPath() {
       return this.edit ? deriveFilePath('entityPicPath', { entityID: this.dataIdInFocus }) : null;
     },
@@ -279,7 +289,7 @@ export default {
             customDataID,
             type,
             name,
-            intValue: type === Type.INT ? Number(value) : null,
+            intValue: type === Type.INT && value !== null ? Number(value) : null,
             stringValue: type === Type.STRING ? value : null,
           })),
         }),
@@ -306,11 +316,7 @@ export default {
       this.rerenderDescriptionLocaleTextBox -= 1;
     },
     initCustomDataFromLevel() {
-      const level = this.LEVELById({
-        id: this.edit ? this.entityInFocus.entityLevelId : this.getCreatingEntityInLevelId,
-      });
-      if (!level) return;
-      const { customData } = level;
+      const { customData } = this.level;
       if (!customData) return;
       this.customData = customData.map(({ id, name, type }, index) => ({
         name: mutableI18nString(name),
@@ -318,6 +324,7 @@ export default {
         customDataID: id,
         value: this.edit
           ? this.entityInFocus.customData[index][type === Type.INT ? 'intValue' : 'stringValue']
+            ?? null
           : null,
       }));
     },
@@ -326,9 +333,6 @@ export default {
     },
     descriptionUpdatedHandler(res) {
       this.description = res;
-    },
-    customDataUpdatedHandler(res, type, index) {
-      console.log({ res, type, index });
     },
     isNumber(evt) {
       evt = evt || window.event;

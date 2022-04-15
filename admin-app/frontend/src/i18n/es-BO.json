@@ -21,6 +21,7 @@
       "invalidNumber": "Este es un número inválido."
     },
     "noTextProvided": "No text was provided.",
+    "noNumberProvided": "No number was provided.",
     "noTags": "There are no tags.",
     "routes": {
       "Home": "Inicio",

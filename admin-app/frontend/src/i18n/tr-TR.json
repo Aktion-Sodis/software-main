@@ -21,6 +21,7 @@
       "invalidNumber": "Geçersiz sayı."
     },
     "noTextProvided": "Buraya bir metin girilmemiş.",
+    "noNumberProvided": "Buraya bir sayı girilmemiş.",
     "noTags": "There are no tags.",
     "routes": {
       "Home": "Ana sayfa",
