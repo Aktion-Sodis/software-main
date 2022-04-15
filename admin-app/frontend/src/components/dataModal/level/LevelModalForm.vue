@@ -356,7 +356,11 @@ export default {
         languageTexts: this.dataDraft?.description.languageTexts,
       });
       this.allowedInterventionIds = this.interventionsOfLevelById({ levelId: this.dataIdInFocus }).map((i) => i.id) ?? [];
-      this.customData = Array.from(this.dataDraft?.customData ?? []);
+      this.customData = this.dataDraft?.customData.map((cd) => ({
+        id: cd.id,
+        name: mutableI18nString(cd.name),
+        type: cd.type,
+      })) ?? [];
       this.customDataTypeIndices = Array.from(
         this.dataDraft?.customData.map((cd) => (cd.type === Type.INT ? 0 : 1)) ?? [],
       );
