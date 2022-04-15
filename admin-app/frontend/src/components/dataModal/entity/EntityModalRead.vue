@@ -41,11 +41,44 @@
             </div>
           </v-col>
           <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
-            <ImgFromS3 :assumedSrc="deriveImgPath" dataType="entity" :key="rerenderImgFromS3">
+            <ImgFromS3
+              :assumedSrc="deriveImgPath"
+              dataType="entity"
+              :key="rerenderImgFromS3"
+              class="mb-4"
+            >
               <template v-slot:v-img="slotProps">
                 <v-img max-height="200px" :src="slotProps.src"> </v-img>
               </template>
             </ImgFromS3>
+
+            <v-divider></v-divider>
+            <v-card-title class="pt-0 pt-sm-2">
+              <span>
+                {{ $t('organizationStructure.levelModal.customData.title') }}
+              </span>
+            </v-card-title>
+
+            <div
+              class="rounded-lg pa-4 d-flex justify-space-between align-center mb-2"
+              style="border: 1px solid; border-color: #736b5e; position: relative"
+              v-for="customDatum in entityInFocus.customData"
+              :key="customDatum.customDataID"
+            >
+              <h3 class="text-center">
+                {{
+                  calculateUILocaleString({
+                    languageTexts: customDatum.name.languageTexts,
+                  })
+                }}
+              </h3>
+              <span>
+                {{
+                  customDatum.type === Type.STRING ? customDatum.stringValue : customDatum.intValue
+                }}
+              </span>
+            </div>
+            <v-divider></v-divider>
           </v-col>
         </v-row>
       </v-container>
@@ -66,6 +99,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { deriveFilePath } from '../../../lib/utils';
+import { Type } from '../../../models';
 
 import ImgFromS3 from '../../commons/ImgFromS3.vue';
 
@@ -74,6 +108,7 @@ export default {
   components: { ImgFromS3 },
   data() {
     return {
+      Type,
       rerenderImgFromS3: false,
     };
   },
