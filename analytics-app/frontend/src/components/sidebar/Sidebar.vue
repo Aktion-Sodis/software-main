@@ -1,16 +1,17 @@
 <template>
   <div @mouseover="openSidebar" @mouseleave="closeSidebar" class="sidebar" :style="{ width: sidebarWidth, transition: sidebarTransition }">
-    <h1>
-      <span v-if="collapsed">
-        <div>V</div>
-        <div>S</div>
-      </span>
-      <span v-else>Vue Sidebar</span>
-    </h1>
-    <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
-    <SidebarLink to="/dummy-view-2" icon="fas fa-columns">Fragebögen</SidebarLink>
-    <SidebarLink to="/dashboards" icon="fas fa-chart-bar">Dashboards</SidebarLink>
-    <SidebarLink to="/hello-world" icon="fa-solid fa-gear">Einstellungen</SidebarLink>
+    <div class="link">
+      <el-image class="image" src="/src/static/aktionSodisSmall.png"/>
+        <span v-if="!collapsed">
+          AktionSodis
+        </span>
+    </div>
+    <div style="margin-top: 50px">
+      <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
+      <SidebarLink to="/dummy-view-2" icon="fas fa-columns">Fragebögen</SidebarLink>
+      <SidebarLink to="/dashboards" icon="fas fa-chart-bar">Dashboards</SidebarLink>
+      <SidebarLink to="/hello-world" icon="fa-solid fa-gear">Einstellungen</SidebarLink>
+      </div>
   </div>
 </template>
 
@@ -51,6 +52,26 @@ export default {
 }
 .sidebar h1 {
   height: 2.5em;
+}
+.link {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  font-weight: 400;
+  user-select: none;
+  margin: 0.1em 0;
+  padding: 0.4em;
+  border-radius: 0.2em;
+  height: 1.5em;
+  color: white;
+  text-decoration: none;
+}
+
+.link .image {
+  flex-shrink: 0;
+  width: 25px;
+  margin-right: 10px;
 }
 
 </style>
