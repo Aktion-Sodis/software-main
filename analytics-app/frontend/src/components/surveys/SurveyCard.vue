@@ -5,12 +5,19 @@
         <el-image class="image" :src="survey.src"/>
       </div>
       <div class="survey-description-wrap">
-        <div class="survey-title">
-        {{ survey.title }}
-        </div>
-        <div class="survey-date">
-          {{ survey.date }}
-        </div>
+        <el-row>
+          <el-col :span="21">
+            <div class="survey-title">
+            {{ survey.title }}
+            </div>
+            <div class="survey-date">
+              {{ survey.date }}
+            </div>
+          </el-col>
+          <el-col :span="3">
+            <i class="fa-solid fa-ellipsis-vertical icon"></i>
+          </el-col>
+        </el-row>
       </div>
     </div>
   </div>
@@ -30,7 +37,6 @@ export default {
   display: inline-block;
   box-shadow: 0px 0px 1px rgb(0, 0, 0, 0.25); 
 }
-
 
 .survey-card:hover {
   box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.25); 
@@ -59,6 +65,4 @@ export default {
   text-align: left;
   font-size: 12px;
 }
-
-
 </style>
