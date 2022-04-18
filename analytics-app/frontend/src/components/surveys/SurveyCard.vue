@@ -33,7 +33,8 @@ export default {
 <style>
 .survey-card {
   width: 200px;
-  margin: 8px;
+  margin-right: 8px;
+  margin-bottom: 8px;
   display: inline-block;
   box-shadow: 0px 0px 1px rgb(0, 0, 0, 0.25); 
 }

@@ -1,5 +1,32 @@
 <template>
   <div class="main">
+      <section class="header">
+          <el-row>
+              <el-col>
+                  <h1 style="text-align: left">
+                      Fragebögen: Kochstellen
+                  </h1>
+              </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="4">
+                <h3 style="text-align: left; margin: 0; position: absolute; top: 50%;">
+                    Zeitraum wählen:
+                </h3>
+            </el-col>
+            <el-col :span="12">
+                <div class="survey-datepicker" style="margin: 0; position: absolute; top: 50%;">
+                    <el-date-picker
+                        v-model="value1"
+                        type="daterange"
+                        range-separator="To"
+                        start-placeholder="Start date"
+                        end-placeholder="End date"
+                    />
+                </div>
+            </el-col>
+          </el-row>
+      </section>
       <section class="surveys">
           <SurveyCard 
             v-for="survey in surveys"
@@ -84,11 +111,17 @@ export default {
 
 .main {
     margin-left: 20px;
+    overflow: hidden;
+}
+
+.header {
+    height: 20vh;
 }
 
 .surveys {
     display: flex;
     flex-wrap: wrap;
+    margin-top: 5px;
 }
 
 </style>
