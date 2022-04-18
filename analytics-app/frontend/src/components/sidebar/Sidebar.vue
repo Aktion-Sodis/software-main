@@ -8,7 +8,7 @@
     </div>
     <div style="margin-top: 50px">
       <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
-      <SidebarLink to="/dummy-view-2" icon="fas fa-columns">Fragebögen</SidebarLink>
+      <SidebarLink to="/surveys" icon="fas fa-columns">Fragebögen</SidebarLink>
       <SidebarLink to="/dashboards" icon="fas fa-chart-bar">Dashboards</SidebarLink>
       <SidebarLink to="/hello-world" icon="fa-solid fa-gear">Einstellungen</SidebarLink>
       </div>
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import SidebarLink from "./SidebarLink.vue"
+import SidebarLink from './SidebarLink.vue'
 import { collapsed, openSidebar, closeSidebar, sidebarWidth, sidebarTransition } from './state'
 export default {
   props: {},
