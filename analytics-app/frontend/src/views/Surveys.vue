@@ -1,39 +1,31 @@
 <template>
   <div class="main">
-      <section class="header">
-          <el-row>
-              <el-col>
-                  <h1 style="text-align: left">
-                      Fragebögen: Kochstellen
-                  </h1>
-              </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="4">
-                <h3 style="text-align: left; margin: 0; position: absolute; top: 50%;">
-                    Zeitraum wählen:
-                </h3>
-            </el-col>
-            <el-col :span="12">
-                <div class="survey-datepicker" style="margin: 0; position: absolute; top: 50%;">
-                    <el-date-picker
-                        v-model="value1"
-                        type="daterange"
-                        range-separator="To"
-                        start-placeholder="Start date"
-                        end-placeholder="End date"
-                    />
-                </div>
-            </el-col>
-          </el-row>
-      </section>
-      <section class="surveys">
+      <div class="title">
+        <h1 style="text-align: left" >
+            Fragebögen: Kochstellen
+        </h1>
+        <div class="datepicker-wrapper">
+            <h3 style="text-align: left">
+            Zeitraum wählen:
+            </h3>
+            <div class="survey-datepicker">
+                <el-date-picker
+                    v-model="value1"
+                    type="daterange"
+                    range-separator="To"
+                    start-placeholder="Start date"
+                    end-placeholder="End date"
+                />
+            </div>
+        </div>
+      </div>
+      <div class="surveys">
           <SurveyCard 
             v-for="survey in surveys"
             :key="survey.id"
             :survey="survey"
           />
-      </section>
+      </div>
   </div>
 </template>
 
@@ -114,14 +106,22 @@ export default {
     overflow: hidden;
 }
 
-.header {
-    height: 20vh;
+.datepicker-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.survey-datepicker {
+    margin-left: 10px;
+    margin-top: 16px;
 }
 
 .surveys {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 5px;
+    margin-top: 20px;
+    height: auto;
+    
 }
 
 </style>
