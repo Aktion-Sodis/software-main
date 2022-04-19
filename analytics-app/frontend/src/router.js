@@ -4,6 +4,7 @@ import DummyView1 from './views/DummyView1.vue';
 import DummyView2 from './views/DummyView2.vue';
 import Home from './views/Home.vue';
 import Surveys from './views/Surveys.vue';
+import Questions from './views/Questions.vue';
 
 export const routes = [
   {
@@ -25,6 +26,11 @@ export const routes = [
     name: 'Surveys',
     path: '/surveys',
     component: Surveys,
+  },
+  {
+    name: 'Questions',
+    path: '/questions',
+    component: Questions,
   },
 ];
 
