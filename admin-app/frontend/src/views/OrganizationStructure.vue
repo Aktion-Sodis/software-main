@@ -41,10 +41,10 @@ import LevelModal from '../components/organizationStructure/LevelModal.vue';
 import EntityModal from '../components/organizationStructure/EntityModal.vue';
 import EntitiesColumn from '../components/organizationStructure/EntitiesColumn.vue';
 import LevelColumnHeader from '../components/organizationStructure/LevelColumnHeader.vue';
-import { dataTypesDict } from '../store/constants';
+import { dataTypesDict, routeNamesDict } from '../lib/constants';
 
 export default {
-  name: 'OrganizationStructure',
+  name: routeNamesDict.OrganizationStructure,
   components: {
     LevelModal,
     EntityModal,

@@ -40,7 +40,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { waitForMilliseconds } from '../lib/utils';
-import { dataTypesDict } from '../store/constants';
+import { dataTypesDict, routeNamesDict } from '../lib/constants';
 
 import SurveyModal from '../components/surveys/SurveyModal.vue';
 import InterventionSkeleton from '../components/interventions/InterventionSkeleton.vue';
@@ -48,7 +48,7 @@ import DataCreationButtonCard from '../components/commons/DataCreationButtonCard
 import Survey from '../components/surveys/Survey.vue';
 
 export default {
-  name: 'Interventions',
+  name: routeNamesDict.Surveys,
   components: {
     SurveyModal,
     DataCreationButtonCard,

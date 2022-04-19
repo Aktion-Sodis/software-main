@@ -34,7 +34,7 @@
 // import { validate as uuidValidate } from 'uuid';
 
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { dataTypesDict } from '../../store/constants';
+import { dataTypesDict } from '../../lib/constants';
 
 export default {
   name: 'AddEntityButton',

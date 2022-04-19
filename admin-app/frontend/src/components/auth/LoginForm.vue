@@ -60,8 +60,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex';
-import GoogleIcon from './GoogleIcon.vue';
+import { mapActions, mapMutations } from 'vuex';
+import { formValidators } from '../../lib/utils';
+import { routeNamesDict, signInStatusDict } from '../../lib/constants';
+import GoogleIcon from '../commons/GoogleIcon.vue';
 
 export default {
   components: { GoogleIcon },
@@ -72,17 +74,11 @@ export default {
       password: null,
       showPassword: false,
       rules: {
-        required: (value) => !!value || this.requiredi18n,
+        required: formValidators.required,
       },
       rememberMe: true,
       loading: false,
     };
-  },
-  computed: {
-    ...mapGetters({}),
-    requiredi18n() {
-      return this.$t('general.form.required');
-    },
   },
   methods: {
     ...mapActions({
@@ -103,22 +99,22 @@ export default {
         password: this.password,
         rememberMe: this.rememberMe,
       });
-      if (signInStatus === 'success') {
-        this.$router.push({ name: 'OrganizationStructure' });
+      if (signInStatus === signInStatusDict.success) {
+        this.$router.push({ name: routeNamesDict.OrganizationStructure });
         return;
       }
-      if (signInStatus === 'failed') {
+      if (signInStatus === signInStatusDict.failed) {
         this.loading = false;
         // TODO: handle error
         return;
       }
-      if (signInStatus === 'completeUserInfo') {
-        this.$router.push({ name: 'CompleteUserInfo' });
+      if (signInStatus === signInStatusDict.completeUserInfo) {
+        this.$router.push({ name: routeNamesDict.CompleteUserInfo });
       }
     },
     forgotPasswordHandler() {
       this.setCredentials({ email: this.email || '' });
-      this.$router.push({ name: 'ForgotPassword' });
+      this.$router.push({ name: routeNamesDict.ForgotPassword });
     },
   },
 };

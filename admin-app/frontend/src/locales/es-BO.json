@@ -17,7 +17,8 @@
       "minCharNotMet": "Al menos {minChar} carácteres.",
       "required": "Necesario.",
       "unsavedChanges": "Hay cambios sin guardar. ¿Estás seguro de que quieres salir?",
-      "addInNewLocale": "En otra lengua"
+      "addInNewLocale": "En otra lengua",
+      "invalidForm": "El formulario no es válido. Preste atención a las advertencias de las entradas."
     },
     "noTextProvided": "No text was provided.",
     "noTags": "There are no tags.",

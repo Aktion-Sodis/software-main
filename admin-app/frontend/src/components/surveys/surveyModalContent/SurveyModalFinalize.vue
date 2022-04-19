@@ -23,7 +23,7 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { dataTypesDict } from '../../../store/constants';
+import { dataTypesDict } from '../../../lib/constants';
 
 export default {
   name: 'Finalize',

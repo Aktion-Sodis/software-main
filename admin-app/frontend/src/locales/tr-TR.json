@@ -17,7 +17,8 @@
       "minCharNotMet": "En az {minChar} uzunluğunda olmalı.",
       "required": "Zorunlu alan.",
       "unsavedChanges": "Kaydedilmemiş değişiklikler var. Çıkmak istediğinizden emin misiniz?",
-      "addInNewLocale": "Başka bir dilde"
+      "addInNewLocale": "Başka bir dilde",
+      "invalidForm": "Geçersiz form. Lütfen girdilerin uyarılarına dikkat ediniz."
     },
     "noTextProvided": "Buraya bir metin girilmemiş.",
     "noTags": "There are no tags.",

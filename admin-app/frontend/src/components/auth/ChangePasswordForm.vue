@@ -7,7 +7,6 @@
       :append-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
       :rules="[rules.required, rules.min]"
       :type="showOldPassword ? 'text' : 'password'"
-      name="input-10-1"
       :label="$t('changePassword.oldPassword.label')"
       :hint="$t('changePassword.oldPassword.hint')"
       @click:append="showOldPassword = !showOldPassword"
@@ -17,9 +16,8 @@
       required
       v-model="newPassword"
       :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[rules.required, rules.min]"
+      :rules="[rules.required, rules.minPasswordLength]"
       :type="showNewPassword ? 'text' : 'password'"
-      name="input-10-1"
       :label="$t('changePassword.newPassword.label')"
       :hint="$t('changePassword.newPassword.hint')"
       @click:append="showNewPassword = !showNewPassword"
@@ -34,9 +32,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-
-const passwordMinChar = 8;
+import { mapActions } from 'vuex';
+import { formValidators } from '../../lib/utils';
+import { routeNamesDict, typesDictionary } from '../../lib/constants';
 
 export default {
   name: 'ChangePasswordForm',
@@ -48,27 +46,29 @@ export default {
       showNewPassword: false,
       loading: false,
       rules: {
-        required: (value) => !!value || this.$t('general.form.required'),
-        min: (value) => value.length >= 8 || this.minCharNotMeti18n,
-        notEmpty: (value) => !value || value.replace(/ /g, '') !== '' || this.requiredi18n,
+        required: formValidators.required,
+        minPasswordLength: formValidators.minPasswordLength,
+        notEmpty: formValidators.notEmpty,
       },
     };
   },
-  computed: {
-    ...mapGetters({}),
-    minCharNotMeti18n() {
-      return this.$t('general.form.minCharNotMet', {
-        minChar: passwordMinChar,
-      });
-    },
+  mounted() {
+    this.$refs.form.reset();
   },
   methods: {
     ...mapActions({
       changePassword: 'auth/changePassword',
+      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
     }),
     async submit() {
       const valid = this.$refs.form.validate();
-      if (!valid) return;
+      if (!valid) {
+        this.showFeedbackForDuration({
+          type: typesDictionary.error,
+          text: this.$t('general.form.invalidForm'),
+        });
+        return;
+      }
 
       this.loading = true;
       const changePasswordStatus = await this.changePassword({
@@ -76,12 +76,13 @@ export default {
         newPassword: this.newPassword,
       });
       if (changePasswordStatus === 'success') {
-        console.log('redirect to orga struct');
-        this.$router.push({ name: 'OrganizationStructure' });
+        this.$router.push({ name: routeNamesDict.OrganizationStructure });
         return;
       }
       if (changePasswordStatus === 'failed') {
-        // TODO: handle error
+        this.showFeedbackForDuration({
+          text: this.$t('general.errorCodes.InternalErrorException'),
+        });
         this.loading = false;
       }
     },

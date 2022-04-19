@@ -45,7 +45,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { waitForMilliseconds } from '../lib/utils';
-import { dataTypesDict } from '../store/constants';
+import { dataTypesDict, routeNamesDict } from '../lib/constants';
 
 import Intervention from '../components/interventions/Intervention.vue';
 import InterventionModal from '../components/interventions/InterventionModal.vue';
@@ -53,7 +53,7 @@ import InterventionSkeleton from '../components/interventions/InterventionSkelet
 import DataCreationButtonCard from '../components/commons/DataCreationButtonCard.vue';
 
 export default {
-  name: 'Interventions',
+  name: routeNamesDict.Interventions,
   components: {
     Intervention,
     InterventionModal,

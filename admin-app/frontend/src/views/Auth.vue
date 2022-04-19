@@ -5,33 +5,33 @@
         <v-container fluid class="pt-16 pt-md-0">
           <v-row no-gutters class="d-flex justify-center align-center">
             <v-col cols="11" sm="10" md="8">
-              <h1 v-if="$route.name === 'Login'">{{ $t('login.title') }}</h1>
-              <h1 v-else-if="$route.name === 'CompleteUserInfo'">
+              <h1 v-if="$route.name === routeNamesDict.Login">{{ $t('login.title') }}</h1>
+              <h1 v-else-if="$route.name === routeNamesDict.CompleteUserInfo">
                 {{ $t('completeUserInfo.title') }}
               </h1>
-              <h1 v-else-if="$route.name === 'ChangePassword'">
+              <h1 v-else-if="$route.name === routeNamesDict.ChangePassword">
                 {{ $t('changePassword.title') }}
               </h1>
-              <h1 v-else-if="$route.name === 'ForgotPassword'">
+              <h1 v-else-if="$route.name === routeNamesDict.ForgotPassword">
                 {{ $t('forgotPassword.title') }}
               </h1>
-              <p class="mb-8 mt-4" v-if="$route.name === 'Login'">
+              <p class="mb-8 mt-4" v-if="$route.name === routeNamesDict.Login">
                 {{ $t('login.subtitle') }}
               </p>
-              <p class="mb-8 mt-4" v-else-if="$route.name === 'CompleteUserInfo'">
+              <p class="mb-8 mt-4" v-else-if="$route.name === routeNamesDict.CompleteUserInfo">
                 {{ $t('completeUserInfo.subtitle') }}
               </p>
-              <p class="mb-8 mt-4" v-else-if="$route.name === 'ChangePassword'">
+              <p class="mb-8 mt-4" v-else-if="$route.name === routeNamesDict.ChangePassword">
                 {{ $t('changePassword.subtitle') }}
               </p>
-              <p class="mb-8 mt-4" v-else-if="$route.name === 'ForgotPassword'">
+              <p class="mb-8 mt-4" v-else-if="$route.name === routeNamesDict.ForgotPassword">
                 {{ $t('forgotPassword.subtitle') }}
               </p>
 
-              <LoginForm v-if="$route.name === 'Login'" />
-              <UpdateUserForm v-else-if="$route.name === 'CompleteUserInfo'" />
-              <ChangePasswordForm v-else-if="$route.name === 'ChangePassword'" />
-              <ForgotPasswordForm v-else-if="$route.name === 'ForgotPassword'" />
+              <LoginForm v-if="$route.name === routeNamesDict.Login" />
+              <UpdateUserForm v-else-if="$route.name === routeNamesDict.CompleteUserInfo" />
+              <ChangePasswordForm v-else-if="$route.name === routeNamesDict.ChangePassword" />
+              <ForgotPasswordForm v-else-if="$route.name === routeNamesDict.ForgotPassword" />
             </v-col>
           </v-row>
           <v-row no-gutters class="d-md-none mt-4 mt-md-16">
@@ -73,11 +73,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import ChangePasswordForm from '../components/commons/ChangePasswordForm.vue';
-import ForgotPasswordForm from '../components/commons/ForgotPasswordForm.vue';
-import LoginForm from '../components/commons/LoginForm.vue';
-import UpdateUserForm from '../components/commons/UpdateUserForm.vue';
+import ChangePasswordForm from '../components/auth/ChangePasswordForm.vue';
+import ForgotPasswordForm from '../components/auth/ForgotPasswordForm.vue';
+import LoginForm from '../components/auth/LoginForm.vue';
+import UpdateUserForm from '../components/auth/UpdateUserForm.vue';
+import { routeNamesDict } from '../lib/constants';
 
 export default {
   components: {
@@ -87,15 +87,9 @@ export default {
     ForgotPasswordForm,
   },
   name: 'Auth',
-  data() {
-    return {};
-  },
-  computed: {
-    ...mapGetters({}),
-  },
-  methods: {
-    ...mapActions({}),
-  },
+  data: () => ({
+    routeNamesDict,
+  }),
 };
 </script>
 

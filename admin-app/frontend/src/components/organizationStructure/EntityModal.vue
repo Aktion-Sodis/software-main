@@ -160,11 +160,11 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { modalModesDict, dataTypesDict } from '../../store/constants';
-import LocaleTextBox from '../global/LocaleTextBox.vue';
+import { modalModesDict, dataTypesDict } from '../../lib/constants';
+import LocaleTextBox from '../commons/form/LocaleTextBox.vue';
 import { Entity } from '../../models';
-import { emptyMutableI18nString, mutableI18nString } from '../../store/classes';
-import { deriveFilePath } from '../../store/utils';
+import { emptyMutableI18nString, mutableI18nString } from '../../lib/classes';
+import { deriveFilePath } from '../../lib/utils';
 import ImgFromS3 from '../commons/ImgFromS3.vue';
 
 const entityDescriptionMaxChar = Math.max(

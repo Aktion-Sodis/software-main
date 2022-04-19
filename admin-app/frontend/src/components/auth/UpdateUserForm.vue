@@ -24,7 +24,7 @@
       required
       v-model="password"
       :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[rules.required, rules.min]"
+      :rules="[rules.required, rules.minPasswordLength]"
       :type="showPassword ? 'text' : 'password'"
       name="input-10-1"
       :label="$t('completeUserInfo.password.label')"
@@ -41,9 +41,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-
-const passwordMinChar = 8;
+import { mapActions } from 'vuex';
+import { formValidators } from '../../lib/utils';
+import { routeNamesDict, signInStatusDict, typesDictionary } from '../../lib/constants';
 
 export default {
   name: 'UpdateUserForm',
@@ -55,27 +55,26 @@ export default {
       showPassword: false,
       loading: false,
       rules: {
-        required: (value) => !!value || this.$t('general.form.required'),
-        min: (value) => value.length >= 8 || this.minCharNotMeti18n,
-        notEmpty: (value) => !value || value.replace(/ /g, '') !== '' || this.requiredi18n,
+        required: formValidators.required,
+        minPasswordLength: formValidators.minPasswordLength,
+        notEmpty: formValidators.notEmpty,
       },
     };
-  },
-  computed: {
-    ...mapGetters({}),
-    minCharNotMeti18n() {
-      return this.$t('general.form.minCharNotMet', {
-        minChar: passwordMinChar,
-      });
-    },
   },
   methods: {
     ...mapActions({
       completeUserInformation: 'auth/completeUserInformation',
+      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
     }),
     async submit() {
       const valid = this.$refs.form.validate();
-      if (!valid) return;
+      if (!valid) {
+        this.showFeedbackForDuration({
+          type: typesDictionary.error,
+          text: this.$t('general.form.invalidForm'),
+        });
+        return;
+      }
 
       this.loading = true;
       const signInStatus = await this.completeUserInformation({
@@ -83,18 +82,19 @@ export default {
         lastName: this.lastName,
         newPassword: this.password,
       });
-      if (signInStatus === 'success') {
-        console.log('redirect to orga struct');
-        this.$router.push({ name: 'OrganizationStructure' });
+      if (signInStatus === signInStatusDict.success) {
+        this.$router.push({ name: routeNamesDict.OrganizationStructure });
         return;
       }
-      if (signInStatus === 'failed') {
-        // TODO: handle error
-        this.loading = false;
+      if (signInStatus === signInStatusDict.failed) {
+        this.showFeedbackForDuration({
+          type: typesDictionary.error,
+          text: this.$t('general.errorCodes.InternalErrorException'),
+        });
         return;
       }
-      if (signInStatus === 'completeUserInfo') {
-        this.$router.push({ name: 'CompleteUserInfo' });
+      if (signInStatus === signInStatusDict.completeUserInfo) {
+        this.$router.push({ name: routeNamesDict.CompleteUserInfo });
       }
     },
   },

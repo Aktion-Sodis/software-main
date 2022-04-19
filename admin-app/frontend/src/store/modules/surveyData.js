@@ -1,9 +1,6 @@
-// import { API, DataStore } from 'aws-amplify';
-// import { createSurvey } from '../../graphql/mutations';
 import { API, DataStore, Storage } from 'aws-amplify';
 import { v4 as uuidv4 } from 'uuid';
 import { deleteSurvey } from '../../graphql/mutations';
-// import { listSurveys, listSurveyTags } from '../../graphql/queries';
 import {
   I18nString,
   Question,
@@ -12,9 +9,9 @@ import {
   // SurveyTag,
   // SurveySurveyTagRelation,
 } from '../../models';
-import { emptyQuestion, emptyQuestionOption } from '../classes';
-import { dataTypesDict, modalModesDict } from '../constants';
-import { deriveFilePath } from '../utils';
+import { emptyQuestion, emptyQuestionOption } from '../../lib/classes';
+import { dataTypesDict, modalModesDict } from '../../lib/constants';
+import { deriveFilePath } from '../../lib/utils';
 
 const surveysData = {
   namespaced: true,

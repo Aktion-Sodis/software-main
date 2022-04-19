@@ -108,6 +108,12 @@ export const syncStatusDict = Object.freeze({
   synchronizing: 'synchronizing',
 });
 
+export const signInStatusDict = Object.freeze({
+  success: 'success',
+  failed: 'failed',
+  completeUserInfo: 'completeUserInfo',
+});
+
 export const allowedFileUploadTypes = Object.freeze(['image/png', 'audio/mpeg', 'application/pdf']);
 
 export const typesDictionary = Object.freeze({
@@ -115,4 +121,18 @@ export const typesDictionary = Object.freeze({
   info: 'info',
   warning: 'warning',
   error: 'error',
+});
+
+export const authChallengeNamesDict = Object.freeze({
+  newPasswordRequired: 'NEW_PASSWORD_REQUIRED',
+});
+
+export const routeNamesDict = Object.freeze({
+  Login: 'Login',
+  OrganizationStructure: 'OrganizationStructure',
+  CompleteUserInfo: 'CompleteUserInfo',
+  ChangePassword: 'ChangePassword',
+  ForgotPassword: 'ForgotPassword',
+  Surveys: 'Surveys',
+  Interventions: 'Interventions',
 });

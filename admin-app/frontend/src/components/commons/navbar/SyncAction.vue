@@ -1,7 +1,7 @@
 <template>
   <v-list-item class="px-2">
     <v-list-item-avatar class="my-0">
-      <v-btn icon color="grey" large v-if="showLoadingCircle">
+      <v-btn icon color="grey" large v-if="isSynchronizing">
         <v-icon> mdi-cloud </v-icon>
         <v-progress-circular
           style="position: absolute"
@@ -11,13 +11,7 @@
           width="2.5"
         ></v-progress-circular>
       </v-btn>
-      <v-btn
-        icon
-        color="grey"
-        large
-        v-else-if="showRefreshIcon"
-        @click="refresh({ routeName: currentRouteName })"
-      >
+      <v-btn icon color="grey" large v-else-if="isInSync" @click="refresh">
         <v-icon> mdi-cloud-refresh </v-icon>
       </v-btn>
       <v-btn large color="grey" icon v-else>
@@ -32,12 +26,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-
-const syncStatusDict = {
-  inSync: 'inSync',
-  synched: 'synched',
-  synchronizing: 'synchronizing',
-};
+import { syncStatusDict } from '../../../lib/constants';
 
 export default {
   name: 'SyncAction',
@@ -45,14 +34,11 @@ export default {
     ...mapGetters({
       syncStatus: 'SYNC_UI/getStatus',
     }),
-    showLoadingCircle() {
+    isSynchronizing() {
       return this.syncStatus === syncStatusDict.synchronizing;
     },
-    showRefreshIcon() {
+    isInSync() {
       return this.syncStatus === syncStatusDict.inSync;
-    },
-    currentRouteName() {
-      return this.$route.name;
     },
   },
   methods: {

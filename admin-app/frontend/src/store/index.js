@@ -4,15 +4,16 @@ import VuexPersistence from 'vuex-persist';
 import i18n from '../i18n';
 
 // import modules
-import authModule from './authModule';
-import interventionsData from './interventions/data';
-import surveysData from './survey/data';
-import QUESTION_UI from './questions/ui';
-import FEEDBACK_UI from './feedback/ui';
-import levelsData from './levels/data';
-import entitiesData from './entities/data';
-import dataModal from './modal/ui';
-import SYNC_UI from './sync/ui';
+import authModule from './modules/auth';
+import interventionsData from './modules/interventionData';
+import surveyData from './modules/surveyData';
+import QUESTION_UI from './modules/questionUI';
+import FEEDBACK_UI from './modules/feedbackUI';
+// eslint-disable-next-line
+import levelsData from './modules/levelData';
+import entitiesData from './modules/entityData';
+import dataModal from './modules/dataModal';
+import SYNC_UI from './modules/syncUI';
 
 // persist
 const vuexLocal = new VuexPersistence({
@@ -119,7 +120,7 @@ export default new Vuex.Store({
     auth: authModule,
     dataModal,
     ENTITY_Data: entitiesData,
-    SURVEY_Data: surveysData,
+    SURVEY_Data: surveyData,
     LEVEL_Data: levelsData,
     INTERVENTION_Data: interventionsData,
     QUESTION_UI,

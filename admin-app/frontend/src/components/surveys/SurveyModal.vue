@@ -18,7 +18,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { modalModesDict, dataTypesDict } from '../../store/constants';
+import { modalModesDict, dataTypesDict } from '../../lib/constants';
 
 import SurveyModalStepper from './surveyModalContent/SurveyModalStepper.vue';
 import QuestionTabs from './surveyModalContent/QuestionTabs.vue';

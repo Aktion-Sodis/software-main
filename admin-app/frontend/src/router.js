@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import store from '../store';
-import i18n from '../i18n';
+import store from './store';
+import i18n from './i18n';
 
-// import Home from '../views/Home.vue';
-import OrganizationStructure from '../views/OrganizationStructure.vue';
-// import BaseData from '../views/BaseData.vue';
-import Surveys from '../views/Surveys.vue';
-import Interventions from '../views/Interventions.vue';
-import Auth from '../views/Auth.vue';
-import { syncStatusDict } from '../store/constants';
+// import Home from './views/Home.vue';
+import OrganizationStructure from './views/OrganizationStructure.vue';
+// import BaseData from './views/BaseData.vue';
+import Surveys from './views/Surveys.vue';
+import Interventions from './views/Interventions.vue';
+import Auth from './views/Auth.vue';
+import { routeNamesDict, syncStatusDict } from './lib/constants';
 
 Vue.use(VueRouter);
 
@@ -27,7 +27,7 @@ export const routes = [
   // },
   {
     path: '/login',
-    name: 'Login',
+    name: routeNamesDict.Login,
     component: Auth,
     meta: {
       requiresAuth: false,
@@ -38,7 +38,7 @@ export const routes = [
   },
   {
     path: '/',
-    redirect: { name: 'OrganizationStructure' },
+    redirect: { name: routeNamesDict.OrganizationStructure },
     meta: {
       requiresAuth: true,
       shouldBeSynced: false,
@@ -48,7 +48,7 @@ export const routes = [
   },
   {
     path: '/complete-user-info',
-    name: 'CompleteUserInfo',
+    name: routeNamesDict.CompleteUserInfo,
     component: Auth,
     meta: {
       requiresAuth: false,
@@ -59,7 +59,7 @@ export const routes = [
   },
   {
     path: '/change-password',
-    name: 'ChangePassword',
+    name: routeNamesDict.ChangePassword,
     component: Auth,
     meta: {
       requiresAuth: false,
@@ -70,7 +70,7 @@ export const routes = [
   },
   {
     path: '/forgot-password',
-    name: 'ForgotPassword',
+    name: routeNamesDict.ForgotPassword,
     component: Auth,
     meta: {
       requiresAuth: false,
@@ -81,7 +81,7 @@ export const routes = [
   },
   {
     path: '/organization-structure',
-    name: 'OrganizationStructure',
+    name: routeNamesDict.OrganizationStructure,
     component: OrganizationStructure,
     meta: {
       requiresAuth: true,
@@ -93,7 +93,7 @@ export const routes = [
   },
   {
     path: '/surveys',
-    name: 'Surveys',
+    name: routeNamesDict.Surveys,
     component: Surveys,
     meta: {
       requiresAuth: true,
@@ -116,7 +116,7 @@ export const routes = [
   // },
   {
     path: '/interventions',
-    name: 'Interventions',
+    name: routeNamesDict.Interventions,
     component: Interventions,
     meta: {
       requiresAuth: true,
@@ -132,7 +132,7 @@ export const routes = [
   //   // route level code-splitting
   //   // this generates a separate chunk (about.[hash].js) for this route
   //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+  //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
   //   meta: {
   //     requiresAuth: false,
   //     shouldBeSynced: false,
@@ -153,8 +153,8 @@ router.beforeEach(async (to, from, next) => {
   await Vue.nextTick();
   if (
     store.getters['auth/getIsAuthenticated']
-    && (to.name === 'Login' || to.name === 'CompleteUserInfo')
-  ) next({ name: from?.name ?? 'OrganizationStructure' });
+    && (to.name === routeNamesDict.Login || to.name === routeNamesDict.CompleteUserInfo)
+  ) next({ name: from?.name ?? routeNamesDict.OrganizationStructure });
   if (
     (!from.name || from.meta.requiresAuth)
     && store.getters['auth/lastRouteActivityDiffTooLarge']
@@ -162,7 +162,7 @@ router.beforeEach(async (to, from, next) => {
     && !store.getters['auth/getRememberSession']
   ) {
     store.dispatch('auth/deleteSession', { root: true });
-    next({ name: 'Login' });
+    next({ name: routeNamesDict.Login });
     store.dispatch(
       'FEEDBACK_UI/showFeedbackForDuration',
       {
@@ -178,7 +178,7 @@ router.beforeEach(async (to, from, next) => {
     if (!store.getters['auth/getIsAuthenticated']) {
       // redirect to login page if not authenticated
       store.dispatch('auth/deleteSession'); // delete state data for consistency
-      next({ name: 'Login' });
+      next({ name: routeNamesDict.Login });
     } else {
       if (to.meta.shouldBeSynced) {
         store.dispatch('SYNC_UI/refreshHandler', { routeName: to.name }, { root: true });

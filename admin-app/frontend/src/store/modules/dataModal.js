@@ -1,9 +1,8 @@
 import Vue from 'vue';
-import { dataTypesDict, modalModesDict } from '../constants';
-
+import { dataTypesDict, modalModesDict } from '../../lib/constants';
 import {
   emptySurvey, emptyIntervention, emptyLevel, emptyEntity,
-} from '../classes';
+} from '../../lib/classes';
 import i18n from '../../i18n';
 
 const dataModal = {

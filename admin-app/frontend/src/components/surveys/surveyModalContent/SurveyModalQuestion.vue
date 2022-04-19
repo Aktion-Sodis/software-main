@@ -355,13 +355,13 @@ import {
   emptyMutableQuestionOption,
   mutableI18nString,
   mutableQuestionOption,
-} from '../../../store/classes';
-import { modalModesDict, questionTypesIconDict } from '../../../store/constants';
+} from '../../../lib/classes';
+import { modalModesDict, questionTypesIconDict } from '../../../lib/constants';
 // eslint-disable-next-line import/named
-import { compareI18nStrings, deriveFilePath } from '../../../store/utils';
+import { compareI18nStrings, deriveFilePath } from '../../../lib/utils';
 
-import LocaleTextBox from '../../global/LocaleTextBox.vue';
-import FileInput from '../../commons/FileInput.vue';
+import LocaleTextBox from '../../commons/form/LocaleTextBox.vue';
+import FileInput from '../../commons/form/FileInput.vue';
 import ImgFromS3 from '../../commons/ImgFromS3.vue';
 
 const questionTextMaxChar = Math.max(parseInt(process.env.VUE_APP_QUESTION_TEXT_MAX_CHAR, 10), 0);

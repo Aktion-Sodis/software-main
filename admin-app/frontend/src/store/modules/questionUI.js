@@ -1,4 +1,4 @@
-import { emptyQuestionOption, emptyQuestion, emptyI18nString } from '../classes';
+import { emptyQuestionOption, emptyQuestion, emptyI18nString } from '../../lib/classes';
 
 const QUESTION_UI = {
   namespaced: true,

@@ -306,13 +306,13 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { dataTypesDict, modalModesDict } from '../../../store/constants';
-import LocaleTextBox from '../../global/LocaleTextBox.vue';
+import { dataTypesDict, modalModesDict } from '../../../lib/constants';
+import LocaleTextBox from '../../commons/form/LocaleTextBox.vue';
 import ImgFromS3 from '../../commons/ImgFromS3.vue';
 import { Survey, SurveyType } from '../../../models';
-import { emptyMutableI18nString, mutableI18nString } from '../../../store/classes';
-import FileInput from '../../commons/FileInput.vue';
-import { deriveFilePath } from '../../../store/utils';
+import { emptyMutableI18nString, mutableI18nString } from '../../../lib/classes';
+import FileInput from '../../commons/form/FileInput.vue';
+import { deriveFilePath } from '../../../lib/utils';
 
 const surveyDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_SURVEY_DESCRIPTION_MAX_CHAR, 10),

@@ -23,7 +23,8 @@ import DevPhaseSnackbar from './components/commons/VersionSnackbar.vue';
 import Feedback from './components/commons/Feedback.vue';
 import LangSelect from './components/commons/LangSelect.vue';
 // import SearchBox from './components/commons/SearchBox.vue';
-import NavBar from './components/commons/NavBar.vue';
+import NavBar from './components/commons/navbar/NavBar.vue';
+import { routeNamesDict } from './lib/constants';
 
 export default {
   name: 'App',
@@ -44,7 +45,12 @@ export default {
       isAuthenticated: 'auth/getIsAuthenticated',
     }),
     isInAuthView() {
-      return this.$route.name === 'Login' || this.$route.name === 'CompleteUserInfo';
+      return (
+        this.$route.name === routeNamesDict.Login
+        || this.$route.name === routeNamesDict.CompleteUserInfo
+        || this.$route.name === routeNamesDict.ForgotPassword
+        || this.$route.name === routeNamesDict.ChangePassword
+      );
     },
     vMainClass() {
       if (this.isInAuthView) return 'mt-0';

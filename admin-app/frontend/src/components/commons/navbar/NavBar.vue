@@ -23,7 +23,7 @@
       <v-list>
         <v-list-item class="px-2">
           <v-list-item-avatar class="my-0">
-            <v-img src="../../static/aktionSodisSmall.png"></v-img>
+            <v-img src="../../../static/aktionSodisSmall.png"></v-img>
           </v-list-item-avatar>
           <v-list-item-title class="white--text text-body-1 ml-3">
             {{ societyName }}
@@ -64,9 +64,9 @@
           </v-list-item-avatar>
           <div class="next-to-avatar">
             <v-list-item-content>
-              <v-list-item-title class="text-h6 white--text" style="white-space: initial"
-                >{{ credentials.firstName }} {{ credentials.lastName }}</v-list-item-title
-              >
+              <v-list-item-title class="text-h6 white--text" style="white-space: initial">
+                {{ credentials.firstName }} {{ credentials.lastName }}
+              </v-list-item-title>
               <v-list-item-subtitle class="white--text" style="white-space: initial">
                 {{ credentials.email }}
               </v-list-item-subtitle>
@@ -84,7 +84,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import SyncAction from './SyncAction.vue';
-import { routes } from '../../router';
+import { routes } from '../../../router';
+import { routeNamesDict } from '../../../lib/constants';
 
 const societyName = process.env.VUE_APP_SOCIETY_VERBOSE_NAME;
 
@@ -92,7 +93,6 @@ export default {
   components: { SyncAction },
   name: 'NavBar',
   data: () => ({
-    societyName,
     routes: routes
       .filter((r) => r.meta.onSideBar)
       .map((r) => ({
@@ -110,6 +110,9 @@ export default {
     currentRouteName() {
       return this.$route.name;
     },
+    societyName() {
+      return societyName;
+    },
   },
   methods: {
     ...mapActions({
@@ -118,7 +121,7 @@ export default {
     }),
     async logout() {
       await this.deleteSession();
-      this.$router.push({ name: 'Login' });
+      this.$router.push({ name: routeNamesDict.Login });
     },
   },
 };
