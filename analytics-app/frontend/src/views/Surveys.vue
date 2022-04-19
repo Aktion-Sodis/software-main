@@ -1,12 +1,12 @@
 <template>
   <div class="main">
       <div class="title">
-        <h1 style="text-align: left" >
+        <h1>
             Fragebögen: Kochstellen
         </h1>
         <div class="datepicker-wrapper">
-            <h3 style="text-align: left">
-            Zeitraum wählen:
+            <h3>
+                Zeitraum wählen:
             </h3>
             <div class="survey-datepicker">
                 <el-date-picker
@@ -100,10 +100,13 @@ export default {
 </script>
 
 <style>
-
 .main {
-    margin-left: 20px;
-    overflow: hidden;
+    margin-left: 30px;
+    text-align: left;
+}
+
+.title {
+    margin-left: 5px;
 }
 
 .datepicker-wrapper {
@@ -120,8 +123,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     margin-top: 20px;
-    height: auto;
-    
+    height: auto;  
 }
 
 </style>
