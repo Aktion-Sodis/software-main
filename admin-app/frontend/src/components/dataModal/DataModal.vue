@@ -4,6 +4,7 @@
     max-width="1200px"
     :persistent="!isRead"
     @keydown.esc="escHandler"
+    v-if="isDisplayedAsData"
   >
     <v-card class="pa-0">
       <InterventionModalRead v-if="isRead && isIntervention" />
@@ -38,6 +39,7 @@ import LevelModalRead from './level/LevelModalRead.vue';
 import SurveyModalStepper from './survey/SurveyModalStepper.vue';
 import SurveyModal from './survey/SurveyModal.vue';
 import SurveyModalQuestionTabs from './survey/question/SurveyModalQuestionTabs.vue';
+import { waitForMilliseconds } from '../../lib/utils';
 
 export default {
   name: 'DataModal',
@@ -51,6 +53,12 @@ export default {
     SurveyModalStepper,
     SurveyModal,
     SurveyModalQuestionTabs,
+  },
+  data: () => ({
+    isDisplayedAsData: false,
+  }),
+  watch: {
+    isDisplayed: 'destroyModalAfterDelay',
   },
   computed: {
     ...mapGetters({
@@ -87,8 +95,17 @@ export default {
     }),
     escHandler() {
       if (this.mode === modalModesDict.edit) this.abortEditData();
-      else if (this.isRead) this.abortCreateData();
-      else this.abortReadData();
+      else if (this.isRead) this.abortReadData();
+      else this.abortCreateData();
+    },
+    async destroyModalAfterDelay(newValue) {
+      // If closed, wait for 500, if still closed, destroy component instance
+      if (newValue) {
+        this.isDisplayedAsData = true;
+        return;
+      }
+      await waitForMilliseconds(500);
+      if (!this.isDisplayed) this.isDisplayedAsData = false;
     },
   },
 };
