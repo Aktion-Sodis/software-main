@@ -26,7 +26,7 @@
                 Antwort:
             </h2>
             <h3 style="text-align: left">
-                Ausgewählte Frage: {{  }}
+                Ausgewählte Frage: {{ selectedQuestion.question_text }}
             </h3>
             <h3 style="text-align: left">
                 Antwort: {{ selectedQuestion.answer }}
@@ -43,19 +43,19 @@ import { ref, reactive } from 'vue'
 export default {
     props: {},
     components: {},
-    setup: (questions, selectedQuestion) => {
-        var selectedID = ref();
-        var selectedQuestion = reactive([]);
-
-        const setActive = (question) => { selectedID.value = question.question_id; selectedQuestion = question;console.log(selectedQuestion.question_text)}
-        return {
-            selectedQuestion,
-            setActive,
-            selectedID,
-        };
+    computed: {
+        selectedQuestion() {
+            return this.questions.find(item => item.question_id === this.selectedID) || 0
+        },
+    },
+    methods: {
+        setActive(question) {
+            return this.selectedID = question.question_id
+        },
     },
     data() {
         return {
+            selectedID: 0,
             questions: [
                 {
                     question_id: 1,
@@ -63,7 +63,7 @@ export default {
                     answer: 'gut',
                 },
                 {
-                    question_id: 2,
+                    question_id: "2abs",
                     question_text: "Trinkst du ausreichend Wasser?",
                     answer: 'Nein',
                 },
