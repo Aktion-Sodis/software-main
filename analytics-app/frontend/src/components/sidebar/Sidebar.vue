@@ -2,16 +2,22 @@
   <div @mouseover="openSidebar" @mouseleave="closeSidebar" class="sidebar" :style="{ width: sidebarWidth, transition: sidebarTransition }">
     <div class="link">
       <el-image class="image" src="/src/static/aktionSodisSmall.png"/>
-        <span v-if="!collapsed">
-          AktionSodis
-        </span>
+      <span v-if="!collapsed">
+        AktionSodis
+      </span>
     </div>
     <div style="margin-top: 50px">
       <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
       <SidebarLink to="/surveys" icon="fas fa-columns">Fragebögen</SidebarLink>
       <SidebarLink to="/dashboards" icon="fas fa-chart-bar">Dashboards</SidebarLink>
       <SidebarLink to="/hello-world" icon="fa-solid fa-gear">Einstellungen</SidebarLink>
-      </div>
+    </div>
+    <div class="link authorization">
+      <i class="icon fa-solid fa-right-to-bracket"/>
+      <span v-if="!collapsed">
+        Login
+      </span>
+    </div>
   </div>
 </template>
 
@@ -73,5 +79,19 @@ export default {
   width: 25px;
   margin-right: 10px;
 }
+
+.link .icon {
+  flex-shrink: 0;
+  width: 25px;
+  margin-right: 10px;
+}
+
+.authorization {
+  position: fixed;
+  bottom: 0;
+}
+
+
+
 
 </style>
