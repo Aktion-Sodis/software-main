@@ -252,7 +252,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
                   answers[currentQuestion] ??= QuestionAnswer(
                       questionID: widget.survey.id!,
                       date: DateTime.now(),
-                      type: currentQuestion.type);
+                      type: currentQuestion.type,
+                      questionOptions: [],
+                  );
                 }
                 if (answers[currentQuestion] != null) {
                   //check for followUpQuestions
@@ -289,7 +291,6 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
                 if (currentQuestion.type == QuestionType.AUDIO ||
                     currentQuestion.type == QuestionType.PICTURE) {
-                  //TODO: connect answers properly
                   _proceedToNextPage(currentQuestion);
                 }
               }
