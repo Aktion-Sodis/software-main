@@ -22,6 +22,10 @@ class SessionCubit extends Cubit<SessionState> {
     final userId = await authRepo.attemptAutoLogin();
     if (userId != null) {
       User? user = await userRepo.getUserById(userId);
+      if (user == null) {
+        await Future.delayed(Duration(seconds: 1));
+        user = await userRepo.getUserById(userId);
+      }
       emit(FullyAuthenticatedSessionState(userID: userId, user: user));
       //todo: differ when password is necessary
     } else {

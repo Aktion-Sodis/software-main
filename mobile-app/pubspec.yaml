@@ -21,11 +21,11 @@ dependencies:
 
 
   #amplify packages
-  amplify_flutter: ^0.4.0-rc.1
-  amplify_datastore: ^0.4.0-rc.1
-  amplify_api: ^0.4.0-rc.1
-  amplify_auth_cognito: ^0.4.0-rc.1
-  amplify_storage_s3: ^0.4.0-rc.1
+  amplify_flutter: ^0.4.4
+  amplify_datastore: ^0.4.4
+  amplify_api: ^0.4.4
+  amplify_auth_cognito: ^0.4.4
+  amplify_storage_s3: ^0.4.4
 
   
   advance_pdf_viewer_fork: ^2.0.0
@@ -63,6 +63,5 @@ flutter:
   uses-material-design: true
 
   assets:
-      - assets/test/
       - assets/fixAssets/
       - assets/specificAssets/
