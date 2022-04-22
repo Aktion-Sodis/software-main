@@ -83,7 +83,7 @@
       }
     }
   },
-  "login": {
+  "Login": {
     "title": "Hoş geldin!",
     "subtitle": "Lütfen giriş yap.",
     "email": "Email",
@@ -95,7 +95,7 @@
     "dontHaveAnAccount": "Hesabın yok mu?",
     "askYourAdmin": "Erişim için bir dernek yetkilisine danış."
   },
-  "completeUserInfo": {
+  "CompleteUserInfo": {
     "title": "Bir şey daha...",
     "subtitle": "Görünen o ki sen buralarda yenisin. Lütfen Admin-App'i kullanmaya başlamak için profilini tamamla.",
     "firstName": "Ad",
@@ -109,7 +109,7 @@
   "home": {
     "title": "Ana Sayfa"
   },
-  "changePassword": {
+  "ChangePassword": {
     "title": "Şifreni güncelle",
     "subtitle": "Eski ve yeni şifrelerini gir",
     "oldPassword": {
@@ -121,7 +121,7 @@
       "hint": "Yeni şifre oluşturun"
     }
   },
-  "forgotPassword": {
+  "ForgotPassword": {
     "title": "Şifremi Unuttum",
     "subtitle": "E-posta adresinizi giriniz. Size bir doğrulama kodu göndereceğiz. Lütfen kodu girin ve hesabınız için yeni bir şifre belirleyin.",
     "emailedCode": "Kod",

@@ -4,7 +4,7 @@
       <v-text-field
         v-model="firstName"
         :rules="[rules.required, rules.notEmpty]"
-        :label="$t('completeUserInfo.firstName')"
+        :label="$t('CompleteUserInfo.firstName')"
         :disabled="loading"
         required
         outlined
@@ -13,7 +13,7 @@
         class="ml-0 ml-sm-4"
         v-model="lastName"
         :rules="[rules.required, rules.notEmpty]"
-        :label="$t('completeUserInfo.lastName')"
+        :label="$t('CompleteUserInfo.lastName')"
         :disabled="loading"
         required
         outlined
@@ -27,14 +27,14 @@
       :rules="[rules.required, rules.minPasswordLength]"
       :type="showPassword ? 'text' : 'password'"
       name="input-10-1"
-      :label="$t('completeUserInfo.password.label')"
-      :hint="$t('completeUserInfo.password.hint')"
+      :label="$t('CompleteUserInfo.password.label')"
+      :hint="$t('CompleteUserInfo.password.hint')"
       @click:append="showPassword = !showPassword"
     ></v-text-field>
     <v-btn :disabled="loading" type="submit" block large color="primary" class="text-none">
       <v-progress-circular indeterminate v-if="loading"></v-progress-circular>
       <span v-else>
-        {{ $t('completeUserInfo.start') }}
+        {{ $t('CompleteUserInfo.start') }}
       </span>
     </v-btn>
   </v-form>

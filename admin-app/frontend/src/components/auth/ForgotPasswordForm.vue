@@ -4,7 +4,7 @@
       <v-text-field
         v-model="emailedCode"
         :rules="[rules.required, rules.notEmpty]"
-        :label="$t('forgotPassword.emailedCode')"
+        :label="$t('ForgotPassword.emailedCode')"
         :disabled="loading"
         required
         outlined
@@ -12,7 +12,7 @@
       <v-text-field
         v-model="newPassword1"
         :rules="[rules.required, rules.notEmpty]"
-        :label="$t('forgotPassword.newPassword1')"
+        :label="$t('ForgotPassword.newPassword1')"
         :disabled="loading"
         required
         outlined
@@ -22,7 +22,7 @@
       <v-text-field
         v-model="newPassword2"
         :rules="[rules.required, rules.notEmpty]"
-        :label="$t('forgotPassword.newPassword2')"
+        :label="$t('ForgotPassword.newPassword2')"
         :disabled="loading"
         required
         outlined
@@ -32,7 +32,7 @@
       <v-btn :disabled="loading" type="submit" block large color="primary" class="text-none">
         <v-progress-circular indeterminate v-if="loading"></v-progress-circular>
         <span v-else>
-          {{ $t('forgotPassword.confirm') }}
+          {{ $t('ForgotPassword.confirm') }}
         </span>
       </v-btn>
     </div>
@@ -40,7 +40,7 @@
       <v-text-field
         v-model="email"
         :rules="[rules.required]"
-        :label="$t('login.email')"
+        :label="$t('Login.email')"
         :disabled="loading"
         required
         outlined
@@ -56,7 +56,7 @@
       >
         <v-progress-circular indeterminate v-if="loading"></v-progress-circular>
         <span v-else>
-          {{ $t('forgotPassword.sendCode') }}
+          {{ $t('ForgotPassword.sendCode') }}
         </span>
       </v-btn>
     </div>

@@ -19,9 +19,9 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import DevPhaseSnackbar from './components/commons/VersionSnackbar.vue';
+import DevPhaseSnackbar from './components/commons/floating/VersionSnackbar.vue';
 import Feedback from './components/commons/Feedback.vue';
-import LangSelect from './components/commons/LangSelect.vue';
+import LangSelect from './components/commons/floating/LangSelect.vue';
 // import SearchBox from './components/commons/SearchBox.vue';
 import NavBar from './components/commons/navbar/NavBar.vue';
 import { routeNamesDict } from './lib/constants';

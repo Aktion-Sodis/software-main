@@ -83,7 +83,7 @@
       }
     }
   },
-  "login": {
+  "Login": {
     "title": "¡Bienvenido de nuevo!",
     "subtitle": "Por favor, inicie sesión con sus credenciales o regístrese.",
     "email": "Email",
@@ -95,7 +95,7 @@
     "dontHaveAnAccount": "Todavía no tengo cuenta",
     "askYourAdmin": "Solicite acceso a su administrador."
   },
-  "completeUserInfo": {
+  "CompleteUserInfo": {
     "title": "Una cosa más...",
     "subtitle": "Parece que eres nuevo aquí. Finalice su perfil para comenzar a usar la Admin App.",
     "firstName": "Primer nombre",
@@ -109,7 +109,7 @@
   "home": {
     "title": "Inicio"
   },
-  "changePassword": {
+  "ChangePassword": {
     "title": "Actualiza tu contraseña",
     "subtitle": "Ingrese sus contraseñas anterior y nueva",
     "oldPassword": {
@@ -121,7 +121,7 @@
       "hint": "La contraseña que desea tener."
     }
   },
-  "forgotPassword": {
+  "ForgotPassword": {
     "title": "Has olvidado tu contraseña",
     "subtitle": "Introduzca su dirección de correo electrónico. Si hay una cuenta para ello, le enviaremos un correo electrónico con un código de verificación. Ingrese el código y establezca una nueva contraseña para su cuenta.",
     "emailedCode": "Código",

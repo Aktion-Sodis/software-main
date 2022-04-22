@@ -7,8 +7,8 @@
       :append-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
       :rules="[rules.required, rules.min]"
       :type="showOldPassword ? 'text' : 'password'"
-      :label="$t('changePassword.oldPassword.label')"
-      :hint="$t('changePassword.oldPassword.hint')"
+      :label="$t('ChangePassword.oldPassword.label')"
+      :hint="$t('ChangePassword.oldPassword.hint')"
       @click:append="showOldPassword = !showOldPassword"
     ></v-text-field>
     <v-text-field
@@ -18,14 +18,14 @@
       :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
       :rules="[rules.required, rules.minPasswordLength]"
       :type="showNewPassword ? 'text' : 'password'"
-      :label="$t('changePassword.newPassword.label')"
-      :hint="$t('changePassword.newPassword.hint')"
+      :label="$t('ChangePassword.newPassword.label')"
+      :hint="$t('ChangePassword.newPassword.hint')"
       @click:append="showNewPassword = !showNewPassword"
     ></v-text-field>
     <v-btn :disabled="loading" type="submit" block large color="primary" class="text-none">
       <v-progress-circular indeterminate v-if="loading"></v-progress-circular>
       <span v-else>
-        {{ $t('completeUserInfo.start') }}
+        {{ $t('CompleteUserInfo.start') }}
       </span>
     </v-btn>
   </v-form>
