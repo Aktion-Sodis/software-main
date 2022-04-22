@@ -1,9 +1,9 @@
 <template>
   <div class="outer-wrapper">
-      <el-row class="inner-wrapper">
+      <el-row justify="center" class="inner-wrapper">
           <el-col :span="12" class="login-wrapper">
                 <el-row no-gutters class="login-row">
-                    <el-col>
+                    <el-col class="login-col">
                         <h1>Welcome back!</h1>
                         <p>Please sign in with your credentials or register:</p>
                         <el-form>
@@ -76,13 +76,14 @@
                     </el-col>
                 </el-row>
           </el-col>
-          <el-col :span="12" class="image-wrapper">
+          <el-col :span="12" class="image-wrapper hidden-sm-and-down">
           </el-col>
       </el-row>
   </div>
 </template>
 
 <script>
+import 'element-plus/theme-chalk/display.css'
 export default {
     name: 'Login',
     data () {
@@ -118,6 +119,9 @@ export default {
   align-items: center;
   z-index: 1;
 }
+.login-col {
+    width: auto;
+}
 .block {
   display: block;
   width: 100%;
@@ -134,7 +138,6 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
-
 .image-wrapper {
   background-image: url('../static/colleagues.jpeg');
   background-size: cover;
