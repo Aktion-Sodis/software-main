@@ -1,7 +1,7 @@
 <template>
   <div>
     <Sidebar />
-    <div style="padding: 20px" :style="{ 'margin-left': sidebarWidth, transition: sidebarTransition}">
+    <div class="main" style="padding-left: 20px" :style="{ 'margin-left': sidebarWidth, transition: sidebarTransition}">
       <router-view></router-view>
     </div>
   </div>
@@ -19,6 +19,10 @@ export default {
 </script>
 
 <style>
+* {
+  padding: 0px;
+  margin: 0px;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
