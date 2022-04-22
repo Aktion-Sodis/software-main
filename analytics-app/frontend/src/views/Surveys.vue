@@ -133,7 +133,6 @@ export default {
 
 <style>
 .main {
-    margin-left: 30px;
     text-align: left;
 }
 

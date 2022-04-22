@@ -1,22 +1,24 @@
 <template>
-  <div @mouseover="openSidebar" @mouseleave="closeSidebar" class="sidebar" :style="{ width: sidebarWidth, transition: sidebarTransition }">
-    <div class="link">
-      <el-image class="image" src="/src/static/aktionSodisSmall.png"/>
-      <span v-if="!collapsed">
-        AktionSodis
-      </span>
-    </div>
-    <div style="margin-top: 50px">
-      <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
-      <SidebarLink to="/surveys" icon="fas fa-columns">Fragebögen</SidebarLink>
-      <SidebarLink to="/dashboards" icon="fas fa-chart-bar">Dashboards</SidebarLink>
-      <SidebarLink to="/hello-world" icon="fa-solid fa-gear">Einstellungen</SidebarLink>
-    </div>
-    <div class="link authorization">
-      <i class="icon fa-solid fa-right-to-bracket"/>
-      <span v-if="!collapsed">
-        Login
-      </span>
+  <div class="sidebar" :style="{ width: sidebarWidth, transition: sidebarTransition }" @mouseover="openSidebar" @mouseleave="closeSidebar" >
+    <div class="sidebar-wrapper">
+      <div class="link">
+        <el-image class="image" src="/src/static/aktionSodisSmall.png"/>
+        <span v-if="!collapsed">
+          AktionSodis
+        </span>
+      </div>
+      <div style="margin-top: 50px">
+        <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
+        <SidebarLink to="/surveys" icon="fas fa-columns">Fragebögen</SidebarLink>
+        <SidebarLink to="/dashboards" icon="fas fa-chart-bar">Dashboards</SidebarLink>
+        <SidebarLink to="/hello-world" icon="fa-solid fa-gear">Einstellungen</SidebarLink>
+      </div>
+      <div class="link authorization">
+        <i class="icon fa-solid fa-right-to-bracket"/>
+        <span v-if="!collapsed">
+          Login
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -51,10 +53,12 @@ export default {
   top: 0;
   left: 0;
   bottom: 0;
-  padding: 0.5em;
-  transition: 0.3s ease;
   display: flex;
   flex-direction: column;
+  transition: 0.3s ease;
+}
+.sidebar-wrapper {
+  padding: 0.5em;
 }
 .sidebar h1 {
   height: 2.5em;

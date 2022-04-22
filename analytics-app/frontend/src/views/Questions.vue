@@ -91,7 +91,11 @@ export default {
 <style scoped>
 
 .main {
-    margin-left: 30px;
+    text-align: left;
+}
+
+.title {
+    margin-left: 5px;
 }
 
 .question-list {

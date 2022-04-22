@@ -1,7 +1,7 @@
 <template>
   <div>
     <Sidebar />
-    <div :style="{ 'margin-left': sidebarWidth, transition: sidebarTransition}">
+    <div style="padding: 20px" :style="{ 'margin-left': sidebarWidth, transition: sidebarTransition}">
       <router-view></router-view>
     </div>
   </div>
