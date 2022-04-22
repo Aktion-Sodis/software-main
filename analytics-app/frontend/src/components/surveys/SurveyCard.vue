@@ -40,10 +40,6 @@ export default {
   box-shadow: 0px 0px 1px rgb(0, 0, 0, 0.25); 
 }
 
-.survey-card-inner {
-
-}
-
 .survey-card:hover {
   box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.25); 
 }
@@ -52,9 +48,6 @@ export default {
   width: 100%;
   padding-top: 10px;
   padding-bottom: 10px;
-}
-
-.survey-image-wrap {
 }
 
 .survey-description-wrap {

@@ -103,9 +103,6 @@ export default {
     flex-direction: row;
 }
 
-.inner-question-list {
-}
-
 .questions {
     display: flex;
     flex-direction: column;
