@@ -3,7 +3,7 @@ import { getUser } from '../../graphql/queries';
 import { createUser } from '../../graphql/mutations';
 
 import i18n from '../../i18n';
-import { authChallengeNamesDict, signInStatusDict } from '../../lib/constants';
+import { authChallengeNamesDict, signInStatusDict, vuexModulesDict } from '../../lib/constants';
 
 const authModule = {
   namespaced: true,
@@ -120,7 +120,7 @@ const authModule = {
         return signInStatusDict.success;
       } catch (error) {
         dispatch(
-          'FEEDBACK_UI/showFeedbackForDuration',
+          `${vuexModulesDict.feedback}/showFeedbackForDuration`,
           {
             type: 'error',
             text: i18n.t(`general.errorCodes.${error.code}`),
@@ -145,7 +145,7 @@ const authModule = {
     ) {
       if (!getters.getUserId) {
         dispatch(
-          'FEEDBACK_UI/showFeedbackForDuration',
+          `${vuexModulesDict.feedback}/showFeedbackForDuration`,
           {
             type: 'error',
             text: 'You cannot just update a user profile without following the sign in flow.',
@@ -226,7 +226,7 @@ const authModule = {
         await Auth.signOut();
       } catch (error) {
         dispatch(
-          'FEEDBACK_UI/showFeedbackForDuration',
+          `${vuexModulesDict.feedback}/showFeedbackForDuration`,
           {
             type: 'error',
             text: error.errors[0].message,

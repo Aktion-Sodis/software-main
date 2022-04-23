@@ -9,7 +9,7 @@ import OrganizationStructure from './views/OrganizationStructure.vue';
 import Surveys from './views/Surveys.vue';
 import Interventions from './views/Interventions.vue';
 import Auth from './views/Auth.vue';
-import { routeNamesDict, syncStatusDict } from './lib/constants';
+import { routeNamesDict, syncStatusDict, vuexModulesDict } from './lib/constants';
 
 Vue.use(VueRouter);
 
@@ -149,22 +149,22 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  store.commit('auth/updateRouteActivity', { root: true });
+  store.commit(`${vuexModulesDict.auth}/updateRouteActivity`, { root: true });
   await Vue.nextTick();
   if (
-    store.getters['auth/getIsAuthenticated']
+    store.getters[`${vuexModulesDict.auth}/getIsAuthenticated`]
     && (to.name === routeNamesDict.Login || to.name === routeNamesDict.CompleteUserInfo)
   ) next({ name: from?.name ?? routeNamesDict.OrganizationStructure });
   if (
     (!from.name || from.meta.requiresAuth)
-    && store.getters['auth/lastRouteActivityDiffTooLarge']
-    && store.getters['auth/getIsAuthenticated']
-    && !store.getters['auth/getRememberSession']
+    && store.getters[`${vuexModulesDict.auth}/lastRouteActivityDiffTooLarge`]
+    && store.getters[`${vuexModulesDict.auth}/getIsAuthenticated`]
+    && !store.getters[`${vuexModulesDict.auth}/getRememberSession`]
   ) {
-    store.dispatch('auth/deleteSession', { root: true });
+    store.dispatch(`${vuexModulesDict.auth}/deleteSession`, { root: true });
     next({ name: routeNamesDict.Login });
     store.dispatch(
-      'FEEDBACK_UI/showFeedbackForDuration',
+      `${vuexModulesDict.feedback}/showFeedbackForDuration`,
       {
         type: 'warning',
         text: i18n.t('general.warningCodes.sessionExpired'),
@@ -175,23 +175,39 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
-    if (!store.getters['auth/getIsAuthenticated']) {
+    if (!store.getters[`${vuexModulesDict.auth}/getIsAuthenticated`]) {
       // redirect to login page if not authenticated
-      store.dispatch('auth/deleteSession'); // delete state data for consistency
+      store.dispatch(`${vuexModulesDict.auth}/deleteSession`); // delete state data for consistency
       next({ name: routeNamesDict.Login });
     } else {
       if (to.meta.shouldBeSynced) {
-        store.dispatch('SYNC_UI/refreshHandler', { routeName: to.name }, { root: true });
+        store.dispatch(
+          `${vuexModulesDict.sync}/refreshHandler`,
+          { routeName: to.name },
+          { root: true },
+        );
       } else {
-        store.commit('SYNC_UI/setStatus', { newStatus: syncStatusDict.synched }, { root: true });
+        store.commit(
+          `${vuexModulesDict.sync}/setStatus`,
+          { newStatus: syncStatusDict.synched },
+          { root: true },
+        );
       }
       next();
     }
   } else {
     if (to.meta.shouldBeSynced) {
-      store.dispatch('SYNC_UI/refreshHandler', { routeName: to.name }, { root: true });
+      store.dispatch(
+        `${vuexModulesDict.sync}/refreshHandler`,
+        { routeName: to.name },
+        { root: true },
+      );
     } else {
-      store.commit('SYNC_UI/setStatus', { newStatus: syncStatusDict.synched }, { root: true });
+      store.commit(
+        `${vuexModulesDict.sync}/setStatus`,
+        { newStatus: syncStatusDict.synched },
+        { root: true },
+      );
     }
     next(); // does not require auth, make sure to always call next()!
   }

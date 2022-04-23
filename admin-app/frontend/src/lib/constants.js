@@ -94,12 +94,16 @@ export const dataTypesDict = Object.freeze({
   intervention: 'INTERVENTION',
 });
 
-export const dataModulesDict = Object.freeze({
+export const vuexModulesDict = Object.freeze({
   entity: `${dataTypesDict.entity}_Data`,
   survey: `${dataTypesDict.survey}_Data`,
-  question: `${dataTypesDict.question}_Data`,
   level: `${dataTypesDict.level}_Data`,
   intervention: `${dataTypesDict.intervention}_Data`,
+  question: `${dataTypesDict.question}_UI`,
+  feedback: 'FEEDBACK_UI',
+  sync: 'SYNC_UI',
+  auth: 'auth',
+  dataModal: 'dataModal',
 });
 
 export const syncStatusDict = Object.freeze({

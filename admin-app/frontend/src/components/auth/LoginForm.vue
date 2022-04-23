@@ -62,7 +62,7 @@
 <script>
 import { mapActions, mapMutations } from 'vuex';
 import { formValidators } from '../../lib/utils';
-import { routeNamesDict, signInStatusDict } from '../../lib/constants';
+import { routeNamesDict, signInStatusDict, vuexModulesDict } from '../../lib/constants';
 import GoogleIcon from '../commons/GoogleIcon.vue';
 
 export default {
@@ -82,12 +82,12 @@ export default {
   },
   methods: {
     ...mapActions({
-      showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
-      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
-      signIn: 'auth/signIn',
+      showToBeImplementedFeedback: `${vuexModulesDict.feedback}/showToBeImplementedFeedback`,
+      showFeedbackForDuration: `${vuexModulesDict.feedback}/showFeedbackForDuration`,
+      signIn: `${vuexModulesDict.auth}/signIn`,
     }),
     ...mapMutations({
-      setCredentials: 'auth/setCredentials',
+      setCredentials: `${vuexModulesDict.auth}/setCredentials`,
     }),
     async submit() {
       const valid = this.$refs.form.validate();

@@ -24,7 +24,7 @@ import Feedback from './components/commons/Feedback.vue';
 import LangSelect from './components/commons/floating/LangSelect.vue';
 // import SearchBox from './components/commons/SearchBox.vue';
 import NavBar from './components/commons/navbar/NavBar.vue';
-import { routeNamesDict } from './lib/constants';
+import { vuexModulesDict, routeNamesDict } from './lib/constants';
 
 export default {
   name: 'App',
@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isAuthenticated: 'auth/getIsAuthenticated',
+      isAuthenticated: `${vuexModulesDict.auth}/getIsAuthenticated`,
     }),
     isInAuthView() {
       return (
@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
+      showToBeImplementedFeedback: `${vuexModulesDict.feedback}/showToBeImplementedFeedback`,
     }),
   },
 };

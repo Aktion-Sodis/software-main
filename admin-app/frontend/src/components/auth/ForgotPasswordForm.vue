@@ -66,7 +66,7 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { formValidators } from '../../lib/utils';
-import { routeNamesDict, signInStatusDict } from '../../lib/constants';
+import { routeNamesDict, signInStatusDict, vuexModulesDict } from '../../lib/constants';
 
 export default {
   name: 'ForgotPasswordForm',
@@ -88,7 +88,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      storedEmail: 'auth/getEmail',
+      storedEmail: `${vuexModulesDict.auth}/getEmail`,
     }),
   },
   mounted() {
@@ -96,12 +96,12 @@ export default {
   },
   methods: {
     ...mapActions({
-      forgotPasswordSubmit: 'auth/forgotPasswordSubmit',
-      forgotPassword: 'auth/forgotPassword',
-      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
+      forgotPasswordSubmit: `${vuexModulesDict.auth}/forgotPasswordSubmit`,
+      forgotPassword: `${vuexModulesDict.auth}/forgotPassword`,
+      showFeedbackForDuration: `${vuexModulesDict.feedback}/showFeedbackForDuration`,
     }),
     ...mapMutations({
-      setCredentials: 'auth/setCredentials',
+      setCredentials: `${vuexModulesDict.auth}/setCredentials`,
     }),
     async sendEmailCode() {
       this.loading = true;

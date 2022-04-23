@@ -26,13 +26,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { syncStatusDict } from '../../../lib/constants';
+import { syncStatusDict, vuexModulesDict } from '../../../lib/constants';
 
 export default {
   name: 'SyncAction',
   computed: {
     ...mapGetters({
-      syncStatus: 'SYNC_UI/getStatus',
+      syncStatus: `${vuexModulesDict.sync}/getStatus`,
     }),
     isSynchronizing() {
       return this.syncStatus === syncStatusDict.synchronizing;
@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      refresh: 'SYNC_UI/refreshHandler',
+      refresh: `${vuexModulesDict.sync}/refreshHandler`,
     }),
   },
 };

@@ -18,7 +18,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { modalModesDict, dataTypesDict } from '../../lib/constants';
+import { modalModesDict, dataTypesDict, vuexModulesDict } from '../../lib/constants';
 
 import SurveyModalStepper from './surveyModalContent/SurveyModalStepper.vue';
 import QuestionTabs from './surveyModalContent/QuestionTabs.vue';
@@ -37,10 +37,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      surveyModalMode: 'dataModal/getMode',
-      isDataModalDisplayed: 'dataModal/getIsDisplayed',
-      dataType: 'dataModal/getDataType',
-      dataIdInFocus: 'dataModal/getDataIdInFocus',
+      surveyModalMode: `${vuexModulesDict.dataModal}/getMode`,
+      isDataModalDisplayed: `${vuexModulesDict.dataModal}/getIsDisplayed`,
+      dataType: `${vuexModulesDict.dataModal}/getDataType`,
+      dataIdInFocus: `${vuexModulesDict.dataModal}/getDataIdInFocus`,
       completionIndex: 'getSurveyModalCompletionIndex',
     }),
     isSurveyModalDisplayed() {
@@ -58,9 +58,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      abortReadSurveyHandler: 'dataModal/abortReadData',
-      abortNewSurveyHandler: 'dataModal/abortCreateData',
-      abortEditSurveyHandler: 'dataModal/abortEditData',
+      abortReadSurveyHandler: `${vuexModulesDict.dataModal}/abortReadData`,
+      abortNewSurveyHandler: `${vuexModulesDict.dataModal}/abortCreateData`,
+      abortEditSurveyHandler: `${vuexModulesDict.dataModal}/abortEditData`,
     }),
     escHandler() {
       if (this.read) this.abortReadSurveyHandler();

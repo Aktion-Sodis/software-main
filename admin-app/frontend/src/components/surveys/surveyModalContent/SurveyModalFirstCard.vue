@@ -306,7 +306,7 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { dataTypesDict, modalModesDict } from '../../../lib/constants';
+import { dataTypesDict, modalModesDict, vuexModulesDict } from '../../../lib/constants';
 import LocaleTextBox from '../../commons/form/LocaleTextBox.vue';
 import ImgFromS3 from '../../commons/ImgFromS3.vue';
 import { Survey, SurveyType } from '../../../models';
@@ -351,20 +351,20 @@ export default {
   },
   computed: {
     ...mapGetters({
-      surveyModalMode: 'dataModal/getMode',
-      dataIdInFocus: 'dataModal/getDataIdInFocus',
-      surveyDraft: 'dataModal/getDataDraft',
-      SURVEYById: 'SURVEY_Data/SURVEYById',
-      // allSurveyTags: 'SURVEY_Data/getSurveyTags',
-      // tagById: 'SURVEY_Data/tagById',
-      // tagIdsBySurveyId: 'SURVEY_Data/tagIdsBySurveyId',
+      surveyModalMode: `${vuexModulesDict.dataModal}/getMode`,
+      dataIdInFocus: `${vuexModulesDict.dataModal}/getDataIdInFocus`,
+      surveyDraft: `${vuexModulesDict.dataModal}/getDataDraft`,
+      SURVEYById: `${vuexModulesDict.survey}/SURVEYById`,
+      // allSurveyTags: vuexModulesDict.survey + 'getSurveyTags',
+      // tagById: vuexModulesDict.survey + 'tagById',
+      // tagIdsBySurveyId: vuexModulesDict.survey + 'tagIdsBySurveyId',
 
-      imageFile: 'dataModal/getImageFile',
+      imageFile: `${vuexModulesDict.dataModal}/getImageFile`,
 
       fallbackLocaleIndex: 'fallbackLocaleIndex',
       calculateUILocaleString: 'calculateUILocaleString',
-      INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
-      interventions: 'INTERVENTION_Data/getInterventions',
+      INTERVENTIONById: `${vuexModulesDict.intervention}/INTERVENTIONById`,
+      interventions: `${vuexModulesDict.intervention}/getInterventions`,
     }),
     surveyInFocus() {
       return this.SURVEYById({ id: this.dataIdInFocus });
@@ -405,16 +405,16 @@ export default {
   },
   methods: {
     ...mapActions({
-      abortNewSurveyHandler: 'dataModal/abortCreateData',
-      abortReadSurveyHandler: 'dataModal/abortReadData',
-      abortEditSurveyHandler: 'dataModal/abortEditData',
-      deleteSurveyHandler: 'dataModal/deleteData',
+      abortNewSurveyHandler: `${vuexModulesDict.dataModal}/abortCreateData`,
+      abortReadSurveyHandler: `${vuexModulesDict.dataModal}/abortReadData`,
+      abortEditSurveyHandler: `${vuexModulesDict.dataModal}/abortEditData`,
+      deleteSurveyHandler: `${vuexModulesDict.dataModal}/deleteData`,
 
-      editData: 'dataModal/editData',
-      saveData: 'dataModal/saveData',
+      editData: `${vuexModulesDict.dataModal}/editData`,
+      saveData: `${vuexModulesDict.dataModal}/saveData`,
     }),
     ...mapMutations({
-      setSurveyDraft: 'dataModal/setSURVEYDraft',
+      setSurveyDraft: `${vuexModulesDict.dataModal}/setSURVEYDraft`,
       incrementCompletionIndex: 'incrementSurveyModalCompletionIndex',
     }),
     async saveHandler() {

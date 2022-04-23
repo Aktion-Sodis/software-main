@@ -34,7 +34,7 @@
 <script>
 import { mapActions } from 'vuex';
 import { formValidators } from '../../lib/utils';
-import { routeNamesDict, typesDictionary } from '../../lib/constants';
+import { routeNamesDict, typesDictionary, vuexModulesDict } from '../../lib/constants';
 
 export default {
   name: 'ChangePasswordForm',
@@ -57,8 +57,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      changePassword: 'auth/changePassword',
-      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
+      changePassword: `${vuexModulesDict.auth}/changePassword`,
+      showFeedbackForDuration: `${vuexModulesDict.feedback}/showFeedbackForDuration`,
     }),
     async submit() {
       const valid = this.$refs.form.validate();

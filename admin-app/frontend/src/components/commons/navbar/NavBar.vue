@@ -85,7 +85,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import SyncAction from './SyncAction.vue';
 import { routes } from '../../../router';
-import { routeNamesDict } from '../../../lib/constants';
+import { routeNamesDict, vuexModulesDict } from '../../../lib/constants';
 
 const societyName = process.env.VUE_APP_SOCIETY_VERBOSE_NAME;
 
@@ -104,8 +104,8 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      isAuthenticated: 'auth/getIsAuthenticated',
-      credentials: 'auth/credentials',
+      isAuthenticated: `${vuexModulesDict.auth}/getIsAuthenticated`,
+      credentials: `${vuexModulesDict.auth}/credentials`,
     }),
     currentRouteName() {
       return this.$route.name;
@@ -116,8 +116,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      deleteSession: 'auth/deleteSession',
-      showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
+      deleteSession: `${vuexModulesDict.auth}/deleteSession`,
+      showToBeImplementedFeedback: `${vuexModulesDict.feedback}/showToBeImplementedFeedback`,
     }),
     async logout() {
       await this.deleteSession();

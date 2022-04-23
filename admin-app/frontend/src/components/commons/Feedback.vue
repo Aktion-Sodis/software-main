@@ -8,20 +8,21 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex';
+import { vuexModulesDict } from '../../lib/constants';
 
 export default {
   name: 'Feedback',
   computed: {
     ...mapGetters({
-      type: 'FEEDBACK_UI/getType',
-      text: 'FEEDBACK_UI/getText',
-      isDisplayed: 'FEEDBACK_UI/getIsDisplayed',
-      duration: 'FEEDBACK_UI/getDuration',
+      type: `${vuexModulesDict.feedback}/getType`,
+      text: `${vuexModulesDict.feedback}/getText`,
+      isDisplayed: `${vuexModulesDict.feedback}/getIsDisplayed`,
+      duration: `${vuexModulesDict.feedback}/getDuration`,
     }),
   },
   methods: {
     ...mapMutations({
-      setIsDisplayed: 'FEEDBACK_UI/setIsDisplayed',
+      setIsDisplayed: `${vuexModulesDict.feedback}/setIsDisplayed`,
     }),
     clickHandler() {
       this.setIsDisplayed({ newValue: false });

@@ -349,7 +349,12 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { modalModesDict, dataTypesDict, customDataTypesIconDict } from '../../lib/constants';
+import {
+  modalModesDict,
+  dataTypesDict,
+  customDataTypesIconDict,
+  vuexModulesDict,
+} from '../../lib/constants';
 import LocaleTextBox from '../commons/form/LocaleTextBox.vue';
 import { Level, InterventionType, Type } from '../../models';
 import {
@@ -390,22 +395,22 @@ export default {
   },
   computed: {
     ...mapGetters({
-      interventions: 'INTERVENTION_Data/getInterventions',
+      interventions: `${vuexModulesDict.intervention}/getInterventions`,
 
-      dataType: 'dataModal/getDataType',
-      modalMode: 'dataModal/getMode',
-      isModalDisplayed: 'dataModal/getIsDisplayed',
-      dataIdInFocus: 'dataModal/getDataIdInFocus',
-      levelDraft: 'dataModal/getDataDraft',
+      dataType: `${vuexModulesDict.dataModal}/getDataType`,
+      modalMode: `${vuexModulesDict.dataModal}/getMode`,
+      isModalDisplayed: `${vuexModulesDict.dataModal}/getIsDisplayed`,
+      dataIdInFocus: `${vuexModulesDict.dataModal}/getDataIdInFocus`,
+      levelDraft: `${vuexModulesDict.dataModal}/getDataDraft`,
 
-      // allLevelTags: 'LEVEL_Data/getLevelTags',
-      // tagById: 'LEVEL_Data/tagById',
-      lowestLevelId: 'LEVEL_Data/lowestLevelId',
-      LEVELById: 'LEVEL_Data/LEVELById',
+      // allLevelTags: vuexModulesDict.level + 'getLevelTags',
+      // tagById: vuexModulesDict.level + 'tagById',
+      lowestLevelId: `${vuexModulesDict.level}/lowestLevelId`,
+      LEVELById: `${vuexModulesDict.level}/LEVELById`,
       fallbackLocaleIndex: 'fallbackLocaleIndex',
-      INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
-      interventionsOfLevelById: 'LEVEL_Data/interventionsOfLevelById',
-      nLevels: 'LEVEL_Data/nLevels',
+      INTERVENTIONById: `${vuexModulesDict.intervention}/INTERVENTIONById`,
+      interventionsOfLevelById: `${vuexModulesDict.level}/interventionsOfLevelById`,
+      nLevels: `${vuexModulesDict.level}/nLevels`,
 
       calculateUILocaleString: 'calculateUILocaleString',
     }),
@@ -463,17 +468,17 @@ export default {
   },
   methods: {
     ...mapActions({
-      saveData: 'dataModal/saveData',
-      deleteData: 'dataModal/deleteData',
-      abortReadData: 'dataModal/abortReadData',
-      abortCreateData: 'dataModal/abortCreateData',
-      abortEditData: 'dataModal/abortEditData',
-      editData: 'dataModal/editData',
+      saveData: `${vuexModulesDict.dataModal}/saveData`,
+      deleteData: `${vuexModulesDict.dataModal}/deleteData`,
+      abortReadData: `${vuexModulesDict.dataModal}/abortReadData`,
+      abortCreateData: `${vuexModulesDict.dataModal}/abortCreateData`,
+      abortEditData: `${vuexModulesDict.dataModal}/abortEditData`,
+      editData: `${vuexModulesDict.dataModal}/editData`,
 
-      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
+      showFeedbackForDuration: `${vuexModulesDict.feedback}/showFeedbackForDuration`,
     }),
     ...mapMutations({
-      setDraft: 'dataModal/setDraft',
+      setDraft: `${vuexModulesDict.dataModal}/setDraft`,
     }),
     deleteHandler() {
       if (this.read) return;

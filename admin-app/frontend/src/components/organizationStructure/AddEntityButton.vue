@@ -34,7 +34,7 @@
 // import { validate as uuidValidate } from 'uuid';
 
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { dataTypesDict } from '../../lib/constants';
+import { dataTypesDict, vuexModulesDict } from '../../lib/constants';
 
 export default {
   name: 'AddEntityButton',
@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getLoading: 'LEVEL_Data/getLoading',
+      getLoading: `${vuexModulesDict.level}/getLoading`,
     }),
   },
   methods: {
@@ -55,7 +55,7 @@ export default {
       this.isHovered = payload;
     },
     ...mapActions({
-      createData: 'dataModal/createData',
+      createData: `${vuexModulesDict.dataModal}/createData`,
     }),
     ...mapMutations({
       setCreatingEntityInLevelId: 'setCreatingEntityInLevelId',

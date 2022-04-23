@@ -14,6 +14,7 @@ import levelsData from './modules/levelData';
 import entitiesData from './modules/entityData';
 import dataModal from './modules/dataModal';
 import SYNC_UI from './modules/syncUI';
+import { vuexModulesDict } from '../lib/constants';
 
 // persist
 const vuexLocal = new VuexPersistence({
@@ -117,15 +118,15 @@ export default new Vuex.Store({
     },
   },
   modules: {
-    auth: authModule,
-    dataModal,
-    ENTITY_Data: entitiesData,
-    SURVEY_Data: surveyData,
-    LEVEL_Data: levelsData,
-    INTERVENTION_Data: interventionsData,
-    QUESTION_UI,
-    FEEDBACK_UI,
-    SYNC_UI,
+    [vuexModulesDict.auth]: authModule,
+    [vuexModulesDict.dataModal]: dataModal,
+    [vuexModulesDict.entity]: entitiesData,
+    [vuexModulesDict.survey]: surveyData,
+    [vuexModulesDict.level]: levelsData,
+    [vuexModulesDict.intervention]: interventionsData,
+    [vuexModulesDict.question]: QUESTION_UI,
+    [vuexModulesDict.feedback]: FEEDBACK_UI,
+    [vuexModulesDict.sync]: SYNC_UI,
   },
   plugins: [vuexLocal.plugin],
 });

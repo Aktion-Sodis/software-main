@@ -43,7 +43,12 @@
 <script>
 import { mapActions } from 'vuex';
 import { formValidators } from '../../lib/utils';
-import { routeNamesDict, signInStatusDict, typesDictionary } from '../../lib/constants';
+import {
+  routeNamesDict,
+  signInStatusDict,
+  typesDictionary,
+  vuexModulesDict,
+} from '../../lib/constants';
 
 export default {
   name: 'UpdateUserForm',
@@ -63,8 +68,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      completeUserInformation: 'auth/completeUserInformation',
-      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
+      completeUserInformation: `${vuexModulesDict.auth}/completeUserInformation`,
+      showFeedbackForDuration: `${vuexModulesDict.feedback}/showFeedbackForDuration`,
     }),
     async submit() {
       const valid = this.$refs.form.validate();

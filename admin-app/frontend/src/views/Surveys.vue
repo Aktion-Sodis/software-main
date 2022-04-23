@@ -40,7 +40,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { waitForMilliseconds } from '../lib/utils';
-import { dataTypesDict, routeNamesDict } from '../lib/constants';
+import { dataTypesDict, routeNamesDict, vuexModulesDict } from '../lib/constants';
 
 import SurveyModal from '../components/surveys/SurveyModal.vue';
 import InterventionSkeleton from '../components/interventions/InterventionSkeleton.vue';
@@ -58,17 +58,19 @@ export default {
   data() {
     return {
       showSurveyModal: false,
-      dataTypesDict,
     };
   },
   computed: {
     ...mapGetters({
-      surveys: 'SURVEY_Data/getSurveys',
-      loading: 'SURVEY_Data/getLoading',
-      isSurveyModalDisplayed: 'dataModal/getIsDisplayed',
+      surveys: `${vuexModulesDict.survey}/getSurveys`,
+      loading: `${vuexModulesDict.survey}/getLoading`,
+      isSurveyModalDisplayed: `${vuexModulesDict.dataModal}/getIsDisplayed`,
     }),
     currentLocale() {
       return this.$i18n.locale;
+    },
+    dataTypesDict() {
+      return dataTypesDict;
     },
   },
   watch: {

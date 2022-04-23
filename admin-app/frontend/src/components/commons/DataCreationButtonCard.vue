@@ -13,7 +13,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { dataTypesDict } from '../../lib/constants';
+import { dataTypesDict, vuexModulesDict } from '../../lib/constants';
 
 export default {
   name: 'DataCreationButtonCard',
@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      createData: 'dataModal/createData',
+      createData: `${vuexModulesDict.dataModal}/createData`,
     }),
     clickHandler() {
       this.createData({ dataType: this.dataType });
