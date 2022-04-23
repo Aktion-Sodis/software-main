@@ -1,13 +1,15 @@
 <template>
   <div class="main">
-      <div class="title">
-        <h1 @click="print(selectedDates)">
-            Fragebögen: Kochstellen
-        </h1>
-        <div class="datepicker-wrapper">
-            <h3>
-                Zeitraum wählen:
-            </h3>
+    <el-row class="title">
+        <el-col>
+        <h1 style="margin-left: 5px">Fragebögen: Kochstellen</h1>
+        </el-col>
+    </el-row>
+    <el-row class="sub-title">
+        <el-col :span="4">
+            <h3 style="margin-left: 5px">Zeitraum wählen:</h3>
+        </el-col>
+        <el-col :span="20">
             <div class="survey-datepicker">
                 <el-date-picker
                     v-model="selectedDates"
@@ -17,15 +19,19 @@
                     end-placeholder="End date"
                 />
             </div>
+        </el-col>
+    </el-row>
+    <el-row class="survey-wrapper">
+        <el-col>
+        <div class="surveys">
+            <SurveyCard 
+                v-for="survey in filteredSurveys"
+                :key="survey.id"
+                :survey="survey"
+            />
         </div>
-      </div>
-      <div class="surveys">
-          <SurveyCard 
-            v-for="survey in filteredSurveys"
-            :key="survey.id"
-            :survey="survey"
-          />
-      </div>
+        </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -131,30 +137,37 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .main {
     text-align: left;
+    height: 100vh;
+    overflow: hidden;
 }
-
 .title {
-    margin-left: 5px;
+    min-height: 1.5rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
 }
-
+.sub-title {
+    min-height: 1.5rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
 .datepicker-wrapper {
     display: flex;
     flex-wrap: wrap;
 }
-
 .survey-datepicker {
     margin-left: 10px;
-    margin-top: 16px;
 }
-
+.survey-wrapper {
+    overflow: scroll;
+    height: 75vh;
+}
 .surveys {
     display: flex;
     flex-wrap: wrap;
     margin-top: 20px;
     height: auto;  
 }
-
 </style>
