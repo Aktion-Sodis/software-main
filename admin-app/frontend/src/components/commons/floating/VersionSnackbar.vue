@@ -7,7 +7,7 @@
       border="left"
       style="z-index: 3"
     >
-      The Admin-App v1.0 🔗
+      Admin-App v1.0 🔗
     </v-alert>
   </a>
 </template>

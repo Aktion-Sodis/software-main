@@ -24,7 +24,7 @@ export default {
   name: 'SearchBox',
   methods: {
     ...mapActions({
-      showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
+      showToBeImplementedFeedback: `${vuexModulesDict.feedback}/showToBeImplementedFeedback`,
     }),
   },
 };

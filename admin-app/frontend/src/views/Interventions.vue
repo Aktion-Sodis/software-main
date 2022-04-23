@@ -45,7 +45,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { waitForMilliseconds } from '../lib/utils';
-import { dataTypesDict } from '../store/constants';
+import { dataTypesDict, routeNamesDict, vuexModulesDict } from '../lib/constants';
 
 import Intervention from '../components/interventions/Intervention.vue';
 import InterventionModal from '../components/interventions/InterventionModal.vue';
@@ -53,7 +53,7 @@ import InterventionSkeleton from '../components/interventions/InterventionSkelet
 import DataCreationButtonCard from '../components/commons/DataCreationButtonCard.vue';
 
 export default {
-  name: 'Interventions',
+  name: routeNamesDict.Interventions,
   components: {
     Intervention,
     InterventionModal,
@@ -63,17 +63,19 @@ export default {
   data() {
     return {
       showInterventionModal: false,
-      dataTypesDict,
     };
   },
   computed: {
     ...mapGetters({
-      interventions: 'INTERVENTION_Data/getInterventions',
-      loading: 'INTERVENTION_Data/getLoading',
-      isInterventionModalDisplayed: 'dataModal/getIsDisplayed',
+      interventions: `${vuexModulesDict.intervention}/getInterventions`,
+      loading: `${vuexModulesDict.intervention}/getLoading`,
+      isInterventionModalDisplayed: `${vuexModulesDict.dataModal}/getIsDisplayed`,
     }),
     currentLocale() {
       return this.$i18n.locale;
+    },
+    dataTypesDict() {
+      return dataTypesDict;
     },
   },
   watch: {

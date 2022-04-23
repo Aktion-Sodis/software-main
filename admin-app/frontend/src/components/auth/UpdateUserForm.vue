@@ -4,7 +4,7 @@
       <v-text-field
         v-model="firstName"
         :rules="[rules.required, rules.notEmpty]"
-        :label="$t('completeUserInfo.firstName')"
+        :label="$t('CompleteUserInfo.firstName')"
         :disabled="loading"
         required
         outlined
@@ -13,7 +13,7 @@
         class="ml-0 ml-sm-4"
         v-model="lastName"
         :rules="[rules.required, rules.notEmpty]"
-        :label="$t('completeUserInfo.lastName')"
+        :label="$t('CompleteUserInfo.lastName')"
         :disabled="loading"
         required
         outlined
@@ -24,26 +24,31 @@
       required
       v-model="password"
       :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[rules.required, rules.min]"
+      :rules="[rules.required, rules.minPasswordLength]"
       :type="showPassword ? 'text' : 'password'"
       name="input-10-1"
-      :label="$t('completeUserInfo.password.label')"
-      :hint="$t('completeUserInfo.password.hint')"
+      :label="$t('CompleteUserInfo.password.label')"
+      :hint="$t('CompleteUserInfo.password.hint')"
       @click:append="showPassword = !showPassword"
     ></v-text-field>
     <v-btn :disabled="loading" type="submit" block large color="primary" class="text-none">
       <v-progress-circular indeterminate v-if="loading"></v-progress-circular>
       <span v-else>
-        {{ $t('completeUserInfo.start') }}
+        {{ $t('CompleteUserInfo.start') }}
       </span>
     </v-btn>
   </v-form>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-
-const passwordMinChar = 8;
+import { mapActions } from 'vuex';
+import { formValidators } from '../../lib/utils';
+import {
+  routeNamesDict,
+  signInStatusDict,
+  typesDictionary,
+  vuexModulesDict,
+} from '../../lib/constants';
 
 export default {
   name: 'UpdateUserForm',
@@ -55,27 +60,26 @@ export default {
       showPassword: false,
       loading: false,
       rules: {
-        required: (value) => !!value || this.$t('general.form.required'),
-        min: (value) => value.length >= 8 || this.minCharNotMeti18n,
-        notEmpty: (value) => !value || value.replace(/ /g, '') !== '' || this.requiredi18n,
+        required: formValidators.required,
+        minPasswordLength: formValidators.minPasswordLength,
+        notEmpty: formValidators.notEmpty,
       },
     };
   },
-  computed: {
-    ...mapGetters({}),
-    minCharNotMeti18n() {
-      return this.$t('general.form.minCharNotMet', {
-        minChar: passwordMinChar,
-      });
-    },
-  },
   methods: {
     ...mapActions({
-      completeUserInformation: 'auth/completeUserInformation',
+      completeUserInformation: `${vuexModulesDict.auth}/completeUserInformation`,
+      showFeedbackForDuration: `${vuexModulesDict.feedback}/showFeedbackForDuration`,
     }),
     async submit() {
       const valid = this.$refs.form.validate();
-      if (!valid) return;
+      if (!valid) {
+        this.showFeedbackForDuration({
+          type: typesDictionary.error,
+          text: this.$t('general.form.invalidForm'),
+        });
+        return;
+      }
 
       this.loading = true;
       const signInStatus = await this.completeUserInformation({
@@ -83,18 +87,19 @@ export default {
         lastName: this.lastName,
         newPassword: this.password,
       });
-      if (signInStatus === 'success') {
-        console.log('redirect to orga struct');
-        this.$router.push({ name: 'OrganizationStructure' });
+      if (signInStatus === signInStatusDict.success) {
+        this.$router.push({ name: routeNamesDict.OrganizationStructure });
         return;
       }
-      if (signInStatus === 'failed') {
-        // TODO: handle error
-        this.loading = false;
+      if (signInStatus === signInStatusDict.failed) {
+        this.showFeedbackForDuration({
+          type: typesDictionary.error,
+          text: this.$t('general.errorCodes.InternalErrorException'),
+        });
         return;
       }
-      if (signInStatus === 'completeUserInfo') {
-        this.$router.push({ name: 'CompleteUserInfo' });
+      if (signInStatus === signInStatusDict.completeUserInfo) {
+        this.$router.push({ name: routeNamesDict.CompleteUserInfo });
       }
     },
   },

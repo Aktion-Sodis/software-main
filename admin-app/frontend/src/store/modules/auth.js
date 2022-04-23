@@ -3,6 +3,7 @@ import { getUser } from '../../graphql/queries';
 import { createUser } from '../../graphql/mutations';
 
 import i18n from '../../i18n';
+import { authChallengeNamesDict, signInStatusDict, vuexModulesDict } from '../../lib/constants';
 
 const authModule = {
   namespaced: true,
@@ -82,10 +83,11 @@ const authModule = {
     async signIn({ commit, dispatch }, { email, password, rememberMe }) {
       try {
         const x = await Auth.signIn(email, password);
+
         const { username, Session, challengeName } = x;
 
         // if password is not finalized
-        if (challengeName === 'NEW_PASSWORD_REQUIRED') {
+        if (challengeName === authChallengeNamesDict.newPasswordRequired) {
           commit('setCredentials', {
             userId: username,
             email,
@@ -94,27 +96,31 @@ const authModule = {
           });
           commit('setToken', { newToken: Session });
           commit('setTempPassword', { newValue: password });
-          return 'completeUserInfo';
+          return signInStatusDict.completeUserInfo;
         }
 
-        const userFoundInDb = (await API.graphql(graphqlOperation(getUser, { id: username }))).data
-          .getUser;
+        // if password is finalized
+        try {
+          const userFoundInDb = (await API.graphql(graphqlOperation(getUser, { id: username })))
+            .data.getUser;
 
-        // if user exists and password is finalized
-        commit('setCredentials', {
-          userId: username,
-          email,
-          firstName: userFoundInDb.firstName,
-          lastName: userFoundInDb.lastName,
-        });
+          // if user exists and password is finalized
+          commit('setCredentials', {
+            userId: username,
+            email,
+            firstName: userFoundInDb.firstName,
+            lastName: userFoundInDb.lastName,
+          });
+        } catch (error) {
+          console.log(error);
+        }
         commit('setToken', { newToken: Session });
         commit('setIsAuthenticated', { newValue: true });
         commit('setRememberSession', { newValue: rememberMe });
-        return 'success';
+        return signInStatusDict.success;
       } catch (error) {
-        console.log({ error });
         dispatch(
-          'FEEDBACK_UI/showFeedbackForDuration',
+          `${vuexModulesDict.feedback}/showFeedbackForDuration`,
           {
             type: 'error',
             text: i18n.t(`general.errorCodes.${error.code}`),
@@ -129,7 +135,7 @@ const authModule = {
           firstName: null,
           lastName: null,
         });
-        return 'failed';
+        return signInStatusDict.failed;
       }
     },
 
@@ -139,14 +145,14 @@ const authModule = {
     ) {
       if (!getters.getUserId) {
         dispatch(
-          'FEEDBACK_UI/showFeedbackForDuration',
+          `${vuexModulesDict.feedback}/showFeedbackForDuration`,
           {
             type: 'error',
             text: 'You cannot just update a user profile without following the sign in flow.',
           },
           { root: true },
         );
-        return 'failed';
+        return signInStatusDict.failed;
       }
 
       try {
@@ -154,11 +160,10 @@ const authModule = {
           await Auth.signIn(getters.getEmail, getters.getTempPassword),
           newPassword,
         );
-      } catch (error) {
-        console.log(error);
+      } catch {
         commit('setToken', { newToken: null });
         commit('setIsAuthenticated', { newValue: false });
-        return 'failed';
+        return signInStatusDict.failed;
       }
 
       try {
@@ -181,32 +186,29 @@ const authModule = {
         commit('setToken', { newToken: 'Session' });
         commit('setIsAuthenticated', { newValue: true });
         commit('setTempPassword', { newValue: null });
-        return 'success';
-      } catch (error) {
-        console.log(error);
+        return signInStatusDict.success;
+      } catch {
         commit('setToken', { newToken: null });
         commit('setIsAuthenticated', { newValue: false });
-        return 'failed';
+        return signInStatusDict.failed;
       }
     },
 
     async forgotPassword(_, { email }) {
       try {
         await Auth.forgotPassword(email);
-        return 'success';
-      } catch (error) {
-        console.log(error);
-        return 'failed';
+        return signInStatusDict.success;
+      } catch {
+        return signInStatusDict.failed;
       }
     },
 
     async forgotPasswordSubmit({ getters }, { code, newPassword }) {
       try {
         await Auth.forgotPasswordSubmit(getters.getEmail, code, newPassword);
-        return 'success';
-      } catch (error) {
-        console.log(error);
-        return 'failed';
+        return signInStatusDict.success;
+      } catch {
+        return signInStatusDict.failed;
       }
     },
 
@@ -214,10 +216,9 @@ const authModule = {
       try {
         const user = await Auth.currentAuthenticatedUser();
         await Auth.changePassword(user, oldPassword, newPassword);
-        return 'success';
-      } catch (error) {
-        console.log(error);
-        return 'failed';
+        return signInStatusDict.success;
+      } catch {
+        return signInStatusDict.failed;
       }
     },
     async deleteSession({ commit, dispatch }) {
@@ -225,7 +226,7 @@ const authModule = {
         await Auth.signOut();
       } catch (error) {
         dispatch(
-          'FEEDBACK_UI/showFeedbackForDuration',
+          `${vuexModulesDict.feedback}/showFeedbackForDuration`,
           {
             type: 'error',
             text: error.errors[0].message,

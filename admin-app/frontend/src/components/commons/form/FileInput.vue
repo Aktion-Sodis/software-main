@@ -4,7 +4,7 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex';
-import { allowedFileUploadTypes } from '../../store/constants';
+import { allowedFileUploadTypes, typesDictionary, vuexModulesDict } from '../../../lib/constants';
 
 export default {
   name: 'FileInput',
@@ -24,11 +24,11 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setImageFile: 'dataModal/setImageFile',
+      setImageFile: `${vuexModulesDict.dataModal}/setImageFile`,
     }),
     ...mapActions({
-      addImageToQuestion: 'QUESTION_UI/addImageToQuestion',
-      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
+      addImageToQuestion: `${vuexModulesDict.question}/addImageToQuestion`,
+      showFeedbackForDuration: `${vuexModulesDict.feedback}/showFeedbackForDuration`,
     }),
     filesChange(files) {
       let success = true;
@@ -43,8 +43,12 @@ export default {
       }
 
       this.showFeedbackForDuration({
-        type: success ? 'success' : 'error',
-        text: this.$t(`general.operationFeedback.upload.${success ? 'success' : 'error'}`),
+        type: success ? typesDictionary.success : typesDictionary.error,
+        text: this.$t(
+          `general.operationFeedback.upload.${
+            success ? typesDictionary.success : typesDictionary.error
+          }`,
+        ),
         duration: 2000,
       });
     },

@@ -1,9 +1,6 @@
-// import { API, DataStore } from 'aws-amplify';
-// import { createSurvey } from '../../graphql/mutations';
 import { API, DataStore, Storage } from 'aws-amplify';
 import { v4 as uuidv4 } from 'uuid';
 import { deleteSurvey } from '../../graphql/mutations';
-// import { listSurveys, listSurveyTags } from '../../graphql/queries';
 import {
   I18nString,
   Question,
@@ -12,9 +9,9 @@ import {
   // SurveyTag,
   // SurveySurveyTagRelation,
 } from '../../models';
-import { emptyQuestion, emptyQuestionOption } from '../classes';
-import { dataTypesDict, modalModesDict } from '../constants';
-import { deriveFilePath } from '../utils';
+import { emptyQuestion, emptyQuestionOption } from '../../lib/classes';
+import { dataTypesDict, modalModesDict, vuexModulesDict } from '../../lib/constants';
+import { deriveFilePath } from '../../lib/utils';
 
 const surveysData = {
   namespaced: true,
@@ -74,9 +71,9 @@ const surveysData = {
       let success = true;
       commit('setLoading', { newValue: true });
 
-      const questionsWithUnnecessaryLastOne = rootGetters['QUESTION_UI/getQuestionDrafts'];
+      const questionsWithUnnecessaryLastOne = rootGetters[`${vuexModulesDict.question}/getQuestionDrafts`];
       const questions = questionsWithUnnecessaryLastOne.slice(0, -1);
-      const rawOptions = rootGetters['QUESTION_UI/getOptionDrafts'];
+      const rawOptions = rootGetters[`${vuexModulesDict.question}/getOptionDrafts`];
       const options = [];
 
       // eslint-disable-next-line no-restricted-syntax
@@ -84,7 +81,7 @@ const surveysData = {
         options.push(rawOption.filter((o) => !o.text.languageTexts.every((t) => t === '')));
       }
 
-      const surveyDraft = rootGetters['dataModal/getDataDraft'];
+      const surveyDraft = rootGetters[`${vuexModulesDict.dataModal}/getDataDraft`];
 
       const survey = new Survey({
         name: new I18nString(surveyDraft.name),
@@ -116,32 +113,34 @@ const surveysData = {
         //   );
         // }
 
-        if (rootGetters['dataModal/getImageFile']) {
+        if (rootGetters[`${vuexModulesDict.dataModal}/getImageFile`]) {
           await Storage.put(
             deriveFilePath('interventionSurveyPicPath', {
               interventionID: survey.interventionSurveysId,
               surveyId: postResponse.id,
             }),
-            rootGetters['dataModal/getImageFile'],
+            rootGetters[`${vuexModulesDict.dataModal}/getImageFile`],
           );
         }
 
-        rootGetters['QUESTION_UI/getQuestionImages'].forEach(async (questionImg, index) => {
-          if (questionImg) {
-            await Storage.put(
-              deriveFilePath('questionPicPath', {
-                interventionID: survey.interventionSurveysId,
-                surveyId: postResponse.id,
-                questionId: survey.questions[index].id,
-              }),
-              questionImg,
-            );
-          }
-        });
+        rootGetters[`${vuexModulesDict.question}/getQuestionImages`].forEach(
+          async (questionImg, index) => {
+            if (questionImg) {
+              await Storage.put(
+                deriveFilePath('questionPicPath', {
+                  interventionID: survey.interventionSurveysId,
+                  surveyId: postResponse.id,
+                  questionId: survey.questions[index].id,
+                }),
+                questionImg,
+              );
+            }
+          },
+        );
 
         commit('addSurvey', postResponse);
         dispatch(
-          'dataModal/readData',
+          `${vuexModulesDict.dataModal}/readData`,
           {
             dataId: postResponse.id,
             dataType: dataTypesDict.survey,
@@ -155,11 +154,23 @@ const surveysData = {
       }
 
       commit('setLoading', { newValue: false });
-      dispatch('dataModal/abortCreateData', { dataType: dataTypesDict.survey }, { root: true });
+      dispatch(
+        `${vuexModulesDict.dataModal}/abortCreateData`,
+        { dataType: dataTypesDict.survey },
+        { root: true },
+      );
       commit('setSurveyModalCompletionIndex', { newValue: 1 }, { root: true });
-      commit('QUESTION_UI/setQuestions', { payload: [emptyQuestion()] }, { root: true });
-      commit('QUESTION_UI/setOptions', { payload: [emptyQuestionOption()] }, { root: true });
-      commit('QUESTION_UI/setQuestionImages', [], { root: true });
+      commit(
+        `${vuexModulesDict.question}/setQuestions`,
+        { payload: [emptyQuestion()] },
+        { root: true },
+      );
+      commit(
+        `${vuexModulesDict.question}/setOptions`,
+        { payload: [emptyQuestionOption()] },
+        { root: true },
+      );
+      commit(`${vuexModulesDict.question}/setQuestionImages`, [], { root: true });
       return success;
     },
     APIput: async ({
@@ -180,18 +191,18 @@ const surveysData = {
           }),
         );
 
-        if (rootGetters['dataModal/getImageFile']) {
+        if (rootGetters[`${vuexModulesDict.dataModal}/getImageFile`]) {
           await Storage.put(
             deriveFilePath('interventionSurveyPicPath', {
               interventionID: res.intervention.id,
               surveyId: res.id,
             }),
-            rootGetters['dataModal/getImageFile'],
+            rootGetters[`${vuexModulesDict.dataModal}/getImageFile`],
           );
         }
 
         dispatch(
-          'dataModal/readData',
+          `${vuexModulesDict.dataModal}/readData`,
           {
             dataId: originalId,
             dataType: dataTypesDict.survey,
@@ -229,10 +240,14 @@ const surveysData = {
           }),
         );
 
-        commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
-        commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
+        commit(`${vuexModulesDict.dataModal}/setDataIdInFocus`, { newValue: null }, { root: true });
+        commit(
+          `${vuexModulesDict.dataModal}/setMode`,
+          { newValue: modalModesDict.read },
+          { root: true },
+        );
         dispatch(
-          'dataModal/abortReadData',
+          `${vuexModulesDict.dataModal}/abortReadData`,
           {},
           {
             root: true,

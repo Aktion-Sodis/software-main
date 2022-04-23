@@ -355,13 +355,13 @@ import {
   emptyMutableQuestionOption,
   mutableI18nString,
   mutableQuestionOption,
-} from '../../../store/classes';
-import { modalModesDict, questionTypesIconDict } from '../../../store/constants';
+} from '../../../lib/classes';
+import { modalModesDict, questionTypesIconDict, vuexModulesDict } from '../../../lib/constants';
 // eslint-disable-next-line import/named
-import { compareI18nStrings, deriveFilePath } from '../../../store/utils';
+import { compareI18nStrings, deriveFilePath } from '../../../lib/utils';
 
-import LocaleTextBox from '../../global/LocaleTextBox.vue';
-import FileInput from '../../commons/FileInput.vue';
+import LocaleTextBox from '../../commons/form/LocaleTextBox.vue';
+import FileInput from '../../commons/form/FileInput.vue';
 import ImgFromS3 from '../../commons/ImgFromS3.vue';
 
 const questionTextMaxChar = Math.max(parseInt(process.env.VUE_APP_QUESTION_TEXT_MAX_CHAR, 10), 0);
@@ -407,17 +407,17 @@ export default {
   },
   computed: {
     ...mapGetters({
-      dataIdInFocus: 'dataModal/getDataIdInFocus',
-      SURVEYById: 'SURVEY_Data/SURVEYById',
-      surveyModalMode: 'dataModal/getMode',
-      questionCurrentDraft: 'QUESTION_UI/questionCurrentDraft',
-      optionsCurrentDraft: 'QUESTION_UI/optionsCurrentDraft',
-      nQuestions: 'QUESTION_UI/nQuestions',
-      iQuestions: 'QUESTION_UI/getIQuestions',
-      isAtLastQuestion: 'QUESTION_UI/isAtLastQuestion',
-      isAtFirstQuestion: 'QUESTION_UI/isAtFirstQuestion',
-      surveyDraft: 'dataModal/getDataDraft',
-      questionTextInFocus: 'QUESTION_UI/questionTextInFocus',
+      dataIdInFocus: `${vuexModulesDict.dataModal}/getDataIdInFocus`,
+      SURVEYById: `${vuexModulesDict.survey}/SURVEYById`,
+      surveyModalMode: `${vuexModulesDict.dataModal}/getMode`,
+      questionCurrentDraft: `${vuexModulesDict.question}/questionCurrentDraft`,
+      optionsCurrentDraft: `${vuexModulesDict.question}/optionsCurrentDraft`,
+      nQuestions: `${vuexModulesDict.question}/nQuestions`,
+      iQuestions: `${vuexModulesDict.question}/getIQuestions`,
+      isAtLastQuestion: `${vuexModulesDict.question}/isAtLastQuestion`,
+      isAtFirstQuestion: `${vuexModulesDict.question}/isAtFirstQuestion`,
+      surveyDraft: `${vuexModulesDict.dataModal}/getDataDraft`,
+      questionTextInFocus: `${vuexModulesDict.question}/questionTextInFocus`,
 
       calculateUILocaleString: 'calculateUILocaleString',
       fallbackLocaleIndex: 'fallbackLocaleIndex',
@@ -504,18 +504,18 @@ export default {
   },
   methods: {
     ...mapActions({
-      nextQuestionHandler: 'QUESTION_UI/nextQuestionHandler',
-      priorQuestionHandler: 'QUESTION_UI/priorQuestionHandler',
-      discardQuestionHandler: 'QUESTION_UI/discardQuestionHandler',
-      saveQuestionHandler: 'QUESTION_UI/saveQuestionHandler',
+      nextQuestionHandler: `${vuexModulesDict.question}/nextQuestionHandler`,
+      priorQuestionHandler: `${vuexModulesDict.question}/priorQuestionHandler`,
+      discardQuestionHandler: `${vuexModulesDict.question}/discardQuestionHandler`,
+      saveQuestionHandler: `${vuexModulesDict.question}/saveQuestionHandler`,
 
-      showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
-      abortReadSurveyHandler: 'dataModal/abortReadData',
+      showToBeImplementedFeedback: `${vuexModulesDict.feedback}/showToBeImplementedFeedback`,
+      abortReadSurveyHandler: `${vuexModulesDict.dataModal}/abortReadData`,
     }),
     ...mapMutations({
       incrementCompletionIndex: 'incrementSurveyModalCompletionIndex',
       decrementCompletionIndex: 'decrementSurveyModalCompletionIndex',
-      setIQuestions: 'QUESTION_UI/setIQuestions',
+      setIQuestions: `${vuexModulesDict.question}/setIQuestions`,
     }),
     confirmLeave() {
       // eslint-disable-next-line

@@ -1,9 +1,8 @@
 import { DataStore } from '@aws-amplify/datastore';
 import { API, Storage } from 'aws-amplify';
-import { dataTypesDict, modalModesDict } from '../constants';
-import { deriveFilePath } from '../utils';
+import { dataTypesDict, modalModesDict, vuexModulesDict } from '../../lib/constants';
+import { deriveFilePath } from '../../lib/utils';
 import { deleteIntervention } from '../../graphql/mutations';
-// import { listInterventions, listInterventionTags } from '../../graphql/queries';
 import {
   I18nString,
   Intervention,
@@ -87,11 +86,11 @@ const interventionsData = {
         //   );
         // }
 
-        if (rootGetters['dataModal/getImageFile'] instanceof File) {
+        if (rootGetters[`${vuexModulesDict.dataModal}/getImageFile`] instanceof File) {
           try {
             await Storage.put(
               deriveFilePath('interventionPicPath', { interventionID: postResponse.id }),
-              rootGetters['dataModal/getImageFile'],
+              rootGetters[`${vuexModulesDict.dataModal}/getImageFile`],
             );
           } catch {
             success = false;
@@ -100,7 +99,7 @@ const interventionsData = {
         commit('addIntervention', postResponse);
 
         dispatch(
-          'dataModal/readData',
+          `${vuexModulesDict.dataModal}/readData`,
           {
             dataId: postResponse.id,
             dataType: dataTypesDict.intervention,
@@ -132,11 +131,11 @@ const interventionsData = {
           }),
         );
 
-        if (rootGetters['dataModal/getImageFile'] instanceof File) {
+        if (rootGetters[`${vuexModulesDict.dataModal}/getImageFile`] instanceof File) {
           try {
             await Storage.put(
               deriveFilePath('interventionPicPath', { interventionID: putResponse.id }),
-              rootGetters['dataModal/getImageFile'],
+              rootGetters[`${vuexModulesDict.dataModal}/getImageFile`],
             );
           } catch {
             success = false;
@@ -144,7 +143,7 @@ const interventionsData = {
         }
 
         dispatch(
-          'dataModal/readData',
+          `${vuexModulesDict.dataModal}/readData`,
           {
             dataId: putResponse.id,
             dataType: dataTypesDict.intervention,
@@ -172,10 +171,18 @@ const interventionsData = {
           commit('deleteIntervention', {
             id,
           });
-          commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
-          commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
+          commit(
+            `${vuexModulesDict.dataModal}/setDataIdInFocus`,
+            { newValue: null },
+            { root: true },
+          );
+          commit(
+            `${vuexModulesDict.dataModal}/setMode`,
+            { newValue: modalModesDict.read },
+            { root: true },
+          );
           dispatch(
-            'dataModal/abortReadData',
+            `${vuexModulesDict.dataModal}/abortReadData`,
             {},
             {
               root: true,

@@ -42,6 +42,7 @@
 // import { validate as uuidValidate } from 'uuid';
 
 import { mapGetters, mapActions } from 'vuex';
+import { vuexModulesDict } from '../../lib/constants';
 
 export default {
   name: 'Entity',
@@ -64,11 +65,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      entityHasParent: 'ENTITY_Data/hasParentByUpperEntityId',
-      hasDescendants: 'ENTITY_Data/hasDescendantsById',
+      entityHasParent: `${vuexModulesDict.entity}/hasParentByUpperEntityId`,
+      hasDescendants: `${vuexModulesDict.entity}/hasDescendantsById`,
       lineColors: 'getLineColors',
-      lineByEntityId: 'ENTITY_Data/lineByEntityId',
-      getLoading: 'LEVEL_Data/getLoading',
+      lineByEntityId: `${vuexModulesDict.entity}/lineByEntityId`,
+      getLoading: `${vuexModulesDict.level}/getLoading`,
     }),
     leftLineOfEntity() {
       return this.lineByEntityId({ id: this.parentEntityID });
@@ -79,7 +80,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      readData: 'dataModal/readData',
+      readData: `${vuexModulesDict.dataModal}/readData`,
     }),
     clickHandler() {
       this.readData({ dataId: this.id, dataType: 'ENTITY' });

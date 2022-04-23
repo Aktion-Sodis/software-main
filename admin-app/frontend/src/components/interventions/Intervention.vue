@@ -21,8 +21,8 @@
 <script>
 // import { validate as uuidValidate } from 'uuid';
 import { mapGetters, mapActions } from 'vuex';
-import { dataTypesDict } from '../../store/constants';
-import { deriveFilePath } from '../../store/utils';
+import { dataTypesDict, vuexModulesDict } from '../../lib/constants';
+import { deriveFilePath } from '../../lib/utils';
 import ImgFromS3 from '../commons/ImgFromS3.vue';
 
 export default {
@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      // tagById: 'INTERVENTION_Data/tagById',
+      // tagById: vuexModulesDict.intervention + 'tagById',
       calculateUILocaleString: 'calculateUILocaleString',
     }),
     deriveImgPath() {
@@ -64,7 +64,7 @@ export default {
       this.readData({ dataId: this.id, dataType: dataTypesDict.intervention });
     },
     ...mapActions({
-      readData: 'dataModal/readData',
+      readData: `${vuexModulesDict.dataModal}/readData`,
     }),
   },
 };

@@ -366,13 +366,13 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { modalModesDict, dataTypesDict } from '../../store/constants';
-import LocaleTextBox from '../global/LocaleTextBox.vue';
+import { modalModesDict, dataTypesDict, vuexModulesDict } from '../../lib/constants';
+import LocaleTextBox from '../commons/form/LocaleTextBox.vue';
 import { Intervention, InterventionType } from '../../models';
-import { emptyMutableI18nString, mutableI18nString } from '../../store/classes';
-import FileInput from '../commons/FileInput.vue';
+import { emptyMutableI18nString, mutableI18nString } from '../../lib/classes';
+import FileInput from '../commons/form/FileInput.vue';
 import ImgFromS3 from '../commons/ImgFromS3.vue';
-import { deriveFilePath } from '../../store/utils';
+import { deriveFilePath } from '../../lib/utils';
 
 const interventionDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_INTERVENTION_DESCRIPTION_MAX_CHAR, 10),
@@ -411,19 +411,19 @@ export default {
   },
   computed: {
     ...mapGetters({
-      dataModalMode: 'dataModal/getMode',
-      isDataModalDisplayed: 'dataModal/getIsDisplayed',
-      dataType: 'dataModal/getDataType',
-      dataIdInFocus: 'dataModal/getDataIdInFocus',
-      interventionDraft: 'dataModal/getDataDraft',
-      INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
-      LEVELById: 'LEVEL_Data/LEVELById',
+      dataModalMode: `${vuexModulesDict.dataModal}/getMode`,
+      isDataModalDisplayed: `${vuexModulesDict.dataModal}/getIsDisplayed`,
+      dataType: `${vuexModulesDict.dataModal}/getDataType`,
+      dataIdInFocus: `${vuexModulesDict.dataModal}/getDataIdInFocus`,
+      interventionDraft: `${vuexModulesDict.dataModal}/getDataDraft`,
+      INTERVENTIONById: `${vuexModulesDict.intervention}/INTERVENTIONById`,
+      LEVELById: `${vuexModulesDict.level}/LEVELById`,
 
-      imageFile: 'dataModal/getImageFile',
+      imageFile: `${vuexModulesDict.dataModal}/getImageFile`,
 
-      // allInterventionTags: 'INTERVENTION_Data/getInterventionTags',
-      // tagById: 'INTERVENTION_Data/tagById',
-      interventionContentTagById: 'INTERVENTION_Data/interventionContentTagById',
+      // allInterventionTags: vuexModulesDict.intervention + 'getInterventionTags',
+      // tagById: vuexModulesDict.intervention + 'tagById',
+      interventionContentTagById: `${vuexModulesDict.intervention}/interventionContentTagById`,
 
       calculateUILocaleString: 'calculateUILocaleString',
     }),
@@ -477,16 +477,16 @@ export default {
   },
   methods: {
     ...mapActions({
-      saveInterventionHandler: 'dataModal/saveData',
-      deleteInterventionHandler: 'dataModal/deleteData',
-      abortReadInterventionHandler: 'dataModal/abortReadData',
-      abortNewInterventionHandler: 'dataModal/abortCreateData',
-      abortEditInterventionHandler: 'dataModal/abortEditData',
-      editInterventionHandler: 'dataModal/editData',
-      showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
+      saveInterventionHandler: `${vuexModulesDict.dataModal}/saveData`,
+      deleteInterventionHandler: `${vuexModulesDict.dataModal}/deleteData`,
+      abortReadInterventionHandler: `${vuexModulesDict.dataModal}/abortReadData`,
+      abortNewInterventionHandler: `${vuexModulesDict.dataModal}/abortCreateData`,
+      abortEditInterventionHandler: `${vuexModulesDict.dataModal}/abortEditData`,
+      editInterventionHandler: `${vuexModulesDict.dataModal}/editData`,
+      showToBeImplementedFeedback: `${vuexModulesDict.feedback}/showToBeImplementedFeedback`,
     }),
     ...mapMutations({
-      setDraft: 'dataModal/setDraft',
+      setDraft: `${vuexModulesDict.dataModal}/setDraft`,
     }),
     deleteHandler() {
       if (this.read) return;

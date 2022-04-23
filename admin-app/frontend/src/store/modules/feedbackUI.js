@@ -1,5 +1,5 @@
 import i18n from '../../i18n';
-import { typesDictionary } from '../constants';
+import { typesDictionary } from '../../lib/constants';
 
 const defaultDuration = 5000;
 

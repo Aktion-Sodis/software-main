@@ -23,7 +23,7 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { dataTypesDict } from '../../../store/constants';
+import { dataTypesDict, vuexModulesDict } from '../../../lib/constants';
 
 export default {
   name: 'Finalize',
@@ -32,15 +32,15 @@ export default {
   },
   computed: {
     ...mapGetters({
-      surveyDraft: 'dataModal/getDataDraft',
+      surveyDraft: `${vuexModulesDict.dataModal}/getDataDraft`,
       calculateUILocaleString: 'calculateUILocaleString',
-      dataIdInFocus: 'dataModal/getDataIdInFocus',
-      SURVEYById: 'SURVEY_Data/SURVEYById',
+      dataIdInFocus: `${vuexModulesDict.dataModal}/getDataIdInFocus`,
+      SURVEYById: `${vuexModulesDict.survey}/SURVEYById`,
     }),
   },
   methods: {
     ...mapActions({
-      saveData: 'dataModal/saveData',
+      saveData: `${vuexModulesDict.dataModal}/saveData`,
     }),
     ...mapMutations({
       incrementCompletionIndex: 'incrementSurveyModalCompletionIndex',

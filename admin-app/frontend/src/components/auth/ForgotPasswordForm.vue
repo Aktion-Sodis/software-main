@@ -1,10 +1,46 @@
 <template>
   <v-form ref="form" @submit.prevent="submit" lazy-validation>
-    <div v-if="!isCodeSent">
+    <div v-if="isCodeSent">
+      <v-text-field
+        v-model="emailedCode"
+        :rules="[rules.required, rules.notEmpty]"
+        :label="$t('ForgotPassword.emailedCode')"
+        :disabled="loading"
+        required
+        outlined
+      ></v-text-field>
+      <v-text-field
+        v-model="newPassword1"
+        :rules="[rules.required, rules.notEmpty]"
+        :label="$t('ForgotPassword.newPassword1')"
+        :disabled="loading"
+        required
+        outlined
+        :append-icon="showPassword1 ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="showPassword1 ? 'text' : 'password'"
+      ></v-text-field>
+      <v-text-field
+        v-model="newPassword2"
+        :rules="[rules.required, rules.notEmpty]"
+        :label="$t('ForgotPassword.newPassword2')"
+        :disabled="loading"
+        required
+        outlined
+        :append-icon="showPassword2 ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="showPassword2 ? 'text' : 'password'"
+      ></v-text-field>
+      <v-btn :disabled="loading" type="submit" block large color="primary" class="text-none">
+        <v-progress-circular indeterminate v-if="loading"></v-progress-circular>
+        <span v-else>
+          {{ $t('ForgotPassword.confirm') }}
+        </span>
+      </v-btn>
+    </div>
+    <div v-else>
       <v-text-field
         v-model="email"
         :rules="[rules.required]"
-        :label="$t('login.email')"
+        :label="$t('Login.email')"
         :disabled="loading"
         required
         outlined
@@ -20,44 +56,7 @@
       >
         <v-progress-circular indeterminate v-if="loading"></v-progress-circular>
         <span v-else>
-          {{ $t('forgotPassword.sendCode') }}
-        </span>
-      </v-btn>
-    </div>
-
-    <div v-else>
-      <v-text-field
-        v-model="emailedCode"
-        :rules="[rules.required, rules.notEmpty]"
-        :label="$t('forgotPassword.emailedCode')"
-        :disabled="loading"
-        required
-        outlined
-      ></v-text-field>
-      <v-text-field
-        v-model="newPassword1"
-        :rules="[rules.required, rules.notEmpty]"
-        :label="$t('forgotPassword.newPassword1')"
-        :disabled="loading"
-        required
-        outlined
-        :append-icon="showPassword1 ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="showPassword1 ? 'text' : 'password'"
-      ></v-text-field>
-      <v-text-field
-        v-model="newPassword2"
-        :rules="[rules.required, rules.notEmpty]"
-        :label="$t('forgotPassword.newPassword2')"
-        :disabled="loading"
-        required
-        outlined
-        :append-icon="showPassword2 ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="showPassword2 ? 'text' : 'password'"
-      ></v-text-field>
-      <v-btn :disabled="loading" type="submit" block large color="primary" class="text-none">
-        <v-progress-circular indeterminate v-if="loading"></v-progress-circular>
-        <span v-else>
-          {{ $t('forgotPassword.confirm') }}
+          {{ $t('ForgotPassword.sendCode') }}
         </span>
       </v-btn>
     </div>
@@ -66,8 +65,8 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex';
-
-const passwordMinChar = 8;
+import { formValidators } from '../../lib/utils';
+import { routeNamesDict, signInStatusDict, vuexModulesDict } from '../../lib/constants';
 
 export default {
   name: 'ForgotPasswordForm',
@@ -82,20 +81,14 @@ export default {
       loading: false,
       isCodeSent: false,
       rules: {
-        required: (value) => !!value || this.$t('general.form.required'),
-        min: (value) => value.length >= 8 || this.minCharNotMeti18n,
-        notEmpty: (value) => !value || value.replace(/ /g, '') !== '' || this.requiredi18n,
+        required: formValidators.required,
+        notEmpty: formValidators.notEmpty,
       },
     };
   },
   computed: {
-    minCharNotMeti18n() {
-      return this.$t('general.form.minCharNotMet', {
-        minChar: passwordMinChar,
-      });
-    },
     ...mapGetters({
-      storedEmail: 'auth/getEmail',
+      storedEmail: `${vuexModulesDict.auth}/getEmail`,
     }),
   },
   mounted() {
@@ -103,21 +96,22 @@ export default {
   },
   methods: {
     ...mapActions({
-      forgotPasswordSubmit: 'auth/forgotPasswordSubmit',
-      forgotPassword: 'auth/forgotPassword',
-      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
+      forgotPasswordSubmit: `${vuexModulesDict.auth}/forgotPasswordSubmit`,
+      forgotPassword: `${vuexModulesDict.auth}/forgotPassword`,
+      showFeedbackForDuration: `${vuexModulesDict.feedback}/showFeedbackForDuration`,
     }),
     ...mapMutations({
-      setCredentials: 'auth/setCredentials',
+      setCredentials: `${vuexModulesDict.auth}/setCredentials`,
     }),
     async sendEmailCode() {
       this.loading = true;
       const forgotPasswordStatus = await this.forgotPassword({ email: this.email });
-      if (forgotPasswordStatus === 'success') {
+      if (forgotPasswordStatus === signInStatusDict.success) {
         this.isCodeSent = true;
         this.setCredentials({ email: this.email });
         this.loading = false;
-      } else if (forgotPasswordStatus === 'failed') {
+        this.$refs.form.reset();
+      } else if (forgotPasswordStatus === signInStatusDict.failed) {
         this.showFeedbackForDuration({ type: 'error', message: 'Sth went wrong' });
       }
       this.loading = false;
@@ -133,15 +127,15 @@ export default {
         code: this.emailedCode,
         newPassword: this.newPassword1,
       });
-      if (forgotPasswordSubmitStatus === 'success') {
+      if (forgotPasswordSubmitStatus === signInStatusDict.success) {
         this.showFeedbackForDuration({
           type: 'success',
           text: 'Successfully updated your password.',
         });
-        this.$router.push({ name: 'Login' });
+        this.$router.push({ name: routeNamesDict.Login });
         return;
       }
-      if (forgotPasswordSubmitStatus === 'failed') {
+      if (forgotPasswordSubmitStatus === signInStatusDict.failed) {
         // TODO: handle error
         this.loading = false;
       }

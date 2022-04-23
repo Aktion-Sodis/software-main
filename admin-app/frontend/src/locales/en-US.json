@@ -17,7 +17,8 @@
       "minCharNotMet": "Minimum {minChar} characters.",
       "required": "Required.",
       "unsavedChanges": "There are unsaved changes. Are you sure you want to leave?",
-      "addInNewLocale": "In another language"
+      "addInNewLocale": "In another language",
+      "invalidForm": "The form is invalid. Please pay attention to warnings of inputs."
     },
     "noTextProvided": "No text was provided.",
     "noTags": "There are no tags.",
@@ -82,7 +83,7 @@
       }
     }
   },
-  "login": {
+  "Login": {
     "title": "Welcome back!",
     "subtitle": "Please sign in with your credentials.",
     "email": "Email",
@@ -94,7 +95,7 @@
     "dontHaveAnAccount": "Don't have an account?",
     "askYourAdmin": "Ask your administrator for access."
   },
-  "completeUserInfo": {
+  "CompleteUserInfo": {
     "title": "One more thing...",
     "subtitle": "Looks like you are new here. Please finish your profile to start using the Admin-App.",
     "firstName": "First name",
@@ -108,7 +109,7 @@
   "home": {
     "title": "Home"
   },
-  "changePassword": {
+  "ChangePassword": {
     "title": "Update your password",
     "subtitle": "Enter your old and the new one.",
     "oldPassword": {
@@ -120,7 +121,7 @@
       "hint": "The password that you want to have."
     }
   },
-  "forgotPassword": {
+  "ForgotPassword": {
     "title": "Forgot Password",
     "subtitle": "Enter your email address. If there is an account for it, we will email you a verification code. Please enter the code and set a new password for your account.",
     "emailedCode": "Code",
