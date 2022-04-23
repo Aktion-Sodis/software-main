@@ -22,7 +22,10 @@ const QuestionType = {
   "MULTIPLECHOICE": "MULTIPLECHOICE",
   "PICTURE": "PICTURE",
   "PICTUREWITHTAGS": "PICTUREWITHTAGS",
-  "AUDIO": "AUDIO"
+  "AUDIO": "AUDIO",
+  "INT": "INT",
+  "DOUBLE": "DOUBLE",
+  "RATING": "RATING"
 };
 
 const SurveyType = {

@@ -25,5 +25,8 @@ enum QuestionType {
   MULTIPLECHOICE,
   PICTURE,
   PICTUREWITHTAGS,
-  AUDIO
+  AUDIO,
+  INT,
+  DOUBLE,
+  RATING
 }

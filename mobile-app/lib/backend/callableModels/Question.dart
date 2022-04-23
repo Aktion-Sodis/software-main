@@ -52,7 +52,10 @@ enum QuestionType {
   MULTIPLECHOICE,
   PICTURE,
   PICTUREWITHTAGS,
-  AUDIO
+  AUDIO,
+  INT,
+  DOUBLE,
+  RATING
 }
 
 amp.QuestionType questionTypeToAmplifyQuestionType(QuestionType questionType) {
@@ -74,6 +77,15 @@ amp.QuestionType questionTypeToAmplifyQuestionType(QuestionType questionType) {
       break;
     case QuestionType.AUDIO:
       return amp.QuestionType.AUDIO;
+      break;
+    case QuestionType.INT:
+      return amp.QuestionType.INT;
+      break;
+    case QuestionType.DOUBLE:
+      return amp.QuestionType.DOUBLE;
+      break;
+    case QuestionType.RATING:
+      return amp.QuestionType.RATING;
       break;
   }
 }
@@ -98,6 +110,15 @@ QuestionType questionTypeFromAmplifyQuestionType(
       break;
     case amp.QuestionType.AUDIO:
       return QuestionType.AUDIO;
+      break;
+    case amp.QuestionType.INT:
+      return QuestionType.INT;
+      break;
+    case amp.QuestionType.DOUBLE:
+      return QuestionType.DOUBLE;
+      break;
+    case amp.QuestionType.RATING:
+      return QuestionType.RATING;
       break;
   }
 }
