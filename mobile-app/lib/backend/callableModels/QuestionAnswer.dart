@@ -11,6 +11,9 @@ class QuestionAnswer {
   late DateTime date;
   late QuestionType type;
   String? text;
+  int? intValue;
+  double? doubleValue;
+  int? rating;
   List<QuestionOption>? questionOptions;
   List<Marking>? markings;
 
@@ -21,7 +24,10 @@ class QuestionAnswer {
       required this.type,
       this.text,
       this.questionOptions,
-      this.markings});
+      this.markings,
+      this.intValue,
+      this.doubleValue,
+      this.rating});
 
   QuestionAnswer.fromAmplifyModel(amp.QuestionAnswer questionAnswer) {
     id = questionAnswer.id;
@@ -29,6 +35,9 @@ class QuestionAnswer {
     date = questionAnswer.date.getDateTimeInUtc();
     type = questionTypeFromAmplifyQuestionType(questionAnswer.type);
     text = questionAnswer.text;
+    intValue = questionAnswer.intValue;
+    doubleValue = questionAnswer.doubleValue;
+    rating = questionAnswer.rating;
     questionOptions = questionAnswer.questionOptions != null
         ? List.generate(
             questionAnswer.questionOptions!.length,
@@ -50,6 +59,9 @@ class QuestionAnswer {
         date: TemporalDateTime(date),
         type: questionTypeToAmplifyQuestionType(type),
         text: text,
+        intValue: intValue,
+        doubleValue: doubleValue,
+        rating: rating,
         questionOptions: questionOptions != null
             ? List.generate(questionOptions!.length,
                 (index) => questionOptions![index].toAmplifyModel())
