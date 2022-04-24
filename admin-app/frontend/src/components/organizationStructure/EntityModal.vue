@@ -160,8 +160,8 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { modalModesDict, dataTypesDict } from '../../lib/constants';
-import LocaleTextBox from '../commons/LocaleTextBox.vue';
+import { modalModesDict, dataTypesDict, vuexModulesDict } from '../../lib/constants';
+import LocaleTextBox from '../commons/form/LocaleTextBox.vue';
 import { Entity } from '../../models';
 import { emptyMutableI18nString, mutableI18nString } from '../../lib/classes';
 import { deriveFilePath } from '../../lib/utils';
@@ -195,18 +195,18 @@ export default {
   },
   computed: {
     ...mapGetters({
-      allEntitiesOfLevel: 'ENTITY_Data/allEntitiesByLevelId',
-      upperLevelById: 'LEVEL_Data/upperLevelById',
-      LEVELById: 'LEVEL_Data/LEVELById',
+      allEntitiesOfLevel: `${vuexModulesDict.entity}/allEntitiesByLevelId`,
+      upperLevelById: `${vuexModulesDict.level}/upperLevelById`,
+      LEVELById: `${vuexModulesDict.level}/LEVELById`,
 
-      dataType: 'dataModal/getDataType',
-      modalMode: 'dataModal/getMode',
-      isModalDisplayed: 'dataModal/getIsDisplayed',
-      dataIdInFocus: 'dataModal/getDataIdInFocus',
-      entityDraft: 'dataModal/getDataDraft',
-      hasDescendants: 'ENTITY_Data/hasDescendantsById',
+      dataType: `${vuexModulesDict.dataModal}/getDataType`,
+      modalMode: `${vuexModulesDict.dataModal}/getMode`,
+      isModalDisplayed: `${vuexModulesDict.dataModal}/getIsDisplayed`,
+      dataIdInFocus: `${vuexModulesDict.dataModal}/getDataIdInFocus`,
+      entityDraft: `${vuexModulesDict.dataModal}/getDataDraft`,
+      hasDescendants: `${vuexModulesDict.entity}/hasDescendantsById`,
 
-      ENTITYById: 'ENTITY_Data/ENTITYById',
+      ENTITYById: `${vuexModulesDict.entity}/ENTITYById`,
       getCreatingEntityInLevelId: 'getCreatingEntityInLevelId',
       calculateUILocaleString: 'calculateUILocaleString',
     }),
@@ -261,17 +261,17 @@ export default {
   },
   methods: {
     ...mapActions({
-      saveData: 'dataModal/saveData',
-      deleteData: 'dataModal/deleteData',
-      abortReadData: 'dataModal/abortReadData',
-      abortCreateData: 'dataModal/abortCreateData',
-      abortEditData: 'dataModal/abortEditData',
-      editData: 'dataModal/editData',
+      saveData: `${vuexModulesDict.dataModal}/saveData`,
+      deleteData: `${vuexModulesDict.dataModal}/deleteData`,
+      abortReadData: `${vuexModulesDict.dataModal}/abortReadData`,
+      abortCreateData: `${vuexModulesDict.dataModal}/abortCreateData`,
+      abortEditData: `${vuexModulesDict.dataModal}/abortEditData`,
+      editData: `${vuexModulesDict.dataModal}/editData`,
 
-      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
+      showFeedbackForDuration: `${vuexModulesDict.feedback}/showFeedbackForDuration`,
     }),
     ...mapMutations({
-      setDraft: 'dataModal/setDraft',
+      setDraft: `${vuexModulesDict.dataModal}/setDraft`,
     }),
     escHandler() {
       this.closeHandler();

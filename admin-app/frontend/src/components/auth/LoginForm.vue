@@ -3,7 +3,7 @@
     <v-text-field
       v-model="email"
       :rules="[rules.required]"
-      :label="$t('login.email')"
+      :label="$t('Login.email')"
       :disabled="loading"
       required
       outlined
@@ -13,7 +13,7 @@
       :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
       :rules="[rules.required]"
       :type="showPassword ? 'text' : 'password'"
-      :label="$t('login.password')"
+      :label="$t('Login.password')"
       @click:append="showPassword = !showPassword"
       :disabled="loading"
       outlined
@@ -22,17 +22,17 @@
       <v-checkbox
         class="my-0"
         v-model="rememberMe"
-        :label="$t('login.rememberMe')"
+        :label="$t('Login.rememberMe')"
         :disabled="loading"
       ></v-checkbox>
       <div class="mt-1" @click="forgotPasswordHandler" style="cursor: pointer">
-        <p class="py-0">{{ $t('login.forgotPassword') }}</p>
+        <p class="py-0">{{ $t('Login.forgotPassword') }}</p>
       </div>
     </div>
     <v-btn :disabled="loading" type="submit" block large color="primary" class="text-none">
       <v-progress-circular indeterminate v-if="loading"></v-progress-circular>
       <span v-else>
-        {{ $t('login.signIn') }}
+        {{ $t('Login.signIn') }}
       </span>
     </v-btn>
     <v-btn
@@ -46,13 +46,13 @@
       @click.prevent="showToBeImplementedFeedback"
     >
       <GoogleIcon />
-      {{ $t('login.withGoogle') }}
+      {{ $t('Login.withGoogle') }}
     </v-btn>
     <div class="d-flex justify-end mt-4">
       <p>
-        {{ $t('login.dontHaveAnAccount') }}
+        {{ $t('Login.dontHaveAnAccount') }}
         <span>
-          {{ $t('login.askYourAdmin') }}
+          {{ $t('Login.askYourAdmin') }}
         </span>
       </p>
     </div>
@@ -60,8 +60,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex';
-import GoogleIcon from './GoogleIcon.vue';
+import { mapActions, mapMutations } from 'vuex';
+import { formValidators } from '../../lib/utils';
+import { routeNamesDict, signInStatusDict, vuexModulesDict } from '../../lib/constants';
+import GoogleIcon from '../commons/GoogleIcon.vue';
 
 export default {
   components: { GoogleIcon },
@@ -72,26 +74,20 @@ export default {
       password: null,
       showPassword: false,
       rules: {
-        required: (value) => !!value || this.requiredi18n,
+        required: formValidators.required,
       },
       rememberMe: true,
       loading: false,
     };
   },
-  computed: {
-    ...mapGetters({}),
-    requiredi18n() {
-      return this.$t('general.form.required');
-    },
-  },
   methods: {
     ...mapActions({
-      showToBeImplementedFeedback: 'FEEDBACK_UI/showToBeImplementedFeedback',
-      showFeedbackForDuration: 'FEEDBACK_UI/showFeedbackForDuration',
-      signIn: 'auth/signIn',
+      showToBeImplementedFeedback: `${vuexModulesDict.feedback}/showToBeImplementedFeedback`,
+      showFeedbackForDuration: `${vuexModulesDict.feedback}/showFeedbackForDuration`,
+      signIn: `${vuexModulesDict.auth}/signIn`,
     }),
     ...mapMutations({
-      setCredentials: 'auth/setCredentials',
+      setCredentials: `${vuexModulesDict.auth}/setCredentials`,
     }),
     async submit() {
       const valid = this.$refs.form.validate();
@@ -103,22 +99,22 @@ export default {
         password: this.password,
         rememberMe: this.rememberMe,
       });
-      if (signInStatus === 'success') {
-        this.$router.push({ name: 'OrganizationStructure' });
+      if (signInStatus === signInStatusDict.success) {
+        this.$router.push({ name: routeNamesDict.OrganizationStructure });
         return;
       }
-      if (signInStatus === 'failed') {
+      if (signInStatus === signInStatusDict.failed) {
         this.loading = false;
         // TODO: handle error
         return;
       }
-      if (signInStatus === 'completeUserInfo') {
-        this.$router.push({ name: 'CompleteUserInfo' });
+      if (signInStatus === signInStatusDict.completeUserInfo) {
+        this.$router.push({ name: routeNamesDict.CompleteUserInfo });
       }
     },
     forgotPasswordHandler() {
       this.setCredentials({ email: this.email || '' });
-      this.$router.push({ name: 'ForgotPassword' });
+      this.$router.push({ name: routeNamesDict.ForgotPassword });
     },
   },
 };

@@ -30,7 +30,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { dataTypesDict } from '../../lib/constants';
+import { dataTypesDict, vuexModulesDict } from '../../lib/constants';
 import { deriveFilePath } from '../../lib/utils';
 import ImgFromS3 from '../commons/ImgFromS3.vue';
 
@@ -65,7 +65,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      tagById: 'SURVEY_Data/tagById',
+      tagById: `${vuexModulesDict.survey}/tagById`,
       calculateUILocaleString: 'calculateUILocaleString',
     }),
     deriveImgPath() {
@@ -80,7 +80,7 @@ export default {
       this.readData({ dataId: this.id, dataType: dataTypesDict.survey });
     },
     ...mapActions({
-      readData: 'dataModal/readData',
+      readData: `${vuexModulesDict.dataModal}/readData`,
     }),
   },
 };

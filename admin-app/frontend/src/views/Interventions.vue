@@ -43,14 +43,15 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { dataTypesDict } from '../lib/constants';
+import { waitForMilliseconds } from '../lib/utils';
+import { dataTypesDict, routeNamesDict, vuexModulesDict } from '../lib/constants';
 
 import Intervention from '../components/interventions/Intervention.vue';
 import InterventionSkeleton from '../components/interventions/InterventionSkeleton.vue';
 import DataCreationButtonCard from '../components/commons/DataCreationButtonCard.vue';
 
 export default {
-  name: 'Interventions',
+  name: routeNamesDict.Interventions,
   components: {
     Intervention,
     DataCreationButtonCard,
@@ -63,12 +64,29 @@ export default {
   },
   computed: {
     ...mapGetters({
-      interventions: 'INTERVENTION_Data/getInterventions',
-      loading: 'INTERVENTION_Data/getLoading',
-      isInterventionModalDisplayed: 'dataModal/getIsDisplayed',
+      interventions: `${vuexModulesDict.intervention}/getInterventions`,
+      loading: `${vuexModulesDict.intervention}/getLoading`,
+      isInterventionModalDisplayed: `${vuexModulesDict.dataModal}/getIsDisplayed`,
     }),
-    dataType() {
-      return dataTypesDict.intervention;
+    currentLocale() {
+      return this.$i18n.locale;
+    },
+    dataTypesDict() {
+      return dataTypesDict;
+    },
+  },
+  watch: {
+    isInterventionModalDisplayed: 'destroyInterventionModalAfterDelay',
+  },
+  methods: {
+    // If closed, wait for 500, if still closed, destroy component instance
+    async destroyInterventionModalAfterDelay(newValue) {
+      if (newValue) {
+        this.showInterventionModal = true;
+        return;
+      }
+      await waitForMilliseconds(500);
+      if (!this.isInterventionModalDisplayed) this.showInterventionModal = false;
     },
   },
 };

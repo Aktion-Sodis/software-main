@@ -1,5 +1,19 @@
 import { databaseOntologies } from './constants';
 
+import i18n from '../i18n';
+
+export const formValidators = {
+  required: (value) => !!value || i18n.t('general.form.required'),
+  minPasswordLength: (value) => {
+    const minChar = process.env.VUE_APP_MIN_PASSWORD_LENGTH;
+    const minCharI18n = i18n.t('general.form.minCharNotMet', {
+      minChar,
+    });
+    return value.length >= process.env.VUE_APP_MIN_PASSWORD_LENGTH || minCharI18n;
+  },
+  notEmpty: (value) => !value || value.replace(/ /g, '') !== '' || i18n.t('general.form.required'),
+};
+
 /* eslint-disable-next-line no-unused-vars */
 export const deriveFilePath = (wantedDerivative, paramsObj) => {
   const derivative = databaseOntologies[wantedDerivative];

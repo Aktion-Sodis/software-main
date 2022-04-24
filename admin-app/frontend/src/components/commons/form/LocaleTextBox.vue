@@ -38,7 +38,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { mutableI18nString } from '../../lib/classes';
+import { mutableI18nString } from '../../../lib/classes';
 // import { I18nString } from '../../models';
 // import { emptyI18nString } from '../../lib/classes';
 

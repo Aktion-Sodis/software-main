@@ -4,15 +4,17 @@ import VuexPersistence from 'vuex-persist';
 import i18n from '../i18n';
 
 // import modules
-import authModule from './authModule';
-import interventionsData from './interventions/data';
-import surveysData from './survey/data';
-import QUESTION_UI from './questions/ui';
-import FEEDBACK_UI from './feedback/ui';
-import levelsData from './levels/data';
-import entitiesData from './entities/data';
-import dataModal from './modal/ui';
-import SYNC_UI from './sync/ui';
+import authModule from './modules/auth';
+import interventionsData from './modules/interventionData';
+import surveyData from './modules/surveyData';
+import QUESTION_UI from './modules/questionUI';
+import FEEDBACK_UI from './modules/feedbackUI';
+// eslint-disable-next-line
+import levelsData from './modules/levelData';
+import entitiesData from './modules/entityData';
+import dataModal from './modules/dataModal';
+import SYNC_UI from './modules/syncUI';
+import { vuexModulesDict } from '../lib/constants';
 
 // persist
 const vuexLocal = new VuexPersistence({
@@ -116,15 +118,15 @@ export default new Vuex.Store({
     },
   },
   modules: {
-    auth: authModule,
-    dataModal,
-    ENTITY_Data: entitiesData,
-    SURVEY_Data: surveysData,
-    LEVEL_Data: levelsData,
-    INTERVENTION_Data: interventionsData,
-    QUESTION_UI,
-    FEEDBACK_UI,
-    SYNC_UI,
+    [vuexModulesDict.auth]: authModule,
+    [vuexModulesDict.dataModal]: dataModal,
+    [vuexModulesDict.entity]: entitiesData,
+    [vuexModulesDict.survey]: surveyData,
+    [vuexModulesDict.level]: levelsData,
+    [vuexModulesDict.intervention]: interventionsData,
+    [vuexModulesDict.question]: QUESTION_UI,
+    [vuexModulesDict.feedback]: FEEDBACK_UI,
+    [vuexModulesDict.sync]: SYNC_UI,
   },
   plugins: [vuexLocal.plugin],
 });

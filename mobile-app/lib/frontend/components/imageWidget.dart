@@ -38,8 +38,10 @@ class ImageWidgetState extends State<ImageWidget> {
     print("reinitializing image widget");
     widget.imageFile?.file().then((value) async {
       imageFile = value;
-      fileImage = FileImage(imageFile!);
-      await fileImage!.evict();
+      if (imageFile != null) {
+        fileImage = FileImage(imageFile!);
+        await fileImage!.evict();
+      }
       if (mounted) {
         setState(() {
           fileImage = fileImage;

@@ -34,8 +34,8 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import draggable from 'vuedraggable';
-import { modalModesDict, questionTypesIconDict } from '../../../../lib/constants';
-import { QuestionType } from '../../../../models';
+import { modalModesDict, questionTypesIconDict, vuexModulesDict } from '../../../lib/constants';
+import { QuestionType } from '../../../models';
 
 export default {
   name: 'SurveyModalQuestionTabs',
@@ -62,25 +62,29 @@ export default {
   },
   computed: {
     ...mapGetters({
-      questions: 'QUESTION_UI/questionWithOptionDrafts',
-      iQuestions: 'QUESTION_UI/getIQuestions',
-      nQuestions: 'QUESTION_UI/nQuestions',
+      questions: `${vuexModulesDict.question}/questionWithOptionDrafts`,
+      iQuestions: `${vuexModulesDict.question}/getIQuestions`,
+      nQuestions: `${vuexModulesDict.question}/nQuestions`,
 
-      surveyModalMode: 'dataModal/getMode',
-      dataIdInFocus: 'dataModal/getDataIdInFocus',
+      surveyModalMode: `${vuexModulesDict.dataModal}/getMode`,
+      dataIdInFocus: `${vuexModulesDict.dataModal}/getDataIdInFocus`,
 
-      SURVEYById: 'SURVEY_Data/SURVEYById',
+      SURVEYById: `${vuexModulesDict.survey}/SURVEYById`,
     }),
     questions: {
       get() {
         return this.read
           ? this.surveyInFocus.questions
-          : this.$store.getters['QUESTION_UI/questionWithOptionDrafts'];
+          : this.$store.getters[`${vuexModulesDict.question}/questionWithOptionDrafts`];
       },
       set(value) {
-        this.$store.commit('QUESTION_UI/setQuestions', { payload: value }, { root: true });
         this.$store.commit(
-          'QUESTION_UI/setOptions',
+          `${vuexModulesDict.question}/setQuestions`,
+          { payload: value },
+          { root: true },
+        );
+        this.$store.commit(
+          `${vuexModulesDict.question}/setOptions`,
           { payload: value.map((q) => q.optionDrafts) },
           { root: true },
         );
@@ -95,7 +99,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setIQuestions: 'QUESTION_UI/setIQuestions',
+      setIQuestions: `${vuexModulesDict.question}/setIQuestions`,
     }),
     handleDrag(evt) {
       return (

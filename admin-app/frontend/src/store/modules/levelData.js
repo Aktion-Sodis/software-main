@@ -3,7 +3,7 @@ import { API, Storage } from 'aws-amplify';
 import {
   Level, I18nString, LevelInterventionRelation, CustomData,
 } from '../../models';
-import { dataTypesDict, modalModesDict } from '../../lib/constants';
+import { dataTypesDict, modalModesDict, vuexModulesDict } from '../../lib/constants';
 import { deleteLevel /* , updateLevel */ } from '../../graphql/mutations';
 import { deriveFilePath } from '../../lib/utils';
 // import { listLevels } from '../../graphql/queries';
@@ -105,7 +105,7 @@ const levelsData = {
             await DataStore.save(
               new LevelInterventionRelation({
                 level: postResponse,
-                intervention: rootGetters['INTERVENTION_Data/INTERVENTIONById']({
+                intervention: rootGetters[`${vuexModulesDict.intervention}/INTERVENTIONById`]({
                   id: interventionId,
                 }),
               }),
@@ -129,7 +129,7 @@ const levelsData = {
         commit('addLevel', postResponse);
 
         dispatch(
-          'dataModal/readData',
+          `${vuexModulesDict.dataModal}/readData`,
           {
             dataId: postResponse.id,
             dataType: dataTypesDict.level,
@@ -201,7 +201,7 @@ const levelsData = {
             await DataStore.save(
               new LevelInterventionRelation({
                 level: putResponse,
-                intervention: rootGetters['INTERVENTION_Data/INTERVENTIONById']({
+                intervention: rootGetters[`${vuexModulesDict.intervention}/INTERVENTIONById`]({
                   id: interventionId,
                 }),
               }),
@@ -216,7 +216,7 @@ const levelsData = {
 
       if (success) {
         dispatch(
-          'dataModal/readData',
+          `${vuexModulesDict.dataModal}/readData`,
           {
             dataType: dataTypesDict.level,
           },
@@ -259,10 +259,14 @@ const levelsData = {
         commit('deleteLevel', {
           id,
         });
-        commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
-        commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
+        commit(`${vuexModulesDict.dataModal}/setDataIdInFocus`, { newValue: null }, { root: true });
+        commit(
+          `${vuexModulesDict.dataModal}/setMode`,
+          { newValue: modalModesDict.read },
+          { root: true },
+        );
         dispatch(
-          'dataModal/abortReadData',
+          `${vuexModulesDict.dataModal}/abortReadData`,
           {},
           {
             root: true,

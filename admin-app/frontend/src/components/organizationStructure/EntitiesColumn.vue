@@ -42,6 +42,7 @@
 <script>
 // import { validate as uuidValidate } from 'uuid';
 import { mapGetters } from 'vuex';
+import { vuexModulesDict } from '../../lib/constants';
 
 import AddEntityButton from './AddEntityButton.vue';
 import Entity from './Entity.vue';
@@ -58,10 +59,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      allEntitiesOfLevel: 'ENTITY_Data/allEntitiesByLevelId',
-      getLoading: 'LEVEL_Data/getLoading',
+      allEntitiesOfLevel: `${vuexModulesDict.entity}/allEntitiesByLevelId`,
+      getLoading: `${vuexModulesDict.level}/getLoading`,
       lineColors: 'getLineColors',
-      calculatedLinesByLevelId: 'ENTITY_Data/calculatedLinesByLevelId',
+      calculatedLinesByLevelId: `${vuexModulesDict.entity}/calculatedLinesByLevelId`,
       calculateUILocaleString: 'calculateUILocaleString',
     }),
   },

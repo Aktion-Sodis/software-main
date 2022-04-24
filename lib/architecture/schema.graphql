@@ -109,6 +109,7 @@ type Survey @model {
   tags: [SurveyTag!]! @manyToMany(relationName: "SurveySurveyTagRelation")
   surveyType: SurveyType!
   schemeVersion: Int @default(value: "0")
+  archived: Boolean @default(value: "false")
 }
 
 enum SurveyType {
@@ -123,6 +124,9 @@ enum QuestionType {
   PICTURE
   PICTUREWITHTAGS
   AUDIO
+  INT
+  DOUBLE
+  RATING
 }
 
 type Question {
@@ -196,6 +200,9 @@ type QuestionAnswer {
   date: AWSDateTime!
   type: QuestionType!
   text: String
+  intValue: Int
+  doubleValue: Float
+  rating: Int
   questionOptions: [QuestionOption!]
   markings: [Marking!]
   # todo: possibly also pic/audio path

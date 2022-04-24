@@ -19,18 +19,21 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
+import { dataTypesDict, vuexModulesDict } from '../../../lib/constants';
 
 export default {
   name: 'SurveyModalFinalize',
   computed: {
     ...mapGetters({
-      surveyDraft: 'dataModal/getDataDraft',
+      surveyDraft: `${vuexModulesDict.dataModal}/getDataDraft`,
       calculateUILocaleString: 'calculateUILocaleString',
+      dataIdInFocus: `${vuexModulesDict.dataModal}/getDataIdInFocus`,
+      SURVEYById: `${vuexModulesDict.survey}/SURVEYById`,
     }),
   },
   methods: {
     ...mapActions({
-      saveData: 'dataModal/saveData',
+      saveData: `${vuexModulesDict.dataModal}/saveData`,
     }),
     ...mapMutations({
       incrementCompletionIndex: 'incrementSurveyModalCompletionIndex',

@@ -12,6 +12,7 @@ class Survey {
   Intervention? intervention;
   late List<Question> questions;
   late List<amp.SurveySurveyTagRelation> tagConnections;
+  late bool archived;
   int? schemeVersion;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -58,7 +59,8 @@ class Survey {
       this.schemeVersion,
       this.createdAt,
       this.updatedAt,
-      required this.surveyType});
+      required this.surveyType,
+      this.archived = false});
 
   Survey.fromAmplifyModel(amp.Survey survey) {
     print(survey.intervention.toString());
@@ -77,21 +79,23 @@ class Survey {
     updatedAt = survey.updatedAt?.getDateTimeInUtc();
     surveyType = surveyTypeFromAmplifySurveyType(
         survey.surveyType); //todo: change with theme change
+    archived = survey.archived ?? false;
   }
 
   amp.Survey toAmplifyModel() {
     return amp.Survey(
-      id: id,
-      name: name_ml.toAmplifyModel(),
-      description: description_ml.toAmplifyModel(),
-      intervention: intervention?.toAmplifyModel(),
-      surveyType: surveyTypeToAmplifySurveyType(surveyType),
-      questions: List.generate(
-          questions.length, (index) => questions[index].toAmplifyModel()),
-      tags: tagConnections,
-      schemeVersion: schemeVersion,
-      //todo: missing survey type
-    );
+        id: id,
+        name: name_ml.toAmplifyModel(),
+        description: description_ml.toAmplifyModel(),
+        intervention: intervention?.toAmplifyModel(),
+        surveyType: surveyTypeToAmplifySurveyType(surveyType),
+        questions: List.generate(
+            questions.length, (index) => questions[index].toAmplifyModel()),
+        tags: tagConnections,
+        schemeVersion: schemeVersion,
+        archived: archived
+        //todo: missing survey type
+        );
   }
 }
 

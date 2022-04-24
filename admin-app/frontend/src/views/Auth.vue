@@ -5,45 +5,26 @@
         <v-container fluid class="pt-16 pt-md-0">
           <v-row no-gutters class="d-flex justify-center align-center">
             <v-col cols="11" sm="10" md="8">
-              <h1 v-if="$route.name === 'Login'">{{ $t('login.title') }}</h1>
-              <h1 v-else-if="$route.name === 'CompleteUserInfo'">
-                {{ $t('completeUserInfo.title') }}
-              </h1>
-              <h1 v-else-if="$route.name === 'ChangePassword'">
-                {{ $t('changePassword.title') }}
-              </h1>
-              <h1 v-else-if="$route.name === 'ForgotPassword'">
-                {{ $t('forgotPassword.title') }}
-              </h1>
-              <p class="mb-8 mt-4" v-if="$route.name === 'Login'">
-                {{ $t('login.subtitle') }}
+              <h1>{{ $t(`${$route.name}.title`) }}</h1>
+              <p class="mb-8 mt-4">
+                {{ $t(`${$route.name}.subtitle`) }}
               </p>
-              <p class="mb-8 mt-4" v-else-if="$route.name === 'CompleteUserInfo'">
-                {{ $t('completeUserInfo.subtitle') }}
-              </p>
-              <p class="mb-8 mt-4" v-else-if="$route.name === 'ChangePassword'">
-                {{ $t('changePassword.subtitle') }}
-              </p>
-              <p class="mb-8 mt-4" v-else-if="$route.name === 'ForgotPassword'">
-                {{ $t('forgotPassword.subtitle') }}
-              </p>
-
-              <LoginForm v-if="$route.name === 'Login'" />
-              <UpdateUserForm v-else-if="$route.name === 'CompleteUserInfo'" />
-              <ChangePasswordForm v-else-if="$route.name === 'ChangePassword'" />
-              <ForgotPasswordForm v-else-if="$route.name === 'ForgotPassword'" />
+              <LoginForm v-if="$route.name === routeNamesDict.Login" />
+              <UpdateUserForm v-else-if="$route.name === routeNamesDict.CompleteUserInfo" />
+              <ChangePasswordForm v-else-if="$route.name === routeNamesDict.ChangePassword" />
+              <ForgotPasswordForm v-else-if="$route.name === routeNamesDict.ForgotPassword" />
             </v-col>
           </v-row>
           <v-row no-gutters class="d-md-none mt-4 mt-md-16">
             <v-col cols="6" sm="4" offset="3" offset-sm="4">
-              <a href="https://aktion-sodis.org/" target="_blank">
+              <a :href="societyWebsiteHref" target="_blank">
                 <div
                   class="d-flex justify-center align-center rounded-xl pa-4 lg-rounded-pill grey"
                 >
                   <img
-                    src="../static/aktionSodisBig.png"
+                    :src="requireSocietyLogoBig()"
                     style="width: 100%"
-                    alt="Aktion Sodis Logo"
+                    :alt="`${societyVerboseName} Logo`"
                   />
                 </div>
               </a>
@@ -55,12 +36,12 @@
         <v-container style="height: 100%" fluid>
           <v-row style="height: 100%" no-gutters>
             <v-col cols="6" offset="3" class="d-flex justify-center align-center">
-              <a href="https://aktion-sodis.org/" target="_blank">
+              <a :href="societyWebsiteHref" target="_blank">
                 <div class="rounded-xl pa-4 lg-rounded-pill d-none d-md-block grey">
                   <img
-                    src="../static/aktionSodisBig.png"
+                    :src="requireSocietyLogoBig()"
                     style="width: 100%"
-                    alt="Aktion Sodis Logo"
+                    :alt="`${societyVerboseName} Logo`"
                   />
                 </div>
               </a>
@@ -73,11 +54,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
 import ChangePasswordForm from '../components/auth/ChangePasswordForm.vue';
 import ForgotPasswordForm from '../components/auth/ForgotPasswordForm.vue';
 import LoginForm from '../components/auth/LoginForm.vue';
 import UpdateUserForm from '../components/auth/UpdateUserForm.vue';
+import { routeNamesDict } from '../lib/constants';
 
 export default {
   components: {
@@ -87,21 +68,37 @@ export default {
     ForgotPasswordForm,
   },
   name: 'Auth',
-  data() {
-    return {};
-  },
   computed: {
-    ...mapGetters({}),
+    routeNamesDict() {
+      return routeNamesDict;
+    },
+    societyVerboseName() {
+      return process.env.VUE_APP_SOCIETY_VERBOSE_NAME || 'Aktion Sodis';
+    },
+    societyWebsiteHref() {
+      return process.env.VUE_APP_SOCIETY_WEBSITE_HREF || 'https://aktion-sodis.org';
+    },
   },
   methods: {
-    ...mapActions({}),
+    requireSocietyLogoBig() {
+      const societyLogoBigName = process.env.VUE_APP_LOGO_BIG;
+      let res;
+      try {
+        // eslint-disable-next-line
+        res = require(`../static/${societyLogoBigName}`);
+      } catch {
+        // eslint-disable-next-line
+        res = require(`../static/aktionSodisBig.png`);
+      }
+      return res;
+    },
   },
 };
 </script>
 
 <style scoped>
 .centered-bg-img {
-  background-image: url('../static/colleagues.jpeg');
+  background-image: url('../static/colleagues.jpg');
   background-size: cover;
   background-position: center;
 }

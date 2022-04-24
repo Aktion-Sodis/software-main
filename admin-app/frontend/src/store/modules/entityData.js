@@ -1,6 +1,6 @@
 import { DataStore } from '@aws-amplify/datastore';
-import { API, Storage } from 'aws-amplify';
-import { dataTypesDict, modalModesDict } from '../../lib/constants';
+import { API } from 'aws-amplify';
+import { dataTypesDict, modalModesDict, vuexModulesDict } from '../../lib/constants';
 import { deleteEntity } from '../../graphql/mutations';
 import { Entity, I18nString } from '../../models';
 import { deriveFilePath } from '../../lib/utils';
@@ -27,7 +27,7 @@ const entitiesData = {
     maxVerticalOrderOfChildren:
       (_, { allEntitiesByLevelId }, rootState, rootGetters) => ({ entityId, entityLevelId }) => {
         const allEntitiesInLowerLevel = allEntitiesByLevelId({
-          entityLevelId: rootGetters['LEVEL_Data/getLevels'].find(
+          entityLevelId: rootGetters[`${vuexModulesDict.level}/getLevels`].find(
             (l) => l.parentLevelID === entityLevelId,
           )?.id,
         });
@@ -43,7 +43,7 @@ const entitiesData = {
     minVerticalOrderOfChildren:
       (_, { allEntitiesByLevelId }, rootState, rootGetters) => ({ entityId, entityLevelId }) => {
         const allEntitiesInLowerLevel = allEntitiesByLevelId({
-          entityLevelId: rootGetters['LEVEL_Data/getLevels'].find(
+          entityLevelId: rootGetters[`${vuexModulesDict.level}/getLevels`].find(
             (l) => l.parentLevelID === entityLevelId,
           )?.id,
         });
@@ -78,7 +78,7 @@ const entitiesData = {
       rootGetters,
     ) => {
       const lines = [];
-      rootGetters['LEVEL_Data/sortedLevels'].forEach((l) => {
+      rootGetters[`${vuexModulesDict.level}/sortedLevels`].forEach((l) => {
         const allParentsInLevel = allEntitiesByLevelId({ entityLevelId: l.id }).filter((e) => hasDescendantsById({ id: e.id }));
         allParentsInLevel.forEach((p, index) => {
           const parentVerticalOrder = verticalOrderByEntityId({
@@ -106,8 +106,9 @@ const entitiesData = {
 
     calculatedLinesByLevelId:
       (_, { calculatedLines }, rootState, rootGetters) => ({ entityLevelId }) => calculatedLines.filter(
-        (li) => rootGetters['LEVEL_Data/getLevels'].find((le) => le.parentLevelID === li.entityLevelId)
-          .id === entityLevelId,
+        (li) => rootGetters[`${vuexModulesDict.level}/getLevels`].find(
+          (le) => le.parentLevelID === li.entityLevelId,
+        ).id === entityLevelId,
       ),
 
     lineByEntityId:
@@ -170,7 +171,7 @@ const entitiesData = {
 
         commit('addEntity', postResponse);
         dispatch(
-          'dataModal/readData',
+          `${vuexModulesDict.dataModal}/readData`,
           {
             dataId: postResponse.id,
             dataType: dataTypesDict.entity,
@@ -219,7 +220,7 @@ const entitiesData = {
         commit('replaceEntity', putResponse);
 
         dispatch(
-          'dataModal/readData',
+          `${vuexModulesDict.dataModal}/readData`,
           {
             dataId: putResponse.id,
             dataType: dataTypesDict.entity,
@@ -249,21 +250,22 @@ const entitiesData = {
         success = false;
       }
 
-      if (success) {
-        Storage.remove(deriveFilePath('entityPicPath', { entityID: id }));
-        commit('deleteEntity', {
-          id,
-        });
-        commit('dataModal/setDataIdInFocus', { newValue: null }, { root: true });
-        commit('dataModal/setMode', { newValue: modalModesDict.read }, { root: true });
-        dispatch(
-          'dataModal/abortReadData',
-          {},
-          {
-            root: true,
-          },
-        );
-      }
+      commit('deleteEntity', {
+        id,
+      });
+      commit(`${vuexModulesDict.dataModal}/setDataIdInFocus`, { newValue: null }, { root: true });
+      commit(
+        `${vuexModulesDict.dataModal}/setMode`,
+        { newValue: modalModesDict.read },
+        { root: true },
+      );
+      dispatch(
+        `${vuexModulesDict.dataModal}/abortReadData`,
+        {},
+        {
+          root: true,
+        },
+      );
 
       commit('setLoading', { newValue: false });
       return success;

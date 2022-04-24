@@ -1,4 +1,4 @@
-import { syncStatusDict } from '../../lib/constants';
+import { syncStatusDict, vuexModulesDict } from '../../lib/constants';
 import { waitForMilliseconds } from '../../lib/utils';
 
 const SYNC_UI = {
@@ -32,33 +32,41 @@ const SYNC_UI = {
     /* Don't call this directly. Call the refreshHandler. */
     syncAll: async ({ commit, dispatch }) => {
       const { apiLevelInterventionRelations, apiLevels } = await dispatch(
-        'LEVEL_Data/APIgetAll',
+        `${vuexModulesDict.level}/APIgetAll`,
         {},
         { root: true },
       );
       commit(
-        'LEVEL_Data/setRelationLevelIntervention',
+        `${vuexModulesDict.level}/setRelationLevelIntervention`,
         {
           newValue: apiLevelInterventionRelations,
         },
         { root: true },
       );
       commit(
-        'LEVEL_Data/setLevels',
+        `${vuexModulesDict.level}/setLevels`,
         {
           newValue: apiLevels,
         },
         { root: true },
       );
 
-      const apiEntities = await dispatch('ENTITY_Data/APIgetAll', {}, { root: true });
-      commit('ENTITY_Data/setEntities', { newValue: apiEntities }, { root: true });
+      const apiEntities = await dispatch(`${vuexModulesDict.entity}/APIgetAll`, {}, { root: true });
+      commit(`${vuexModulesDict.entity}/setEntities`, { newValue: apiEntities }, { root: true });
 
-      const apiInterventions = await dispatch('INTERVENTION_Data/APIgetAll', {}, { root: true });
-      commit('INTERVENTION_Data/setInterventions', { newValue: apiInterventions }, { root: true });
+      const apiInterventions = await dispatch(
+        `${vuexModulesDict.intervention}/APIgetAll`,
+        {},
+        { root: true },
+      );
+      commit(
+        `${vuexModulesDict.intervention}/setInterventions`,
+        { newValue: apiInterventions },
+        { root: true },
+      );
 
-      const apiSurveys = await dispatch('SURVEY_Data/APIgetAll', {}, { root: true });
-      commit('SURVEY_Data/setSurveys', { newValue: apiSurveys }, { root: true });
+      const apiSurveys = await dispatch(`${vuexModulesDict.survey}/APIgetAll`, {}, { root: true });
+      commit(`${vuexModulesDict.survey}/setSurveys`, { newValue: apiSurveys }, { root: true });
     },
   },
 };

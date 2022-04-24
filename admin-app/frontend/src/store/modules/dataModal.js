@@ -1,6 +1,5 @@
 import Vue from 'vue';
-import { dataTypesDict, modalModesDict } from '../../lib/constants';
-
+import { dataTypesDict, modalModesDict, vuexModulesDict } from '../../lib/constants';
 import {
   emptySurvey, emptyIntervention, emptyLevel, emptyEntity,
 } from '../../lib/classes';
@@ -128,7 +127,7 @@ const dataModal = {
         );
       }
       dispatch(
-        'FEEDBACK_UI/showFeedbackForDuration',
+        `${vuexModulesDict.feedback}/showFeedbackForDuration`,
         {
           type: success ? 'success' : 'error',
           text: i18n.t(
@@ -143,7 +142,7 @@ const dataModal = {
       );
       // TODO: Too costly. Find a leaner way of updating the data.
       dispatch(
-        'SYNC_UI/refreshHandler',
+        `${vuexModulesDict.sync}/refreshHandler`,
         {},
         {
           root: true,
@@ -160,7 +159,7 @@ const dataModal = {
         { root: true },
       );
       dispatch(
-        'FEEDBACK_UI/showFeedbackForDuration',
+        `${vuexModulesDict.feedback}/showFeedbackForDuration`,
         {
           type: success ? 'success' : 'error',
           text: i18n.t(`general.operationFeedback.data.${success ? 'success' : 'error'}.delete`),
@@ -172,7 +171,7 @@ const dataModal = {
 
       // TODO: Too costly. Find a leaner way of updating the data.
       dispatch(
-        'SYNC_UI/refreshHandler',
+        `${vuexModulesDict.sync}/refreshHandler`,
         {},
         {
           root: true,

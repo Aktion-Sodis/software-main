@@ -38,26 +38,51 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { dataTypesDict } from '../lib/constants';
+import { waitForMilliseconds } from '../lib/utils';
+import { dataTypesDict, routeNamesDict, vuexModulesDict } from '../lib/constants';
 
 import InterventionSkeleton from '../components/interventions/InterventionSkeleton.vue';
 import DataCreationButtonCard from '../components/commons/DataCreationButtonCard.vue';
 import Survey from '../components/surveys/Survey.vue';
 
 export default {
-  name: 'Interventions',
+  name: routeNamesDict.Surveys,
   components: {
     DataCreationButtonCard,
     InterventionSkeleton,
     Survey,
   },
+  data() {
+    return {
+      showSurveyModal: false,
+    };
+  },
   computed: {
     ...mapGetters({
-      surveys: 'SURVEY_Data/getSurveys',
-      loading: 'SURVEY_Data/getLoading',
+      surveys: `${vuexModulesDict.survey}/getSurveys`,
+      loading: `${vuexModulesDict.survey}/getLoading`,
+      isSurveyModalDisplayed: `${vuexModulesDict.dataModal}/getIsDisplayed`,
     }),
-    surveyDataType() {
-      return dataTypesDict.survey;
+    currentLocale() {
+      return this.$i18n.locale;
+    },
+    dataTypesDict() {
+      return dataTypesDict;
+    },
+  },
+  watch: {
+    isInterventionModalDisplayed: 'destroyInterventionModalAfterDelay',
+    isSurveyModalDisplayed: 'destroySurveyModalAfterDelay',
+  },
+  methods: {
+    // If closed, wait for 500, if still closed, destroy component instance
+    async destroySurveyModalAfterDelay(newValue) {
+      if (newValue) {
+        this.showSurveyModal = true;
+        return;
+      }
+      await waitForMilliseconds(500);
+      if (!this.isInterventionModalDisplayed) this.showSurveyModal = false;
     },
   },
 };

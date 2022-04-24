@@ -37,24 +37,27 @@ import { mapGetters, mapActions } from 'vuex';
 
 import EntitiesColumn from '../components/organizationStructure/EntitiesColumn.vue';
 import LevelColumnHeader from '../components/organizationStructure/LevelColumnHeader.vue';
-import { dataTypesDict } from '../lib/constants';
+import { dataTypesDict, routeNamesDict, vuexModulesDict } from '../lib/constants';
 
 export default {
-  name: 'OrganizationStructure',
+  name: routeNamesDict.OrganizationStructure,
   components: {
     EntitiesColumn,
     LevelColumnHeader,
   },
   computed: {
     ...mapGetters({
-      getLoading: 'LEVEL_Data/getLoading',
-      levels: 'LEVEL_Data/sortedLevels',
+      getLoading: `${vuexModulesDict.level}/getLoading`,
+      levels: `${vuexModulesDict.level}/sortedLevels`,
+      isModalDisplayed: `${vuexModulesDict.dataModal}/getIsDisplayed`,
+      dataType: `${vuexModulesDict.dataModal}/getDataType`,
+
       calculateUILocaleString: 'calculateUILocaleString',
     }),
   },
   methods: {
     ...mapActions({
-      createData: 'dataModal/createData',
+      newLevelHandler: `${vuexModulesDict.dataModal}/createData`,
     }),
     clickOnAddNewLevel() {
       this.createData({ dataType: dataTypesDict.level });
