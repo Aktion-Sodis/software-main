@@ -12,6 +12,7 @@
     "cancel": "İptal",
     "save": "Kaydet",
     "delete": "Sil",
+    "archive": "Arşivle",
     "form": {
       "maxCharExceeded": "Maksimum {maxChar} karakter.",
       "minCharNotMet": "En az {minChar} uzunluğunda olmalı.",

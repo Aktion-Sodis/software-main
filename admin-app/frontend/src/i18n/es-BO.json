@@ -12,6 +12,7 @@
     "cancel": "Cancelar",
     "save": "Guardar",
     "delete": "Eliminar",
+    "archive": "Archivar",
     "form": {
       "maxCharExceeded": "Máximo {maxChar} caracteres.",
       "minCharNotMet": "Al menos {minChar} carácteres.",

@@ -151,9 +151,9 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-btn x-large v-if="edit" @click="deleteData" color="warning" text>
-          {{ $t('general.delete') }}
-          <v-icon large> mdi-delete </v-icon>
+        <v-btn x-large v-if="edit" @click="archiveData" color="destructive" text>
+          {{ $t('general.archive') }}
+          <v-icon large> mdi-archive </v-icon>
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn x-large color="secondary" text @click="closeHandler">
@@ -251,7 +251,7 @@ export default {
     ...mapActions({
       editData: 'dataModal/editData',
       saveData: 'dataModal/saveData',
-      deleteData: 'dataModal/deleteData',
+      archiveData: 'dataModal/archiveData',
       abortCreateData: 'dataModal/abortCreateData',
       abortEditData: 'dataModal/abortEditData',
     }),
