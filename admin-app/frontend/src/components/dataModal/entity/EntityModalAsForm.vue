@@ -131,8 +131,8 @@ import { modalModesDict } from '../../../lib/constants';
 import { deriveFilePath } from '../../../lib/utils';
 import { Entity } from '../../../models';
 
-import LocaleTextBox from '../../commons/LocaleTextBox.vue';
-import FileInput from '../../commons/FileInput.vue';
+import LocaleTextBox from '../../commons/form/LocaleTextBox.vue';
+import FileInput from '../../commons/form/FileInput.vue';
 import ImgFromS3 from '../../commons/ImgFromS3.vue';
 
 export default {

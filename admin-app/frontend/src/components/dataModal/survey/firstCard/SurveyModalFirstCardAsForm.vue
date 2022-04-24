@@ -178,11 +178,11 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { modalModesDict } from '../../../../lib/constants';
-import LocaleTextBox from '../../../commons/LocaleTextBox.vue';
 import ImgFromS3 from '../../../commons/ImgFromS3.vue';
 import { Survey, SurveyType } from '../../../../models';
 import { emptyMutableI18nString, mutableI18nString } from '../../../../lib/classes';
-import FileInput from '../../../commons/FileInput.vue';
+import LocaleTextBox from '../../../commons/form/LocaleTextBox.vue';
+import FileInput from '../../../commons/form/FileInput.vue';
 import { deriveFilePath } from '../../../../lib/utils';
 
 export default {

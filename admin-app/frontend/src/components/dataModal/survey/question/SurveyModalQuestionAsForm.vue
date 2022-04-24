@@ -253,13 +253,13 @@ import {
   emptyMutableQuestionOption,
   mutableI18nString,
   mutableQuestionOption,
-} from '../../../lib/classes';
-import { modalModesDict, questionTypesIconDict, vuexModulesDict } from '../../../lib/constants';
+} from '../../../../lib/classes';
+import { modalModesDict, questionTypesIconDict, vuexModulesDict } from '../../../../lib/constants';
 // eslint-disable-next-line import/named
-import { compareI18nStrings, deriveFilePath } from '../../../lib/utils';
+import { compareI18nStrings, deriveFilePath } from '../../../../lib/utils';
 
-import LocaleTextBox from '../../commons/form/LocaleTextBox.vue';
-import FileInput from '../../commons/form/FileInput.vue';
+import LocaleTextBox from '../../../commons/form/LocaleTextBox.vue';
+import FileInput from '../../../commons/form/FileInput.vue';
 
 const maxNOptions = Math.min(Number(process.env.VUE_APP_MAX_N_QUESTION_OPTIONS), 0);
 

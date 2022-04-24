@@ -34,8 +34,8 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import draggable from 'vuedraggable';
-import { modalModesDict, questionTypesIconDict, vuexModulesDict } from '../../../lib/constants';
-import { QuestionType } from '../../../models';
+import { modalModesDict, questionTypesIconDict, vuexModulesDict } from '../../../../lib/constants';
+import { QuestionType } from '../../../../models';
 
 export default {
   name: 'SurveyModalQuestionTabs',

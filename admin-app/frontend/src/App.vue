@@ -25,7 +25,7 @@ import DevPhaseSnackbar from './components/commons/floating/VersionSnackbar.vue'
 import Feedback from './components/commons/Feedback.vue';
 import LangSelect from './components/commons/floating/LangSelect.vue';
 // import SearchBox from './components/commons/SearchBox.vue';
-import NavBar from './components/commons/NavBar.vue';
+import NavBar from './components/commons/navbar/NavBar.vue';
 import DataModal from './components/dataModal/DataModal.vue';
 import { vuexModulesDict, routeNamesDict } from './lib/constants';
 
