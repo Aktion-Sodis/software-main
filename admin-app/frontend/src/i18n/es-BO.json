@@ -1,6 +1,6 @@
 {
   "development": {
-    "notYetImplemented": "Esta función aún no se ha implementado. ¡Por favor, ignora si estás en búsqueda de errores! 🐞🔍"
+    "notYetImplemented": "Esta función aún no se ha implementado. ¡Gracias por su paciencia! 🐞"
   },
   "reflectiveData": {
     "localeVerboseName": "Español Bolivia"
@@ -12,6 +12,7 @@
     "cancel": "Cancelar",
     "save": "Guardar",
     "delete": "Eliminar",
+    "archive": "Archivar",
     "form": {
       "maxCharExceeded": "Máximo {maxChar} caracteres.",
       "minCharNotMet": "Al menos {minChar} carácteres.",
@@ -69,12 +70,14 @@
         "success": {
           "create": "Successfully created.",
           "update": "Successfully updated.",
-          "delete": "Successfully deleted."
+          "delete": "Successfully deleted.",
+          "archive": "Archivado con éxito."
         },
         "error": {
-          "create": "Something went wrong.",
-          "update": "Something went wrong.",
-          "delete": "Something went wrong."
+          "create": "Algo salió mal.",
+          "update": "Algo salió mal.",
+          "delete": "Algo salió mal.",
+          "archive": "Algo salió mal."
         }
       },
       "upload": {

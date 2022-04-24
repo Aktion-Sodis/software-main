@@ -1,6 +1,6 @@
 {
   "development": {
-    "notYetImplemented": "Bu fonksiyonalite henüz tamamlanmadı. Eğer bug arayışındaysan lütfen görmezden gel! 🐞🔍"
+    "notYetImplemented": "Bu fonksiyonalite henüz tamamlanmadı. Sabrınız için teşekkürler! 🐞"
   },
   "reflectiveData": {
     "localeVerboseName": "Türkçe Türkiye"
@@ -12,6 +12,7 @@
     "cancel": "İptal",
     "save": "Kaydet",
     "delete": "Sil",
+    "archive": "Arşivle",
     "form": {
       "maxCharExceeded": "Maksimum {maxChar} karakter.",
       "minCharNotMet": "En az {minChar} uzunluğunda olmalı.",
@@ -69,12 +70,14 @@
         "success": {
           "create": "Yaratma başarılı.",
           "update": "Düzenleme başarılı.",
-          "delete": "Silme başarılı."
+          "delete": "Silme başarılı.",
+          "archive": "Arşivleme başarılı."
         },
         "error": {
           "create": "Bir şeyler yanlış gitti.",
           "update": "Bir şeyler yanlış gitti.",
-          "delete": "Bir şeyler yanlış gitti."
+          "delete": "Bir şeyler yanlış gitti.",
+          "archive": "Bir şeyler yanlış gitti."
         }
       },
       "upload": {

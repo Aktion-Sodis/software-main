@@ -1,6 +1,5 @@
 <template>
   <div>
-    <SurveyModal v-if="showSurveyModal" />
     <h1 class="ml-8">
       {{ $t('surveys.title') }}
     </h1>
@@ -34,7 +33,7 @@
       <v-row>
         <v-col cols="12" sm="6" md="4" xl="3">
           <DataCreationButtonCard
-            :dataType="dataTypesDict.survey"
+            :dataType="surveyDataType"
             subtitleI18nSelector="surveys.newSurvey"
           >
             <template v-slot:creation-button="slotProps">
@@ -70,7 +69,6 @@ import {
   dataTypesDict, filterUIDict, routeNamesDict, vuexModulesDict,
 } from '../lib/constants';
 
-import SurveyModal from '../components/surveys/SurveyModal.vue';
 import InterventionSkeleton from '../components/interventions/InterventionSkeleton.vue';
 import DataCreationButtonCard from '../components/commons/DataCreationButtonCard.vue';
 import Survey from '../components/surveys/Survey.vue';
@@ -78,7 +76,6 @@ import Survey from '../components/surveys/Survey.vue';
 export default {
   name: routeNamesDict.Surveys,
   components: {
-    SurveyModal,
     DataCreationButtonCard,
     InterventionSkeleton,
     Survey,
@@ -129,5 +126,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

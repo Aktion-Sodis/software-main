@@ -1,6 +1,5 @@
 <template>
   <div>
-    <InterventionModal v-if="showInterventionModal" />
     <h1 class="ml-8">
       {{ $t('interventions.title') }}
     </h1>
@@ -8,7 +7,7 @@
       <v-row>
         <v-col cols="12" sm="6" md="4" xl="3">
           <DataCreationButtonCard
-            :dataType="dataTypesDict.intervention"
+            :dataType="dataType"
             subtitleI18nSelector="interventions.newIntervention"
           >
             <template v-slot:creation-button="slotProps">
@@ -48,7 +47,6 @@ import { waitForMilliseconds } from '../lib/utils';
 import { dataTypesDict, routeNamesDict, vuexModulesDict } from '../lib/constants';
 
 import Intervention from '../components/interventions/Intervention.vue';
-import InterventionModal from '../components/interventions/InterventionModal.vue';
 import InterventionSkeleton from '../components/interventions/InterventionSkeleton.vue';
 import DataCreationButtonCard from '../components/commons/DataCreationButtonCard.vue';
 
@@ -56,7 +54,6 @@ export default {
   name: routeNamesDict.Interventions,
   components: {
     Intervention,
-    InterventionModal,
     DataCreationButtonCard,
     InterventionSkeleton,
   },
