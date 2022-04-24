@@ -151,11 +151,41 @@ const dataModal = {
     },
     deleteData: async ({ dispatch, getters }) => {
       const dataType = getters.getDataType;
-      if (getters.getEntityModalMode === modalModesDict.read) return;
-      if (getters.getEntityModalMode === modalModesDict.create) return;
+      if (getters.getMode === modalModesDict.read) return;
       const success = await dispatch(
         `${dataType}_Data/APIdelete`,
         { id: getters.getDataIdInFocus, _version: getters.getDataDraft._version },
+        { root: true },
+      );
+      dispatch(
+        `${vuexModulesDict.feedback}/showFeedbackForDuration`,
+        {
+          type: success ? 'success' : 'error',
+          text: i18n.t(`general.operationFeedback.data.${success ? 'success' : 'error'}.archive`),
+        },
+        {
+          root: true,
+        },
+      );
+
+      // TODO: Too costly. Find a leaner way of updating the data.
+      dispatch(
+        `${vuexModulesDict.sync}/refreshHandler`,
+        {},
+        {
+          root: true,
+        },
+      );
+    },
+    archiveData: async ({ dispatch, getters }) => {
+      const dataType = getters.getDataType;
+      if (getters.getMode !== modalModesDict.edit) return;
+      const success = await dispatch(
+        `${dataType}_Data/APIput`,
+        {
+          newData: { ...getters.getDataDraft, archived: true },
+          originalId: getters.getDataIdInFocus,
+        },
         { root: true },
       );
       dispatch(

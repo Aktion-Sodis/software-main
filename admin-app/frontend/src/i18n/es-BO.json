@@ -70,12 +70,14 @@
         "success": {
           "create": "Successfully created.",
           "update": "Successfully updated.",
-          "delete": "Successfully deleted."
+          "delete": "Successfully deleted.",
+          "archive": "Archivado con éxito."
         },
         "error": {
-          "create": "Something went wrong.",
-          "update": "Something went wrong.",
-          "delete": "Something went wrong."
+          "create": "Algo salió mal.",
+          "update": "Algo salió mal.",
+          "delete": "Algo salió mal.",
+          "archive": "Algo salió mal."
         }
       },
       "upload": {
