@@ -14,12 +14,16 @@ class TaskRepository {
   Future<List<Task>> getAllTasks() async {
     //todo: bei Task userID als query parameter hinzufügen
     print("getting all tasks for user: ${user.firstName}");
-    var queryResult = await Amplify.DataStore.query(
-      amp.Task.classType,
-      //where: amp.Task.USER.eq(user.id)
-    );
-    queryResult = List.from(
-        queryResult.where((element) => element.taskUserId == user.id));
+    var queryResult = await Amplify.DataStore.query(amp.Task.classType,
+        where: amp.Task.USERID.eq(user.id!)
+        //where: amp.Task.USER.eq(user.id)
+        );
+    queryResult.forEach((element) {
+      if (element.title == "") {
+        Amplify.DataStore.delete(element);
+      }
+    });
+    queryResult.removeWhere((element) => element.title == "");
     var populatedResults = await _populateList(queryResult);
     return List.generate(populatedResults.length,
         (index) => Task.fromAmplifyModel(populatedResults[index]));

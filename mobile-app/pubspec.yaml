@@ -21,11 +21,11 @@ dependencies:
 
 
   #amplify packages
-  amplify_flutter: ^0.4.4
-  amplify_datastore: ^0.4.4
-  amplify_api: ^0.4.4
-  amplify_auth_cognito: ^0.4.4
-  amplify_storage_s3: ^0.4.4
+  amplify_flutter: ^0.4.5
+  amplify_datastore: ^0.4.5
+  amplify_api: ^0.4.5
+  amplify_auth_cognito: ^0.4.5
+  amplify_storage_s3: ^0.4.5
 
   
   advance_pdf_viewer_fork: ^2.0.0

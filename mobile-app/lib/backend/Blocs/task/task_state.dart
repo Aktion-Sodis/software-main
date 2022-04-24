@@ -46,7 +46,7 @@ class LoadedTaskState extends TaskState {
     List<Task> toSort =
         entity != null ? tasksByEntity(entity.id!) : List.from(allTasks);
     toSort.removeWhere(
-        (element) => !sameDayOrBefore(DateTime.now(), element.dueDate!));
+        (element) => !sameDayOrBefore(DateTime.now(), element.dueDate));
     toSort.sort((a, b) => compareTasks(a, b));
     return toSort;
   }
@@ -55,7 +55,7 @@ class LoadedTaskState extends TaskState {
     List<Task> toSort =
         entity != null ? tasksByEntity(entity.id!) : List.from(allTasks);
     toSort.removeWhere((element) =>
-        !sameDay(DateTime.now().add(Duration(days: 1)), element.dueDate!));
+        !sameDay(DateTime.now().add(Duration(days: 1)), element.dueDate));
     toSort.sort((a, b) => compareTasks(a, b));
     return toSort;
   }
@@ -64,16 +64,20 @@ class LoadedTaskState extends TaskState {
     List<Task> toSort =
         entity != null ? tasksByEntity(entity.id!) : List.from(allTasks);
     toSort.removeWhere((element) =>
-        !isAfterDay(DateTime.now().add(Duration(days: 2)), element.dueDate!));
+        !isAfterDay(DateTime.now().add(Duration(days: 2)), element.dueDate));
     toSort.sort((a, b) => compareTasks(a, b));
     return toSort;
   }
 }
 
-bool sameDay(DateTime one, DateTime two) =>
-    (one.year == two.year && one.month == two.month) && (one.day == two.day);
+bool sameDay(DateTime? one, DateTime? two) =>
+    (one?.year == two?.year && one?.month == two?.month) &&
+    (one?.day == two?.day);
 
-bool sameDayOrBefore(DateTime max, DateTime one) {
+bool sameDayOrBefore(DateTime? max, DateTime? one) {
+  if (max == null || one == null) {
+    return false;
+  }
   if (one.isBefore(max)) {
     return true;
   } else {
@@ -81,9 +85,14 @@ bool sameDayOrBefore(DateTime max, DateTime one) {
   }
 }
 
-bool isAfterDay(DateTime min, DateTime compare) {
-  DateTime tocompare = DateTime(min.year, min.month, min.day);
-  if (compare.isAfter(tocompare) || compare.isAtSameMomentAs(tocompare)) {
+bool isAfterDay(DateTime? min, DateTime? compare) {
+  DateTime? tocompare =
+      min != null ? DateTime(min.year, min.month, min.day) : null;
+  if (tocompare == null || compare == null) {
+    return true;
+  }
+  if ((compare?.isAfter(tocompare) ?? false) ||
+      (compare?.isAtSameMomentAs(tocompare) ?? false)) {
     return true;
   } else {
     return false;
