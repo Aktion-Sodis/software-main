@@ -140,3 +140,21 @@ export const routeNamesDict = Object.freeze({
   Surveys: 'Surveys',
   Interventions: 'Interventions',
 });
+
+const archived = new Map();
+archived.set(false, {
+  icon: 'mdi-archive-off',
+  tooltipI18nSelector: 'general.filters.hideArchived',
+});
+archived.set(true, { icon: 'mdi-archive', tooltipI18nSelector: 'general.filters.showArchived' });
+const _deleted = new Map();
+_deleted.set(false, { icon: 'mdi-delete', tooltipI18nSelector: 'general.filters.hideDeleted' });
+_deleted.set(true, {
+  icon: 'mdi-delete-empty',
+  tooltipI18nSelector: 'general.filters.showDeleted',
+});
+
+export const filterUIDict = Object.freeze({
+  archived,
+  _deleted,
+});

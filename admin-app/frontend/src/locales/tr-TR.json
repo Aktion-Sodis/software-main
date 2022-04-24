@@ -67,20 +67,27 @@
     "operationFeedback": {
       "data": {
         "success": {
-          "create": "Successfully created.",
-          "update": "Successfully updated.",
-          "delete": "Successfully deleted."
+          "create": "Yaratma başarılı.",
+          "update": "Düzenleme başarılı.",
+          "delete": "Silme başarılı."
         },
         "error": {
-          "create": "Something went wrong.",
-          "update": "Something went wrong.",
-          "delete": "Something went wrong."
+          "create": "Bir şeyler yanlış gitti.",
+          "update": "Bir şeyler yanlış gitti.",
+          "delete": "Bir şeyler yanlış gitti."
         }
       },
       "upload": {
-        "success": "Successfully uploaded.",
-        "error": "Could not upload the file."
+        "success": "Yükleme başarılı.",
+        "error": "Yükleme tamamlanamadı."
       }
+    },
+    "filters": {
+      "title": "Filtreler",
+      "hideArchived": "Arşivlenmiş öğeleri gizlemek için tıkla",
+      "showArchived": "Arşivlenmiş öğeleri göstermek için tıkla",
+      "hideDeleted": "Silinmiş öğeleri gizlemek için tıkla",
+      "showDeleted": "Silinmiş öğeleri göstermek için tıkla"
     }
   },
   "Login": {

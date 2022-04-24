@@ -66,6 +66,7 @@ const SYNC_UI = {
       );
 
       const apiSurveys = await dispatch(`${vuexModulesDict.survey}/APIgetAll`, {}, { root: true });
+      console.log({ apiSurveys });
       commit(`${vuexModulesDict.survey}/setSurveys`, { newValue: apiSurveys }, { root: true });
     },
   },

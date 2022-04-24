@@ -20,13 +20,29 @@ const surveysData = {
     // surveyTags: [],
     // relationSurveysAndTags: [],
     loading: false,
+    filters: {
+      _deleted: true,
+      archived: true,
+    },
   }),
   getters: {
     /* READ */
-    getSurveys: ({ surveys }) => surveys.filter((i) => !i._deleted).sort((a, b) => a.id - b.id),
+    getSurveys: ({ surveys }, { getFilters }) => surveys
+      .filter((s) => {
+        let res = true;
+        // eslint-disable-next-line no-restricted-syntax
+        for (const [key, value] of Object.entries(getFilters)) {
+          if (value) res = res && !s[key];
+          // else res = res && s[key];
+        }
+        console.log('res', res);
+        return res;
+      })
+      .sort((a, b) => a.id - b.id),
     // getSurveyTags: ({ surveyTags }) => surveyTags,
     // getRelationSurveysAndTags: ({ relationSurveysAndTags }) => relationSurveysAndTags,
     getLoading: ({ loading }) => loading,
+    getFilters: ({ filters }) => filters,
 
     SURVEYById:
       (_, { getSurveys }) => ({ id }) => getSurveys.find((s) => s.id === id),
@@ -65,6 +81,9 @@ const surveysData = {
     // setSurveyTags: (state, { newValue }) => {
     //   state.surveyTags = newValue;
     // },
+    setFilter: (state, { filter, newValue }) => {
+      state.filters[filter] = newValue;
+    },
   },
   actions: {
     APIpost: async ({ commit, dispatch, rootGetters }) => {

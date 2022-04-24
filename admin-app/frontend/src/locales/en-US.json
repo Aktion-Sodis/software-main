@@ -81,6 +81,13 @@
         "success": "Successfully uploaded.",
         "error": "Could not upload the file."
       }
+    },
+    "filters": {
+      "title": "Filters",
+      "hideArchived": "Click to hide archived items",
+      "showArchived": "Click to show archived items",
+      "hideDeleted": "Click to hide deleted items",
+      "showDeleted": "Click to show deleted items"
     }
   },
   "Login": {
