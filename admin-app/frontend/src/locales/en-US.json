@@ -271,7 +271,10 @@
               "MULTIPLECHOICE": "Multiple choice",
               "PICTURE": "Picture",
               "PICTUREWITHTAGS": "Picture with tags",
-              "AUDIO": "Audio"
+              "AUDIO": "Audio",
+              "INT": "Integer number",
+              "DOUBLE": "Decimal number",
+              "RATING": "Rating"
             }
           }
         },

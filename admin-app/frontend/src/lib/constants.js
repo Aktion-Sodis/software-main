@@ -79,6 +79,9 @@ export const questionTypesIconDict = Object.freeze({
   [QuestionType.PICTURE]: 'mdi-image',
   // [QuestionType.PICTUREWITHTAGS]: 'mdi-message-image',
   [QuestionType.AUDIO]: 'mdi-waveform',
+  [QuestionType.INT]: 'mdi-numeric',
+  [QuestionType.DOUBLE]: 'mdi-decimal',
+  [QuestionType.RATING]: 'mdi-star',
 });
 
 export const customDataTypesIconDict = Object.freeze({

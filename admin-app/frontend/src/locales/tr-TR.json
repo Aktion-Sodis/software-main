@@ -271,7 +271,10 @@
               "MULTIPLECHOICE": "Çoktan çok seçmeli",
               "PICTURE": "Resim",
               "PICTUREWITHTAGS": "Etiketli resim",
-              "AUDIO": "Ses"
+              "AUDIO": "Ses",
+              "INT": "Integer number",
+              "DOUBLE": "Decimal number",
+              "RATING": "Rating"
             }
           }
         },
