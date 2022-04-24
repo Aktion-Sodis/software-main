@@ -207,6 +207,7 @@ const surveysData = {
             // updated.questions = newData.questions;
             updated.surveyType = newData.surveyType;
             updated.intervention = newData.intervention;
+            updated.archived = newData.archived;
           }),
         );
 
