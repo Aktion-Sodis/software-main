@@ -21,6 +21,11 @@
               <v-icon> mdi-radiobox-blank </v-icon>
               <v-icon> mdi-radiobox-blank </v-icon>
             </div>
+            <div v-else-if="q.type === QuestionType.RATING">
+               <v-icon> mdi-star </v-icon>
+               <v-icon> mdi-star </v-icon>
+               <v-icon> mdi-star-half-full </v-icon>
+             </div>
             <v-icon v-else large>
               {{ questionTypesIconDict[q.type] }}
             </v-icon>
