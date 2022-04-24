@@ -916,7 +916,9 @@ class OverviewWidget extends StatelessWidget {
     for (AppliedIntervention appliedIntervention
         in entity.appliedInterventions) {
       for (Survey element in appliedIntervention.intervention.surveys) {
-        firstThreeSurveys.add(element);
+        if (!element.archived) {
+          firstThreeSurveys.add(element);
+        }
         if (firstThreeSurveys.length >= 3) {
           break;
         }
@@ -1147,6 +1149,10 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Survey> nonArchivedSurveys = List.from(appliedIntervention
+        .intervention.surveys
+        .where((element) => !element.archived));
+
     return Scrollbar(
         child: SingleChildScrollView(
             child: Column(
@@ -1206,14 +1212,14 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
                       ],
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min))),
-        if (appliedIntervention.intervention.surveys.isNotEmpty)
+        if (nonArchivedSurveys.isNotEmpty)
           Card(
               margin: EdgeInsets.all(defaultPadding(context)),
               child: Container(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: List.generate(
-                          appliedIntervention.intervention.surveys.length + 1,
+                          nonArchivedSurveys.length + 1,
                           (index) => index == 0
                               ? Container(
                                   margin:
@@ -1224,17 +1230,14 @@ class AppliedInterventionPageState extends State<AppliedInterventionPage> {
                                           .headline2))
                               : surveyRow(
                                   context,
-                                  appliedIntervention
-                                      .intervention.surveys[index - 1],
+                                  nonArchivedSurveys[index - 1],
                                   image: SurveyRepository.getSurveyPic(
-                                      appliedIntervention
-                                          .intervention.surveys[index - 1]),
+                                      nonArchivedSurveys[index - 1]),
                                   pressable: true,
                                   onPressed: () {
                                     context.read<OrganizationViewBloc>().add(
                                         StartSurvey(
-                                            appliedIntervention.intervention
-                                                .surveys[index - 1],
+                                            nonArchivedSurveys[index - 1],
                                             appliedIntervention,
                                             (context
                                                         .read<
@@ -1497,7 +1500,9 @@ class SurveyWidgetState extends State<SurveyWidget> {
       entity.appliedInterventions.forEach((element) {
         if (selected.any((obj) => obj.id == element.intervention.id)) {
           for (Survey survey in element.intervention.surveys) {
-            toSet.add({"appliedIntervention": element, "survey": survey});
+            if (!survey.archived) {
+              toSet.add({"appliedIntervention": element, "survey": survey});
+            }
           }
         }
       });
@@ -1516,8 +1521,10 @@ class SurveyWidgetState extends State<SurveyWidget> {
     currentlyDisplayedSurveys = [];
     for (var element in entity.appliedInterventions) {
       for (Survey survey in element.intervention.surveys) {
-        currentlyDisplayedSurveys
-            .add({"appliedIntervention": element, "survey": survey});
+        if (!survey.archived) {
+          currentlyDisplayedSurveys
+              .add({"appliedIntervention": element, "survey": survey});
+        }
       }
     }
     super.initState();

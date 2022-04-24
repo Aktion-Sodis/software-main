@@ -149,7 +149,9 @@ Map<String, dynamic> stringMap = {
     "task_update_task": "Update Task",
     "task_create_title": "Create Task",
     "task_update_title": "Update Task",
-    "task_later_in_future": "Later"
+    "task_later_in_future": "Later",
+    "task_please_enter_task_title": "Please enter a title",
+    "task_please_set_date": "Please set the deadline"
   },
   "es-BO": {
     "emailorphonenumber": "correo electrónico/número de teléfono",
@@ -251,9 +253,17 @@ Map<String, dynamic> stringMap = {
     "task_update_task": "Actualizar tarrea",
     "task_create_title": "Crear tarrea",
     "task_update_title": "Actualizar tarrea",
-    "task_later_in_future": "Más tarde"
+    "task_later_in_future": "Más tarde",
+    "task_please_enter_task_title": "Por favor, introduce un título",
+    "task_please_set_date": "Por favor, defina la fecha"
   }
 };
+
+String get task_please_enter_task_title =>
+    stringMap[currentLanguage]["task_please_enter_task_title"];
+
+String get task_please_set_date =>
+    stringMap[currentLanguage]["task_please_set_date"];
 
 String get task_later_in_future =>
     stringMap[currentLanguage]["task_later_in_future"];

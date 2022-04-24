@@ -2067,15 +2067,15 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "int": {
-                    "name": "int",
+                "intValue": {
+                    "name": "intValue",
                     "isArray": false,
                     "type": "Int",
                     "isRequired": false,
                     "attributes": []
                 },
-                "double": {
-                    "name": "double",
+                "doubleValue": {
+                    "name": "doubleValue",
                     "isArray": false,
                     "type": "Float",
                     "isRequired": false,
@@ -2151,5 +2151,5 @@ export const schema = {
             }
         }
     },
-    "version": "8fd2bbe05f639f582e85d781d96a00c5"
+    "version": "5513f75668298946d70868c15444edbb"
 };

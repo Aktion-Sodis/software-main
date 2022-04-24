@@ -117,6 +117,8 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
 
   TaskFormCubit? _cubit;
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TaskFormCubit>(
@@ -142,308 +144,325 @@ class TaskForm<T extends TaskFormCubit> extends StatelessWidget {
               child: Material(
             child: Scrollbar(
               controller: _scrollController,
-              child: ListView(
-                padding: MediaQuery.of(context).padding,
-                controller: _scrollController,
-                children: [
-                  NisabaAppBar(
-                      title: task != null
-                          ? strings.task_update_title
-                          : strings.task_create_title),
-                  const SizedBox(
-                    height: 19,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: defaultPadding(context)),
-                    child: _subtitle(strings.task_dialog_what_task),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(defaultPadding(context)),
-                    child: ShadowBox(
-                      child: TextField(
-                        controller: _taskTextController,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 2,
-                        decoration: InputDecoration(
-                            /*border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.transparent, width: 0),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            disabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.transparent, width: 0),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.transparent, width: 0),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: ThemeColors.green, width: 2),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            prefixIcon: const Icon(MdiIcons.pencilOutline),*/
-                            labelText: strings.task_dialog_title),
+              child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    padding: MediaQuery.of(context).padding,
+                    controller: _scrollController,
+                    children: [
+                      NisabaAppBar(
+                          title: task != null
+                              ? strings.task_update_title
+                              : strings.task_create_title),
+                      const SizedBox(
+                        height: 19,
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: defaultPadding(context),
-                        right: defaultPadding(context),
-                        bottom: defaultPadding(context)),
-                    child: ShadowBox(
-                      child: TextField(
-                        controller: _taskDescriptionController,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 10,
-                        minLines: 4,
-                        decoration: InputDecoration(
-                            /*border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.transparent, width: 0),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            disabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.transparent, width: 0),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.transparent, width: 0),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: ThemeColors.green, width: 2),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            prefixIcon: const Icon(MdiIcons.pencilOutline),*/
-                            labelText: strings.task_dialog_description),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: defaultPadding(context)),
+                        child: _subtitle(strings.task_dialog_what_task),
                       ),
-                    ),
-                  ),
-                  state.attachments.isNotEmpty
-                      ? const AttachmentsList()
-                      : const SizedBox.shrink(),
-                  Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: defaultPadding(context)),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: Row(
-                            children: [
-                              RecorderWidget(
-                                  restingViewBuilder: (startPlaying) {
-                                return _iconButton(
-                                    MdiIcons.microphoneOutline, startPlaying);
-                              }, recordingViewBuilder: (stopPlaying) {
-                                return _iconButton(
-                                    MdiIcons.stopCircleOutline, stopPlaying);
-                              }, onAudioRecorded: (uri) {
-                                _cubit!.addAttachment(AudioAttachment(uri));
-                              }, loadingViewBuilder: () {
-                                return _iconButton(MdiIcons.microphoneOutline,
-                                    () {
-                                  // TODO: add explaining toast, that widget is not ready yet
-                                  debugPrint(
-                                      "Recorder widget is not ready yet");
-                                });
-                              }),
-                              SizedBox(
-                                width: defaultPadding(context),
-                              ),
-                              Expanded(
-                                  child: Text(
-                                strings.task_dialog_record_audio,
-                                overflow: TextOverflow.visible,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ))
-                            ],
-                          )),
-                          SizedBox(
-                            width: defaultPadding(context),
-                          ),
-                          Expanded(
-                              child: Row(
-                            children: [
-                              _iconButton(MdiIcons.cameraOutline,
-                                  () => _cubit!.takePhoto(context)),
-                              SizedBox(
-                                width: defaultPadding(context),
-                              ),
-                              Expanded(
-                                  child: Text(
-                                strings.task_dialog_take_foto,
-                                overflow: TextOverflow.visible,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ))
-                            ],
-                          )),
-                        ],
-                      )),
-                  Padding(
-                      padding: EdgeInsets.all(defaultPadding(context)),
-                      child: _subtitle(strings.task_dialog_entity_choose)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: defaultPadding(context)),
-                    child: ShadowBox(
-                      child: DropdownSearch<Entity>(
-                        selectedItem: _cubit!.state.entity,
-                        searchDelay: const Duration(seconds: 0),
-                        onFind: _cubit!.searchForEntities,
-                        mode: Mode.MENU,
-                        itemAsString: (entity) => entity!.name,
-                        isFilteredOnline: true,
-                        showSearchBox: true,
-                        compareFn: (e1, e2) {
-                          return e1?.id! == e2?.id!;
-                        },
-                        searchFieldProps: TextFieldProps(
+                      Padding(
+                        padding: EdgeInsets.all(defaultPadding(context)),
+                        child: ShadowBox(
+                          child: TextFormField(
+                            validator: (value) => (value ?? "").isEmpty
+                                ? strings.task_please_enter_task_title
+                                : null,
+                            controller: _taskTextController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 2,
                             decoration: InputDecoration(
-                                hintText: strings.task_dialog_entity_search)),
-                        emptyBuilder: (context, sss) {
-                          return Center(
-                            child: Text(
-                                strings.task_dialog_entity_search_no_result),
-                          );
-                        },
-                        loadingBuilder: (context, searchEntry) {
-                          return const Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          );
-                        },
-                        dropDownButton: const Icon(
-                          MdiIcons.accountSearch,
+                                /*border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.transparent, width: 0),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            disabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.transparent, width: 0),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.transparent, width: 0),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: ThemeColors.green, width: 2),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            prefixIcon: const Icon(MdiIcons.pencilOutline),*/
+                                labelText: strings.task_dialog_title),
+                          ),
                         ),
-                        /*dropdownBuilder: (context, entity) {
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: defaultPadding(context),
+                            right: defaultPadding(context),
+                            bottom: defaultPadding(context)),
+                        child: ShadowBox(
+                          child: TextField(
+                            controller: _taskDescriptionController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 10,
+                            minLines: 4,
+                            decoration: InputDecoration(
+                                /*border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.transparent, width: 0),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            disabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.transparent, width: 0),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.transparent, width: 0),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: ThemeColors.green, width: 2),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            prefixIcon: const Icon(MdiIcons.pencilOutline),*/
+                                labelText: strings.task_dialog_description),
+                          ),
+                        ),
+                      ),
+                      state.attachments.isNotEmpty
+                          ? const AttachmentsList()
+                          : const SizedBox.shrink(),
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: defaultPadding(context)),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: Row(
+                                children: [
+                                  RecorderWidget(
+                                      restingViewBuilder: (startPlaying) {
+                                    return _iconButton(
+                                        MdiIcons.microphoneOutline,
+                                        startPlaying);
+                                  }, recordingViewBuilder: (stopPlaying) {
+                                    return _iconButton(
+                                        MdiIcons.stopCircleOutline,
+                                        stopPlaying);
+                                  }, onAudioRecorded: (uri) {
+                                    _cubit!.addAttachment(AudioAttachment(uri));
+                                  }, loadingViewBuilder: () {
+                                    return _iconButton(
+                                        MdiIcons.microphoneOutline, () {
+                                      // TODO: add explaining toast, that widget is not ready yet
+                                      debugPrint(
+                                          "Recorder widget is not ready yet");
+                                    });
+                                  }),
+                                  SizedBox(
+                                    width: defaultPadding(context),
+                                  ),
+                                  Expanded(
+                                      child: Text(
+                                    strings.task_dialog_record_audio,
+                                    overflow: TextOverflow.visible,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ))
+                                ],
+                              )),
+                              SizedBox(
+                                width: defaultPadding(context),
+                              ),
+                              Expanded(
+                                  child: Row(
+                                children: [
+                                  _iconButton(MdiIcons.cameraOutline,
+                                      () => _cubit!.takePhoto(context)),
+                                  SizedBox(
+                                    width: defaultPadding(context),
+                                  ),
+                                  Expanded(
+                                      child: Text(
+                                    strings.task_dialog_take_foto,
+                                    overflow: TextOverflow.visible,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ))
+                                ],
+                              )),
+                            ],
+                          )),
+                      Padding(
+                          padding: EdgeInsets.all(defaultPadding(context)),
+                          child: _subtitle(strings.task_dialog_entity_choose)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: defaultPadding(context)),
+                        child: ShadowBox(
+                          child: DropdownSearch<Entity>(
+                            selectedItem: _cubit!.state.entity,
+                            searchDelay: const Duration(seconds: 0),
+                            onFind: _cubit!.searchForEntities,
+                            mode: Mode.MENU,
+                            itemAsString: (entity) => entity!.name,
+                            isFilteredOnline: true,
+                            showSearchBox: true,
+                            compareFn: (e1, e2) {
+                              return e1?.id! == e2?.id!;
+                            },
+                            searchFieldProps: TextFieldProps(
+                                decoration: InputDecoration(
+                                    hintText:
+                                        strings.task_dialog_entity_search)),
+                            emptyBuilder: (context, sss) {
+                              return Center(
+                                child: Text(strings
+                                    .task_dialog_entity_search_no_result),
+                              );
+                            },
+                            loadingBuilder: (context, searchEntry) {
+                              return const Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              );
+                            },
+                            dropDownButton: const Icon(
+                              MdiIcons.accountSearch,
+                            ),
+                            /*dropdownBuilder: (context, entity) {
                           return entityRow(context, entity!);
                         },*/
-                        showClearButton: true,
-                        items: [],
-                        dropdownSearchDecoration: InputDecoration(
-                            hintText: strings.task_dialog_entity_search_hint,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 8)),
-                        onChanged: (e) {
-                          if (e != null) {
-                            _cubit!.updateEntity(e);
-                          } else {
-                            _cubit!.clearEntity();
-                          }
-                        },
+                            showClearButton: true,
+                            items: [],
+                            dropdownSearchDecoration: InputDecoration(
+                                hintText:
+                                    strings.task_dialog_entity_search_hint,
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 8)),
+                            onChanged: (e) {
+                              if (e != null) {
+                                _cubit!.updateEntity(e);
+                              } else {
+                                _cubit!.clearEntity();
+                              }
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.all(defaultPadding(context)),
-                      child: _subtitle(strings.task_dialog_when)),
-                  Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: defaultPadding(context)),
-                      child: Wrap(
-                        spacing: 20,
-                        runSpacing: 7,
-                        children: [
-                          SmallButton(
-                            onPressed: () => _cubit!.setDeadline(_now),
-                            iconData: MdiIcons.circleMedium,
-                            text: strings.task_today,
-                            selected: state.deadline != null &&
-                                areEqualStandardizedDates(
-                                    state.deadline!, _now),
-                          ),
-                          SmallButton(
-                            onPressed: () => _cubit!.setDeadline(_tomorrow),
-                            iconData: MdiIcons.skipNextOutline,
-                            text: strings.task_tomorrow,
-                            selected: state.deadline != null &&
-                                areEqualStandardizedDates(
-                                    state.deadline!, _tomorrow),
-                          ),
-                          SmallButton(
-                            onPressed: () => _cubit!.setDeadline(_nextWeek),
-                            iconData: MdiIcons.skipForwardOutline,
-                            text: strings.task_next_week,
-                            selected: state.deadline != null &&
-                                areEqualStandardizedDates(
-                                    state.deadline!, _nextWeek),
-                          ),
-                          SmallButton(
-                            onPressed: () => _cubit!.setDeadline(_nextMonth),
-                            iconData: MdiIcons.calendarRefreshOutline,
-                            text: strings.task_next_month,
-                            selected: state.deadline != null &&
-                                areEqualStandardizedDates(
-                                    state.deadline!, _nextMonth),
-                          ),
-                        ],
-                      )),
-                  Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: defaultPadding(context),
-                          horizontal: 2.0 * defaultPadding(context)),
-                      child: Text(strings.task_or)),
-                  Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: defaultPadding(context)),
-                      child: Wrap(
-                        children: [
-                          SmallButton(
-                            onPressed: () =>
-                                _cubit!.openCalendarToSetDeadline(context),
-                            iconData: MdiIcons.calendarOutline,
-                            text: state.deadline != null &&
-                                    _customDateSelected(state.deadline!)
-                                ? strings.task_deadline +
-                                    ": " +
-                                    formatDate(state.deadline!)
-                                : strings.task_set_date,
-                            outlinedWhenSelected: true,
-                            keepClickable: true,
-                            selected: state.deadline != null &&
-                                _customDateSelected(state.deadline!),
-                          ),
-                        ],
-                      )),
-                  Padding(
-                      padding: EdgeInsets.all(defaultPadding(context)),
-                      child: defaultGreenButton(
-                        context,
-                        (state is TaskFormSavingInProgress)
-                            ? () {}
-                            : () {
-                                BlocProvider.of<TaskFormCubit>(context).submit(
-                                  attachments: state.attachments,
-                                  entity: state.entity,
-                                  deadline: state.deadline,
-                                  task: state.task,
-                                  appliedIntervention:
-                                      state.appliedIntervention,
-                                  executedSurvey: state.executedSurvey,
-                                  taskBloc: state.taskBloc,
-                                  organizationViewBloc:
-                                      state.organizationViewBloc,
-                                  userBloc: state.userBloc,
-                                  text: _taskTextController.text,
-                                  description: _taskDescriptionController.text,
-                                );
-                              },
-                        minWidth: width(context) * .92,
-                        minHeight: width(context) * .12,
-                        text: task != null
-                            ? strings.task_update_task
-                            : strings.task_save_task,
-                      ))
-                ],
-              ),
+                      Padding(
+                          padding: EdgeInsets.all(defaultPadding(context)),
+                          child: _subtitle(strings.task_dialog_when)),
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: defaultPadding(context)),
+                          child: Wrap(
+                            spacing: 20,
+                            runSpacing: 7,
+                            children: [
+                              SmallButton(
+                                onPressed: () => _cubit!.setDeadline(_now),
+                                iconData: MdiIcons.circleMedium,
+                                text: strings.task_today,
+                                selected: state.deadline != null &&
+                                    areEqualStandardizedDates(
+                                        state.deadline!, _now),
+                              ),
+                              SmallButton(
+                                onPressed: () => _cubit!.setDeadline(_tomorrow),
+                                iconData: MdiIcons.skipNextOutline,
+                                text: strings.task_tomorrow,
+                                selected: state.deadline != null &&
+                                    areEqualStandardizedDates(
+                                        state.deadline!, _tomorrow),
+                              ),
+                              SmallButton(
+                                onPressed: () => _cubit!.setDeadline(_nextWeek),
+                                iconData: MdiIcons.skipForwardOutline,
+                                text: strings.task_next_week,
+                                selected: state.deadline != null &&
+                                    areEqualStandardizedDates(
+                                        state.deadline!, _nextWeek),
+                              ),
+                              SmallButton(
+                                onPressed: () =>
+                                    _cubit!.setDeadline(_nextMonth),
+                                iconData: MdiIcons.calendarRefreshOutline,
+                                text: strings.task_next_month,
+                                selected: state.deadline != null &&
+                                    areEqualStandardizedDates(
+                                        state.deadline!, _nextMonth),
+                              ),
+                            ],
+                          )),
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: defaultPadding(context),
+                              horizontal: 2.0 * defaultPadding(context)),
+                          child: Text(strings.task_or)),
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: defaultPadding(context)),
+                          child: Wrap(
+                            children: [
+                              SmallButton(
+                                onPressed: () =>
+                                    _cubit!.openCalendarToSetDeadline(context),
+                                iconData: MdiIcons.calendarOutline,
+                                text: state.deadline != null &&
+                                        _customDateSelected(state.deadline!)
+                                    ? strings.task_deadline +
+                                        ": " +
+                                        formatDate(state.deadline!)
+                                    : strings.task_set_date,
+                                outlinedWhenSelected: true,
+                                keepClickable: true,
+                                selected: state.deadline != null &&
+                                    _customDateSelected(state.deadline!),
+                              ),
+                            ],
+                          )),
+                      Padding(
+                          padding: EdgeInsets.all(defaultPadding(context)),
+                          child: defaultGreenButton(
+                            context,
+                            (state is TaskFormSavingInProgress)
+                                ? () {}
+                                : () {
+                                    if (_formKey.currentState?.validate() ??
+                                        false) {
+                                      BlocProvider.of<TaskFormCubit>(context)
+                                          .submit(
+                                        attachments: state.attachments,
+                                        entity: state.entity,
+                                        deadline: state.deadline,
+                                        task: state.task,
+                                        appliedIntervention:
+                                            state.appliedIntervention,
+                                        executedSurvey: state.executedSurvey,
+                                        taskBloc: state.taskBloc,
+                                        organizationViewBloc:
+                                            state.organizationViewBloc,
+                                        userBloc: state.userBloc,
+                                        text: _taskTextController.text,
+                                        description:
+                                            _taskDescriptionController.text,
+                                      );
+                                    }
+                                  },
+                            minWidth: width(context) * .92,
+                            minHeight: width(context) * .12,
+                            text: task != null
+                                ? strings.task_update_task
+                                : strings.task_save_task,
+                          ))
+                    ],
+                  )),
             ),
           ));
         },
