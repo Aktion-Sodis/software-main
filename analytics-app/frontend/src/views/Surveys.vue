@@ -3,10 +3,10 @@
       <div class="content">
         <el-row class="title">
             <el-col>
-            <h1 style="margin-left: 5px">Fragebögen: Kochstellen</h1>
+                <h1 style="margin-left: 5px">Fragebögen: Kochstellen</h1>
             </el-col>
         </el-row>
-        <el-row class="sub-title">
+        <el-row class="datepicker-wrapper">
             <el-col :span="4">
                 <h3 style="margin-left: 5px">Zeitraum wählen:</h3>
             </el-col>
@@ -24,13 +24,13 @@
         </el-row>
         <el-row class="survey-wrapper">
             <el-col>
-            <div class="surveys">
-                <SurveyCard 
-                    v-for="survey in filteredSurveys"
-                    :key="survey.id"
-                    :survey="survey"
-                />
-            </div>
+                <div class="surveys">
+                    <SurveyCard 
+                        v-for="survey in filteredSurveys"
+                        :key="survey.id"
+                        :survey="survey"
+                    />
+                </div>
             </el-col>
         </el-row>
     </div>
@@ -258,33 +258,23 @@ export default {
     overflow: scroll;
 }
 .title {
-    min-height: 1.5rem;
     margin-bottom: 1rem;
     margin-top: 1rem;
 }
-.sub-title {
-    min-height: 1.5rem;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
+.datepicker-wrapper {
+    margin: 1rem 0;
     position: sticky;
     top: 0;
     background-color: rgb(255, 255, 255);
     z-index: 1;
-    padding-bottom: 0.5rem;
-    padding-top: 0.5rem;
-}
-.datepicker-wrapper {
-    display: flex;
-    flex-wrap: wrap;
+    padding: 1rem 0;
 }
 .survey-datepicker {
     margin-left: 1rem;
 }
-
 .surveys {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 1rem;
     height: auto;  
 }
 </style>

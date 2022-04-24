@@ -1,13 +1,13 @@
 <template>
   <div class="sidebar" :style="{ width: sidebarWidth, transition: sidebarTransition }" @mouseover="openSidebar" @mouseleave="closeSidebar" >
     <div class="sidebar-wrapper">
-      <div class="link">
+      <div class="link header">
         <el-image class="image" src="/src/static/aktionSodisSmall.png"/>
         <span v-if="!collapsed">
           AktionSodis
         </span>
       </div>
-      <div style="margin-top: 50px">
+      <div class="content">
         <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
         <SidebarLink to="/surveys" icon="fas fa-columns">Fragebögen</SidebarLink>
         <SidebarLink to="/dashboards" icon="fas fa-chart-bar">Dashboards</SidebarLink>
@@ -63,6 +63,7 @@ export default {
 .sidebar h1 {
   height: 2.5em;
 }
+
 .link {
   display: flex;
   align-items: center;
@@ -91,7 +92,7 @@ export default {
 }
 
 .authorization {
-  position: fixed;
+  position: absolute;
   bottom: 0;
 }
 
