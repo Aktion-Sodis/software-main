@@ -42,27 +42,18 @@ const dataModal = {
       state.imageFile = newValue;
     },
 
-    /* ENTITY DRAFT: SET & RESET */
-    setENTITYDraft: (state, draft) => {
-      state.dataDraft = draft;
-    },
-    resetENTITYDraft: (state) => {
-      state.dataDraft = emptyEntity();
-    },
-
     setDraft: (state, draft) => {
       state.dataDraft = draft;
+    },
+
+    resetENTITYDraft: (state) => {
+      state.dataDraft = emptyEntity();
     },
     resetLEVELDraft: (state) => {
       state.dataDraft = emptyLevel();
     },
     resetINTERVENTIONDraft: (state) => {
       state.dataDraft = emptyIntervention();
-    },
-
-    /* SURVEY DRAFT: SET & RESET */
-    setSURVEYDraft: (state, draft) => {
-      state.dataDraft = draft;
     },
     resetSURVEYDraft: (state) => {
       state.dataDraft = emptySurvey();
@@ -76,8 +67,12 @@ const dataModal = {
       commit('setIsDisplayed', { newValue: true });
       commit('setImageFile', { newValue: null });
     },
-    abortReadData: async ({ commit }) => {
+    abortReadData: async ({ commit, getters }) => {
       commit('setIsDisplayed', { newValue: false });
+      if (getters.getDataType === dataTypesDict.survey) {
+        commit('setSurveyModalCompletionIndex', { newValue: 1 }, { root: true });
+        commit('QUESTION_UI/setIQuestions', { payload: 0 }, { root: true });
+      }
       await Vue.nextTick();
       commit('setDataIdInFocus', { newValue: null });
     },
@@ -88,7 +83,8 @@ const dataModal = {
       commit(`reset${dataType}Draft`);
       commit('setIsDisplayed', { newValue: true });
     },
-    abortCreateData: async ({ commit }, { dataType }) => {
+    abortCreateData: async ({ commit, getters }) => {
+      const dataType = getters.getDataType;
       commit('setIsDisplayed', { newValue: false });
       await Vue.nextTick();
       commit(`reset${dataType}Draft`);
@@ -96,21 +92,25 @@ const dataModal = {
       commit('setImageFile', { newValue: null });
       if (dataType === dataTypesDict.entity) commit('setCreatingEntityInLevelId', { id: null }, { root: true });
     },
-    editData: ({ commit, rootGetters }, { dataId, dataType }) => {
+    editData: ({ commit, getters, rootGetters }) => {
+      const dataId = getters.getDataIdInFocus;
+      const dataType = getters.getDataType;
       commit('setMode', { newValue: modalModesDict.edit });
       commit('setDataIdInFocus', { newValue: dataId });
       commit('setDataType', { newValue: dataType });
       const data = rootGetters[`${dataType}_Data/${dataType}ById`]({ id: dataId });
       commit('setDraft', data);
     },
-    abortEditData: async ({ commit }, { dataType }) => {
+    abortEditData: async ({ commit, getters }) => {
+      const dataType = getters.getDataType;
       commit(`reset${dataType}Draft`);
       await Vue.nextTick();
       commit('setMode', { newValue: modalModesDict.read });
       commit('setImageFile', { newValue: null });
     },
 
-    saveData: async ({ dispatch, getters }, { dataType, originalVersion }) => {
+    saveData: async ({ dispatch, getters }) => {
+      const dataType = getters.getDataType;
       if (getters.getMode === modalModesDict.read) return;
       const draft = getters.getDataDraft;
       let success = false;
@@ -122,7 +122,6 @@ const dataModal = {
           {
             newData: draft,
             originalId: getters.getDataIdInFocus,
-            originalVersion,
           },
           { root: true },
         );
@@ -150,12 +149,43 @@ const dataModal = {
         },
       );
     },
-    deleteData: async ({ dispatch, getters }, { dataType }) => {
-      if (getters.getEntityModalMode === modalModesDict.read) return;
-      if (getters.getEntityModalMode === modalModesDict.create) return;
+    deleteData: async ({ dispatch, getters }) => {
+      const dataType = getters.getDataType;
+      if (getters.getMode === modalModesDict.read) return;
       const success = await dispatch(
         `${dataType}_Data/APIdelete`,
         { id: getters.getDataIdInFocus, _version: getters.getDataDraft._version },
+        { root: true },
+      );
+      dispatch(
+        `${vuexModulesDict.feedback}/showFeedbackForDuration`,
+        {
+          type: success ? 'success' : 'error',
+          text: i18n.t(`general.operationFeedback.data.${success ? 'success' : 'error'}.archive`),
+        },
+        {
+          root: true,
+        },
+      );
+
+      // TODO: Too costly. Find a leaner way of updating the data.
+      dispatch(
+        `${vuexModulesDict.sync}/refreshHandler`,
+        {},
+        {
+          root: true,
+        },
+      );
+    },
+    archiveData: async ({ dispatch, getters }) => {
+      const dataType = getters.getDataType;
+      if (getters.getMode !== modalModesDict.edit) return;
+      const success = await dispatch(
+        `${dataType}_Data/APIput`,
+        {
+          newData: { ...getters.getDataDraft, archived: true },
+          originalId: getters.getDataIdInFocus,
+        },
         { root: true },
       );
       dispatch(

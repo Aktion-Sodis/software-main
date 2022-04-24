@@ -15,8 +15,6 @@
         <EntitiesColumn :entityLevelId="level.id" :index="index" />
       </div>
       <div class="column-wrapper dotted-left-border d-flex align-center justify-center">
-        <LevelModal v-if="showLevelModal" />
-        <EntityModal v-else-if="showEntityModal" />
         <v-btn :disabled="getLoading" rounded x-large color="primary" @click="clickOnAddNewLevel">
           <v-icon class="mr-2">mdi-plus</v-icon>
           <v-skeleton-loader
@@ -37,8 +35,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
-import LevelModal from '../components/organizationStructure/LevelModal.vue';
-import EntityModal from '../components/organizationStructure/EntityModal.vue';
 import EntitiesColumn from '../components/organizationStructure/EntitiesColumn.vue';
 import LevelColumnHeader from '../components/organizationStructure/LevelColumnHeader.vue';
 import { dataTypesDict, routeNamesDict, vuexModulesDict } from '../lib/constants';
@@ -46,16 +42,8 @@ import { dataTypesDict, routeNamesDict, vuexModulesDict } from '../lib/constants
 export default {
   name: routeNamesDict.OrganizationStructure,
   components: {
-    LevelModal,
-    EntityModal,
     EntitiesColumn,
     LevelColumnHeader,
-  },
-  data() {
-    return {
-      showLevelModal: false,
-      showEntityModal: false,
-    };
   },
   computed: {
     ...mapGetters({
@@ -67,34 +55,12 @@ export default {
       calculateUILocaleString: 'calculateUILocaleString',
     }),
   },
-  watch: {
-    isModalDisplayed: 'destroyModalAfterDelay',
-  },
   methods: {
     ...mapActions({
       newLevelHandler: `${vuexModulesDict.dataModal}/createData`,
     }),
     clickOnAddNewLevel() {
-      this.newLevelHandler({ dataType: dataTypesDict.level });
-    },
-    async destroyModalAfterDelay(newValue) {
-      // If closed, wait for 500, if still closed, destroy component instance
-      if (newValue) {
-        if (this.dataType === dataTypesDict.level) {
-          this.showLevelModal = true;
-        } else if (this.dataType === dataTypesDict.entity) {
-          this.showEntityModal = true;
-        }
-        return;
-      }
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      if (!this.isModalDisplayed) {
-        if (this.dataType === dataTypesDict.level) {
-          this.showLevelModal = false;
-        } else if (this.dataType === dataTypesDict.entity) {
-          this.showEntityModal = false;
-        }
-      }
+      this.createData({ dataType: dataTypesDict.level });
     },
   },
 };

@@ -1,10 +1,11 @@
 import { DataStore } from '@aws-amplify/datastore';
-import { API } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
 import {
   Level, I18nString, LevelInterventionRelation, CustomData,
 } from '../../models';
 import { dataTypesDict, modalModesDict, vuexModulesDict } from '../../lib/constants';
 import { deleteLevel /* , updateLevel */ } from '../../graphql/mutations';
+import { deriveFilePath } from '../../lib/utils';
 // import { listLevels } from '../../graphql/queries';
 
 const levelsData = {
@@ -114,6 +115,17 @@ const levelsData = {
             console.log(error);
           }
         }
+
+        if (rootGetters['dataModal/getImageFile'] instanceof File) {
+          try {
+            await Storage.put(
+              deriveFilePath('levelPicPath', { levelID: postResponse.id }),
+              rootGetters['dataModal/getImageFile'],
+            );
+          } catch {
+            success = false;
+          }
+        }
         commit('addLevel', postResponse);
 
         dispatch(
@@ -126,9 +138,8 @@ const levelsData = {
             root: true,
           },
         );
-      } catch (error) {
+      } catch {
         success = false;
-        console.log(error);
       }
       commit('setLoading', { newValue: false });
       return success;
@@ -156,6 +167,17 @@ const levelsData = {
           }),
         );
 
+        if (rootGetters['dataModal/getImageFile'] instanceof File) {
+          try {
+            await Storage.put(
+              deriveFilePath('levelPicPath', { levelID: putResponse.id }),
+              rootGetters['dataModal/getImageFile'],
+            );
+          } catch {
+            success = false;
+          }
+        }
+
         commit('replaceLevel', putResponse);
 
         // FIRST DELETE ALL INTERVENTION RELATIONS OF THE LEVEL
@@ -165,9 +187,8 @@ const levelsData = {
           try {
             // eslint-disable-next-line no-await-in-loop
             await DataStore.delete(relation);
-          } catch (error) {
+          } catch {
             success = false;
-            console.log(error);
           }
         }
 
@@ -185,26 +206,26 @@ const levelsData = {
                 }),
               }),
             );
-          } catch (error) {
+          } catch {
             success = false;
-            console.log(error);
           }
         }
+      } catch {
+        success = false;
+      }
 
+      if (success) {
         dispatch(
           `${vuexModulesDict.dataModal}/readData`,
           {
-            dataId: putResponse.id,
             dataType: dataTypesDict.level,
           },
           {
             root: true,
           },
         );
-      } catch (error) {
-        success = false;
-        console.log(error);
       }
+
       commit('setLoading', { newValue: false });
       return success;
     },
@@ -214,9 +235,8 @@ const levelsData = {
 
       try {
         await API.graphql({ query: deleteLevel, variables: { input: { id, _version } } });
-      } catch (error) {
+      } catch {
         success = false;
-        console.log(error);
       }
 
       const relationsOfOriginal = getters.getRelationLevelIntervention.filter(
@@ -228,28 +248,32 @@ const levelsData = {
         try {
           // eslint-disable-next-line no-await-in-loop
           await DataStore.delete(relation);
-        } catch (error) {
+        } catch {
           success = false;
-          console.log(error);
         }
       }
 
-      commit('deleteLevel', {
-        id,
-      });
-      commit(`${vuexModulesDict.dataModal}/setDataIdInFocus`, { newValue: null }, { root: true });
-      commit(
-        `${vuexModulesDict.dataModal}/setMode`,
-        { newValue: modalModesDict.read },
-        { root: true },
-      );
-      dispatch(
-        `${vuexModulesDict.dataModal}/abortReadData`,
-        {},
-        {
-          root: true,
-        },
-      );
+      if (success) {
+        Storage.put(deriveFilePath('levelPicPath', { levelID: id }));
+
+        commit('deleteLevel', {
+          id,
+        });
+        commit(`${vuexModulesDict.dataModal}/setDataIdInFocus`, { newValue: null }, { root: true });
+        commit(
+          `${vuexModulesDict.dataModal}/setMode`,
+          { newValue: modalModesDict.read },
+          { root: true },
+        );
+        dispatch(
+          `${vuexModulesDict.dataModal}/abortReadData`,
+          {},
+          {
+            root: true,
+          },
+        );
+      }
+
       commit('setLoading', { newValue: false });
       return success;
     },

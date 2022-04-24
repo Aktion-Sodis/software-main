@@ -362,7 +362,6 @@ import {
   emptyMutableI18nString,
   mutableI18nString,
 } from '../../lib/classes';
-// import { emptyI18nString } from '../../store/classes';
 
 const levelDescriptionMaxChar = Math.max(
   parseInt(process.env.VUE_APP_LEVEL_DESCRIPTION_MAX_CHAR, 10),

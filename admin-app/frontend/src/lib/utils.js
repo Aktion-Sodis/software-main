@@ -1,9 +1,8 @@
 import { databaseOntologies } from './constants';
+
 import i18n from '../i18n';
 
-const waitForMilliseconds = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
-
-const formValidators = {
+export const formValidators = {
   required: (value) => !!value || i18n.t('general.form.required'),
   minPasswordLength: (value) => {
     const minChar = process.env.VUE_APP_MIN_PASSWORD_LENGTH;
@@ -14,8 +13,6 @@ const formValidators = {
   },
   notEmpty: (value) => !value || value.replace(/ /g, '') !== '' || i18n.t('general.form.required'),
 };
-
-export { waitForMilliseconds, formValidators };
 
 /* eslint-disable-next-line no-unused-vars */
 export const deriveFilePath = (wantedDerivative, paramsObj) => {
@@ -37,3 +34,5 @@ export const compareI18nStrings = (a, b) => {
   }
   return true;
 };
+
+export const waitForMilliseconds = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));

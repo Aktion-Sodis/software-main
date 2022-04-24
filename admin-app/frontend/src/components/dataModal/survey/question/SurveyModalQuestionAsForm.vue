@@ -2,14 +2,7 @@
   <v-card class="px-0 pt-0 px-md-4 pt-md-4">
     <v-form lazy-validation>
       <v-card-title class="flex-column flex-sm-row">
-        <h2 v-if="read">
-          {{
-            calculateUILocaleString({
-              languageTexts: surveyInFocus.name.languageTexts,
-            })
-          }}
-        </h2>
-        <h2 v-else>
+        <h2>
           {{
             calculateUILocaleString({
               languageTexts: surveyDraft.name.languageTexts,
@@ -34,7 +27,6 @@
             }}
           </v-btn>
           <v-btn
-            v-if="!read"
             :x-large="$vuetify.breakpoint.name !== 'xs'"
             text
             :fab="$vuetify.breakpoint.name === 'xs'"
@@ -59,15 +51,7 @@
               <h2 class="mb-2">
                 {{ $t('surveys.modal.questionCard.form.question.title') }}
               </h2>
-              <h3 v-if="read">
-                {{
-                  calculateUILocaleString({
-                    languageTexts: questionTextInFocus.languageTexts,
-                  })
-                }}
-              </h3>
               <LocaleTextBox
-                v-else
                 labelPrefixI18nSelector="surveys.modal.questionCard.form.question.textLabel"
                 :initVal="text"
                 @res="questionUpdatedHandler"
@@ -89,29 +73,14 @@
               <h3 class="mt-4">
                 {{ $t('surveys.modal.questionCard.form.question.imageTitle') }}
               </h3>
-              <div v-if="read">
-                <ImgFromS3 :assumedSrc="deriveImgPath" dataType="survey">
-                  <template v-slot:v-img="slotProps">
-                    <v-img max-height="200px" :src="slotProps.src"> </v-img>
-                  </template>
-                </ImgFromS3>
-              </div>
-              <div v-else class="d-flex justify-center">
-                <v-btn
-                  v-if="edit || create"
-                  color="primary"
-                  rounded
-                  x-large
-                  @click="selectQuestionImg"
-                  class="mt-4"
-                >
+              <div class="d-flex justify-center">
+                <v-btn color="primary" rounded x-large @click="selectQuestionImg" class="mt-4">
                   <v-icon class="mr-2"> mdi-image </v-icon>
                   <span class="overflow-hidden">
                     {{ $t('surveys.modal.questionCard.form.question.addImage') }}
                   </span>
                 </v-btn>
                 <FileInput
-                  v-if="!read"
                   ref="question-img-upload"
                   style="display: none"
                   :acceptedType="'image/png'"
@@ -123,21 +92,13 @@
                 {{ $t('surveys.modal.questionCard.form.question.audioTitle') }}
               </h3>
               <div class="d-flex justify-center">
-                <v-btn
-                  v-if="edit || create"
-                  color="primary"
-                  rounded
-                  x-large
-                  @click="clickOnAddAudio"
-                  class="mt-4"
-                >
+                <v-btn color="primary" rounded x-large @click="clickOnAddAudio" class="mt-4">
                   <v-icon class="mr-2"> mdi-waveform </v-icon>
                   <span class="overflow-hidden">
                     {{ $t('surveys.modal.questionCard.form.question.addAudio') }}
                   </span>
                 </v-btn>
                 <input
-                  v-if="edit || create"
                   type="file"
                   accept="image/png, image/jpeg"
                   ref="question-audio-upload"
@@ -151,16 +112,8 @@
                 <span>
                   {{ $t('surveys.modal.questionCard.form.answer.title') }}
                 </span>
-                <span v-if="read">
-                  ({{
-                    $t(
-                      `surveys.modal.questionCard.form.answer.questionTypes.${surveyInFocus.questions[iQuestions].type}`
-                    )
-                  }})
-                </span>
               </h2>
               <v-select
-                v-if="edit || create"
                 v-model="type"
                 :items="questionTypesItemValue"
                 :label="$t('surveys.modal.questionCard.form.answer.typeLabel')"
@@ -171,33 +124,7 @@
               <v-divider class="mb-4"></v-divider>
 
               <div v-if="areAnswersNeeded">
-                <div v-if="read">
-                  <v-list dense disabled>
-                    <v-list-item-group color="primary">
-                      <v-list-item
-                        v-for="option in surveyInFocus.questions[iQuestions].questionOptions"
-                        :key="option.id"
-                      >
-                        <v-list-item-icon>
-                          <v-icon
-                            v-text="questionTypesIconDict[surveyInFocus.questions[iQuestions].type]"
-                          ></v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title
-                            v-text="
-                              calculateUILocaleString({
-                                languageTexts: option.text.languageTexts,
-                              })
-                            "
-                          ></v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list-item-group>
-                  </v-list>
-                </div>
-
-                <div v-else>
+                <div>
                   <div v-for="(option, index) in options" :key="index">
                     <h3>
                       {{ $t('surveys.modal.questionCard.form.answer.answer') }}
@@ -215,7 +142,6 @@
 
                       <div class="d-flex">
                         <v-btn
-                          v-if="edit || create"
                           color="primary"
                           rounded
                           outlined
@@ -228,14 +154,13 @@
                           </span>
                         </v-btn>
                         <input
-                          v-if="edit || create"
                           type="file"
                           accept="image/png, image/jpeg"
                           :ref="`option-img-upload`"
                           style="display: none"
                         />
                         <v-btn
-                          v-if="(edit || create) && options.length > 2"
+                          v-if="options.length > 2"
                           color="primary"
                           outlined
                           icon
@@ -249,21 +174,13 @@
                   </div>
 
                   <div class="d-flex justify-center" v-if="maxNOptionsAchieved">
-                    <v-btn
-                      v-if="edit || create"
-                      color="primary"
-                      rounded
-                      x-large
-                      class="mt-2"
-                      @click="clickOnAddOption"
-                    >
+                    <v-btn color="primary" rounded x-large class="mt-2" @click="clickOnAddOption">
                       <v-icon class="mr-2"> mdi-plus </v-icon>
                       <span class="overflow-hidden">
                         {{ $t('surveys.modal.questionCard.form.answer.addAnswer') }}
                       </span>
                     </v-btn>
                     <input
-                      v-if="edit || create"
                       type="file"
                       accept="audio/*"
                       ref="question-audio-upload"
@@ -277,17 +194,7 @@
         </v-container>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="warning" text @click="abortReadSurveyHandler" v-if="read">
-          {{ $t('general.close') }}
-        </v-btn>
-        <v-btn
-          x-large
-          text
-          color="warning"
-          class="text-none"
-          @click="discardQuestionHandler"
-          v-else
-        >
+        <v-btn x-large text color="warning" class="text-none" @click="discardQuestionHandler">
           {{
             $vuetify.breakpoint.name === 'xs'
               ? ''
@@ -295,7 +202,7 @@
           }}
           <v-icon large> mdi-delete </v-icon>
         </v-btn>
-        <v-spacer v-if="!isAtLastQuestion || read"></v-spacer>
+        <v-spacer v-if="!isAtLastQuestion"></v-spacer>
         <div class="d-flex" v-if="$vuetify.breakpoint.name !== 'xs'">
           <v-btn
             x-large
@@ -303,7 +210,7 @@
             class="text-none"
             @click="priorQuestion"
             :disabled="!canAdvanceBack"
-            v-if="!isAtLastQuestion || read"
+            v-if="!isAtLastQuestion"
           >
             <v-icon large> mdi-skip-previous </v-icon>
             {{
@@ -318,7 +225,7 @@
             class="text-none"
             @click="nextQuestion"
             :disabled="!canAdvance"
-            v-if="!isAtLastQuestion || read"
+            v-if="!isAtLastQuestion"
           >
             {{
               $vuetify.breakpoint.name === 'xs' ? '' : $t('surveys.modal.questionCard.nextQuestion')
@@ -328,14 +235,7 @@
         </div>
 
         <v-spacer></v-spacer>
-        <v-btn
-          x-large
-          text
-          class="text-none"
-          @click="saveQuestion"
-          :disabled="!canSave"
-          v-if="!read"
-        >
+        <v-btn x-large text class="text-none" @click="saveQuestion" :disabled="!canSave">
           {{ $vuetify.breakpoint.name === 'xs' ? '' : $t('surveys.modal.questionCard.saveDraft') }}
           <v-icon large class="ml-2"> mdi-content-save-outline </v-icon>
         </v-btn>
@@ -347,24 +247,20 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import { v4 as uuidv4 } from 'uuid';
-import { Question, QuestionType } from '../../../models';
+import { Question, QuestionType } from '../../../../models';
 import {
-  // emptyQuestionOption,
-  // emptyI18nString,
   emptyMutableI18nString,
   emptyMutableQuestionOption,
   mutableI18nString,
   mutableQuestionOption,
-} from '../../../lib/classes';
-import { modalModesDict, questionTypesIconDict, vuexModulesDict } from '../../../lib/constants';
+} from '../../../../lib/classes';
+import { modalModesDict, questionTypesIconDict, vuexModulesDict } from '../../../../lib/constants';
 // eslint-disable-next-line import/named
-import { compareI18nStrings, deriveFilePath } from '../../../lib/utils';
+import { compareI18nStrings, deriveFilePath } from '../../../../lib/utils';
 
-import LocaleTextBox from '../../commons/form/LocaleTextBox.vue';
-import FileInput from '../../commons/form/FileInput.vue';
-import ImgFromS3 from '../../commons/ImgFromS3.vue';
+import LocaleTextBox from '../../../commons/form/LocaleTextBox.vue';
+import FileInput from '../../../commons/form/FileInput.vue';
 
-const questionTextMaxChar = Math.max(parseInt(process.env.VUE_APP_QUESTION_TEXT_MAX_CHAR, 10), 0);
 const maxNOptions = Math.min(Number(process.env.VUE_APP_MAX_N_QUESTION_OPTIONS), 0);
 
 export default {
@@ -372,16 +268,12 @@ export default {
   components: {
     LocaleTextBox,
     FileInput,
-    ImgFromS3,
   },
   watch: {
     questionCurrentDraft: 'updateComponentData',
   },
   data() {
     return {
-      rules: {
-        maxChar: (value) => value.length <= questionTextMaxChar || this.maxCharExceededi18n,
-      },
       text: emptyMutableI18nString(),
       type: QuestionType.TEXT,
       options: [emptyMutableQuestionOption()],
@@ -392,7 +284,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     // If the form is dirty and the user did not confirm leave,
     // prevent losing unsaved changes by canceling navigation
-    if (this.confirmStayInDirtyForm() || (!this.read && this.nQuestions > 1)) {
+    if (this.confirmStayInDirtyForm() || this.nQuestions > 1) {
       next(false);
     } else {
       // Navigate to next view
@@ -433,13 +325,7 @@ export default {
         }))
         .filter((t) => t.value !== QuestionType.PICTUREWITHTAGS);
     },
-    maxCharExceededi18n() {
-      return this.$t('general.form.maxCharExceeded', {
-        maxChar: questionTextMaxChar,
-      });
-    },
     areThereChanges() {
-      if (this.read) return false;
       if (!compareI18nStrings(this.text, this.questionCurrentDraft.text)) return true;
       if (this.type !== this.questionCurrentDraft.type) return true;
       if (this.areAnswersNeeded) {
@@ -455,22 +341,13 @@ export default {
     edit() {
       return this.surveyModalMode === modalModesDict.edit;
     },
-    create() {
-      return this.surveyModalMode === modalModesDict.create;
-    },
-    read() {
-      return this.surveyModalMode === modalModesDict.read;
-    },
     canAdvanceBack() {
       return !this.isAtFirstQuestion && !this.areThereChanges;
     },
     canAdvance() {
-      return this.read
-        ? this.iQuestions < this.nQuestions - 1
-        : this.iQuestions < this.nQuestions - 2 && !this.areThereChanges;
+      return !this.isAtLastQuestion;
     },
     canSave() {
-      if (this.read) return false;
       return (
         (!this.areAnswersNeeded
           || (this.options.length > 0
@@ -482,11 +359,10 @@ export default {
       return this.nQuestions > 1 && !this.areThereChanges;
     },
     canGoBackToDetails() {
-      return this.read || !this.areThereChanges;
+      return !this.areThereChanges;
     },
     areAnswersNeeded() {
-      const type = this.read ? this.surveyInFocus.questions[this.iQuestions].type : this.type;
-      return [QuestionType.SINGLECHOICE, QuestionType.MULTIPLECHOICE].includes(type);
+      return [QuestionType.SINGLECHOICE, QuestionType.MULTIPLECHOICE].includes(this.type);
     },
     maxNOptionsAchieved() {
       return this.options.length >= maxNOptions;
@@ -498,9 +374,6 @@ export default {
         questionID: this.surveyInFocus.questions[this.iQuestions].id,
       });
     },
-  },
-  mounted() {
-    if (this.read) this.setIQuestions({ payload: 0 });
   },
   methods: {
     ...mapActions({
@@ -525,7 +398,7 @@ export default {
       return this.areThereChanges && !this.confirmLeave();
     },
     beforeWindowUnload(e) {
-      if (this.confirmStayInDirtyForm() || (!this.read && this.nQuestions > 1)) {
+      if (this.confirmStayInDirtyForm() || this.nQuestions > 1) {
         // Cancel the event
         e.preventDefault();
         // Chrome requires returnValue to be set
@@ -539,9 +412,7 @@ export default {
       this.decrementCompletionIndex();
     },
     updateComponentData() {
-      const q = this.read
-        ? this.surveyInFocus.questions[this.iQuestions]
-        : this.questionCurrentDraft;
+      const q = this.questionCurrentDraft;
       const { optionsCurrentDraft } = this;
 
       this.text = mutableI18nString({

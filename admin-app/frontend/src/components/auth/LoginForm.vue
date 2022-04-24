@@ -63,7 +63,7 @@
 import { mapActions, mapMutations } from 'vuex';
 import { formValidators } from '../../lib/utils';
 import { routeNamesDict, signInStatusDict, vuexModulesDict } from '../../lib/constants';
-import GoogleIcon from '../commons/GoogleIcon.vue';
+import GoogleIcon from './GoogleIcon.vue';
 
 export default {
   components: { GoogleIcon },

@@ -9,7 +9,7 @@
     >
       <v-tab v-for="(q, i) in questions" :key="i" :value="i">
         <v-icon v-if="i === nQuestions - 1 && !read" large> mdi-plus </v-icon>
-        <v-badge v-else color="grey lighten-2" :content="i + 1" bottom overlap>
+        <v-badge v-else :content="i + 1" bottom overlap>
           <div>
             <div v-if="q.type === QuestionType.MULTIPLECHOICE">
               <v-icon> mdi-checkbox-outline </v-icon>
@@ -34,11 +34,11 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import draggable from 'vuedraggable';
-import { modalModesDict, questionTypesIconDict, vuexModulesDict } from '../../../lib/constants';
-import { QuestionType } from '../../../models';
+import { modalModesDict, questionTypesIconDict, vuexModulesDict } from '../../../../lib/constants';
+import { QuestionType } from '../../../../models';
 
 export default {
-  name: 'QuestionTabs',
+  name: 'SurveyModalQuestionTabs',
   components: { draggable },
   data() {
     return {
@@ -49,7 +49,7 @@ export default {
     };
   },
   mounted() {
-    this.iQ = this.read ? 0 : Math.max(this.nQuestions - 1, 0);
+    this.iQ = this.iQuestions;
   },
   watch: {
     iQ(newVal) {
@@ -81,6 +81,11 @@ export default {
         this.$store.commit(
           `${vuexModulesDict.question}/setQuestions`,
           { payload: value },
+          { root: true },
+        );
+        this.$store.commit(
+          `${vuexModulesDict.question}/setOptions`,
+          { payload: value.map((q) => q.optionDrafts) },
           { root: true },
         );
       },
