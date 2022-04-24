@@ -33,6 +33,9 @@ class QuestionAnswer {
   final TemporalDateTime? _date;
   final QuestionType? _type;
   final String? _text;
+  final int? _intValue;
+  final double? _doubleValue;
+  final int? _rating;
   final List<QuestionOption>? _questionOptions;
   final List<Marking>? _markings;
 
@@ -79,6 +82,18 @@ class QuestionAnswer {
     return _text;
   }
   
+  int? get intValue {
+    return _intValue;
+  }
+  
+  double? get doubleValue {
+    return _doubleValue;
+  }
+  
+  int? get rating {
+    return _rating;
+  }
+  
   List<QuestionOption>? get questionOptions {
     return _questionOptions;
   }
@@ -87,15 +102,18 @@ class QuestionAnswer {
     return _markings;
   }
   
-  const QuestionAnswer._internal({required this.id, required questionID, required date, required type, text, questionOptions, markings}): _questionID = questionID, _date = date, _type = type, _text = text, _questionOptions = questionOptions, _markings = markings;
+  const QuestionAnswer._internal({required this.id, required questionID, required date, required type, text, intValue, doubleValue, rating, questionOptions, markings}): _questionID = questionID, _date = date, _type = type, _text = text, _intValue = intValue, _doubleValue = doubleValue, _rating = rating, _questionOptions = questionOptions, _markings = markings;
   
-  factory QuestionAnswer({String? id, required String questionID, required TemporalDateTime date, required QuestionType type, String? text, List<QuestionOption>? questionOptions, List<Marking>? markings}) {
+  factory QuestionAnswer({String? id, required String questionID, required TemporalDateTime date, required QuestionType type, String? text, int? intValue, double? doubleValue, int? rating, List<QuestionOption>? questionOptions, List<Marking>? markings}) {
     return QuestionAnswer._internal(
       id: id == null ? UUID.getUUID() : id,
       questionID: questionID,
       date: date,
       type: type,
       text: text,
+      intValue: intValue,
+      doubleValue: doubleValue,
+      rating: rating,
       questionOptions: questionOptions != null ? List<QuestionOption>.unmodifiable(questionOptions) : questionOptions,
       markings: markings != null ? List<Marking>.unmodifiable(markings) : markings);
   }
@@ -113,6 +131,9 @@ class QuestionAnswer {
       _date == other._date &&
       _type == other._type &&
       _text == other._text &&
+      _intValue == other._intValue &&
+      _doubleValue == other._doubleValue &&
+      _rating == other._rating &&
       DeepCollectionEquality().equals(_questionOptions, other._questionOptions) &&
       DeepCollectionEquality().equals(_markings, other._markings);
   }
@@ -130,6 +151,9 @@ class QuestionAnswer {
     buffer.write("date=" + (_date != null ? _date!.format() : "null") + ", ");
     buffer.write("type=" + (_type != null ? enumToString(_type)! : "null") + ", ");
     buffer.write("text=" + "$_text" + ", ");
+    buffer.write("intValue=" + (_intValue != null ? _intValue!.toString() : "null") + ", ");
+    buffer.write("doubleValue=" + (_doubleValue != null ? _doubleValue!.toString() : "null") + ", ");
+    buffer.write("rating=" + (_rating != null ? _rating!.toString() : "null") + ", ");
     buffer.write("questionOptions=" + (_questionOptions != null ? _questionOptions!.toString() : "null") + ", ");
     buffer.write("markings=" + (_markings != null ? _markings!.toString() : "null"));
     buffer.write("}");
@@ -137,13 +161,16 @@ class QuestionAnswer {
     return buffer.toString();
   }
   
-  QuestionAnswer copyWith({String? id, String? questionID, TemporalDateTime? date, QuestionType? type, String? text, List<QuestionOption>? questionOptions, List<Marking>? markings}) {
+  QuestionAnswer copyWith({String? id, String? questionID, TemporalDateTime? date, QuestionType? type, String? text, int? intValue, double? doubleValue, int? rating, List<QuestionOption>? questionOptions, List<Marking>? markings}) {
     return QuestionAnswer._internal(
       id: id ?? this.id,
       questionID: questionID ?? this.questionID,
       date: date ?? this.date,
       type: type ?? this.type,
       text: text ?? this.text,
+      intValue: intValue ?? this.intValue,
+      doubleValue: doubleValue ?? this.doubleValue,
+      rating: rating ?? this.rating,
       questionOptions: questionOptions ?? this.questionOptions,
       markings: markings ?? this.markings);
   }
@@ -154,6 +181,9 @@ class QuestionAnswer {
       _date = json['date'] != null ? TemporalDateTime.fromString(json['date']) : null,
       _type = enumFromString<QuestionType>(json['type'], QuestionType.values),
       _text = json['text'],
+      _intValue = (json['intValue'] as num?)?.toInt(),
+      _doubleValue = (json['doubleValue'] as num?)?.toDouble(),
+      _rating = (json['rating'] as num?)?.toInt(),
       _questionOptions = json['questionOptions'] is List
         ? (json['questionOptions'] as List)
           .where((e) => e != null)
@@ -168,7 +198,7 @@ class QuestionAnswer {
         : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'questionID': _questionID, 'date': _date?.format(), 'type': enumToString(_type), 'text': _text, 'questionOptions': _questionOptions?.map((QuestionOption? e) => e?.toJson()).toList(), 'markings': _markings?.map((Marking? e) => e?.toJson()).toList()
+    'id': id, 'questionID': _questionID, 'date': _date?.format(), 'type': enumToString(_type), 'text': _text, 'intValue': _intValue, 'doubleValue': _doubleValue, 'rating': _rating, 'questionOptions': _questionOptions?.map((QuestionOption? e) => e?.toJson()).toList(), 'markings': _markings?.map((Marking? e) => e?.toJson()).toList()
   };
 
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -203,6 +233,24 @@ class QuestionAnswer {
       fieldName: 'text',
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
+      fieldName: 'intValue',
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
+      fieldName: 'doubleValue',
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.double)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
+      fieldName: 'rating',
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.int)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(

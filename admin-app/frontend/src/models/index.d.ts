@@ -101,12 +101,12 @@ export declare class QuestionAnswer {
   readonly questionID: string;
   readonly date: string;
   readonly type: QuestionType | keyof typeof QuestionType;
-  readonly text?: string;
-  readonly int?: number;
-  readonly double?: number;
-  readonly rating?: number;
-  readonly questionOptions?: QuestionOption[];
-  readonly markings?: Marking[];
+  readonly text?: string | null;
+  readonly int?: number | null;
+  readonly double?: number | null;
+  readonly rating?: number | null;
+  readonly questionOptions?: QuestionOption[] | null;
+  readonly markings?: Marking[] | null;
   constructor(init: ModelInit<QuestionAnswer>);
 }
 
@@ -282,10 +282,10 @@ export declare class Survey {
   readonly questions: Question[];
   readonly tags: SurveySurveyTagRelation[];
   readonly surveyType: SurveyType | keyof typeof SurveyType;
-  readonly schemeVersion?: number;
-  readonly archived?: boolean;
-  readonly createdAt?: string;
-  readonly updatedAt?: string;
+  readonly schemeVersion?: number | null;
+  readonly archived?: boolean | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
   constructor(init: ModelInit<Survey, SurveyMetaData>);
   static copyOf(source: Survey, mutator: (draft: MutableModel<Survey, SurveyMetaData>) => MutableModel<Survey, SurveyMetaData> | void): Survey;
 }
