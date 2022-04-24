@@ -19,9 +19,11 @@
       "required": "Necesario.",
       "unsavedChanges": "Hay cambios sin guardar. ¿Estás seguro de que quieres salir?",
       "addInNewLocale": "En otra lengua",
-      "invalidForm": "El formulario no es válido. Preste atención a las advertencias de las entradas."
+      "invalidForm": "El formulario no es válido. Preste atención a las advertencias de las entradas.",
+      "invalidNumber": "Este es un número inválido."
     },
     "noTextProvided": "No text was provided.",
+    "noNumberProvided": "No number was provided.",
     "noTags": "There are no tags.",
     "routes": {
       "Home": "Inicio",

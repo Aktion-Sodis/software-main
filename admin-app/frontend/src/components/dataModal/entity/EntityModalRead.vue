@@ -40,12 +40,56 @@
               </h3>
             </div>
           </v-col>
-          <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3">
-            <ImgFromS3 :assumedSrc="deriveImgPath" dataType="entity" :key="rerenderImgFromS3">
+          <v-col cols="12" sm="6" class="pt-0 px-0 px-sm-3" v-if="entityInFocus">
+            <ImgFromS3
+              :assumedSrc="deriveImgPath"
+              dataType="entity"
+              :key="rerenderImgFromS3"
+              class="mb-4"
+            >
               <template v-slot:v-img="slotProps">
                 <v-img max-height="200px" :src="slotProps.src"> </v-img>
               </template>
             </ImgFromS3>
+
+            <div v-if="level.customData.length > 0">
+              <v-divider></v-divider>
+              <v-card-title class="pt-0 pt-sm-2">
+                <span>
+                  {{ $t('organizationStructure.levelModal.customData.title') }}
+                </span>
+              </v-card-title>
+
+              <div
+                class="rounded-lg pa-4 d-flex justify-space-between align-center mb-2"
+                style="border: 1px solid; border-color: #736b5e; position: relative"
+                v-for="customDatum in entityInFocus.customData"
+                :key="customDatum.customDataID"
+              >
+                <h3 class="text-center">
+                  {{
+                    calculateUILocaleString({
+                      languageTexts: customDatum.name.languageTexts,
+                    })
+                  }}
+                </h3>
+                <span v-if="customDatum.stringValue || customDatum.intValue">
+                  {{
+                    customDatum.type === Type.STRING
+                      ? customDatum.stringValue
+                      : customDatum.intValue
+                  }}
+                </span>
+                <span v-else class="font-italic">
+                  {{
+                    customDatum.type === Type.STRING
+                      ? $t('general.noTextProvided')
+                      : $t('general.noNumberProvided')
+                  }}
+                </span>
+              </div>
+              <v-divider></v-divider>
+            </div>
           </v-col>
         </v-row>
       </v-container>
@@ -66,6 +110,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { deriveFilePath } from '../../../lib/utils';
+import { Type } from '../../../models';
 
 import ImgFromS3 from '../../commons/ImgFromS3.vue';
 
@@ -74,6 +119,7 @@ export default {
   components: { ImgFromS3 },
   data() {
     return {
+      Type,
       rerenderImgFromS3: false,
     };
   },
@@ -86,10 +132,14 @@ export default {
     ...mapGetters({
       dataIdInFocus: 'dataModal/getDataIdInFocus',
       ENTITYById: 'ENTITY_Data/ENTITYById',
+      LEVELById: 'LEVEL_Data/LEVELById',
       calculateUILocaleString: 'calculateUILocaleString',
     }),
     entityInFocus() {
       return this.ENTITYById({ id: this.dataIdInFocus });
+    },
+    level() {
+      return this.LEVELById({ id: this.entityInFocus.entityLevelId });
     },
     deriveImgPath() {
       return deriveFilePath('entityPicPath', { entityID: this.dataIdInFocus });

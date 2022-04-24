@@ -2,7 +2,7 @@ import { DataStore } from '@aws-amplify/datastore';
 import { API } from 'aws-amplify';
 import { dataTypesDict, modalModesDict, vuexModulesDict } from '../../lib/constants';
 import { deleteEntity } from '../../graphql/mutations';
-import { Entity, I18nString } from '../../models';
+import { AppliedCustomData, Entity, I18nString } from '../../models';
 import { deriveFilePath } from '../../lib/utils';
 
 const entitiesData = {
@@ -153,6 +153,7 @@ const entitiesData = {
         ...entityDraft,
         name: new I18nString(entityDraft.name),
         description: new I18nString(entityDraft.description),
+        customData: entityDraft.customData.map((cd) => new AppliedCustomData(cd)),
       });
 
       try {
@@ -202,6 +203,7 @@ const entitiesData = {
             updated.name = newData.name;
             updated.description = newData.description;
             updated.parentEntityID = newData.parentEntityID;
+            updated.customData = newData.customData.map((cd) => new AppliedCustomData(cd));
           }),
         );
 

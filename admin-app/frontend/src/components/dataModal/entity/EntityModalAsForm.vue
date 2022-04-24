@@ -1,5 +1,5 @@
 <template>
-  <v-form lazy-validation>
+  <v-form ref="form" v-model="isFormValid">
     <v-card-title>
       <h2 v-if="edit && entityInFocus">
         {{ $t('organizationStructure.entityModal.modalTitle.edit') }}
@@ -85,7 +85,12 @@
             </v-select>
           </v-col>
           <v-col cols="12" sm="6" class="pb-0 px-0 mb-3 px-sm-3">
-            <ImgFromS3 :assumedSrc="assumedSrc" :key="rerenderImgFromS3" dataType="entity">
+            <ImgFromS3
+              :assumedSrc="assumedSrc"
+              :key="rerenderImgFromS3"
+              dataType="entity"
+              class="mb-4"
+            >
               <template v-slot:v-img="slotProps">
                 <v-img max-height="200px" :src="slotProps.src">
                   <v-btn fab class="iv-edit-icon" color="primary" @click="selectImg">
@@ -96,6 +101,34 @@
                 </v-img>
               </template>
             </ImgFromS3>
+
+            <div v-if="level.customData.length > 0">
+              <v-divider></v-divider>
+              <v-card-title class="pt-0 pt-sm-2">
+                <span>
+                  {{ $t('organizationStructure.levelModal.customData.title') }}
+                </span>
+              </v-card-title>
+
+              <div v-for="customDatum in customData" :key="customDatum.customDataID">
+                {{ customDatum.value }}
+                <v-text-field
+                  :label="
+                    calculateUILocaleString({ languageTexts: customDatum.name.languageTexts })
+                  "
+                  outlined
+                  v-model="customDatum.value"
+                  @keypress="
+                    if (customDatum.type === Type.INT) {
+                      isNumber($event);
+                      $refs.form.validate();
+                    }
+                  "
+                  :rules="customDatum.type === Type.INT ? rules.correctNumber : []"
+                ></v-text-field>
+              </div>
+              <v-divider></v-divider>
+            </div>
           </v-col>
         </v-row>
       </v-container>
@@ -129,7 +162,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { emptyMutableI18nString, mutableI18nString } from '../../../lib/classes';
 import { modalModesDict } from '../../../lib/constants';
 import { deriveFilePath } from '../../../lib/utils';
-import { Entity } from '../../../models';
+import { Entity, Type } from '../../../models';
 
 import LocaleTextBox from '../../commons/form/LocaleTextBox.vue';
 import FileInput from '../../commons/form/FileInput.vue';
@@ -140,12 +173,18 @@ export default {
   components: { LocaleTextBox, FileInput, ImgFromS3 },
   data() {
     return {
+      Type,
       name: emptyMutableI18nString(),
       description: emptyMutableI18nString(),
       parentEntityID: null,
       rerenderImgFromS3: false,
       rerenderNameLocaleTextBox: 0,
       rerenderDescriptionLocaleTextBox: -1,
+      customData: [],
+      rules: {
+        correctNumber: [(v) => !Number.isNaN(Number(v)) || this.$t('general.form.invalidNumber')],
+      },
+      isFormValid: true,
     };
   },
   watch: {
@@ -156,6 +195,7 @@ export default {
   },
   mounted() {
     if (this.edit) this.prefillComponentDataFromDataDraft();
+    this.initCustomDataFromLevel();
   },
   computed: {
     ...mapGetters({
@@ -177,6 +217,11 @@ export default {
     edit() {
       return this.dataModalMode === modalModesDict.edit;
     },
+    level() {
+      return this.LEVELById({
+        id: this.edit ? this.entityInFocus.entityLevelId : this.getCreatingEntityInLevelId,
+      });
+    },
     deriveImgPath() {
       return this.edit ? deriveFilePath('entityPicPath', { entityID: this.dataIdInFocus }) : null;
     },
@@ -188,6 +233,7 @@ export default {
         this.calculateLocalizedString({ languageTexts: this.name.languageTexts })
           === this.$t('general.noTextProvided')
         || (this.allEntitiesOfUpperLevel.length > 0 && !this.parentEntityID)
+        || !this.isFormValid
       );
     },
     allEntitiesOfUpperLevel() {
@@ -237,7 +283,15 @@ export default {
             : this.getCreatingEntityInLevelId,
           parentEntityID: this.parentEntityID ?? null,
           appliedInterventions: [],
-          customData: [], // TODO
+          customData: this.customData.map(({
+            customDataID, type, name, value,
+          }) => ({
+            customDataID,
+            type,
+            name,
+            intValue: type === Type.INT && value !== null ? Number(value) : null,
+            stringValue: type === Type.STRING ? value : null,
+          })),
         }),
       );
       await this.$nextTick();
@@ -261,11 +315,33 @@ export default {
       this.rerenderNameLocaleTextBox += 1;
       this.rerenderDescriptionLocaleTextBox -= 1;
     },
+    initCustomDataFromLevel() {
+      const { customData } = this.level;
+      if (!customData) return;
+      this.customData = customData.map(({ id, name, type }, index) => ({
+        name: mutableI18nString(name),
+        type,
+        customDataID: id,
+        value: this.edit
+          ? this.entityInFocus.customData[index][type === Type.INT ? 'intValue' : 'stringValue']
+            ?? null
+          : null,
+      }));
+    },
     nameUpdatedHandler(res) {
       this.name = res;
     },
     descriptionUpdatedHandler(res) {
       this.description = res;
+    },
+    isNumber(evt) {
+      evt = evt || window.event;
+      const charCode = evt.which ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
+        evt.preventDefault();
+        return false;
+      }
+      return true;
     },
   },
 };

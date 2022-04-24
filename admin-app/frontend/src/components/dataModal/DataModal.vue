@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model="isDisplayed"
+    v-model="isModalDisplayed"
     max-width="1200px"
     :persistent="!isRead"
     @keydown.esc="escHandler"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { dataTypesDict, modalModesDict } from '../../lib/constants';
 
 import InterventionModalAsForm from './intervention/InterventionModalAsForm.vue';
@@ -86,12 +86,23 @@ export default {
     isSurvey() {
       return this.dataType === dataTypesDict.survey;
     },
+    isModalDisplayed: {
+      get() {
+        return this.isDisplayed;
+      },
+      set(value) {
+        this.setIsDisplayed({ newValue: value });
+      },
+    },
   },
   methods: {
     ...mapActions({
       abortCreateData: 'dataModal/abortCreateData',
       abortEditData: 'dataModal/abortEditData',
       abortReadData: 'dataModal/abortReadData',
+    }),
+    ...mapMutations({
+      setIsDisplayed: 'dataModal/setIsDisplayed',
     }),
     escHandler() {
       if (this.mode === modalModesDict.edit) this.abortEditData();
