@@ -19,7 +19,7 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import { dataTypesDict, vuexModulesDict } from '../../../lib/constants';
+import { vuexModulesDict } from '../../../lib/constants';
 
 export default {
   name: 'SurveyModalFinalize',
