@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -26,6 +27,7 @@ import 'package:mobile_app/frontend/components/audio/recorder_widget.dart';
 import 'package:mobile_app/frontend/components/imageWidget.dart';
 import 'package:mobile_app/frontend/dependentsizes.dart';
 import 'package:mobile_app/frontend/strings.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:mobile_app/services/photo_capturing.dart';
 
 import '../../backend/callableModels/ExecutedSurvey.dart';
@@ -150,6 +152,15 @@ class SurveyWidgetState extends State<SurveyWidget> {
         case QuestionType.TEXT:
           return textQuestionWidget(
               context: context, question: e, survey: widget.survey);
+        case QuestionType.INT:
+          return integerInputWidget(
+              context: context, question: e, survey: widget.survey);
+        case QuestionType.RATING:
+          return ratingWidget(
+              context: context, question: e, survey: widget.survey);
+        case QuestionType.DOUBLE:
+          return doubleInputWidget(
+              context: context, question: e, survey: widget.survey);
         default:
           throw UnimplementedError();
       }
@@ -250,10 +261,10 @@ class SurveyWidgetState extends State<SurveyWidget> {
                     questions[_inSurveyPageController.page!.round()];
                 if (currentQuestion.type == QuestionType.MULTIPLECHOICE) {
                   answers[currentQuestion] ??= QuestionAnswer(
-                      questionID: widget.survey.id!,
-                      date: DateTime.now(),
-                      type: currentQuestion.type,
-                      questionOptions: [],
+                    questionID: widget.survey.id!,
+                    date: DateTime.now(),
+                    type: currentQuestion.type,
+                    questionOptions: [],
                   );
                 }
                 if (answers[currentQuestion] != null) {
@@ -594,6 +605,131 @@ class SurveyWidgetState extends State<SurveyWidget> {
                 ..text = result;
             },
           ),
+        ),
+      ],
+    ));
+  }
+
+  Widget integerInputWidget(
+      {required BuildContext context,
+      required Question question,
+      required Survey survey}) {
+    return Scrollbar(
+        child: ListView(
+      shrinkWrap: true,
+      children: [
+        imageForQuestion(
+            syncedFile: SurveyRepository.getQuestionPic(survey, question)),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
+        questionTitleWidget(question: question, context: context),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
+        Center(
+          child: Container(
+              width: width(context) * .25,
+              child: TextField(
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.number,
+                onChanged: (String result) {
+                  answers[question] = QuestionAnswer(
+                      questionID: question.id!,
+                      date: DateTime.now(),
+                      type: QuestionType.INT)
+                    ..intValue = int.tryParse(result);
+                },
+              )),
+        ),
+      ],
+    ));
+  }
+
+  Widget ratingWidget(
+      {required BuildContext context,
+      required Question question,
+      required Survey survey}) {
+    const int maxRating = 9;
+
+    return Scrollbar(
+        child: ListView(
+      shrinkWrap: true,
+      children: [
+        imageForQuestion(
+            syncedFile: SurveyRepository.getQuestionPic(survey, question)),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
+        questionTitleWidget(question: question, context: context),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
+        Center(
+          child: RatingBar(
+              itemCount: maxRating,
+              ratingWidget: RatingWidget(
+                full: const FakeRadioWidget(
+                  active: true,
+                ),
+                half: const FakeRadioWidget(
+                  active: false,
+                ),
+                empty: const FakeRadioWidget(
+                  active: false,
+                ),
+              ),
+              itemSize: width(context) * .05,
+              initialRating: (answers[question]?.rating ?? 0) / maxRating,
+              itemPadding:
+                  EdgeInsets.symmetric(horizontal: defaultPadding(context) / 2),
+              allowHalfRating: false,
+              glow: false,
+              onRatingUpdate: (rating) {
+                answers[question] = QuestionAnswer(
+                    questionID: question.id!,
+                    date: DateTime.now(),
+                    type: QuestionType.RATING)
+                  ..rating = rating.round();
+              }),
+        ),
+      ],
+    ));
+  }
+
+  Widget doubleInputWidget(
+      {required BuildContext context,
+      required Question question,
+      required Survey survey}) {
+    return Scrollbar(
+        child: ListView(
+      shrinkWrap: true,
+      children: [
+        imageForQuestion(
+            syncedFile: SurveyRepository.getQuestionPic(survey, question)),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
+        questionTitleWidget(question: question, context: context),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
+        Center(
+          child: Container(
+              width: width(context) * .25,
+              child: TextField(
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                ],
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                onChanged: (String result) {
+                  answers[question] = QuestionAnswer(
+                      questionID: question.id!,
+                      date: DateTime.now(),
+                      type: QuestionType.DOUBLE)
+                    ..doubleValue = double.tryParse(result);
+                },
+              )),
         ),
       ],
     ));
@@ -943,6 +1079,18 @@ class SurveyWidgetState extends State<SurveyWidget> {
             ],
           );
           break;
+        case QuestionType.INT:
+          answerWidget = Text(questionAnswer.intValue!.toString(),
+              style: Theme.of(context).textTheme.bodyText1);
+          break;
+        case QuestionType.DOUBLE:
+          answerWidget = Text(questionAnswer.doubleValue!.toString(),
+              style: Theme.of(context).textTheme.bodyText1);
+          break;
+        case QuestionType.RATING:
+          answerWidget = Text(questionAnswer.rating!.toString() + "/9",
+              style: Theme.of(context).textTheme.bodyText1);
+          break;
         default:
           answerWidget = Container();
           break;
@@ -1048,6 +1196,12 @@ class SurveyWidgetState extends State<SurveyWidget> {
         return multipleChoiceTypeDescription;
       case QuestionType.TEXT:
         return textFieldTypeDescription;
+      case QuestionType.INT:
+        return integerTypeDescription;
+      case QuestionType.DOUBLE:
+        return doubleTypeDescription;
+      case QuestionType.RATING:
+        return ratingTypeDescription;
       default:
         return '';
     }
@@ -1319,7 +1473,6 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar>
       ..addListener(() {
         setState(() {});
       });
-
     super.initState();
   }
 }
@@ -1355,5 +1508,56 @@ class _AudioPlayerWidgetFromSyncFileState
         loading = false;
       }
     });
+  }
+}
+
+const double _kOuterRadius = 8.0;
+const double _kInnerRadius = 4.5;
+
+class FakeRadioWidget extends StatelessWidget {
+  final bool active;
+  const FakeRadioWidget({Key? key, required this.active}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 15,
+      height: 15,
+      child: CustomPaint(
+        painter: _FakeRadioPainter(
+          color: Theme.of(context).highlightColor,
+          active: active,
+        ),
+      ),
+    );
+  }
+}
+
+class _FakeRadioPainter extends CustomPainter {
+  final Color color;
+  final bool active;
+  const _FakeRadioPainter({required this.color, required this.active});
+
+  @override
+  bool shouldRepaint(covariant _FakeRadioPainter oldDelegate) {
+    return oldDelegate.active != active;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Offset center = (Offset.zero & size).center;
+
+    // Outer circle
+    final Paint paint = Paint()
+      ..color = Colors.lightBlue!
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
+    canvas.drawCircle(center, _kOuterRadius, paint);
+
+    // Inner circle
+    if (active) {
+      paint.style = PaintingStyle.fill;
+      canvas.drawCircle(center, _kInnerRadius, paint);
+    }
   }
 }
