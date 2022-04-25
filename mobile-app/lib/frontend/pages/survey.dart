@@ -1185,6 +1185,12 @@ class SurveyWidgetState extends State<SurveyWidget> {
         return multipleChoiceTypeDescription;
       case QuestionType.TEXT:
         return textFieldTypeDescription;
+      case QuestionType.INT:
+        return integerTypeDescription;
+      case QuestionType.DOUBLE:
+        return doubleTypeDescription;
+      case QuestionType.RATING:
+        return ratingTypeDescription;
       default:
         return '';
     }

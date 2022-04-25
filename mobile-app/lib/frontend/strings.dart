@@ -82,6 +82,9 @@ Map<String, dynamic> stringMap = {
       "sc": "One answer only",
       "mc": "Multiple answers possible",
       "text_field": "Write down your answer",
+      "int": "Write down a whole number",
+      "double": "Write down a decimal number",
+      "rating": "Rate by dragging",
     },
     "summary": "summary",
     "end_survey": "Are you sure you want to end the survey?",
@@ -458,6 +461,12 @@ String get multipleChoiceTypeDescription =>
     stringMap[currentLanguage]["question_type_descriptions"]["mc"];
 String get textFieldTypeDescription =>
     stringMap[currentLanguage]["question_type_descriptions"]["text_field"];
+String get integerTypeDescription =>
+    stringMap[currentLanguage]["question_type_descriptions"]["int"];
+String get doubleTypeDescription =>
+    stringMap[currentLanguage]["question_type_descriptions"]["double"];
+String get ratingTypeDescription =>
+    stringMap[currentLanguage]["question_type_descriptions"]["rating"];
 String get summary => stringMap[currentLanguage]["summary"];
 String get endSurvey => stringMap[currentLanguage]["end_survey"];
 String get savedSurvey => stringMap[currentLanguage]["saved_survey"];
