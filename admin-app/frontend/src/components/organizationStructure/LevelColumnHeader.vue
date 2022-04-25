@@ -56,7 +56,7 @@
 <script>
 // import { validate as uuidValidate } from 'uuid';
 import { mapActions, mapGetters } from 'vuex';
-import { dataTypesDict } from '../../store/constants';
+import { dataTypesDict, vuexModulesDict } from '../../lib/constants';
 
 export default {
   name: 'LevelColumnHeader',
@@ -73,9 +73,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getLoading: 'LEVEL_Data/getLoading',
-      INTERVENTIONById: 'INTERVENTION_Data/INTERVENTIONById',
-      interventionsOfLevelById: 'LEVEL_Data/interventionsOfLevelById',
+      getLoading: `${vuexModulesDict.level}/getLoading`,
+      INTERVENTIONById: `${vuexModulesDict.intervention}/INTERVENTIONById`,
+      interventionsOfLevelById: `${vuexModulesDict.level}/interventionsOfLevelById`,
       calculateUILocaleString: 'calculateUILocaleString',
     }),
     interventionsOfLevel() {
@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      readData: 'dataModal/readData',
+      readData: `${vuexModulesDict.dataModal}/readData`,
     }),
     clickOnLevelHandler() {
       this.readData({ dataId: this.id, dataType: dataTypesDict.level });
