@@ -17,20 +17,55 @@
     >
       <v-icon color="white">{{ route.icon }}</v-icon>
     </v-btn>
+    <template>
+      <div class="text-center">
+        <v-menu
+          v-model="menu"
+          :close-on-content-click="false"
+          :nudge-width="100"
+          offset-x
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn  v-bind="attrs" v-on="on">
+              <v-icon color="white">mdi-cog-outline</v-icon>
+            </v-btn>
+          </template>
 
-    <v-menu top close-on-click>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on">
-          <v-icon color="white"> mdi-cog-outline </v-icon>
-        </v-btn>
-      </template>
-
-      <v-list>
-        <v-list-item v-for="item in [0, 1, 2, 3, 4]" :key="item">
-          <v-list-item-title>{{ item }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+          <v-card >
+            <v-list>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>Settings</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+            <v-divider></v-divider>
+            <v-list>
+              <v-list-item>
+                <lang-select />
+              </v-list-item>
+              <v-list-item>
+                <v-layout  align-center justify-center>
+                    <v-btn @click="logout" class="mx-2" small color="primary" large block>
+                      <v-icon color="white">mdi-exit-to-app</v-icon>
+                      Logout
+                    </v-btn>
+                </v-layout>
+              </v-list-item>
+            </v-list>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                @click="menu = false"
+              >
+                Close
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
+      </div>
+    </template>
   </v-bottom-navigation>
 
   <v-navigation-drawer v-else permanent expand-on-hover class="primary-dark" width="17rem" fixed>
@@ -101,13 +136,19 @@ import { mapGetters, mapActions } from 'vuex';
 import SyncAction from './SyncAction.vue';
 import { routes } from '../../../router';
 import { routeNamesDict, vuexModulesDict } from '../../../lib/constants';
+import LangSelect from '../floating/LangSelect.vue';
 
 const societyName = process.env.VUE_APP_SOCIETY_VERBOSE_NAME;
 
 export default {
-  components: { SyncAction },
+  components: { SyncAction, LangSelect },
   name: 'NavBar',
   data: () => ({
+    fav: true,
+    menu: false,
+    message: false,
+    hints: true,
+    societyName,
     routes: routes
       .filter((r) => r.meta.onSideBar)
       .map((r) => ({

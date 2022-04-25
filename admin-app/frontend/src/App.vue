@@ -1,10 +1,9 @@
 <template>
   <v-app>
     <div class="top-right-fixed">
-      <LangSelect :style="isInAuthView ? '' : 'margin-right: 1rem;'" />
+      <LangSelect v-if ="$vuetify.breakpoint.name !== 'xs'" :style="isInAuthView ? '' : 'margin-right: 1rem;'" />
       <!-- <SearchBox v-if="!isInAuthView" /> -->
     </div>
-
     <v-main :class="vMainClass">
       <router-view />
     </v-main>
