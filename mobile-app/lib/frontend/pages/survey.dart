@@ -169,7 +169,6 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
   @override
   void initState() {
-
     preliminaryExecutedSurveyId = UUID.getUUID();
     questions = widget.survey.questions
         .where((element) => !element.isFollowUpQuestion)
@@ -262,10 +261,10 @@ class SurveyWidgetState extends State<SurveyWidget> {
                     questions[_inSurveyPageController.page!.round()];
                 if (currentQuestion.type == QuestionType.MULTIPLECHOICE) {
                   answers[currentQuestion] ??= QuestionAnswer(
-                      questionID: widget.survey.id!,
-                      date: DateTime.now(),
-                      type: currentQuestion.type,
-                      questionOptions: [],
+                    questionID: widget.survey.id!,
+                    date: DateTime.now(),
+                    type: currentQuestion.type,
+                    questionOptions: [],
                   );
                 }
                 if (answers[currentQuestion] != null) {
@@ -611,122 +610,130 @@ class SurveyWidgetState extends State<SurveyWidget> {
     ));
   }
 
-  Widget integerInputWidget({required BuildContext context,
-    required Question question,
-    required Survey survey}){
+  Widget integerInputWidget(
+      {required BuildContext context,
+      required Question question,
+      required Survey survey}) {
     return Scrollbar(
         child: ListView(
-          shrinkWrap: true,
-          children: [
-            imageForQuestion(
-                syncedFile: SurveyRepository.getQuestionPic(survey, question)),
-            SizedBox(
-              height: defaultPadding(context),
-            ),
-            questionTitleWidget(question: question, context: context),
-            SizedBox(
-              height: defaultPadding(context),
-            ),
-            Center(
-              child: Container(
-                  width: width(context)*.25,
-                  child: TextField(
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    keyboardType: TextInputType.number,
-                    onChanged: (String result) {
-                      answers[question] = QuestionAnswer(
-                          questionID: question.id!,
-                          date: DateTime.now(),
-                          type: QuestionType.INT)..intValue = int.tryParse(result);
-                    },
-                  )),
-            ),
-          ],
-        ));
+      shrinkWrap: true,
+      children: [
+        imageForQuestion(
+            syncedFile: SurveyRepository.getQuestionPic(survey, question)),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
+        questionTitleWidget(question: question, context: context),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
+        Center(
+          child: Container(
+              width: width(context) * .25,
+              child: TextField(
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.number,
+                onChanged: (String result) {
+                  answers[question] = QuestionAnswer(
+                      questionID: question.id!,
+                      date: DateTime.now(),
+                      type: QuestionType.INT)
+                    ..intValue = int.tryParse(result);
+                },
+              )),
+        ),
+      ],
+    ));
   }
 
-  Widget ratingWidget({required BuildContext context,
-    required Question question,
-    required Survey survey}){
-
+  Widget ratingWidget(
+      {required BuildContext context,
+      required Question question,
+      required Survey survey}) {
     const int maxRating = 9;
 
     return Scrollbar(
         child: ListView(
-          shrinkWrap: true,
-          children: [
-            imageForQuestion(
-                syncedFile: SurveyRepository.getQuestionPic(survey, question)),
-            SizedBox(
-              height: defaultPadding(context),
-            ),
-            questionTitleWidget(question: question, context: context),
-            SizedBox(
-              height: defaultPadding(context),
-            ),
-            Center(
-              child: RatingBar(
-                itemCount: maxRating,
-                  ratingWidget: RatingWidget(
-                    full:  const FakeRadioWidget(active: true,),
-                    half:  const FakeRadioWidget(active: false,),
-                    empty:  const FakeRadioWidget(active: false,),
-                  ),
-                  itemSize: width(context)*.05,
-                  initialRating: (answers[question]?.rating ?? 0)/maxRating,
-                  itemPadding: EdgeInsets.symmetric(horizontal: defaultPadding(context)/2),
-                  allowHalfRating: false,
-                  glow: false,
-                  onRatingUpdate: (rating){
-                    answers[question] = QuestionAnswer(
-                        questionID: question.id!,
-                        date: DateTime.now(),
-                        type: QuestionType.RATING)..rating = (rating*maxRating).round();
-                  }
+      shrinkWrap: true,
+      children: [
+        imageForQuestion(
+            syncedFile: SurveyRepository.getQuestionPic(survey, question)),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
+        questionTitleWidget(question: question, context: context),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
+        Center(
+          child: RatingBar(
+              itemCount: maxRating,
+              ratingWidget: RatingWidget(
+                full: const FakeRadioWidget(
+                  active: true,
+                ),
+                half: const FakeRadioWidget(
+                  active: false,
+                ),
+                empty: const FakeRadioWidget(
+                  active: false,
+                ),
               ),
-            ),
-          ],
-        ));
+              itemSize: width(context) * .05,
+              initialRating: (answers[question]?.rating ?? 0) / maxRating,
+              itemPadding:
+                  EdgeInsets.symmetric(horizontal: defaultPadding(context) / 2),
+              allowHalfRating: false,
+              glow: false,
+              onRatingUpdate: (rating) {
+                answers[question] = QuestionAnswer(
+                    questionID: question.id!,
+                    date: DateTime.now(),
+                    type: QuestionType.RATING)
+                  ..rating = (rating * maxRating).round();
+              }),
+        ),
+      ],
+    ));
   }
 
-  Widget doubleInputWidget({required BuildContext context,
-    required Question question,
-    required Survey survey}){
+  Widget doubleInputWidget(
+      {required BuildContext context,
+      required Question question,
+      required Survey survey}) {
     return Scrollbar(
         child: ListView(
-          shrinkWrap: true,
-          children: [
-            imageForQuestion(
-                syncedFile: SurveyRepository.getQuestionPic(survey, question)),
-            SizedBox(
-              height: defaultPadding(context),
-            ),
-            questionTitleWidget(question: question, context: context),
-            SizedBox(
-              height: defaultPadding(context),
-            ),
-            Center(
-              child: Container(
-                  width: width(context)*.25,
-                  child: TextField(
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                    ],
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
-                    onChanged: (String result) {
-                      answers[question] = QuestionAnswer(
-                          questionID: question.id!,
-                          date: DateTime.now(),
-                          type: QuestionType.DOUBLE)..doubleValue = double.tryParse(result);
-                    },
-                  )),
-            ),
-          ],
-        ));
+      shrinkWrap: true,
+      children: [
+        imageForQuestion(
+            syncedFile: SurveyRepository.getQuestionPic(survey, question)),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
+        questionTitleWidget(question: question, context: context),
+        SizedBox(
+          height: defaultPadding(context),
+        ),
+        Center(
+          child: Container(
+              width: width(context) * .25,
+              child: TextField(
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                ],
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                onChanged: (String result) {
+                  answers[question] = QuestionAnswer(
+                      questionID: question.id!,
+                      date: DateTime.now(),
+                      type: QuestionType.DOUBLE)
+                    ..doubleValue = double.tryParse(result);
+                },
+              )),
+        ),
+      ],
+    ));
   }
-
 
   void _dismissSurvey() async {
     bool confirmation = await showDialog(
@@ -1078,6 +1085,10 @@ class SurveyWidgetState extends State<SurveyWidget> {
           break;
         case QuestionType.DOUBLE:
           answerWidget = Text(questionAnswer.doubleValue!.toString(),
+              style: Theme.of(context).textTheme.bodyText1);
+          break;
+        case QuestionType.RATING:
+          answerWidget = Text(questionAnswer.rating!.toString(),
               style: Theme.of(context).textTheme.bodyText1);
           break;
         default:
@@ -1513,12 +1524,14 @@ class FakeRadioWidget extends StatelessWidget {
       width: 15,
       height: 15,
       child: CustomPaint(
-        painter: _FakeRadioPainter(color: Theme.of(context).highlightColor, active: active,),
+        painter: _FakeRadioPainter(
+          color: Theme.of(context).highlightColor,
+          active: active,
+        ),
       ),
     );
   }
 }
-
 
 class _FakeRadioPainter extends CustomPainter {
   final Color color;
@@ -1527,7 +1540,7 @@ class _FakeRadioPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _FakeRadioPainter oldDelegate) {
-    return oldDelegate.active!=active;
+    return oldDelegate.active != active;
   }
 
   @override
