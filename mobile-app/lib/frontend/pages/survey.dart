@@ -690,7 +690,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
                     questionID: question.id!,
                     date: DateTime.now(),
                     type: QuestionType.RATING)
-                  ..rating = (rating * maxRating).round();
+                  ..rating = rating.round();
               }),
         ),
       ],
@@ -1088,7 +1088,7 @@ class SurveyWidgetState extends State<SurveyWidget> {
               style: Theme.of(context).textTheme.bodyText1);
           break;
         case QuestionType.RATING:
-          answerWidget = Text(questionAnswer.rating!.toString(),
+          answerWidget = Text(questionAnswer.rating!.toString() + "/9",
               style: Theme.of(context).textTheme.bodyText1);
           break;
         default:
