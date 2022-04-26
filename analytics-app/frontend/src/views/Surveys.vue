@@ -25,11 +25,12 @@
         <el-row class="survey-wrapper">
             <el-col>
                 <div class="surveys">
-                    <SurveyCard 
-                        v-for="survey in filteredSurveys"
-                        :key="survey.id"
-                        :survey="survey"
-                    />
+                        <SurveyCard 
+                            v-for="survey in filteredSurveys"
+                            :key="survey.id"
+                            :survey="survey"
+                            @click="selectSurvey(survey)"
+                        />
                 </div>
             </el-col>
         </el-row>
@@ -39,6 +40,7 @@
 
 <script>
 import SurveyCard from '../components/surveys/SurveyCard.vue'
+import { router } from '../router';
 export default {
     props: {},
     components: { SurveyCard },
@@ -47,6 +49,11 @@ export default {
             let timezoneOffset = date.getTimezoneOffset();
             let adjustedDate = date.getTime() + timezoneOffset * 60000
             return adjustedDate
+        },
+        selectSurvey(survey) {
+            this.selectedID = survey.survey_id
+            router.push({ name: 'Questions', params: { survey_id: survey.survey_id }})
+            return
         },
     },
     computed: {
@@ -68,6 +75,7 @@ export default {
     },
     data() {
         return {
+            selectedID: 0,
             selectedDates: '',
             surveys: [
                 {
