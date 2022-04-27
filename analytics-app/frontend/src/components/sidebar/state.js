@@ -9,4 +9,4 @@ export const SIDEBAR_WIDTH_COLLAPSED = 55
 export const sidebarWidth = computed(
   () => `${collapsed.value ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}px`
 )
-export const sidebarTransition = '0.4s ease'
+export const sidebarTransition = '0.5s ease'
