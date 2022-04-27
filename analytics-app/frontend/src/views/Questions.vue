@@ -1,47 +1,51 @@
 <template>
   <div class="main">
-      <el-row class="title">
-          <el-col>
-            <h1 style="text-align: left; margin-left: 5px" >Fragebogen: Kochstellen</h1>
-          </el-col>
-      </el-row>
-      <el-row class="sub-title">
-          <el-col :span="6" >
-            <h2 style="text-align: left; margin-left: 5px">Fragen:</h2>
-          </el-col>
-          <el-col :span="18">
-            <h2 style="text-align: left">Antwort:</h2>
-          </el-col>
-      </el-row>
-      <el-row class="survey-content">
-          <el-col :span="6" class="question-list">
-            <div class="questions">
+      <div class="title">
+        <h1 style="text-align: left; margin-left: 5px" >Fragebogen: Kochstellen</h1>
+      </div>
+      <div class="survey-content">
+        <div class="question-list">
+            <div class="questions" :class="{'collapsed': collapsed}" @mouseover="openQuestionList" @mouseleave="closeQuestionList">
                 <div 
-                    v-for="question in questions" 
+                    v-for="(question, index) in questions" 
                     :key="question.id" 
                     class="question"
-                    :class="{ 'active': selectedID === question.question_id }"
-                    @click="setActive(question)"> 
-                        {{ question.question_text }}
+                    :class="{ 'active': selectedID === question.question_id, 'collapsed': collapsed }"
+                    @click="setActive(question) "> 
+                    <div class="question-index-wrapper">
+                        {{index+1}}
+                    </div>
+                    <div v-if="!collapsed" class="question-text-wrapper"> {{ question.question_text }} </div>
                 </div>
             </div>
-          </el-col>
-          <el-col :span="18">
-            <div class="answer-wrapper">
+        </div>
+        <div class="content-wrapper">
+            <div class="question-wrapper">
                 <h3 style="text-align: left">
-                    Ausgewählte Frage: {{ selectedQuestion.question_text }}
-                </h3>
-                <h3 style="text-align: left">
-                    Antwort: {{ selectedQuestion.answer }}
+                    Frage: {{ selectedQuestion.question_text }}
                 </h3>
             </div>
-          </el-col>
-      </el-row>
+        <component class="answer-wrapper" :is='componentsMap[selectedQuestion.question_type]'/>
+        </div>
+      </div>
     </div>
 </template>
 
 <script>
+import { ref } from 'vue'
 import 'element-plus/theme-chalk/display.css'
+import initialComponent from '../components/evaluation/initialComponent.vue'
+import textComponent from '../components/evaluation/textComponent.vue'
+import imageComponent from '../components/evaluation/imageComponent.vue'
+
+const componentsMap = {
+  "initial": initialComponent,
+  "text": textComponent, 
+  "image": imageComponent,
+}
+
+const collapsed = ref(false)
+
 export default {
     props: {},
     components: {},
@@ -52,8 +56,18 @@ export default {
     },
     methods: {
         setActive(question) {
-            return this.selectedID = question.question_id
+            const comp = componentsMap[question.question_type]
+            return this.selectedID = question.question_id, comp
         },
+        openQuestionList() {
+            return collapsed.value = false
+        },
+        closeQuestionList() {
+            return collapsed.value = true
+        }
+    },
+    setup() {
+        return { componentsMap, collapsed }
     },
     data() {
         return {
@@ -63,76 +77,91 @@ export default {
                     question_id: 1,
                     question_text: "Wie geht's?",
                     answer: 'gut',
+                    question_type: 'image',
                 },
                 {
                     question_id: "2abs",
-                    question_text: "Trinkst du ausreichend Wasser?",
+                    question_text: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis p",
                     answer: 'Nein',
+                    question_type: 'text',
                 },
                 {
                     question_id: 3,
                     question_text: "Machst du viel Sport?",
                     answer: 'Nein',
+                    question_type: 'text',
                 },
                 {
                     question_id: 4,
                     question_text: "Kannst du schwimmen?",
                     answer: 'Nein',
+                    question_type: 'text',
                 },
                 {
                     question_id: 5,
                     question_text: "Kannst du kochen?",
                     answer: 'Nein',
+                    question_type: 'text',
                 },
                 {
                     question_id: 6,
                     question_text: "Wie geht's?",
                     answer: 'gut',
+                    question_type: 'text',
                 },
                 {
                     question_id: "2abs",
                     question_text: "Trinkst du ausreichend Wasser?",
                     answer: 'Nein',
+                    question_type: 'text',
                 },
                 {
                     question_id: 7,
                     question_text: "Machst du viel Sport?",
                     answer: 'Nein',
+                    question_type: 'text',
                 },
                 {
                     question_id: 8,
                     question_text: "Kannst du schwimmen?",
                     answer: 'Nein',
+                    question_type: 'text',
                 },
                 {
                     question_id: 9,
                     question_text: "Kannst du kochen?",
                     answer: 'Nein',
+                    question_type: 'text',
                 },
                 {
                     question_id: 10,
                     question_text: "Wie geht's?",
                     answer: 'gut',
+                    question_type: 'text',
                 },
                 {
                     question_id: "11",
                     question_text: "Trinkst du ausreichend Wasser?",
                     answer: 'Nein',
+                    question_type: 'text',
                 },
                 {
                     question_id: 12,
                     question_text: "Machst du viel Sport?",
                     answer: 'Nein',
+                    question_type: 'text',
                 },
                 {
                     question_id: 13,
                     question_text: "Kannst du schwimmen?",
                     answer: 'Nein',
+                    question_type: 'text',
                 },
                 {
                     question_id: 14,
                     question_text: "Kannst du kochen?",
                     answer: 'Nein',
+                    question_type: 'text',
                 },
             ],
         }
@@ -156,30 +185,75 @@ export default {
     margin-bottom: 1rem;
     margin-top: 1rem;
 }
-.question-list {
+.survey-content {
+    height: 100%;
+    width: 100%;
     display: flex;
-    flex-direction: row;
 }
 .questions {
+    width: 500px;
     border-right-style: solid;
-    height: 75vh;
+    height: 90vh;
     overflow: scroll;
+
+    transition: 0.5s;
+}
+.questions.collapsed {
+    width: 50px;
 }
 .question {
-  width: 200px;
+  width: 460px;
+  min-height: 70px;
   margin-left: 5px;
   margin-right: 15px;
   margin-bottom: 10px;
   margin-top: 2px;
-  box-shadow: 0px 0px 1px rgb(0, 0, 0, 0.25); 
+  padding: 0.5rem 1rem;
+  box-shadow: 0px 0px 1px rgb(0, 0, 0, 0.25);
+  border-radius: 5px;
 
   text-align: left;
   padding-left: 5px;
+
+  display: flex;
+}
+.question.collapsed {
+  width: 15px;
+  text-align: center;
 }
 .question:hover {
   box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.25); 
 }
 .question.active {
-  background-color: rgb(215, 215, 215);
+  background-color: rgb(105, 105, 105);
+  color: rgb(255, 255, 255);
+}
+.question-index-wrapper {
+    min-width: 20px;
+    margin: auto 0;
+    text-align: center;
+}
+.question-text-wrapper {
+    margin: auto 0;
+    padding: 0 0.5rem;
+}
+.content-wrapper {
+    width: 100%;
+    margin: 0 1rem;
+    overflow: scroll;
+    height: 80vh;
+}
+.question-wrapper {
+    margin-bottom: 1rem;
+    min-height: 1rem;
+    padding: 1rem 1rem;
+    border: 3px solid red;
+    border-radius: 5px;
+}
+.answer-wrapper {
+    min-height: 40px;
+    padding: 50px;
+    border: 3px solid red;
+    border-radius: 5px;
 }
 </style>
