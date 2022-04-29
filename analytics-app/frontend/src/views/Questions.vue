@@ -21,11 +21,13 @@
         </div>
         <div class="content-wrapper">
             <div class="question-wrapper">
+                <div class="question-inner-wrapper">
                 <h3 style="text-align: left">
                     {{ selectedQuestion.question_text }}
                 </h3>
             </div>
-        <component class="answer-wrapper" :is='componentsMap[selectedQuestion.question_type]' :selectedQuestion="selectedQuestion" />
+            </div>
+            <component class="answer-wrapper" :is='componentsMap[selectedQuestion.question_type]' :selectedQuestion="selectedQuestion" />
         </div>
       </div>
     </div>
@@ -243,26 +245,27 @@ export default {
 .content-wrapper {
     width: 100%;
     margin: 0 1rem;
-    overflow: scroll;
     height: 90vh;
     margin-top: 2px;
 }
 .question-wrapper {
-    margin-bottom: 1rem;
-    min-height: 1rem;
-    padding: 1rem 1rem;
-    border: 3px solid #2D91BE;
-    border-radius: 5px;
     background-color: rgb(255, 255, 255);
     z-index: 1;
     position: sticky;
     top: 0;
+    padding-bottom: 1rem;
+}
+.question-inner-wrapper {
+    min-height: 1rem;
+    padding: 1rem 1rem;
+    border: 3px solid #2D91BE;
+    border-radius: 5px;
 }
 .answer-wrapper {
-    margin-top: 1rem;
-    min-height: 40px;
+    height: 75vh;
     padding: 1rem;
     border: 3px solid #2D91BE;
     border-radius: 5px;
+    overflow: scroll;
 }
 </style>
