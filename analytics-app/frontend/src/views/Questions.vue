@@ -22,10 +22,10 @@
         <div class="content-wrapper">
             <div class="question-wrapper">
                 <h3 style="text-align: left">
-                    Frage: {{ selectedQuestion.question_text }}
+                    {{ selectedQuestion.question_text }}
                 </h3>
             </div>
-        <component class="answer-wrapper" :is='componentsMap[selectedQuestion.question_type]'/>
+        <component class="answer-wrapper" :is='componentsMap[selectedQuestion.question_type]' :selectedQuestion="selectedQuestion" />
         </div>
       </div>
     </div>
@@ -76,91 +76,91 @@ export default {
                 {
                     question_id: 1,
                     question_text: "Wie geht's?",
-                    answer: 'gut',
+                    question_answer: 'gut',
                     question_type: 'image',
                 },
                 {
                     question_id: "2abs",
                     question_text: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis p",
-                    answer: 'Nein',
+                    question_answer: 'Nein',
                     question_type: 'text',
                 },
                 {
                     question_id: 3,
                     question_text: "Machst du viel Sport?",
-                    answer: 'Nein',
+                    question_answer: 'Nein',
                     question_type: 'text',
                 },
                 {
                     question_id: 4,
                     question_text: "Kannst du schwimmen?",
-                    answer: 'Nein',
+                    question_answer: 'Nein',
                     question_type: 'text',
                 },
                 {
                     question_id: 5,
                     question_text: "Kannst du kochen?",
-                    answer: 'Nein',
+                    question_answer: 'Nein',
                     question_type: 'text',
                 },
                 {
                     question_id: 6,
                     question_text: "Wie geht's?",
-                    answer: 'gut',
+                    question_answer: 'gut',
                     question_type: 'text',
                 },
                 {
                     question_id: "2abs",
                     question_text: "Trinkst du ausreichend Wasser?",
-                    answer: 'Nein',
+                    question_answer: 'Nein',
                     question_type: 'text',
                 },
                 {
                     question_id: 7,
                     question_text: "Machst du viel Sport?",
-                    answer: 'Nein',
+                    question_answer: 'Nein',
                     question_type: 'text',
                 },
                 {
                     question_id: 8,
                     question_text: "Kannst du schwimmen?",
-                    answer: 'Nein',
+                    question_answer: 'Nein',
                     question_type: 'text',
                 },
                 {
                     question_id: 9,
                     question_text: "Kannst du kochen?",
-                    answer: 'Nein',
+                    question_answer: 'Nein',
                     question_type: 'text',
                 },
                 {
                     question_id: 10,
                     question_text: "Wie geht's?",
-                    answer: 'gut',
+                    question_answer: 'gut',
                     question_type: 'text',
                 },
                 {
                     question_id: "11",
                     question_text: "Trinkst du ausreichend Wasser?",
-                    answer: 'Nein',
+                    question_answer: 'Nein',
                     question_type: 'text',
                 },
                 {
                     question_id: 12,
                     question_text: "Machst du viel Sport?",
-                    answer: 'Nein',
+                    question_answer: 'Nein',
                     question_type: 'text',
                 },
                 {
                     question_id: 13,
                     question_text: "Kannst du schwimmen?",
-                    answer: 'Nein',
+                    question_answer: 'Nein',
                     question_type: 'text',
                 },
                 {
                     question_id: 14,
                     question_text: "Kannst du kochen?",
-                    answer: 'Nein',
+                    question_answer: 'Nein',
                     question_type: 'text',
                 },
             ],
@@ -216,6 +216,8 @@ export default {
   padding-left: 5px;
 
   display: flex;
+  background-color: #2D91BE;
+  color: white;
 }
 .question.collapsed {
   width: 15px;
@@ -223,9 +225,10 @@ export default {
 }
 .question:hover {
   box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.25); 
+  background-color: #64AA73;
 }
 .question.active {
-  background-color: rgb(105, 105, 105);
+  background-color: #FEAA3A;
   color: rgb(255, 255, 255);
 }
 .question-index-wrapper {
@@ -241,19 +244,25 @@ export default {
     width: 100%;
     margin: 0 1rem;
     overflow: scroll;
-    height: 80vh;
+    height: 90vh;
+    margin-top: 2px;
 }
 .question-wrapper {
     margin-bottom: 1rem;
     min-height: 1rem;
     padding: 1rem 1rem;
-    border: 3px solid red;
+    border: 3px solid #2D91BE;
     border-radius: 5px;
+    background-color: rgb(255, 255, 255);
+    z-index: 1;
+    position: sticky;
+    top: 0;
 }
 .answer-wrapper {
+    margin-top: 1rem;
     min-height: 40px;
-    padding: 50px;
-    border: 3px solid red;
+    padding: 1rem;
+    border: 3px solid #2D91BE;
     border-radius: 5px;
 }
 </style>
