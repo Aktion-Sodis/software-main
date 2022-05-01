@@ -107,21 +107,21 @@ await createLevelToInterventionConnections(familyLevel);
 
 console.log("levelinterventionconnections created");
 
-await createTestEntities(villageLevel, familyLevel);
+//await createTestEntities(villageLevel, familyLevel);
 
-console.log("test entities created");
+//console.log("test entities created");
 
-await createTestSurvey();
+//await createTestSurvey();
 
-console.log("test survey created");
-/*
-console.log("InterventionLevel connections drawn");
+//console.log("test survey created");
+
+//console.log("InterventionLevel connections drawn");
 
 //läuft bis hier her
 
 //  TODO: das muss mit in die survey migration 
 //console.log("Migrating question options...");
-migrateQuestionOptions(sqlPool);
+//migrateQuestionOptions(sqlPool);
 
 console.log("Migrating surveys...");
 migrateSurveys(sqlPool);
@@ -132,6 +132,8 @@ console.log("Migrating villages...");
 migrateVillages(sqlPool, villageLevel);
 
 
+//todo: bilder mit übertragen
+//sql-wert: interviewee.image_url
 console.log("Migrating families...");
 migrateFamilies(sqlPool, familyLevel);
 
@@ -145,4 +147,4 @@ migrateAppliedInterventions(sqlPool, defaultUser);
 console.log("Migrating executed surveys and answers...");
 migrateExecutedSurveys(sqlPool, defaultUser);
 console.log("Successfully finished migration.");
-*/
+

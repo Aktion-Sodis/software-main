@@ -20,7 +20,10 @@ export enum QuestionType {
   MULTIPLECHOICE = "MULTIPLECHOICE",
   PICTURE = "PICTURE",
   PICTUREWITHTAGS = "PICTUREWITHTAGS",
-  AUDIO = "AUDIO"
+  AUDIO = "AUDIO",
+  INT = "INT",
+  DOUBLE = "DOUBLE",
+  RATING = "RATING"
 }
 
 export enum SurveyType {
@@ -99,6 +102,9 @@ export declare class QuestionAnswer {
   readonly date: string;
   readonly type: QuestionType | keyof typeof QuestionType;
   readonly text?: string | null;
+  readonly intValue?: number | null;
+  readonly doubleValue?: number | null;
+  readonly rating?: number | null;
   readonly questionOptions?: QuestionOption[] | null;
   readonly markings?: Marking[] | null;
   constructor(init: ModelInit<QuestionAnswer>);
@@ -277,6 +283,7 @@ export declare class Survey {
   readonly tags: SurveySurveyTagRelation[];
   readonly surveyType: SurveyType | keyof typeof SurveyType;
   readonly schemeVersion?: number | null;
+  readonly archived?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Survey, SurveyMetaData>);

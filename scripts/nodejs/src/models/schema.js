@@ -594,6 +594,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "archived": {
+                    "name": "archived",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -1740,7 +1747,10 @@ export const schema = {
                 "MULTIPLECHOICE",
                 "PICTURE",
                 "PICTUREWITHTAGS",
-                "AUDIO"
+                "AUDIO",
+                "INT",
+                "DOUBLE",
+                "RATING"
             ]
         },
         "SurveyType": {
@@ -2057,6 +2067,27 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "intValue": {
+                    "name": "intValue",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "doubleValue": {
+                    "name": "doubleValue",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "rating": {
+                    "name": "rating",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "questionOptions": {
                     "name": "questionOptions",
                     "isArray": true,
@@ -2120,5 +2151,5 @@ export const schema = {
             }
         }
     },
-    "version": "76f4bf4d34435dcdab0d95fc5ab09b5e"
+    "version": "5513f75668298946d70868c15444edbb"
 };

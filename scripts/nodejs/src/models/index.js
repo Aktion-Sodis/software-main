@@ -1,6 +1,6 @@
 // @ts-check
 import { initSchema } from '@aws-amplify/datastore';
-import { schema } from './schema.js';
+import { schema } from './schema';
 
 const PermissionType = {
   "READ": "READ",
@@ -22,7 +22,10 @@ const QuestionType = {
   "MULTIPLECHOICE": "MULTIPLECHOICE",
   "PICTURE": "PICTURE",
   "PICTUREWITHTAGS": "PICTUREWITHTAGS",
-  "AUDIO": "AUDIO"
+  "AUDIO": "AUDIO",
+  "INT": "INT",
+  "DOUBLE": "DOUBLE",
+  "RATING": "RATING"
 };
 
 const SurveyType = {
