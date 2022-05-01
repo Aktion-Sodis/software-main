@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     ...mapState({
-      surveys: (state) => state.surveys,
+      surveys: (state) => state.surveyData.surveys,
     }),
     filteredSurveys: function () {
       if (!this.selectedDates) return this.surveys;

@@ -71,7 +71,7 @@ export default {
   components: {},
   computed: {
     ...mapState({
-      questions: (state) => state.questions,
+      questions: (state) => state.questionData.questions,
     }),
     selectedQuestion() {
       return (
