@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>{{}}</div>
+    <div></div>
     <div class="graph-wrapper" ref="plot1"></div>
   </div>
 </template>
@@ -16,14 +16,19 @@ export default {
     }),
   },
   mounted() {
-    Plotly.newPlot(this.$refs.plot1, this.graphData.data);
+    Plotly.newPlot(
+      this.$refs.plot1,
+      this.graphData.data,
+      this.graphData.layout,
+      this.graphData.config
+    );
   },
 };
 </script>
 
 <style scoped>
 .graph-wrapper {
-  height: auto;
-  width: auto;
+  height: 100%;
+  width: 100%;
 }
 </style>
