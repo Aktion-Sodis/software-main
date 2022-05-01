@@ -18,6 +18,7 @@
               range-separator="To"
               start-placeholder="Start date"
               end-placeholder="End date"
+              value-format="YYYY-MM-DD"
             />
           </div>
         </el-col>
@@ -47,11 +48,6 @@ export default {
   props: {},
   components: { SurveyCard },
   methods: {
-    adjustDate(date) {
-      let timezoneOffset = date.getTimezoneOffset();
-      let adjustedDate = date.getTime() + timezoneOffset * 60000;
-      return adjustedDate;
-    },
     selectSurvey(survey) {
       this.selectedID = survey.survey_id;
       router.push({
@@ -66,25 +62,20 @@ export default {
       surveys: (state) => state.surveys,
     }),
     filteredSurveys: function () {
+      if (!this.selectedDates) return this.surveys;
       console.log(this.selectedDates);
-      if (this.selectedDates) {
-        let selectedDate0 = this.selectedDates[0]?.getTime();
-        let selectedDate1 = this.selectedDates[1]?.getTime();
-        return this.surveys.filter(function (survey) {
-          let surveyDate = new Date(survey.date);
-          let timezoneOffset = surveyDate.getTimezoneOffset();
-          let adjustedDate = surveyDate.getTime() + timezoneOffset * 60000;
-          return selectedDate0 <= adjustedDate && adjustedDate <= selectedDate1;
-        });
-      } else {
-        return this.surveys;
-      }
+      let startDate = new Date(this.selectedDates[0]).getTime();
+      let endDate = new Date(this.selectedDates[1]).getTime();
+      return this.surveys.filter(function (survey) {
+        let surveyDate = new Date(survey.date).getTime();
+        return startDate <= surveyDate && surveyDate <= endDate;
+      });
     },
   },
   data() {
     return {
-      selectedID: 0,
-      selectedDates: "",
+      selectedID: null,
+      selectedDates: null,
     };
   },
 };
