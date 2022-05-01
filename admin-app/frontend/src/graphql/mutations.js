@@ -751,7 +751,7 @@ export const createSurvey = /* GraphQL */ `
         type
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         isFollowUpQuestion
       }
@@ -839,7 +839,7 @@ export const updateSurvey = /* GraphQL */ `
         type
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         isFollowUpQuestion
       }
@@ -927,7 +927,7 @@ export const deleteSurvey = /* GraphQL */ `
         type
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         isFollowUpQuestion
       }
@@ -1598,12 +1598,12 @@ export const createExecutedSurvey = /* GraphQL */ `
         date
         type
         text
-        int
-        double
+        intValue
+        doubleValue
         rating
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         markings {
           x
@@ -1741,12 +1741,12 @@ export const updateExecutedSurvey = /* GraphQL */ `
         date
         type
         text
-        int
-        double
+        intValue
+        doubleValue
         rating
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         markings {
           x
@@ -1884,12 +1884,12 @@ export const deleteExecutedSurvey = /* GraphQL */ `
         date
         type
         text
-        int
-        double
+        intValue
+        doubleValue
         rating
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         markings {
           x
@@ -2079,8 +2079,8 @@ export const createTask = /* GraphQL */ `
           date
           type
           text
-          int
-          double
+          intValue
+          doubleValue
           rating
         }
         schemeVersion
@@ -2277,8 +2277,8 @@ export const updateTask = /* GraphQL */ `
           date
           type
           text
-          int
-          double
+          intValue
+          doubleValue
           rating
         }
         schemeVersion
@@ -2475,8 +2475,8 @@ export const deleteTask = /* GraphQL */ `
           date
           type
           text
-          int
-          double
+          intValue
+          doubleValue
           rating
         }
         schemeVersion
