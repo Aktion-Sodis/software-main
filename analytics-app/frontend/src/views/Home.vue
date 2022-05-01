@@ -6,17 +6,17 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
-  name: 'Home',
+  name: "Home",
   computed: {
     ...mapGetters({
-      helloWorld: 'getHelloWorld',
+      helloWorld: "getHelloWorld",
     }),
   },
   methods: {
     ...mapActions({
-      exampleButtonHandler: 'exampleButtonHandler',
+      exampleButtonHandler: "exampleButtonHandler",
     }),
   },
 };
