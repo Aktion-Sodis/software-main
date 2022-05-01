@@ -1,7 +1,8 @@
 import * as mutations from "../graphql/mutations.js";
-import { InterventionType, SurveyType } from "../models/index.js";
+import { InterventionType, Question, QuestionType, SurveyType } from "../models/index.js";
 import { getQuestionsBySurveyId } from "./getQuestionsBySurveyId.js";
 import queryResult from "../utils/awaitableQuery.js";
+import mlString from "../utils/stringFormatter.js";
 
 const listSurveys = `
     SELECT
@@ -70,5 +71,86 @@ const surveyTransformer = (oldSurvey, oldQuestionOptions) => {
   };
   return newSurvey;
 };
+
+const getQuestions = async(sqlPool, survey) => {
+    //todo: implement
+    var questions = [];
+  const getQuestionsQuery = `
+    SELECT 
+        question.id as id,
+        question.question_name as question_name,
+    FROM question
+    LEFT JOIN survey_section
+        ON survey_section.id=question.survey_section_id
+    LEFT JOIN survey_header
+        ON survey_header.id=survey_section.survey_header_id
+    WHERE survey_header.id = ${survey.id}
+    `;
+}
+
+const getQuestion = async (sqlPool, oldQuestion, allOldQuestions, surveyID) => {
+    var newType;
+    switch(oldQuestion.input_type.input_type_name) {
+        case "image":
+            newType = QuestionType.PICTURE;
+            break;
+        case "numeric":
+            newType = QuestionType.DOUBLE;
+            break;
+        case "single choice":
+            newType = QuestionType.SINGLECHOICE;
+            break;
+        case "text":
+            newType = QuestionType.TEXT;
+            break;
+    }
+    //new type setted
+    const isFollowUpQuestionBool = oldQuestion.dependent_question_id !== null;
+    var question;
+    const questionImageID = oldQuestion.question_images_id;
+    if(newType === QuestionType.SINGLECHOICE) {
+        const questionOptionQuery = `
+        SELECT 
+            question_option.id as id,
+            option_choice.option_choice_name as text
+        FROM question_option
+        LEFT JOIN option_choice
+            ON question_option.option_choice_id=option_choice.id
+        WHERE question_id=${oldQuestion.id}
+        ;
+        `;
+        var questionOptions = await queryResult(sqlPool, questionOptionQuery);
+        var questionOptionsToSet = [];
+        //question options prinzipiell da -> jetzt noch folgefragen zuordnen
+        for(var questionOption of questionOptions) {
+            //potenzielle folgefragen suchen
+            const followUpQuestions = allOldQuestions.where((element) => (element.dependent_question_id===oldQuestion.id)&&(element.dependent_question_option_id==questionOption.id));
+            const followUpIDs = Array.from(followUpQuestions, e => element.id);
+            const questionOptionToAdd = {
+                id: questionOption.id,
+                text: mlString(questionOption.text),
+                followUpQuestionIDs: followUpIDs
+            }
+            questionOptionsToSet.push(questionOptionToAdd);
+        }
+        question = {
+            id: oldQuestion.id,
+            text: mlString(oldQuestion.question_name),
+            type: newType,
+            isFollowUpQuestion: isFollowUpQuestionBool,
+            questionOptions: questionOptionsToSet
+        };
+    }
+    else {
+        question = {
+            id: oldQuestion.id,
+            text: mlString(oldQuestion.question_name),
+            type: newType,
+            isFollowUpQuestion: isFollowUpQuestionBool,
+        }
+    }
+    //todo: copy pic from cloudstorage to s3
+    return question;
+}
 
 export default migrateSurveys;
