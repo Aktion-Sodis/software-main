@@ -2,6 +2,7 @@ import { createStore } from 'vuex';
 
 import surveyData from './surveys';
 import questionData from './questions';
+import charts from './charts';
 
 const store = createStore({
   state: () => ({
@@ -10,6 +11,7 @@ const store = createStore({
   modules: {
     surveyData: surveyData,
     questionData: questionData,
+    charts: charts,
   },
 });
 

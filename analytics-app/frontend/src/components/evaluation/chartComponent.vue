@@ -1,27 +1,19 @@
 <template>
   <div>
-    <div>{{ graphData.layout.title }}</div>
+    <div>{{}}</div>
     <div class="graph-wrapper" ref="plot1"></div>
   </div>
 </template>
 
 <script>
 import Plotly from "plotly.js-dist";
+import { mapState } from "vuex";
 
 export default {
-  data: function () {
-    return {
-      graphData: {
-        data: [
-          {
-            x: ["giraffes", "orangutans", "monkeys"],
-            y: [20, 14, 23],
-            type: "bar",
-          },
-        ],
-        layout: { title: "My graph" },
-      },
-    };
+  computed: {
+    ...mapState({
+      graphData: (state) => state.charts.graphData,
+    }),
   },
   mounted() {
     Plotly.newPlot(this.$refs.plot1, this.graphData.data);
