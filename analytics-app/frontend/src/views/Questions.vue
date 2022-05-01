@@ -57,14 +57,16 @@ import "element-plus/theme-chalk/display.css";
 import initialComponent from "../components/evaluation/initialComponent.vue";
 import textComponent from "../components/evaluation/textComponent.vue";
 import imageComponent from "../components/evaluation/imageComponent.vue";
+import chartComponent from "../components/evaluation/chartComponent.vue";
 
 const componentsMap = {
   initial: initialComponent,
   text: textComponent,
   image: imageComponent,
+  chart: chartComponent,
 };
 
-const collapsed = ref(false);
+const collapsed = ref(true);
 
 export default {
   props: {},
@@ -96,7 +98,7 @@ export default {
   },
   data() {
     return {
-      selectedID: 0,
+      selectedID: 3,
     };
   },
 };

@@ -18,7 +18,7 @@ const questionData = {
                 question_id: 3,
                 question_text: "Machst du viel Sport?",
                 question_answer: "Nein",
-                question_type: "text",
+                question_type: "chart",
             },
             {
                 question_id: 4,
