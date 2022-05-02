@@ -661,7 +661,7 @@ export const getSurvey = /* GraphQL */ `
         type
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         isFollowUpQuestion
       }
@@ -1319,12 +1319,12 @@ export const getExecutedSurvey = /* GraphQL */ `
         date
         type
         text
-        int
-        double
+        intValue
+        doubleValue
         rating
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         markings {
           x
@@ -1403,8 +1403,8 @@ export const listExecutedSurveys = /* GraphQL */ `
           date
           type
           text
-          int
-          double
+          intValue
+          doubleValue
           rating
         }
         schemeVersion
@@ -1485,8 +1485,8 @@ export const syncExecutedSurveys = /* GraphQL */ `
           date
           type
           text
-          int
-          double
+          intValue
+          doubleValue
           rating
         }
         schemeVersion
@@ -1669,8 +1669,8 @@ export const getTask = /* GraphQL */ `
           date
           type
           text
-          int
-          double
+          intValue
+          doubleValue
           rating
         }
         schemeVersion

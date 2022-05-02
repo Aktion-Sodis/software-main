@@ -140,7 +140,7 @@ type Question {
 type QuestionOption {
   id: ID!
   text: I18nString!
-  followUpQuestionID: ID
+  followUpQuestionIDs: [ID!]
 }
 
 # entityCollection

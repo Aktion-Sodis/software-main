@@ -70,7 +70,7 @@ export declare class Question {
 export declare class QuestionOption {
   readonly id: string;
   readonly text: I18nString;
-  readonly followUpQuestionID?: string | null;
+  readonly followUpQuestionIDs?: string[] | null;
   constructor(init: ModelInit<QuestionOption>);
 }
 
