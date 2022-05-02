@@ -15,5 +15,5 @@
     "esm": "^3.2.25",
     "mysql": "^2.18.1"
   },
-  "type": "commonjs"
+  "type": "module"
 }

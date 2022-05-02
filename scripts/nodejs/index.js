@@ -47,23 +47,16 @@ const sqlPool = mysql.createPool({
   connectionLimit: 10,
 });
 
-//await migrateSurveys(sqlPool);
-
 console.log(`Successfully connected to old database ${sqlPool}.`);
 
 console.log(
   "Clean up erroneous writes of villageLevel to remove erroneous entries..."
-);
-console.log("delete interventions");
-await deleteLevels(); //todo: ggf nicht deleten, sondern prüfen ob vorhanden
+);//todo: ggf nicht deleten, sondern prüfen ob vorhanden
 console.log("delete applied interventions");
 await deleteAppliedInterventions(); //todo: ggf. nicht deleten, sondern prüfen ob vorhanden
 console.log("delete entities");
 await deleteEntities();
-//todo: delete interventions -> haben fixe IDs, also wenn dann updaten
-//todo: delete surveys -> haben fixe IDs, also wenn dann updaten
-//todo: delte entities -> haben fixe IDs, also wenn dann updaten
-//todo: delete executedSurveys -> haben fixe IDs, also wenn dann updaten
+//todo: delete executedSurveys 
 console.log("create migrator tag");
 
 await createMigratorTag();
@@ -124,9 +117,9 @@ console.log("levelinterventionconnections created");
 //migrateQuestionOptions(sqlPool);
 
 console.log("Migrating surveys...");
-migrateSurveys(sqlPool);
+await migrateSurveys(sqlPool);
 
-
+/*
 //todo: check for family wether interventions exist
 console.log("Migrating villages...");
 migrateVillages(sqlPool, villageLevel);
@@ -148,3 +141,6 @@ console.log("Migrating executed surveys and answers...");
 migrateExecutedSurveys(sqlPool, defaultUser);
 console.log("Successfully finished migration.");
 
+
+
+await migrateSurveys(sqlPool);*/

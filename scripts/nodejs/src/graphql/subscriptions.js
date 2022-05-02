@@ -292,6 +292,7 @@ export const onCreateIntervention = /* GraphQL */ `
         items {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -371,6 +372,7 @@ export const onUpdateIntervention = /* GraphQL */ `
         items {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -450,6 +452,7 @@ export const onDeleteIntervention = /* GraphQL */ `
         items {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -700,7 +703,7 @@ export const onCreateSurvey = /* GraphQL */ `
         type
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         isFollowUpQuestion
       }
@@ -720,6 +723,7 @@ export const onCreateSurvey = /* GraphQL */ `
       }
       surveyType
       schemeVersion
+      archived
       id
       createdAt
       updatedAt
@@ -784,7 +788,7 @@ export const onUpdateSurvey = /* GraphQL */ `
         type
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         isFollowUpQuestion
       }
@@ -804,6 +808,7 @@ export const onUpdateSurvey = /* GraphQL */ `
       }
       surveyType
       schemeVersion
+      archived
       id
       createdAt
       updatedAt
@@ -868,7 +873,7 @@ export const onDeleteSurvey = /* GraphQL */ `
         type
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         isFollowUpQuestion
       }
@@ -888,6 +893,7 @@ export const onDeleteSurvey = /* GraphQL */ `
       }
       surveyType
       schemeVersion
+      archived
       id
       createdAt
       updatedAt
@@ -1481,6 +1487,7 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt
@@ -1516,9 +1523,12 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
         date
         type
         text
+        intValue
+        doubleValue
+        rating
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         markings {
           x
@@ -1617,6 +1627,7 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt
@@ -1652,9 +1663,12 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
         date
         type
         text
+        intValue
+        doubleValue
+        rating
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         markings {
           x
@@ -1753,6 +1767,7 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt
@@ -1788,9 +1803,12 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
         date
         type
         text
+        intValue
+        doubleValue
+        rating
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         markings {
           x
@@ -1945,6 +1963,7 @@ export const onCreateTask = /* GraphQL */ `
         survey {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -1976,6 +1995,9 @@ export const onCreateTask = /* GraphQL */ `
           date
           type
           text
+          intValue
+          doubleValue
+          rating
         }
         schemeVersion
         id
@@ -2136,6 +2158,7 @@ export const onUpdateTask = /* GraphQL */ `
         survey {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -2167,6 +2190,9 @@ export const onUpdateTask = /* GraphQL */ `
           date
           type
           text
+          intValue
+          doubleValue
+          rating
         }
         schemeVersion
         id
@@ -2327,6 +2353,7 @@ export const onDeleteTask = /* GraphQL */ `
         survey {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -2358,6 +2385,9 @@ export const onDeleteTask = /* GraphQL */ `
           date
           type
           text
+          intValue
+          doubleValue
+          rating
         }
         schemeVersion
         id
@@ -3565,6 +3595,7 @@ export const onCreateSurveySurveyTagRelation = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt
@@ -3634,6 +3665,7 @@ export const onUpdateSurveySurveyTagRelation = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt
@@ -3703,6 +3735,7 @@ export const onDeleteSurveySurveyTagRelation = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt

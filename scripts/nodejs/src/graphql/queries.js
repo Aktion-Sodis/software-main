@@ -330,6 +330,7 @@ export const getIntervention = /* GraphQL */ `
         items {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -660,7 +661,7 @@ export const getSurvey = /* GraphQL */ `
         type
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         isFollowUpQuestion
       }
@@ -680,6 +681,7 @@ export const getSurvey = /* GraphQL */ `
       }
       surveyType
       schemeVersion
+      archived
       id
       createdAt
       updatedAt
@@ -727,6 +729,7 @@ export const listSurveys = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt
@@ -783,6 +786,7 @@ export const syncSurveys = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt
@@ -1279,6 +1283,7 @@ export const getExecutedSurvey = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt
@@ -1314,9 +1319,12 @@ export const getExecutedSurvey = /* GraphQL */ `
         date
         type
         text
+        intValue
+        doubleValue
+        rating
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         markings {
           x
@@ -1363,6 +1371,7 @@ export const listExecutedSurveys = /* GraphQL */ `
         survey {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -1394,6 +1403,9 @@ export const listExecutedSurveys = /* GraphQL */ `
           date
           type
           text
+          intValue
+          doubleValue
+          rating
         }
         schemeVersion
         id
@@ -1441,6 +1453,7 @@ export const syncExecutedSurveys = /* GraphQL */ `
         survey {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -1472,6 +1485,9 @@ export const syncExecutedSurveys = /* GraphQL */ `
           date
           type
           text
+          intValue
+          doubleValue
+          rating
         }
         schemeVersion
         id
@@ -1621,6 +1637,7 @@ export const getTask = /* GraphQL */ `
         survey {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -1652,6 +1669,9 @@ export const getTask = /* GraphQL */ `
           date
           type
           text
+          intValue
+          doubleValue
+          rating
         }
         schemeVersion
         id
@@ -2899,6 +2919,7 @@ export const getSurveySurveyTagRelation = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt
@@ -2950,6 +2971,7 @@ export const listSurveySurveyTagRelations = /* GraphQL */ `
         survey {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -2998,6 +3020,7 @@ export const syncSurveySurveyTagRelations = /* GraphQL */ `
         survey {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
