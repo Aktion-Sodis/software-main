@@ -9,16 +9,27 @@ const charts = {
                 }
             ],
             layout: {
+                title: {
+                    text: 'Plot Title',
+                    font: {
+                        size: 24
+                    },
+                    xref: 'paper',
+                },
                 yaxis: {
                     title: 'Y-axis Title',
-                    ticktext: ['long label', 'Very long label', '3', 'label'],
                     tickvals: [1, 2, 3, 4],
                     tickmode: 'array',
                     automargin: true,
-                    titlefont: { size: 30 },
+                    titlefont: { size: 20 },
                 },
-                paper_bgcolor: '#7f7f7f',
-                plot_bgcolor: '#c7c7c7'
+                xaxis: {
+                    title: 'X-axis Title',
+                    automargin: true,
+                    titlefont: { size: 20 },
+                },
+                paper_bgcolor: '#rgb(45, 145, 190, 0.2)',
+                plot_bgcolor: '#rgb(45, 145, 190, 0.2)',
             },
             config: { responsive: true }
         },
