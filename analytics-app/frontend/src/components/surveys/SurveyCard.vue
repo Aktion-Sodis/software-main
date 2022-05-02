@@ -36,6 +36,7 @@ export default {
   margin-left: 5px;
   margin-right: 5px;
   margin-bottom: 10px;
+  border-radius: 5px;
   display: inline-block;
   box-shadow: 0px 0px 1px rgb(0, 0, 0, 0.25);
 }
@@ -50,12 +51,10 @@ export default {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-
 .survey-description-wrap {
-  background-color: rgb(238, 235, 235);
+  background-color: rgb(45, 145, 190, 0.2);
   padding: 10px;
 }
-
 .survey-title {
   text-align: left;
   font-size: 15px;
