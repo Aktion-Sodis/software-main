@@ -1,14 +1,12 @@
 <template>
   <div class="main">
-    <div class="title">
-      <h1>Fragebogen: Kochstellen</h1>
-    </div>
     <div class="sub-title">
-      <div @click="toggleQuestionList">
+      <div class="icon-wrapper" @click="toggleQuestionList">
         <span class="collapse-icon" :class="{ 'rotate-180': collapsed }">
           <i class="fas fa-angle-double-left" />
         </span>
       </div>
+      <h1>Fragebogen: Kochstellen</h1>
       <el-button class="compare" @click="showSurveyModal"
         >Mehrere vergleichen</el-button
       >
@@ -132,16 +130,25 @@ export default {
   text-align: left;
   min-height: 1.5rem;
   margin-bottom: 0;
-  height: 45px;
+  height: 50px;
 }
 .sub-title {
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 45px;
+  height: 50px;
+}
+.icon-wrapper {
+  width: 36px;
+  background-color: rgb(45, 145, 190, 0.2);
+  color: white;
+  border-radius: 5px;
+  align-items: center;
+  margin-left: 5px;
 }
 .compare {
-  margin-right: 0.5rem;
+  margin-right: 8px;
 }
 .collapse-icon {
   padding: 0.75em;
@@ -160,7 +167,7 @@ export default {
 .questions {
   width: 500px;
   border-right: solid 1px rgb(255, 255, 255);
-  max-height: calc(100vh - 45px - 45px);
+  max-height: calc(100vh - 50px);
   overflow: scroll;
 
   transition: 0.5s;
@@ -211,9 +218,9 @@ export default {
   padding: 0 0.5rem;
 }
 .content-wrapper {
-  width: 95%;
+  width: 100%;
   margin-left: 3.5rem;
-  margin-right: 0.5rem;
+  margin-right: 8px;
   margin-top: 2px;
   z-index: 0;
 }
@@ -230,14 +237,14 @@ export default {
   padding: 8px 0.5rem;
   box-sizing: border-box;
   text-align: center;
-  background-color: rgb(45, 145, 190, 0.2);
+  background-color: rgb(45, 145, 190, 0.3);
   border-radius: 5px;
   margin: auto 0;
   display: flex;
 }
 .answer-wrapper {
   box-sizing: border-box;
-  height: calc(100vh - 45px - 45px - 106px);
+  height: calc(100vh - 50px - 106px);
   padding: 8px 0.5rem;
   overflow: scroll;
   background-color: rgb(45, 145, 190, 0.2);
