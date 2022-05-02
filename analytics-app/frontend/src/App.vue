@@ -1,21 +1,24 @@
 <template>
   <div>
     <Sidebar />
-    <div class="main" style="padding-left: 20px" :style="{ 'margin-left': sidebarWidth, transition: sidebarTransition}">
+    <div
+      class="main"
+      :style="{ 'margin-left': sidebarWidth, transition: sidebarTransition }"
+    >
       <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import Sidebar from './components/sidebar/Sidebar.vue'
-import { sidebarWidth, sidebarTransition } from './components/sidebar/state.js'
+import Sidebar from "./components/sidebar/Sidebar.vue";
+import { sidebarWidth, sidebarTransition } from "./components/sidebar/state.js";
 export default {
   components: { Sidebar },
   setup() {
-    return { sidebarWidth, sidebarTransition }
-  }
-}
+    return { sidebarWidth, sidebarTransition };
+  },
+};
 </script>
 
 <style>
