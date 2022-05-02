@@ -5,14 +5,16 @@
         Fragebogen: Kochstellen
       </h1>
     </div>
+    <div class="sub-title">
+      <div @click="toggleQuestionList" style="display: flex">
+        <span class="collapse-icon" :class="{ 'rotate-180': collapsed }">
+          <i class="fas fa-angle-double-left" />
+        </span>
+      </div>
+    </div>
     <div class="survey-content">
       <div class="question-list">
-        <div
-          class="questions"
-          :class="{ collapsed: collapsed }"
-          @mouseover="openQuestionList"
-          @mouseleave="closeQuestionList"
-        >
+        <div class="questions" :class="{ collapsed: collapsed }">
           <div
             v-for="(question, index) in questions"
             :key="question.id"
@@ -32,7 +34,7 @@
           </div>
         </div>
       </div>
-      <div class="content-wrapper">
+      <div class="content-wrapper" @click="closeQuestionList">
         <div class="question-wrapper">
           <div class="question-inner-wrapper">
             <h3 style="text-align: left">
@@ -84,13 +86,15 @@ export default {
   methods: {
     setActive(question) {
       const comp = componentsMap[question.question_type];
-      return (this.selectedID = question.question_id), comp;
-    },
-    openQuestionList() {
-      return (collapsed.value = false);
+      return (
+        (this.selectedID = question.question_id), comp, (collapsed.value = true)
+      );
     },
     closeQuestionList() {
       return (collapsed.value = true);
+    },
+    toggleQuestionList() {
+      return (collapsed.value = !collapsed.value);
     },
   },
   setup() {
@@ -201,5 +205,15 @@ export default {
   border: 3px solid #2d91be;
   border-radius: 5px;
   overflow: scroll;
+}
+.collapse-icon {
+  padding: 0.75em;
+  color: #2d91be;
+  transition: 0.2s linear;
+  display: inline-block;
+}
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: 0.2s linear;
 }
 </style>
