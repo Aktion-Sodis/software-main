@@ -29,7 +29,7 @@ const surveyData = {
                 src: 'src/static/aktionSodisBig.png',
             },
             {
-                survey_id: '3',
+                survey_id: '4',
                 date: '2022-04-21',
                 title: 'Umfrage 3',
                 village: 'Micani',
@@ -38,7 +38,7 @@ const surveyData = {
                 src: 'src/static/aktionSodisBig.png',
             },
             {
-                survey_id: '3',
+                survey_id: '5',
                 date: '2022-04-22',
                 title: 'Umfrage 3',
                 village: 'Micani',
@@ -47,7 +47,7 @@ const surveyData = {
                 src: 'src/static/aktionSodisBig.png',
             },
             {
-                survey_id: '3',
+                survey_id: '6',
                 date: '2022-04-23',
                 title: 'Umfrage 3',
                 village: 'Micani',
@@ -56,7 +56,7 @@ const surveyData = {
                 src: 'src/static/aktionSodisBig.png',
             },
             {
-                survey_id: '3',
+                survey_id: '7',
                 date: '2022-04-24',
                 title: 'Umfrage 3',
                 village: 'Micani',
@@ -65,7 +65,7 @@ const surveyData = {
                 src: 'src/static/aktionSodisBig.png',
             },
             {
-                survey_id: '3',
+                survey_id: '8',
                 date: '2022-04-22',
                 title: 'Umfrage 3',
                 village: 'Micani',
@@ -74,7 +74,7 @@ const surveyData = {
                 src: 'src/static/aktionSodisBig.png',
             },
             {
-                survey_id: '3',
+                survey_id: '9',
                 date: '2022-04-23',
                 title: 'Umfrage 3',
                 village: 'Micani',
@@ -83,7 +83,7 @@ const surveyData = {
                 src: 'src/static/aktionSodisBig.png',
             },
             {
-                survey_id: '3',
+                survey_id: '10',
                 date: '2022-04-24',
                 title: 'Umfrage 3',
                 village: 'Micani',
@@ -92,7 +92,7 @@ const surveyData = {
                 src: 'src/static/aktionSodisBig.png',
             },
             {
-                survey_id: '3',
+                survey_id: '11',
                 date: '2022-04-22',
                 title: 'Umfrage 3',
                 village: 'Micani',

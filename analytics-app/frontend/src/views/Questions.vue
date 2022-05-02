@@ -113,7 +113,7 @@ export default {
   data() {
     return {
       selectedID: 3,
-      isSurveyModalVisible: true,
+      isSurveyModalVisible: false,
     };
   },
 };
