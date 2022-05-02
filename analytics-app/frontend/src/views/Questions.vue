@@ -6,11 +6,12 @@
       </h1>
     </div>
     <div class="sub-title">
-      <div @click="toggleQuestionList" style="display: flex">
+      <div @click="toggleQuestionList">
         <span class="collapse-icon" :class="{ 'rotate-180': collapsed }">
           <i class="fas fa-angle-double-left" />
         </span>
       </div>
+      <el-button class="compare">Mehrere vergleichen</el-button>
     </div>
     <div class="survey-content">
       <div class="question-list">
@@ -119,6 +120,24 @@ export default {
   margin-bottom: 1rem;
   margin-top: 1rem;
 }
+.sub-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.compare {
+  margin-right: 0.5rem;
+}
+.collapse-icon {
+  padding: 0.75em;
+  color: #2d91be;
+  transition: 0.2s linear;
+  display: inline-block;
+}
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: 0.2s linear;
+}
 .survey-content {
   height: 100%;
   width: 100%;
@@ -205,15 +224,5 @@ export default {
   border: 3px solid #2d91be;
   border-radius: 5px;
   overflow: scroll;
-}
-.collapse-icon {
-  padding: 0.75em;
-  color: #2d91be;
-  transition: 0.2s linear;
-  display: inline-block;
-}
-.rotate-180 {
-  transform: rotate(180deg);
-  transition: 0.2s linear;
 }
 </style>
