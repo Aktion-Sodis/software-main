@@ -11,7 +11,9 @@
           <i class="fas fa-angle-double-left" />
         </span>
       </div>
-      <el-button class="compare">Mehrere vergleichen</el-button>
+      <el-button class="compare" @click="showSurveyModal"
+        >Mehrere vergleichen</el-button
+      >
     </div>
     <div class="survey-content">
       <div class="question-list">
@@ -50,6 +52,7 @@
         />
       </div>
     </div>
+    <SurveyModal v-show="isSurveyModalVisible" @close="closeSurveyModal" />
   </div>
 </template>
 
@@ -62,6 +65,8 @@ import textComponent from "../components/evaluation/textComponent.vue";
 import imageComponent from "../components/evaluation/imageComponent.vue";
 import chartComponent from "../components/evaluation/chartComponent.vue";
 
+import SurveyModal from "../components/surveys/SurveyModal.vue";
+
 const componentsMap = {
   initial: initialComponent,
   text: textComponent,
@@ -73,7 +78,7 @@ const collapsed = ref(true);
 
 export default {
   props: {},
-  components: {},
+  components: { SurveyModal },
   computed: {
     ...mapState({
       questions: (state) => state.questionData.questions,
@@ -97,6 +102,12 @@ export default {
     toggleQuestionList() {
       return (collapsed.value = !collapsed.value);
     },
+    showSurveyModal() {
+      this.isSurveyModalVisible = true;
+    },
+    closeSurveyModal() {
+      this.isSurveyModalVisible = false;
+    },
   },
   setup() {
     return { componentsMap, collapsed };
@@ -104,6 +115,7 @@ export default {
   data() {
     return {
       selectedID: 3,
+      isSurveyModalVisible: false,
     };
   },
 };
