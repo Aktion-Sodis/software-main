@@ -1,9 +1,7 @@
 <template>
   <div class="main">
     <div class="title">
-      <h1 style="text-align: left; margin-left: 5px">
-        Fragebogen: Kochstellen
-      </h1>
+      <h1>Fragebogen: Kochstellen</h1>
     </div>
     <div class="sub-title">
       <div @click="toggleQuestionList">
@@ -115,7 +113,7 @@ export default {
   data() {
     return {
       selectedID: 3,
-      isSurveyModalVisible: false,
+      isSurveyModalVisible: true,
     };
   },
 };
@@ -128,8 +126,10 @@ export default {
   overflow: hidden;
 }
 .title {
+  margin-left: 5px;
+  text-align: left;
   min-height: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   margin-top: 1rem;
 }
 .sub-title {
@@ -159,11 +159,11 @@ export default {
 .questions {
   width: 500px;
   border-right: solid 1px rgb(255, 255, 255);
-  height: 90vh;
+  height: 85%;
   overflow: scroll;
 
   transition: 0.5s;
-  position: fixed;
+  position: absolute;
   z-index: 1;
   background-color: rgb(255, 255, 255);
 }
@@ -210,8 +210,9 @@ export default {
   padding: 0 0.5rem;
 }
 .content-wrapper {
-  width: 100%;
-  height: 90vh;
+  width: 95%;
+  height: 80%;
+  position: absolute;
   margin-left: 3.5rem;
   margin-right: 0.5rem;
   margin-top: 2px;
@@ -231,7 +232,7 @@ export default {
   border-radius: 5px;
 }
 .answer-wrapper {
-  height: 70vh;
+  height: 80%;
   padding: 1rem;
   border: 3px solid #2d91be;
   border-radius: 5px;

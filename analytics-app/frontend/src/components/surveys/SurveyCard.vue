@@ -2,13 +2,13 @@
   <div class="survey-card">
     <div class="survey-card-inner">
       <div class="survey-image-wrap">
-        <el-image class="image" :src="survey.src"/>
+        <el-image class="image" :src="survey.src" />
       </div>
       <div class="survey-description-wrap">
         <el-row>
           <el-col :span="21">
             <div class="survey-title">
-            {{ survey.title }}
+              {{ survey.title }}
             </div>
             <div class="survey-date">
               {{ survey.date }}
@@ -25,25 +25,26 @@
 
 <script>
 export default {
-  name: 'SurveyCard',
-  props: ['survey']
-}
+  name: "SurveyCard",
+  props: ["survey"],
+};
 </script>
 
-<style>
+<style scoped>
 .survey-card {
   width: 200px;
   margin-left: 5px;
-  margin-right: 10px;
-  margin-bottom: 15px;
+  margin-right: 5px;
+  margin-bottom: 10px;
   display: inline-block;
-  box-shadow: 0px 0px 1px rgb(0, 0, 0, 0.25); 
+  box-shadow: 0px 0px 1px rgb(0, 0, 0, 0.25);
 }
-
+.survey-card.selected {
+  box-shadow: 0px 0px 5px rgb(0, 0, 0, 1) !important;
+}
 .survey-card:hover {
-  box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.25); 
+  box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.25);
 }
-
 .image {
   width: 100%;
   padding-top: 10px;
@@ -59,7 +60,6 @@ export default {
   text-align: left;
   font-size: 15px;
 }
-
 .survey-date {
   text-align: left;
   font-size: 12px;
