@@ -96,7 +96,7 @@ export default {
 }
 .modal {
   height: 85%;
-  width: 90%;
+  width: 92%;
   background: #ffffff;
   box-shadow: 2px 2px 20px 1px;
   overflow-x: auto;

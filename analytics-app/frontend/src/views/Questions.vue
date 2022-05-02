@@ -123,7 +123,6 @@ export default {
 .main {
   text-align: left;
   height: 100vh;
-  overflow: hidden;
 }
 .title {
   margin-left: 5px;

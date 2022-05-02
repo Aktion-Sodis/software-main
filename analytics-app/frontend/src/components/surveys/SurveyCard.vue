@@ -32,10 +32,11 @@ export default {
 
 <style scoped>
 .survey-card {
-  width: 200px;
+  width: 250px;
+  margin-top: 5px;
   margin-left: 5px;
   margin-right: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   border-radius: 5px;
   display: inline-block;
   box-shadow: 0px 0px 1px rgb(0, 0, 0, 0.25);

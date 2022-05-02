@@ -1,40 +1,31 @@
 <template>
   <div class="main">
-    <div class="content">
-      <el-row class="title">
-        <el-col>
-          <h1 style="margin-left: 5px">Fragebögen: Kochstellen</h1>
-        </el-col>
-      </el-row>
-      <el-row class="datepicker-wrapper">
-        <el-col :span="4">
-          <h3 style="margin-left: 5px">Zeitraum wählen:</h3>
-        </el-col>
-        <el-col :span="20">
-          <div class="survey-datepicker">
-            <el-date-picker
-              v-model="selectedDates"
-              type="daterange"
-              range-separator="To"
-              start-placeholder="Start date"
-              end-placeholder="End date"
-              value-format="YYYY-MM-DD"
-            />
-          </div>
-        </el-col>
-      </el-row>
-      <el-row class="survey-wrapper">
-        <el-col>
-          <div class="surveys">
-            <SurveyCard
-              v-for="survey in filteredSurveys"
-              :key="survey.id"
-              :survey="survey"
-              @click="selectSurvey(survey)"
-            />
-          </div>
-        </el-col>
-      </el-row>
+    <div class="title">
+      <h1>Fragebögen: Kochstellen</h1>
+      <div class="filter-wrapper">
+        <span class="datepicker-description">Zeitraum wählen:</span>
+        <div class="survey-datepicker">
+          <el-date-picker
+            v-model="selectedDates"
+            type="daterange"
+            range-separator="To"
+            start-placeholder="Start date"
+            end-placeholder="End date"
+            value-format="YYYY-MM-DD"
+          />
+        </div>
+        <el-button class="compare" @click="showSurveyModal"
+          >Mehrere vergleichen</el-button
+        >
+      </div>
+    </div>
+    <div class="surveys">
+      <SurveyCard
+        v-for="survey in filteredSurveys"
+        :key="survey.id"
+        :survey="survey"
+        @click="selectSurvey(survey)"
+      />
     </div>
   </div>
 </template>
@@ -85,30 +76,40 @@ export default {
 .main {
   text-align: left;
   height: 100vh;
-  overflow: hidden;
-}
-.content {
-  height: 100vh;
-  overflow: scroll;
 }
 .title {
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-}
-.datepicker-wrapper {
-  margin: 1rem 0;
-  position: sticky;
-  top: 0;
+  box-sizing: border-box;
+  padding-top: 5px;
+  padding-left: 5px;
+  width: 95%;
+  height: 50px;
   background-color: rgb(255, 255, 255);
   z-index: 1;
-  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+
+  display: flex;
+  justify-content: space-between;
 }
-.survey-datepicker {
-  margin-left: 1rem;
+.filter-wrapper {
+  display: flex;
+  padding-top: 5px;
+}
+.datepicker-description {
+  padding-top: 4px;
+  padding-right: 10px;
 }
 .surveys {
   display: flex;
   flex-wrap: wrap;
   height: auto;
+  align-content: flex-start;
+  justify-content: flex-start;
+  overflow: scroll;
+  margin-bottom: 10px;
+}
+.compare {
+  margin-right: 8px;
+  margin-left: 8px;
 }
 </style>

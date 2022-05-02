@@ -2,7 +2,7 @@
   <div>
     <Sidebar />
     <div
-      class="main"
+      class="app-container"
       :style="{ 'margin-left': sidebarWidth, transition: sidebarTransition }"
     >
       <router-view></router-view>
@@ -32,5 +32,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+.app-container {
+  padding-left: 10px;
 }
 </style>
