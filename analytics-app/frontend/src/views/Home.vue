@@ -186,13 +186,11 @@ export default {};
 
 <style scoped>
 .main {
-  height: 100%;
+  height: 100vh;
   background-color: rgb(243, 0, 0);
-  position: absolute;
 }
 .header {
-  position: sticky;
-  top: 0;
+  height: 100px;
 }
 .title {
   background-color: rgb(41, 243, 0);
@@ -203,7 +201,7 @@ export default {};
 .body {
   display: flex;
   justify-content: space-between;
-  height: 90%;
+  height: 80vh;
   position: relative;
 }
 .left {
@@ -239,9 +237,5 @@ export default {};
   height: 85vh;
   overflow: scroll;
   bottom: 0;
-}
-.footer {
-  height: 1px;
-  background-color: rgb(12, 9, 9);
 }
 </style>

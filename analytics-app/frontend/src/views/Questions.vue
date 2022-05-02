@@ -38,9 +38,11 @@
       <div class="content-wrapper" @click="closeQuestionList">
         <div class="question-wrapper">
           <div class="question-inner-wrapper">
-            <h3 style="text-align: left">
-              {{ selectedQuestion.question_text }}
-            </h3>
+            <div class="question-text-wrapper">
+              <h3 style="text-align: left">
+                {{ selectedQuestion.question_text }}
+              </h3>
+            </div>
           </div>
         </div>
         <component
@@ -130,12 +132,13 @@ export default {
   text-align: left;
   min-height: 1.5rem;
   margin-bottom: 0;
-  margin-top: 1rem;
+  height: 45px;
 }
 .sub-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 45px;
 }
 .compare {
   margin-right: 0.5rem;
@@ -151,15 +154,13 @@ export default {
   transition: 0.2s linear;
 }
 .survey-content {
-  height: 100%;
   width: 100%;
   display: flex;
-  position: relative;
 }
 .questions {
   width: 500px;
   border-right: solid 1px rgb(255, 255, 255);
-  height: 85%;
+  max-height: calc(100vh - 45px - 45px);
   overflow: scroll;
 
   transition: 0.5s;
@@ -211,8 +212,6 @@ export default {
 }
 .content-wrapper {
   width: 95%;
-  height: 80%;
-  position: absolute;
   margin-left: 3.5rem;
   margin-right: 0.5rem;
   margin-top: 2px;
@@ -223,19 +222,25 @@ export default {
   z-index: 1;
   position: sticky;
   top: 0;
-  padding-bottom: 1rem;
+  padding-bottom: 10px;
 }
 .question-inner-wrapper {
+  height: 86px;
   min-height: 1rem;
-  padding: 1rem 1rem;
-  border: 3px solid #2d91be;
+  padding: 8px 0.5rem;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: rgb(45, 145, 190, 0.2);
   border-radius: 5px;
+  margin: auto 0;
+  display: flex;
 }
 .answer-wrapper {
-  height: 80%;
-  padding: 1rem;
-  border: 3px solid #2d91be;
-  border-radius: 5px;
+  box-sizing: border-box;
+  height: calc(100vh - 45px - 45px - 106px);
+  padding: 8px 0.5rem;
   overflow: scroll;
+  background-color: rgb(45, 145, 190, 0.2);
+  border-radius: 5px;
 }
 </style>
