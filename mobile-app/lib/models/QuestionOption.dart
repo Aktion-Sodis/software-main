@@ -21,6 +21,7 @@
 
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -29,7 +30,7 @@ import 'package:flutter/foundation.dart';
 class QuestionOption {
   final String id;
   final I18nString? _text;
-  final String? _followUpQuestionID;
+  final List<String>? _followUpQuestionIDs;
 
   I18nString get text {
     try {
@@ -44,17 +45,17 @@ class QuestionOption {
     }
   }
   
-  String? get followUpQuestionID {
-    return _followUpQuestionID;
+  List<String>? get followUpQuestionIDs {
+    return _followUpQuestionIDs;
   }
   
-  const QuestionOption._internal({required this.id, required text, followUpQuestionID}): _text = text, _followUpQuestionID = followUpQuestionID;
+  const QuestionOption._internal({required this.id, required text, followUpQuestionIDs}): _text = text, _followUpQuestionIDs = followUpQuestionIDs;
   
-  factory QuestionOption({String? id, required I18nString text, String? followUpQuestionID}) {
+  factory QuestionOption({String? id, required I18nString text, List<String>? followUpQuestionIDs}) {
     return QuestionOption._internal(
       id: id == null ? UUID.getUUID() : id,
       text: text,
-      followUpQuestionID: followUpQuestionID);
+      followUpQuestionIDs: followUpQuestionIDs != null ? List<String>.unmodifiable(followUpQuestionIDs) : followUpQuestionIDs);
   }
   
   bool equals(Object other) {
@@ -67,7 +68,7 @@ class QuestionOption {
     return other is QuestionOption &&
       id == other.id &&
       _text == other._text &&
-      _followUpQuestionID == other._followUpQuestionID;
+      DeepCollectionEquality().equals(_followUpQuestionIDs, other._followUpQuestionIDs);
   }
   
   @override
@@ -80,17 +81,17 @@ class QuestionOption {
     buffer.write("QuestionOption {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("text=" + (_text != null ? _text!.toString() : "null") + ", ");
-    buffer.write("followUpQuestionID=" + "$_followUpQuestionID");
+    buffer.write("followUpQuestionIDs=" + (_followUpQuestionIDs != null ? _followUpQuestionIDs!.toString() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  QuestionOption copyWith({String? id, I18nString? text, String? followUpQuestionID}) {
+  QuestionOption copyWith({String? id, I18nString? text, List<String>? followUpQuestionIDs}) {
     return QuestionOption._internal(
       id: id ?? this.id,
       text: text ?? this.text,
-      followUpQuestionID: followUpQuestionID ?? this.followUpQuestionID);
+      followUpQuestionIDs: followUpQuestionIDs ?? this.followUpQuestionIDs);
   }
   
   QuestionOption.fromJson(Map<String, dynamic> json)  
@@ -98,10 +99,10 @@ class QuestionOption {
       _text = json['text']?['serializedData'] != null
         ? I18nString.fromJson(new Map<String, dynamic>.from(json['text']['serializedData']))
         : null,
-      _followUpQuestionID = json['followUpQuestionID'];
+      _followUpQuestionIDs = json['followUpQuestionIDs']?.cast<String>();
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'text': _text?.toJson(), 'followUpQuestionID': _followUpQuestionID
+    'id': id, 'text': _text?.toJson(), 'followUpQuestionIDs': _followUpQuestionIDs
   };
 
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -121,9 +122,10 @@ class QuestionOption {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'followUpQuestionID',
+      fieldName: 'followUpQuestionIDs',
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      isArray: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.collection, ofModelName: describeEnum(ModelFieldTypeEnum.string))
     ));
   });
 }
