@@ -91,5 +91,36 @@
         }
       }
     }
+  },
+  "migrationt": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-monitoring-migrationt-223632-authRole",
+      "UnauthRoleArn": "arn:aws:iam::404541487485:role/amplify-monitoring-migrationt-223632-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::404541487485:role/amplify-monitoring-migrationt-223632-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-monitoring-migrationt-223632-deployment",
+      "UnauthRoleName": "amplify-monitoring-migrationt-223632-unauthRole",
+      "StackName": "amplify-monitoring-migrationt-223632",
+      "StackId": "arn:aws:cloudformation:eu-central-1:404541487485:stack/amplify-monitoring-migrationt-223632/96fd7040-ca57-11ec-acbd-02784df577a8",
+      "AmplifyAppId": "ddi8cmvwmf668"
+    },
+    "categories": {
+      "auth": {
+        "userPoolGroups": {},
+        "sodisusers": {}
+      },
+      "function": {
+        "AdminQueries3df1db39": {
+          "deploymentBucketName": "amplify-monitoring-migrationt-223632-deployment",
+          "s3Key": "amplify-builds/AdminQueries3df1db39-4c4e556e466d63776b6c-build.zip"
+        }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "ddi8cmvwmf668",
+          "type": "manual"
+        }
+      }
+    }
   }
 }
