@@ -115,23 +115,22 @@ export default {
   margin-bottom: 1rem;
   margin-top: 1rem;
 }
-.sub-title {
-  min-height: 1.5rem;
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-}
 .survey-content {
   height: 100%;
   width: 100%;
   display: flex;
+  position: relative;
 }
 .questions {
   width: 500px;
-  border-right-style: solid;
+  border-right: solid 1px rgb(255, 255, 255);
   height: 90vh;
   overflow: scroll;
 
   transition: 0.5s;
+  position: fixed;
+  z-index: 1;
+  background-color: rgb(255, 255, 255);
 }
 .questions.collapsed {
   width: 50px;
@@ -177,9 +176,11 @@ export default {
 }
 .content-wrapper {
   width: 100%;
-  margin: 0 1rem;
   height: 90vh;
+  margin-left: 3.5rem;
+  margin-right: 0.5rem;
   margin-top: 2px;
+  z-index: 0;
 }
 .question-wrapper {
   background-color: rgb(255, 255, 255);
@@ -195,7 +196,7 @@ export default {
   border-radius: 5px;
 }
 .answer-wrapper {
-  height: 75vh;
+  height: 70vh;
   padding: 1rem;
   border: 3px solid #2d91be;
   border-radius: 5px;
