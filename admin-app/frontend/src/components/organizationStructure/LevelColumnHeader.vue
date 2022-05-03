@@ -25,26 +25,26 @@
             :key="intervention.id"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-avatar v-if="index < 4" v-bind="attrs" v-on="on">
+              <v-avatar v-if="index < 7" v-bind="attrs" v-on="on">
                 <v-icon>mdi-hammer-wrench</v-icon>
               </v-avatar>
-              <v-avatar v-if="index === 5" v-bind="attrs" v-on="on">
+              <v-avatar v-if="index === 8" v-bind="attrs" v-on="on">
                 <v-icon>mdi-dots-horizontal</v-icon>
               </v-avatar>
             </template>
-            <span v-if="index < 4">
+            <span v-if="index < 7">
               {{ calculateUILocaleString({ languageTexts: intervention.name.languageTexts }) }}
             </span>
-            <span v-if="index === 5">
+            <span v-if="index === 8">
               {{
                 $t('organizationStructure.thereAreMoreInterventions', {
-                  count: interventionsOfLevel.length - 4,
+                  count: interventionsOfLevel.length - 8,
                 })
               }}
             </span>
           </v-tooltip>
         </div>
-        <div v-else style="height: 48px; overflow: hidden">
+        <div v-else style="height: 48px; overflow: hidden" class="d-flex justify-center">
           <v-skeleton-loader v-if="getLoading" class="mt-3" type="text"></v-skeleton-loader>
           <p v-else class="caption">{{ $t('organizationStructure.hasNoInterventions') }}</p>
         </div>

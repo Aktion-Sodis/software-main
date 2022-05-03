@@ -5,7 +5,7 @@
       <div
         v-for="(level, index) in levels"
         :key="level.id"
-        class="column-wrapper px-16"
+        class="px-24"
         :class="level.parentLevelID === null || 'dotted-left-border'"
       >
         <LevelColumnHeader
@@ -14,7 +14,7 @@
         />
         <EntitiesColumn :entityLevelId="level.id" :index="index" />
       </div>
-      <div class="column-wrapper dotted-left-border d-flex align-center justify-center">
+      <div class="dotted-left-border d-flex align-center justify-center">
         <v-btn :disabled="getLoading" rounded x-large color="primary" @click="clickOnAddNewLevel">
           <v-icon class="mr-2">mdi-plus</v-icon>
           <v-skeleton-loader
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      newLevelHandler: `${vuexModulesDict.dataModal}/createData`,
+      createData: `${vuexModulesDict.dataModal}/createData`,
     }),
     clickOnAddNewLevel() {
       this.createData({ dataType: dataTypesDict.level });
@@ -67,10 +67,6 @@ export default {
 </script>
 
 <style scoped>
-.column-wrapper {
-  min-width: 24rem;
-}
-
 .dotted-left-border {
   border-left: 4px rgb(0, 0, 0, 0.2) dotted;
 }

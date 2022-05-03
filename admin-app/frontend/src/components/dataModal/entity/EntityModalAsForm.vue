@@ -318,15 +318,18 @@ export default {
     initCustomDataFromLevel() {
       const { customData } = this.level;
       if (!customData) return;
-      this.customData = customData.map(({ id, name, type }, index) => ({
-        name: mutableI18nString(name),
-        type,
-        customDataID: id,
-        value: this.edit
-          ? this.entityInFocus.customData[index][type === Type.INT ? 'intValue' : 'stringValue']
-            ?? null
-          : null,
-      }));
+      this.customData = customData.map(({ id, name, type }, index) => {
+        let value = null;
+        if (this.edit && this.entityInFocus.customData[index]) {
+          value = this.entityInFocus.customData[index][type === Type.INT ? 'intValue' : 'stringValue'];
+        }
+        return {
+          name: mutableI18nString(name),
+          type,
+          customDataID: id,
+          value,
+        };
+      });
     },
     nameUpdatedHandler(res) {
       this.name = res;
