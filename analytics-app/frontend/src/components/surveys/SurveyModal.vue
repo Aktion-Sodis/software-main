@@ -54,7 +54,7 @@ export default {
       this.$emit("close");
     },
     setActive(survey) {
-      return (this.selectedID = survey.survey_id);
+      this.selectedID = survey.survey_id;
     },
   },
   computed: {

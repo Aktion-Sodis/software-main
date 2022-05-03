@@ -14,9 +14,20 @@
             value-format="YYYY-MM-DD"
           />
         </div>
-        <el-button class="compare" @click="showSurveyModal"
-          >Mehrere vergleichen</el-button
-        >
+        <div v-if="compare" class="compare">
+          <el-button-group class="ml-4">
+            <el-button type="primary">Vergleichen</el-button>
+            <el-button type="primary" @click="resetSelectedIDs"
+              >Zurücksetzen</el-button
+            >
+            <el-button type="danger" @click="stopCompare">
+              <i class="fa-solid fa-xmark"></i
+            ></el-button>
+          </el-button-group>
+        </div>
+        <div v-else class="compare">
+          <el-button @click="startCompare">Mehrere vergleichen</el-button>
+        </div>
       </div>
     </div>
     <div class="surveys">
@@ -24,6 +35,11 @@
         v-for="survey in filteredSurveys"
         :key="survey.id"
         :survey="survey"
+        :class="{
+          selected:
+            selectedID0 === survey.survey_id ||
+            selectedID1 === survey.survey_id,
+        }"
         @click="selectSurvey(survey)"
       />
     </div>
@@ -40,12 +56,42 @@ export default {
   components: { SurveyCard },
   methods: {
     selectSurvey(survey) {
-      this.selectedID = survey.survey_id;
-      router.push({
-        name: "Questions",
-        params: { survey_id: survey.survey_id },
-      });
+      if (!this.compare) {
+        router.push({
+          name: "Questions",
+          params: { survey_id: survey.survey_id },
+        });
+        return;
+      }
+      //check if id is already in selected array
+      if (this.selectedIDs.includes(survey.survey_id)) {
+        console.log("DUPLIKAT: Noch nicht implementiert");
+        return;
+      }
+      //check if there are already two ids in selected, ids
+      if (this.selectedIDs.length > 1) {
+        console.log("LÄNGE: Noch nicht implementiert");
+        return;
+      }
+      this.selectedIDs.push(survey.survey_id);
+      console.log(this.selectedIDs);
+      this.selectedID0 = this.selectedIDs[0] || null;
+      this.selectedID1 = this.selectedIDs[1] || null;
+      console.log(this.selectedID0);
+      console.log(this.selectedID1);
       return;
+    },
+    resetSelectedIDs() {
+      this.selectedIDs = [];
+      this.selectedID0 = null;
+      this.selectedID1 = null;
+    },
+    stopCompare() {
+      this.resetSelectedIDs();
+      return (this.compare = false);
+    },
+    startCompare() {
+      return (this.compare = true);
     },
   },
   computed: {
@@ -66,7 +112,11 @@ export default {
   data() {
     return {
       selectedID: null,
+      selectedIDs: [],
       selectedDates: null,
+      compare: false,
+      selectedID0: null,
+      selectedID1: null,
     };
   },
 };
@@ -80,8 +130,8 @@ export default {
 .title {
   box-sizing: border-box;
   padding-top: 5px;
-  padding-left: 5px;
-  width: 95%;
+  padding-left: 3px;
+  width: 100%;
   height: 50px;
   background-color: rgb(255, 255, 255);
   z-index: 1;
