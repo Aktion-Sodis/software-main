@@ -1,0 +1,14 @@
+{
+  "name": "release",
+  "version": "1.0.0",
+  "description": "",
+  "main": "release.js",
+  "scripts": {
+    "once": "node release.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "octokit": "^1.7.1"
+  }
+}
