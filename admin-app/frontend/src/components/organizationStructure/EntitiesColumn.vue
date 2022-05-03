@@ -28,7 +28,7 @@
         :style="`background-color: ${lineColors[line.indentation]}; height: ${
           160 * (line.y1 - line.y0)
         }px; top: ${32 + line.y0 * 160 + line.indentation * 3}px; left: ${
-          -192 + line.indentation * 6
+          -186 + line.indentation * 12
         }px;`"
       ></div>
     </div>
