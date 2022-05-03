@@ -1,45 +1,64 @@
 <template>
-  <div class="sidebar" :style="{ width: sidebarWidth, transition: sidebarTransition }" @mouseover="openSidebar" @mouseleave="closeSidebar" >
+  <div
+    class="sidebar"
+    :style="{ width: sidebarWidth, transition: sidebarTransition }"
+    @mouseover="openSidebar"
+    @mouseleave="closeSidebar"
+  >
     <div class="sidebar-wrapper">
       <div class="link header">
-        <el-image class="image" src="/src/static/aktionSodisSmall.png"/>
-        <span v-if="!collapsed">
-          AktionSodis
-        </span>
+        <el-image class="image" src="/src/static/aktionSodisSmall.png" />
+        <span v-if="!collapsed"> AktionSodis </span>
       </div>
       <div class="content">
         <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
-        <SidebarLink to="/surveys" icon="fas fa-columns">Fragebögen</SidebarLink>
-        <SidebarLink to="/dashboards" icon="fas fa-chart-bar">Dashboards</SidebarLink>
-        <SidebarLink to="/hello-world" icon="fa-solid fa-gear">Einstellungen</SidebarLink>
+        <SidebarLink to="/surveys" icon="fas fa-columns"
+          >Fragebögen</SidebarLink
+        >
+        <SidebarLink to="/dashboard" icon="fas fa-chart-bar"
+          >Dashboard</SidebarLink
+        >
+        <SidebarLink to="/hello-world" icon="fa-solid fa-gear"
+          >Einstellungen</SidebarLink
+        >
       </div>
       <div class="link authorization">
-        <i class="icon fa-solid fa-right-to-bracket"/>
-        <span v-if="!collapsed">
-          Login
-        </span>
+        <i class="icon fa-solid fa-right-to-bracket" />
+        <span v-if="!collapsed"> Login </span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import SidebarLink from './SidebarLink.vue'
-import { collapsed, openSidebar, closeSidebar, sidebarWidth, sidebarTransition } from './state'
+import SidebarLink from "./SidebarLink.vue";
+import {
+  collapsed,
+  openSidebar,
+  closeSidebar,
+  sidebarWidth,
+  sidebarTransition,
+} from "./state";
 export default {
   props: {},
   components: { SidebarLink },
   setup() {
-    return { collapsed, openSidebar, closeSidebar, sidebarWidth, sidebarTransition }
-  }
-}
+    return {
+      collapsed,
+      openSidebar,
+      closeSidebar,
+      sidebarWidth,
+      sidebarTransition,
+    };
+  },
+};
 </script>
 
 <style>
 :root {
-  --sidebar-bg-color: #2D91BE;
-  --sidebar-item-hover: #64AA73;
-  --sidebar-item-active: #FEAA3A;
+  --sidebar-bg-color: #2d91be;
+  --sidebar-item-hover: #64aa73;
+  --sidebar-item-active: #feaa3a;
 }
 </style>
 
@@ -94,8 +113,4 @@ export default {
   position: absolute;
   bottom: 0;
 }
-
-
-
-
 </style>
