@@ -42,6 +42,12 @@ export declare class I18nString {
   constructor(init: ModelInit<I18nString>);
 }
 
+export declare class I18nString {
+  readonly languageKeys: string[];
+  readonly languageTexts: string[];
+  constructor(init: ModelInit<I18nString>);
+}
+
 export declare class Permission {
   readonly permissionType: PermissionType | keyof typeof PermissionType;
   readonly allowedEntities: string[];
@@ -178,6 +184,10 @@ type SessionDataMetaData = {
 type LevelInterventionRelationMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 };
+
+type SessionDataMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
 
 type InterventionContentRelationMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
@@ -482,6 +492,21 @@ export declare class LevelInterventionRelation {
       draft: MutableModel<LevelInterventionRelation, LevelInterventionRelationMetaData>
     ) => MutableModel<LevelInterventionRelation, LevelInterventionRelationMetaData> | void
   ): LevelInterventionRelation;
+}
+
+export declare class SessionData {
+  readonly id: string;
+  readonly date: string;
+  readonly userID?: string;
+  readonly app?: string;
+  readonly version?: string;
+  readonly buildNumber?: string;
+  readonly remoteConfig?: string;
+  readonly platform?: string;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+  constructor(init: ModelInit<SessionData, SessionDataMetaData>);
+  static copyOf(source: SessionData, mutator: (draft: MutableModel<SessionData, SessionDataMetaData>) => MutableModel<SessionData, SessionDataMetaData> | void): SessionData;
 }
 
 export declare class InterventionContentRelation {
