@@ -18,10 +18,10 @@ export default async function createLevelToInterventionConnections(level) {
       if (!connection._deleted) {
         await API.graphql({
           query: mutations.deleteLevelInterventionRelation,
-          variables: {
+          variables: { input: {
             id: connection.id,
             _version: connection._version,
-          },
+          }},
         });
       }
     }

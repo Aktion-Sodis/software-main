@@ -5,14 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db_migration": "index.js"
+    "db_migration": "node --experimental-json-modules index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.82.0",
     "aws-amplify": "^4.3.17",
     "dotenv": "^16.0.0",
     "esm": "^3.2.25",
+    "firebase-admin": "^10.1.0",
     "mysql": "^2.18.1"
   },
   "type": "module"

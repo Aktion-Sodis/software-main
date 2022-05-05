@@ -54,7 +54,7 @@ const migrateSurveys = async (sqlPool) => {
         },
       });
       if(onlineSurveyQuery.data.getSurvey!==null) {
-        uploadSurvey._version = onlineSurveyQuery.data.getSurvey._version + 1;
+        uploadSurvey._version = onlineSurveyQuery.data.getSurvey._version;
         uploadSurvey = await API.graphql({
             query: mutations.updateSurvey,
             variables: {

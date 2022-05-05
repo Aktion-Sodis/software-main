@@ -28,6 +28,19 @@ import createMigratorTag from "./src/migrators/createMigratorTag.js";
 import createLevelToInterventionConnections from "./src/migrators/createLevelToInterventionConnections.js";
 import createTestEntities from "./src/migrators/createTestEntities.js";
 import uploadTestFiles from "./src/migrators/uploadTestFiles.js";
+import migrateProjectData from "./src/migrators/migrateProjectData.js";
+
+import {initializeApp, cert} from 'firebase-admin/app';
+import { getStorage } from "firebase-admin/storage";
+import serviceAccount from './service-account.json' assert {type: "json"};
+//import * as AWS from ""
+
+initializeApp({
+  credential: cert(serviceAccount),
+  storageBucket: 'aktion-sodis.appspot.com'
+});
+
+const googleCloudBucket = getStorage().bucket();
 
 Amplify.default.configure(awsconfig);
 
@@ -46,18 +59,6 @@ const sqlPool = mysql.createPool({
   database: process.env.MARIADB_DBNAME,
   connectionLimit: 10,
 });
-
-console.log(`Successfully connected to old database ${sqlPool}.`);
-
-console.log(
-  "Clean up erroneous writes of villageLevel to remove erroneous entries..."
-);//todo: ggf nicht deleten, sondern prüfen ob vorhanden
-console.log("delete applied interventions");
-await deleteAppliedInterventions(); //todo: ggf. nicht deleten, sondern prüfen ob vorhanden
-console.log("delete entities");
-await deleteEntities();
-//todo: delete executedSurveys 
-console.log("create migrator tag");
 
 await createMigratorTag();
 
@@ -78,7 +79,7 @@ const defaultUser = await createMigrationUser([]);
 // console.log("Family level id is:" + JSON.stringify(familyLevel));
 
 console.log("Creating interventions...");
-await migrateProjects(sqlPool);
+const allInterventions = await migrateProjects(sqlPool);
 
 //bis hierher läuft es
 
@@ -117,30 +118,11 @@ console.log("levelinterventionconnections created");
 //migrateQuestionOptions(sqlPool);
 
 console.log("Migrating surveys...");
-await migrateSurveys(sqlPool);
+const allSurveys = await migrateSurveys(sqlPool);
+console.log('allSurveysLength: ' + allSurveys.length.toString());
+console.log(allSurveys[0]);
+console.log("Migrating Entities, AppliedInterventions and ExecutedSurveys");
 
-/*
-//todo: check for family wether interventions exist
-console.log("Migrating villages...");
-migrateVillages(sqlPool, villageLevel);
+const allProjectData = await migrateProjectData(sqlPool, familyLevel, villageLevel, allSurveys, defaultUser);
 
-
-//todo: bilder mit übertragen
-//sql-wert: interviewee.image_url
-console.log("Migrating families...");
-migrateFamilies(sqlPool, familyLevel);
-
-
-console.log("Migrating applied interventions...") ;
-// Applied interventions are not directly documented in old database schema.
-// Application of intervention is infered based on executed surveys.
-migrateAppliedInterventions(sqlPool, defaultUser);
-
-//TODO: hier überprüfen -> wurde zuvor zu früh übertragen
-console.log("Migrating executed surveys and answers...");
-migrateExecutedSurveys(sqlPool, defaultUser);
-console.log("Successfully finished migration.");
-
-
-
-await migrateSurveys(sqlPool);*/
+console.log("Finished");

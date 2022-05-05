@@ -30,8 +30,9 @@ const migrateProjects = async (sqlPool) => {
       },
     });
   }
-
+  var listToReturn = [];
   for (let project of projects) {
+    console.log("dealing with project: " + project.name);
     //todo: update tags
     let newIntervention = {
       name: mlString(project.name),
@@ -54,6 +55,7 @@ const migrateProjects = async (sqlPool) => {
           },
         },
       });
+      listToReturn.push(newInterventionEntry.data.createIntervention);
     } catch (error) {
       const oldInterventionEntry = await API.graphql({
         query: queries.getIntervention,
@@ -64,7 +66,7 @@ const migrateProjects = async (sqlPool) => {
 
       newIntervention._version =
         oldInterventionEntry.data.getIntervention._version;
-      await API.graphql({
+      const updateResult = await API.graphql({
         query: mutations.updateIntervention,
         variables: {
           input: newIntervention,
@@ -79,8 +81,10 @@ const migrateProjects = async (sqlPool) => {
           },
         },
       });
+      listToReturn.push(updateResult.data.updateIntervention);
     }
   }
+  return listToReturn;
 };
 
 export default migrateProjects;
