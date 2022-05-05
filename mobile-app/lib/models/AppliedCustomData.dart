@@ -29,7 +29,7 @@ import 'package:flutter/foundation.dart';
 class AppliedCustomData {
   final String? _customDataID;
   final Type? _type;
-  final String? _name;
+  final I18nString? _name;
   final int? _intValue;
   final String? _stringValue;
 
@@ -59,7 +59,7 @@ class AppliedCustomData {
     }
   }
   
-  String get name {
+  I18nString get name {
     try {
       return _name!;
     } catch(e) {
@@ -82,7 +82,7 @@ class AppliedCustomData {
   
   const AppliedCustomData._internal({required customDataID, required type, required name, intValue, stringValue}): _customDataID = customDataID, _type = type, _name = name, _intValue = intValue, _stringValue = stringValue;
   
-  factory AppliedCustomData({required String customDataID, required Type type, required String name, int? intValue, String? stringValue}) {
+  factory AppliedCustomData({required String customDataID, required Type type, required I18nString name, int? intValue, String? stringValue}) {
     return AppliedCustomData._internal(
       customDataID: customDataID,
       type: type,
@@ -116,7 +116,7 @@ class AppliedCustomData {
     buffer.write("AppliedCustomData {");
     buffer.write("customDataID=" + "$_customDataID" + ", ");
     buffer.write("type=" + (_type != null ? enumToString(_type)! : "null") + ", ");
-    buffer.write("name=" + "$_name" + ", ");
+    buffer.write("name=" + (_name != null ? _name!.toString() : "null") + ", ");
     buffer.write("intValue=" + (_intValue != null ? _intValue!.toString() : "null") + ", ");
     buffer.write("stringValue=" + "$_stringValue");
     buffer.write("}");
@@ -124,7 +124,7 @@ class AppliedCustomData {
     return buffer.toString();
   }
   
-  AppliedCustomData copyWith({String? customDataID, Type? type, String? name, int? intValue, String? stringValue}) {
+  AppliedCustomData copyWith({String? customDataID, Type? type, I18nString? name, int? intValue, String? stringValue}) {
     return AppliedCustomData._internal(
       customDataID: customDataID ?? this.customDataID,
       type: type ?? this.type,
@@ -136,12 +136,14 @@ class AppliedCustomData {
   AppliedCustomData.fromJson(Map<String, dynamic> json)  
     : _customDataID = json['customDataID'],
       _type = enumFromString<Type>(json['type'], Type.values),
-      _name = json['name'],
+      _name = json['name']?['serializedData'] != null
+        ? I18nString.fromJson(new Map<String, dynamic>.from(json['name']['serializedData']))
+        : null,
       _intValue = (json['intValue'] as num?)?.toInt(),
       _stringValue = json['stringValue'];
   
   Map<String, dynamic> toJson() => {
-    'customDataID': _customDataID, 'type': enumToString(_type), 'name': _name, 'intValue': _intValue, 'stringValue': _stringValue
+    'customDataID': _customDataID, 'type': enumToString(_type), 'name': _name?.toJson(), 'intValue': _intValue, 'stringValue': _stringValue
   };
 
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -160,10 +162,10 @@ class AppliedCustomData {
       ofType: ModelFieldType(ModelFieldTypeEnum.enumeration)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
       fieldName: 'name',
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'I18nString')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(

@@ -27,8 +27,12 @@ class I18nString {
       int index = languageKeys.indexOf(str.currentLanguage);
       languageTexts[index] = text;
     } else {
-      languageKeys.add(str.currentLanguage);
-      languageTexts.add(text);
+      List<String> languageKeysToSet = List.from(languageKeys);
+      List<String> languageTextesToSet = List.from(languageKeys);
+      languageKeysToSet.add(str.currentLanguage);
+      languageTextesToSet.add(text);
+      languageKeys = languageKeysToSet;
+      languageTexts = languageTextesToSet;
     }
   }
 
@@ -44,6 +48,16 @@ class I18nString {
     languageTexts = I18nString.languageTexts;
   }
 
-  amp.I18nString toAmplifyModel() =>
-      amp.I18nString(languageKeys: languageKeys, languageTexts: languageTexts);
+  amp.I18nString toAmplifyModel() {
+    List<String> sortedkeys =
+        List.generate(languageKeys.length, (index) => languageKeys[index]);
+    sortedkeys.sort();
+    List<String> sortedLanguageTextes = [];
+    for (String key in sortedkeys) {
+      int index = languageKeys.indexOf(key);
+      sortedLanguageTextes.add(languageTexts[index]);
+    }
+    return amp.I18nString(
+        languageKeys: sortedkeys, languageTexts: sortedLanguageTextes);
+  }
 }

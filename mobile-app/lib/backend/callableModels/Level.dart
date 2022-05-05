@@ -10,7 +10,7 @@ class Level {
   late I18nString description_ml;
   String? parentLevelID;
   late bool interventionsAreAllowed;
-  List<Intervention>? allowedInterventions;
+  List<amp.LevelInterventionRelation>? allowedInterventions;
   late List<CustomData> customData;
   int? schemeVersion;
   DateTime? createdAt;
@@ -30,7 +30,7 @@ class Level {
       required this.description_ml,
       this.parentLevelID,
       required this.interventionsAreAllowed,
-      this.allowedInterventions,
+      required this.allowedInterventions,
       required this.customData,
       this.schemeVersion,
       this.createdAt,
@@ -42,12 +42,7 @@ class Level {
     description_ml = I18nString.fromAmplifyModel(level.description);
     parentLevelID = level.parentLevelID;
     interventionsAreAllowed = level.interventionsAreAllowed;
-    allowedInterventions = level.allowedInterventions != null
-        ? List.generate(
-            level.allowedInterventions!.length,
-            (index) => Intervention.fromAmplifyModel(
-                level.allowedInterventions![index]))
-        : null;
+    allowedInterventions = level.allowedInterventions;
     customData = List.generate(level.customData.length,
         (index) => CustomData.fromAmplifyModel(level.customData[index]));
     schemeVersion = level.schemeVersion;
@@ -62,10 +57,7 @@ class Level {
         description: description_ml.toAmplifyModel(),
         parentLevelID: parentLevelID,
         interventionsAreAllowed: interventionsAreAllowed,
-        allowedInterventions: allowedInterventions != null
-            ? List.generate(allowedInterventions!.length,
-                (index) => allowedInterventions![index].toAmplifyModel())
-            : null,
+        allowedInterventions: allowedInterventions,
         customData: List.generate(
             customData.length, (index) => customData[index].toAmplifyModel()),
         schemeVersion: schemeVersion);

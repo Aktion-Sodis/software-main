@@ -29,12 +29,23 @@ class AuthRepository {
   }
 
   Future<String?> attemptAutoLogin() async {
-    print("trying auto login");
+    try {
+      print("trying auto login");
 
-    final session = await Amplify.Auth.fetchAuthSession();
-    print("autoLogin logged in?: ${session.isSignedIn}");
+      final session = await Amplify.Auth.fetchAuthSession();
+      print("autoLogin logged in?: ${session.isSignedIn}");
 
-    return session.isSignedIn ? (await _getUserIdFromAttributes()) : null;
+      return session.isSignedIn ? (await _getUserIdFromAttributes()) : null;
+    } catch (e) {
+      try {
+        print("tryining offline login");
+        AuthUser authUser = await Amplify.Auth.getCurrentUser();
+        return authUser.userId;
+      } catch (e) {
+        print("offline login not possible");
+        return null;
+      }
+    }
   }
 
   // todo: Verify how to implement "always remember device" on login.

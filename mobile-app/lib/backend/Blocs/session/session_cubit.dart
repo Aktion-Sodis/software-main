@@ -21,7 +21,12 @@ class SessionCubit extends Cubit<SessionState> {
   void attemptAutoLogin() async {
     final userId = await authRepo.attemptAutoLogin();
     if (userId != null) {
-      emit(FullyAuthenticatedSessionState(userID: userId));
+      User? user = await userRepo.getUserById(userId);
+      if (user == null) {
+        await Future.delayed(Duration(seconds: 1));
+        user = await userRepo.getUserById(userId);
+      }
+      emit(FullyAuthenticatedSessionState(userID: userId, user: user));
       //todo: differ when password is necessary
     } else {
       emit(RequiresAuthentificationSessionState());
@@ -41,7 +46,10 @@ class SessionCubit extends Cubit<SessionState> {
         emit(RequiresPasswordChangeSessionState(authCredentials: credentials));
       } else {
         print("popping fully quthenticated state");
-        emit(FullyAuthenticatedSessionState(userID: credentials.userId!));
+        //todo: hier liegt fehler bezüglich user laden
+        User? user = await userRepo.getUserById(credentials.userId!);
+        emit(FullyAuthenticatedSessionState(
+            userID: credentials.userId!, user: user));
       }
     } catch (e) {
       print("error in showing Session");

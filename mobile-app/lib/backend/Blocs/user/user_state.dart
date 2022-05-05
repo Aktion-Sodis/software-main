@@ -5,11 +5,10 @@ import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 
 class UserState {
   final User? user;
-  late final File? userPic;
 
-  UserState({this.user, this.userPic});
+  UserState({this.user});
 
   UserState copyWith({User? user, File? userPic}) {
-    return UserState(user: user ?? this.user, userPic: userPic ?? this.userPic);
+    return UserState(user: user ?? this.user);
   }
 }

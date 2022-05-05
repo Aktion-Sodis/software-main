@@ -15,27 +15,54 @@ dependencies:
   flutter:
     sdk: flutter
 
+  string_similarity: ^2.0.0
+
     
 
 
   #amplify packages
-  amplify_flutter: ^0.4.0-rc.1
-  amplify_datastore: ^0.4.0-rc.1
-  amplify_api: ^0.4.0-rc.1
-  amplify_auth_cognito: ^0.4.0-rc.1
+  amplify_flutter: ^0.4.5
+  amplify_datastore: ^0.4.5
+  amplify_api: ^0.4.5
+  amplify_auth_cognito: ^0.4.5
+  amplify_storage_s3: ^0.4.5
+
+  
+  advance_pdf_viewer_fork: ^2.0.0
+
+  
 
 
   font_awesome_flutter: ^9.2.0
   cupertino_icons: ^1.0.2
+  material_design_icons_flutter: ^5.0.6595
   flutter_bloc: ^8.0.1
+  flutter_sound: ^8.3.9
+  path_provider: ^2.0.9
+  path: ^1.8.0
   image_picker: ^0.8.4+10
+  flutter_datetime_picker: ^1.5.1
+  dropdown_search: ^2.0.1
+  permission_handler: ^9.2.0
+  hive: ^2.1.0
+  connectivity_plus: ^2.2.1
+  flutter_rating_bar: ^4.0.0
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
+  flutter_launcher_icons: "^0.9.2"
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/fixAssets/app_icon.png"
 
 flutter:
+  uses-material-design: true
+
   assets:
-      - assets/test/
       - assets/fixAssets/
+      - assets/specificAssets/

@@ -1,4 +1,5 @@
 import 'package:mobile_app/backend/Blocs/auth/auth_credentials.dart';
+import 'package:mobile_app/backend/callableModels/User.dart';
 
 abstract class SessionState {}
 
@@ -16,7 +17,8 @@ class AuthenticatedSessionState extends SessionState {
 }
 
 class FullyAuthenticatedSessionState extends AuthenticatedSessionState {
-  FullyAuthenticatedSessionState({required String userID})
+  User? user;
+  FullyAuthenticatedSessionState({required String userID, this.user})
       : super(userID: userID);
 }
 

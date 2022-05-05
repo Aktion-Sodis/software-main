@@ -5,22 +5,27 @@
       <div
         v-for="(level, index) in levels"
         :key="level.id"
-        class="column-wrapper px-16"
-        :class="level.upperLevelId === null || 'dotted-left-border'"
+        class="px-24"
+        :class="level.parentLevelID === null || 'dotted-left-border'"
       >
         <LevelColumnHeader
           :id="level.id"
-          :allowedInterventions="level.allowedInterventions"
-          :name="level.name"
+          :name="calculateUILocaleString({ languageTexts: level.name.languageTexts })"
         />
-        <EntitiesColumn :levelId="level.id" :index="index" />
+        <EntitiesColumn :entityLevelId="level.id" :index="index" />
       </div>
-      <div class="column-wrapper dotted-left-border d-flex align-center justify-center">
-        <LevelModal v-if="showLevelModal" />
-        <EntityModal v-if="showEntityModal" />
-        <v-btn rounded x-large color="primary" @click="clickOnAddNewLevel">
-          <v-icon class="mr-2"> mdi-plus </v-icon>
-          {{ $t('organizationStructure.addNewLevel') }}
+      <div class="dotted-left-border d-flex align-center justify-center">
+        <v-btn :disabled="getLoading" rounded x-large color="primary" @click="clickOnAddNewLevel">
+          <v-icon class="mr-2">mdi-plus</v-icon>
+          <v-skeleton-loader
+            v-if="getLoading"
+            width="196"
+            class="mt-2"
+            type="text"
+          ></v-skeleton-loader>
+          <span v-else>
+            {{ $t('organizationStructure.addNewLevel') }}
+          </span>
         </v-btn>
       </div>
     </div>
@@ -30,71 +35,38 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
-import LevelModal from '../components/organizationStructure/LevelModal.vue';
-import EntityModal from '../components/organizationStructure/EntityModal.vue';
 import EntitiesColumn from '../components/organizationStructure/EntitiesColumn.vue';
 import LevelColumnHeader from '../components/organizationStructure/LevelColumnHeader.vue';
-import { dataTypesDict } from '../store/constants';
+import { dataTypesDict, routeNamesDict, vuexModulesDict } from '../lib/constants';
 
 export default {
-  name: 'OrganizationStructure',
+  name: routeNamesDict.OrganizationStructure,
   components: {
-    LevelModal,
-    EntityModal,
     EntitiesColumn,
     LevelColumnHeader,
   },
-  data() {
-    return {
-      showLevelModal: false,
-      showEntityModal: false,
-    };
-  },
   computed: {
     ...mapGetters({
-      levels: 'LEVEL_Data/sortedLevels',
-      isLevelModalDisplayed: 'dataModal/getIsDisplayed',
-      entityModalIsDisplayed: 'dataModal/getIsDisplayed',
+      getLoading: `${vuexModulesDict.level}/getLoading`,
+      levels: `${vuexModulesDict.level}/sortedLevels`,
+      isModalDisplayed: `${vuexModulesDict.dataModal}/getIsDisplayed`,
+      dataType: `${vuexModulesDict.dataModal}/getDataType`,
+
+      calculateUILocaleString: 'calculateUILocaleString',
     }),
-  },
-  watch: {
-    isLevelModalDisplayed: 'destroyLevelModalAfterDelay',
-    entityModalIsDisplayed: 'destroyEntityModalAfterDelay',
   },
   methods: {
     ...mapActions({
-      newLevelHandler: 'dataModal/createData',
+      createData: `${vuexModulesDict.dataModal}/createData`,
     }),
     clickOnAddNewLevel() {
-      this.newLevelHandler({ dataType: dataTypesDict.level });
-    },
-    async destroyLevelModalAfterDelay(newValue) {
-      // If closed, wait for 500, if still closed, destroy component instance
-      if (newValue) {
-        this.showLevelModal = true;
-        return;
-      }
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      if (!this.isLevelModalDisplayed) this.showLevelModal = false;
-    },
-    async destroyEntityModalAfterDelay(newValue) {
-      // If closed, wait for 500, if still closed, destroy component instance
-      if (newValue) {
-        this.showEntityModal = true;
-        return;
-      }
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      if (!this.isLevelModalDisplayed) this.showLevelModal = false;
+      this.createData({ dataType: dataTypesDict.level });
     },
   },
 };
 </script>
 
 <style scoped>
-.column-wrapper {
-  min-width: 24rem;
-}
-
 .dotted-left-border {
   border-left: 4px rgb(0, 0, 0, 0.2) dotted;
 }

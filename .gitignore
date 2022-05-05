@@ -1,2 +1,6 @@
 .idea/
+
 service-account.json
+
+scripts/nodejs/node_modules
+

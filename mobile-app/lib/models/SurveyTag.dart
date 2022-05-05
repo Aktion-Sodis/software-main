@@ -21,6 +21,7 @@
 
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -31,9 +32,9 @@ class SurveyTag extends Model {
   final String id;
   final I18nString? _text;
   final int? _schemeVersion;
+  final List<SurveySurveyTagRelation>? _surveys;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
-  final String? _surveyTagsId;
 
   @override
   getInstanceType() => classType;
@@ -60,6 +61,19 @@ class SurveyTag extends Model {
     return _schemeVersion;
   }
   
+  List<SurveySurveyTagRelation> get surveys {
+    try {
+      return _surveys!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
   TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -68,18 +82,14 @@ class SurveyTag extends Model {
     return _updatedAt;
   }
   
-  String? get surveyTagsId {
-    return _surveyTagsId;
-  }
+  const SurveyTag._internal({required this.id, required text, schemeVersion, required surveys, createdAt, updatedAt}): _text = text, _schemeVersion = schemeVersion, _surveys = surveys, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  const SurveyTag._internal({required this.id, required text, schemeVersion, createdAt, updatedAt, surveyTagsId}): _text = text, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _surveyTagsId = surveyTagsId;
-  
-  factory SurveyTag({String? id, required I18nString text, int? schemeVersion, String? surveyTagsId}) {
+  factory SurveyTag({String? id, required I18nString text, int? schemeVersion, required List<SurveySurveyTagRelation> surveys}) {
     return SurveyTag._internal(
       id: id == null ? UUID.getUUID() : id,
       text: text,
       schemeVersion: schemeVersion,
-      surveyTagsId: surveyTagsId);
+      surveys: surveys != null ? List<SurveySurveyTagRelation>.unmodifiable(surveys) : surveys);
   }
   
   bool equals(Object other) {
@@ -93,7 +103,7 @@ class SurveyTag extends Model {
       id == other.id &&
       _text == other._text &&
       _schemeVersion == other._schemeVersion &&
-      _surveyTagsId == other._surveyTagsId;
+      DeepCollectionEquality().equals(_surveys, other._surveys);
   }
   
   @override
@@ -108,19 +118,18 @@ class SurveyTag extends Model {
     buffer.write("text=" + (_text != null ? _text!.toString() : "null") + ", ");
     buffer.write("schemeVersion=" + (_schemeVersion != null ? _schemeVersion!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null") + ", ");
-    buffer.write("surveyTagsId=" + "$_surveyTagsId");
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  SurveyTag copyWith({String? id, I18nString? text, int? schemeVersion, String? surveyTagsId}) {
+  SurveyTag copyWith({String? id, I18nString? text, int? schemeVersion, List<SurveySurveyTagRelation>? surveys}) {
     return SurveyTag._internal(
       id: id ?? this.id,
       text: text ?? this.text,
       schemeVersion: schemeVersion ?? this.schemeVersion,
-      surveyTagsId: surveyTagsId ?? this.surveyTagsId);
+      surveys: surveys ?? this.surveys);
   }
   
   SurveyTag.fromJson(Map<String, dynamic> json)  
@@ -129,18 +138,25 @@ class SurveyTag extends Model {
         ? I18nString.fromJson(new Map<String, dynamic>.from(json['text']['serializedData']))
         : null,
       _schemeVersion = (json['schemeVersion'] as num?)?.toInt(),
+      _surveys = json['surveys'] is List
+        ? (json['surveys'] as List)
+          .where((e) => e?['serializedData'] != null)
+          .map((e) => SurveySurveyTagRelation.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
-      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null,
-      _surveyTagsId = json['surveyTagsId'];
+      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'text': _text?.toJson(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'surveyTagsId': _surveyTagsId
+    'id': id, 'text': _text?.toJson(), 'schemeVersion': _schemeVersion, 'surveys': _surveys?.map((SurveySurveyTagRelation? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "surveyTag.id");
   static final QueryField TEXT = QueryField(fieldName: "text");
   static final QueryField SCHEMEVERSION = QueryField(fieldName: "schemeVersion");
-  static final QueryField SURVEYTAGSID = QueryField(fieldName: "surveyTagsId");
+  static final QueryField SURVEYS = QueryField(
+    fieldName: "surveys",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (SurveySurveyTagRelation).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "SurveyTag";
     modelSchemaDefinition.pluralName = "SurveyTags";
@@ -159,6 +175,13 @@ class SurveyTag extends Model {
       ofType: ModelFieldType(ModelFieldTypeEnum.int)
     ));
     
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
+      key: SurveyTag.SURVEYS,
+      isRequired: true,
+      ofModelName: (SurveySurveyTagRelation).toString(),
+      associatedKey: SurveySurveyTagRelation.SURVEYTAG
+    ));
+    
     modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
       fieldName: 'createdAt',
       isRequired: false,
@@ -171,12 +194,6 @@ class SurveyTag extends Model {
       isRequired: false,
       isReadOnly: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: SurveyTag.SURVEYTAGSID,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
   });
 }

@@ -1,7 +1,8 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mobile_app/backend/storage/dataStorePaths.dart';
+import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -13,10 +14,19 @@ class UserRepository {
         amp.User.classType,
         where: amp.User.ID.eq(userId),
       );
+      print("userQuery has REsults: ${users.length}");
       return users.isNotEmpty ? User.fromAmplifyModel(users.first) : null;
     } catch (e) {
       rethrow;
     }
+  }
+
+  static Future<amp.User> getAmpUserByID(String userID) async {
+    final List<amp.User> users = await Amplify.DataStore.query(
+      amp.User.classType,
+      where: amp.User.ID.eq(userID),
+    );
+    return users.first;
   }
 
   Future createUser(User user) async {
@@ -33,16 +43,13 @@ class UserRepository {
     await Amplify.DataStore.save(user.toAmplifyModel());
   }
 
-  Future updateUserPic(File file, String userID) async {
-    ///returns local asset path and saves pic to cloud storage
-    //todo: implement
-    return "test";
+  static SyncedFile getUserPicFile(User user) {
+    String path = dataStorePath(DataStorePaths.userPicPath, [user.id!]);
+    return SyncedFile(path);
   }
 
-  Future<File?> getUserPic(String userID) async {
-    ///returns user Pic as asset
-    ///returns File or memory
-    //todo: implement
-    return null;
+  static SyncedFile getUserPicFileByUserID(String id) {
+    String path = dataStorePath(DataStorePaths.userPicPath, [id]);
+    return SyncedFile(path);
   }
 }

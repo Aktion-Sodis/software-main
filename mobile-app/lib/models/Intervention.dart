@@ -35,11 +35,11 @@ class Intervention extends Model {
   final InterventionType? _interventionType;
   final List<InterventionContentRelation>? _contents;
   final List<Survey>? _surveys;
-  final List<InterventionTag>? _tags;
+  final List<InterventionInterventionTagRelation>? _tags;
   final int? _schemeVersion;
+  final List<LevelInterventionRelation>? _levels;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
-  final String? _levelAllowedInterventionsId;
 
   @override
   getInstanceType() => classType;
@@ -114,7 +114,7 @@ class Intervention extends Model {
     }
   }
   
-  List<InterventionTag> get tags {
+  List<InterventionInterventionTagRelation> get tags {
     try {
       return _tags!;
     } catch(e) {
@@ -131,6 +131,19 @@ class Intervention extends Model {
     return _schemeVersion;
   }
   
+  List<LevelInterventionRelation> get levels {
+    try {
+      return _levels!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
   TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -139,13 +152,9 @@ class Intervention extends Model {
     return _updatedAt;
   }
   
-  String? get levelAllowedInterventionsId {
-    return _levelAllowedInterventionsId;
-  }
+  const Intervention._internal({required this.id, required name, required description, required interventionType, required contents, required surveys, required tags, schemeVersion, required levels, createdAt, updatedAt}): _name = name, _description = description, _interventionType = interventionType, _contents = contents, _surveys = surveys, _tags = tags, _schemeVersion = schemeVersion, _levels = levels, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  const Intervention._internal({required this.id, required name, required description, required interventionType, required contents, required surveys, required tags, schemeVersion, createdAt, updatedAt, levelAllowedInterventionsId}): _name = name, _description = description, _interventionType = interventionType, _contents = contents, _surveys = surveys, _tags = tags, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _levelAllowedInterventionsId = levelAllowedInterventionsId;
-  
-  factory Intervention({String? id, required I18nString name, required I18nString description, required InterventionType interventionType, required List<InterventionContentRelation> contents, required List<Survey> surveys, required List<InterventionTag> tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
+  factory Intervention({String? id, required I18nString name, required I18nString description, required InterventionType interventionType, required List<InterventionContentRelation> contents, required List<Survey> surveys, required List<InterventionInterventionTagRelation> tags, int? schemeVersion, required List<LevelInterventionRelation> levels}) {
     return Intervention._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
@@ -153,9 +162,9 @@ class Intervention extends Model {
       interventionType: interventionType,
       contents: contents != null ? List<InterventionContentRelation>.unmodifiable(contents) : contents,
       surveys: surveys != null ? List<Survey>.unmodifiable(surveys) : surveys,
-      tags: tags != null ? List<InterventionTag>.unmodifiable(tags) : tags,
+      tags: tags != null ? List<InterventionInterventionTagRelation>.unmodifiable(tags) : tags,
       schemeVersion: schemeVersion,
-      levelAllowedInterventionsId: levelAllowedInterventionsId);
+      levels: levels != null ? List<LevelInterventionRelation>.unmodifiable(levels) : levels);
   }
   
   bool equals(Object other) {
@@ -174,7 +183,7 @@ class Intervention extends Model {
       DeepCollectionEquality().equals(_surveys, other._surveys) &&
       DeepCollectionEquality().equals(_tags, other._tags) &&
       _schemeVersion == other._schemeVersion &&
-      _levelAllowedInterventionsId == other._levelAllowedInterventionsId;
+      DeepCollectionEquality().equals(_levels, other._levels);
   }
   
   @override
@@ -191,14 +200,13 @@ class Intervention extends Model {
     buffer.write("interventionType=" + (_interventionType != null ? enumToString(_interventionType)! : "null") + ", ");
     buffer.write("schemeVersion=" + (_schemeVersion != null ? _schemeVersion!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null") + ", ");
-    buffer.write("levelAllowedInterventionsId=" + "$_levelAllowedInterventionsId");
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Intervention copyWith({String? id, I18nString? name, I18nString? description, InterventionType? interventionType, List<InterventionContentRelation>? contents, List<Survey>? surveys, List<InterventionTag>? tags, int? schemeVersion, String? levelAllowedInterventionsId}) {
+  Intervention copyWith({String? id, I18nString? name, I18nString? description, InterventionType? interventionType, List<InterventionContentRelation>? contents, List<Survey>? surveys, List<InterventionInterventionTagRelation>? tags, int? schemeVersion, List<LevelInterventionRelation>? levels}) {
     return Intervention._internal(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -208,7 +216,7 @@ class Intervention extends Model {
       surveys: surveys ?? this.surveys,
       tags: tags ?? this.tags,
       schemeVersion: schemeVersion ?? this.schemeVersion,
-      levelAllowedInterventionsId: levelAllowedInterventionsId ?? this.levelAllowedInterventionsId);
+      levels: levels ?? this.levels);
   }
   
   Intervention.fromJson(Map<String, dynamic> json)  
@@ -235,16 +243,21 @@ class Intervention extends Model {
       _tags = json['tags'] is List
         ? (json['tags'] as List)
           .where((e) => e?['serializedData'] != null)
-          .map((e) => InterventionTag.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .map((e) => InterventionInterventionTagRelation.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
       _schemeVersion = (json['schemeVersion'] as num?)?.toInt(),
+      _levels = json['levels'] is List
+        ? (json['levels'] as List)
+          .where((e) => e?['serializedData'] != null)
+          .map((e) => LevelInterventionRelation.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
-      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null,
-      _levelAllowedInterventionsId = json['levelAllowedInterventionsId'];
+      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name?.toJson(), 'description': _description?.toJson(), 'interventionType': enumToString(_interventionType), 'contents': _contents?.map((InterventionContentRelation? e) => e?.toJson()).toList(), 'surveys': _surveys?.map((Survey? e) => e?.toJson()).toList(), 'tags': _tags?.map((InterventionTag? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'levelAllowedInterventionsId': _levelAllowedInterventionsId
+    'id': id, 'name': _name?.toJson(), 'description': _description?.toJson(), 'interventionType': enumToString(_interventionType), 'contents': _contents?.map((InterventionContentRelation? e) => e?.toJson()).toList(), 'surveys': _surveys?.map((Survey? e) => e?.toJson()).toList(), 'tags': _tags?.map((InterventionInterventionTagRelation? e) => e?.toJson()).toList(), 'schemeVersion': _schemeVersion, 'levels': _levels?.map((LevelInterventionRelation? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "intervention.id");
@@ -259,9 +272,11 @@ class Intervention extends Model {
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Survey).toString()));
   static final QueryField TAGS = QueryField(
     fieldName: "tags",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (InterventionTag).toString()));
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (InterventionInterventionTagRelation).toString()));
   static final QueryField SCHEMEVERSION = QueryField(fieldName: "schemeVersion");
-  static final QueryField LEVELALLOWEDINTERVENTIONSID = QueryField(fieldName: "levelAllowedInterventionsId");
+  static final QueryField LEVELS = QueryField(
+    fieldName: "levels",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (LevelInterventionRelation).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Intervention";
     modelSchemaDefinition.pluralName = "Interventions";
@@ -303,14 +318,21 @@ class Intervention extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
       key: Intervention.TAGS,
       isRequired: true,
-      ofModelName: (InterventionTag).toString(),
-      associatedKey: InterventionTag.INTERVENTIONTAGSID
+      ofModelName: (InterventionInterventionTagRelation).toString(),
+      associatedKey: InterventionInterventionTagRelation.INTERVENTION
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Intervention.SCHEMEVERSION,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.int)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
+      key: Intervention.LEVELS,
+      isRequired: true,
+      ofModelName: (LevelInterventionRelation).toString(),
+      associatedKey: LevelInterventionRelation.INTERVENTION
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
@@ -325,12 +347,6 @@ class Intervention extends Model {
       isRequired: false,
       isReadOnly: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Intervention.LEVELALLOWEDINTERVENTIONSID,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
   });
 }

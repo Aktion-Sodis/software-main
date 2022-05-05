@@ -22,6 +22,9 @@ class Task {
   DateTime? createdAt;
   DateTime? updatedAt;
 
+  late List<int> audioList;
+  late List<int> picList;
+
   Task(
       {this.id,
       required this.title,
@@ -35,7 +38,9 @@ class Task {
       this.executedSurvey,
       this.schemeVersion,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      required this.audioList,
+      required this.picList});
 
   Task.fromAmplifyModel(amp.Task task) {
     id = task.id;
@@ -43,6 +48,8 @@ class Task {
     text = task.text;
     dueDate = task.dueDate?.getDateTimeInUtc();
     finishedDate = task.finishedDate?.getDateTimeInUtc();
+    audioList = task.audioIDs;
+    picList = task.picIDs;
     location = task.location != null
         ? Location.fromAmplifyModel(task.location!)
         : null;
@@ -69,6 +76,7 @@ class Task {
             finishedDate != null ? TemporalDateTime(finishedDate!) : null,
         location: location?.toAmplifyModel(),
         user: user.toAmplifyModel(),
+        userID: user.id!,
         entity: entity?.toAmplifyModel(),
         appliedIntervention: appliedIntervention?.toAmplifyModel(),
         executedSurvey: executedSurvey?.toAmplifyModel(),
@@ -76,6 +84,8 @@ class Task {
         taskUserId: user.id!,
         taskAppliedInterventionId: appliedIntervention?.id!,
         taskExecutedSurveyId: executedSurvey?.id!,
-        taskEntityId: entity?.id!);
+        taskEntityId: entity?.id!,
+        audioIDs: audioList,
+        picIDs: picList);
   }
 }

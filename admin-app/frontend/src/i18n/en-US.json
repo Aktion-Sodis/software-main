@@ -1,0 +1,310 @@
+{
+  "development": {
+    "notYetImplemented": "This feature is yet to be implemented. Thank you for your patience! 🐞"
+  },
+  "reflectiveData": {
+    "localeVerboseName": "English US"
+  },
+  "general": {
+    "edit": "Edit",
+    "searchBox": "Search anything",
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "archive": "Archive",
+    "form": {
+      "maxCharExceeded": "Maximum {maxChar} characters.",
+      "minCharNotMet": "Minimum {minChar} characters.",
+      "required": "Required.",
+      "unsavedChanges": "There are unsaved changes. Are you sure you want to leave?",
+      "addInNewLocale": "In another language",
+      "invalidForm": "The form is invalid. Please pay attention to warnings of inputs.",
+      "invalidNumber": "This is an invalid number."
+    },
+    "noTextProvided": "No text was provided.",
+    "noNumberProvided": "No number was provided.",
+    "noTags": "There are no tags.",
+    "routes": {
+      "Home": "Home",
+      "BaseData": "Base data",
+      "OrganizationStructure": "Organization structure",
+      "Interventions": "Interventions",
+      "Login": "Login",
+      "CompleteUserInfo": "Complete user information",
+      "ChangePassword": "Change password",
+      "ForgotPassword": "Forgot password",
+      "About": "About",
+      "Surveys": "Surveys"
+    },
+    "errorCodes": {
+      "InternalErrorException": "An internal error has occurred. Please try again later. Error Code: 6001",
+      "InvalidLambdaResponseException": "An internal error has occurred. Please try again later. Error Code: 6002",
+      "InvalidParameterException": "An internal error has occurred. Please try again later. Error Code: 6003",
+      "InvalidSmsRoleAccessPolicyException": "An internal error has occurred. Please try again later. Error Code: 6004",
+      "InvalidSmsRoleTrustRelationshipException": "An internal error has occurred. Please try again later. Error Code: 6005",
+      "InvalidUserPoolConfigurationException": "An internal error has occurred. Please try again later. Error Code: 6006",
+      "NotAuthorizedException": "Sorry, there is no matcing account for the given credentials. Error Code: 6001",
+      "PasswordResetRequiredException": "Password reset is required. Error Code: 6007",
+      "ResourceNotFoundException": "An internal error has occurred. Please try again later. Error Code: 6008",
+      "TooManyRequestsException": "Too many requests. Please try again later. Error Code: 6009",
+      "UnexpectedLambdaException": "An internal error has occurred. Please try again later. Error Code: 6010",
+      "UserLambdaValidationException": "An internal error has occurred. Please try again later. Error Code: 6011",
+      "UserNotConfirmedException": "User is not confirmed. Error Code: 6012",
+      "UserNotFoundException": "Sorry, there is no matcing account for the given credentials. Error Code: 6013",
+      "ConditionalCheckFailedException": "Sorry, something went wrong. Error Code: 6014",
+      "InvalidPasswordException": "Sorry, something went wrong. Error Code: 6015",
+      "LimitExceededException": "Sorry, something went wrong. Error Code: 6016",
+      "CodeMismatchException": "Code mismatch. Error Code: 6017",
+      "ExpiredCodeException": "Code has expired. Error Code: 6018",
+      "TooManyFailedAttemptsException": "Too many failed attempts. Error Code: 6019"
+    },
+    "warningCodes": {
+      "sessionExpired": "Your session has expired. Please sign in again."
+    },
+    "api": {
+      "inSync": "Refresh",
+      "synched": "In sync",
+      "synchronizing": "synchronizing..."
+    },
+    "operationFeedback": {
+      "data": {
+        "success": {
+          "create": "Successfully created.",
+          "update": "Successfully updated.",
+          "delete": "Successfully deleted.",
+          "archive": "Successfully archived."
+        },
+        "error": {
+          "create": "Something went wrong.",
+          "update": "Something went wrong.",
+          "delete": "Something went wrong.",
+          "archive": "Something went wrong."
+        }
+      },
+      "upload": {
+        "success": "Successfully uploaded.",
+        "error": "Could not upload the file."
+      }
+    },
+    "filters": {
+      "title": "Filters",
+      "hideArchived": "Click to hide archived items",
+      "showArchived": "Click to show archived items",
+      "hideDeleted": "Click to hide deleted items",
+      "showDeleted": "Click to show deleted items"
+    }
+  },
+  "Login": {
+    "title": "Welcome back!",
+    "subtitle": "Please sign in with your credentials.",
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot Password",
+    "signIn": "Sign in",
+    "withGoogle": "Sign in with Google",
+    "dontHaveAnAccount": "Don't have an account?",
+    "askYourAdmin": "Ask your administrator for access."
+  },
+  "CompleteUserInfo": {
+    "title": "One more thing...",
+    "subtitle": "Looks like you are new here. Please finish your profile to start using the Admin-App.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "password": {
+      "label": "New password",
+      "hint": "Make sure you don't forget this password and note it down."
+    },
+    "start": "Start"
+  },
+  "home": {
+    "title": "Home"
+  },
+  "ChangePassword": {
+    "title": "Update your password",
+    "subtitle": "Enter your old and the new one.",
+    "oldPassword": {
+      "label": "Old password",
+      "hint": "The password that you currently have. If you forgot it, try resetting your password."
+    },
+    "newPassword": {
+      "label": "New password",
+      "hint": "The password that you want to have."
+    }
+  },
+  "ForgotPassword": {
+    "title": "Forgot Password",
+    "subtitle": "Enter your email address. If there is an account for it, we will email you a verification code. Please enter the code and set a new password for your account.",
+    "emailedCode": "Code",
+    "newPassword1": "New password",
+    "newPassword2": "New password again",
+    "sendCode": "Send code",
+    "confirm": "Confirm"
+  },
+  "baseData": {
+    "title": "Base Data",
+    "documents": "Documents",
+    "images": "Images",
+    "videos": "Videos",
+    "surveys": "Surveys",
+    "tags": "Tags"
+  },
+  "organizationStructure": {
+    "title": "Organization Structure",
+    "addNewEntity": "Add new entity",
+    "addNewLevel": "Add new level",
+    "hasNoInterventions": "There are no interventions for this level.",
+    "hasNoEntities": "There are no entities for this level.",
+    "hasNoCustomData": "There are no custom data for this level.",
+    "thereAreMoreInterventions": "There are {count} more interventions for this level.",
+    "levelModal": {
+      "modalTitle": {
+        "edit": "Edit level ",
+        "create": "Create new level",
+        "read": "Viewing level"
+      },
+      "modalDescription": {
+        "edit": "This is the description of this beautiful edit dialog.",
+        "create": "This is the description of this beautiful create dialog."
+      },
+      "interventions": "Interventions",
+      "customData": {
+        "title": "Custom Data",
+        "name": "Name",
+        "type": "Type",
+        "types": {
+          "INT": "Number",
+          "STRING": "Text"
+        }
+      },
+      "areInterventionsAllowed": "are allowed.",
+      "allowInterventionsFirst": "Allow interventions first.",
+      "name": "Level Name",
+      "description": "Level Description",
+      "manageAllowedInterventions": "Manage allowed interventions",
+      "upperLevel": "Level is subordinate to"
+    },
+    "entityModal": {
+      "moreStuffTitle": "More stuff coming soon...",
+      "moreStuffDescription": "Adding Location, Custom Data and Tags will come in the next major update.",
+      "modalTitle": {
+        "edit": "Edit entity ",
+        "create": "Create new entity",
+        "read": "Viewing entity"
+      },
+      "modalDescription": {
+        "edit": "This is the description of this beautiful edit dialog.",
+        "create": "This is the description of this beautiful create dialog."
+      },
+      "name": "Entity Name",
+      "description": "Entity Description",
+      "otherInfo": "Here be some other things",
+      "upperEntity": "Upper entity",
+      "upperEntityLabel": "Choose parent entity"
+    }
+  },
+  "interventions": {
+    "title": "Interventions",
+    "newIntervention": "New intervention",
+    "type": {
+      "title": "Intervention Type",
+      "types": {
+        "TECHNOLOGY": "Technology",
+        "EDUCATION": "Education"
+      }
+    },
+    "modal": {
+      "modalTitle": {
+        "read": "Viewing intervention",
+        "edit": "Edit intervention ",
+        "create": "Create new intervention"
+      },
+      "modalDescription": {
+        "edit": "This is the description of this beautiful edit dialog.",
+        "create": "This is the description of this beautiful create dialog."
+      },
+      "name": "Intervention Name",
+      "description": "Intervention Description",
+      "image": "Intervention Image",
+      "levels": "Levels where this intervention is allowed",
+      "noDocuments": "No documents uploaded.",
+      "noImages": "No images uploaded.",
+      "noVideos": "No videos uploaded.",
+      "noSurveys": "No surveys uploaded."
+    }
+  },
+  "surveys": {
+    "title": "Surveys",
+    "newSurvey": "New survey",
+    "type": {
+      "title": "Survey Type",
+      "types": {
+        "INITIAL": "Initial",
+        "DEFAULT": "Default"
+      }
+    },
+    "modal": {
+      "image": "Survey Image",
+      "intervention": "Survey belongs to:",
+      "firstCard": {
+        "title": {
+          "edit": "Editing survey ",
+          "create": "New survey"
+        },
+        "form": {
+          "name": "Survey name",
+          "description": "Survey description",
+          "tags": "Survey tags"
+        },
+        "next-step": "Next step",
+        "questions": "Questions"
+      },
+      "questionCard": {
+        "form": {
+          "question": {
+            "title": "Question",
+            "textLabel": "Question text",
+            "imageTitle": "Question image",
+            "addImage": "Add image",
+            "audioTitle": "Question audio",
+            "addAudio": "Add audio"
+          },
+          "answer": {
+            "title": "Answer",
+            "typeLabel": "Question type",
+            "answer": "Option",
+            "textLabel": "Option text",
+            "addImage": "Add image to option",
+            "addAnswer": "Add option",
+            "questionTypes": {
+              "TEXT": "Text",
+              "SINGLECHOICE": "Single choice",
+              "MULTIPLECHOICE": "Multiple choice",
+              "PICTURE": "Picture",
+              "PICTUREWITHTAGS": "Picture with tags",
+              "AUDIO": "Audio",
+              "INT": "Integer number",
+              "DOUBLE": "Decimal number",
+              "RATING": "Rating"
+            }
+          }
+        },
+        "discardQuestion": "Discard question",
+        "priorQuestion": "Prior question",
+        "nextQuestion": "Next question",
+        "finalizeSurvey": "Finalize survey",
+        "backToDetails": "Details",
+        "saveDraft": "Save draft"
+      },
+      "finalizeCard": {
+        "publishSurvey": "Publish survey"
+      },
+      "stepper": {
+        "details": "Survey details",
+        "questions": "Questions",
+        "finalize": "Finalize"
+      }
+    }
+  }
+}

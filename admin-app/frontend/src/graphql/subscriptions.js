@@ -142,15 +142,14 @@ export const onCreateLevel = /* GraphQL */ `
       interventionsAreAllowed
       allowedInterventions {
         items {
-          interventionType
-          schemeVersion
           id
+          levelID
+          interventionID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         nextToken
         startedAt
@@ -188,15 +187,14 @@ export const onUpdateLevel = /* GraphQL */ `
       interventionsAreAllowed
       allowedInterventions {
         items {
-          interventionType
-          schemeVersion
           id
+          levelID
+          interventionID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         nextToken
         startedAt
@@ -234,15 +232,14 @@ export const onDeleteLevel = /* GraphQL */ `
       interventionsAreAllowed
       allowedInterventions {
         items {
-          interventionType
-          schemeVersion
           id
+          levelID
+          interventionID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         nextToken
         startedAt
@@ -295,6 +292,7 @@ export const onCreateIntervention = /* GraphQL */ `
         items {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -308,26 +306,39 @@ export const onCreateIntervention = /* GraphQL */ `
       }
       tags {
         items {
-          schemeVersion
           id
+          interventionID
+          interventionTagID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
         }
         nextToken
         startedAt
       }
       schemeVersion
+      levels {
+        items {
+          id
+          levelID
+          interventionID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      levelAllowedInterventionsId
     }
   }
 `;
@@ -361,6 +372,7 @@ export const onUpdateIntervention = /* GraphQL */ `
         items {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -374,26 +386,39 @@ export const onUpdateIntervention = /* GraphQL */ `
       }
       tags {
         items {
-          schemeVersion
           id
+          interventionID
+          interventionTagID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
         }
         nextToken
         startedAt
       }
       schemeVersion
+      levels {
+        items {
+          id
+          levelID
+          interventionID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      levelAllowedInterventionsId
     }
   }
 `;
@@ -427,6 +452,7 @@ export const onDeleteIntervention = /* GraphQL */ `
         items {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -440,26 +466,39 @@ export const onDeleteIntervention = /* GraphQL */ `
       }
       tags {
         items {
-          schemeVersion
           id
+          interventionID
+          interventionTagID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          interventionTagsId
         }
         nextToken
         startedAt
       }
       schemeVersion
+      levels {
+        items {
+          id
+          levelID
+          interventionID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      levelAllowedInterventionsId
     }
   }
 `;
@@ -490,14 +529,14 @@ export const onCreateContent = /* GraphQL */ `
       }
       tags {
         items {
-          schemeVersion
           id
+          contentID
+          contentTagID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          contentTagsId
         }
         nextToken
         startedAt
@@ -539,14 +578,14 @@ export const onUpdateContent = /* GraphQL */ `
       }
       tags {
         items {
-          schemeVersion
           id
+          contentID
+          contentTagID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          contentTagsId
         }
         nextToken
         startedAt
@@ -588,14 +627,14 @@ export const onDeleteContent = /* GraphQL */ `
       }
       tags {
         items {
-          schemeVersion
           id
+          contentID
+          contentTagID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          contentTagsId
         }
         nextToken
         startedAt
@@ -644,13 +683,16 @@ export const onCreateSurvey = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       questions {
         id
@@ -661,26 +703,27 @@ export const onCreateSurvey = /* GraphQL */ `
         type
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         isFollowUpQuestion
       }
       tags {
         items {
-          schemeVersion
           id
+          surveyID
+          surveyTagID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          surveyTagsId
         }
         nextToken
         startedAt
       }
       surveyType
       schemeVersion
+      archived
       id
       createdAt
       updatedAt
@@ -725,13 +768,16 @@ export const onUpdateSurvey = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       questions {
         id
@@ -742,26 +788,27 @@ export const onUpdateSurvey = /* GraphQL */ `
         type
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         isFollowUpQuestion
       }
       tags {
         items {
-          schemeVersion
           id
+          surveyID
+          surveyTagID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          surveyTagsId
         }
         nextToken
         startedAt
       }
       surveyType
       schemeVersion
+      archived
       id
       createdAt
       updatedAt
@@ -806,13 +853,16 @@ export const onDeleteSurvey = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       questions {
         id
@@ -823,26 +873,27 @@ export const onDeleteSurvey = /* GraphQL */ `
         type
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         isFollowUpQuestion
       }
       tags {
         items {
-          schemeVersion
           id
+          surveyID
+          surveyTagID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          surveyTagsId
         }
         nextToken
         startedAt
       }
       surveyType
       schemeVersion
+      archived
       id
       createdAt
       updatedAt
@@ -899,12 +950,16 @@ export const onCreateEntity = /* GraphQL */ `
       customData {
         customDataID
         type
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         intValue
         stringValue
       }
       appliedInterventions {
         items {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -976,12 +1031,16 @@ export const onUpdateEntity = /* GraphQL */ `
       customData {
         customDataID
         type
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         intValue
         stringValue
       }
       appliedInterventions {
         items {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1053,12 +1112,16 @@ export const onDeleteEntity = /* GraphQL */ `
       customData {
         customDataID
         type
-        name
+        name {
+          languageKeys
+          languageTexts
+        }
         intValue
         stringValue
       }
       appliedInterventions {
         items {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1126,18 +1189,22 @@ export const onCreateAppliedIntervention = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       location {
         latitude
         longitude
       }
+      isOkay
       executedSurveys {
         items {
           date
@@ -1210,18 +1277,22 @@ export const onUpdateAppliedIntervention = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       location {
         latitude
         longitude
       }
+      isOkay
       executedSurveys {
         items {
           date
@@ -1294,18 +1365,22 @@ export const onDeleteAppliedIntervention = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       location {
         latitude
         longitude
       }
+      isOkay
       executedSurveys {
         items {
           date
@@ -1361,12 +1436,12 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         location {
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1400,7 +1475,6 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         questions {
           id
@@ -1413,6 +1487,7 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt
@@ -1448,9 +1523,12 @@ export const onCreateExecutedSurvey = /* GraphQL */ `
         date
         type
         text
+        intValue
+        doubleValue
+        rating
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         markings {
           x
@@ -1498,12 +1576,12 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         location {
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1537,7 +1615,6 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         questions {
           id
@@ -1550,6 +1627,7 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt
@@ -1585,9 +1663,12 @@ export const onUpdateExecutedSurvey = /* GraphQL */ `
         date
         type
         text
+        intValue
+        doubleValue
+        rating
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         markings {
           x
@@ -1635,12 +1716,12 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         location {
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1674,7 +1755,6 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         questions {
           id
@@ -1687,6 +1767,7 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
         }
         surveyType
         schemeVersion
+        archived
         id
         createdAt
         updatedAt
@@ -1722,9 +1803,12 @@ export const onDeleteExecutedSurvey = /* GraphQL */ `
         date
         type
         text
+        intValue
+        doubleValue
+        rating
         questionOptions {
           id
-          followUpQuestionID
+          followUpQuestionIDs
         }
         markings {
           x
@@ -1774,6 +1858,7 @@ export const onCreateTask = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
+      userID
       entity {
         name {
           languageKeys
@@ -1802,7 +1887,6 @@ export const onCreateTask = /* GraphQL */ `
         customData {
           customDataID
           type
-          name
           intValue
           stringValue
         }
@@ -1841,12 +1925,12 @@ export const onCreateTask = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         location {
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -1864,6 +1948,7 @@ export const onCreateTask = /* GraphQL */ `
       }
       executedSurvey {
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -1878,6 +1963,7 @@ export const onCreateTask = /* GraphQL */ `
         survey {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -1909,6 +1995,9 @@ export const onCreateTask = /* GraphQL */ `
           date
           type
           text
+          intValue
+          doubleValue
+          rating
         }
         schemeVersion
         id
@@ -1922,6 +2011,8 @@ export const onCreateTask = /* GraphQL */ `
         executedSurveyWhoExecutedItId
       }
       schemeVersion
+      picIDs
+      audioIDs
       id
       createdAt
       updatedAt
@@ -1962,6 +2053,7 @@ export const onUpdateTask = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
+      userID
       entity {
         name {
           languageKeys
@@ -1990,7 +2082,6 @@ export const onUpdateTask = /* GraphQL */ `
         customData {
           customDataID
           type
-          name
           intValue
           stringValue
         }
@@ -2029,12 +2120,12 @@ export const onUpdateTask = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         location {
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -2052,6 +2143,7 @@ export const onUpdateTask = /* GraphQL */ `
       }
       executedSurvey {
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -2066,6 +2158,7 @@ export const onUpdateTask = /* GraphQL */ `
         survey {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -2097,6 +2190,9 @@ export const onUpdateTask = /* GraphQL */ `
           date
           type
           text
+          intValue
+          doubleValue
+          rating
         }
         schemeVersion
         id
@@ -2110,6 +2206,8 @@ export const onUpdateTask = /* GraphQL */ `
         executedSurveyWhoExecutedItId
       }
       schemeVersion
+      picIDs
+      audioIDs
       id
       createdAt
       updatedAt
@@ -2150,6 +2248,7 @@ export const onDeleteTask = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
+      userID
       entity {
         name {
           languageKeys
@@ -2178,7 +2277,6 @@ export const onDeleteTask = /* GraphQL */ `
         customData {
           customDataID
           type
-          name
           intValue
           stringValue
         }
@@ -2217,12 +2315,12 @@ export const onDeleteTask = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          levelAllowedInterventionsId
         }
         location {
           latitude
           longitude
         }
+        isOkay
         executedSurveys {
           nextToken
           startedAt
@@ -2240,6 +2338,7 @@ export const onDeleteTask = /* GraphQL */ `
       }
       executedSurvey {
         appliedIntervention {
+          isOkay
           schemeVersion
           id
           createdAt
@@ -2254,6 +2353,7 @@ export const onDeleteTask = /* GraphQL */ `
         survey {
           surveyType
           schemeVersion
+          archived
           id
           createdAt
           updatedAt
@@ -2285,6 +2385,9 @@ export const onDeleteTask = /* GraphQL */ `
           date
           type
           text
+          intValue
+          doubleValue
+          rating
         }
         schemeVersion
         id
@@ -2298,6 +2401,8 @@ export const onDeleteTask = /* GraphQL */ `
         executedSurveyWhoExecutedItId
       }
       schemeVersion
+      picIDs
+      audioIDs
       id
       createdAt
       updatedAt
@@ -2319,13 +2424,26 @@ export const onCreateContentTag = /* GraphQL */ `
         languageTexts
       }
       schemeVersion
+      contents {
+        items {
+          id
+          contentID
+          contentTagID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      contentTagsId
     }
   }
 `;
@@ -2337,13 +2455,26 @@ export const onUpdateContentTag = /* GraphQL */ `
         languageTexts
       }
       schemeVersion
+      contents {
+        items {
+          id
+          contentID
+          contentTagID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      contentTagsId
     }
   }
 `;
@@ -2355,13 +2486,26 @@ export const onDeleteContentTag = /* GraphQL */ `
         languageTexts
       }
       schemeVersion
+      contents {
+        items {
+          id
+          contentID
+          contentTagID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      contentTagsId
     }
   }
 `;
@@ -2373,13 +2517,26 @@ export const onCreateInterventionTag = /* GraphQL */ `
         languageTexts
       }
       schemeVersion
+      interventions {
+        items {
+          id
+          interventionID
+          interventionTagID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      interventionTagsId
     }
   }
 `;
@@ -2391,13 +2548,26 @@ export const onUpdateInterventionTag = /* GraphQL */ `
         languageTexts
       }
       schemeVersion
+      interventions {
+        items {
+          id
+          interventionID
+          interventionTagID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      interventionTagsId
     }
   }
 `;
@@ -2409,13 +2579,26 @@ export const onDeleteInterventionTag = /* GraphQL */ `
         languageTexts
       }
       schemeVersion
+      interventions {
+        items {
+          id
+          interventionID
+          interventionTagID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      interventionTagsId
     }
   }
 `;
@@ -2427,13 +2610,26 @@ export const onCreateSurveyTag = /* GraphQL */ `
         languageTexts
       }
       schemeVersion
+      surveys {
+        items {
+          id
+          surveyID
+          surveyTagID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      surveyTagsId
     }
   }
 `;
@@ -2445,13 +2641,26 @@ export const onUpdateSurveyTag = /* GraphQL */ `
         languageTexts
       }
       schemeVersion
+      surveys {
+        items {
+          id
+          surveyID
+          surveyTagID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      surveyTagsId
     }
   }
 `;
@@ -2463,13 +2672,26 @@ export const onDeleteSurveyTag = /* GraphQL */ `
         languageTexts
       }
       schemeVersion
+      surveys {
+        items {
+          id
+          surveyID
+          surveyTagID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      surveyTagsId
     }
   }
 `;
@@ -2530,6 +2752,231 @@ export const onDeleteSessionData = /* GraphQL */ `
     }
   }
 `;
+export const onCreateLevelInterventionRelation = /* GraphQL */ `
+  subscription OnCreateLevelInterventionRelation {
+    onCreateLevelInterventionRelation {
+      id
+      levelID
+      interventionID
+      level {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        parentLevelID
+        interventionsAreAllowed
+        allowedInterventions {
+          nextToken
+          startedAt
+        }
+        customData {
+          id
+          type
+        }
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      intervention {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        interventionType
+        contents {
+          nextToken
+          startedAt
+        }
+        surveys {
+          nextToken
+          startedAt
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateLevelInterventionRelation = /* GraphQL */ `
+  subscription OnUpdateLevelInterventionRelation {
+    onUpdateLevelInterventionRelation {
+      id
+      levelID
+      interventionID
+      level {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        parentLevelID
+        interventionsAreAllowed
+        allowedInterventions {
+          nextToken
+          startedAt
+        }
+        customData {
+          id
+          type
+        }
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      intervention {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        interventionType
+        contents {
+          nextToken
+          startedAt
+        }
+        surveys {
+          nextToken
+          startedAt
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteLevelInterventionRelation = /* GraphQL */ `
+  subscription OnDeleteLevelInterventionRelation {
+    onDeleteLevelInterventionRelation {
+      id
+      levelID
+      interventionID
+      level {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        parentLevelID
+        interventionsAreAllowed
+        allowedInterventions {
+          nextToken
+          startedAt
+        }
+        customData {
+          id
+          type
+        }
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      intervention {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        interventionType
+        contents {
+          nextToken
+          startedAt
+        }
+        surveys {
+          nextToken
+          startedAt
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
 export const onCreateInterventionContentRelation = /* GraphQL */ `
   subscription OnCreateInterventionContentRelation {
     onCreateInterventionContentRelation {
@@ -2559,13 +3006,16 @@ export const onCreateInterventionContentRelation = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       content {
         name {
@@ -2629,13 +3079,16 @@ export const onUpdateInterventionContentRelation = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       content {
         name {
@@ -2699,13 +3152,16 @@ export const onDeleteInterventionContentRelation = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        levelAllowedInterventionsId
       }
       content {
         name {
@@ -2725,6 +3181,579 @@ export const onDeleteInterventionContentRelation = /* GraphQL */ `
           startedAt
         }
         schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onCreateInterventionInterventionTagRelation = /* GraphQL */ `
+  subscription OnCreateInterventionInterventionTagRelation {
+    onCreateInterventionInterventionTagRelation {
+      id
+      interventionID
+      interventionTagID
+      intervention {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        interventionType
+        contents {
+          nextToken
+          startedAt
+        }
+        surveys {
+          nextToken
+          startedAt
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      interventionTag {
+        text {
+          languageKeys
+          languageTexts
+        }
+        schemeVersion
+        interventions {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateInterventionInterventionTagRelation = /* GraphQL */ `
+  subscription OnUpdateInterventionInterventionTagRelation {
+    onUpdateInterventionInterventionTagRelation {
+      id
+      interventionID
+      interventionTagID
+      intervention {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        interventionType
+        contents {
+          nextToken
+          startedAt
+        }
+        surveys {
+          nextToken
+          startedAt
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      interventionTag {
+        text {
+          languageKeys
+          languageTexts
+        }
+        schemeVersion
+        interventions {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteInterventionInterventionTagRelation = /* GraphQL */ `
+  subscription OnDeleteInterventionInterventionTagRelation {
+    onDeleteInterventionInterventionTagRelation {
+      id
+      interventionID
+      interventionTagID
+      intervention {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        interventionType
+        contents {
+          nextToken
+          startedAt
+        }
+        surveys {
+          nextToken
+          startedAt
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        schemeVersion
+        levels {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      interventionTag {
+        text {
+          languageKeys
+          languageTexts
+        }
+        schemeVersion
+        interventions {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onCreateContentContentTagRelation = /* GraphQL */ `
+  subscription OnCreateContentContentTagRelation {
+    onCreateContentContentTagRelation {
+      id
+      contentID
+      contentTagID
+      content {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        interventions {
+          nextToken
+          startedAt
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      contentTag {
+        text {
+          languageKeys
+          languageTexts
+        }
+        schemeVersion
+        contents {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateContentContentTagRelation = /* GraphQL */ `
+  subscription OnUpdateContentContentTagRelation {
+    onUpdateContentContentTagRelation {
+      id
+      contentID
+      contentTagID
+      content {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        interventions {
+          nextToken
+          startedAt
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      contentTag {
+        text {
+          languageKeys
+          languageTexts
+        }
+        schemeVersion
+        contents {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteContentContentTagRelation = /* GraphQL */ `
+  subscription OnDeleteContentContentTagRelation {
+    onDeleteContentContentTagRelation {
+      id
+      contentID
+      contentTagID
+      content {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        interventions {
+          nextToken
+          startedAt
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        schemeVersion
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      contentTag {
+        text {
+          languageKeys
+          languageTexts
+        }
+        schemeVersion
+        contents {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onCreateSurveySurveyTagRelation = /* GraphQL */ `
+  subscription OnCreateSurveySurveyTagRelation {
+    onCreateSurveySurveyTagRelation {
+      id
+      surveyID
+      surveyTagID
+      survey {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        intervention {
+          interventionType
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        questions {
+          id
+          type
+          isFollowUpQuestion
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        surveyType
+        schemeVersion
+        archived
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        interventionSurveysId
+      }
+      surveyTag {
+        text {
+          languageKeys
+          languageTexts
+        }
+        schemeVersion
+        surveys {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateSurveySurveyTagRelation = /* GraphQL */ `
+  subscription OnUpdateSurveySurveyTagRelation {
+    onUpdateSurveySurveyTagRelation {
+      id
+      surveyID
+      surveyTagID
+      survey {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        intervention {
+          interventionType
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        questions {
+          id
+          type
+          isFollowUpQuestion
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        surveyType
+        schemeVersion
+        archived
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        interventionSurveysId
+      }
+      surveyTag {
+        text {
+          languageKeys
+          languageTexts
+        }
+        schemeVersion
+        surveys {
+          nextToken
+          startedAt
+        }
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteSurveySurveyTagRelation = /* GraphQL */ `
+  subscription OnDeleteSurveySurveyTagRelation {
+    onDeleteSurveySurveyTagRelation {
+      id
+      surveyID
+      surveyTagID
+      survey {
+        name {
+          languageKeys
+          languageTexts
+        }
+        description {
+          languageKeys
+          languageTexts
+        }
+        intervention {
+          interventionType
+          schemeVersion
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        questions {
+          id
+          type
+          isFollowUpQuestion
+        }
+        tags {
+          nextToken
+          startedAt
+        }
+        surveyType
+        schemeVersion
+        archived
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        interventionSurveysId
+      }
+      surveyTag {
+        text {
+          languageKeys
+          languageTexts
+        }
+        schemeVersion
+        surveys {
+          nextToken
+          startedAt
+        }
         id
         createdAt
         updatedAt

@@ -21,6 +21,7 @@
 
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -31,9 +32,9 @@ class ContentTag extends Model {
   final String id;
   final I18nString? _text;
   final int? _schemeVersion;
+  final List<ContentContentTagRelation>? _contents;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
-  final String? _contentTagsId;
 
   @override
   getInstanceType() => classType;
@@ -60,6 +61,19 @@ class ContentTag extends Model {
     return _schemeVersion;
   }
   
+  List<ContentContentTagRelation> get contents {
+    try {
+      return _contents!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
   TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -68,18 +82,14 @@ class ContentTag extends Model {
     return _updatedAt;
   }
   
-  String? get contentTagsId {
-    return _contentTagsId;
-  }
+  const ContentTag._internal({required this.id, required text, schemeVersion, required contents, createdAt, updatedAt}): _text = text, _schemeVersion = schemeVersion, _contents = contents, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  const ContentTag._internal({required this.id, required text, schemeVersion, createdAt, updatedAt, contentTagsId}): _text = text, _schemeVersion = schemeVersion, _createdAt = createdAt, _updatedAt = updatedAt, _contentTagsId = contentTagsId;
-  
-  factory ContentTag({String? id, required I18nString text, int? schemeVersion, String? contentTagsId}) {
+  factory ContentTag({String? id, required I18nString text, int? schemeVersion, required List<ContentContentTagRelation> contents}) {
     return ContentTag._internal(
       id: id == null ? UUID.getUUID() : id,
       text: text,
       schemeVersion: schemeVersion,
-      contentTagsId: contentTagsId);
+      contents: contents != null ? List<ContentContentTagRelation>.unmodifiable(contents) : contents);
   }
   
   bool equals(Object other) {
@@ -93,7 +103,7 @@ class ContentTag extends Model {
       id == other.id &&
       _text == other._text &&
       _schemeVersion == other._schemeVersion &&
-      _contentTagsId == other._contentTagsId;
+      DeepCollectionEquality().equals(_contents, other._contents);
   }
   
   @override
@@ -108,19 +118,18 @@ class ContentTag extends Model {
     buffer.write("text=" + (_text != null ? _text!.toString() : "null") + ", ");
     buffer.write("schemeVersion=" + (_schemeVersion != null ? _schemeVersion!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null") + ", ");
-    buffer.write("contentTagsId=" + "$_contentTagsId");
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  ContentTag copyWith({String? id, I18nString? text, int? schemeVersion, String? contentTagsId}) {
+  ContentTag copyWith({String? id, I18nString? text, int? schemeVersion, List<ContentContentTagRelation>? contents}) {
     return ContentTag._internal(
       id: id ?? this.id,
       text: text ?? this.text,
       schemeVersion: schemeVersion ?? this.schemeVersion,
-      contentTagsId: contentTagsId ?? this.contentTagsId);
+      contents: contents ?? this.contents);
   }
   
   ContentTag.fromJson(Map<String, dynamic> json)  
@@ -129,18 +138,25 @@ class ContentTag extends Model {
         ? I18nString.fromJson(new Map<String, dynamic>.from(json['text']['serializedData']))
         : null,
       _schemeVersion = (json['schemeVersion'] as num?)?.toInt(),
+      _contents = json['contents'] is List
+        ? (json['contents'] as List)
+          .where((e) => e?['serializedData'] != null)
+          .map((e) => ContentContentTagRelation.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
-      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null,
-      _contentTagsId = json['contentTagsId'];
+      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'text': _text?.toJson(), 'schemeVersion': _schemeVersion, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'contentTagsId': _contentTagsId
+    'id': id, 'text': _text?.toJson(), 'schemeVersion': _schemeVersion, 'contents': _contents?.map((ContentContentTagRelation? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "contentTag.id");
   static final QueryField TEXT = QueryField(fieldName: "text");
   static final QueryField SCHEMEVERSION = QueryField(fieldName: "schemeVersion");
-  static final QueryField CONTENTTAGSID = QueryField(fieldName: "contentTagsId");
+  static final QueryField CONTENTS = QueryField(
+    fieldName: "contents",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (ContentContentTagRelation).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "ContentTag";
     modelSchemaDefinition.pluralName = "ContentTags";
@@ -159,6 +175,13 @@ class ContentTag extends Model {
       ofType: ModelFieldType(ModelFieldTypeEnum.int)
     ));
     
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
+      key: ContentTag.CONTENTS,
+      isRequired: true,
+      ofModelName: (ContentContentTagRelation).toString(),
+      associatedKey: ContentContentTagRelation.CONTENTTAG
+    ));
+    
     modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
       fieldName: 'createdAt',
       isRequired: false,
@@ -171,12 +194,6 @@ class ContentTag extends Model {
       isRequired: false,
       isReadOnly: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: ContentTag.CONTENTTAGSID,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
   });
 }

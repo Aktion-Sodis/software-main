@@ -5,58 +5,64 @@
         v-if="isHovered"
         color="primary"
         rounded
+        :disabled="getLoading"
         x-large
         @mouseleave="setIsHovered(false)"
         key="hovered"
         class="overflow-hidden"
         @click="clickHandler"
       >
-        <v-icon class="mr-2"> mdi-plus </v-icon>
-        <span class="overflow-hidden">
-          {{ $t('organizationStructure.addNewEntity') }}
-        </span>
+        <v-icon class="mr-2">mdi-plus</v-icon>
+        <span class="overflow-hidden">{{ $t('organizationStructure.addNewEntity') }}</span>
       </v-btn>
       <v-btn
         v-else
         fab
         color="primary"
         @mouseover="setIsHovered(true)"
+        :disabled="getLoading"
         key="notHovered"
         @click="clickHandler"
       >
-        <v-icon class="mx-auto"> mdi-plus </v-icon>
+        <v-icon class="mx-auto">mdi-plus</v-icon>
       </v-btn>
     </transition>
   </div>
 </template>
 
 <script>
-import { validate as uuidValidate } from 'uuid';
+// import { validate as uuidValidate } from 'uuid';
 
-import { mapActions, mapMutations } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
+import { dataTypesDict, vuexModulesDict } from '../../lib/constants';
 
 export default {
   name: 'AddEntityButton',
   data: () => ({ isHovered: false }),
   props: {
-    levelId: {
+    entityLevelId: {
       required: true,
-      validator: (e) => uuidValidate(e) || e === null,
+      // validator: (v) => uuidValidate(v) || v === null || v.slice(0, 10) === 'dummyLevel',
     },
+  },
+  computed: {
+    ...mapGetters({
+      getLoading: `${vuexModulesDict.level}/getLoading`,
+    }),
   },
   methods: {
     setIsHovered(payload) {
       this.isHovered = payload;
     },
     ...mapActions({
-      newEntityHandler: 'dataModal/createData',
+      createData: `${vuexModulesDict.dataModal}/createData`,
     }),
     ...mapMutations({
       setCreatingEntityInLevelId: 'setCreatingEntityInLevelId',
     }),
     clickHandler() {
-      this.setCreatingEntityInLevelId({ id: this.levelId });
-      this.newEntityHandler({ dataType: 'ENTITY' });
+      this.setCreatingEntityInLevelId({ id: this.entityLevelId });
+      this.createData({ dataType: dataTypesDict.entity });
     },
   },
 };

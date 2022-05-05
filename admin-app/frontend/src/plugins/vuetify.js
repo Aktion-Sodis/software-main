@@ -25,6 +25,7 @@ export default new Vuetify({
         secondary: '#E26D5C',
         accent: colors.indigo.base,
         warning: colors.red.darken4,
+        destructive: '#fb8c00',
       },
     },
   },

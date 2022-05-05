@@ -1,0 +1,310 @@
+{
+  "development": {
+    "notYetImplemented": "Bu fonksiyonalite henüz tamamlanmadı. Sabrınız için teşekkürler! 🐞"
+  },
+  "reflectiveData": {
+    "localeVerboseName": "Türkçe Türkiye"
+  },
+  "general": {
+    "edit": "Düzenle",
+    "searchBox": "Her yerde ara",
+    "close": "Kapat",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "delete": "Sil",
+    "archive": "Arşivle",
+    "form": {
+      "maxCharExceeded": "Maksimum {maxChar} karakter.",
+      "minCharNotMet": "En az {minChar} uzunluğunda olmalı.",
+      "required": "Zorunlu alan.",
+      "unsavedChanges": "Kaydedilmemiş değişiklikler var. Çıkmak istediğinizden emin misiniz?",
+      "addInNewLocale": "Başka bir dilde",
+      "invalidForm": "Geçersiz form. Lütfen girdilerin uyarılarına dikkat ediniz.",
+      "invalidNumber": "Geçersiz sayı."
+    },
+    "noTextProvided": "Buraya bir metin girilmemiş.",
+    "noNumberProvided": "Buraya bir sayı girilmemiş.",
+    "noTags": "There are no tags.",
+    "routes": {
+      "Home": "Ana sayfa",
+      "BaseData": "Temel veriler",
+      "OrganizationStructure": "Organizasyonel yapı",
+      "Interventions": "Müdahaleler",
+      "Login": "Giriş",
+      "CompleteUserInfo": "Kullanıcı bilgilerini tamamla",
+      "ChangePassword": "Şifre Değiştir",
+      "ForgotPassword": "Şifremi Unuttum",
+      "About": "Hakkımızda",
+      "Surveys": "Anketler"
+    },
+    "errorCodes": {
+      "InternalErrorException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6001",
+      "InvalidLambdaResponseException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6002",
+      "InvalidParameterException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6003",
+      "InvalidSmsRoleAccessPolicyException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6004",
+      "InvalidSmsRoleTrustRelationshipException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6005",
+      "InvalidUserPoolConfigurationException": "Dahili bir hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6006",
+      "NotAuthorizedException": "Üzgünüz, verilen kimlik bilgileriyle eşleşen hesap yok. Hata Kodu: 6007",
+      "PasswordResetRequiredException": "Parola sıfırlama gerekli. Hata Kodu: 608",
+      "ResourceNotFoundException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6009",
+      "TooManyRequestsException": "Çok fazla istek var. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6010",
+      "UnexpectedLambdaException": "Dahili bir hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6011",
+      "UserLambdaValidationException": "Bir dahili hata oluştu. Lütfen daha sonra tekrar deneyin. Hata Kodu: 6012",
+      "UserNotConfirmedException": "Kullanıcı onaylanmadı. Hata Kodu: 6013",
+      "UserNotFoundException": "Üzgünüz, verilen kimlik bilgileriyle eşleşen hesap yok. Hata Kodu: 6014",
+      "ConditionalCheckFailedException": "Üzgünüm, bir şeyler ters gitti. Hata Kodu: 6015",
+      "InvalidPasswordException": "Üzgünüm, bir şeyler ters gitti. Hata Kodu: 6016",
+      "LimitExceededException": "Üzgünüm, bir şeyler ters gitti. Hata Kodu: 6017",
+      "CodeMismatchException": "Kod uyuşmazlığı. Hata Kodu: 6018",
+      "ExpiredCodeException": "Kodun süresi doldu. Hata Kodu: 6019",
+      "TooManyFailedAttemptsException": "Çok fazla başarısız deneme. Hata Kodu: 6020"
+    },
+    "warningCodes": {
+      "sessionExpired": "Oturumun süresi doldu. Lütfen yeniden giriş yap."
+    },
+    "api": {
+      "inSync": "Yenile",
+      "synched": "Senkronize",
+      "synchronizing": "senkronize ediliyor..."
+    },
+    "operationFeedback": {
+      "data": {
+        "success": {
+          "create": "Yaratma başarılı.",
+          "update": "Düzenleme başarılı.",
+          "delete": "Silme başarılı.",
+          "archive": "Arşivleme başarılı."
+        },
+        "error": {
+          "create": "Bir şeyler yanlış gitti.",
+          "update": "Bir şeyler yanlış gitti.",
+          "delete": "Bir şeyler yanlış gitti.",
+          "archive": "Bir şeyler yanlış gitti."
+        }
+      },
+      "upload": {
+        "success": "Yükleme başarılı.",
+        "error": "Yükleme tamamlanamadı."
+      }
+    },
+    "filters": {
+      "title": "Filtreler",
+      "hideArchived": "Arşivlenmiş öğeleri gizlemek için tıkla",
+      "showArchived": "Arşivlenmiş öğeleri göstermek için tıkla",
+      "hideDeleted": "Silinmiş öğeleri gizlemek için tıkla",
+      "showDeleted": "Silinmiş öğeleri göstermek için tıkla"
+    }
+  },
+  "Login": {
+    "title": "Hoş geldin!",
+    "subtitle": "Lütfen giriş yap.",
+    "email": "Email",
+    "password": "Şifre",
+    "rememberMe": "Oturumu hatırla",
+    "forgotPassword": "Şifremi unuttum",
+    "signIn": "Giriş yap",
+    "withGoogle": "Google'la giriş yap",
+    "dontHaveAnAccount": "Hesabın yok mu?",
+    "askYourAdmin": "Erişim için bir dernek yetkilisine danış."
+  },
+  "CompleteUserInfo": {
+    "title": "Bir şey daha...",
+    "subtitle": "Görünen o ki sen buralarda yenisin. Lütfen Admin-App'i kullanmaya başlamak için profilini tamamla.",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "password": {
+      "label": "Yeni şifre",
+      "hint": "Lütfen bu şifreni unutma ve bir yerde sakladığından emin ol."
+    },
+    "start": "Başla"
+  },
+  "home": {
+    "title": "Ana Sayfa"
+  },
+  "ChangePassword": {
+    "title": "Şifreni güncelle",
+    "subtitle": "Eski ve yeni şifrelerini gir",
+    "oldPassword": {
+      "label": "Eski Şifre",
+      "hint": "Şu anda sahip olduğunuz şifre. Unuttuysanız, şifrenizi sıfırlamayı deneyin."
+    },
+    "newPassword": {
+      "label": "Yeni Şifre",
+      "hint": "Yeni şifre oluşturun"
+    }
+  },
+  "ForgotPassword": {
+    "title": "Şifremi Unuttum",
+    "subtitle": "E-posta adresinizi giriniz. Size bir doğrulama kodu göndereceğiz. Lütfen kodu girin ve hesabınız için yeni bir şifre belirleyin.",
+    "emailedCode": "Kod",
+    "newPassword1": "Yeni Şifre",
+    "newPassword2": "Yeni Şifre Tekrar",
+    "sendCode": "Kod Gönder",
+    "confirm": "Onay"
+  },
+  "baseData": {
+    "title": "Temel Veriler",
+    "documents": "Dokümanlar",
+    "images": "Resimler",
+    "videos": "Videolar",
+    "surveys": "Anketler",
+    "tags": "Etiketler"
+  },
+  "organizationStructure": {
+    "title": "Organizasyonel Yapı",
+    "addNewEntity": "Yeni oluşum ekle",
+    "addNewLevel": "Yeni seviye ekle",
+    "hasNoInterventions": "Bu seviyede henüz hiç müdahale yok.",
+    "hasNoEntities": "Bu seviyede henüz hiç oluşum yok.",
+    "hasNoCustomData": "Henüz bu seviyeye özgü hiçbir veri yok.",
+    "thereAreMoreInterventions": "Bu seviye için {count} müdahale daha var.",
+    "levelModal": {
+      "modalTitle": {
+        "edit": "Seviyeyi düzenle: ",
+        "create": "Yeni seviye yarat",
+        "read": "Seviye görüntüleniyor"
+      },
+      "modalDescription": {
+        "edit": "Bu güzel seviye düzenleme diyaloğunun çok güzel açıklaması.",
+        "create": "Bu güzel seviye yaratma diyaloğunun çok güzel açıklaması."
+      },
+      "interventions": "Müdahaleler",
+      "customData": {
+        "title": "Özel veriler",
+        "name": "Ad",
+        "type": "Tür",
+        "types": {
+          "INT": "Sayı",
+          "STRING": "Metin"
+        }
+      },
+      "areInterventionsAllowed": "uygulanabilir.",
+      "allowInterventionsFirst": "Lütfen önce müdahale yapılmasına izin verin.",
+      "name": "Seviye adı",
+      "description": "Seviye açıklaması",
+      "manageAllowedInterventions": "İzin verilen müdahaleleri yönet",
+      "upperLevel": "Seviyenin üst seviyesi"
+    },
+    "entityModal": {
+      "moreStuffTitle": "Daha fazlası yakında...",
+      "moreStuffDescription": "Konum, Özel Veriler ve Etiketlerin eklenmesi bir sonraki büyük güncellemede gelecek.",
+      "modalTitle": {
+        "edit": "Oluşumu düzenle: ",
+        "create": "Yeni oluşum yarat",
+        "read": "Oluşum görüntüleniyor"
+      },
+      "modalDescription": {
+        "edit": "Bu güzel oluşum düzenleme diyaloğunun çok güzel açıklaması.",
+        "create": "Bu güzel oluşum yaratma diyaloğunun çok güzel açıklaması."
+      },
+      "name": "Oluşum adı",
+      "description": "Oluşum açıklaması",
+      "otherInfo": "Burada başka bir şeyler olsun",
+      "upperEntity": "Üst oluşum",
+      "upperEntityLabel": "Üst oluşumu seç"
+    }
+  },
+  "interventions": {
+    "title": "Müdahaleler",
+    "newIntervention": "Yeni müdahale",
+    "type": {
+      "title": "Müdahale türü",
+      "types": {
+        "TECHNOLOGY": "Teknoloji",
+        "EDUCATION": "Eğitim"
+      }
+    },
+    "modal": {
+      "modalTitle": {
+        "read": "Müdahale",
+        "edit": "Müdahaleyi düzenle: ",
+        "create": "Yeni müdahale yarat"
+      },
+      "modalDescription": {
+        "edit": "Bu güzel müdahale düzenleme diyaloğunun çok güzel açıklaması.",
+        "create": "Bu güzel müdahale yaratma diyaloğunun çok güzel açıklaması."
+      },
+      "name": "Müdahale adı",
+      "description": "Müdahale açıklaması",
+      "image": "Müdahale resmi",
+      "noDocuments": "Henüz hiç döküman yüklenmemiş.",
+      "levels": "Levels where this intervention is allowed",
+      "noImages": "Henüz hiç resim yüklenmemiş.",
+      "noVideos": "Henüz hiç video yüklenmemiş.",
+      "noSurveys": "Henüz hiç anket yüklenmemiş."
+    }
+  },
+  "surveys": {
+    "title": "Anketler",
+    "newSurvey": "Yeni anket",
+    "type": {
+      "title": "Anket türü",
+      "types": {
+        "INITIAL": "Başlangıç",
+        "DEFAULT": "Varsayılan"
+      }
+    },
+    "modal": {
+      "image": "Anket Resmi",
+      "intervention": "Anketin müdahalesi:",
+      "firstCard": {
+        "title": {
+          "edit": "Anket düzenleniyor... ",
+          "create": "Yeni anket"
+        },
+        "form": {
+          "name": "Anket adı",
+          "description": "Anket açıklaması",
+          "tags": "Anket etiketleri"
+        },
+        "next-step": "Sonraki adım",
+        "questions": "Sorular"
+      },
+      "questionCard": {
+        "form": {
+          "question": {
+            "title": "Soru",
+            "textLabel": "Soru metni",
+            "imageTitle": "Soru resmi",
+            "addImage": "Resim ekle",
+            "audioTitle": "Soru sesi",
+            "addAudio": "Ses ekle"
+          },
+          "answer": {
+            "title": "Yanıt",
+            "typeLabel": "Soru tipi",
+            "answer": "Seçenek",
+            "textLabel": "Seçenek metni",
+            "addImage": "Seçeneğe resim ekle",
+            "addAnswer": "Seçenek ekle",
+            "questionTypes": {
+              "TEXT": "Metin",
+              "SINGLECHOICE": "Çoktan tek seçmeli",
+              "MULTIPLECHOICE": "Çoktan çok seçmeli",
+              "PICTURE": "Resim",
+              "PICTUREWITHTAGS": "Etiketli resim",
+              "AUDIO": "Ses",
+              "INT": "Integer number",
+              "DOUBLE": "Decimal number",
+              "RATING": "Rating"
+            }
+          }
+        },
+        "discardQuestion": "Soruyu sil",
+        "priorQuestion": "Önceki soru",
+        "nextQuestion": "Sonraki soru",
+        "finalizeSurvey": "Anketi tamamla",
+        "backToDetails": "Detaylar",
+        "saveDraft": "Taslağı kaydet"
+      },
+      "finalizeCard": {
+        "publishSurvey": "Anketi yayınla"
+      },
+      "stepper": {
+        "details": "Anket detayları",
+        "questions": "Sorular",
+        "finalize": "Tamamla"
+      }
+    }
+  }
+}
