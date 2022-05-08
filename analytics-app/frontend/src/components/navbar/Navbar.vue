@@ -53,7 +53,7 @@
         >
       </li>
       <li>
-        <router-link class="link" to="/dummy-view-2"
+        <router-link class="link" to="/login"
           ><i class="icon fa-solid fa-arrow-right-to-bracket" />
           <p>Login</p></router-link
         >
@@ -153,7 +153,6 @@ export default {
   color: white;
 }
 .user {
-  padding-top: 5px;
   margin: 0 10px;
 }
 .user .user-icon {
