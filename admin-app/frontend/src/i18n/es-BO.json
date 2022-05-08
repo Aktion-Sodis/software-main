@@ -8,7 +8,7 @@
   "general": {
     "edit": "Editar",
     "searchBox": "Búsqueda",
-    "close": "Close",
+    "close": "Cerrar",
     "cancel": "Cancelar",
     "save": "Guardar",
     "delete": "Eliminar",
@@ -284,9 +284,9 @@
               "PICTURE": "Imágen",
               "PICTUREWITHTAGS": "Imágen con etiquetas",
               "AUDIO": "Audio",
-              "INT": "Integer number",
-              "DOUBLE": "Decimal number",
-              "RATING": "Rating"
+              "INT": "Número entero",
+              "DOUBLE": "Número decimal",
+              "RATING": "Valoración"
             }
           }
         },
