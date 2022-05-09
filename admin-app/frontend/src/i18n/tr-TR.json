@@ -280,8 +280,8 @@
             "addAnswer": "Seçenek ekle",
             "questionTypes": {
               "TEXT": "Metin",
-              "SINGLECHOICE": "Çoktan tek seçmeli",
-              "MULTIPLECHOICE": "Çoktan çok seçmeli",
+              "SINGLECHOICE": "Çoktan seçmeli (tek)",
+              "MULTIPLECHOICE": "Çoktan seçmeli (çok)",
               "PICTURE": "Resim",
               "PICTUREWITHTAGS": "Etiketli resim",
               "AUDIO": "Ses",
