@@ -177,7 +177,7 @@ const dataModal = {
         },
       );
     },
-    archiveData: async ({ dispatch, getters }) => {
+    archiveData: async ({ commit, dispatch, getters }) => {
       const dataType = getters.getDataType;
       if (getters.getMode !== modalModesDict.edit) return;
       const success = await dispatch(
@@ -198,6 +198,8 @@ const dataModal = {
           root: true,
         },
       );
+
+      await commit('abortReadData');
 
       // TODO: Too costly. Find a leaner way of updating the data.
       dispatch(

@@ -8,6 +8,7 @@ const QUESTION_UI = {
     questionDrafts: [emptyQuestion()],
     optionDrafts: [[emptyQuestionOption()]],
     questionImages: [],
+    questionAudios: [],
   }),
   getters: {
     /* READ */
@@ -15,6 +16,7 @@ const QUESTION_UI = {
     getQuestionDrafts: ({ questionDrafts }) => questionDrafts || [emptyQuestion()],
     getOptionDrafts: ({ optionDrafts }) => optionDrafts || [[emptyQuestionOption()]],
     getQuestionImages: ({ questionImages }) => questionImages,
+    getQuestionAudios: ({ questionAudios }) => questionAudios,
 
     questionWithOptionDrafts: (_, { getQuestionDrafts, getOptionDrafts }) => getQuestionDrafts.map((q, i) => ({
       ...q,
@@ -55,6 +57,9 @@ const QUESTION_UI = {
     setQuestionImages: (state, { payload }) => {
       state.questionImages = payload;
     },
+    setQuestionAudios: (state, { payload }) => {
+      state.questionAudios = payload;
+    },
 
     /* QUESTION CREATE, UPDATE, DELETE */
     addQuestionAtIndex: (state, { newQuestion, index }) => {
@@ -79,16 +84,28 @@ const QUESTION_UI = {
     },
 
     /* QUESTION IMAGE CREATE, UPDATE, DELETE */
-    addQuestionImageAtIndex: (state, { newQuestionImage, index }) => {
-      state.questionImages.splice(index, 0, newQuestionImage);
+    addQuestionImageAtIndex: (state, { newFile, index }) => {
+      state.questionImages.splice(index, 0, newFile);
     },
-    replaceQuestionImageAtIndex: (state, { newQuestionImage, index }) => {
-      state.questionImages.splice(index, 1, newQuestionImage);
+    replaceQuestionImageAtIndex: (state, { newFile, index }) => {
+      state.questionImages.splice(index, 1, newFile);
     },
     deleteQuestionImageAtIndex: (state, { index }) => {
       state.questionImages.splice(index, 1);
     },
     pushNullToQuestionImages: (state) => state.questionImages.push(null),
+
+    /* QUESTION AUDIO CREATE, UPDATE, DELETE */
+    addQuestionAudioAtIndex: (state, { newFile, index }) => {
+      state.questionAudios.splice(index, 0, newFile);
+    },
+    replaceQuestionAudioAtIndex: (state, { newFile, index }) => {
+      state.questionAudios.splice(index, 1, newFile);
+    },
+    deleteQuestionAudioAtIndex: (state, { index }) => {
+      state.questionAudios.splice(index, 1);
+    },
+    pushNullToQuestionAudios: (state) => state.questionAudios.push(null),
   },
   actions: {
     nextQuestionHandler: ({ commit, getters }, { newQuestion, newOptions }) => {
@@ -160,14 +177,30 @@ const QUESTION_UI = {
         commit('incrementIQuestions');
       }
     },
-    addImageToQuestion: ({ commit, getters }, { newQuestionImage }) => {
+    addImageToQuestion: ({ commit, getters }, { newFile }) => {
+      console.log({ newFile });
       const currentIndex = getters.getIQuestions;
       if (getters.getQuestionImages[currentIndex] === undefined) {
         while (getters.getQuestionImages.length <= currentIndex) {
           commit('pushNullToQuestionImages');
         }
       }
-      commit('replaceQuestionImageAtIndex', { newQuestionImage, index: currentIndex });
+      commit('replaceQuestionImageAtIndex', { newFile, index: currentIndex });
+    },
+    addFileToQuestion: ({ commit, getters }, { file, type }) => {
+      const currentIndex = getters.getIQuestions;
+      const isImage = type === 'image';
+      if (getters.getQuestionAudios[currentIndex] === undefined) {
+        while (getters.getQuestionAudios.length <= currentIndex) {
+          if (isImage) {
+            commit('pushNullToQuestionImages');
+            continue;
+          }
+          commit('pushNullToQuestionAudios');
+        }
+      }
+      const mutationName = isImage ? 'addQuestionImageAtIndex' : 'addQuestionAudioAtIndex';
+      commit(mutationName, { newFile: file, index: currentIndex });
     },
   },
 };

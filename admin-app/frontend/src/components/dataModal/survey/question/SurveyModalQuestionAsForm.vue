@@ -83,7 +83,7 @@
                 <FileInput
                   ref="question-img-upload"
                   style="display: none"
-                  :acceptedType="'image/png'"
+                  acceptedType="image/png"
                   :isForQuestions="true"
                 />
               </div>
@@ -92,17 +92,17 @@
                 {{ $t('surveys.modal.questionCard.form.question.audioTitle') }}
               </h3>
               <div class="d-flex justify-center">
-                <v-btn color="primary" rounded x-large @click="clickOnAddAudio" class="mt-4">
+                <v-btn color="primary" rounded x-large @click="selectQuestionAudio" class="mt-4">
                   <v-icon class="mr-2"> mdi-waveform </v-icon>
                   <span class="overflow-hidden">
                     {{ $t('surveys.modal.questionCard.form.question.addAudio') }}
                   </span>
                 </v-btn>
-                <input
-                  type="file"
-                  accept="image/png, image/jpeg"
+                <FileInput
                   ref="question-audio-upload"
                   style="display: none"
+                  acceptedType="audio/mpeg"
+                  :isForQuestions="true"
                 />
               </div>
             </v-col>
@@ -453,12 +453,9 @@ export default {
       const imgInput = this.$refs['question-img-upload'];
       imgInput.$el.click();
     },
-    clickOnAddAudio() {
+    selectQuestionAudio() {
       const audioInput = this.$refs['question-audio-upload'];
-      if (Array.isArray(audioInput)) audioInput[0].click();
-      else audioInput.click();
-      this.showToBeImplementedFeedback();
-      // console.log('TODO: do something with', audioInput);
+      audioInput.$el.click();
     },
     clickOnAddOption() {
       this.options.push(emptyMutableQuestionOption());

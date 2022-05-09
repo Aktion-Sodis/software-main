@@ -39,6 +39,10 @@ export const databaseOntologies = Object.freeze({
     path: 'interventionFiles/interventionID/surveyFiles/surveyID/questionFiles/questionID/pic.png',
     toBeReplaced: ['interventionID', 'surveyID', 'questionID'],
   },
+  questionAudioPath: {
+    path: 'interventionFiles/interventionID/surveyFiles/surveyID/questionFiles/questionID/audio.mp3',
+    toBeReplaced: ['interventionID', 'surveyID', 'questionID'],
+  },
   questionOptionPicPath: {
     path: 'interventionFiles/interventionID/surveyFiles/surveyID/questionFiles/questionID/optionFiles/optionID/pic.png',
     toBeReplaced: ['interventionID', 'surveyID', 'questionID', 'optionID'],

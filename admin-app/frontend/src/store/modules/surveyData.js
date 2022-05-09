@@ -157,6 +157,21 @@ const surveysData = {
           },
         );
 
+        rootGetters[`${vuexModulesDict.question}/getQuestionAudios`].forEach(
+          async (questionImg, index) => {
+            if (questionImg) {
+              await Storage.put(
+                deriveFilePath('questionAudioPath', {
+                  interventionID: survey.interventionSurveysId,
+                  surveyId: postResponse.id,
+                  questionId: survey.questions[index].id,
+                }),
+                questionImg,
+              );
+            }
+          },
+        );
+
         commit('addSurvey', postResponse);
         dispatch(
           `${vuexModulesDict.dataModal}/readData`,

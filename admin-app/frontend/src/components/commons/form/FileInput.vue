@@ -27,17 +27,19 @@ export default {
       setImageFile: `${vuexModulesDict.dataModal}/setImageFile`,
     }),
     ...mapActions({
-      addImageToQuestion: `${vuexModulesDict.question}/addImageToQuestion`,
+      addFileToQuestion: `${vuexModulesDict.question}/addFileToQuestion`,
       showFeedbackForDuration: `${vuexModulesDict.feedback}/showFeedbackForDuration`,
     }),
     filesChange(files) {
       let success = true;
       if (files.length !== 1) success = false;
       const file = files[0];
+      console.log({ file });
       if (file.size > 16000000 || !allowedFileUploadTypes.includes(file.type)) success = false;
 
       if (this.isForQuestions) {
-        this.addImageToQuestion({ newQuestionImage: file });
+        const isImage = file.type.includes('image');
+        this.addFileToQuestion({ file, type: isImage ? 'image' : 'audio' });
       } else {
         this.setImageFile({ newValue: file });
       }
