@@ -53,6 +53,13 @@
                   </template>
                 </ImgFromS3>
               </div>
+
+              <h3 class="mt-4">
+                {{ $t('surveys.modal.questionCard.form.question.audioTitle') }}
+              </h3>
+              <div v-if="surveyInFocus">
+                <AudioFromS3 :assumedSrc="deriveAudioPath" />
+              </div>
             </v-col>
 
             <v-col cols="12" sm="6" class="pt-4 px-0 px-sm-3 pt-sm-0">
@@ -130,16 +137,19 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
+
 import { questionTypesIconDict } from '../../../../lib/constants';
 // eslint-disable-next-line import/named
 import { deriveFilePath } from '../../../../lib/utils';
 
 import ImgFromS3 from '../../../commons/ImgFromS3.vue';
+import AudioFromS3 from '../../../commons/AudioFromS3.vue';
 
 export default {
   name: 'SurveyModalQuestionRead',
   components: {
     ImgFromS3,
+    AudioFromS3,
   },
   data() {
     return {
@@ -176,9 +186,19 @@ export default {
         questionID: this.surveyInFocus.questions[this.iQuestions].id,
       });
     },
+    deriveAudioPath() {
+      return deriveFilePath('questionAudioPath', {
+        interventionID: this.surveyInFocus.intervention.id,
+        surveyID: this.dataIdInFocus,
+        questionID: this.surveyInFocus.questions[this.iQuestions].id,
+      });
+    },
   },
-  mounted() {
+  async mounted() {
     if (this.iQuestions >= this.nQuestions) this.setIQuestions({ payload: 0 });
+
+    // const questionAudio = await Storage.get(this.deriveAudioPath, { download: true });
+    // this.audioURL = URL.createObjectURL(questionAudio.Body);
   },
   methods: {
     ...mapActions({
