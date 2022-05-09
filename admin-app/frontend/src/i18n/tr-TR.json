@@ -25,6 +25,7 @@
     "noTextProvided": "Buraya bir metin girilmemiş.",
     "noNumberProvided": "Buraya bir sayı girilmemiş.",
     "noTags": "There are no tags.",
+    "noAudio": "Yok.",
     "routes": {
       "Home": "Ana sayfa",
       "BaseData": "Temel veriler",

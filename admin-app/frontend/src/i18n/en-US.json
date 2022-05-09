@@ -25,6 +25,7 @@
     "noTextProvided": "No text was provided.",
     "noNumberProvided": "No number was provided.",
     "noTags": "There are no tags.",
+    "noAudio": "No audio.",
     "routes": {
       "Home": "Home",
       "BaseData": "Base data",
