@@ -19,19 +19,14 @@
     </v-btn>
     <template>
       <div class="text-center">
-        <v-menu
-          v-model="menu"
-          :close-on-content-click="false"
-          :nudge-width="100"
-          offset-x
-        >
+        <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="100" offset-x>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn  v-bind="attrs" v-on="on">
+            <v-btn v-bind="attrs" v-on="on">
               <v-icon color="white">mdi-cog-outline</v-icon>
             </v-btn>
           </template>
 
-          <v-card >
+          <v-card>
             <v-list>
               <v-list-item>
                 <v-list-item-content>
@@ -45,22 +40,17 @@
                 <lang-select />
               </v-list-item>
               <v-list-item>
-                <v-layout  align-center justify-center>
-                    <v-btn @click="logout" class="mx-2" small color="primary" large block>
-                      <v-icon color="white">mdi-exit-to-app</v-icon>
-                      Logout
-                    </v-btn>
+                <v-layout align-center justify-center>
+                  <v-btn @click="logout" class="mx-2" small color="primary" large block>
+                    <v-icon color="white">mdi-exit-to-app</v-icon>
+                    Logout
+                  </v-btn>
                 </v-layout>
               </v-list-item>
             </v-list>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn
-                text
-                @click="menu = false"
-              >
-                Close
-              </v-btn>
+              <v-btn text @click="menu = false"> Close </v-btn>
             </v-card-actions>
           </v-card>
         </v-menu>
@@ -148,7 +138,6 @@ export default {
     menu: false,
     message: false,
     hints: true,
-    societyName,
     routes: routes
       .filter((r) => r.meta.onSideBar)
       .map((r) => ({
