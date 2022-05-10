@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -32,4 +32,4 @@ jobs:
         cache: 'npm'
         cache-dependency-path: lib/cicd/node/package-lock.json
     - run: npm ci
-    - run: npm run once -- "$APOLAT2000PERSONALACCESSTOKEN"
+    - run: npm run once -- '{$APOLAT2000PERSONALACCESSTOKEN}'
