@@ -22,15 +22,12 @@ jobs:
         node-version: [16.x]
 
     steps:
-    - uses: actions/checkout@v3
-      env:
-        DUMMY: ${{ secrets.DUMMY }}
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
+      env:
+        DUMMY: ${{ secrets.DUMMY }}
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: lib/cicd/node/package-lock.json
-    - run: npm ci
-    - run: |
-        node release.mjs "$DUMMY"
+      run: npm ci; npm run once -- "$DUMMY"
