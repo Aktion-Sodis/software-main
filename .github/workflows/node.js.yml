@@ -32,4 +32,4 @@ jobs:
         cache: 'npm'
         cache-dependency-path: lib/cicd/node/package-lock.json
     - run: npm ci
-    - run: npm run once -- '{$APOLAT2000PERSONALACCESSTOKEN}'
+    - run: npm run once -- "$APOLAT2000PERSONALACCESSTOKEN"
