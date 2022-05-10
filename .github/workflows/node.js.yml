@@ -14,20 +14,19 @@ jobs:
     runs-on: ubuntu-latest
 
     defaults:
-       run:
-         working-directory: lib/cicd/node/
-
-    strategy:
-      matrix:
-        node-version: [16.x]
+      run:
+        working-directory: lib/cicd/node/
 
     steps:
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      env:
-        DUMMY: ${{ secrets.DUMMY }}
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: lib/cicd/node/package-lock.json
-      run: npm ci; npm run once -- "$DUMMY"
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+          cache-dependency-path: lib/cicd/node/package-lock.json
+      - name: main
+        env:
+          DUMMY: ${{ secrets.DUMMY }}
+        run: |
+          npm ci
+          node release.mjs "$DUMMY"
