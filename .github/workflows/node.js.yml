@@ -24,7 +24,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       env:
-        dummy: ${{ secrets.dummy }}
+        DUMMY: ${{ secrets.DUMMY }}
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -33,4 +33,4 @@ jobs:
         cache-dependency-path: lib/cicd/node/package-lock.json
     - run: npm ci
     - run: |
-        node release.mjs "$dummy"
+        node release.mjs "$DUMMY"
