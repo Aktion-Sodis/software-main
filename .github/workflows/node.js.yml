@@ -12,6 +12,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    defaults:
+       run:
+         working-directory: lib/cicd/node/
+
     strategy:
       matrix:
         node-version: [12.x, 14.x, 16.x]
@@ -26,6 +30,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: cd lib/cicd/node/
+        cache-dependency-path: lib/cicd/node/package-lock.json
     - run: npm ci
     - run: npm run once -- "$APOLAT2000PERSONALACCESSTOKEN"
