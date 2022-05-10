@@ -9,7 +9,8 @@ on:
 
 jobs:
   build:
-    environment: cicd
+    environment:
+      name: cicd
     runs-on: ubuntu-latest
 
     defaults:
