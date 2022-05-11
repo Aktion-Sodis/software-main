@@ -6,7 +6,7 @@
         <div class="line2"></div>
         <div class="line3"></div>
       </div>
-      <div class="logo">
+      <div class="logo" @click="currentRouteName">
         <el-image class="image" src="/src/static/aktionSodisSmall.png" />
       </div>
       <div class="name">Aktion Sodis</div>
@@ -16,19 +16,31 @@
         @click="closeNavLinks"
       >
         <li>
-          <router-link class="link" to="/">
+          <router-link
+            class="link"
+            :class="{ active: $route.path === '/' }"
+            to="/"
+          >
             <i class="icon fas fa-home" />
             <p>Home</p>
           </router-link>
         </li>
         <li>
-          <router-link class="link" to="/dummy-view-1">
+          <router-link
+            class="link"
+            :class="{ active: $route.path === '/dummy-view-1' }"
+            to="/dummy-view-1"
+          >
             <i class="icon fa-solid fa-database" />
             <p>Data</p>
           </router-link>
         </li>
         <li>
-          <router-link class="link" to="/dummy-view-2">
+          <router-link
+            class="link"
+            :class="{ active: $route.path === '/dummy-view-2' }"
+            to="/dummy-view-2"
+          >
             <i class="icon fas fa-chart-bar" />
             <p>Dashboard</p>
           </router-link>
@@ -47,13 +59,13 @@
       @click="closeUserLinks"
     >
       <li>
-        <router-link class="link" to="/dummy-view-2"
+        <router-link class="user-link" to="/dummy-view-2"
           ><i class="icon fa-solid fa-gear" />
           <p>Settings</p></router-link
         >
       </li>
       <li>
-        <router-link class="link" to="/login"
+        <router-link class="user-link" to="/login"
           ><i class="icon fa-solid fa-arrow-right-to-bracket" />
           <p>Login</p></router-link
         >
@@ -103,7 +115,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   height: 50px;
-  background-color: #be2d67;
+  background-color: #2d91be;
 }
 .organization {
   display: flex;
@@ -122,10 +134,11 @@ export default {
 }
 .nav-links {
   display: flex;
+  align-items: center;
 }
 .nav-links li {
   list-style: none;
-  margin-right: 10px;
+  margin-right: 3px;
 }
 .link {
   text-decoration: none;
@@ -134,6 +147,14 @@ export default {
   letter-spacing: 1px;
   display: flex;
   align-items: center;
+  padding: 2px 12px 1px 1px;
+  border-radius: 5px;
+}
+.link.active {
+  background-color: #feaa3a;
+}
+.link:hover {
+  background-color: #64aa73;
 }
 .icon {
   width: 16px;
@@ -142,11 +163,6 @@ export default {
 .extras {
   display: flex;
   align-items: center;
-}
-.search {
-  padding-top: 3px;
-  height: 5px;
-  width: 150px;
 }
 .language-selector {
   margin: 0 5px;
@@ -168,20 +184,38 @@ export default {
   position: absolute;
   right: 0px;
   top: 50px;
-  background-color: #be2d67;
+  background-color: #2d91be;
   align-items: flex-start;
   width: 150px;
   border-top: 1px solid black;
 }
 .user-links li {
-  padding: 10px 0 10px 0px;
+  width: 100%;
+  margin: 5px 0 0 5px;
+  padding: 1px 0 1px 0px;
+  width: calc(100% - 10px);
+  list-style: none;
+}
+.user-link {
+  text-decoration: none;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   display: flex;
   align-items: center;
+  padding: 2px 12px 1px 1px;
+  border-radius: 5px;
+}
+.user-link.active {
+  background-color: #feaa3a;
+}
+.user-link:hover {
+  background-color: #64aa73;
 }
 .burger div {
   width: 25px;
   height: 2px;
-  margin: 5px;
+  margin: 5px 5px;
   background-color: white;
 }
 .user-links.collapsed {
@@ -195,7 +229,8 @@ export default {
     position: absolute;
     left: 0px;
     top: 50px;
-    background-color: #be2d67;
+    background-color: #2d91be;
+    color: white;
     align-items: flex-start;
     width: 100%;
     border-top: 1px solid black;
@@ -204,9 +239,9 @@ export default {
     display: none;
   }
   .nav-links li {
-    padding: 10px 0 10px 0px;
-    display: flex;
-    align-items: center;
+    margin: 5px 0 0 5px;
+    padding: 1px 0 1px 0px;
+    width: calc(100% - 10px);
   }
   .burger {
     display: block;
