@@ -10,9 +10,9 @@
         :class="{ collapsed: menuCollapsed }"
         @click="closeNavLinks"
       >
-        <li>
+        <li class="li">
           <router-link
-            class="nav-link"
+            class="link"
             :class="{ active: $route.path === '/' }"
             to="/"
           >
@@ -20,9 +20,9 @@
             <p>Home</p>
           </router-link>
         </li>
-        <li>
+        <li class="li">
           <router-link
-            class="nav-link"
+            class="link"
             :class="{ active: $route.path === '/data' }"
             to="/data"
           >
@@ -30,11 +30,11 @@
             <p>Data</p>
           </router-link>
         </li>
-        <li>
+        <li class="li">
           <router-link
-            class="nav-link"
-            :class="{ active: $route.path === '/dummy-view-2' }"
-            to="/dummy-view-2"
+            class="link"
+            :class="{ active: $route.path === '/dashboard' }"
+            to="/dashboard"
           >
             <i class="icon fas fa-chart-bar" />
             <p>Dashboard</p>
@@ -48,9 +48,7 @@
         <i class="user-icon fa-solid fa-circle-user"></i>
       </div>
       <div class="burger" @click="toggleNavLinks">
-        <div class="line1"></div>
-        <div class="line2"></div>
-        <div class="line3"></div>
+        <i class="burger-icon fa-solid fa-bars" />
       </div>
     </div>
     <ul
@@ -58,20 +56,20 @@
       :class="{ collapsed: userCollapsed }"
       @click="closeUserLinks"
     >
-      <li>
-        <router-link class="user-link" to="/dummy-view-2"
+      <li class="li">
+        <router-link class="link" to="/dummy-view-2"
           ><i class="icon fa-solid fa-gear" />
           <p>Settings</p></router-link
         >
       </li>
-      <li>
-        <router-link class="user-link" to="/login"
+      <li class="li">
+        <router-link class="link" to="/login"
           ><i class="icon fa-solid fa-arrow-right-to-bracket" />
           <p>Login</p></router-link
         >
       </li>
-      <li>
-        <router-link class="user-link" to="/login"
+      <li class="li">
+        <router-link class="link" to="/login"
           ><i class="icon fa-solid fa-arrow-right-to-bracket" />
           <p>Login</p></router-link
         >
@@ -115,13 +113,19 @@ export default {
 };
 </script>
 
+<style>
+:root {
+  --navbar-height: 50px;
+  --link-height: 35px;
+}
+</style>
 <style scoped>
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 50px;
-  background-color: #2d91be;
+  height: var(--navbar-height);
+  background-color: var(--bg-color);
 }
 .organization {
   display: flex;
@@ -142,25 +146,47 @@ export default {
   display: flex;
   align-items: center;
 }
-.nav-links li {
-  list-style: none;
-  margin-right: 3px;
+.user-links {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 0px;
+  top: var(--navbar-height);
+  background-color: var(--bg-color);
+  align-items: flex-start;
+  width: 150px;
+  border-top: 1px solid black;
+  border-radius: 0px 0px 0px 5px;
+  padding: 4px 0px 4px 0px;
+
+  z-index: 1;
 }
-.nav-link {
+.user-links.collapsed {
+  display: none;
+}
+.li {
+  width: 100%;
+  margin: 2px 0 2px 5px;
+  width: calc(100% - 10px);
+  list-style: none;
+}
+.link {
   text-decoration: none;
   color: white;
   text-transform: uppercase;
   letter-spacing: 1px;
   display: flex;
   align-items: center;
-  padding: 2px 12px 1px 1px;
   border-radius: 5px;
+  height: var(--link-height);
+  box-sizing: border-box;
+  padding: 2px 12px 1px 1px;
 }
-.nav-link.active {
-  background-color: #feaa3a;
+.link.active .user-link.active {
+  background-color: var(--item-active);
 }
-.nav-link:hover {
-  background-color: #64aa73;
+.link:hover .user-link:hover {
+  background-color: var(--item-hover);
 }
 .icon {
   width: 16px;
@@ -175,57 +201,24 @@ export default {
   color: white;
 }
 .user {
-  margin: 0 10px;
+  margin: 0 0;
 }
-.user .user-icon {
-  height: 30px;
+.user-icon {
+  height: 25px;
   color: white;
+  margin: 0 10px;
 }
 .burger {
   display: none;
 }
-.user-links {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  right: 0px;
-  top: 50px;
-  background-color: #2d91be;
-  align-items: flex-start;
-  width: 150px;
-  border-top: 1px solid black;
-  border-radius: 0px 0px 0px 5px;
-  padding: 4px 0px 4px 0px;
+.burger-icon {
+  height: 30px;
 }
-.user-links li {
-  width: 100%;
-  margin: 2px 0 2px 5px;
-  width: calc(100% - 10px);
-  list-style: none;
+.link.active {
+  background-color: var(--item-active);
 }
-.user-link {
-  text-decoration: none;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
-  border-radius: 5px;
-}
-.user-link.active {
-  background-color: #feaa3a;
-}
-.user-link:hover {
-  background-color: #64aa73;
-}
-.burger div {
-  width: 25px;
-  height: 2px;
-  margin: 5px 5px;
-  background-color: white;
-}
-.user-links.collapsed {
-  display: none;
+.link:hover {
+  background-color: var(--item-hover);
 }
 
 @media screen and (max-width: 820px) {
@@ -233,43 +226,34 @@ export default {
     display: flex;
     flex-direction: column;
     position: absolute;
-    left: 0px;
-    top: 50px;
-    background-color: #2d91be;
-    color: white;
+    right: 0px;
+    top: var(--navbar-height);
+    background-color: var(--bg-color);
     align-items: flex-start;
     width: 100%;
     border-top: 1px solid black;
     border-radius: 0px 0px 5px 5px;
     padding: 4px 0px 4px 0px;
+
+    z-index: 1;
   }
   .nav-links.collapsed {
-    display: none;
-  }
-  .nav-links li {
-    width: 100%;
-    margin: 2px 0 2px 5px;
-    width: calc(100% - 10px);
-    list-style: none;
-  }
-  .nav-link {
-    text-decoration: none;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-    border-radius: 5px;
-  }
-  .burger {
-    display: block;
-  }
-  .organization-name {
     display: none;
   }
   .user-links {
     width: 100%;
     border-radius: 0px 0px 5px 5px;
+  }
+  .burger {
+    display: block;
+    color: white;
+    margin: 0 10px;
+  }
+  .user-icon {
+    margin: 0 0;
+  }
+  .organization-name {
+    display: none;
   }
 }
 </style>
