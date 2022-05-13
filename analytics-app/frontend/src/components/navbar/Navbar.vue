@@ -1,15 +1,10 @@
 <template>
   <div class="navbar">
     <div class="organization">
-      <div class="burger" @click="toggleNavLinks">
-        <div class="line1"></div>
-        <div class="line2"></div>
-        <div class="line3"></div>
-      </div>
       <div class="logo" @click="currentRouteName">
         <el-image class="image" src="/src/static/aktionSodisSmall.png" />
       </div>
-      <div class="name">Aktion Sodis</div>
+      <div class="organization-name">Aktion Sodis</div>
       <ul
         class="nav-links"
         :class="{ collapsed: menuCollapsed }"
@@ -17,7 +12,7 @@
       >
         <li>
           <router-link
-            class="link"
+            class="nav-link"
             :class="{ active: $route.path === '/' }"
             to="/"
           >
@@ -27,7 +22,7 @@
         </li>
         <li>
           <router-link
-            class="link"
+            class="nav-link"
             :class="{ active: $route.path === '/data' }"
             to="/data"
           >
@@ -37,7 +32,7 @@
         </li>
         <li>
           <router-link
-            class="link"
+            class="nav-link"
             :class="{ active: $route.path === '/dummy-view-2' }"
             to="/dummy-view-2"
           >
@@ -52,6 +47,11 @@
       <div class="user" @click="toggleUserLinks">
         <i class="user-icon fa-solid fa-circle-user"></i>
       </div>
+      <div class="burger" @click="toggleNavLinks">
+        <div class="line1"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+      </div>
     </div>
     <ul
       class="user-links"
@@ -62,6 +62,12 @@
         <router-link class="user-link" to="/dummy-view-2"
           ><i class="icon fa-solid fa-gear" />
           <p>Settings</p></router-link
+        >
+      </li>
+      <li>
+        <router-link class="user-link" to="/login"
+          ><i class="icon fa-solid fa-arrow-right-to-bracket" />
+          <p>Login</p></router-link
         >
       </li>
       <li>
@@ -125,7 +131,7 @@ export default {
   width: 30px;
   margin: 0 10px;
 }
-.name {
+.organization-name {
   text-transform: uppercase;
   letter-spacing: 0px;
   font-size: 20px;
@@ -140,7 +146,7 @@ export default {
   list-style: none;
   margin-right: 3px;
 }
-.link {
+.nav-link {
   text-decoration: none;
   color: white;
   text-transform: uppercase;
@@ -150,10 +156,10 @@ export default {
   padding: 2px 12px 1px 1px;
   border-radius: 5px;
 }
-.link.active {
+.nav-link.active {
   background-color: #feaa3a;
 }
-.link:hover {
+.nav-link:hover {
   background-color: #64aa73;
 }
 .icon {
@@ -188,11 +194,12 @@ export default {
   align-items: flex-start;
   width: 150px;
   border-top: 1px solid black;
+  border-radius: 0px 0px 0px 5px;
+  padding: 4px 0px 4px 0px;
 }
 .user-links li {
   width: 100%;
-  margin: 5px 0 0 5px;
-  padding: 1px 0 1px 0px;
+  margin: 2px 0 2px 5px;
   width: calc(100% - 10px);
   list-style: none;
 }
@@ -203,7 +210,6 @@ export default {
   letter-spacing: 1px;
   display: flex;
   align-items: center;
-  padding: 2px 12px 1px 1px;
   border-radius: 5px;
 }
 .user-link.active {
@@ -234,23 +240,36 @@ export default {
     align-items: flex-start;
     width: 100%;
     border-top: 1px solid black;
+    border-radius: 0px 0px 5px 5px;
+    padding: 4px 0px 4px 0px;
   }
   .nav-links.collapsed {
     display: none;
   }
   .nav-links li {
-    margin: 5px 0 0 5px;
-    padding: 1px 0 1px 0px;
+    width: 100%;
+    margin: 2px 0 2px 5px;
     width: calc(100% - 10px);
+    list-style: none;
+  }
+  .nav-link {
+    text-decoration: none;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
   }
   .burger {
     display: block;
   }
-  .logo {
+  .organization-name {
     display: none;
   }
   .user-links {
     width: 100%;
+    border-radius: 0px 0px 5px 5px;
   }
 }
 </style>
