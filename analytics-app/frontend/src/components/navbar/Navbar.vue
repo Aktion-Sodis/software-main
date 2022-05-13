@@ -28,8 +28,8 @@
         <li>
           <router-link
             class="link"
-            :class="{ active: $route.path === '/dummy-view-1' }"
-            to="/dummy-view-1"
+            :class="{ active: $route.path === '/data' }"
+            to="/data"
           >
             <i class="icon fa-solid fa-database" />
             <p>Data</p>

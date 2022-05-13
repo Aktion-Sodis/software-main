@@ -3,7 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import DummyView1 from './views/DummyView1.vue';
 import DummyView2 from './views/DummyView2.vue';
 import Home from './views/Home.vue';
-import Login from './views/Login.vue'
+import Login from './views/Login.vue';
+import Data from './views/Data.vue';
 
 export const routes = [
   {
@@ -29,6 +30,11 @@ export const routes = [
       hideNavbar: true,
     }
   },
+  { 
+    name: 'Data',
+    path: '/data',
+    component: Data,
+  }
 ];
 
 export const router = createRouter({
