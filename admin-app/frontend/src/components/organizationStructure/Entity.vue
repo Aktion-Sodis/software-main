@@ -4,19 +4,19 @@
       <div
         v-if="entityHasParent({ parentEntityID }) && index !== 0"
         class="entity-connection-left-line"
-        :style="`width: ${60 - leftLineOfEntity.indentation * 12}px; left: ${
-          -60 + leftLineOfEntity.indentation * 12
+        :style="`width: ${378 - leftLineOfEntity.indentation * 12}px; left: ${
+          -378 + leftLineOfEntity.indentation * 12
         }px; background-color: ${lineColors[leftLineOfEntity.indentation]}; top: ${
-          64 + leftLineOfEntity.indentation * 6
+          16 + leftLineOfEntity.indentation * 3
         }px; z-index: ${leftLineOfEntity.indentation}`"
       ></div>
       <div
         v-if="hasDescendants({ id })"
         class="entity-connection-right-line"
-        :style="`width: ${72 + rightLineOfEntity.indentation * 12}px; left: calc(12rem - 26px + ${
-          rightLineOfEntity.indentation * 6
+        :style="`width: ${(rightLineOfEntity.indentation + 1) * 12}px; left: calc(128px + ${
+          (rightLineOfEntity.indentation + 1) * 6
         }px); background-color: ${lineColors[rightLineOfEntity.indentation]}; top: ${
-          64 + rightLineOfEntity.indentation * 6
+          16 + rightLineOfEntity.indentation * 3
         }px; z-index: ${rightLineOfEntity.indentation}`"
       ></div>
     </div>

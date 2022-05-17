@@ -1,0 +1,15 @@
+{
+  "name": "release",
+  "version": "1.0.0",
+  "description": "",
+  "main": "release.js",
+  "scripts": {
+    "once": "node release.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.6.7",
+    "octokit": "^1.7.1"
+  }
+}

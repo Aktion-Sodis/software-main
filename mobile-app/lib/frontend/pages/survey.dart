@@ -270,27 +270,35 @@ class SurveyWidgetState extends State<SurveyWidget> {
                 if (answers[currentQuestion] != null) {
                   //check for followUpQuestions
                   if (currentQuestion.type == QuestionType.SINGLECHOICE) {
-                    String? followUpID = answers[currentQuestion]!
+                    List<String>? followUpIDs = answers[currentQuestion]!
                         .questionOptions!
                         .first
-                        .followUpQuestionID;
-                    if (followUpID != null) {
+                        .followUpQuestionIDs;
+                    if (followUpIDs != null) {
                       List<Question> followUpQuestions = widget.survey.questions
-                          .where((element) => element.id == followUpID)
+                          .where((element) =>
+                              followUpIDs.any((fu) => fu == element.id))
                           .toList();
+                      followUpQuestions.removeWhere(
+                          (element) => questions.contains(element));
                       if (followUpQuestions.isNotEmpty) {
-                        if (!questions.contains(followUpQuestions.first)) {
-                          setState(() {
-                            questions.insert(
+                        setState(() {
+                          try {
+                            questions.insertAll(
                                 questions.indexOf(currentQuestion) + 1,
-                                followUpQuestions.first);
-                          });
-                        }
+                                followUpQuestions);
+                          } catch (e) {
+                            questions.addAll(followUpQuestions);
+                          }
+                        });
                       }
                     }
+                    //todo: hier sinn nicht direkt nachvollziehbar
+                    //@arthur-becker bitte allgemein nochmal prüfen
+                    //habe es nur so geändert, dass build möglich ist
                     questions.removeWhere((element) {
                       bool result = element.isFollowUpQuestion &&
-                          element.id != followUpID;
+                          !(followUpIDs?.contains(element.id) ?? false);
                       if (result) {
                         answers.remove(element);
                       }

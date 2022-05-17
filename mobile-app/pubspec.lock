@@ -478,6 +478,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.11"
+
   material_design_icons_flutter:
     dependency: "direct main"
     description:

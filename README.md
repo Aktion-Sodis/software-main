@@ -62,6 +62,6 @@
 
 ## :raised_hands: Contribute
 
-See our ["job" posts](https://cloud.collective-incubator.de/teams/aktion-sodis) for our volunteer collaboration! We will love to have you around and skyrocket our coolness coefficient to the moon 😎🚀
+See our ["job" posts](https://cloud.collective-incubator.de/jobs) for our volunteer collaboration! We will love to have you around and skyrocket our coolness coefficient to the moon 😎🚀 
 
-You can also always assign yourself to an issue and solve that issue in a pull request.
+You can also always assign yourself to an issue and solve that issue in a pull request. 

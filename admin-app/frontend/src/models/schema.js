@@ -1925,12 +1925,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "followUpQuestionID": {
-                    "name": "followUpQuestionID",
-                    "isArray": false,
+                "followUpQuestionIDs": {
+                    "name": "followUpQuestionIDs",
+                    "isArray": true,
                     "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": true
                 }
             }
         },
@@ -2151,5 +2152,6 @@ export const schema = {
             }
         }
     },
-    "version": "5513f75668298946d70868c15444edbb"
+
+    "version": "dc6306969dd366139fcc9a6c28e81f80"
 };
