@@ -28,6 +28,7 @@
           >
             <i class="icon fa-solid fa-database" />
             <p>Data</p>
+            <i class="icon-dropdown fa-solid fa-caret-down" />
           </router-link>
         </li>
         <li class="li">
@@ -39,6 +40,18 @@
             <i class="icon fas fa-chart-bar" />
             <p>Dashboard</p>
           </router-link>
+        </li>
+        <li class="li">
+          <div class="link">
+            <i class="icon fa-solid fa-database" />
+            <p>Test</p>
+            <i class="icon-dropdown fa-solid fa-caret-down" />
+          </div>
+          <div class="sub-link">
+            <i class="icon fa-solid fa-database" />
+            <p>Test</p>
+            <i class="icon-dropdown fa-solid fa-caret-down" />
+          </div>
         </li>
       </ul>
     </div>
@@ -168,6 +181,7 @@ export default {
   width: 100%;
   margin: 2px 0 2px 5px;
   width: calc(100% - 10px);
+  width: max-content;
   list-style: none;
 }
 .link {
@@ -191,6 +205,23 @@ export default {
 .icon {
   width: 16px;
   margin: 9px;
+}
+.icon-dropdown {
+  width: 10px;
+  margin: 5px;
+}
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: var(--navbar-height);
+  background-color: var(--bg-color);
+  align-items: flex-start;
+  border-top: 1px solid black;
+  border-radius: 0px 0px 5px 5px;
+  padding: 4px 0px 4px 0px;
+
+  z-index: 1;
 }
 .extras {
   display: flex;

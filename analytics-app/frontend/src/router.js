@@ -14,16 +14,6 @@ export const routes = [
     component: Home,
   },
   {
-    name: 'DummyView1',
-    path: '/dummy-view-1',
-    component: DummyView1,
-  },
-  {
-    name: 'DummyView2',
-    path: '/dummy-view-2',
-    component: DummyView2,
-  },
-  {
     name: 'Login',
     path: '/login',
     component: Login,
@@ -35,6 +25,10 @@ export const routes = [
     name: 'Data',
     path: '/data',
     component: Data,
+    children: [
+      { path: 'dummy-view-1', component: DummyView1 },
+      { path: 'dummy-view-2', component: DummyView2 },
+    ],
   },
   {
     name: 'Dashboard',

@@ -1,17 +1,17 @@
 <template>
   <div>
     <div class="navbar">
-      <Navbar v-if="!$route.meta.hideNavbar" />
+      <Navbar2 v-if="!$route.meta.hideNavbar" />
     </div>
     <router-view class="main"> </router-view>
   </div>
 </template>
 
 <script>
-import Navbar from "./components/navbar/Navbar.vue";
+import Navbar2 from "./components/navbar/NavbarLinks.vue";
 
 export default {
-  components: { Navbar },
+  components: { Navbar2 },
 };
 </script>
 
