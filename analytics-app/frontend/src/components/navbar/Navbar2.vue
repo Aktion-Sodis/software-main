@@ -6,9 +6,8 @@
         src="/src/static/aktionSodisSmall.png"
       />
       <div class="organization-name">Aktion Sodis</div>
-      <NavbarLinks></NavbarLinks>
     </div>
-    <div class="settings-wrapper">Login</div>
+    <NavbarLinks></NavbarLinks>
   </div>
 </template>
 
@@ -34,15 +33,17 @@ export default {
 .organization-icon {
   width: 30px;
   height: 30px;
-  margin: 0 10px;
+  margin: 0 0 0 10px;
 }
 .organization-name {
   color: white;
   font-size: 20px;
-  margin-right: 10px;
+  margin: 0 10px 0 10px;
 }
-.settings-wrapper {
-  margin: 0 10px;
-  color: white;
+
+@media screen and (max-width: 820px) {
+  .organization-icon {
+    display: none;
+  }
 }
 </style>

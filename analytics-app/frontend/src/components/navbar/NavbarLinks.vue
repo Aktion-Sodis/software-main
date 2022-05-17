@@ -1,11 +1,16 @@
 <template>
   <div class="navbar-wrapper">
-    <div class="navbar">
-      <router-link class="link" :class="{ active: $route.path === '/' }" to="/">
+    <div class="navbar" :class="{ collapsed: navbarCollapsed }">
+      <router-link
+        class="link"
+        :class="{ active: $route.path === '/' }"
+        to="/"
+        @click="toggleNavbar"
+      >
         <i class="icon fas fa-home" />
         Home
       </router-link>
-      <div class="dropdown" @mouseover="showContent" @mouseleave="hideContent">
+      <div class="dropdown" @mouseleave="hideContent" @click="toggleContent">
         <div
           class="dropbtn"
           :class="{
@@ -22,6 +27,7 @@
             class="link"
             :class="{ active: $route.path === '/data/dummy-view-1' }"
             to="/data/dummy-view-1"
+            @click="toggleNavbar"
           >
             <i class="icon fa-solid fa-database" />
             Home1
@@ -30,6 +36,7 @@
             class="link"
             :class="{ active: $route.path === '/data/dummy-view-2' }"
             to="/data/dummy-view-2"
+            @click="toggleNavbar"
           >
             <i class="icon fa-solid fa-download"></i>
             Export
@@ -40,10 +47,18 @@
         class="link"
         :class="{ active: $route.path === '/dashboard' }"
         to="/dashboard"
+        @click="toggleNavbar"
       >
         <i class="icon fas fa-chart-bar" />
         Dashboard
       </router-link>
+    </div>
+    <router-link class="link" to="/login">
+      <i class="icon fa-solid fa-arrow-right-to-bracket" />
+      Login
+    </router-link>
+    <div class="burger" @click="toggleNavbar">
+      <i class="burger-icon fa-solid fa-bars" />
     </div>
   </div>
 </template>
@@ -51,12 +66,14 @@
 <script>
 import { ref } from "vue";
 
+const navbarCollapsed = ref(false);
+const settingsCollapsed = ref(false);
 const dropdownCollapsed = ref(true);
 console.log(dropdownCollapsed);
 
 export default {
   setup() {
-    return { dropdownCollapsed };
+    return { dropdownCollapsed, navbarCollapsed, settingsCollapsed };
   },
   methods: {
     showContent() {
@@ -69,6 +86,14 @@ export default {
       dropdownCollapsed.value = true;
       console.log(dropdownCollapsed.value);
       return dropdownCollapsed.value;
+    },
+    toggleContent() {
+      dropdownCollapsed.value = !dropdownCollapsed.value;
+      return dropdownCollapsed.value;
+    },
+    toggleNavbar() {
+      navbarCollapsed.value = !navbarCollapsed.value;
+      return navbarCollapsed.value;
     },
   },
 };
@@ -84,12 +109,16 @@ export default {
 <style scoped>
 .navbar-wrapper {
   height: var(--navbar-height);
+  display: flex;
+  justify-content: space-between;
   background-color: var(--bg-color);
+}
+.navbar,
+.settings {
   display: flex;
 }
-
-.navbar {
-  display: flex;
+.settings {
+  margin: auto 0px;
 }
 .link,
 .dropbtn {
@@ -125,5 +154,45 @@ export default {
 }
 .icon {
   width: 16px;
+}
+
+.burger {
+  display: none;
+}
+.burger-icon {
+  height: 30px;
+}
+
+.user-icon {
+  height: 25px;
+  color: white;
+}
+
+@media screen and (max-width: 820px) {
+  .navbar-wrapper {
+    align-items: center;
+  }
+  .navbar {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 0px;
+    top: var(--navbar-height);
+    min-width: 100%;
+
+    border-top: 1px solid white;
+  }
+  .link,
+  .dropbtn {
+    margin: 0;
+  }
+  .navbar.collapsed {
+    display: none;
+  }
+  .burger {
+    display: block;
+    color: white;
+    margin: 0 10px;
+  }
 }
 </style>
