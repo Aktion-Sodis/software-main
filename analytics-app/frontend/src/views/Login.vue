@@ -145,7 +145,7 @@ export default {
   }
   .login-outer-wrapper {
     width: 100%;
-    margin-top: 200px;
+    margin-top: 50px;
   }
 }
 </style>
