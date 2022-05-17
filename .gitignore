@@ -4,3 +4,4 @@ service-account.json
 
 scripts/nodejs/node_modules
 
+analytics-app/backend/__pycache__/data.cpython-310.pyc
