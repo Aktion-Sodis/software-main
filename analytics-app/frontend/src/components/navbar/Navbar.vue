@@ -1,290 +1,143 @@
 <template>
-  <div class="navbar">
-    <div class="organization">
-      <div class="logo" @click="currentRouteName">
-        <el-image class="image" src="/src/static/aktionSodisSmall.png" />
-      </div>
+  <div class="navbar-wrapper">
+    <div class="organization-wrapper">
+      <el-image
+        class="organization-icon"
+        src="/src/static/aktionSodisSmall.png"
+      />
       <div class="organization-name">Aktion Sodis</div>
-      <ul
-        class="nav-links"
-        :class="{ collapsed: menuCollapsed }"
-        @click="closeNavLinks"
+    </div>
+    <div class="navbar" :class="{ collapsed: navbarCollapsed }">
+      <router-link
+        class="link"
+        :class="{ active: $route.path === '/' }"
+        to="/"
+        @click="toggleNavbar"
       >
-        <li class="li">
+        <i class="icon fas fa-home" />
+        Home
+      </router-link>
+      <div class="dropdown" @mouseleave="hideContent" @click="toggleContent">
+        <div
+          class="dropbtn"
+          :class="{
+            active: $route.path.split('/')[1] === 'data',
+            open: !dropdownCollapsed,
+          }"
+        >
+          <i class="icon fa-solid fa-database" />
+          Data
+          <i class="icon fa-solid fa-caret-down"></i>
+        </div>
+        <div class="dropdown-content" v-show="!dropdownCollapsed">
           <router-link
             class="link"
-            :class="{ active: $route.path === '/' }"
-            to="/"
+            :class="{ active: $route.path === '/data/dummy-view-1' }"
+            to="/data/dummy-view-1"
+            @click="toggleNavbar"
           >
-            <i class="icon fas fa-home" />
-            <p>Home</p>
+            <i class="icon fa-solid fa-database" />
+            Home1
           </router-link>
-        </li>
-        <li class="li">
           <router-link
             class="link"
-            :class="{ active: $route.path === '/data' }"
-            to="/data"
+            :class="{ active: $route.path === '/data/dummy-view-2' }"
+            to="/data/dummy-view-2"
+            @click="toggleNavbar"
           >
-            <i class="icon fa-solid fa-database" />
-            <p>Data</p>
-            <i class="icon-dropdown fa-solid fa-caret-down" />
+            <i class="icon fa-solid fa-download"></i>
+            Export
           </router-link>
-        </li>
-        <li class="li">
-          <router-link
-            class="link"
-            :class="{ active: $route.path === '/dashboard' }"
-            to="/dashboard"
-          >
-            <i class="icon fas fa-chart-bar" />
-            <p>Dashboard</p>
-          </router-link>
-        </li>
-        <li class="li">
-          <div class="link">
-            <i class="icon fa-solid fa-database" />
-            <p>Test</p>
-            <i class="icon-dropdown fa-solid fa-caret-down" />
-          </div>
-          <div class="sub-link">
-            <i class="icon fa-solid fa-database" />
-            <p>Test</p>
-            <i class="icon-dropdown fa-solid fa-caret-down" />
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="extras">
-      <div class="language-selector"><p>English</p></div>
-      <div class="user" @click="toggleUserLinks">
-        <i class="user-icon fa-solid fa-circle-user"></i>
+        </div>
       </div>
-      <div class="burger" @click="toggleNavLinks">
-        <i class="burger-icon fa-solid fa-bars" />
-      </div>
+      <router-link
+        class="link"
+        :class="{ active: $route.path === '/dashboard' }"
+        to="/dashboard"
+        @click="toggleNavbar"
+      >
+        <i class="icon fas fa-chart-bar" />
+        Dashboard
+      </router-link>
     </div>
-    <ul
-      class="user-links"
-      :class="{ collapsed: userCollapsed }"
-      @click="closeUserLinks"
-    >
-      <li class="li">
-        <router-link class="link" to="/dummy-view-2"
-          ><i class="icon fa-solid fa-gear" />
-          <p>Settings</p></router-link
-        >
-      </li>
-      <li class="li">
-        <router-link class="link" to="/login"
-          ><i class="icon fa-solid fa-arrow-right-to-bracket" />
-          <p>Login</p></router-link
-        >
-      </li>
-      <li class="li">
-        <router-link class="link" to="/login"
-          ><i class="icon fa-solid fa-arrow-right-to-bracket" />
-          <p>Login</p></router-link
-        >
-      </li>
-    </ul>
+    <router-link class="link" to="/login">
+      <i class="icon fa-solid fa-arrow-right-to-bracket" />
+      Login
+    </router-link>
+  </div>
+  <div class="burger" @click="toggleNavbar">
+    <i class="burger-icon fa-solid fa-bars" />
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
-
-const menuCollapsed = ref(true);
-const userCollapsed = ref(true);
-
+import NavbarLinks from "./NavbarLinks.vue";
 export default {
-  setup() {
-    return { menuCollapsed, userCollapsed };
-  },
-  methods: {
-    closeNavLinks() {
-      return [(menuCollapsed.value = true), (userCollapsed.value = true)];
-    },
-    toggleNavLinks() {
-      return [
-        (menuCollapsed.value = !menuCollapsed.value),
-        (userCollapsed.value = true),
-      ];
-    },
-    closeUserLinks() {
-      console.log("Toggle");
-      return [(userCollapsed.value = true), (menuCollapsed.value = true)];
-    },
-    toggleUserLinks() {
-      console.log("Toggle");
-      return [
-        (userCollapsed.value = !userCollapsed.value),
-        (menuCollapsed.value = true),
-      ];
-    },
-  },
+  components: { NavbarLinks },
 };
 </script>
 
-<style>
-:root {
-  --navbar-height: 50px;
-  --link-height: 35px;
-}
-</style>
 <style scoped>
-.navbar {
+.wrapper {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  height: var(--navbar-height);
+  justify-content: space-between;
+
   background-color: var(--bg-color);
 }
-.organization {
+.organization-wrapper {
   display: flex;
   align-items: center;
 }
-.image {
+.organization-icon {
   width: 30px;
-  margin: 0 10px;
+  height: 30px;
+  margin: 0 0 0 10px;
 }
 .organization-name {
-  text-transform: uppercase;
-  letter-spacing: 0px;
+  color: white;
   font-size: 20px;
-  color: white;
-  margin-right: 20px;
+  margin: 0 10px 0 10px;
 }
-.nav-links {
-  display: flex;
-  align-items: center;
-}
-.user-links {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  right: 0px;
-  top: var(--navbar-height);
-  background-color: var(--bg-color);
-  align-items: flex-start;
-  width: 150px;
-  border-top: 1px solid black;
-  border-radius: 0px 0px 0px 5px;
-  padding: 4px 0px 4px 0px;
 
-  z-index: 1;
-}
-.user-links.collapsed {
-  display: none;
-}
-.li {
-  width: 100%;
-  margin: 2px 0 2px 5px;
-  width: calc(100% - 10px);
-  width: max-content;
-  list-style: none;
-}
-.link {
-  text-decoration: none;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
-  border-radius: 5px;
-  height: var(--link-height);
-  box-sizing: border-box;
-  padding: 2px 12px 1px 1px;
-}
-.link.active .user-link.active {
-  background-color: var(--item-active);
-}
-.link:hover .user-link:hover {
-  background-color: var(--item-hover);
-}
-.icon {
-  width: 16px;
-  margin: 9px;
-}
-.icon-dropdown {
-  width: 10px;
-  margin: 5px;
-}
-.dropdown {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: var(--navbar-height);
-  background-color: var(--bg-color);
-  align-items: flex-start;
-  border-top: 1px solid black;
-  border-radius: 0px 0px 5px 5px;
-  padding: 4px 0px 4px 0px;
-
-  z-index: 1;
-}
-.extras {
-  display: flex;
-  align-items: center;
-}
-.language-selector {
-  margin: 0 5px;
-  color: white;
-}
-.user {
-  margin: 0 0;
-}
-.user-icon {
-  height: 25px;
-  color: white;
-  margin: 0 10px;
-}
 .burger {
   display: none;
 }
 .burger-icon {
   height: 30px;
 }
-.link.active {
-  background-color: var(--item-active);
-}
-.link:hover {
-  background-color: var(--item-hover);
-}
 
 @media screen and (max-width: 820px) {
-  .nav-links {
+  .organization-icon {
+    display: none;
+  }
+  .navbar-wrapper {
+    height: var(--navbar-height);
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--bg-color);
+  }
+  .navbar {
     display: flex;
     flex-direction: column;
     position: absolute;
-    right: 0px;
+    left: 0px;
     top: var(--navbar-height);
-    background-color: var(--bg-color);
-    align-items: flex-start;
-    width: 100%;
-    border-top: 1px solid black;
-    border-radius: 0px 0px 5px 5px;
-    padding: 4px 0px 4px 0px;
+    min-width: 100%;
 
-    z-index: 1;
+    border-top: 1px solid white;
   }
-  .nav-links.collapsed {
+  .link,
+  .dropbtn {
+    margin: 0;
+  }
+  .navbar.collapsed {
     display: none;
-  }
-  .user-links {
-    width: 100%;
-    border-radius: 0px 0px 5px 5px;
   }
   .burger {
     display: block;
     color: white;
     margin: 0 10px;
-  }
-  .user-icon {
-    margin: 0 0;
-  }
-  .organization-name {
-    display: none;
   }
 }
 </style>
