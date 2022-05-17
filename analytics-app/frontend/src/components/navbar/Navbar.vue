@@ -60,29 +60,64 @@
         Dashboard
       </router-link>
     </div>
-    <router-link class="link" to="/login">
-      <i class="icon fa-solid fa-arrow-right-to-bracket" />
-      Login
-    </router-link>
-  </div>
-  <div class="burger" @click="toggleNavbar">
-    <i class="burger-icon fa-solid fa-bars" />
+    <div class="settings">
+      <router-link class="link" to="/login">
+        <i class="icon fa-solid fa-arrow-right-to-bracket" />
+        Login
+      </router-link>
+      <div class="burger" @click="toggleNavbar">
+        <i class="burger-icon fa-solid fa-bars" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import NavbarLinks from "./NavbarLinks.vue";
+import { ref } from "vue";
+
+const navbarCollapsed = ref(true);
+const dropdownCollapsed = ref(true);
+
 export default {
-  components: { NavbarLinks },
+  setup() {
+    return { dropdownCollapsed, navbarCollapsed };
+  },
+  methods: {
+    showContent() {
+      dropdownCollapsed.value = false;
+      console.log(dropdownCollapsed.value);
+      console.log(this.$route.path.split("/")[1]);
+      return dropdownCollapsed.value;
+    },
+    hideContent() {
+      dropdownCollapsed.value = true;
+      console.log(dropdownCollapsed.value);
+      return dropdownCollapsed.value;
+    },
+    toggleContent() {
+      dropdownCollapsed.value = !dropdownCollapsed.value;
+      return dropdownCollapsed.value;
+    },
+    toggleNavbar() {
+      navbarCollapsed.value = !navbarCollapsed.value;
+      return navbarCollapsed.value;
+    },
+  },
 };
 </script>
 
-<style scoped>
-.wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+<style>
+:root {
+  --navbar-height: 50px;
+  --link-height: 35px;
+}
+</style>
 
+<style scoped>
+.navbar-wrapper {
+  height: var(--navbar-height);
+  display: flex;
+  justify-content: space-between;
   background-color: var(--bg-color);
 }
 .organization-wrapper {
@@ -99,6 +134,48 @@ export default {
   font-size: 20px;
   margin: 0 10px 0 10px;
 }
+.navbar,
+.settings {
+  display: flex;
+}
+.settings {
+  margin: auto 0px;
+}
+.link,
+.dropbtn {
+  display: block;
+  text-decoration: none;
+  color: white;
+  margin: 0 5px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  height: var(--navbar-height);
+  line-height: var(--navbar-height);
+  background-color: var(--bg-color);
+  min-width: 60px;
+
+  cursor: pointer;
+  text-align: start;
+}
+
+.link:hover {
+  border-bottom: 4px solid var(--item-hover);
+}
+
+.link.active,
+.dropbtn.active {
+  border-bottom: 4px solid var(--item-active);
+}
+.dropbtn.open {
+  border-bottom: 0px solid var(--item-active);
+}
+
+.dropdown-content {
+  filter: brightness(110%);
+}
+.icon {
+  width: 16px;
+}
 
 .burger {
   display: none;
@@ -107,15 +184,14 @@ export default {
   height: 30px;
 }
 
+.user-icon {
+  height: 25px;
+  color: white;
+}
+
 @media screen and (max-width: 820px) {
-  .organization-icon {
-    display: none;
-  }
   .navbar-wrapper {
-    height: var(--navbar-height);
-    display: flex;
-    justify-content: space-between;
-    background-color: var(--bg-color);
+    align-items: center;
   }
   .navbar {
     display: flex;
@@ -137,7 +213,7 @@ export default {
   .burger {
     display: block;
     color: white;
-    margin: 0 10px;
+    margin: auto 10px;
   }
 }
 </style>

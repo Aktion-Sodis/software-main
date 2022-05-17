@@ -1,5 +1,12 @@
 <template>
   <div class="navbar-wrapper">
+    <div class="organization-wrapper">
+      <el-image
+        class="organization-icon"
+        src="/src/static/aktionSodisSmall.png"
+      />
+      <div class="organization-name">Aktion Sodis</div>
+    </div>
     <div class="navbar" :class="{ collapsed: navbarCollapsed }">
       <router-link
         class="link"
@@ -53,12 +60,14 @@
         Dashboard
       </router-link>
     </div>
-    <router-link class="link" to="/login">
-      <i class="icon fa-solid fa-arrow-right-to-bracket" />
-      Login
-    </router-link>
-    <div class="burger" @click="toggleNavbar">
-      <i class="burger-icon fa-solid fa-bars" />
+    <div class="settings">
+      <router-link class="link" to="/login">
+        <i class="icon fa-solid fa-arrow-right-to-bracket" />
+        Login
+      </router-link>
+      <div class="burger" @click="toggleNavbar">
+        <i class="burger-icon fa-solid fa-bars" />
+      </div>
     </div>
   </div>
 </template>
@@ -66,14 +75,12 @@
 <script>
 import { ref } from "vue";
 
-const navbarCollapsed = ref(false);
-const settingsCollapsed = ref(false);
+const navbarCollapsed = ref(true);
 const dropdownCollapsed = ref(true);
-console.log(dropdownCollapsed);
 
 export default {
   setup() {
-    return { dropdownCollapsed, navbarCollapsed, settingsCollapsed };
+    return { dropdownCollapsed, navbarCollapsed };
   },
   methods: {
     showContent() {
@@ -112,6 +119,20 @@ export default {
   display: flex;
   justify-content: space-between;
   background-color: var(--bg-color);
+}
+.organization-wrapper {
+  display: flex;
+  align-items: center;
+}
+.organization-icon {
+  width: 30px;
+  height: 30px;
+  margin: 0 0 0 10px;
+}
+.organization-name {
+  color: white;
+  font-size: 20px;
+  margin: 0 10px 0 10px;
 }
 .navbar,
 .settings {
@@ -192,7 +213,7 @@ export default {
   .burger {
     display: block;
     color: white;
-    margin: 0 10px;
+    margin: auto 10px;
   }
 }
 </style>
