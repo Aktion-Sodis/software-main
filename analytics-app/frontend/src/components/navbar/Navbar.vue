@@ -17,7 +17,21 @@
         <i class="icon fas fa-home" />
         Home
       </router-link>
-      <div class="dropdown" @mouseleave="hideContent" @click="toggleContent">
+      <router-link
+        class="link"
+        :class="{ active: $route.path === '/dashboard' }"
+        to="/dashboard"
+        @click="toggleNavbar"
+      >
+        <i class="icon fas fa-chart-bar" />
+        Dashboard
+      </router-link>
+      <div
+        class="dropdown"
+        @mouseleave="hideContent"
+        @mouseover="showContent"
+        @click="toggleContent"
+      >
         <div
           class="dropbtn"
           :class="{
@@ -46,19 +60,19 @@
             @click="toggleNavbar"
           >
             <i class="icon fa-solid fa-download"></i>
+            Auswertung
+          </router-link>
+          <router-link
+            class="link"
+            :class="{ active: $route.path === '/data/export' }"
+            to="/data/export"
+            @click="toggleNavbar"
+          >
+            <i class="icon fa-solid fa-download"></i>
             Export
           </router-link>
         </div>
       </div>
-      <router-link
-        class="link"
-        :class="{ active: $route.path === '/dashboard' }"
-        to="/dashboard"
-        @click="toggleNavbar"
-      >
-        <i class="icon fas fa-chart-bar" />
-        Dashboard
-      </router-link>
     </div>
     <div class="settings">
       <router-link class="link" to="/login">
@@ -141,6 +155,9 @@ export default {
 .settings {
   margin: auto 0px;
 }
+.dropdown {
+  min-width: 140px;
+}
 .link,
 .dropbtn {
   display: block;
@@ -161,7 +178,6 @@ export default {
 .link:hover {
   border-bottom: 4px solid var(--item-hover);
 }
-
 .link.active,
 .dropbtn.active {
   border-bottom: 4px solid var(--item-active);
@@ -169,21 +185,18 @@ export default {
 .dropbtn.open {
   border-bottom: 0px solid var(--item-active);
 }
-
 .dropdown-content {
   filter: brightness(110%);
 }
 .icon {
   width: 16px;
 }
-
 .burger {
   display: none;
 }
 .burger-icon {
   height: 30px;
 }
-
 .user-icon {
   height: 25px;
   color: white;

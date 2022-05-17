@@ -40,5 +40,7 @@ export default {
 .main {
   text-align: left;
   height: calc(100vh - var(--navbar-height));
+  box-sizing: border-box;
+  padding: 10px 30px 0 30px;
 }
 </style>
