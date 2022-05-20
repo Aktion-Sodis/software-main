@@ -1,0 +1,11 @@
+{
+    "login": {
+      "welcome": "Welcome back!",
+      "message": "Please sign or register:",
+      "rememberMe": "Remember me",
+      "signIn": "Sign in",
+      "googleSignIn": "Sign in with Google",
+      "noAccount": "Don't have an account?",
+      "registerHere": "Register here"
+    }
+}

@@ -2,8 +2,8 @@
   <div class="outer-wrapper">
     <div class="login-outer-wrapper">
       <div class="login-wrapper">
-        <h1>Welcome back!</h1>
-        <p>Please sign or register:</p>
+        <h1>{{ $t("login.welcome") }}</h1>
+        <p>{{ $t("login.message") }}</p>
         <el-form>
           <el-form-item required class="username-wrapper">
             <el-input v-model="username" placeholder="Username" />
@@ -17,11 +17,13 @@
             />
           </el-form-item>
           <el-form-item class="rememberMe-wrapper">
-            <el-checkbox v-model="rememberMe">Remember me</el-checkbox>
+            <el-checkbox v-model="rememberMe">{{
+              $t("login.rememberMe")
+            }}</el-checkbox>
           </el-form-item>
           <el-form-item class="sign-in-wrapper">
             <el-button native-type="submit" class="block sodis">
-              Sign in
+              {{ $t("login.signIn") }}
             </el-button>
           </el-form-item>
           <el-form-item class="google-sign-in-wrapper">
@@ -53,17 +55,17 @@
                 </g>
                 <!-- eslint-enable max-len -->
               </svg>
-              <p class="google-text-wrapper">Sign in with Google</p>
+              <p class="google-text-wrapper">{{ $t("login.googleSignIn") }}</p>
             </el-button>
           </el-form-item>
           <div class="push-to-end">
             <p>
-              Don't have an account?
+              {{ $t("login.noAccount") }}
               <a
                 href="#"
                 class="font-weight-bold font-italic text-decoration-none"
               >
-                Register here
+                {{ $t("login.registerHere") }}
               </a>
             </p>
           </div>

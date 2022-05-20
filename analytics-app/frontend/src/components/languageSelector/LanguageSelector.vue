@@ -15,12 +15,17 @@
 
 <script>
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const langdropdownCollapsed = ref(true);
 
 export default {
   setup() {
-    return { langdropdownCollapsed };
+    const { locale, t } = useI18n({
+      inheritLocale: true,
+    });
+    console.log($root.$i18n.locale);
+    return { langdropdownCollapsed, locale, t };
   },
   methods: {
     toggleLangguageSelector() {
