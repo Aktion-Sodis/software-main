@@ -2,36 +2,48 @@
   <div class="language-selector-wrapper" @click="toggleLangguageSelector">
     <div class="language-dropbtn">
       <i class="language-icon fa-solid fa-globe"></i>
-      <div class="language-wrapper">Englisch</div>
+      <div class="language-wrapper">{{ $i18n.locale }}</div>
       <i class="language-icon fa-solid fa-caret-down"></i>
     </div>
     <div class="language-dropdown-content" v-show="!langdropdownCollapsed">
-      <div class="language-content">Englisch</div>
-      <div class="language-content">Deutsch</div>
-      <div class="language-content">Deutsch</div>
+      <div
+        class="language-content"
+        v-for="locale in $i18n.availableLocales"
+        :key="`locale-${locale}`"
+        :value="locale"
+        @click="changeLang(locale)"
+      >
+        {{ locale }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import { useI18n } from "vue-i18n";
+import i18n from "../../i18n";
 
 const langdropdownCollapsed = ref(true);
 
 export default {
   setup() {
-    const { locale, t } = useI18n({
-      inheritLocale: true,
-    });
-    console.log($root.$i18n.locale);
-    return { langdropdownCollapsed, locale, t };
+    return { langdropdownCollapsed };
   },
   methods: {
     toggleLangguageSelector() {
       langdropdownCollapsed.value = !langdropdownCollapsed.value;
       return langdropdownCollapsed.value;
     },
+    changeLang(locale) {
+      this.$i18n.locale = locale;
+      console.log("test");
+      return this.$i18n.locale;
+    },
+  },
+  data() {
+    return {
+      selected: this.default,
+    };
   },
 };
 </script>
