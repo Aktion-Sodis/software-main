@@ -15,13 +15,13 @@
           to="/"
         >
           <i class="nav-icon fas fa-home" />
-          <a class="nav-text">Home</a>
+          <a class="nav-text">{{ $t("navbar.home") }}</a>
         </router-link>
       </div>
       <div class="dropdwn-items">
         <div class="dropdwn-btn" @click="toggleDashboard">
           <i class="nav-icon fa-solid fa-database" />
-          <a class="nav-text">Dashboards</a>
+          <a class="nav-text">{{ $t("navbar.dashboards") }}</a>
           <i class="drop-icon fa-solid fa-caret-down"></i>
         </div>
         <div class="dropdwn-content" v-if="!dashboardsCollapsed">
@@ -44,23 +44,23 @@
       <div class="dropdwn-items">
         <div class="dropdwn-btn" @click="toggleData">
           <i class="nav-icon fa-solid fa-database" />
-          <a class="nav-text">Data</a>
+          <a class="nav-text">{{ $t("navbar.data") }}</a>
           <i class="drop-icon fa-solid fa-caret-down"></i>
         </div>
         <div class="dropdwn-content" v-if="!dataCollapsed">
           <router-link
             class="nav-link"
-            :class="{ active: $route.path === '/data/dummy-view-1' }"
-            to="/data/dummy-view-1"
+            :class="{ active: $route.path === '/data/evaluation' }"
+            to="/data/evaluation"
           >
-            <a>Auswertung</a>
+            <a>{{ $t("navbar.evaluation") }}</a>
           </router-link>
           <router-link
             class="nav-link"
             :class="{ active: $route.path === '/data/export' }"
             to="/data/export"
           >
-            <a>Export </a>
+            <a>{{ $t("navbar.export") }} </a>
           </router-link>
         </div>
       </div>
@@ -103,7 +103,8 @@ export default {
 .logo-wrapper {
   height: var(--navbar-height);
   display: flex;
-  align-items: center;
+  margin-top: 20px;
+  margin-left: 5px;
 }
 .organization-icon {
   height: 30px;

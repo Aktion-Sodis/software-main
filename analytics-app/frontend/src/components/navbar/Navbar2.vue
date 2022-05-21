@@ -19,6 +19,7 @@ export default {
   --navbar-height: 70px;
   --link-height: 35px;
   --left-menu-width: 260px;
+  --left-menu-width-collapsed: 70px;
 }
 </style>
 

@@ -11,5 +11,12 @@
     "languages": {
       "de": "German",
       "en": "English"
+    },
+    "navbar": {
+      "home": "Home",
+      "dashboards": "Dashboards",
+      "data": "Data",
+      "evaluation": "Evaluation",
+      "export": "Export"
     }
 }

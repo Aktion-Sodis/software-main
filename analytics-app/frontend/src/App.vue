@@ -43,7 +43,6 @@ export default {
   box-sizing: border-box;
   margin-left: var(--left-menu-width);
   margin-top: var(--navbar-height);
-  background-color: rgb(241, 241, 241);
   padding: 10px;
 }
 </style>
