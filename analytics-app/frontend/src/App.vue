@@ -1,17 +1,17 @@
 <template>
   <div>
     <div class="navbar">
-      <Navbar v-if="!$route.meta.hideNavbar" />
+      <Navbar2 v-if="!$route.meta.hideNavbar" />
     </div>
     <router-view class="main"> </router-view>
   </div>
 </template>
 
 <script>
-import Navbar from "./components/navbar/Navbar.vue";
+import Navbar2 from "./components/navbar/Navbar2.vue";
 
 export default {
-  components: { Navbar },
+  components: { Navbar2 },
 };
 </script>
 
@@ -41,6 +41,8 @@ export default {
   text-align: left;
   height: calc(100vh - var(--navbar-height));
   box-sizing: border-box;
-  padding: 10px 30px 0 30px;
+  margin-left: var(--left-menu-width);
+  margin-top: var(--navbar-height);
+  background-color: rgb(241, 241, 241);
 }
 </style>

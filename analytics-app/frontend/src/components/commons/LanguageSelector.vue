@@ -59,13 +59,11 @@ export default {
 }
 
 .language-dropbtn {
-  height: 30px;
   width: 140px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   text-decoration: none;
-  margin: 7px 0px 0 0px;
   padding: 0 10px;
   box-sizing: border-box;
   height: var(--navbar-height);
@@ -75,9 +73,9 @@ export default {
   text-align: start;
 
   border-radius: 5px;
-  border: 1px solid black;
+  border: 1px solid rgb(203, 203, 203);
   background-color: white;
-  height: 36px;
+  height: 30px;
 }
 .language-wrapper {
   color: black;
@@ -102,13 +100,15 @@ export default {
 
 .language-dropdown-content {
   background-color: white;
-  border: 1px solid black;
+  border: 1px solid rgb(203, 203, 203);
   border-radius: 5px;
   max-height: 150px;
   width: 140px;
   overflow-x: hidden;
   overflow-y: scroll;
   box-sizing: border-box;
+
+  position: absolute;
 }
 
 .language-content:hover {
