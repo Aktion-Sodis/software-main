@@ -7,5 +7,9 @@
       "googleSignIn": "Mit Google einloggen",
       "noAccount": "Noch keinen Account?",
       "registerHere": "Registrieren"
+    },
+    "languages": {
+      "de": "Deutsch",
+      "en": "Englisch"
     }
 }
