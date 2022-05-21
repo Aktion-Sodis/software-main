@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>
+    <h1>Das ist die Home view</h1>
+    <p>
       Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
       ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis
       dis p Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
@@ -33,6 +34,6 @@
       Aenean massa. Cum sociis natoque penatibus et magnis dis p Lorem ipsum
       dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
       dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis p
-    </h1>
+    </p>
   </div>
 </template>
