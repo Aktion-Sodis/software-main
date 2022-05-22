@@ -40,11 +40,13 @@
 <script>
 import { ref } from "vue";
 import "element-plus/theme-chalk/display.css";
+import ChartComponent from "../../components/data/ChartComponent.vue";
 
 const collapsed = ref(true);
 
 export default {
   props: {},
+  components: { ChartComponent },
   setup() {
     return { collapsed };
   },
@@ -295,8 +297,8 @@ export default {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: gainsboro;
-  border-radius: 5px;
+  background: rgb(255, 255, 255);
+  border-radius: 0px;
 }
 
 /* Handle */

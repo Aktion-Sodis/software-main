@@ -52,6 +52,6 @@ export default {
   box-sizing: border-box;
   margin: 10px 10px 10px 10px;
   height: calc(100vh - var(--navbar-height) - 20px);
-  background-color: white;
+  background-color: rgb(255, 255, 255);
 }
 </style>
