@@ -31,7 +31,9 @@
           Technologie - Fragebogen -
           {{ selectedQuestion.question_text }}
         </div>
-        <div class="content-container">Test</div>
+        <div class="content-container">
+          <ChartComponent></ChartComponent>
+        </div>
       </div>
     </div>
   </div>
@@ -209,6 +211,8 @@ export default {
   overflow-x: hidden;
   height: calc(100vh - 120px);
 
+  border-right: 1px solid var(--bg-color);
+
   transition: var(--transition-time);
 
   z-index: 1;
@@ -223,9 +227,9 @@ export default {
   max-width: 450px;
   min-height: 80px;
   margin-left: 5px;
-  margin-right: 0;
-  margin-bottom: 5px;
-  margin-top: 0;
+  margin-right: 2px;
+  margin-bottom: 2px;
+  margin-top: 2px;
   padding: 0.5rem 1rem;
   box-shadow: 0px 0px 1px rgb(0, 0, 0, 0.25);
   border-radius: 5px;
@@ -288,6 +292,8 @@ export default {
 .content-container {
   width: calc(100vw - var(--left-menu-width) - 100px);
   height: calc(100vh - var(--navbar-height) - 60px);
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 /* Designing for scroll-bar */
