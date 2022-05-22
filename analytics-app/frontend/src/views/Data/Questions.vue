@@ -10,7 +10,10 @@
         <div class="questions">
           <div
             class="question"
-            :class="{ collapsed: collapsed }"
+            :class="{
+              collapsed: collapsed,
+              active: selectedID === question.question_id,
+            }"
             v-for="(question, index) in questions"
             :key="question.id"
             @click="setActive(question)"
@@ -25,7 +28,8 @@
 
       <div class="content-wrapper">
         <div class="description-wrapper">
-          Technologie - Fragebogen - Wie geht's?
+          Technologie - Fragebogen -
+          {{ selectedQuestion.question_text }}
         </div>
         <div class="content-container">Test</div>
       </div>
@@ -44,7 +48,17 @@ export default {
   setup() {
     return { collapsed };
   },
+  computed: {
+    selectedQuestion() {
+      return (
+        this.questions.find((item) => item.question_id === this.selectedID) || 0
+      );
+    },
+  },
   methods: {
+    setActive(question) {
+      return (this.selectedID = question.question_id), (collapsed.value = true);
+    },
     toggleQuestionList() {
       console.log("collapsed");
       console.log(collapsed);
@@ -224,6 +238,10 @@ export default {
 
   direction: ltr;
 }
+.question.active {
+  background-color: #feaa3a;
+  color: rgb(255, 255, 255);
+}
 .question.collapsed {
   width: 40px;
 }
@@ -263,6 +281,7 @@ export default {
 }
 .description-wrapper {
   font-size: 20px;
+  text-align: left;
 }
 .content-container {
   width: calc(100vw - var(--left-menu-width) - 100px);
