@@ -1,9 +1,11 @@
 <template>
-  <div>
+  <div class="app">
     <div class="navbar">
       <Navbar2 v-if="!$route.meta.hideNavbar" />
     </div>
-    <router-view class="main"> </router-view>
+    <div class="main-wrapper">
+      <router-view class="main"> </router-view>
+    </div>
   </div>
 </template>
 
@@ -23,7 +25,6 @@ export default {
 :root {
   --bg-color: #2d91be;
   --item-hover: #64aa73;
-  --item-active: #feaa3a;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -32,17 +33,25 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+.app {
+  background-color: rgba(255, 255, 255, 0.283);
+}
 .navbar {
   z-index: 1;
   position: sticky;
   top: 0;
 }
-.main {
-  text-align: left;
-  height: calc(100vh - var(--navbar-height));
-  box-sizing: border-box;
+.main-wrapper {
+  background-color: rgb(219, 219, 219);
   margin-left: var(--left-menu-width);
   margin-top: var(--navbar-height);
-  padding: 10px;
+  height: calc(100vh - var(--navbar-height));
+  display: flow-root;
+}
+.main {
+  box-sizing: border-box;
+  margin: 10px 10px 10px 10px;
+  height: calc(100vh - var(--navbar-height) - 20px);
+  background-color: white;
 }
 </style>

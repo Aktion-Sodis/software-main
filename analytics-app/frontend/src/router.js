@@ -6,7 +6,9 @@ import Home from './views/Home.vue';
 import Login from './views/Login.vue';
 import Data from './views/data/Data.vue';
 import Export from './views/data/DataExport.vue';
-import DataEvaluation from './views/Data/DataEvaluation.vue'
+import DataEvaluation from './views/Data/DataEvaluation.vue';
+import Questions from './views/Data/Questions.vue';
+
 import Dashboard from './views/Dashboard.vue'
 
 export const routes = [
@@ -31,7 +33,13 @@ export const routes = [
       { path: 'dummy-view-1', component: DummyView1 },
       { path: 'dummy-view-2', component: DummyView2 },
       { path: 'export', component: Export },
-      { path: 'evaluation', component: DataEvaluation },
+      { 
+        path: 'evaluation',
+        component: DataEvaluation,
+        children: [
+          { path: 'questions', component: Questions },
+        ]
+      },
     ],
   },
   {

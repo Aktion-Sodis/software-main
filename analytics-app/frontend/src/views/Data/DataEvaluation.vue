@@ -1,6 +1,8 @@
 .
 <template>
-  <h1>Datenauswertung</h1>
+  <div class="wrapper">
+    <router-view> </router-view>
+  </div>
 </template>
 
 <script>
