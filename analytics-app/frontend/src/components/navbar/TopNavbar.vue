@@ -4,7 +4,7 @@
     <SearchBar />
     <div class="settings-wrapper">
       <LanguageSelector />
-      <i class="icon fa-solid fa-bell"></i>
+      <NotificationPanel />
       <i class="icon fa-solid fa-gear"></i>
       <i class="icon fa-solid fa-circle-user"></i>
     </div>
@@ -14,9 +14,10 @@
 <script>
 import LanguageSelector from "../commons/LanguageSelector.vue";
 import SearchBar from "../commons/SearchBar.vue";
+import NotificationPanel from "../commons/NotificationPanel.vue";
 
 export default {
-  components: { LanguageSelector, SearchBar },
+  components: { LanguageSelector, SearchBar, NotificationPanel },
 };
 </script>
 

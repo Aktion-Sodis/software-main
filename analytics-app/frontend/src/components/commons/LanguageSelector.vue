@@ -109,6 +109,7 @@ export default {
   box-sizing: border-box;
 
   position: absolute;
+  top: var(--navbar-height);
 }
 
 .language-content:hover {
