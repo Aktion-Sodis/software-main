@@ -51,6 +51,7 @@ export default {
         },
         {
           id: 2,
+          date: "23/5/2022",
           message: "Das ist ein Alarm",
           type: "Danger",
         },
