@@ -32,7 +32,7 @@
           {{ selectedQuestion.question_text }}
         </div>
         <div class="content-container">
-          <ChartComponent></ChartComponent>
+          <ImageComponent></ImageComponent>
         </div>
       </div>
     </div>
@@ -43,6 +43,7 @@
 import { ref } from "vue";
 import "element-plus/theme-chalk/display.css";
 import ChartComponent from "../../components/data/ChartComponent.vue";
+import ImageComponent from "../../components/data/ImageComponent.vue";
 
 const collapsed = ref(true);
 
@@ -290,7 +291,7 @@ export default {
   text-align: left;
 }
 .content-container {
-  width: calc(100vw - var(--left-menu-width) - 100px);
+  width: calc(100vw - var(--left-menu-width) - 80px);
   height: calc(100vh - var(--navbar-height) - 60px);
   overflow-x: hidden;
   overflow-y: scroll;

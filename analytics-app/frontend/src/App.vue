@@ -50,7 +50,7 @@ export default {
 }
 .main {
   box-sizing: border-box;
-  margin: 10px 10px 10px 10px;
+  margin: 5px 5px 5px 5px;
   height: calc(100vh - var(--navbar-height) - 20px);
   background-color: rgb(255, 255, 255);
 }
