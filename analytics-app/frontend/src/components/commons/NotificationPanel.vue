@@ -25,7 +25,7 @@
 <script>
 import { ref } from "vue";
 
-const isPopup = ref(true);
+const isPopup = ref(false);
 
 export default {
   setup() {
@@ -62,6 +62,10 @@ export default {
 </script>
 
 <style scoped>
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+}
 .icon {
   height: 20px;
   color: rgb(0, 0, 0);
@@ -70,7 +74,7 @@ export default {
 .panel {
   position: absolute;
   top: var(--navbar-height);
-  right: 5px;
+  right: 80px;
   width: 320px;
   max-height: 420px;
   overflow-y: scroll;

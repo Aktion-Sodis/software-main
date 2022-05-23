@@ -49,7 +49,7 @@ const collapsed = ref(true);
 
 export default {
   props: {},
-  components: { ChartComponent },
+  components: { ChartComponent, ImageComponent },
   setup() {
     return { collapsed };
   },
