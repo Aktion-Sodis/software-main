@@ -1,15 +1,16 @@
 import json
 import pandas as pd
 
-FILE = "data/humission/AppliedIntervention/ddkdud35fe52vlz7pfjhvk5ccq.json"
+DATA_FILE = "data.json"
 
-def import_data(FILE):
-    f = open(FILE)
+def import_data(DATA_FILE):
+    f = open(DATA_FILE)
     data = json.load(f)
     f.close()
 
     return data
 
-data = import_data(FILE)
+data = import_data(DATA_FILE)
 
-print(data)
+print(data["images"])
+
