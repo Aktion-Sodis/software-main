@@ -1,61 +1,75 @@
 <template>
   <div>
-    <div class="graph-wrapper" ref="plot1"></div>
+    <div class="graph-wrapper" ref="plot"></div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import Plotly from "plotly.js-dist";
 import { ref } from "vue";
 
-var graphData = {
-  titleText: "Das ist der neue Titel",
-  xAxisTitle: "Hallo X",
-  yAxisTitle: "Hallo Y",
-  xData: ["Apples", "Oranges", "Watermelon", "Pears"],
-  yData: [3, 2, 1, 4],
-  type: "bar",
-};
-
 export default {
-  mounted() {
-    Plotly.newPlot(
-      this.$refs.plot1,
-      this.graph.data,
-      this.graph.layout,
-      this.graph.config
-    );
-  },
   setup() {
-    return { graphData };
+    return {};
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      const path = "http://127.0.0.1:5000/graphdata";
+      axios
+        .get(path)
+        .then((res) => {
+          var data = res.data.data;
+
+          this.graphData.data[0].x = data.xData;
+          this.graphData.data[0].y = data.yData;
+          this.graphData.layout.title.text = data.titleText;
+          this.graphData.layout.yaxis.title = data.yAxisTitle;
+          this.graphData.layout.xaxis.title = data.xAxisTitle;
+
+          Plotly.react(
+            this.$refs.plot,
+            this.graphData.data,
+            this.graphData.layout,
+            this.graphData.config
+          );
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
   },
   computed: {
-    graph() {
+    graphData() {
       return {
         data: [
           {
-            x: graphData.xData,
-            y: graphData.yData,
-            type: graphData.type,
+            x: ["Apples", "Oranges", "Watermelon", "Pears"],
+            y: [3, 2, 1, 4],
+            type: "bar",
           },
         ],
         layout: {
           title: {
-            text: graphData.titleText,
+            text: "Hallo",
             font: {
               size: 24,
             },
             xref: "paper",
           },
           yaxis: {
-            title: graphData.yAxisTitle,
+            title: "Y",
             tickvals: [1, 2, 3, 4],
             tickmode: "array",
             automargin: true,
             titlefont: { size: 20 },
           },
           xaxis: {
-            title: graphData.xAxisTitle,
+            title: "X",
             automargin: true,
             titlefont: { size: 20 },
           },

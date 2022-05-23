@@ -64,6 +64,14 @@ images = [
     }
 ]
 
+graphData = {
+  "titleText": "Das ist der neue Titel",
+  "xAxisTitle": "Test",
+  "yAxisTitle": "Hallo Y",
+  "xData": ["Apples", "Oranges", "Watermelon", "Birnen"],
+  "yData": [1, 2, 1, 2],
+}
+
 # configuration
 DEBUG = True
 
@@ -82,10 +90,17 @@ def ping_pong():
 
 
 @app.route('/images', methods=['GET'])
-def data():
+def get_images():
     return jsonify({
         'status': 'success',
         'data': images,
+    })
+
+@app.route('/graphdata', methods=['GET'])
+def get_graphData():
+    return jsonify({
+        'status': 'success',
+        'data': graphData,
     })
 
 
