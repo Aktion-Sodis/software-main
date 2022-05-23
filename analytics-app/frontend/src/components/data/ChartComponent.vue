@@ -6,43 +6,56 @@
 
 <script>
 import Plotly from "plotly.js-dist";
+import { ref } from "vue";
+
+var graphData = {
+  titleText: "Das ist der neue Titel",
+  xAxisTitle: "Hallo X",
+  yAxisTitle: "Hallo Y",
+  xData: ["Apples", "Oranges", "Watermelon", "Pears"],
+  yData: [3, 2, 1, 4],
+  type: "bar",
+};
 
 export default {
   mounted() {
     Plotly.newPlot(
       this.$refs.plot1,
-      this.graphData.data,
-      this.graphData.layout,
-      this.graphData.config
+      this.graph.data,
+      this.graph.layout,
+      this.graph.config
     );
   },
-  data() {
-    return {
-      graphData: {
+  setup() {
+    return { graphData };
+  },
+  computed: {
+    graph() {
+      return {
         data: [
           {
-            x: ["Apples", "Oranges", "Watermelon", "Pears"],
-            y: [3, 2, 1, 4],
-            type: "bar",
+            x: graphData.xData,
+            y: graphData.yData,
+            type: graphData.type,
           },
         ],
         layout: {
           title: {
-            text: "Plot Title",
+            text: graphData.titleText,
             font: {
               size: 24,
             },
             xref: "paper",
           },
           yaxis: {
-            title: "Y-axis Title",
+            title: graphData.yAxisTitle,
             tickvals: [1, 2, 3, 4],
             tickmode: "array",
             automargin: true,
             titlefont: { size: 20 },
           },
           xaxis: {
-            title: "X-axis Title",
+            title: graphData.xAxisTitle,
             automargin: true,
             titlefont: { size: 20 },
           },
@@ -50,8 +63,8 @@ export default {
           plot_bgcolor: "#rgb(45, 145, 190, 0.2)",
         },
         config: { responsive: true },
-      },
-    };
+      };
+    },
   },
 };
 </script>

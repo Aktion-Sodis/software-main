@@ -32,7 +32,7 @@
           {{ selectedQuestion.question_text }}
         </div>
         <div class="content-container">
-          <ImageComponent></ImageComponent>
+          <ChartComponent></ChartComponent>
         </div>
       </div>
     </div>
