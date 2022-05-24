@@ -58,7 +58,7 @@ export default {
 .images {
   display: flex;
   flex-wrap: wrap;
-  width: calc(100vw - var(--left-menu-width) - 80px);
+  width: calc(100vw - var(--left-menu-width) - 60px - 50px);
   height: calc(
     100vh - var(--navbar-height) - var(--container-margin) - 60px - 50px
   );

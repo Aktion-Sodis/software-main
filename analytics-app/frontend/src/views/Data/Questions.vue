@@ -1,11 +1,14 @@
 <template>
   <div class="container">
-    <div class="return">
-      <el-button class="sodis"
+    <div class="return-wrapper">
+      <el-button class="sodis return"
         ><i class="fa-solid fa-arrow-left"></i
       ></el-button>
     </div>
     <div class="header">Technologie - Fragebogen</div>
+    <div class="download-wrapper">
+      <el-button class="sodis"><i class="fa-solid fa-download"></i></el-button>
+    </div>
     <div class="side">
       <div
         class="icon-wrapper"
@@ -217,17 +220,20 @@ export default {
   grid-template-rows: 60px 50px calc(
       100vh - var(--navbar-height) - var(--container-margin) - 60px - 50px
     );
-  grid-template-columns: 60px calc(
-      100vw - var(--left-menu-width) - var(--container-margin) * 2 - 60px
-    );
+  grid-template-columns:
+    60px calc(
+      100vw - var(--left-menu-width) - var(--container-margin) * 2 - 60px -
+        200px
+    )
+    200px;
 
   grid-template-areas:
-    "return header header"
+    "return header buttons"
     "side question-text question-text"
     "side main main";
 }
 
-.return {
+.return-wrapper {
   grid-area: return;
   border: none;
   margin: auto 0;
@@ -235,6 +241,8 @@ export default {
 .sodis {
   background-color: #2d91be;
   color: white;
+}
+.return {
   padding: 0;
   margin-right: 6px;
   width: 42px;
@@ -263,6 +271,12 @@ export default {
   grid-area: question-text;
   background-color: white;
   z-index: 0;
+}
+
+.download-wrapper {
+  grid-area: buttons;
+  justify-self: end;
+  margin: auto 0;
 }
 
 /* Question Text */
