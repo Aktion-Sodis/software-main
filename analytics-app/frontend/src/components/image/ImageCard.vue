@@ -1,12 +1,14 @@
 <template>
-  <div class="image-card">
-    <el-image
-      :src="image.img_src"
-      fit="contain"
-      class="image"
-      :previewSrcList="preview"
-      :initial-index="index"
-    />
+  <div class="image-card-wrapper">
+    <div class="image-card">
+      <el-image
+        :src="image.img_src"
+        fit="contain"
+        class="image"
+        :previewSrcList="preview"
+        :initial-index="index"
+      />
+    </div>
   </div>
 </template>
 
@@ -21,7 +23,7 @@ export default {
 .image-card {
   width: fit-content;
   height: fit-content;
-  margin: 0 10px 10px 0;
+  margin: 0px 10px 10px 0;
   padding: 5px;
   box-shadow: 0px 0px 1px rgb(0, 0, 0, 0.5) inset;
 }

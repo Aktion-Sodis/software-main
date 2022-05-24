@@ -59,6 +59,9 @@ export default {
   display: flex;
   flex-wrap: wrap;
   width: calc(100vw - var(--left-menu-width) - 80px);
-  height: calc(100vh - var(--navbar-height) - 60px);
+  height: calc(
+    100vh - var(--navbar-height) - var(--container-margin) - 60px - 50px
+  );
+  z-index: 0;
 }
 </style>

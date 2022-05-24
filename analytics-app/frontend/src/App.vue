@@ -4,7 +4,7 @@
       <Navbar2 v-if="!$route.meta.hideNavbar" />
     </div>
     <div class="main-wrapper">
-      <router-view class="main"> </router-view>
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -33,25 +33,16 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-.app {
-  background-color: rgba(255, 255, 255, 0.283);
-}
 .navbar {
   z-index: 1;
   position: sticky;
   top: 0;
 }
 .main-wrapper {
-  background-color: rgb(219, 219, 219);
+  background-color: rgb(236, 245, 254);
   margin-left: var(--left-menu-width);
   margin-top: var(--navbar-height);
   height: calc(100vh - var(--navbar-height));
-  display: flow-root;
-}
-.main {
-  box-sizing: border-box;
-  margin: 5px 5px 5px 5px;
-  height: calc(100vh - var(--navbar-height) - 20px);
-  background-color: rgb(255, 255, 255);
+  width: calc(100vw - var(--left-menu-width));
 }
 </style>

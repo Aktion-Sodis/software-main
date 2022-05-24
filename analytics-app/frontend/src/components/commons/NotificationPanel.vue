@@ -87,7 +87,7 @@ export default {
   flex-direction: column;
   align-items: center;
 
-  z-index: 3;
+  z-index: 2;
 }
 .notification {
   width: 242px;
@@ -105,6 +105,6 @@ export default {
   position: fixed;
   top: 0px;
   left: 0px;
-  z-index: 2;
+  z-index: 1;
 }
 </style>
