@@ -7,7 +7,9 @@
     </div>
     <div class="header">Technologie - Fragebogen</div>
     <div class="download-wrapper">
-      <el-button class="sodis"><i class="fa-solid fa-download"></i></el-button>
+      <el-button class="sodis download"
+        ><i class="fa-solid fa-download"></i
+      ></el-button>
     </div>
     <div class="side">
       <div
@@ -52,9 +54,8 @@
         </div>
       </div>
     </div>
-
-    <div class="question-text-wrapper">
-      <div class="question-text">{{ selectedQuestion.question_text }}</div>
+    <div class="content-header-wrapper">
+      <div class="content-header"></div>
     </div>
     <div class="main">
       <ImageComponent></ImageComponent>
@@ -235,6 +236,7 @@ export default {
 
 .return-wrapper {
   grid-area: return;
+  justify-self: start;
   border: none;
   margin: auto 0;
 }
@@ -243,9 +245,7 @@ export default {
   color: white;
 }
 .return {
-  padding: 0;
-  margin-right: 6px;
-  width: 42px;
+  width: 50px;
 }
 .header {
   grid-area: header;
@@ -267,7 +267,7 @@ export default {
   overflow-y: scroll;
 }
 
-.question-text-wrapper {
+.content-header-wrapper {
   grid-area: question-text;
   background-color: white;
   z-index: 0;
@@ -279,9 +279,13 @@ export default {
   margin: auto 0;
 }
 
+.download {
+  width: 50px;
+}
+
 /* Question Text */
 
-.question-text {
+.content-header {
   margin-top: 12px;
   text-align: left;
   font-size: 20px;
