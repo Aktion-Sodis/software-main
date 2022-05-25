@@ -19,7 +19,7 @@
         @mouseleave="hideInfo()"
       >
         <span class="collapse-icon" :class="{ 'rotate-180': collapsed }">
-          <i class="icon fas fa-angle-double-left" />
+          <i class="fas fa-angle-double-left" />
         </span>
         <div>
           <span
@@ -55,10 +55,10 @@
       </div>
     </div>
     <div class="content-header-wrapper">
-      <div class="content-header"></div>
+      <div class="content-header">{{ selectedQuestion.question_text }}</div>
     </div>
     <div class="main">
-      <ImageComponent></ImageComponent>
+      <ChartComponent></ChartComponent>
     </div>
   </div>
 </template>
