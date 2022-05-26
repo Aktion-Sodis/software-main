@@ -77,6 +77,7 @@
         </div>
       </div>
       <NavbarDropdown></NavbarDropdown>
+      <NavbarItem></NavbarItem>
     </div>
   </div>
 </template>
@@ -85,13 +86,14 @@
 import { ref } from "vue";
 import { mapState } from "vuex";
 
+import NavbarItem from "./NavbarItem.vue";
 import NavbarDropdown from "./NavbarDropdown.vue";
 
 const dashboardsCollapsed = ref(true);
 const dataCollapsed = ref(true);
 
 export default {
-  components: { NavbarDropdown },
+  components: { NavbarItem, NavbarDropdown },
   setup() {
     return { dashboardsCollapsed, dataCollapsed };
   },

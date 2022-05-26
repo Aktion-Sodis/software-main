@@ -30,9 +30,6 @@ export default {
     }),
   },
   methods: {
-    printSBC() {
-      console.log(this.SideBarCollapsed);
-    },
     ...mapMutations({
       toggleSidebar: "toggleSidebar",
     }),

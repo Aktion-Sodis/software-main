@@ -1,8 +1,8 @@
 <template>
-  <div id="drop-item" class="dropdown-items">
+  <div id="drop-item" class="dropdown-item">
     <div id="drop-btn" class="dropdown-btn" @click="toggleContent">
       <div class="dropdown-btn-icon">
-        <i class="fa-solid fa-database"></i>
+        <i class="icon fa-solid fa-database"></i>
       </div>
       <div
         id="drop-btn-expand"
@@ -24,7 +24,7 @@
       <router-link id="drop-link" class="dropdown-link" to="/">
         <div class="dropdown-link-text">{{ $t("navbar.export") }}</div>
       </router-link>
-      <router-link class="dropdown-link" to="/">
+      <router-link id="drop-link" class="dropdown-link" to="/">
         <div class="dropdown-link-text">
           <p>{{ $t("navbar.export") }}</p>
         </div>
@@ -76,12 +76,14 @@ export default {
 </script>
 
 <style scoped>
+.dropdown-item {
+  color: white;
+}
 .dropdown-btn {
   display: flex;
   align-items: center;
   height: var(--link-height);
   width: fit-content;
-  color: white;
 }
 .dropdown-btn-icon {
   width: var(--left-menu-width-collapsed);
@@ -102,7 +104,7 @@ export default {
   display: flex;
 }
 #drop-item:hover #drop-btn {
-  background-color: var(--item-hover);
+  background-color: rgb(37, 119, 157);
 }
 #drop-item:hover #drop-content {
   display: flex;
@@ -129,6 +131,9 @@ export default {
 .dropdown-content.collapsed {
   display: none;
   background-color: var(--bg-color-bright);
+  margin-left: 0;
+  position: absolute;
+  left: var(--left-menu-width-collapsed);
 }
 
 .dropdown-link {
@@ -142,14 +147,17 @@ export default {
     var(--left-menu-width-expanded) - var(--left-menu-width-collapsed)
   );
   text-align: left;
-  padding-left: 5px;
-
+  padding-left: 20px;
   color: white;
 
   display: flex;
   align-items: center;
 }
 .dropdown-link-text:hover {
-  color: rgb(212, 232, 255);
+  color: rgb(37, 119, 157);
+}
+
+.icon {
+  width: 14px;
 }
 </style>
