@@ -17,6 +17,15 @@
       <NavbarDropdown></NavbarDropdown>
       <NavbarDropdown></NavbarDropdown>
       <NavbarDropdown></NavbarDropdown>
+      <NavbarDropdown></NavbarDropdown>
+      <NavbarDropdown></NavbarDropdown>
+      <NavbarDropdown></NavbarDropdown>
+      <NavbarDropdown></NavbarDropdown>
+      <NavbarDropdown></NavbarDropdown>
+      <NavbarDropdown></NavbarDropdown>
+      <NavbarDropdown></NavbarDropdown>
+      <NavbarDropdown></NavbarDropdown>
+      <NavbarDropdown></NavbarDropdown>
     </div>
   </div>
 </template>
@@ -70,8 +79,10 @@ export default {
   width: var(--left-menu-width-collapsed);
 }
 .left-menu-container {
+  height: calc(100vh - var(--navbar-height));
   display: flex;
   flex-direction: column;
+  overflow: scroll;
 }
 
 /* Organization */
