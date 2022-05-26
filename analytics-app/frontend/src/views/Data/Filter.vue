@@ -428,6 +428,17 @@ export default {
   color: white;
 }
 
+.survey-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: stretch;
+  gap: 10px 10px;
+
+  padding-left: 18px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 /* Designing for scroll-bar */
 ::-webkit-scrollbar {
   width: 5px;

@@ -340,6 +340,7 @@ export default {
   transition: var(--transition-time);
 
   position: absolute;
+  left: calc(var(--left-menu-width) + var(--container-margin));
   top: calc(var(--navbar-height) + 60px + 50px);
   bottom: var(--container-margin);
 
