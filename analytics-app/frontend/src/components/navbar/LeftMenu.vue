@@ -1,83 +1,22 @@
 <template>
   <div class="left-menu" :class="{ collapsed: SideBarCollapsed }">
-    <div class="logo-wrapper" @click="printSBC">
-      <el-image
-        class="organization-icon"
-        src="/src/static/aktionSodisSmall.png"
-      />
+    <div class="organization-wrapper">
+      <div class="icon-wrapper">
+        <el-image
+          class="organization-icon"
+          src="/src/static/aktionSodisSmall.png"
+        />
+      </div>
       <div class="organization-name" :class="{ collapsed: SideBarCollapsed }">
         Aktion Sodis
       </div>
     </div>
     <div class="left-menu-container">
-      <div class="sidenav-item">
-        <router-link
-          class="link"
-          :class="{ active: $route.path === '/' }"
-          to="/"
-        >
-          <i class="nav-icon fas fa-home" />
-          <a class="nav-text" :class="{ collapsed: SideBarCollapsed }">{{
-            $t("navbar.home")
-          }}</a>
-        </router-link>
-      </div>
-      <div class="dropdwn-items">
-        <div class="dropdwn-btn" @click="toggleDashboard">
-          <i class="nav-icon fa-solid fa-database" />
-          <a class="nav-text" :class="{ collapsed: SideBarCollapsed }">{{
-            $t("navbar.dashboards")
-          }}</a>
-          <div class="drop-icon" :class="{ collapsed: SideBarCollapsed }">
-            <i class="fa-solid fa-caret-down"></i>
-          </div>
-        </div>
-        <div class="dropdwn-content" v-if="!dashboardsCollapsed">
-          <router-link
-            class="nav-link"
-            :class="{ active: $route.path === '/data/dummy-view-1' }"
-            to="/data/dummy-view-1"
-          >
-            <a>Home</a>
-          </router-link>
-          <router-link
-            class="nav-link"
-            :class="{ active: $route.path === '/data/export' }"
-            to="/data/export"
-          >
-            <a>Export </a>
-          </router-link>
-        </div>
-      </div>
-      <div class="dropdwn-items">
-        <div class="dropdwn-btn" @click="toggleData">
-          <i class="nav-icon fa-solid fa-database" />
-          <a class="nav-text" :class="{ collapsed: SideBarCollapsed }">{{
-            $t("navbar.data")
-          }}</a>
-          <div class="drop-icon" :class="{ collapsed: SideBarCollapsed }">
-            <i class="fa-solid fa-caret-down"></i>
-          </div>
-        </div>
-        <div class="dropdwn-content" v-if="!dataCollapsed">
-          <router-link
-            class="nav-link"
-            :class="{ active: $route.path === '/data/evaluation' }"
-            to="/data/evaluation"
-          >
-            <a>{{ $t("navbar.evaluation") }}</a>
-          </router-link>
-          <router-link
-            class="nav-link"
-            :class="{ active: $route.path === '/data/export' }"
-            to="/data/export"
-          >
-            <a>{{ $t("navbar.export") }} </a>
-          </router-link>
-        </div>
-      </div>
       <NavbarDropdown></NavbarDropdown>
       <NavbarItem></NavbarItem>
+      <NavbarDropdown></NavbarDropdown>
+      <NavbarDropdown></NavbarDropdown>
+      <NavbarDropdown></NavbarDropdown>
     </div>
   </div>
 </template>
@@ -117,12 +56,12 @@ export default {
 </script>
 
 <style scoped>
+/* General Layout */
 .left-menu {
   width: var(--left-menu-width);
   background-color: var(--bg-color);
   float: left;
   position: fixed;
-  z-index: 1;
   top: 0;
   left: 0;
   bottom: 0;
@@ -130,31 +69,41 @@ export default {
 .left-menu.collapsed {
   width: var(--left-menu-width-collapsed);
 }
+.left-menu-container {
+  display: flex;
+  flex-direction: column;
+}
 
-.logo-wrapper {
+/* Organization */
+.organization-wrapper {
   height: var(--navbar-height);
   display: flex;
-  margin-top: 20px;
-  margin-left: 5px;
+  align-items: center;
+  box-sizing: border-box;
+}
+.icon-wrapper {
+  box-sizing: border-box;
+  width: var(--left-menu-width-collapsed);
 }
 .organization-icon {
-  height: 30px;
   width: 30px;
-  margin-left: 15px;
 }
+
 .organization-name {
-  font-size: 25px;
+  box-sizing: border-box;
+  width: calc(
+    var(--left-menu-width-expanded) - var(--left-menu-width-collapsed)
+  );
+  text-align: left;
+  padding-left: 5px;
+  font-size: 20px;
   text-transform: uppercase;
-  padding: 0 5px;
+  color: white;
 }
 .organization-name.collapsed {
   display: none;
 }
 
-.left-menu-container {
-  display: flex;
-  flex-direction: column;
-}
 .dropdwn-items,
 .sidenav-item {
   width: 100%;

@@ -58,7 +58,7 @@
       <div class="content-header">{{ selectedQuestion.question_text }}</div>
     </div>
     <div class="main">
-      <ChartComponent></ChartComponent>
+      <ImageComponent></ImageComponent>
     </div>
   </div>
 </template>
@@ -103,7 +103,7 @@ export default {
   },
   data() {
     return {
-      selectedID: 3,
+      selectedID: 1,
       isSurveyModalVisible: false,
       questions: [
         {
@@ -257,7 +257,6 @@ export default {
 .side {
   grid-area: side;
   background-color: white;
-  z-index: 1;
 }
 
 .main {
@@ -325,6 +324,7 @@ export default {
 
   margin-left: 10px;
   z-index: 1;
+  position: absolute;
 }
 .collapse-info.collapseInfo {
   display: none;
@@ -343,12 +343,11 @@ export default {
   left: calc(var(--left-menu-width) + var(--container-margin));
   top: calc(var(--navbar-height) + 60px + 50px);
   bottom: var(--container-margin);
+  z-index: 1;
 
   background-color: white;
 
   direction: rtl;
-
-  z-index: 1;
 }
 
 .question {

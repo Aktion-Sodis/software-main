@@ -62,6 +62,5 @@ export default {
   height: calc(
     100vh - var(--navbar-height) - var(--container-margin) - 60px - 50px
   );
-  z-index: 0;
 }
 </style>

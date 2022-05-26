@@ -42,7 +42,7 @@ export default {
 }
 .navbar-icon {
   box-sizing: border-box;
-  width: 60px;
+  width: var(--left-menu-width-collapsed);
   margin: 0;
   padding: 0;
   color: white;

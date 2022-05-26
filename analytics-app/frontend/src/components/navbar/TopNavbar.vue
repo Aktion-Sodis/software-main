@@ -65,7 +65,6 @@ export default {
   margin-left: var(--left-menu-width);
   background-color: white;
   position: fixed;
-  z-index: 1;
   top: 0;
   right: 0;
   left: 0;

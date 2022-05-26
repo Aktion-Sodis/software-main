@@ -84,6 +84,10 @@ export default {
   align-items: center;
   height: var(--link-height);
   width: fit-content;
+
+  cursor: pointer;
+
+  position: relative;
 }
 .dropdown-btn-icon {
   width: var(--left-menu-width-collapsed);
@@ -95,6 +99,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  position: relative;
 }
 .dropdown-btn-expand.collapsed {
   display: none;
