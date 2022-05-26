@@ -1,6 +1,8 @@
 <template>
   <div class="top-navbar">
-    <i class="icon fa-solid fa-bars"></i>
+    <div @click="toggleSidebar">
+      <i class="icon fa-solid fa-bars"></i>
+    </div>
     <SearchBar />
     <div class="settings-wrapper">
       <LanguageSelector />
@@ -12,12 +14,51 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import { mapState, mapMutations, mapActions } from "vuex";
+
 import LanguageSelector from "../commons/LanguageSelector.vue";
 import SearchBar from "../commons/SearchBar.vue";
 import NotificationPanel from "../commons/NotificationPanel.vue";
 
 export default {
   components: { LanguageSelector, SearchBar, NotificationPanel },
+  computed: {
+    ...mapState({
+      SideBarCollapsed: (state) => state.NavbarAtributes.SideBarCollapsed,
+      LeftMenuWidth: (state) => state.NavbarAtributes.LeftMenuWidth,
+    }),
+  },
+  methods: {
+    printSBC() {
+      console.log(this.SideBarCollapsed);
+    },
+    ...mapMutations({
+      toggleSidebar: "toggleSidebar",
+    }),
+  },
+  mounted: function () {
+    this.root = document.documentElement;
+  },
+  watch: {
+    SideBarCollapsed: {
+      handler: function () {
+        this.$nextTick(() => {
+          if (this.SideBarCollapsed) {
+            this.root.style.setProperty("--left-menu-width", "60px");
+          } else {
+            this.root.style.setProperty("--left-menu-width", "260px");
+          }
+        });
+      },
+      immediate: true,
+    },
+  },
+  data() {
+    return {
+      root: null,
+    };
+  },
 };
 </script>
 

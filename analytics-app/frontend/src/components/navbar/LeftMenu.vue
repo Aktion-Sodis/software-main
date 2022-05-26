@@ -1,11 +1,13 @@
 <template>
-  <div class="left-menu">
-    <div class="logo-wrapper">
+  <div class="left-menu" :class="{ collapsed: SideBarCollapsed }">
+    <div class="logo-wrapper" @click="printSBC">
       <el-image
         class="organization-icon"
         src="/src/static/aktionSodisSmall.png"
       />
-      <div class="organization-name">Aktion Sodis</div>
+      <div class="organization-name" :class="{ collapsed: SideBarCollapsed }">
+        Aktion Sodis
+      </div>
     </div>
     <div class="left-menu-container">
       <div class="sidenav-item">
@@ -15,14 +17,20 @@
           to="/"
         >
           <i class="nav-icon fas fa-home" />
-          <a class="nav-text">{{ $t("navbar.home") }}</a>
+          <a class="nav-text" :class="{ collapsed: SideBarCollapsed }">{{
+            $t("navbar.home")
+          }}</a>
         </router-link>
       </div>
       <div class="dropdwn-items">
         <div class="dropdwn-btn" @click="toggleDashboard">
           <i class="nav-icon fa-solid fa-database" />
-          <a class="nav-text">{{ $t("navbar.dashboards") }}</a>
-          <i class="drop-icon fa-solid fa-caret-down"></i>
+          <a class="nav-text" :class="{ collapsed: SideBarCollapsed }">{{
+            $t("navbar.dashboards")
+          }}</a>
+          <div class="drop-icon" :class="{ collapsed: SideBarCollapsed }">
+            <i class="fa-solid fa-caret-down"></i>
+          </div>
         </div>
         <div class="dropdwn-content" v-if="!dashboardsCollapsed">
           <router-link
@@ -44,8 +52,12 @@
       <div class="dropdwn-items">
         <div class="dropdwn-btn" @click="toggleData">
           <i class="nav-icon fa-solid fa-database" />
-          <a class="nav-text">{{ $t("navbar.data") }}</a>
-          <i class="drop-icon fa-solid fa-caret-down"></i>
+          <a class="nav-text" :class="{ collapsed: SideBarCollapsed }">{{
+            $t("navbar.data")
+          }}</a>
+          <div class="drop-icon" :class="{ collapsed: SideBarCollapsed }">
+            <i class="fa-solid fa-caret-down"></i>
+          </div>
         </div>
         <div class="dropdwn-content" v-if="!dataCollapsed">
           <router-link
@@ -64,19 +76,29 @@
           </router-link>
         </div>
       </div>
+      <NavbarDropdown></NavbarDropdown>
     </div>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
+import { mapState } from "vuex";
+
+import NavbarDropdown from "./NavbarDropdown.vue";
 
 const dashboardsCollapsed = ref(true);
 const dataCollapsed = ref(true);
 
 export default {
+  components: { NavbarDropdown },
   setup() {
     return { dashboardsCollapsed, dataCollapsed };
+  },
+  computed: {
+    ...mapState({
+      SideBarCollapsed: (state) => state.NavbarAtributes.SideBarCollapsed,
+    }),
   },
   methods: {
     toggleDashboard() {
@@ -84,6 +106,9 @@ export default {
     },
     toggleData() {
       return (dataCollapsed.value = !dataCollapsed.value);
+    },
+    printSBC() {
+      console.log(this.SideBarCollapsed);
     },
   },
 };
@@ -100,6 +125,10 @@ export default {
   left: 0;
   bottom: 0;
 }
+.left-menu.collapsed {
+  width: var(--left-menu-width-collapsed);
+}
+
 .logo-wrapper {
   height: var(--navbar-height);
   display: flex;
@@ -116,6 +145,10 @@ export default {
   text-transform: uppercase;
   padding: 0 5px;
 }
+.organization-name.collapsed {
+  display: none;
+}
+
 .left-menu-container {
   display: flex;
   flex-direction: column;
@@ -141,9 +174,12 @@ export default {
 }
 .dropdwn-btn,
 .link {
-  margin-top: 10px;
-  margin-left: 25px;
-  margin-right: 15px;
+  padding: 15px 15px 15px 25px;
+}
+.dropdwn-btn:hover,
+.link:hover,
+.nav-link:hover {
+  background-color: var(--item-hover);
 }
 .dropdwn-content {
   margin: 0px 57px;
@@ -160,8 +196,15 @@ export default {
   font-size: 16px;
   margin-left: 15px;
 }
+.nav-text.collapsed {
+  display: none;
+}
 .drop-icon {
   position: relative;
   float: right;
+}
+.drop-icon.collapsed {
+  visibility: hidden;
+  display: none;
 }
 </style>

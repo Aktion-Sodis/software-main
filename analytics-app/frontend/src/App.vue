@@ -23,7 +23,8 @@ export default {
   margin: 0px;
 }
 :root {
-  --bg-color: #2d91be;
+  --bg-color: rgb(45, 145, 190);
+  --bg-color-bright: rgb(66, 195, 255);
   --item-hover: #64aa73;
 }
 #app {
