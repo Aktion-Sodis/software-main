@@ -1,7 +1,7 @@
 <template>
   <div class="survey-card">
     <div class="survey-card-inner">
-      <el-image class="image" :src="src" :fit="contain" />
+      <el-image class="image" :src="src" />
       <div class="survey-description-wrap">
         <el-row>
           <el-col :span="21">

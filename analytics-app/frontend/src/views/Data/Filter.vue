@@ -7,9 +7,18 @@
     </div>
     <div class="header">Technologie - Fragebogen</div>
     <div class="continue-wrapper">
-      <el-button class="sodis continue" :disabled="true"
-        ><i class="fa-solid fa-arrow-right"></i
-      ></el-button>
+      <el-button-group class="ml-4">
+        <el-button
+          class="sodis"
+          :disabled="!this.continue"
+          @click="resetSelection"
+        >
+          Reset
+        </el-button>
+        <el-button class="sodis" :disabled="!this.continue">
+          <i class="fa-solid fa-arrow-right"></i
+        ></el-button>
+      </el-button-group>
     </div>
 
     <div class="filter">
@@ -48,6 +57,8 @@
           v-for="survey in selectedIntervention.surveys"
           :key="survey.id"
           :survey="survey"
+          :class="{ selected: surveySelected(survey) }"
+          @click="selectSurvey(survey)"
         >
         </SurveyCard>
       </div>
@@ -79,19 +90,41 @@ export default {
     setActive(tag) {
       this.selectedTag = tag;
       this.selectedIntervention = "";
-      console.log(this.selectedTag);
       return this.selectedTag, this.selectedIntervention;
     },
     setIntervention(intervention) {
       this.selectedIntervention = intervention;
-      console.log(this.selectedIntervention.surveys);
       return this.selectedIntervention;
+    },
+    selectSurvey(survey) {
+      //check if id is already in selected array
+      if (this.selectedSurveys.includes(survey.id)) {
+        console.log("DUPLIKAT: Noch nicht implementiert");
+        return;
+      }
+
+      this.selectedSurveys.push(survey.id);
+      console.log(this.selectedSurveys);
+      this.continue = true;
+      return;
+    },
+    surveySelected(survey) {
+      if (this.selectedSurveys.includes(survey.id)) {
+        return true;
+      }
+      return false;
+    },
+    resetSelection() {
+      this.selectedSurveys = [];
+      this.continue = false;
     },
   },
   data() {
     return {
       selectedTag: "",
       selectedIntervention: "",
+      selectedSurveys: [],
+      continue: false,
       interventions: [
         {
           id: 1,
@@ -432,9 +465,9 @@ export default {
   display: flex;
   flex-wrap: wrap;
   align-content: stretch;
-  gap: 10px 10px;
+  gap: 5px 5px;
 
-  padding-left: 18px;
+  padding-left: 5px;
   padding-top: 10px;
   padding-bottom: 10px;
 }
