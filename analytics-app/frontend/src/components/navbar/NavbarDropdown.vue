@@ -2,14 +2,14 @@
   <div id="drop-item" class="dropdown-item">
     <div id="drop-btn" class="dropdown-btn" @click="toggleContent">
       <div class="dropdown-btn-icon">
-        <i class="icon fa-solid fa-database"></i>
+        <i class="icon" :class="items.icon"></i>
       </div>
       <div
         id="drop-btn-expand"
         class="dropdown-btn-expand"
         :class="{ collapsed: SideBarCollapsed }"
       >
-        <div class="dropdown-btn-text">{{ $t("navbar.data") }}</div>
+        <div class="dropdown-btn-text">{{ items.name }}</div>
         <div class="drop-icon" :class="{ collapsed: SideBarCollapsed }">
           <i class="fa-solid fa-caret-down"></i>
         </div>
@@ -21,13 +21,13 @@
       :class="{ collapsed: SideBarCollapsed }"
       v-if="!contentCollapsed"
     >
-      <router-link id="drop-link" class="dropdown-link" to="/">
-        <div class="dropdown-link-text">{{ $t("navbar.export") }}</div>
-      </router-link>
-      <router-link id="drop-link" class="dropdown-link" to="/">
-        <div class="dropdown-link-text">
-          <p>{{ $t("navbar.export") }}</p>
-        </div>
+      <router-link
+        class="dropdown-link"
+        v-for="item in items.items"
+        :key="item.id"
+        :to="item.to"
+      >
+        <div class="dropdown-link-text">{{ item.name }}</div>
       </router-link>
     </div>
   </div>
@@ -40,6 +40,9 @@ import { ref } from "vue";
 var contentCollapsed = ref(true);
 
 export default {
+  props: {
+    items: Object,
+  },
   setup() {
     return { contentCollapsed };
   },

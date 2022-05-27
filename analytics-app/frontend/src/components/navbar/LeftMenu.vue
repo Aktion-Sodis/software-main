@@ -11,21 +11,10 @@
         Aktion Sodis
       </div>
     </div>
-    <div class="left-menu-container">
-      <NavbarDropdown></NavbarDropdown>
-      <NavbarItem></NavbarItem>
-      <NavbarDropdown></NavbarDropdown>
-      <NavbarDropdown></NavbarDropdown>
-      <NavbarDropdown></NavbarDropdown>
-      <NavbarDropdown></NavbarDropdown>
-      <NavbarDropdown></NavbarDropdown>
-      <NavbarDropdown></NavbarDropdown>
-      <NavbarDropdown></NavbarDropdown>
-      <NavbarDropdown></NavbarDropdown>
-      <NavbarDropdown></NavbarDropdown>
-      <NavbarDropdown></NavbarDropdown>
-      <NavbarDropdown></NavbarDropdown>
-      <NavbarDropdown></NavbarDropdown>
+    <div class="left-menu-container" :class="{ expanded: !SideBarCollapsed }">
+      <NavbarItem :item="home"></NavbarItem>
+      <NavbarItem :item="data"></NavbarItem>
+      <NavbarDropdown :items="dashboard"></NavbarDropdown>
     </div>
   </div>
 </template>
@@ -61,6 +50,36 @@ export default {
       console.log(this.SideBarCollapsed);
     },
   },
+  data() {
+    return {
+      home: {
+        name: "Home",
+        icon: "fa-solid fa-house",
+        to: "/",
+      },
+      data: {
+        name: "Data",
+        icon: "fa-solid fa-database",
+        to: "/data/filter",
+      },
+      dashboard: {
+        name: "Dashboards",
+        icon: "fas fa-chart-bar",
+        items: [
+          {
+            id: 1,
+            name: "Dashboard1",
+            to: "/data/dummy-view-1",
+          },
+          {
+            id: 2,
+            name: "Dashboard2",
+            to: "/data/dummy-view-2",
+          },
+        ],
+      },
+    };
+  },
 };
 </script>
 
@@ -79,9 +98,11 @@ export default {
   width: var(--left-menu-width-collapsed);
 }
 .left-menu-container {
-  height: calc(100vh - var(--navbar-height));
   display: flex;
   flex-direction: column;
+}
+.left-menu-container.expanded {
+  height: calc(100vh - var(--navbar-height));
   overflow: scroll;
 }
 

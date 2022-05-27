@@ -1,24 +1,28 @@
 <template>
   <div id="nav-item" class="navbar-item">
-    <router-link class="link" to="/">
+    <router-link class="link" :to="item.to">
       <div class="navbar-icon">
-        <i class="icon fa-solid fa-database"></i>
+        <i class="icon" :class="item.icon"></i>
       </div>
       <div
         id="nav-text"
         class="navbar-text"
         :class="{ collapsed: SideBarCollapsed }"
       >
-        <div>{{ $t("navbar.data") }}</div>
+        <div>{{ item.name }}</div>
       </div>
     </router-link>
   </div>
 </template>
 
 <script>
+import { objectEntries } from "@antfu/utils";
 import { mapState } from "vuex";
 
 export default {
+  props: {
+    item: Object,
+  },
   computed: {
     ...mapState({
       SideBarCollapsed: (state) => state.NavbarAtributes.SideBarCollapsed,
