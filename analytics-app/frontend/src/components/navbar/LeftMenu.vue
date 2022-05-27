@@ -101,9 +101,8 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.left-menu-container.expanded {
+.left-menu-container {
   height: calc(100vh - var(--navbar-height));
-  overflow: scroll;
 }
 
 /* Organization */

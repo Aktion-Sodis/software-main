@@ -37,23 +37,17 @@
 import { mapState } from "vuex";
 import { ref } from "vue";
 
-var contentCollapsed = ref(true);
-
 export default {
   props: {
     items: Object,
   },
-  setup() {
-    return { contentCollapsed };
-  },
   methods: {
     toggleContent() {
       if (this.SideBarCollapsed) {
-        contentCollapsed.value = false;
-        return contentCollapsed.value;
+        this.contentCollapsed = false;
+        return this.contentCollapsed;
       }
-      console.log(contentCollapsed.value);
-      return (contentCollapsed.value = !contentCollapsed.value);
+      return (this.contentCollapsed = !this.contentCollapsed);
     },
   },
   computed: {
@@ -75,6 +69,11 @@ export default {
       immediate: true,
     },
   },
+  data() {
+    return {
+      contentCollapsed: true,
+    };
+  },
 };
 </script>
 
@@ -91,6 +90,8 @@ export default {
   cursor: pointer;
 
   position: relative;
+
+  z-index: 2;
 }
 .dropdown-btn-icon {
   width: var(--left-menu-width-collapsed);
@@ -136,6 +137,7 @@ export default {
     var(--left-menu-width-expanded) - var(--left-menu-width-collapsed)
   );
   margin-left: var(--left-menu-width-collapsed);
+  z-index: 2;
 }
 .dropdown-content.collapsed {
   display: none;
@@ -168,5 +170,15 @@ export default {
 
 .icon {
   width: 14px;
+}
+
+/* Div to close component when clicked somewhere else */
+.outside {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
 }
 </style>

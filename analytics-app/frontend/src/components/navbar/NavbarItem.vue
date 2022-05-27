@@ -63,6 +63,9 @@ export default {
 
   display: flex;
   align-items: center;
+
+  position: absolute;
+  left: var(--left-menu-width-collapsed);
 }
 .navbar-text.collapsed {
   display: none;
