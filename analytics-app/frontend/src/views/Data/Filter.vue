@@ -15,7 +15,7 @@
         >
           Reset
         </el-button>
-        <el-button class="sodis" :disabled="!this.continue">
+        <el-button class="sodis return" :disabled="!this.continue">
           <i class="fa-solid fa-arrow-right"></i
         ></el-button>
       </el-button-group>

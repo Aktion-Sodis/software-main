@@ -40,11 +40,7 @@
         </div>
       </div>
       <div class="surveys">
-        <div
-          class="survey-wrapper"
-          v-for="(survey, index) in surveys"
-          :key="survey.id"
-        >
+        <div class="survey-wrapper" v-for="survey in surveys" :key="survey.id">
           <div class="survey-name-wrapper">
             <div class="survey-placeholder">
               <i class="sodis-icon fa-solid fa-bars-staggered"></i>
