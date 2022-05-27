@@ -63,8 +63,8 @@
 import { ref } from "vue";
 import "element-plus/theme-chalk/display.css";
 
-import ChartComponent from "../components/data/ChartComponent.vue";
-import ImageComponent from "../components/data/ImageComponent.vue";
+import ChartComponent from "../../components/data/ChartComponent.vue";
+import ImageComponent from "../../components/data/ImageComponent.vue";
 
 var collapsed = ref(true);
 var collapseInfo = ref(true);

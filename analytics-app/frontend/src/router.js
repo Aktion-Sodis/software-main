@@ -1,16 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import DummyView1 from './views/DummyView1.vue';
-import DummyView2 from './views/DummyView2.vue';
-import Home from './views/Home.vue';
-import Login from './views/Login.vue';
-import Data from './views/data/Data.vue';
-import Export from './views/data/DataExport.vue';
-import DataEvaluation from './views/Data/DataEvaluation.vue';
-import Questions from './views/Data/Questions.vue';
-import Filter from './views/Data/Filter.vue';
+import Home from './views/home/Home.vue';
 
-import Dashboard from './views/Dashboard.vue'
+import Login from './views/login/Login.vue';
+
+import Dashboard from './views/dashboards/Dashboard.vue'
+
+import Data from './views/data/data.vue';
+import Export from './views/data/dataExport.vue';
+import Questions from './views/data/Questions.vue';
+import Filter from './views/data/Filter.vue';
+
+
 
 export const routes = [
   {
@@ -31,17 +32,9 @@ export const routes = [
     path: '/data',
     component: Data,
     children: [
-      { path: 'dummy-view-1', component: DummyView1 },
-      { path: 'dummy-view-2', component: DummyView2 },
       { path: 'export', component: Export },
       { path: 'filter', component: Filter },
-      { 
-        path: 'evaluation',
-        component: DataEvaluation,
-        children: [
-          { path: 'questions', component: Questions },
-        ]
-      },
+      { path: 'questions', component: Questions },
     ],
   },
   {

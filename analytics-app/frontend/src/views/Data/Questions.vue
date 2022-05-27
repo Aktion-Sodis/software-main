@@ -73,7 +73,7 @@
       <div class="content-header">{{ selectedQuestion.question_text }}</div>
     </div>
     <div class="main">
-      <ChartComponent></ChartComponent>
+      <ChartComponentPlotly></ChartComponentPlotly>
     </div>
   </div>
 </template>
@@ -82,14 +82,14 @@
 import { ref } from "vue";
 import "element-plus/theme-chalk/display.css";
 
-import ChartComponent from "../../components/data/ChartComponent.vue";
+import ChartComponentPlotly from "../../components/data/ChartComponentPlotly.vue";
 import ImageComponent from "../../components/data/ImageComponent.vue";
 
 var collapsed = ref(true);
 var collapseInfo = ref(true);
 
 export default {
-  components: { ChartComponent, ImageComponent },
+  components: { ChartComponentPlotly, ImageComponent },
   setup() {
     return { collapsed, collapseInfo };
   },
