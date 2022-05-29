@@ -90,11 +90,12 @@ export default {
     setActive(tag) {
       this.selectedTag = tag;
       this.selectedIntervention = "";
+      this.resetSelection();
       return this.selectedTag, this.selectedIntervention;
     },
     setIntervention(intervention) {
       this.selectedIntervention = intervention;
-      this.selectedSurveys = [];
+      this.resetSelection();
       return this.selectedIntervention;
     },
     selectSurvey(survey) {
