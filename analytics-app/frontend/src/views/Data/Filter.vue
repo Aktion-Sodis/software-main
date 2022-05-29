@@ -94,6 +94,7 @@ export default {
     },
     setIntervention(intervention) {
       this.selectedIntervention = intervention;
+      this.selectedSurveys = [];
       return this.selectedIntervention;
     },
     selectSurvey(survey) {
