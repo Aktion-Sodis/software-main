@@ -3,7 +3,10 @@
     <div class="navbar">
       <Navbar2 v-if="!$route.meta.hideNavbar" />
     </div>
-    <div class="main-wrapper">
+    <div class="main-wrapper" v-if="!$route.meta.hideNavbar">
+      <router-view></router-view>
+    </div>
+    <div class="login-wrapper" v-if="$route.meta.hideNavbar">
       <router-view></router-view>
     </div>
   </div>
