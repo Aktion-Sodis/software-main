@@ -1,113 +1,79 @@
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
-import 'package:string_similarity/string_similarity.dart';
 
 class OrganizationViewState {}
 
 class EntitiesLoadedOrganizationViewState extends OrganizationViewState {
-  final List<Entity> allEntities;
+  final List<Level> allLevels;
   final OrganizationViewType organizationViewType;
   final Entity? currentDetailEntity;
-  final List<Entity> currentListEntities;
   final String appBarString;
   final bool addEntityPossible;
   final AppliedIntervention? currentDetailAppliedIntervention;
   final ExecutedSurvey? executedSurveyToDisplay;
+  final List<LevelContent> levelContentList;
   late final DateTime keyDateTime;
 
-  Entity entityByID(String id) => allEntities.firstWhere((e) => e.id == id);
-
-  List<Entity> entitiesByParentID(String? id) {
-    return List.from(
-        allEntities.where((element) => element.parentEntityID == id));
-  }
-
-  List<Entity> entitiesByName(String query) {
-    List<Entity> toSort = List.from(allEntities);
-    toSort.sort((a, b) {
-      double aEqualness = StringSimilarity.compareTwoStrings(a.name, query);
-      double bEqualness = StringSimilarity.compareTwoStrings(b.name, query);
-      if (aEqualness == bEqualness) {
-        return 0;
-      } else if (aEqualness > bEqualness) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-    if (toSort.length > 5) {
-      return toSort.sublist(0, 5);
-    }
-    return toSort;
-  }
-
-  bool hasChildren(String entityID) =>
-      allEntities.any((obj) => obj.parentEntityID == entityID);
-
-  List<Level> getLevelsInOrder() {
-    List<Level> toOrder = [];
-    allEntities.forEach((element) {
-      if (!toOrder.any((l) => l.id == element.level.id)) {
-        toOrder.add(element.level);
-      }
-    });
-    int parentIndex =
-        toOrder.indexWhere((element) => element.parentLevelID == null);
-    List<Level> inOrder = [toOrder.removeAt(parentIndex)];
-    while (toOrder.isNotEmpty) {
-      int removeIndex = toOrder
-          .indexWhere((element) => element.parentLevelID == inOrder.last.id);
-      inOrder.add(toOrder.removeAt(removeIndex));
-    }
-    return inOrder;
+  LevelContent get currentLevelContent {
+    return levelContentList.last;
   }
 
   bool addChildPossible(Entity entity) {
-    List<Level> levelsInOrder = getLevelsInOrder();
+    List<Level> levelsInOrder = allLevels;
     return levelsInOrder.last.id != entity.level.id;
   }
 
   Level getCurrentLevel() {
-    return currentListEntities.first.level;
+    return levelContentList.last.level;
   }
 
   Level? getDaughterLevel(Level level) {
-    return getLevelsInOrder()
-        .firstWhere((element) => element.parentLevelID == level.id);
+    return allLevels.firstWhere((element) => element.parentLevelID == level.id);
   }
 
-  EntitiesLoadedOrganizationViewState(
-      {required this.allEntities,
-      required this.organizationViewType,
-      this.currentDetailEntity,
-      required this.currentListEntities,
-      required this.appBarString,
-      required this.addEntityPossible,
-      this.currentDetailAppliedIntervention,
-      this.executedSurveyToDisplay}) {
+  EntitiesLoadedOrganizationViewState({
+    required this.allLevels,
+    required this.organizationViewType,
+    this.currentDetailEntity,
+    required this.levelContentList,
+    required this.appBarString,
+    required this.addEntityPossible,
+    this.currentDetailAppliedIntervention,
+    this.executedSurveyToDisplay,
+  }) {
     this.keyDateTime = DateTime.now();
     print("loaded state newly created");
   }
 
   EntitiesLoadedOrganizationViewState copyWith(
-      {List<Entity>? allEntities,
+      {List<Level>? allLevels,
       OrganizationViewType? organizationViewType,
       Entity? currentDetailEntity,
-      List<Entity>? currentListEntities,
       String? appBarString,
       bool? addEntityPossible,
       AppliedIntervention? currentDetailAppliedIntervention,
-      ExecutedSurvey? executedSurveyToDisplay}) {
+      ExecutedSurvey? executedSurveyToDisplay,
+      List<LevelContent>? levelContentList}) {
     return EntitiesLoadedOrganizationViewState(
-        allEntities: allEntities ?? this.allEntities,
+        allLevels: allLevels ?? this.allLevels,
         organizationViewType: organizationViewType ?? this.organizationViewType,
-        currentListEntities: currentListEntities ?? this.currentListEntities,
         currentDetailEntity: currentDetailEntity,
         appBarString: appBarString ?? this.appBarString,
         addEntityPossible: addEntityPossible ?? this.addEntityPossible,
         currentDetailAppliedIntervention: currentDetailAppliedIntervention ??
             this.currentDetailAppliedIntervention,
-        executedSurveyToDisplay: executedSurveyToDisplay);
+        executedSurveyToDisplay: executedSurveyToDisplay,
+        levelContentList: levelContentList ?? this.levelContentList);
   }
+}
+
+class LevelContent {
+  Level level;
+  Entity? parentEntity;
+  List<Entity> daughterEntities = [];
+  int page = 0;
+  bool hasMoreToLoad = true;
+
+  LevelContent(this.level, this.parentEntity);
 }
 
 enum OrganizationViewType {
