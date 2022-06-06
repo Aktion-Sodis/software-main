@@ -63,6 +63,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
   void fulfillSync() async {
+    return;
     InternetConnectionType internetConnectionType =
         await StorageRepository.currentInternetConnectionType();
     if (internetConnectionType != InternetConnectionType.WIFI) {
