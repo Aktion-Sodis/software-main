@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <div class="navbar">
+    <div class="navbar-wrapper">
       <Navbar2 v-if="!$route.meta.hideNavbar" />
     </div>
     <div class="main-wrapper" v-if="!$route.meta.hideNavbar">
@@ -37,7 +37,7 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-.navbar {
+.navbar-wrapper {
   z-index: 100;
   position: sticky;
   top: 0;

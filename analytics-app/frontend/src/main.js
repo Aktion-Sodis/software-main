@@ -13,6 +13,8 @@ import VueApexCharts from "vue3-apexcharts";
 import '@fortawesome/fontawesome-free/js/all';
 import 'element-plus/dist/index.css';
 
+import 'bootstrap/dist/css/bootstrap.css'
+
 const app = createApp(App);
 
 app.use(router);

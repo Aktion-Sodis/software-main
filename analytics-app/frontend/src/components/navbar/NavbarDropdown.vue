@@ -1,5 +1,5 @@
 <template>
-  <div id="drop-item" class="dropdown-item">
+  <div id="drop-item" class="dropdown-wrapper">
     <div id="drop-btn" class="dropdown-btn" @click="toggleContent">
       <div class="dropdown-btn-icon">
         <i class="icon" :class="items.icon"></i>
@@ -78,7 +78,7 @@ export default {
 </script>
 
 <style scoped>
-.dropdown-item {
+.dropdown-wrapper {
   color: white;
 }
 .dropdown-btn {
