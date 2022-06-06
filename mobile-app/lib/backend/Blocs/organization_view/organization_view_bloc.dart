@@ -170,7 +170,6 @@ class OrganizationViewBloc
             appliedIntervention: event.appliedIntervention,
             entity: event.entity));
       } else if (event is AddExecutedSurvey) {
-        // TODO: check AddExecutedSurvey
         bool isCurrentDetailEntity =
             loadedState.currentDetailEntity?.id == event.entity.id;
 
@@ -188,7 +187,8 @@ class OrganizationViewBloc
         toEdit.appliedInterventions[aIIndex].executedSurveys
             .add(event.executedSurvey);
 
-        emit(loadedState.copyWith());
+        emit(loadedState.copyWith(
+            currentDetailEntity: loadedState.currentDetailEntity));
       } else if (event is AddEntity) {
         Entity newEntity = event.entity;
         String id = await EntityRepository.createEntity(newEntity);
@@ -202,7 +202,6 @@ class OrganizationViewBloc
             appBarString: event.entity.name,
             currentDetailEntity: event.entity));
       } else if (event is AddAppliedIntervention) {
-        // TODO: check AddAppliedIntervention
         String id =
             await AppliedInterventionRepository.createAppliedIntervention(
                 event.appliedIntervention, event.entity);
@@ -228,9 +227,9 @@ class OrganizationViewBloc
         if (newCurrentEntity?.id == event.entity.id) {
           newCurrentEntity!.appliedInterventions.add(toAdd);
         }*/
-        emit(loadedState.copyWith());
+        emit(loadedState.copyWith(
+            currentDetailEntity: loadedState.currentDetailEntity));
       } else if (event is UpdateAppliedIntervention) {
-        // TODO: check UpdateAppliedIntervention
         AppliedInterventionRepository.updateAppliedIntervention(
             event.appliedIntervention, event.entity);
         AppliedIntervention toAdd = event.appliedIntervention;
@@ -241,6 +240,7 @@ class OrganizationViewBloc
         toSet.appliedInterventions[aIIndex] = event.appliedIntervention;
 
         emit(loadedState.copyWith(
+            currentDetailEntity: loadedState.currentDetailEntity,
             currentDetailAppliedIntervention:
                 loadedState.currentDetailAppliedIntervention != null
                     ? toAdd
@@ -258,6 +258,7 @@ class OrganizationViewBloc
               ": " +
               event.executedSurvey.survey.name,
           executedSurveyToDisplay: event.executedSurvey,
+          currentDetailEntity: loadedState.currentDetailEntity,
           organizationViewType: OrganizationViewType.EXECUTEDSURVEY,
         ));
       } else if (event is UpdatePic) {
@@ -265,6 +266,7 @@ class OrganizationViewBloc
             organizationViewType: loadedState.organizationViewType,
             appBarString: loadedState.appBarString,
             addEntityPossible: loadedState.addEntityPossible,
+            currentDetailEntity: loadedState.currentDetailEntity,
             currentDetailAppliedIntervention:
                 loadedState.currentDetailAppliedIntervention,
             executedSurveyToDisplay: loadedState.executedSurveyToDisplay));

@@ -44,6 +44,9 @@ class EntitiesLoadedOrganizationViewState extends OrganizationViewState {
     print("loaded state newly created");
   }
 
+  /**
+   * Notice: `currentDetailEntity` will be taken exactly like it stands in the arguments
+   */
   EntitiesLoadedOrganizationViewState copyWith(
       {List<Level>? allLevels,
       OrganizationViewType? organizationViewType,
