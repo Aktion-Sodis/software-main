@@ -14,6 +14,7 @@ import 'package:mobile_app/backend/Blocs/user/user_bloc.dart';
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/callableModels/localModels/attachment.dart';
 import 'package:mobile_app/backend/callableModels/localModels/image_attachment.dart';
+import 'package:mobile_app/backend/repositories/EntityRepository.dart';
 import 'package:mobile_app/backend/repositories/TaskRepository.dart';
 import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/backend/storage/storage_repository.dart';
@@ -72,9 +73,8 @@ class TaskFormCubit extends Cubit<TaskFormState> {
             deadline: task?.dueDate));
 
   Future<List<Entity>> searchForEntities(String? query) async {
-    return (state.organizationViewBloc.state
-            as EntitiesLoadedOrganizationViewState)
-        .entitiesByName(query ?? "");
+    // TODO: makt it possible to search among all entities
+    return EntityRepository.getEntities(searchByName: query, page: 0);
   }
 
   static TaskFormCubit initialize<T extends TaskFormCubit>(
