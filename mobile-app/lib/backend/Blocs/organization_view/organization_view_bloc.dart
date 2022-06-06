@@ -6,6 +6,7 @@ import 'package:mobile_app/backend/Blocs/organization_view/organization_view_sta
 import 'package:mobile_app/backend/callableModels/CallableModels.dart';
 import 'package:mobile_app/backend/repositories/AppliedInterventionRepository.dart';
 import 'package:mobile_app/backend/repositories/EntityRepository.dart';
+import 'package:mobile_app/backend/repositories/LevelRepository.dart';
 import 'package:mobile_app/frontend/pages/task_form/task_form.dart';
 import 'package:mobile_app/frontend/strings.dart' as strings;
 
@@ -19,18 +20,16 @@ class OrganizationViewBloc
       this.entityRepository, this.appliedInterventionRepository, this.inAppBloc)
       : super(LoadingOrganizationViewState()) {
     on<OrganizationViewEvent>(_mapEventToState);
-    EntityRepository.getAllEntities().then((value) {
-      List<Entity> startingEntities =
-          List.from(value.where((element) => element.parentEntityID == null));
-      String startingAppBarString = startingEntities.first.level.name;
-
+    LevelRepository.getAllLevels().then((allLevels) {
+      String startingAppBarString = allLevels.first.name;
       // ignore: invalid_use_of_visible_for_testing_member
       emit(EntitiesLoadedOrganizationViewState(
-          allEntities: value,
+          allLevels: allLevels,
           organizationViewType: OrganizationViewType.LIST,
-          currentListEntities: startingEntities,
+          levelContentList: [LevelContent(allLevels.first, null)],
           appBarString: startingAppBarString,
           addEntityPossible: true));
+      add(LoadDaughterEntities(null, 0));
     });
   }
 
@@ -43,26 +42,17 @@ class OrganizationViewBloc
       if (event is BackTapEvent) {
         switch (loadedState.organizationViewType) {
           case OrganizationViewType.LIST:
-            if (loadedState.currentListEntities.first.parentEntityID != null) {
-              Entity parentEntity = loadedState.entityByID(
-                  loadedState.currentListEntities.first.parentEntityID!);
-              print("parent Entity found");
-              List<Entity> newListEntities =
-                  loadedState.entitiesByParentID(parentEntity.parentEntityID);
-              print("daughters of new parent: ${newListEntities.length}");
-              print("daughters of new list: ${newListEntities.first.name}");
-              String appBarName = newListEntities.first.level.name;
-              emit(loadedState.copyWith(
-                  currentListEntities: newListEntities,
-                  appBarString: appBarName));
+            if (loadedState.levelContentList.length > 1) {
+              loadedState.levelContentList.removeLast();
+              String appBarName = loadedState.levelContentList.last.level.name;
+              emit(loadedState.copyWith(appBarString: appBarName));
             }
             break;
           case OrganizationViewType.OVERVIEW:
             emit(loadedState.copyWith(
                 organizationViewType: OrganizationViewType.LIST,
                 currentDetailEntity: null,
-                appBarString:
-                    loadedState.currentListEntities.first.level.name));
+                appBarString: loadedState.levelContentList.last.level.name));
             break;
           case OrganizationViewType.APPLIEDINTERVENTIONS:
             emit(loadedState.copyWith(
@@ -109,12 +99,36 @@ class OrganizationViewBloc
             break;
         }
       } else if (event is NavigateToDaughterView) {
-        List<Entity> newEntities =
-            loadedState.entitiesByParentID(event.parentID);
+        Level nextLevel = loadedState.allLevels.firstWhere(
+          (element) => element.parentLevelID == event.parent.level.id,
+        );
         emit(loadedState.copyWith(
             organizationViewType: OrganizationViewType.LIST,
-            currentListEntities: newEntities,
-            appBarString: newEntities.first.level.name));
+            levelContentList: loadedState.levelContentList
+              ..add(LevelContent(nextLevel, event.parent)),
+            appBarString: nextLevel.name));
+        add(LoadDaughterEntities(event.parent, 0));
+      } else if (event is LoadDaughterEntities &&
+          loadedState.currentLevelContent.hasMoreToLoad) {
+        List<Entity> loadedEntities = await EntityRepository.getEntities(
+            byParentEntityID: true,
+            parentEntityID: event.parent == null ? null : event.parent!.id,
+            page: event.page);
+
+        loadedState.levelContentList
+            .where(
+          (element) => element.parentEntity == event.parent,
+        )
+            .forEach(((element) {
+          if (loadedEntities.isEmpty) {
+            element.hasMoreToLoad = false;
+          } else {
+            element.daughterEntities.addAll(loadedEntities);
+          }
+          element.page++;
+        }));
+
+        emit(loadedState.copyWith());
       } else if (event is NavigateToEntityOverview) {
         emit(loadedState.copyWith(
             organizationViewType: OrganizationViewType.OVERVIEW,
@@ -156,75 +170,54 @@ class OrganizationViewBloc
             appliedIntervention: event.appliedIntervention,
             entity: event.entity));
       } else if (event is AddExecutedSurvey) {
-        int entityIndex = loadedState.allEntities
-            .indexWhere((element) => element.id == event.entity.id);
-        int currentListEntitiesIndex = loadedState.currentListEntities
-            .indexWhere((element) => element.id == event.entity.id);
+        // TODO: check AddExecutedSurvey
         bool isCurrentDetailEntity =
             loadedState.currentDetailEntity?.id == event.entity.id;
-        Entity toEdit = loadedState.allEntities[entityIndex];
+
+        late Entity toEdit;
+        for (LevelContent levelContent in loadedState.levelContentList) {
+          for (Entity entity in levelContent.daughterEntities) {
+            if (entity.id == event.entity.id) {
+              toEdit = entity;
+            }
+          }
+        }
+
         int aIIndex = toEdit.appliedInterventions.indexWhere(
             (element) => element.id == event.appliedIntervention.id);
         toEdit.appliedInterventions[aIIndex].executedSurveys
             .add(event.executedSurvey);
-        List<Entity> allEntitiests = List.from(loadedState.allEntities);
-        List<Entity> currentListEntitiests =
-            List.from(loadedState.currentListEntities);
-        Entity? cDE = loadedState.currentDetailEntity;
-        allEntitiests[entityIndex] = toEdit;
-        if (currentListEntitiesIndex >= 0) {
-          currentListEntitiests[currentListEntitiesIndex] = toEdit;
-        }
-        if (isCurrentDetailEntity) {
-          cDE = toEdit;
-        }
-        emit(loadedState.copyWith(
-            allEntities: allEntitiests,
-            currentListEntities: currentListEntitiests,
-            currentDetailEntity: cDE));
+
+        emit(loadedState.copyWith());
       } else if (event is AddEntity) {
         Entity newEntity = event.entity;
         String id = await EntityRepository.createEntity(newEntity);
         newEntity.id = id;
-        List<Entity> newAllEntities = loadedState.allEntities;
-        newAllEntities.add(newEntity);
-        List<Entity> newCurrentEntities = loadedState.currentListEntities;
-        if (!event.isDaughter) {
-          newCurrentEntities.add(newEntity);
-        }
+        loadedState.levelContentList.last.daughterEntities.add(newEntity);
 
-        emit(loadedState.copyWith(
-            allEntities: newAllEntities,
-            currentListEntities: newCurrentEntities));
+        emit(loadedState.copyWith());
       } else if (event is UpdateEntity) {
         EntityRepository.updateEntity(event.entity);
-        int index = loadedState.allEntities
-            .indexWhere((element) => element.id == event.entity.id);
-        List<Entity> newAllEntities = loadedState.allEntities;
-        newAllEntities[index] = event.entity;
-
-        int currentIndex = loadedState.currentListEntities
-            .indexWhere((element) => element.id == event.entity.id);
-        List<Entity> newCurrentEntities = loadedState.currentListEntities;
-        if (currentIndex >= 0) {
-          newCurrentEntities[currentIndex] = event.entity;
-        }
         emit(loadedState.copyWith(
-            allEntities: newAllEntities,
-            currentListEntities: newCurrentEntities,
             appBarString: event.entity.name,
             currentDetailEntity: event.entity));
       } else if (event is AddAppliedIntervention) {
+        // TODO: check AddAppliedIntervention
         String id =
             await AppliedInterventionRepository.createAppliedIntervention(
                 event.appliedIntervention, event.entity);
         print("new InterventionID: $id");
         AppliedIntervention toAdd = event.appliedIntervention;
         toAdd.id = id;
-        List<Entity> newAllEntities = loadedState.allEntities;
-        int allIndex = newAllEntities
-            .indexWhere((element) => element.id == event.entity.id);
-        newAllEntities[allIndex].appliedInterventions.add(toAdd);
+
+        for (LevelContent levelContent in loadedState.levelContentList) {
+          for (Entity entity in levelContent.daughterEntities) {
+            if (entity.id == event.entity.id) {
+              entity.appliedInterventions.add(toAdd);
+            }
+          }
+        }
+
         /*List<Entity> newCurrentEntities = loadedState.currentListEntities;
         int currentIndex = newCurrentEntities
             .indexWhere((element) => element.id == event.entity.id);
@@ -235,36 +228,19 @@ class OrganizationViewBloc
         if (newCurrentEntity?.id == event.entity.id) {
           newCurrentEntity!.appliedInterventions.add(toAdd);
         }*/
-        emit(loadedState.copyWith(
-            allEntities: newAllEntities,
-            currentListEntities: loadedState.currentListEntities,
-            currentDetailEntity: loadedState.currentDetailEntity));
+        emit(loadedState.copyWith());
       } else if (event is UpdateAppliedIntervention) {
+        // TODO: check UpdateAppliedIntervention
         AppliedInterventionRepository.updateAppliedIntervention(
             event.appliedIntervention, event.entity);
         AppliedIntervention toAdd = event.appliedIntervention;
         Entity toSet = event.entity;
+
         int aIIndex = toSet.appliedInterventions.indexWhere(
             (element) => element.id == event.appliedIntervention.id);
         toSet.appliedInterventions[aIIndex] = event.appliedIntervention;
-        List<Entity> newAllEntities = loadedState.allEntities;
-        int allIndex = newAllEntities
-            .indexWhere((element) => element.id == event.entity.id);
-        newAllEntities[allIndex] = toSet;
-        List<Entity> newCurrentEntities = loadedState.currentListEntities;
-        int currentIndex = newCurrentEntities
-            .indexWhere((element) => element.id == event.entity.id);
-        if (currentIndex > -1) {
-          newCurrentEntities[currentIndex] = toSet;
-        }
-        Entity? newCurrentEntity = loadedState.currentDetailEntity;
-        if (newCurrentEntity?.id == event.entity.id) {
-          newCurrentEntity = toSet;
-        }
+
         emit(loadedState.copyWith(
-            allEntities: newAllEntities,
-            currentListEntities: newCurrentEntities,
-            currentDetailEntity: newCurrentEntity,
             currentDetailAppliedIntervention:
                 loadedState.currentDetailAppliedIntervention != null
                     ? toAdd
@@ -282,15 +258,11 @@ class OrganizationViewBloc
               ": " +
               event.executedSurvey.survey.name,
           executedSurveyToDisplay: event.executedSurvey,
-          currentDetailEntity: loadedState.currentDetailEntity,
           organizationViewType: OrganizationViewType.EXECUTEDSURVEY,
         ));
       } else if (event is UpdatePic) {
         emit(loadedState.copyWith(
-            allEntities: loadedState.allEntities,
             organizationViewType: loadedState.organizationViewType,
-            currentDetailEntity: loadedState.currentDetailEntity,
-            currentListEntities: loadedState.currentListEntities,
             appBarString: loadedState.appBarString,
             addEntityPossible: loadedState.addEntityPossible,
             currentDetailAppliedIntervention:
