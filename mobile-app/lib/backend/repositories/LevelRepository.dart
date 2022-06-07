@@ -5,6 +5,12 @@ import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class LevelRepository {
+  static Future<List<amp.Level>> getAllAmpLevels() async {
+    return Amplify.DataStore.query(
+      amp.Level.classType,
+    );
+  }
+
   static Future<List<Level>> getAllLevels() async {
     List<amp.Level> levels = await Amplify.DataStore.query(
       amp.Level.classType,

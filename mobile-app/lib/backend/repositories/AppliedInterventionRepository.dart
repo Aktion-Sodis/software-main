@@ -9,6 +9,16 @@ import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class AppliedInterventionRepository {
   static Future<List<amp.AppliedIntervention>>
+      getAllAmpAppliedInterventions() async {
+    List<amp.AppliedIntervention> appliedIntervention =
+        await Amplify.DataStore.query(
+      amp.AppliedIntervention.classType,
+    );
+
+    return appliedIntervention;
+  }
+
+  static Future<List<amp.AppliedIntervention>>
       getAmpAppliedInterventionsByEntityID(String entityID) async {
     print("applied Interventions by Entity: $entityID");
     List<amp.AppliedIntervention> appliedIntervention =

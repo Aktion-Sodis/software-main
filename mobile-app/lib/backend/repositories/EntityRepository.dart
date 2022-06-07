@@ -9,6 +9,12 @@ import 'package:mobile_app/models/ModelProvider.dart' as amp;
 class EntityRepository {
   static const int batchSize = 15;
 
+  static Future<List<amp.Entity>> getAllAmpEntities() async {
+    return Amplify.DataStore.query<amp.Entity>(
+      amp.Entity.classType,
+    );
+  }
+
   static Future<List<Entity>> getAllEntities({int? page}) async {
     return getEntities(page: page);
   }

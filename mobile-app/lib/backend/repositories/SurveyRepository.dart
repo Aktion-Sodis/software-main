@@ -11,6 +11,13 @@ class SurveyRepository {
     return Survey.fromAmplifyModel(survey);
   }
 
+  static Future<List<amp.Survey>> getAllAmpSurveys() async {
+    List<amp.Survey> results = await Amplify.DataStore.query(
+      amp.Survey.classType,
+    );
+    return results;
+  }
+
   static Future<amp.Survey> getAmpSurveyByID(String surveyID) async {
     List<amp.Survey> results = await Amplify.DataStore.query(
         amp.Survey.classType,
@@ -51,6 +58,13 @@ class SurveyRepository {
       {amp.Intervention? intervention}) {
     return Future.wait(
         List.generate(surveys.length, (index) => _populate(surveys[index])));
+  }
+
+  static Future<List<amp.SurveySurveyTagRelation>>
+      getAllSurveySurveyTagRelationsBySurvey() async {
+    return Amplify.DataStore.query(
+      amp.SurveySurveyTagRelation.classType,
+    );
   }
 
   static Future<List<amp.SurveySurveyTagRelation>>

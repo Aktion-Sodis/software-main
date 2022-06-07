@@ -8,6 +8,13 @@ import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class ExecutedSurveyRepository {
+  static Future<List<amp.ExecutedSurvey>> getAllAmpExecutedSurveys() async {
+    var results = Amplify.DataStore.query(
+      amp.ExecutedSurvey.classType,
+    );
+    return results;
+  }
+
   static Future<ExecutedSurvey> executedSurveyByID(
       String executedSurveyID) async {
     amp.ExecutedSurvey executedSurvey =
