@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mobile_app/backend/Blocs/in_app/in_app_bloc.dart';
 import 'package:mobile_app/backend/Blocs/organization_view/organization_view_bloc.dart';
@@ -41,10 +42,10 @@ class MainMenuOrganization extends StatelessWidget {
           Expanded(
               child:
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            if (!(organizationViewState.organizationViewType ==
-                    OrganizationViewType.LIST &&
-                organizationViewState.currentListEntities.first.level.id ==
-                    organizationViewState.getLevelsInOrder().first.id))
+            if (organizationViewState.organizationViewType !=
+                    OrganizationViewType.LIST ||
+                organizationViewState.currentLevelContent.level.parentLevelID !=
+                    null)
               Container(
                   alignment: Alignment.center,
                   margin:
@@ -62,11 +63,8 @@ class MainMenuOrganization extends StatelessWidget {
                       left: (organizationViewState.organizationViewType ==
                                   OrganizationViewType.LIST &&
                               organizationViewState
-                                      .currentListEntities.first.level.id ==
-                                  organizationViewState
-                                      .getLevelsInOrder()
-                                      .first
-                                      .id)
+                                      .levelContentList.last.level.id ==
+                                  organizationViewState.allLevels.first.id)
                           ? defaultPadding(context)
                           : 0),
                   child: Row(
@@ -94,9 +92,16 @@ class MainMenuOrganization extends StatelessWidget {
                                       context,
                                       null,
                                       organizationViewState
-                                          .currentListEntities.first.level,
-                                      organizationViewState.currentListEntities
-                                          .first.parentEntityID);
+                                          .levelContentList.last.level,
+                                      organizationViewState.levelContentList
+                                                  .last.parentEntity ==
+                                              null
+                                          ? null
+                                          : organizationViewState
+                                              .levelContentList
+                                              .last
+                                              .parentEntity!
+                                              .id);
                                   if (toAdd != null) {
                                     context
                                         .read<OrganizationViewBloc>()
@@ -143,31 +148,13 @@ class MainMenuOrganization extends StatelessWidget {
 
   Widget mainWidget(BuildContext context,
       EntitiesLoadedOrganizationViewState organizationViewState) {
-    Widget actualWidget() {
+    Widget actualWidget(BuildContext context) {
       switch (organizationViewState.organizationViewType) {
         case OrganizationViewType.LIST:
           return Container(
-              key:
-                  ValueKey(organizationViewState.keyDateTime.toIso8601String()),
               child: ListWidget(
-                  key:
-                      ValueKey(organizationViewState.currentListEntities.first),
-                  entities: organizationViewState.currentListEntities,
-                  onInfoTapped: (entity) => context
-                      .read<OrganizationViewBloc>()
-                      .add(NavigateToEntityOverview(entity)),
-                  onChildTapped: (entity) => context
-                      .read<OrganizationViewBloc>()
-                      .add(NavigateToDaughterView(entity.id!)),
-                  organizatiOnViewState: organizationViewState,
-                  parentEntityName: organizationViewState
-                              .currentListEntities.first.parentEntityID !=
-                          null
-                      ? organizationViewState
-                          .entityByID(organizationViewState
-                              .currentListEntities.first.parentEntityID!)
-                          .name
-                      : ""));
+            key: Key(organizationViewState.levelContentList.last.level.id!),
+          ));
           break;
         case OrganizationViewType.OVERVIEW:
           return Container(
@@ -256,7 +243,7 @@ class MainMenuOrganization extends StatelessWidget {
     }
 
     return AnimatedSwitcher(
-        duration: Duration(milliseconds: 200), child: actualWidget());
+        duration: Duration(milliseconds: 200), child: actualWidget(context));
   }
 
   Widget levelIndicatorWidget(BuildContext context,
@@ -604,22 +591,16 @@ class EntityDialogWidgetState extends State<EntityDialogWidget> {
 }
 
 class ListWidget extends StatelessWidget {
-  final List<Entity> entities;
-  final ValueChanged<Entity> onInfoTapped;
-  final ValueChanged<Entity> onChildTapped;
-  final EntitiesLoadedOrganizationViewState organizatiOnViewState;
-  final String parentEntityName;
+  ListWidget({required Key key}) : super(key: key);
+  final ScrollController _scrollController = ScrollController();
 
-  ListWidget(
-      {required this.entities,
-      required this.onInfoTapped,
-      required this.onChildTapped,
-      required this.organizatiOnViewState,
-      required this.parentEntityName,
-      required Key key})
-      : super(key: key);
+  Widget listItem(BuildContext buildContext, int index,
+      EntitiesLoadedOrganizationViewState state) {
+    String parentEntityName = state.levelContentList.last.parentEntity != null
+        ? state.levelContentList.last.parentEntity!.name
+        : "";
+    List<Entity> entities = state.currentLevelContent.daughterEntities;
 
-  Widget listItem(BuildContext buildContext, int index) {
     SyncedFile imageFile = EntityRepository.getEntityPic(entities[index]);
     return Card(
         margin: EdgeInsets.symmetric(
@@ -661,7 +642,7 @@ class ListWidget extends StatelessWidget {
                     child: Text(parentEntityName,
                         style: Theme.of(buildContext).textTheme.subtitle2),
                   ),
-                if (organizatiOnViewState.hasChildren(entities[index].id!))
+                if (state.addChildPossible(entities[index]))
                   Container(
                     child: ElevatedButton(
                         style: ButtonStyle(
@@ -679,51 +660,12 @@ class ListWidget extends StatelessWidget {
                                   .secondary), //todo: change
                         ),
                         onPressed: () {
-                          onChildTapped(entities[index]);
+                          buildContext
+                              .read<OrganizationViewBloc>()
+                              .add(NavigateToDaughterView(entities[index]));
                         },
                         child: Center(
                             child: Icon(FontAwesomeIcons.arrowRight,
-                                color: Theme.of(buildContext)
-                                    .colorScheme
-                                    .onSecondary))),
-                    padding: EdgeInsets.only(
-                        left: defaultPadding(buildContext),
-                        right: defaultPadding(buildContext),
-                        bottom: defaultPadding(buildContext)),
-                  )
-                else if (organizatiOnViewState
-                    .addChildPossible(entities[index]))
-                  Container(
-                    child: ElevatedButton(
-                        style: ButtonStyle(
-                          textStyle: MaterialStateProperty.all(
-                              TextStyle(fontSize: 18)),
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8))),
-                          minimumSize: MaterialStateProperty.all(Size(
-                              width(buildContext) * .84,
-                              width(buildContext) * .12)),
-                          backgroundColor: MaterialStateProperty.all(
-                              Theme.of(buildContext)
-                                  .colorScheme
-                                  .secondary), //todo: change
-                        ),
-                        onPressed: () async {
-                          Entity? toAdd = await showEntityDialog(
-                              buildContext,
-                              null,
-                              organizatiOnViewState
-                                  .getDaughterLevel(entities[index].level)!,
-                              entities[index].id);
-                          if (toAdd != null) {
-                            buildContext
-                                .read<OrganizationViewBloc>()
-                                .add(AddEntity(toAdd, isDaughter: true));
-                          }
-                        },
-                        child: Center(
-                            child: Icon(FontAwesomeIcons.plus,
                                 color: Theme.of(buildContext)
                                     .colorScheme
                                     .onSecondary))),
@@ -749,7 +691,9 @@ class ListWidget extends StatelessWidget {
                             .primary), //todo: change
                   ),
                   onPressed: () {
-                    onInfoTapped(entities[index]);
+                    buildContext
+                        .read<OrganizationViewBloc>()
+                        .add(NavigateToEntityOverview(entities[index]));
                   },
                   child: Center(
                       child: Row(
@@ -777,11 +721,56 @@ class ListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Scrollbar(
-          child: ListView.builder(
-              itemBuilder: listItem, itemCount: entities.length)),
-    );
+    return BlocBuilder<OrganizationViewBloc, OrganizationViewState>(
+        buildWhen: ((previous, current) =>
+            current is EntitiesLoadedOrganizationViewState),
+        builder: (context, state) {
+          EntitiesLoadedOrganizationViewState
+              entitiesLoadedOrganizationViewState =
+              state as EntitiesLoadedOrganizationViewState;
+          List<Entity> entities = entitiesLoadedOrganizationViewState
+              .currentLevelContent.daughterEntities;
+          return Container(
+              child: Scrollbar(
+            controller: _scrollController,
+            child: LazyLoadScrollView(
+                onEndOfPage: () => context.read<OrganizationViewBloc>().add(
+                    LoadDaughterEntities(
+                        entitiesLoadedOrganizationViewState
+                            .levelContentList.last.parentEntity,
+                        entitiesLoadedOrganizationViewState
+                            .levelContentList.last.page)),
+                child: ListView.builder(
+                    controller: _scrollController,
+                    itemBuilder: (context, index) {
+                      if (entitiesLoadedOrganizationViewState
+                              .levelContentList.last.hasMoreToLoad &&
+                          index == entities.length) {
+                        return Container(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            height: 80,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ],
+                            ));
+                      } else {
+                        return listItem(context, index,
+                            entitiesLoadedOrganizationViewState);
+                      }
+                    },
+                    itemCount: entities.length +
+                        (entitiesLoadedOrganizationViewState
+                                .levelContentList.last.hasMoreToLoad
+                            ? 1
+                            : 0))),
+          ));
+        });
   }
 }
 
@@ -1514,9 +1503,10 @@ class SurveyWidgetState extends State<SurveyWidget> {
 
   @override
   void initState() {
-    entity = (context.read<OrganizationViewBloc>().state
-            as EntitiesLoadedOrganizationViewState)
-        .currentDetailEntity!;
+    EntitiesLoadedOrganizationViewState state = context
+        .read<OrganizationViewBloc>()
+        .state as EntitiesLoadedOrganizationViewState;
+    entity = state.currentDetailEntity!;
     currentlySelectedInterventions = [];
     currentlyDisplayedSurveys = [];
     for (var element in entity.appliedInterventions) {

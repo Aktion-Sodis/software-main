@@ -6,6 +6,13 @@ import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class InterventionRepository {
+  static Future<List<amp.Intervention>> getAllAmpIntervention() async {
+    var interventions = Amplify.DataStore.query(
+      amp.Intervention.classType,
+    );
+    return interventions;
+  }
+
   static Future<amp.Intervention> getAmpInterventionByID(
       String interventionID) async {
     try {

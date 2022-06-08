@@ -7,8 +7,14 @@ abstract class OrganizationViewEvent {}
 class BackTapEvent extends OrganizationViewEvent {}
 
 class NavigateToDaughterView extends OrganizationViewEvent {
-  String parentID;
-  NavigateToDaughterView(this.parentID);
+  Entity parent;
+  NavigateToDaughterView(this.parent);
+}
+
+class LoadDaughterEntities extends OrganizationViewEvent {
+  Entity? parent;
+  int page;
+  LoadDaughterEntities(this.parent, this.page);
 }
 
 class NavigateToEntityOverview extends OrganizationViewEvent {
@@ -68,8 +74,11 @@ class StartSurvey extends OrganizationViewEvent {
 
 class AddEntity extends OrganizationViewEvent {
   Entity entity;
-  bool isDaughter;
-  AddEntity(this.entity, {this.isDaughter = false});
+  //bool isDaughter;
+  AddEntity(
+    this.entity,
+    /*{this.isDaughter = false}*/
+  );
 }
 
 class UpdateEntity extends OrganizationViewEvent {

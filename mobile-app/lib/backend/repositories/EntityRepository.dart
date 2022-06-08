@@ -7,10 +7,37 @@ import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class EntityRepository {
-  static Future<List<Entity>> getAllEntities() async {
-    List<amp.Entity> allAmpEntities = await Amplify.DataStore.query(
+  static const int batchSize = 15;
+
+  static Future<List<amp.Entity>> getAllAmpEntities() async {
+    return Amplify.DataStore.query<amp.Entity>(
       amp.Entity.classType,
     );
+  }
+
+  static Future<List<Entity>> getAllEntities({int? page}) async {
+    return getEntities(page: page);
+  }
+
+  static Future<List<Entity>> getEntities(
+      {int? page,
+      bool byParentEntityID = false,
+      String? parentEntityID,
+      String? searchByName}) async {
+    List<amp.Entity> allAmpEntities = await Amplify.DataStore.query(
+        amp.Entity.classType,
+        where: byParentEntityID && searchByName != null
+            ? amp.Entity.PARENTENTITYID
+                .eq(parentEntityID)
+                .and(amp.Entity.NAME.contains(searchByName))
+            : byParentEntityID
+                ? amp.Entity.PARENTENTITYID.eq(parentEntityID)
+                : searchByName != null
+                    ? amp.Entity.NAME.contains(searchByName)
+                    : null,
+        pagination: page == null
+            ? null
+            : QueryPagination(page: page, limit: batchSize));
     List<amp.Entity> popluatedEntities =
         await _populateMultipleConnections(allAmpEntities);
 

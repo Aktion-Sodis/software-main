@@ -21,6 +21,7 @@ import 'package:mobile_app/backend/repositories/UserRepository.dart';
 import 'package:mobile_app/backend/storage/image_synch.dart';
 import 'package:mobile_app/backend/storage/storage_repository.dart';
 import 'package:mobile_app/models/InterventionContentRelation.dart';
+import 'package:mobile_app/models/ModelProvider.dart' as amp;
 
 class SyncBloc extends Bloc<SyncEvent, SyncState> {
   TaskBloc taskBloc;
@@ -70,17 +71,131 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       return;
     }
     add(StartSyncEvent());
-    List<Future> toWaitData = [
-      EntityRepository.getAllEntities(),
-      taskBloc.taskRepository.getAllTasks(),
-      ContentRepository.getAllRelationsWithPopulatedContentsAndInterventions(),
-    ];
-    List<dynamic> data = await Future.wait(toWaitData);
-    List<Entity> allEntities = data[0] as List<Entity>;
-    List<Task> allTasksToSync = data[1] as List<Task>;
+
+    List<amp.Level> allAmpLevels = await LevelRepository.getAllAmpLevels();
+    List<amp.Entity> allAmpEntities =
+        (await EntityRepository.getAllAmpEntities())
+            .map((e) => e.copyWith(
+                appliedInterventions: [],
+                level: allAmpLevels
+                    .where((element) => element.id == e.entityLevelId)
+                    .first))
+            .toList();
+    List<amp.Intervention> allAmpInterventions = (await InterventionRepository
+            .getAllAmpIntervention())
+        .map((e) => e.copyWith(tags: [], contents: [], levels: [], surveys: []))
+        .toList();
+    List<amp.AppliedIntervention> allAmpAppliedInterventions =
+        (await AppliedInterventionRepository.getAllAmpAppliedInterventions())
+            .where((element) =>
+                element.entityAppliedInterventionsId != null &&
+                allAmpInterventions.any((intervention) =>
+                    intervention.id ==
+                    element.appliedInterventionInterventionId))
+            .toList();
+    List<amp.Survey> allAmpSurveys = (await SurveyRepository.getAllAmpSurveys())
+        .where(
+          (element) => element.intervention != null,
+        )
+        .toList()
+        .map((e) => e.copyWith(
+              tags: [],
+            ))
+        .toList();
+    List<amp.ExecutedSurvey> allAmpExecutedSurveys =
+        await ExecutedSurveyRepository.getAllAmpExecutedSurveys();
+
+    // TODO: check population of surveys with SurveySurveyTagRelations
+
+    // TODO: populate contents, tags, levels of Interventions
+
+    // Populate Intervention and Surveys
+    allAmpInterventions.sort((a, b) => a.id.compareTo(b.id));
+    allAmpSurveys
+        .sort(((a, b) => a.intervention!.id.compareTo(b.intervention!.id)));
+    await populateSortedLists<amp.Intervention, amp.Survey, String>(
+        allAmpInterventions,
+        (p0) => p0.id,
+        allAmpSurveys,
+        (p1) => p1.intervention!.id, (i1, i2) async {
+      allAmpSurveys[i2] = allAmpSurveys[i2].copyWith(
+          intervention: allAmpInterventions[i1]
+              .copyWith(contents: [], tags: [], surveys: [], levels: []));
+
+      allAmpInterventions[i1] = allAmpInterventions[i1].copyWith(
+          surveys: (allAmpInterventions[i1].surveys ?? [])
+            ..add(allAmpSurveys[i2]));
+    });
+
+    // Populate AppliedInterventions with Interventions
+    allAmpAppliedInterventions.sort(((a, b) => a
+        .appliedInterventionInterventionId
+        .compareTo(b.appliedInterventionInterventionId)));
+    await populateSortedLists<amp.Intervention, amp.AppliedIntervention,
+            String>(
+        allAmpInterventions,
+        (p0) => p0.id,
+        allAmpAppliedInterventions,
+        (p1) => p1.appliedInterventionInterventionId, (i1, i2) async {
+      amp.Intervention intervention = allAmpInterventions[i1];
+      amp.User user = await UserRepository.getAmpUserByID(
+          allAmpAppliedInterventions[i2].appliedInterventionWhoDidItId);
+      allAmpAppliedInterventions[i2] = allAmpAppliedInterventions[i2].copyWith(
+          intervention: intervention, whoDidIt: user, executedSurveys: []);
+    });
+
+    // Populate AppliedInterventions with ExecutedSurveys
+    allAmpAppliedInterventions.sort(((a, b) => a.id.compareTo(b.id)));
+    allAmpExecutedSurveys.sort(((a, b) =>
+        a.appliedIntervention.id.compareTo(b.appliedIntervention.id)));
+    await populateSortedLists<amp.AppliedIntervention, amp.ExecutedSurvey,
+            String>(
+        allAmpAppliedInterventions,
+        (p0) => p0.id,
+        allAmpExecutedSurveys,
+        (p1) => p1.appliedIntervention.id, (i1, i2) async {
+      var user = await UserRepository.getAmpUserByID(
+          allAmpExecutedSurveys[i2].executedSurveyWhoExecutedItId);
+
+      amp.Survey survey = allAmpSurveys
+          .where((element) =>
+              element.id == allAmpExecutedSurveys[i2].executedSurveySurveyId)
+          .first;
+      allAmpExecutedSurveys[i2] = allAmpExecutedSurveys[i2].copyWith(
+          appliedIntervention: allAmpAppliedInterventions[i1].copyWith(
+            executedSurveys: [],
+          ),
+          survey: survey,
+          whoExecutedIt: user);
+
+      allAmpAppliedInterventions[i1] = allAmpAppliedInterventions[i1].copyWith(
+          executedSurveys: allAmpAppliedInterventions[i1].executedSurveys
+            ..add(allAmpExecutedSurveys[i2]));
+    });
+
+    // Populate Entities with AppliedInterventions
+    allAmpAppliedInterventions.sort(((a, b) => a.entityAppliedInterventionsId!
+        .compareTo(b.entityAppliedInterventionsId!)));
+    allAmpEntities.sort(((a, b) => a.id.compareTo(b.id)));
+    await populateSortedLists<amp.Entity, amp.AppliedIntervention, String>(
+        allAmpEntities,
+        (p0) => p0.id,
+        allAmpAppliedInterventions,
+        (p1) => p1.entityAppliedInterventionsId!, (i1, i2) async {
+      allAmpEntities[i1] = allAmpEntities[i1].copyWith(
+          appliedInterventions: (allAmpEntities[i1].appliedInterventions ?? [])
+            ..add(allAmpAppliedInterventions[i2]));
+    });
+
+    List<Entity> allEntities = allAmpEntities.map((e) {
+      return Entity.fromAmplifyModel(e);
+    }).toList();
+    List<Level> allLevels = await LevelRepository.getAllLevels();
+    List<Task> allTasksToSync = await taskBloc.taskRepository.getAllTasks();
     List<InterventionContentRelation> allContentRelations =
-        data[2] as List<InterventionContentRelation>;
-    List<Level> allLevels = [];
+        await ContentRepository
+            .getAllRelationsWithPopulatedContentsAndInterventions();
+
     List<Content> allContents = [];
     List<Intervention> allInterventions = [];
     for (InterventionContentRelation interventionContentRelation
@@ -116,6 +231,30 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     syncEntities(allEntities);
     if (userBloc.state.user != null) {
       syncUser(userBloc.state.user!);
+    }
+  }
+
+  Future<void> populateSortedLists<P, Q, R extends Comparable>(
+      List<P> list1,
+      R Function(P) param1,
+      List<Q> list2,
+      R Function(Q) param2,
+      Future<void> Function(int, int) populate) async {
+    int i = 0;
+    int j = 0;
+
+    while (i < list1.length && j < list2.length) {
+      P element1 = list1[i];
+      Q element2 = list2[j];
+
+      if (param1(element1).compareTo(param2(element2)) < 0) {
+        i++;
+      } else if (param1(element1).compareTo(param2(element2)) > 0) {
+        j++;
+      } else {
+        await populate(i, j);
+        j++;
+      }
     }
   }
 
