@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:mobile_app/frontend/strings.dart';
 import 'package:mobile_app/frontend/tests/audio_test.dart';
+import 'package:mobile_app/frontend/tests/gps_test.dart';
 
 class TestList extends StatelessWidget {
   TestList({Key? key}) : super(key: key);
 
   final Map<String, Widget Function()> _allTests = {
-    "flutter_sound": () => AudioTest()
+    "flutter_sound": () => AudioTest(),
+    "geolocator": () => GpsTest()
   };
 
   Widget _itemBuilder(BuildContext context, int index) {

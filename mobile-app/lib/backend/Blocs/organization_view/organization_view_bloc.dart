@@ -9,6 +9,7 @@ import 'package:mobile_app/backend/repositories/EntityRepository.dart';
 import 'package:mobile_app/backend/repositories/LevelRepository.dart';
 import 'package:mobile_app/frontend/pages/task_form/task_form.dart';
 import 'package:mobile_app/frontend/strings.dart' as strings;
+import 'package:mobile_app/services/gps.dart';
 
 class OrganizationViewBloc
     extends Bloc<OrganizationViewEvent, OrganizationViewState> {
@@ -191,6 +192,12 @@ class OrganizationViewBloc
             currentDetailEntity: loadedState.currentDetailEntity));
       } else if (event is AddEntity) {
         Entity newEntity = event.entity;
+        try {
+          newEntity.location =
+              Location.fromPosition(await GPS.getCurrentPosition());
+        } catch (e) {
+          // Probably: LocationServiceDisabledException or TimeoutException
+        }
         String id = await EntityRepository.createEntity(newEntity);
         newEntity.id = id;
         loadedState.levelContentList.last.daughterEntities.add(newEntity);
@@ -202,6 +209,12 @@ class OrganizationViewBloc
             appBarString: event.entity.name,
             currentDetailEntity: event.entity));
       } else if (event is AddAppliedIntervention) {
+        try {
+          event.appliedIntervention.location =
+              Location.fromPosition(await GPS.getCurrentPosition());
+        } catch (e) {
+          // Probably: LocationServiceDisabledException or TimeoutException
+        }
         String id =
             await AppliedInterventionRepository.createAppliedIntervention(
                 event.appliedIntervention, event.entity);
