@@ -158,6 +158,7 @@ export default {
       types: [InterventionType.TECHNOLOGY, InterventionType.EDUCATION],
       description: emptyMutableI18nString(),
       levelIds: [],
+      contents: [],
       rerenderImgFromS3: false,
       rerenderNameLocaleTextBox: 0, // increment this
       rerenderDescriptionLocaleTextBox: -1, // decrement this
