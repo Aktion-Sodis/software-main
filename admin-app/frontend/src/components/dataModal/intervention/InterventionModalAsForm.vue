@@ -101,8 +101,9 @@
             <ImgFromS3 :assumedSrc="assumedSrc" :key="rerenderImgFromS3" dataType="intervention">
               <template v-slot:v-img="slotProps">
                 <v-img max-height="200px" :src="slotProps.src">
-                  <v-btn fab class="iv-edit-icon" color="primary" @click="selectImg">
-                    <v-icon color="darken-2"> mdi-pencil-outline </v-icon>
+                  <v-btn class="iv-edit-icon" color="primary" @click="selectImg">
+                    <v-icon color="darken-2"> mdi-plus </v-icon>
+                    <span> {{ edit ? $t('general.editImage') : $t('general.addImage') }} </span>
                   </v-btn>
 
                   <FileInput ref="img-upload" style="display: none" :acceptedType="'image/png'" />
@@ -158,6 +159,7 @@ export default {
       types: [InterventionType.TECHNOLOGY, InterventionType.EDUCATION],
       description: emptyMutableI18nString(),
       levelIds: [],
+      contents: [],
       rerenderImgFromS3: false,
       rerenderNameLocaleTextBox: 0, // increment this
       rerenderDescriptionLocaleTextBox: -1, // decrement this

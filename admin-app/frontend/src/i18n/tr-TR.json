@@ -13,6 +13,8 @@
     "save": "Kaydet",
     "delete": "Sil",
     "archive": "Arşivle",
+    "addImage": "Resim ekle",
+    "editImage": "Resmi düzenle",
     "form": {
       "maxCharExceeded": "Maksimum {maxChar} karakter.",
       "minCharNotMet": "En az {minChar} uzunluğunda olmalı.",

@@ -19,6 +19,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { vuexModulesDict } from '../../../lib/constants';
 
 export default {
   name: 'SearchBox',

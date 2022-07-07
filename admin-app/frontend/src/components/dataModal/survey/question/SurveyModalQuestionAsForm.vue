@@ -77,7 +77,7 @@
                 <v-btn color="primary" rounded x-large @click="selectQuestionImg" class="mt-4">
                   <v-icon class="mr-2"> mdi-image </v-icon>
                   <span class="overflow-hidden">
-                    {{ $t('surveys.modal.questionCard.form.question.addImage') }}
+                    {{ edit ? $t('general.editImage') : $t('general.addImage') }}
                   </span>
                 </v-btn>
                 <FileInput

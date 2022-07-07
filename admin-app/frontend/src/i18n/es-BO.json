@@ -13,6 +13,8 @@
     "save": "Guardar",
     "delete": "Eliminar",
     "archive": "Archivar",
+    "addImage": "Añadir imagen",
+    "editImage": "Editar imagen",
     "form": {
       "maxCharExceeded": "Máximo {maxChar} caracteres.",
       "minCharNotMet": "Al menos {minChar} carácteres.",
