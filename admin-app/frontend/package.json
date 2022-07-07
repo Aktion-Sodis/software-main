@@ -6,6 +6,7 @@
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
+        "lint:fix": "vue-cli-service lint --fix",
         "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
     },
     "dependencies": {
