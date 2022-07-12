@@ -113,7 +113,6 @@
               </v-card-title>
 
               <div v-for="customDatum in customData" :key="customDatum.customDataID">
-                {{ customDatum.value }}
                 <v-text-field
                   :label="
                     calculateUILocaleString({ languageTexts: customDatum.name.languageTexts })
