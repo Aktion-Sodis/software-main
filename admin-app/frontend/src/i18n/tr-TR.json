@@ -191,9 +191,9 @@
       "moreStuffTitle": "Daha fazlası yakında...",
       "moreStuffDescription": "Konum, Özel Veriler ve Etiketlerin eklenmesi bir sonraki büyük güncellemede gelecek.",
       "modalTitle": {
-        "edit": "Oluşumu düzenle: ",
-        "create": "Yeni oluşum yarat",
-        "read": "Oluşum görüntüleniyor"
+        "edit": "{entity} düzenleniyor",
+        "create": "Yeni {entity} yarat",
+        "read": "{entity} görüntüleniyor"
       },
       "modalDescription": {
         "edit": "Bu güzel oluşum düzenleme diyaloğunun çok güzel açıklaması.",

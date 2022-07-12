@@ -2,13 +2,14 @@
   <v-form ref="form" v-model="isFormValid">
     <v-card-title>
       <h2 v-if="edit && entityInFocus">
-        {{ $t('organizationStructure.entityModal.modalTitle.edit') }}
-        <i>
-          {{ calculateUILocaleString({ languageTexts: entityInFocus.name.languageTexts }) }}
-        </i>
+        {{
+          $t('organizationStructure.entityModal.modalTitle.edit', {
+            entity: calculateUILocaleString({ languageTexts: entityInFocus.name.languageTexts }),
+          })
+        }}
       </h2>
       <h2 v-else>
-        {{ $t('organizationStructure.entityModal.modalTitle.create') }}
+        {{ $t('organizationStructure.entityModal.modalTitle.create', {entity: calculateUILocaleString({ languageTexts: level.name.languageTexts})}) }}
       </h2>
     </v-card-title>
     <v-card-subtitle v-if="edit">

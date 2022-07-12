@@ -1,18 +1,18 @@
 <template>
   <v-form lazy-validation>
     <v-card-title>
-      <h2>
-        {{ $t('organizationStructure.entityModal.modalTitle.read') }}
+      <h2 v-if="entityInFocus">
+        {{
+          $t('organizationStructure.entityModal.modalTitle.read', {
+            entity: calculateUILocaleString({ languageTexts: entityInFocus.name.languageTexts }),
+          })
+        }}
       </h2>
     </v-card-title>
     <v-card-text>
       <v-container>
         <v-row>
           <v-col cols="12" sm="6" class="pb-0 px-0 mb-3 px-sm-3">
-            <h2 v-if="entityInFocus">
-              {{ calculateUILocaleString({ languageTexts: entityInFocus.name.languageTexts }) }}
-            </h2>
-
             <div
               v-if="entityInFocus"
               class="d-flex flex-column justify-center"

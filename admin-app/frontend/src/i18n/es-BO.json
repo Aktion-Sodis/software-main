@@ -191,9 +191,9 @@
       "moreStuffTitle": "Próximamente más cosas...",
       "moreStuffDescription": "Agregar ubicación, datos personalizados y etiquetas vendrá en la próxima actualización importante.",
       "modalTitle": {
-        "edit": "Editar entidad ",
-        "create": "Crear nueva entidad",
-        "read": "Observando entidad"
+        "edit": "Editar {entity}",
+        "create": "Crear nueva {entity}",
+        "read": "Observando {entity}"
       },
       "modalDescription": {
         "edit": "Esta es la descripción de este diálogo de edición.",

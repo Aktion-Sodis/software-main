@@ -191,9 +191,9 @@
       "moreStuffTitle": "More stuff coming soon...",
       "moreStuffDescription": "Adding Location, Custom Data and Tags will come in the next major update.",
       "modalTitle": {
-        "edit": "Edit entity ",
-        "create": "Create new entity",
-        "read": "Viewing entity"
+        "edit": "Editing {entity}",
+        "create": "Create new {entity}",
+        "read": "Viewing {entity}"
       },
       "modalDescription": {
         "edit": "This is the description of this beautiful edit dialog.",
