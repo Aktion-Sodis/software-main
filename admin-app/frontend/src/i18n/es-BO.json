@@ -203,7 +203,7 @@
       "description": "Descripción de {entity}",
       "otherInfo": "Información adicional",
       "upperEntity": "Perteneciente a {entity}",
-      "upperEntityLabel": "Elija la {entity} madre"
+      "upperEntityLabel": "Elija {entity} superior"
     }
   },
   "interventions": {
