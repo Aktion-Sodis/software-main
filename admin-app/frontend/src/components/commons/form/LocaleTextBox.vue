@@ -10,7 +10,7 @@
           :inputHandler="(e) => inputHandler(e, selectedLocale)"
           name="text-input"
           :model="res.languageTexts[calculateIndexByLocale({ locale: selectedLocale })]"
-          :label="`${$t(labelPrefixI18nSelector)} (${selectedLocale})`"
+          :label="`${$t(labelPrefixI18nSelector, passPayloadToI18n)} (${selectedLocale})`"
         ></slot>
         <div class="pb-7" v-if="selectedLocale !== $i18n.fallbackLocale">
           <v-btn
@@ -51,6 +51,10 @@ export default {
     initVal: {
       type: Object,
       required: true,
+    },
+    passPayloadToI18n: {
+      type: Object,
+      required: false,
     },
   },
   data() {
