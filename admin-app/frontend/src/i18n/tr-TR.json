@@ -286,8 +286,8 @@
               "PICTURE": "Resim",
               "PICTUREWITHTAGS": "Etiketli resim",
               "AUDIO": "Ses",
-              "INT": "Integer number",
-              "DOUBLE": "Decimal number",
+              "INT": "Tamsayı",
+              "DOUBLE": "Ondalıklı sayı",
               "RATING": "Rating"
             }
           }

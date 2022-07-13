@@ -176,8 +176,8 @@
         "name": "Name",
         "type": "Type",
         "types": {
-          "INT": "Number",
-          "STRING": "Text"
+          "INT": "Número",
+          "STRING": "Texto"
         }
       },
       "areInterventionsAllowed": "estan permitidas.",
