@@ -9,7 +9,11 @@
         }}
       </h2>
       <h2 v-else>
-        {{ $t('organizationStructure.entityModal.modalTitle.create', {entity: calculateUILocaleString({ languageTexts: level.name.languageTexts})}) }}
+        {{
+          $t('organizationStructure.entityModal.modalTitle.create', {
+            entity: calculateUILocaleString({ languageTexts: level.name.languageTexts }),
+          })
+        }}
       </h2>
     </v-card-title>
     <v-card-subtitle v-if="edit">
@@ -114,9 +118,12 @@
 
               <div v-for="customDatum in customData" :key="customDatum.customDataID">
                 <v-text-field
-                  :label="
-                    calculateUILocaleString({ languageTexts: customDatum.name.languageTexts })
-                  "
+                  :label="`${calculateUILocaleString({
+                    languageTexts: customDatum.name.languageTexts,
+                  })}
+                    (${$t(
+                      'organizationStructure.levelModal.customData.types.' + customDatum.type
+                    )})`"
                   outlined
                   v-model="customDatum.value"
                   @keypress="
