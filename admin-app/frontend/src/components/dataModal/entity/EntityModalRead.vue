@@ -61,32 +61,44 @@
               </v-card-title>
 
               <div
-                class="rounded-lg pa-4 d-flex justify-space-between align-center mb-2"
-                style="border: 1px solid; border-color: #736b5e; position: relative"
-                v-for="customDatum in entityInFocus.customData"
-                :key="customDatum.customDataID"
+                class="mb-2"
+                style="width: 100%"
+                v-for="(customDatum, index) in level.customData"
+                :key="customDatum.id"
               >
-                <h3 class="text-center">
-                  {{
-                    calculateUILocaleString({
-                      languageTexts: customDatum.name.languageTexts,
-                    })
-                  }}
-                </h3>
-                <span v-if="customDatum.stringValue || customDatum.intValue">
-                  {{
-                    customDatum.type === Type.STRING
-                      ? customDatum.stringValue
-                      : customDatum.intValue
-                  }}
-                </span>
-                <span v-else class="font-italic">
-                  {{
-                    customDatum.type === Type.STRING
-                      ? $t('general.noTextProvided')
-                      : $t('general.noNumberProvided')
-                  }}
-                </span>
+                <div
+                  class="rounded-lg pa-4 d-flex justify-space-between align-center"
+                  style="border: 1px solid; border-color: #736b5e; width: 100%"
+                >
+                  <h3 class="text-center">
+                    {{
+                      calculateUILocaleString({
+                        languageTexts: customDatum.name.languageTexts,
+                      })
+                    }}
+                  </h3>
+                  <span v-if="entityInFocus.customData[index]">
+                    <span
+                      v-if="
+                        entityInFocus.customData[index].stringValue ||
+                        entityInFocus.customData[index].intValue
+                      "
+                    >
+                      {{
+                        entityInFocus.customData[index].type === Type.STRING
+                          ? entityInFocus.customData[index].stringValue
+                          : entityInFocus.customData[index].intValue
+                      }}
+                    </span>
+                  </span>
+                  <span v-else class="font-italic">
+                    {{
+                      customDatum.type === Type.STRING
+                        ? $t('general.noTextProvided')
+                        : $t('general.noNumberProvided')
+                    }}
+                  </span>
+                </div>
               </div>
               <v-divider></v-divider>
             </div>
