@@ -29,7 +29,13 @@
 
             <div v-if="entityInFocus" style="min-height: 5rem">
               <h3 v-if="entityInFocus.parentEntityID">
-                {{ $t('organizationStructure.entityModal.upperEntity') }}:
+                {{
+                  $t('organizationStructure.entityModal.upperEntity', {
+                    entity: calculateUILocaleString({
+                      languageTexts: upperLevelName.languageTexts,
+                    }),
+                  })
+                }}:
 
                 {{
                   calculateUILocaleString({
@@ -152,6 +158,9 @@ export default {
     },
     level() {
       return this.LEVELById({ id: this.entityInFocus.entityLevelId });
+    },
+    upperLevelName() {
+      return this.LEVELById({ id: this.level.parentLevelID }).name;
     },
     deriveImgPath() {
       return deriveFilePath('entityPicPath', { entityID: this.dataIdInFocus });

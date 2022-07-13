@@ -28,6 +28,9 @@
           <v-col cols="12" sm="6" class="pb-0 px-0 mb-3 px-sm-3">
             <LocaleTextBox
               labelPrefixI18nSelector="organizationStructure.entityModal.name"
+              :passPayloadToI18n="{
+                entity: calculateUILocaleString({ languageTexts: level.name.languageTexts }),
+              }"
               :initVal="name"
               @res="nameUpdatedHandler"
               :key="rerenderNameLocaleTextBox"
@@ -47,6 +50,9 @@
 
             <LocaleTextBox
               labelPrefixI18nSelector="organizationStructure.entityModal.description"
+              :passPayloadToI18n="{
+                entity: calculateUILocaleString({ languageTexts: level.name.languageTexts }),
+              }"
               :initVal="description"
               @res="descriptionUpdatedHandler"
               :key="rerenderDescriptionLocaleTextBox"
@@ -68,7 +74,11 @@
               v-model="parentEntityID"
               :items="allEntitiesOfUpperLevel"
               item-value="id"
-              :label="$t('organizationStructure.entityModal.upperEntityLabel')"
+              :label="
+                $t('organizationStructure.entityModal.upperEntityLabel', {
+                  entity: calculateUILocaleString({ languageTexts: upperLevelName.languageTexts }),
+                })
+              "
               dense
               outlined
               persistent-hint
@@ -229,6 +239,9 @@ export default {
       return this.LEVELById({
         id: this.edit ? this.entityInFocus.entityLevelId : this.getCreatingEntityInLevelId,
       });
+    },
+    upperLevelName() {
+      return this.LEVELById({ id: this.level.parentLevelID }).name;
     },
     deriveImgPath() {
       return this.edit ? deriveFilePath('entityPicPath', { entityID: this.dataIdInFocus }) : null;

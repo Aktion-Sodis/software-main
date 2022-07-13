@@ -199,11 +199,11 @@
         "edit": "Bu güzel oluşum düzenleme diyaloğunun çok güzel açıklaması.",
         "create": "Bu güzel oluşum yaratma diyaloğunun çok güzel açıklaması."
       },
-      "name": "Oluşum adı",
-      "description": "Oluşum açıklaması",
-      "otherInfo": "Burada başka bir şeyler olsun",
-      "upperEntity": "Üst oluşum",
-      "upperEntityLabel": "Üst oluşumu seç"
+      "name": "{entity} adı",
+      "description": "{entity} açıklaması",
+      "otherInfo": "Diğer bilgiler",
+      "upperEntity": "Ait olduğu {entity}",
+      "upperEntityLabel": "Üst {entity} seç"
     }
   },
   "interventions": {

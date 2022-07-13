@@ -199,11 +199,11 @@
         "edit": "This is the description of this beautiful edit dialog.",
         "create": "This is the description of this beautiful create dialog."
       },
-      "name": "Entity Name",
-      "description": "Entity Description",
+      "name": "{entity} Name",
+      "description": "{entity} Description",
       "otherInfo": "Here be some other things",
-      "upperEntity": "Upper entity",
-      "upperEntityLabel": "Choose parent entity"
+      "upperEntity": "Belonging to {entity}",
+      "upperEntityLabel": "Choose parent {entity}"
     }
   },
   "interventions": {
